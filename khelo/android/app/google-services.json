@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "92999931839",
+    "project_id": "khelo-dev-8040e",
+    "storage_bucket": "khelo-dev-8040e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92999931839:android:6bb53b7449b2b928ac330a",
+        "android_client_info": {
+          "package_name": "com.example.khelo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj8mdOgjpM9J6tI-4D195GThJV26lGm-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

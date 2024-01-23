@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd data && flutter analyze --fatal-infos || true
+cd ../style && flutter analyze --fatal-infos || true
+cd ../app && flutter analyze --fatal-infos || true

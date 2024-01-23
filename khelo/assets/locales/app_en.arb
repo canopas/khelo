@@ -1,0 +1,21 @@
+{
+    "app_title": "Khelo",
+    "tab_home_title": "home",
+    "tab_my_cricket_title": "my cricket",
+    "tab_stats_title": "stats",
+    "tab_profile_title": "profile",
+
+    "intro_sign_in_btn_text": "Sign in",
+    "intro_get_start_text": "Getting started with us",
+    "intro_description_text": "get started with Khelo, create your team, start the match, score your match, get your stats and much more.\nEmbark on a journey beyond imagination, where every move is a new adventure!\nPlay. Thrive. Conquer.",
+
+    "sign_in_enter_your_phone_number_text": "Enter your mobile number",
+    "sign_in_enter_phone_number_text": "Enter mobile number",
+    "sign_in_get_otp_btn_text": "Get OTP",
+
+    "otp_verification_verify_otp_text": "Verify OTP",
+    "otp_verification_enter_otp_text": "Enter OTP you received",
+    "otp_verification_resend_code_text": "Resend Code",
+
+    "edit_profile_screen_title": "Edit profile"
+}
