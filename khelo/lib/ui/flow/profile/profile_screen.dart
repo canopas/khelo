@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
+import 'package:flutter/material.dart';
+import 'package:khelo/components/app_page.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/app_route.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -12,11 +13,16 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        "Profile",
-        style:
-        AppTextStyle.header4.copyWith(color: context.colorScheme.primary),
+    return AppPage(
+      title: context.l10n.tab_profile_title,
+      body: Builder(
+        builder: (context) {
+          return Center(
+            child: TextButton(onPressed: () {
+              AppRoute.editProfile.push(context);
+            }, child: const Text("go to profile >>")),
+          );
+        },
       ),
     );
   }

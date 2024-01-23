@@ -11,14 +11,12 @@ final userServiceProvider = Provider((ref) {
 
 class UserService {
   User? currentUser;
-// caller function here
 /*
-like
+// caller function here
  func callerFunctionCalledFromNotifier(){
   var response = await funcThatInternallyDoTheseStuff();
   parse the response
   return the response
  }
 */
-
 }

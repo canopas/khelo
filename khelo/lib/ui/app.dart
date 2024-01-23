@@ -26,7 +26,7 @@ class _AppState extends ConsumerState<App> {
     super.initState();
 
     final AppRoute initialRoute;
-    initialRoute = AppRoute.intro;
+    initialRoute = AppRoute.main;
     // if (ref.read(hasUserSession)) {
     //   initialRoute = AppRoute.main;
     // } else {
