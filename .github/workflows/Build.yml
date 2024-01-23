@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd app
+          cd khelo
           flutter clean
           flutter pub get
 
@@ -35,7 +35,7 @@ jobs:
 
       - name: Build android APK
         run: |
-          cd app
+          cd khelo
           file='VERSION'
           fileData=$(cat $file)
           IFS='.'
@@ -53,5 +53,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: khelo.apk
-          path: app/*.apk
+          path: khelo/*.apk
           if-no-files-found: error

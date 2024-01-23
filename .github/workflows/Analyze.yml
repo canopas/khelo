@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd app
+          cd khelo
           flutter clean
           flutter pub get
 
@@ -34,7 +34,7 @@ jobs:
 
       - name: Lint test
         run: |
-          cd app
+          cd khelo
           dart analyze --fatal-infos
 
           cd ../data
