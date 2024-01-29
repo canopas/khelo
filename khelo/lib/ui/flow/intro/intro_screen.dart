@@ -49,8 +49,8 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                 ),
                 PrimaryButton(
                   context.l10n.intro_sign_in_btn_text,
-                  onPressed: () {
-                    AppRoute.phoneLogin.push(context);
+                  onPressed: () async {
+                    await AppRoute.phoneLogin.push(context);
                   },
                 ),
               ],

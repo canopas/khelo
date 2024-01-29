@@ -104,8 +104,8 @@ class AppRoute {
                 verificationId: verificationId,
               ));
 
-  static AppRoute get editProfile =>
-      AppRoute(pathEditProfile, builder: (_) => const EditProfileScreen());
+  static AppRoute editProfile({bool isToCreateAccount = false}) =>
+      AppRoute(pathEditProfile, builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
   static final routes = [
     GoRoute(
@@ -122,13 +122,17 @@ class AppRoute {
             : state.widget(context);
       },
     ),
+    GoRoute(
+      path: pathEditProfile,
+      builder: (context, state) {
+        return state.extra == null
+            ? EditProfileScreen(isToCreateAccount: true,)
+            : state.widget(context);
+      },
+    ),
     phoneLogin.goRoute(),
     GoRoute(
       path: pathPhoneNumberVerification,
-      builder: (context, state) => state.widget(context),
-    ),
-    GoRoute(
-      path: pathEditProfile,
       builder: (context, state) => state.widget(context),
     ),
   ];

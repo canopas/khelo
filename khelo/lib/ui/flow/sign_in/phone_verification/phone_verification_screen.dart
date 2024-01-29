@@ -44,9 +44,9 @@ class _PhoneVerificationScreenState
   void _observeVerificationComplete() {
     ref.listen(
         phoneVerificationStateProvider
-            .select((value) => value.verificationComplete), (previous, next) {
-      if (next) {
-        context.pop(true);
+            .select((value) => value.credential), (previous, next) {
+      if (next != null) {
+        context.pop(next);
       }
     });
   }

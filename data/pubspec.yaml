@@ -13,6 +13,14 @@ dependencies:
 
   shared_preferences: ^2.0.18
 
+  # storage
+  firebase_storage: ^11.6.0
+  cloud_firestore: ^4.14.0
+
+  # auth
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.16.0
+
   # io
   dio: ^5.0.2
   json_annotation: ^4.8.1
@@ -23,10 +31,11 @@ dependencies:
   device_info_plus: ^9.1.1
   package_info_plus: ^5.0.1
   flutter_timezone: ^1.0.8
+  path: ^1.8.3
 
   # state management
-  flutter_riverpod: ^2.3.1
-  hooks_riverpod: ^2.3.1
+  flutter_riverpod: ^2.4.9
+  hooks_riverpod: ^2.4.9
 
 dev_dependencies:
   flutter_test:

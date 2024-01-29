@@ -5,6 +5,23 @@
     "tab_stats_title": "stats",
     "tab_profile_title": "profile",
 
+    "common_none_title":"None",
+    "common_anonymous_title":"Anonymous",
+    "common_delete_title":"Delete",
+    "common_cancel_title":"Cancel",
+    "common_sign_out_title":"Sign out",
+
+    "alert_confirm_default_title": "Are you sure?",
+    "alert_confirm_default_message": "Are you sure you want to {deleteText}?",
+    "@alert_confirm_default_message": {
+      "description": "Are you sure you want to {deleteText}?",
+      "placeholders": {
+        "deleteText": {
+          "type": "String"
+        }
+      }
+    },
+
     "intro_sign_in_btn_text": "Sign in",
     "intro_get_start_text": "Getting started with us",
     "intro_description_text": "get started with Khelo, create your team, start the match, score your match, get your stats and much more.\nEmbark on a journey beyond imagination, where every move is a new adventure!\nPlay. Thrive. Conquer.",
@@ -17,5 +34,46 @@
     "otp_verification_enter_otp_text": "Enter OTP you received",
     "otp_verification_resend_code_text": "Resend Code",
 
-    "edit_profile_screen_title": "Edit profile"
+    "edit_profile_screen_title": "Edit profile",
+    "edit_profile_select_birth_date_placeholder": "Select your date of birth",
+    "edit_profile_name_placeholder": "NAME",
+    "edit_profile_email_placeholder": "EMAIL",
+    "edit_profile_location_placeholder": "LOCATION",
+    "edit_profile_dob_placeholder": "DOB",
+    "edit_profile_gender_placeholder": "GENDER",
+    "edit_profile_player_role_placeholder": "PLAYER ROLE",
+    "edit_profile_batting_style_placeholder": "BATTING STYLE",
+    "edit_profile_bowling_style_placeholder": "BOWLING STYLE",
+    "edit_profile_gender_male_title": "Male",
+    "edit_profile_gender_female_title": "Female",
+    "edit_profile_gender_other_title": "Other",
+    "edit_profile_save_title": "SAVE",
+    "edit_profile_choose_option_title": "Choose an option.",
+    "edit_profile_crop_image_title": "Crop Image",
+
+
+    "batting_style_right_hand_bat_title": "Right hand bat",
+    "batting_style_left_hand_bat_title": "Left hand bat",
+
+    "bowling_style_right_arm_fast_title": "Right arm fast",
+    "bowling_style_right_arm_medium_title": "Right arm medium",
+    "bowling_style_left_arm_fast_title": "Left arm fast",
+    "bowling_style_left_arm_medium_title": "Left arm medium",
+    "bowling_style_slow_left_arm_orthodox_title": "Slow left arm orthodox",
+    "bowling_style_slow_left_arm_chinaman_title": "Slow left arm chinaman",
+    "bowling_style_right_arm_off_break_title": "Right arm off break",
+    "bowling_style_right_arm_leg_break_title": "Right arm leg break",
+
+    "player_role_top_order_batter_title": "Top order batter",
+    "player_role_middle_order_batter_title": "Middle order batter",
+    "player_role_wicket_keeper_batter_title": "Wicket keeper batter",
+    "player_role_wicket_keeper_title": "Wicket keeper",
+    "player_role_bowler_title": "Bowler",
+    "player_role_all_rounder_title": "All rounder",
+    "player_role_lower_order_batter_title": "Lower order batter",
+    "player_role_opening_batter_title": "Opening batter",
+
+    "profile_complete_your_profile_title": "Complete Your Profile",
+    "profile_complete_profile_description_title": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
+    "profile_complete_profile_btn_title": "Complete Profile"
 }

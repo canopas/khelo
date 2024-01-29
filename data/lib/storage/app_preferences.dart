@@ -8,9 +8,9 @@ final currentUserJsonPod = createPrefProvider<String?>(
   defaultValue: null,
 );
 
-final currentUserPod = Provider<User?>((ref) {
+final currentUserPod = Provider<UserModel?>((ref) {
   final json = ref.watch(currentUserJsonPod);
-  return json == null ? null : User.fromJsonString(json);
+  return json == null ? null : UserModel.fromJsonString(json);
 });
 
 final hasUserSession = Provider<bool>((ref) => ref.watch(currentUserPod) != null);

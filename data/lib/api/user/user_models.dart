@@ -9,39 +9,42 @@ part 'user_models.freezed.dart';
 part 'user_models.g.dart';
 
 @freezed
-class User with _$User {
-  const User._();
+class UserModel with _$UserModel {
+  const UserModel._();
 
-  const factory User({
-    required int id,
+  const factory UserModel({
+    required String id,
     String? name,
     String? location,
     String? phone,
-    String? dob,
+    DateTime? dob,
     String? email,
     String? profile_img_url,
     UserGender? gender,
     DateTime? created_at,
     DateTime? updated_at,
-    String? player_role,
-    String? batting_style,
-    String? bowling_style,
-  }) = _User;
+    PlayerRole? player_role,
+    BattingStyle? batting_style,
+    BowlingStyle? bowling_style,
+  }) = _UserModel;
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   String toJsonString() => jsonEncode(toJson());
 
-  static User? fromJsonString(String json) =>
-      User.fromJson(jsonDecode(json));
+  String get nameInitial => name?[0].toUpperCase() ?? '?';
+
+  static UserModel? fromJsonString(String json) =>
+      UserModel.fromJson(jsonDecode(json));
 }
 
 @JsonEnum(valueField: "value")
 enum UserGender {
   unknown(0),
   male(1),
-  female(2);
+  female(2),
+  other(3);
 
   final int value;
 
@@ -50,7 +53,6 @@ enum UserGender {
 
 @JsonEnum(valueField: "value")
 enum PlayerRole {
-  unknown(0),
   topOrderBatter(1),
   middleOrderBatter(2),
   wickerKeeperBatter(3),
@@ -68,7 +70,6 @@ enum PlayerRole {
 
 @JsonEnum(valueField: "value")
 enum BattingStyle {
-  unknown(0),
   rightHandBat(1),
   leftHandBat(2);
 
@@ -79,9 +80,15 @@ enum BattingStyle {
 
 @JsonEnum(valueField: "value")
 enum BowlingStyle {
-  unknown(0),
-  male(1),
-  female(2);
+  rightArmFast(0),
+  rightArmMedium(1),
+  leftArmFast(2),
+  leftArmMedium(3),
+  slowLeftArmOrthodox(4),
+  slowLeftArmChinaMan(5),
+  rightArmOffBreak(6),
+  rightArmLegBreak(7),
+  none(8);
 
   final int value;
 

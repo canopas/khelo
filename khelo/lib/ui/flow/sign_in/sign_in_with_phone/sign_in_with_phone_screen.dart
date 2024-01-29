@@ -1,9 +1,9 @@
 import 'package:data/storage/app_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -30,12 +30,13 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
       (previous, current) async {
         if (current != null) {
           final state = ref.read(signInWithPhoneStateProvider);
-          final bool? success = await AppRoute.verifyOTP(
+          final UserCredential? success = await AppRoute.verifyOTP(
             phoneNumber: state.code.dialCode + state.phone,
             verificationId: current,
-          ).push(context);
-          if (success == true && context.mounted) context.pop(true);
+          ).push<UserCredential>(context);
+          if (success != null && context.mounted) onSignInSuccess(success);
 
+          //context.pop(true);
           //onSignInSuccess(); // in place of context.pop
         }
       },
@@ -46,9 +47,9 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
     ref.listen(
       signInWithPhoneStateProvider.select((value) => value.signInSuccess),
       (previous, current) async {
-        if (current && context.mounted) {
-          context.pop(true);
-          //onSignInSuccess(); // in place of context.pop
+        if (current != null && context.mounted) {
+          // context.pop(true);
+          onSignInSuccess(current); // in place of context.pop
         }
       },
     );
@@ -137,12 +138,12 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
     );
   }
 
-  void onSignInSuccess() async {
+  void onSignInSuccess(UserCredential credential) async {
     final user = ref.read(currentUserPod);
     if (user?.name == null || user!.name!.isEmpty) {
-      // await AppRoute.editProfile(blockBackButton: true).push(context);
-      await AppRoute.editProfile.push(context);
+      AppRoute.editProfile(isToCreateAccount: true).go(context);
+    } else {
+      AppRoute.main.go(context);
     }
-    if (mounted) context.pop(true);
   }
 }

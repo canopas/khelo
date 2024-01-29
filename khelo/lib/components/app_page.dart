@@ -33,7 +33,8 @@ class AppPage extends StatelessWidget {
     }
   }
 
-  Widget _cupertino(BuildContext context) => CupertinoPageScaffold(
+  Widget _cupertino(BuildContext context) =>
+      CupertinoPageScaffold(
         navigationBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null

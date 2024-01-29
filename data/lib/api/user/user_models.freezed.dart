@@ -14,56 +14,57 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-User _$UserFromJson(Map<String, dynamic> json) {
-  return _User.fromJson(json);
+UserModel _$UserModelFromJson(Map<String, dynamic> json) {
+  return _UserModel.fromJson(json);
 }
 
 /// @nodoc
-mixin _$User {
-  int get id => throw _privateConstructorUsedError;
+mixin _$UserModel {
+  String get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
-  String? get dob => throw _privateConstructorUsedError;
+  DateTime? get dob => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
   UserGender? get gender => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
   DateTime? get updated_at => throw _privateConstructorUsedError;
-  String? get player_role => throw _privateConstructorUsedError;
-  String? get batting_style => throw _privateConstructorUsedError;
-  String? get bowling_style => throw _privateConstructorUsedError;
+  PlayerRole? get player_role => throw _privateConstructorUsedError;
+  BattingStyle? get batting_style => throw _privateConstructorUsedError;
+  BowlingStyle? get bowling_style => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $UserModelCopyWith<UserModel> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res, User>;
+abstract class $UserModelCopyWith<$Res> {
+  factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
+      _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {int id,
+      {String id,
       String? name,
       String? location,
       String? phone,
-      String? dob,
+      DateTime? dob,
       String? email,
       String? profile_img_url,
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
-      String? player_role,
-      String? batting_style,
-      String? bowling_style});
+      PlayerRole? player_role,
+      BattingStyle? batting_style,
+      BowlingStyle? bowling_style});
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User>
-    implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
+    implements $UserModelCopyWith<$Res> {
+  _$UserModelCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -91,7 +92,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -107,7 +108,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       dob: freezed == dob
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as DateTime?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -131,47 +132,49 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as PlayerRole?,
       batting_style: freezed == batting_style
           ? _value.batting_style
           : batting_style // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BattingStyle?,
       bowling_style: freezed == bowling_style
           ? _value.bowling_style
           : bowling_style // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BowlingStyle?,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$$UserImplCopyWith(
-          _$UserImpl value, $Res Function(_$UserImpl) then) =
-      __$$UserImplCopyWithImpl<$Res>;
+abstract class _$$UserModelImplCopyWith<$Res>
+    implements $UserModelCopyWith<$Res> {
+  factory _$$UserModelImplCopyWith(
+          _$UserModelImpl value, $Res Function(_$UserModelImpl) then) =
+      __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {int id,
+      {String id,
       String? name,
       String? location,
       String? phone,
-      String? dob,
+      DateTime? dob,
       String? email,
       String? profile_img_url,
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
-      String? player_role,
-      String? batting_style,
-      String? bowling_style});
+      PlayerRole? player_role,
+      BattingStyle? batting_style,
+      BowlingStyle? bowling_style});
 }
 
 /// @nodoc
-class __$$UserImplCopyWithImpl<$Res>
-    extends _$UserCopyWithImpl<$Res, _$UserImpl>
-    implements _$$UserImplCopyWith<$Res> {
-  __$$UserImplCopyWithImpl(_$UserImpl _value, $Res Function(_$UserImpl) _then)
+class __$$UserModelImplCopyWithImpl<$Res>
+    extends _$UserModelCopyWithImpl<$Res, _$UserModelImpl>
+    implements _$$UserModelImplCopyWith<$Res> {
+  __$$UserModelImplCopyWithImpl(
+      _$UserModelImpl _value, $Res Function(_$UserModelImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -191,11 +194,11 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
   }) {
-    return _then(_$UserImpl(
+    return _then(_$UserModelImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -211,7 +214,7 @@ class __$$UserImplCopyWithImpl<$Res>
       dob: freezed == dob
           ? _value.dob
           : dob // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as DateTime?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -235,23 +238,23 @@ class __$$UserImplCopyWithImpl<$Res>
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as PlayerRole?,
       batting_style: freezed == batting_style
           ? _value.batting_style
           : batting_style // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BattingStyle?,
       bowling_style: freezed == bowling_style
           ? _value.bowling_style
           : bowling_style // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as BowlingStyle?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$UserImpl extends _User {
-  const _$UserImpl(
+class _$UserModelImpl extends _UserModel {
+  const _$UserModelImpl(
       {required this.id,
       this.name,
       this.location,
@@ -267,11 +270,11 @@ class _$UserImpl extends _User {
       this.bowling_style})
       : super._();
 
-  factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserImplFromJson(json);
+  factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserModelImplFromJson(json);
 
   @override
-  final int id;
+  final String id;
   @override
   final String? name;
   @override
@@ -279,7 +282,7 @@ class _$UserImpl extends _User {
   @override
   final String? phone;
   @override
-  final String? dob;
+  final DateTime? dob;
   @override
   final String? email;
   @override
@@ -291,22 +294,22 @@ class _$UserImpl extends _User {
   @override
   final DateTime? updated_at;
   @override
-  final String? player_role;
+  final PlayerRole? player_role;
   @override
-  final String? batting_style;
+  final BattingStyle? batting_style;
   @override
-  final String? bowling_style;
+  final BowlingStyle? bowling_style;
 
   @override
   String toString() {
-    return 'User(id: $id, name: $name, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style)';
+    return 'UserModel(id: $id, name: $name, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserImpl &&
+            other is _$UserModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.location, location) ||
@@ -350,38 +353,39 @@ class _$UserImpl extends _User {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserImplCopyWith<_$UserImpl> get copyWith =>
-      __$$UserImplCopyWithImpl<_$UserImpl>(this, _$identity);
+  _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
+      __$$UserModelImplCopyWithImpl<_$UserModelImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserImplToJson(
+    return _$$UserModelImplToJson(
       this,
     );
   }
 }
 
-abstract class _User extends User {
-  const factory _User(
-      {required final int id,
+abstract class _UserModel extends UserModel {
+  const factory _UserModel(
+      {required final String id,
       final String? name,
       final String? location,
       final String? phone,
-      final String? dob,
+      final DateTime? dob,
       final String? email,
       final String? profile_img_url,
       final UserGender? gender,
       final DateTime? created_at,
       final DateTime? updated_at,
-      final String? player_role,
-      final String? batting_style,
-      final String? bowling_style}) = _$UserImpl;
-  const _User._() : super._();
+      final PlayerRole? player_role,
+      final BattingStyle? batting_style,
+      final BowlingStyle? bowling_style}) = _$UserModelImpl;
+  const _UserModel._() : super._();
 
-  factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
+  factory _UserModel.fromJson(Map<String, dynamic> json) =
+      _$UserModelImpl.fromJson;
 
   @override
-  int get id;
+  String get id;
   @override
   String? get name;
   @override
@@ -389,7 +393,7 @@ abstract class _User extends User {
   @override
   String? get phone;
   @override
-  String? get dob;
+  DateTime? get dob;
   @override
   String? get email;
   @override
@@ -401,13 +405,13 @@ abstract class _User extends User {
   @override
   DateTime? get updated_at;
   @override
-  String? get player_role;
+  PlayerRole? get player_role;
   @override
-  String? get batting_style;
+  BattingStyle? get batting_style;
   @override
-  String? get bowling_style;
+  BowlingStyle? get bowling_style;
   @override
   @JsonKey(ignore: true)
-  _$$UserImplCopyWith<_$UserImpl> get copyWith =>
+  _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

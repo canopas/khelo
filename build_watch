@@ -16,7 +16,7 @@ function keep_running {
 }
 
 # Navigate to each project directory and run the watcher in the background
-(cd app && keep_running) &
+(cd khelo && keep_running) &
 (cd data && keep_running) &
 
 # Wait for all background processes to finish
