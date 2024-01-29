@@ -99,7 +99,6 @@ class PhoneVerificationViewNotifier
         await userService.updateUser(user);
         state = state.copyWith(verifying: false, credential: credential);
       } else {
-        // get user
         await userService.getUser(credential.user?.uid ?? "INVALID ID");
         state = state.copyWith(verifying: false, credential: credential);
       }

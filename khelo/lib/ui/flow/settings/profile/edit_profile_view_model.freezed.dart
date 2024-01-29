@@ -29,6 +29,7 @@ mixin _$EditProfileState {
   BowlingStyle? get bowlingStyle => throw _privateConstructorUsedError;
   PlayerRole? get playerRole => throw _privateConstructorUsedError;
   bool get isButtonEnable => throw _privateConstructorUsedError;
+  bool get isImageUploading => throw _privateConstructorUsedError;
   bool get isSaved => throw _privateConstructorUsedError;
   bool get isSaveInProgress => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
@@ -55,6 +56,7 @@ abstract class $EditProfileStateCopyWith<$Res> {
       BowlingStyle? bowlingStyle,
       PlayerRole? playerRole,
       bool isButtonEnable,
+      bool isImageUploading,
       bool isSaved,
       bool isSaveInProgress,
       UserModel? currentUser});
@@ -85,6 +87,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? bowlingStyle = freezed,
     Object? playerRole = freezed,
     Object? isButtonEnable = null,
+    Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
     Object? currentUser = freezed,
@@ -129,6 +132,10 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
       isButtonEnable: null == isButtonEnable
           ? _value.isButtonEnable
           : isButtonEnable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isImageUploading: null == isImageUploading
+          ? _value.isImageUploading
+          : isImageUploading // ignore: cast_nullable_to_non_nullable
               as bool,
       isSaved: null == isSaved
           ? _value.isSaved
@@ -177,6 +184,7 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       BowlingStyle? bowlingStyle,
       PlayerRole? playerRole,
       bool isButtonEnable,
+      bool isImageUploading,
       bool isSaved,
       bool isSaveInProgress,
       UserModel? currentUser});
@@ -206,6 +214,7 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? bowlingStyle = freezed,
     Object? playerRole = freezed,
     Object? isButtonEnable = null,
+    Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
     Object? currentUser = freezed,
@@ -251,6 +260,10 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.isButtonEnable
           : isButtonEnable // ignore: cast_nullable_to_non_nullable
               as bool,
+      isImageUploading: null == isImageUploading
+          ? _value.isImageUploading
+          : isImageUploading // ignore: cast_nullable_to_non_nullable
+              as bool,
       isSaved: null == isSaved
           ? _value.isSaved
           : isSaved // ignore: cast_nullable_to_non_nullable
@@ -281,6 +294,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       this.bowlingStyle = null,
       this.playerRole = null,
       this.isButtonEnable = false,
+      this.isImageUploading = false,
       this.isSaved = false,
       this.isSaveInProgress = false,
       this.currentUser});
@@ -313,6 +327,9 @@ class _$EditProfileStateImpl implements _EditProfileState {
   final bool isButtonEnable;
   @override
   @JsonKey()
+  final bool isImageUploading;
+  @override
+  @JsonKey()
   final bool isSaved;
   @override
   @JsonKey()
@@ -322,7 +339,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
 
   @override
   String toString() {
-    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress, currentUser: $currentUser)';
+    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress, currentUser: $currentUser)';
   }
 
   @override
@@ -348,6 +365,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 other.playerRole == playerRole) &&
             (identical(other.isButtonEnable, isButtonEnable) ||
                 other.isButtonEnable == isButtonEnable) &&
+            (identical(other.isImageUploading, isImageUploading) ||
+                other.isImageUploading == isImageUploading) &&
             (identical(other.isSaved, isSaved) || other.isSaved == isSaved) &&
             (identical(other.isSaveInProgress, isSaveInProgress) ||
                 other.isSaveInProgress == isSaveInProgress) &&
@@ -368,6 +387,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       bowlingStyle,
       playerRole,
       isButtonEnable,
+      isImageUploading,
       isSaved,
       isSaveInProgress,
       currentUser);
@@ -392,6 +412,7 @@ abstract class _EditProfileState implements EditProfileState {
       final BowlingStyle? bowlingStyle,
       final PlayerRole? playerRole,
       final bool isButtonEnable,
+      final bool isImageUploading,
       final bool isSaved,
       final bool isSaveInProgress,
       final UserModel? currentUser}) = _$EditProfileStateImpl;
@@ -416,6 +437,8 @@ abstract class _EditProfileState implements EditProfileState {
   PlayerRole? get playerRole;
   @override
   bool get isButtonEnable;
+  @override
+  bool get isImageUploading;
   @override
   bool get isSaved;
   @override

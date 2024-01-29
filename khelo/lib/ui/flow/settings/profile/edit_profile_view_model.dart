@@ -80,16 +80,30 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
   Future<void> onImageChange(String path) async {
     try {
+      state = state.copyWith(isImageUploading: true);
       final imageUrl = await fileUploadService.uploadProfileImage(path);
       final prevUrl = state.imageUrl;
 
       if (prevUrl != null && prevUrl != state.currentUser?.profile_img_url) {
         await fileUploadService.deleteUploadedProfileImage(prevUrl);
       }
-      state = state.copyWith(imageUrl: imageUrl);
+      state = state.copyWith(imageUrl: imageUrl, isImageUploading: false);
       onValueChange();
     } catch (e) {
+      state = state.copyWith(isImageUploading: false);
       debugPrint("EditProfileViewNotifier: error while image upload -> $e");
+    }
+  }
+
+  Future<void> onBackBtnPressed() async {
+    try {
+      if (state.imageUrl != state.currentUser?.profile_img_url &&
+          state.imageUrl != null) {
+        await fileUploadService.deleteUploadedProfileImage(state.imageUrl!);
+      }
+    } catch (e) {
+      debugPrint(
+          "EditProfileViewNotifier: error while delete image on back btn press -> $e");
     }
   }
 
@@ -176,18 +190,6 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
           "EditProfileViewNotifier: error in reAuthenticate And Delete -> $e");
     }
   }
-
-  void onBackBtnPressed() {
-    try {
-      if (state.imageUrl != state.currentUser?.profile_img_url &&
-          state.imageUrl != null) {
-        fileUploadService.deleteUploadedProfileImage(state.imageUrl!);
-      }
-    } catch (e) {
-      debugPrint(
-          "EditProfileViewNotifier: error while delete image on back btn press -> $e");
-    }
-  }
 }
 
 @freezed
@@ -203,6 +205,7 @@ class EditProfileState with _$EditProfileState {
     @Default(null) BowlingStyle? bowlingStyle,
     @Default(null) PlayerRole? playerRole,
     @Default(false) bool isButtonEnable,
+    @Default(false) bool isImageUploading,
     @Default(false) bool isSaved,
     @Default(false) bool isSaveInProgress,
     UserModel? currentUser,

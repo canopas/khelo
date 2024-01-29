@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -26,12 +27,16 @@ class _AppState extends ConsumerState<App> {
     super.initState();
 
     final AppRoute initialRoute;
-    initialRoute = AppRoute.intro;
-    // if (ref.read(hasUserSession)) {
-    //   initialRoute = AppRoute.main;
-    // } else {
-    //   initialRoute = AppRoute.intro;
-    // }
+    if (ref.read(hasUserSession)) {
+      final currentUser = ref.read(currentUserPod);
+      if (currentUser?.name == null || currentUser!.name!.isEmpty) {
+        initialRoute = AppRoute.editProfile(isToCreateAccount: true);
+      } else {
+        initialRoute = AppRoute.main;
+      }
+    } else {
+      initialRoute = AppRoute.intro;
+    }
 
     _router = GoRouter(
       initialLocation: initialRoute.path,

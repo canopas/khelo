@@ -13,6 +13,7 @@ import 'package:khelo/ui/flow/settings/profile/edit_profile_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
 class EditProfileScreen extends ConsumerWidget {
@@ -182,7 +183,7 @@ class EditProfileScreen extends ConsumerWidget {
                     context.l10n.edit_profile_save_title,
                     expanded: false,
                     progress: state.isSaveInProgress,
-                    enabled: state.isButtonEnable,
+                    enabled: state.isButtonEnable && !state.isImageUploading,
                     onPressed: () => notifier.onSubmitTap(),
                   )
                 ],
@@ -208,19 +209,23 @@ class EditProfileScreen extends ConsumerWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  image: state.imageUrl != null
+                  image: state.imageUrl != null && !state.isImageUploading
                       ? DecorationImage(
                           image: CachedNetworkImageProvider(state.imageUrl!),
                           fit: BoxFit.cover)
                       : null,
                   color: context.colorScheme.primary),
-              child: state.imageUrl == null
+              child: state.imageUrl == null && !state.isImageUploading
                   ? Icon(
                       Icons.person,
                       size: profileViewHeight / 2,
                       color: context.colorScheme.textSecondary,
                     )
-                  : null,
+                  : state.isImageUploading
+                      ? AppProgressIndicator(
+                          color: context.colorScheme.surface,
+                        )
+                      : null,
             ),
             OnTapScale(
               onTap: () {
