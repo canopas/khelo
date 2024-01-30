@@ -1,4 +1,5 @@
 import 'package:data/api/user/user_models.dart';
+import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -15,7 +16,7 @@ final editProfileStateProfile = StateNotifierProvider.autoDispose<
   final notifier = EditProfileViewNotifier(
     ref.read(fileUploadServiceProvider),
     ref.read(userServiceProvider),
-    FirebaseAuth.instance,
+    ref.read(authServiceProvider),
     ref.read(currentUserPod),
   );
   ref.listen(currentUserPod, (_, next) => notifier._updateUser(next));
@@ -25,11 +26,14 @@ final editProfileStateProfile = StateNotifierProvider.autoDispose<
 class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final FileUploadService fileUploadService;
   final UserService userService;
-  final FirebaseAuth auth;
+  final AuthService _authService;
 
   EditProfileViewNotifier(
-      this.fileUploadService, this.userService, this.auth, UserModel? user)
-      : super(EditProfileState(
+    this.fileUploadService,
+    this.userService,
+    this._authService,
+    UserModel? user,
+  ) : super(EditProfileState(
             dob: user?.dob ?? DateTime.now(),
             imageUrl: user?.profile_img_url,
             battingStyle: user?.batting_style,
@@ -85,7 +89,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       final prevUrl = state.imageUrl;
 
       if (prevUrl != null && prevUrl != state.currentUser?.profile_img_url) {
-        await fileUploadService.deleteUploadedProfileImage(prevUrl);
+        await deleteUnusedImage(prevUrl);
       }
       state = state.copyWith(imageUrl: imageUrl, isImageUploading: false);
       onValueChange();
@@ -96,14 +100,9 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   }
 
   Future<void> onBackBtnPressed() async {
-    try {
-      if (state.imageUrl != state.currentUser?.profile_img_url &&
-          state.imageUrl != null) {
-        await fileUploadService.deleteUploadedProfileImage(state.imageUrl!);
-      }
-    } catch (e) {
-      debugPrint(
-          "EditProfileViewNotifier: error while delete image on back btn press -> $e");
+    if (state.imageUrl != state.currentUser?.profile_img_url &&
+        state.imageUrl != null) {
+      await deleteUnusedImage(state.imageUrl!);
     }
   }
 
@@ -114,10 +113,12 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
     try {
       state = state.copyWith(isSaveInProgress: true);
+      final String? previousImageUrl;
       if (state.currentUser?.profile_img_url != null &&
           state.imageUrl != state.currentUser?.profile_img_url) {
-        fileUploadService
-            .deleteUploadedProfileImage(state.currentUser!.profile_img_url!);
+        previousImageUrl = state.currentUser!.profile_img_url!;
+      } else {
+        previousImageUrl = null;
       }
 
       final name = state.nameController.text.trim();
@@ -135,9 +136,13 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
           gender: state.gender,
           profile_img_url: state.imageUrl,
           dob: state.dob,
+          created_at: state.currentUser?.created_at,
           updated_at: DateTime.now());
 
       await userService.updateUser(user);
+      if (previousImageUrl != null) {
+        await deleteUnusedImage(previousImageUrl);
+      }
       state = state.copyWith(isSaveInProgress: false, isSaved: true);
     } catch (e) {
       state = state.copyWith(isSaveInProgress: false);
@@ -148,46 +153,79 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
   Future<void> onDeleteTap() async {
     try {
+      String? userProfileImageUrl;
+      String? currentImageUrl;
       if (state.imageUrl != null) {
         if (state.imageUrl != state.currentUser?.profile_img_url &&
             state.currentUser?.profile_img_url != null) {
-          fileUploadService
-              .deleteUploadedProfileImage(state.currentUser!.profile_img_url!);
+          userProfileImageUrl = state.currentUser!.profile_img_url!;
         }
-        fileUploadService.deleteUploadedProfileImage(state.imageUrl!);
+        currentImageUrl = state.imageUrl!;
       } else {
         if (state.currentUser?.profile_img_url != null) {
-          fileUploadService
-              .deleteUploadedProfileImage(state.currentUser!.profile_img_url!);
+          userProfileImageUrl = state.currentUser!.profile_img_url!;
         }
       }
 
-      await auth.currentUser?.delete();
-      userService.deleteUser();
+      await _authService.deleteAccount();
+
+      if (userProfileImageUrl != null) {
+        await deleteUnusedImage(userProfileImageUrl);
+      }
+      if (currentImageUrl != null) {
+        await deleteUnusedImage(currentImageUrl);
+      } // do not merge above both if-conditions in if-else or any other control-flow, at a time both variable may have non-null value
     } on FirebaseAuthException catch (e) {
       if (e.code == "requires-recent-login") {
-        await _reAuthenticateAndDelete();
+        await _reauthenticateAndDelete();
       }
     } catch (e) {
       debugPrint("EditProfileViewNotifier: error while delete account -> $e");
     }
   }
 
-  Future<void> _reAuthenticateAndDelete() async {
+  Future<void> _reauthenticateAndDelete() async {
     try {
-      final providerData = auth.currentUser?.providerData.first;
-      if (PhoneAuthProvider().providerId == providerData?.providerId) {
-        await auth.currentUser?.reauthenticateWithProvider(PhoneAuthProvider());
-        await auth.currentUser?.delete();
+      String? userProfileImageUrl;
+      String? currentImageUrl;
+      if (state.imageUrl != null) {
+        if (state.imageUrl != state.currentUser?.profile_img_url &&
+            state.currentUser?.profile_img_url != null) {
+          userProfileImageUrl = state.currentUser!.profile_img_url!;
+        }
+        currentImageUrl = state.imageUrl!;
+      } else {
+        if (state.currentUser?.profile_img_url != null) {
+          userProfileImageUrl = state.currentUser!.profile_img_url!;
+        }
       }
+
+      _authService.reauthenticateAndDeleteAccount();
+
+      if (userProfileImageUrl != null) {
+        await deleteUnusedImage(userProfileImageUrl);
+      }
+      if (currentImageUrl != null) {
+        await deleteUnusedImage(currentImageUrl);
+      } // do not merge above both if-conditions in if-else or any other control-flow, at a time both variable may have non-null value
     } on FirebaseAuthException catch (e) {
       if (e.code == "web-user-interaction-failure") {
+        // TODO: handle the error when user account has been deleted after creating in few course of time
         debugPrint(
             "EditProfileViewNotifier: error in _reAuthenticateAndDelete -> $e");
       }
     } catch (e) {
       debugPrint(
           "EditProfileViewNotifier: error in reAuthenticate And Delete -> $e");
+    }
+  }
+
+  Future<void> deleteUnusedImage(String imgUrl) async {
+    try {
+      await fileUploadService.deleteUploadedProfileImage(imgUrl);
+    } catch (e) {
+      debugPrint(
+          "EditProfileViewNotifier: error while deleting Unused Image -> $e");
     }
   }
 }

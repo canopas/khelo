@@ -228,9 +228,7 @@ class EditProfileScreen extends ConsumerWidget {
                       : null,
             ),
             OnTapScale(
-              onTap: () {
-                _onEditProfileButtonTap(context, notifier);
-              },
+              onTap: () => _onEditProfileButtonTap(context, notifier),
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
@@ -521,9 +519,7 @@ class EditProfileScreen extends ConsumerWidget {
               context.l10n.common_delete_title.toLowerCase())),
           actions: [
             TextButton(
-              onPressed: () {
-                context.pop();
-              },
+              onPressed: () => context.pop(),
               child: Text(
                 context.l10n.common_cancel_title,
                 style: TextStyle(color: context.colorScheme.textSecondary),

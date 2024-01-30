@@ -13,7 +13,7 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final notifier = ref.read(signInWithPhoneStateProvider.notifier);
+    final notifier = ref.watch(signInWithPhoneStateProvider.notifier);
     final countryCode = ref.watch(
       signInWithPhoneStateProvider.select((value) => value.code),
     );
@@ -73,7 +73,6 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
         const SizedBox(
           height: 30,
           width: 1,
-          // color: context.colorScheme.outline,
         ),
       ],
     );

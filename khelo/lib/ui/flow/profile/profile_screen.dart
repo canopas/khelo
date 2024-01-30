@@ -58,10 +58,6 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 _inCompleteProfileView(context, state.currentUser!)
               ],
-              // const SizedBox(
-              //   height: 24,
-              // ),
-              // Text(context.l10n.edit_profile_sign_out_title, style: AppTextStyle.header2.copyWith(color: context.colorScheme.textSecondary),)
             ],
           );
         },
@@ -86,12 +82,6 @@ class ProfileScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                   color: context.colorScheme.containerLow,
                   shape: BoxShape.circle,
-                  // image: state.currentUser?.profile_img_url != null
-                  //     ? DecorationImage(
-                  //         image: CachedNetworkImageProvider(
-                  //             state.currentUser!.profile_img_url!),
-                  //         fit: BoxFit.cover)
-                  //     : null,
                   image: state.currentUser?.profile_img_url != null
                       ? DecorationImage(
                           image: CachedNetworkImageProvider(

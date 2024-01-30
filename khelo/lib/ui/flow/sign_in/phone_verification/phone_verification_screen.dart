@@ -44,8 +44,8 @@ class _PhoneVerificationScreenState
   void _observeVerificationComplete() {
     ref.listen(
         phoneVerificationStateProvider
-            .select((value) => value.credential), (previous, next) {
-      if (next != null) {
+            .select((value) => value.isVerificationComplete), (previous, next) {
+      if (next) {
         context.pop(next);
       }
     });
@@ -81,9 +81,7 @@ class _PhoneVerificationScreenState
                 enabled: state.enableVerify,
                 progress: state.verifying,
                 context.l10n.otp_verification_verify_otp_text,
-                onPressed: () {
-                  notifier.verifyOTP();
-                },
+                onPressed: () => notifier.verifyOTP(),
               ),
               const SizedBox(
                 height: 16,

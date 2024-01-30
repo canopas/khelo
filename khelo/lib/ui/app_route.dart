@@ -92,7 +92,7 @@ class AppRoute {
       AppRoute("/intro", builder: (_) => const IntroScreen());
 
   static AppRoute get phoneLogin =>
-      AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
+      AppRoute("/phone-login", builder: (_) => SignInWithPhoneScreen());
 
   static AppRoute verifyOTP({
     required String verificationId,
@@ -104,8 +104,9 @@ class AppRoute {
                 verificationId: verificationId,
               ));
 
-  static AppRoute editProfile({bool isToCreateAccount = false}) =>
-      AppRoute(pathEditProfile, builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
+  static AppRoute editProfile({bool isToCreateAccount = false}) => AppRoute(
+      pathEditProfile,
+      builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
   static final routes = [
     GoRoute(
@@ -126,7 +127,9 @@ class AppRoute {
       path: pathEditProfile,
       builder: (context, state) {
         return state.extra == null
-            ? EditProfileScreen(isToCreateAccount: true,)
+            ? EditProfileScreen(
+                isToCreateAccount: true,
+              )
             : state.widget(context);
       },
     ),

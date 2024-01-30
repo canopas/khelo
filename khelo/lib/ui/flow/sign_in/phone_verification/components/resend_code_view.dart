@@ -14,7 +14,7 @@ class PhoneVerificationResendCodeView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(phoneVerificationStateProvider.notifier);
+    final notifier = ref.watch(phoneVerificationStateProvider.notifier);
 
     final duration = ref.watch(
       phoneVerificationStateProvider
@@ -27,7 +27,6 @@ class PhoneVerificationResendCodeView extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         OnTapScale(
-          // onTapScale
           enabled: activeResendCodeBtn,
           onTap: () async {
             await notifier.resendCode(phone: phoneNumber);

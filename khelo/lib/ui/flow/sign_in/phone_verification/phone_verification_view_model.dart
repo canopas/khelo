@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:data/api/user/user_models.dart';
-import 'package:data/service/user/user_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:data/service/auth/auth_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,19 +9,19 @@ part 'phone_verification_view_model.freezed.dart';
 final phoneVerificationStateProvider = StateNotifierProvider.autoDispose<
     PhoneVerificationViewNotifier, PhoneVerificationState>((ref) {
   return PhoneVerificationViewNotifier(
-      FirebaseAuth.instance, ref.read(userServiceProvider));
+    ref.read(authServiceProvider),
+  );
 });
 
 class PhoneVerificationViewNotifier
     extends StateNotifier<PhoneVerificationState> {
-  final FirebaseAuth firebaseAuth;
-  final UserService userService;
+  final AuthService _authService;
   late Timer timer;
   late String phoneNumber;
 
   bool firstAutoVerificationComplete = false;
 
-  PhoneVerificationViewNotifier(this.firebaseAuth, this.userService)
+  PhoneVerificationViewNotifier(this._authService)
       : super(const PhoneVerificationState()) {
     updateResendCodeTimerDuration();
   }
@@ -65,61 +63,30 @@ class PhoneVerificationViewNotifier
     try {
       state = state.copyWith(error: null);
       updateResendCodeTimerDuration();
-      await firebaseAuth.verifyPhoneNumber(
+      _authService.verifyPhoneNumber(
         phoneNumber: phone,
-        verificationCompleted: (phoneAuthCredential) async {
-          try {
-            final userCredential =
-                await firebaseAuth.signInWithCredential(phoneAuthCredential);
-            onVerificationSuccess(userCredential);
-          } catch (error) {
-            state = state.copyWith(error: error);
-          }
+        onVerificationCompleted: (phoneCredential, _) {
+          state =
+              state.copyWith(verifying: false, isVerificationComplete: true);
         },
-        verificationFailed: (error) {
+        onVerificationFailed: (error) {
           state = state.copyWith(error: error);
         },
-        codeSent: (verificationId, forceResendingToken) {
+        onCodeSent: (verificationId, _) {
           state = state.copyWith(verificationId: verificationId);
         },
-        codeAutoRetrievalTimeout: (verificationId) {},
       );
     } catch (e) {
       debugPrint("PhoneVerificationViewNotifier: error in resend otp -> $e");
     }
   }
 
-  Future<void> onVerificationSuccess(UserCredential credential) async {
-    try {
-      if (credential.additionalUserInfo?.isNewUser ?? false) {
-        UserModel user = UserModel(
-            id: firebaseAuth.currentUser?.uid ?? "INVALID ID",
-            phone: firebaseAuth.currentUser?.phoneNumber,
-            created_at: DateTime.now());
-        await userService.updateUser(user);
-        state = state.copyWith(verifying: false, credential: credential);
-      } else {
-        await userService.getUser(credential.user?.uid ?? "INVALID ID");
-        state = state.copyWith(verifying: false, credential: credential);
-      }
-    } catch (e) {
-      debugPrint(
-          "PhoneVerificationViewNotifier: error in onVerificationSuccess -> $e");
-    }
-  }
-
   Future<void> verifyOTP() async {
     if (state.verificationId == null) return;
-
     state = state.copyWith(verifying: true, error: null);
     try {
-      final credential = PhoneAuthProvider.credential(
-        verificationId: state.verificationId!,
-        smsCode: state.otp,
-      );
-      final userCredential =
-          await firebaseAuth.signInWithCredential(credential);
-      onVerificationSuccess(userCredential);
+      await _authService.verifyOTP(state.verificationId!, state.otp);
+      state = state.copyWith(verifying: false, isVerificationComplete: true);
     } catch (e) {
       state = state.copyWith(verifying: false, error: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");
@@ -138,7 +105,7 @@ class PhoneVerificationState with _$PhoneVerificationState {
   const factory PhoneVerificationState({
     @Default(false) bool verifying,
     @Default(false) bool enableVerify,
-    @Default(null) UserCredential? credential,
+    @Default(false) bool isVerificationComplete,
     String? verificationId,
     @Default('') String otp,
     @Default(Duration(seconds: 30)) Duration activeResendDuration,

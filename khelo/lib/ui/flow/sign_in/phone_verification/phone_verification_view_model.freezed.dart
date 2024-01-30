@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$PhoneVerificationState {
   bool get verifying => throw _privateConstructorUsedError;
   bool get enableVerify => throw _privateConstructorUsedError;
-  UserCredential? get credential => throw _privateConstructorUsedError;
+  bool get isVerificationComplete => throw _privateConstructorUsedError;
   String? get verificationId => throw _privateConstructorUsedError;
   String get otp => throw _privateConstructorUsedError;
   Duration get activeResendDuration => throw _privateConstructorUsedError;
@@ -38,7 +38,7 @@ abstract class $PhoneVerificationStateCopyWith<$Res> {
   $Res call(
       {bool verifying,
       bool enableVerify,
-      UserCredential? credential,
+      bool isVerificationComplete,
       String? verificationId,
       String otp,
       Duration activeResendDuration,
@@ -61,7 +61,7 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
   $Res call({
     Object? verifying = null,
     Object? enableVerify = null,
-    Object? credential = freezed,
+    Object? isVerificationComplete = null,
     Object? verificationId = freezed,
     Object? otp = null,
     Object? activeResendDuration = null,
@@ -76,10 +76,10 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
           ? _value.enableVerify
           : enableVerify // ignore: cast_nullable_to_non_nullable
               as bool,
-      credential: freezed == credential
-          ? _value.credential
-          : credential // ignore: cast_nullable_to_non_nullable
-              as UserCredential?,
+      isVerificationComplete: null == isVerificationComplete
+          ? _value.isVerificationComplete
+          : isVerificationComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
       verificationId: freezed == verificationId
           ? _value.verificationId
           : verificationId // ignore: cast_nullable_to_non_nullable
@@ -109,7 +109,7 @@ abstract class _$$PhoneVerificationStateImplCopyWith<$Res>
   $Res call(
       {bool verifying,
       bool enableVerify,
-      UserCredential? credential,
+      bool isVerificationComplete,
       String? verificationId,
       String otp,
       Duration activeResendDuration,
@@ -131,7 +131,7 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
   $Res call({
     Object? verifying = null,
     Object? enableVerify = null,
-    Object? credential = freezed,
+    Object? isVerificationComplete = null,
     Object? verificationId = freezed,
     Object? otp = null,
     Object? activeResendDuration = null,
@@ -146,10 +146,10 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
           ? _value.enableVerify
           : enableVerify // ignore: cast_nullable_to_non_nullable
               as bool,
-      credential: freezed == credential
-          ? _value.credential
-          : credential // ignore: cast_nullable_to_non_nullable
-              as UserCredential?,
+      isVerificationComplete: null == isVerificationComplete
+          ? _value.isVerificationComplete
+          : isVerificationComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
       verificationId: freezed == verificationId
           ? _value.verificationId
           : verificationId // ignore: cast_nullable_to_non_nullable
@@ -173,7 +173,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
   const _$PhoneVerificationStateImpl(
       {this.verifying = false,
       this.enableVerify = false,
-      this.credential = null,
+      this.isVerificationComplete = false,
       this.verificationId,
       this.otp = '',
       this.activeResendDuration = const Duration(seconds: 30),
@@ -187,7 +187,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
   final bool enableVerify;
   @override
   @JsonKey()
-  final UserCredential? credential;
+  final bool isVerificationComplete;
   @override
   final String? verificationId;
   @override
@@ -201,7 +201,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
 
   @override
   String toString() {
-    return 'PhoneVerificationState(verifying: $verifying, enableVerify: $enableVerify, credential: $credential, verificationId: $verificationId, otp: $otp, activeResendDuration: $activeResendDuration, error: $error)';
+    return 'PhoneVerificationState(verifying: $verifying, enableVerify: $enableVerify, isVerificationComplete: $isVerificationComplete, verificationId: $verificationId, otp: $otp, activeResendDuration: $activeResendDuration, error: $error)';
   }
 
   @override
@@ -213,8 +213,8 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
                 other.verifying == verifying) &&
             (identical(other.enableVerify, enableVerify) ||
                 other.enableVerify == enableVerify) &&
-            (identical(other.credential, credential) ||
-                other.credential == credential) &&
+            (identical(other.isVerificationComplete, isVerificationComplete) ||
+                other.isVerificationComplete == isVerificationComplete) &&
             (identical(other.verificationId, verificationId) ||
                 other.verificationId == verificationId) &&
             (identical(other.otp, otp) || other.otp == otp) &&
@@ -228,7 +228,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
       runtimeType,
       verifying,
       enableVerify,
-      credential,
+      isVerificationComplete,
       verificationId,
       otp,
       activeResendDuration,
@@ -246,7 +246,7 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
   const factory _PhoneVerificationState(
       {final bool verifying,
       final bool enableVerify,
-      final UserCredential? credential,
+      final bool isVerificationComplete,
       final String? verificationId,
       final String otp,
       final Duration activeResendDuration,
@@ -257,7 +257,7 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
   @override
   bool get enableVerify;
   @override
-  UserCredential? get credential;
+  bool get isVerificationComplete;
   @override
   String? get verificationId;
   @override

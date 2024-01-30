@@ -1,5 +1,4 @@
 import 'package:data/storage/app_preferences.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,59 +13,53 @@ import 'package:style/text/app_text_style.dart';
 
 import 'components/sign_in_with_phone_input_fields.dart';
 
-class SignInWithPhoneScreen extends ConsumerStatefulWidget {
-  const SignInWithPhoneScreen({super.key});
+class SignInWithPhoneScreen extends ConsumerWidget {
+  SignInWithPhoneScreen({super.key});
 
-  @override
-  ConsumerState createState() => _SignInWithPhoneScreenState();
-}
-
-class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
   final TextEditingController _phoneController = TextEditingController();
 
-  void _observeOtp({required BuildContext context}) {
+  void _observeOtp({required BuildContext context, required WidgetRef ref}) {
     ref.listen(
       signInWithPhoneStateProvider.select((value) => value.verificationId),
       (previous, current) async {
         if (current != null) {
-          final state = ref.read(signInWithPhoneStateProvider);
-          final UserCredential? success = await AppRoute.verifyOTP(
+          final state = ref.watch(signInWithPhoneStateProvider);
+          final bool? success = await AppRoute.verifyOTP(
             phoneNumber: state.code.dialCode + state.phone,
             verificationId: current,
-          ).push<UserCredential>(context);
-          if (success != null && context.mounted) onSignInSuccess(success);
-
-          //context.pop(true);
-          //onSignInSuccess(); // in place of context.pop
+          ).push<bool>(context);
+          if (success != null && success && context.mounted) {
+            onSignInSuccess(context, ref);
+          }
         }
       },
     );
   }
 
-  void _observeSignInSuccess({required BuildContext context}) {
+  void _observeSignInSuccess({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
     ref.listen(
       signInWithPhoneStateProvider.select((value) => value.signInSuccess),
       (previous, current) async {
-        if (current != null && context.mounted) {
-          // context.pop(true);
-          onSignInSuccess(current); // in place of context.pop
-        }
+        if (current && context.mounted) onSignInSuccess(context, ref);
       },
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(signInWithPhoneStateProvider.notifier);
     final loading = ref.watch(
       signInWithPhoneStateProvider.select((value) => value.verifying),
     );
     final enable = ref.watch(
-      signInWithPhoneStateProvider.select((value) => value.enableNext),
+      signInWithPhoneStateProvider.select((value) => value.enableBtn),
     );
 
-    _observeOtp(context: context);
-    _observeSignInSuccess(context: context);
+    _observeOtp(context: context, ref: ref);
+    _observeSignInSuccess(context: context, ref: ref);
 
     return AppPage(
       body: Builder(builder: (context) {
@@ -83,15 +76,13 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
               _phoneInputField(
                   context: context,
                   enable: true,
-                  loading: false,
+                  loading: loading,
                   notifier: notifier),
               PrimaryButton(
                 context.l10n.sign_in_get_otp_btn_text,
                 enabled: enable,
                 progress: loading,
-                onPressed: () {
-                  notifier.verifyPhoneNumber();
-                },
+                onPressed: () => notifier.verifyPhoneNumber(),
               ),
             ],
           ),
@@ -121,9 +112,7 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
         style: AppTextStyle.subtitle1.copyWith(
           color: context.colorScheme.textPrimary,
         ),
-        onTapOutside: (event) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
+        onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
         placeholderStyle: AppTextStyle.subtitle1.copyWith(
           color: context.colorScheme.textDisabled,
         ),
@@ -138,9 +127,9 @@ class _SignInWithPhoneScreenState extends ConsumerState<SignInWithPhoneScreen> {
     );
   }
 
-  void onSignInSuccess(UserCredential credential) async {
+  void onSignInSuccess(BuildContext context, WidgetRef ref) async {
     final user = ref.read(currentUserPod);
-    if (user?.name == null || user!.name!.isEmpty) {
+    if (user?.name == null || user!.name!.trim().isEmpty) {
       AppRoute.editProfile(isToCreateAccount: true).go(context);
     } else {
       AppRoute.main.go(context);
