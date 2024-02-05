@@ -5,21 +5,23 @@
     "tab_stats_title": "stats",
     "tab_profile_title": "profile",
 
-    "common_none_title":"None",
-    "common_anonymous_title":"Anonymous",
-    "common_delete_title":"Delete",
-    "common_cancel_title":"Cancel",
-    "common_sign_out_title":"Sign out",
+    "common_none_title": "None",
+    "common_anonymous_title": "Anonymous",
+    "common_delete_title": "Delete",
+    "common_cancel_title": "Cancel",
+    "common_sign_out_title": "Sign out",
+    "common_add_title": "Add",
+    "common_save_title": "Save",
 
     "alert_confirm_default_title": "Are you sure?",
     "alert_confirm_default_message": "Are you sure you want to {deleteText}?",
     "@alert_confirm_default_message": {
-      "description": "Are you sure you want to {deleteText}?",
-      "placeholders": {
-        "deleteText": {
-          "type": "String"
+        "description": "Are you sure you want to {deleteText}?",
+        "placeholders": {
+            "deleteText": {
+                "type": "String"
+            }
         }
-      }
     },
 
     "intro_sign_in_btn_text": "Sign in",
@@ -48,9 +50,9 @@
     "edit_profile_gender_female_title": "Female",
     "edit_profile_gender_other_title": "Other",
     "edit_profile_save_title": "SAVE",
-    "edit_profile_choose_option_title": "Choose an option.",
-    "edit_profile_crop_image_title": "Crop Image",
 
+    "image_picker_choose_option_title": "Choose an option.",
+    "image_picker_crop_image_title": "Crop Image",
 
     "batting_style_right_hand_bat_title": "Right hand bat",
     "batting_style_left_hand_bat_title": "Left hand bat",
@@ -75,5 +77,20 @@
 
     "profile_complete_your_profile_title": "Complete Your Profile",
     "profile_complete_profile_description_title": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
-    "profile_complete_profile_btn_title": "Complete Profile"
+    "profile_complete_profile_btn_title": "Complete Profile",
+
+    "my_cricket_screen_title": "My Cricket",
+
+    "add_team_screen_title": "Add Team",
+    "add_team_add_as_member_description_text": "Add me as a team member",
+    "add_team_enter_team_name_placeholder_text": "Enter team name",
+    "add_team_location_text": "Location",
+
+    "add_team_member_screen_title": "Add team member",
+    "add_team_member_search_placeholder_text": "Search member with name",
+    "add_team_member_verify_placeholder_text": "Enter the last five digits of the phone number of the selected player.",
+    "add_team_member_verify_title": "Verify",
+
+    "my_game_teams_tab_title": "Teams",
+    "my_game_matches_tab_title": "Matches"
 }

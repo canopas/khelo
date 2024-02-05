@@ -21,10 +21,6 @@ class UserService {
   UserService(
       this.currentUser, this.currentUserJsonController, this._firestore);
 
-  Future<void> addUser(UserModel user) async {
-    await _firestore.collection(collectionName).add(user.toJson());
-  }
-
   Future<void> deleteUser() async {
     await _firestore.collection(collectionName).doc(currentUser?.id).delete();
     currentUserJsonController.state = null;
@@ -43,8 +39,28 @@ class UserService {
     DocumentReference userRef = _firestore.collection(collectionName).doc(id);
     DocumentSnapshot snapshot = await userRef.get();
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-    var tempUser = UserModel.fromJson(userData);
-    currentUserJsonController.state = tempUser.toJsonString();
+    var userModel = UserModel.fromJson(userData);
+    currentUserJsonController.state = userModel.toJsonString();
+  }
+
+  Future<List<UserModel>> searchUser(String searchKey) async {
+    // _firestore
+    //     .collection(collectionName)
+    //     .where('name_lowercase',
+    //         isGreaterThanOrEqualTo: searchKey.toLowerCase())
+    //     .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z');
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection(collectionName)
+        .where('name_lowercase',
+            isGreaterThanOrEqualTo: searchKey.toLowerCase())
+        .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return UserModel.fromJson(data).copyWith(id: doc.id);
+    }).toList();
   }
 
   void signOutUser() {

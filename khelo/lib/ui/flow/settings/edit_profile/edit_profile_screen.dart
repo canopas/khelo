@@ -3,29 +3,28 @@ import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
-import 'package:khelo/ui/flow/settings/profile/edit_profile_view_model.dart';
+import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../../components/image_picker_sheet.dart';
+
 class EditProfileScreen extends ConsumerWidget {
   final bool isToCreateAccount;
 
-  EditProfileScreen({super.key, required this.isToCreateAccount});
+  const EditProfileScreen({super.key, required this.isToCreateAccount});
 
   final double profileViewHeight = 130;
-  final ImagePicker _picker = ImagePicker();
 
   _observeIsSaved(BuildContext context, WidgetRef ref) {
-    ref.listen(editProfileStateProfile.select((state) => state.isSaved),
+    ref.listen(editProfileStateProvider.select((state) => state.isSaved),
         (previous, next) {
       if (next) {
         if (isToCreateAccount) {
@@ -39,8 +38,8 @@ class EditProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(editProfileStateProfile.notifier);
-    final state = ref.watch(editProfileStateProfile);
+    final notifier = ref.watch(editProfileStateProvider.notifier);
+    final state = ref.watch(editProfileStateProvider);
 
     _observeIsSaved(context, ref);
 
@@ -103,7 +102,7 @@ class EditProfileScreen extends ConsumerWidget {
                       WidgetSpan(
                           child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
-                        child: Icon(Icons.calendar_today,
+                        child: Icon(Icons.cake_rounded,
                             color: context.colorScheme.textPrimary),
                       )),
                       TextSpan(
@@ -228,7 +227,13 @@ class EditProfileScreen extends ConsumerWidget {
                       : null,
             ),
             OnTapScale(
-              onTap: () => _onEditProfileButtonTap(context, notifier),
+              onTap: () async {
+                final imagePath =
+                    await ImagePickerSheet.show<String>(context, true);
+                if (imagePath != null) {
+                  notifier.onImageChange(imagePath);
+                }
+              },
               child: Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
@@ -251,111 +256,6 @@ class EditProfileScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  void _onEditProfileButtonTap(
-      BuildContext context, EditProfileViewNotifier notifier) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      backgroundColor: context.colorScheme.surface,
-      builder: (sheetContext) {
-        return Container(
-          padding: sheetContext.mediaQueryPadding +
-              const EdgeInsets.only(left: 16, right: 16, bottom: 24),
-          child: Wrap(
-            children: [
-              Text(
-                context.l10n.edit_profile_choose_option_title,
-                style: AppTextStyle.header2
-                    .copyWith(color: context.colorScheme.textSecondary),
-              ),
-              const SizedBox(
-                height: 34,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  //<a href="https://lovepik.com/images/png-light-line.html">Light Line Png vectors by Lovepik.com</a> GRAPHIC IMAGE LINK : camera
-                  _sheetOptionCell(
-                    context,
-                    notifier,
-                    "assets/images/ic_camera.png",
-                    () async {
-                      sheetContext.pop();
-                      final image = await _picker.pickImage(
-                        source: ImageSource.camera,
-                        requestFullMetadata: false,
-                      );
-                      if (context.mounted && image != null) {
-                        _openCropImage(context, notifier, image);
-                      }
-                    },
-                  ),
-
-                  _sheetOptionCell(
-                    context,
-                    notifier,
-                    "assets/images/ic_gallery.png",
-                    () async {
-                      sheetContext.pop();
-                      final image = await _picker.pickImage(
-                        source: ImageSource.gallery,
-                        requestFullMetadata: false,
-                      );
-                      if (context.mounted && image != null) {
-                        _openCropImage(context, notifier, image);
-                      }
-                    },
-                  ),
-                ],
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _sheetOptionCell(BuildContext context,
-      EditProfileViewNotifier notifier, String imagePath, VoidCallback onTap) {
-    return OnTapScale(
-      onTap: () => onTap(),
-      child: Container(
-        height: 80,
-        width: 80,
-        decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage(imagePath)),
-            shape: BoxShape.circle,
-            border: Border.all(color: context.colorScheme.containerHigh),
-            color: context.colorScheme.containerLow),
-      ),
-    );
-  }
-
-  void _openCropImage(BuildContext context, EditProfileViewNotifier notifier,
-      XFile image) async {
-    final croppedImage = await ImageCropper().cropImage(
-      sourcePath: image.path,
-      aspectRatioPresets: [CropAspectRatioPreset.square],
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: context.l10n.edit_profile_crop_image_title,
-          toolbarColor: context.colorScheme.primary,
-          toolbarWidgetColor: context.colorScheme.onPrimary,
-          initAspectRatio: CropAspectRatioPreset.square,
-          lockAspectRatio: true,
-        ),
-        IOSUiSettings(
-          title: context.l10n.edit_profile_crop_image_title,
-        ),
-        WebUiSettings(
-          context: context,
-        ),
-      ],
-    );
-
-    if (croppedImage != null) notifier.onImageChange(croppedImage.path);
   }
 
   Widget _textInputField(BuildContext context, EditProfileViewNotifier notifier,

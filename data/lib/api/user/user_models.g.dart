@@ -10,6 +10,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
       id: json['id'] as String,
       name: json['name'] as String?,
+      name_lowercase: json['name_lowercase'] as String?,
       location: json['location'] as String?,
       phone: json['phone'] as String?,
       dob: json['dob'] == null ? null : DateTime.parse(json['dob'] as String),
@@ -34,6 +35,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'name_lowercase': instance.name_lowercase,
       'location': instance.location,
       'phone': instance.phone,
       'dob': instance.dob?.toIso8601String(),

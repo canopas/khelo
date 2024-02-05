@@ -22,6 +22,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String get id => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  String? get name_lowercase => throw _privateConstructorUsedError;
   String? get location => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
   DateTime? get dob => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $UserModelCopyWith<$Res> {
   $Res call(
       {String id,
       String? name,
+      String? name_lowercase,
       String? location,
       String? phone,
       DateTime? dob,
@@ -76,6 +78,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   $Res call({
     Object? id = null,
     Object? name = freezed,
+    Object? name_lowercase = freezed,
     Object? location = freezed,
     Object? phone = freezed,
     Object? dob = freezed,
@@ -96,6 +99,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name_lowercase: freezed == name_lowercase
+          ? _value.name_lowercase
+          : name_lowercase // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -156,6 +163,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
   $Res call(
       {String id,
       String? name,
+      String? name_lowercase,
       String? location,
       String? phone,
       DateTime? dob,
@@ -182,6 +190,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = freezed,
+    Object? name_lowercase = freezed,
     Object? location = freezed,
     Object? phone = freezed,
     Object? dob = freezed,
@@ -202,6 +211,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name_lowercase: freezed == name_lowercase
+          ? _value.name_lowercase
+          : name_lowercase // ignore: cast_nullable_to_non_nullable
               as String?,
       location: freezed == location
           ? _value.location
@@ -257,6 +270,7 @@ class _$UserModelImpl extends _UserModel {
   const _$UserModelImpl(
       {required this.id,
       this.name,
+      this.name_lowercase,
       this.location,
       this.phone,
       this.dob,
@@ -277,6 +291,8 @@ class _$UserModelImpl extends _UserModel {
   final String id;
   @override
   final String? name;
+  @override
+  final String? name_lowercase;
   @override
   final String? location;
   @override
@@ -302,7 +318,7 @@ class _$UserModelImpl extends _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style)';
+    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style)';
   }
 
   @override
@@ -312,6 +328,8 @@ class _$UserModelImpl extends _UserModel {
             other is _$UserModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.name_lowercase, name_lowercase) ||
+                other.name_lowercase == name_lowercase) &&
             (identical(other.location, location) ||
                 other.location == location) &&
             (identical(other.phone, phone) || other.phone == phone) &&
@@ -338,6 +356,7 @@ class _$UserModelImpl extends _UserModel {
       runtimeType,
       id,
       name,
+      name_lowercase,
       location,
       phone,
       dob,
@@ -368,6 +387,7 @@ abstract class _UserModel extends UserModel {
   const factory _UserModel(
       {required final String id,
       final String? name,
+      final String? name_lowercase,
       final String? location,
       final String? phone,
       final DateTime? dob,
@@ -388,6 +408,8 @@ abstract class _UserModel extends UserModel {
   String get id;
   @override
   String? get name;
+  @override
+  String? get name_lowercase;
   @override
   String? get location;
   @override

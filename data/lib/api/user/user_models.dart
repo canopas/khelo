@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_models.freezed.dart';
-
 part 'user_models.g.dart';
 
 @freezed
@@ -15,6 +14,7 @@ class UserModel with _$UserModel {
   const factory UserModel({
     required String id,
     String? name,
+    String? name_lowercase,
     String? location,
     String? phone,
     DateTime? dob,

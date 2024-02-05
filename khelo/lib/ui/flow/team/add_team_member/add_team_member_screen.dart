@@ -1,0 +1,310 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:data/api/team/team_model.dart';
+import 'package:data/api/user/user_models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:khelo/components/app_page.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
+import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
+import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_style.dart';
+
+class AddTeamMemberScreen extends ConsumerWidget {
+  final TeamModel team;
+
+  const AddTeamMemberScreen({super.key, required this.team});
+
+  void _observeIsAdded(
+      BuildContext context, WidgetRef ref, AddTeamMemberState state) {
+    ref.listen(addTeamMemberStateProvider.select((value) => value.isAdded),
+        (previous, next) {
+      if (next && context.mounted) {
+        context.pop(state.selectedUsers);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.watch(addTeamMemberStateProvider.notifier);
+    final state = ref.watch(addTeamMemberStateProvider);
+
+    _observeIsAdded(context, ref, state);
+    return AppPage(
+      title: context.l10n.add_team_member_screen_title,
+      actions: [
+        Visibility(
+          visible: state.selectedUsers.isNotEmpty,
+          child: IconButton(
+              onPressed: () {
+                notifier.addPlayersToTeam(team.id ?? "INVALID ID");
+              },
+              icon: const Icon(Icons.check)),
+        )
+      ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: SafeArea(
+          child: Column(
+            children: [
+              _searchTextField(context, notifier, state),
+              Expanded(
+                child: state.searchedUsers.isEmpty
+                    ? const Center(
+                        child: Text(
+                            "search above person to add them in your team"),
+                      )
+                    : ListView.separated(
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 16,
+                          );
+                        },
+                        itemCount: state.searchedUsers.length,
+                        itemBuilder: (context, index) {
+                          UserModel user = state.searchedUsers[index];
+                          return _userProfileCell(
+                              context, notifier, state, user);
+                        },
+                      ),
+              ),
+              _selectedPlayerList(context, notifier, state),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _searchTextField(
+    BuildContext context,
+    AddTeamMemberViewNotifier notifier,
+    AddTeamMemberState state,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Material(
+        type: MaterialType.transparency,
+        child: TextField(
+          controller: state.searchController,
+          onChanged: notifier.onSearchChanged,
+          decoration: InputDecoration(
+            hintText: context.l10n.add_team_member_search_placeholder_text,
+            contentPadding: const EdgeInsets.all(16),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30.0),
+              borderSide: BorderSide.none,
+            ),
+            filled: true,
+            fillColor: context.colorScheme.containerLowOnSurface,
+            hintStyle: TextStyle(color: context.colorScheme.textDisabled),
+            prefixIcon: Icon(
+              Icons.search,
+              color: context.colorScheme.textDisabled,
+              size: 24,
+            ),
+          ),
+          onTapOutside: (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          style: AppTextStyle.body2.copyWith(
+            color: context.colorScheme.textPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _userProfileCell(
+      BuildContext context,
+      AddTeamMemberViewNotifier notifier,
+      AddTeamMemberState state,
+      UserModel user) {
+    return GestureDetector(
+        onTap: () {
+          // TODO: show userDetail Sheet
+        },
+        child: Row(
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: context.colorScheme.containerHigh,
+                  image: user.profile_img_url != null
+                      ? DecorationImage(
+                          image:
+                              CachedNetworkImageProvider(user.profile_img_url!),
+                          fit: BoxFit.cover)
+                      : null),
+              child: user.profile_img_url == null
+                  ? Text(
+                      user.nameInitial,
+                      style: AppTextStyle.header2.copyWith(
+                        color: context.colorScheme.secondary,
+                      ),
+                    )
+                  : null,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name ?? context.l10n.common_anonymous_title,
+                    style: AppTextStyle.header4
+                        .copyWith(color: context.colorScheme.textPrimary),
+                  ),
+                  Text(
+                      user.player_role != null
+                          ? _getPlayerRoleString(context, user.player_role!)
+                          : "Not Specified",
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textSecondary)),
+                  if (user.phone != null) ...[
+                    const SizedBox(
+                      height: 2,
+                    ),
+                    Text(
+                      "***** ***${user.phone!.substring(user.phone!.length - 2)}",
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textSecondary),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            OnTapScale(
+              onTap: team.players?.contains(user) != true &&
+                      !state.selectedUsers.contains(user)
+                  ? () async {
+                      if (user.phone != null) {
+                        final res = await showDialog<bool>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return VerifyAddTeamMemberDialog(
+                                phoneNumber: user.phone!
+                                    .substring(user.phone!.length - 5));
+                          },
+                        );
+                        if (res != null && res && context.mounted) {
+                          notifier.selectUser(user);
+                        }
+                      }
+                    }
+                  : null,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                    color: context.colorScheme.containerLow,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(team.players?.contains(user) == true ||
+                        state.selectedUsers.contains(user)
+                    ? "ADDED"
+                    : "ADD"),
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget _selectedPlayerList(
+    BuildContext context,
+    AddTeamMemberViewNotifier notifier,
+    AddTeamMemberState state,
+  ) {
+    return SizedBox(
+      height: 60,
+      child: Stack(
+        children: [
+          ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(right: 100),
+              itemBuilder: (context, index) {
+                final user = state.selectedUsers[index];
+                return SizedBox(
+                  height: 60,
+                  width: 65,
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: context.colorScheme.containerHigh,
+                            border: Border.all(),
+                            image: user.profile_img_url != null
+                                ? DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                        user.profile_img_url!),
+                                    fit: BoxFit.cover)
+                                : null),
+                        child: user.profile_img_url == null
+                            ? Text(
+                                user.nameInitial,
+                                style: AppTextStyle.header2.copyWith(
+                                  color: context.colorScheme.secondary,
+                                ),
+                              )
+                            : null,
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: OnTapScale(
+                            onTap: () {
+                              notifier.unSelectUser(user);
+                            },
+                            child: Icon(
+                              Icons.cancel_rounded,
+                              color: context.colorScheme.textPrimary,
+                            )),
+                      ),
+                    ],
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  width: 20,
+                );
+              },
+              itemCount: state.selectedUsers.length),
+        ],
+      ),
+    );
+  }
+
+  String _getPlayerRoleString(BuildContext context, PlayerRole role) {
+    switch (role) {
+      case PlayerRole.topOrderBatter:
+        return context.l10n.player_role_top_order_batter_title;
+      case PlayerRole.middleOrderBatter:
+        return context.l10n.player_role_middle_order_batter_title;
+      case PlayerRole.wickerKeeperBatter:
+        return context.l10n.player_role_wicket_keeper_batter_title;
+      case PlayerRole.wicketKeeper:
+        return context.l10n.player_role_wicket_keeper_title;
+      case PlayerRole.bowler:
+        return context.l10n.player_role_bowler_title;
+      case PlayerRole.allRounder:
+        return context.l10n.player_role_all_rounder_title;
+      case PlayerRole.lowerOrderBatter:
+        return context.l10n.player_role_lower_order_batter_title;
+      case PlayerRole.openingBatter:
+        return context.l10n.player_role_opening_batter_title;
+      case PlayerRole.none:
+        return context.l10n.common_none_title;
+    }
+  }
+}

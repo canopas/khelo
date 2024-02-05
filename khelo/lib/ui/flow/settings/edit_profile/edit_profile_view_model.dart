@@ -11,7 +11,7 @@ import 'package:khelo/domain/extensions/string_extensions.dart';
 
 part 'edit_profile_view_model.freezed.dart';
 
-final editProfileStateProfile = StateNotifierProvider.autoDispose<
+final editProfileStateProvider = StateNotifierProvider.autoDispose<
     EditProfileViewNotifier, EditProfileState>((ref) {
   final notifier = EditProfileViewNotifier(
     ref.read(fileUploadServiceProvider),
@@ -85,7 +85,10 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   Future<void> onImageChange(String path) async {
     try {
       state = state.copyWith(isImageUploading: true);
-      final imageUrl = await fileUploadService.uploadProfileImage(path);
+      final imageUrl = await fileUploadService.uploadProfileImage(
+        path,
+        ImageUploadType.user,
+      );
       final prevUrl = state.imageUrl;
 
       if (prevUrl != null && prevUrl != state.currentUser?.profile_img_url) {
@@ -128,12 +131,14 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       UserModel user = UserModel(
           id: state.currentUser!.id,
           name: name,
+          name_lowercase: name.toLowerCase(),
           email: email,
-          location: location,
+          location: location.toLowerCase(),
           batting_style: state.battingStyle,
           bowling_style: state.bowlingStyle,
           player_role: state.playerRole,
           gender: state.gender,
+          phone: state.currentUser?.phone,
           profile_img_url: state.imageUrl,
           dob: state.dob,
           created_at: state.currentUser?.created_at,
@@ -222,7 +227,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
   Future<void> deleteUnusedImage(String imgUrl) async {
     try {
-      await fileUploadService.deleteUploadedProfileImage(imgUrl);
+      await fileUploadService.deleteUploadedImage(imgUrl);
     } catch (e) {
       debugPrint(
           "EditProfileViewNotifier: error while deleting Unused Image -> $e");

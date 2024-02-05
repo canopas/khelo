@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/ui/flow/my_cricket/my_cricket_screen.dart';
+import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
 import 'package:khelo/ui/flow/stats/stats_screen.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -24,7 +24,7 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   static final List<Widget> _widgets = <Widget>[
     const HomeScreen(),
-    const MyCricketScreen(),
+    const MyGameTabScreen(),
     const StatsScreen(),
     const ProfileScreen(),
   ];
