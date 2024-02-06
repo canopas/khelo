@@ -1,33 +1,58 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
+import 'package:data/extensions/string_extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../storage/app_preferences.dart';
 
 final teamServiceProvider = Provider((ref) {
-  final service = TeamService(FirebaseFirestore.instance);
-  ref.listen(currentUserPod, (_, next) => service.currentUserId = next?.id);
+  final service =
+      TeamService(ref.read(currentUserPod)?.id, FirebaseFirestore.instance);
+
+  ref.listen(currentUserPod, (_, next) => service._currentUserId = next?.id);
   return service;
 });
 
 class TeamService {
-  String? currentUserId;
+  String? _currentUserId;
   final FirebaseFirestore _firestore;
-  final String collectionName = 'teams';
-  final String subCollectionName = 'players';
+  final String _collectionName = 'teams';
+  final String _subCollectionName = 'players';
 
-  TeamService(this._firestore);
+  TeamService(this._currentUserId, this._firestore);
+
+  Future<String> updateTeam(TeamModel team, List<UserModel> players) async {
+    DocumentReference teamRef =
+        _firestore.collection(_collectionName).doc(team.id);
+    WriteBatch batch = _firestore.batch();
+
+    batch.set(teamRef, team.toJson(), SetOptions(merge: true));
+    String newTeamId = teamRef.id;
+
+    for (var player in players) {
+      DocumentReference playerRef =
+          teamRef.collection(_subCollectionName).doc(player.id);
+      batch.set(playerRef, player.toJson(), SetOptions(merge: true));
+    }
+
+    if (team.id == null) {
+      batch.update(teamRef, {'id': newTeamId});
+    }
+    await batch.commit();
+    return newTeamId;
+  }
 
   Future<TeamModel> getTeamById(String teamId) async {
-    CollectionReference teamsCollection = _firestore.collection(collectionName);
+    CollectionReference teamsCollection =
+        _firestore.collection(_collectionName);
 
     DocumentSnapshot teamDoc = await teamsCollection.doc(teamId).get();
 
     TeamModel team = TeamModel.fromJson(teamDoc.data() as Map<String, dynamic>);
 
     CollectionReference playersCollection =
-        teamDoc.reference.collection(subCollectionName);
+        teamDoc.reference.collection(_subCollectionName);
     QuerySnapshot playersSnapshot = await playersCollection.get();
 
     final players = playersSnapshot.docs.map((playerDoc) {
@@ -37,9 +62,9 @@ class TeamService {
     return team.copyWith(players: players);
   }
 
-  // get Team with Players
-  Future<List<TeamModel>> getTeamsWithPlayers() async {
-    CollectionReference teamsCollection = _firestore.collection(collectionName);
+  Future<List<TeamModel>> getTeams() async {
+    CollectionReference teamsCollection =
+        _firestore.collection(_collectionName);
 
     QuerySnapshot mainCollectionSnapshot = await teamsCollection.get();
 
@@ -49,129 +74,87 @@ class TeamService {
       TeamModel team =
           TeamModel.fromJson(mainDoc.data() as Map<String, dynamic>);
 
-      CollectionReference playersCollection =
-          mainDoc.reference.collection(subCollectionName);
+      if (team.created_by == _currentUserId) {
+        CollectionReference playersCollection =
+            mainDoc.reference.collection(_subCollectionName);
 
-      QuerySnapshot playersSnapshot = await playersCollection.get();
+        QuerySnapshot playersSnapshot = await playersCollection.get();
 
-      final players = playersSnapshot.docs.map((playerDoc) {
-        return UserModel.fromJson(playerDoc.data() as Map<String, dynamic>);
-      }).toList();
+        final players = playersSnapshot.docs.map((playerDoc) {
+          return UserModel.fromJson(playerDoc.data() as Map<String, dynamic>);
+        }).toList();
 
-      team = team.copyWith(players: players);
-      teams.add(team);
+        team = team.copyWith(players: players);
+        teams.add(team);
+      } else {
+        CollectionReference playersCollection =
+            mainDoc.reference.collection(_subCollectionName);
+        QuerySnapshot playersSnapshot = await playersCollection
+            .where('id', isEqualTo: _currentUserId)
+            .get();
+
+        if (playersSnapshot.docs.isNotEmpty) {
+          final players = playersSnapshot.docs.map((playerDoc) {
+            return UserModel.fromJson(playerDoc.data() as Map<String, dynamic>);
+          }).toList();
+
+          team = team.copyWith(players: players);
+          teams.add(team);
+        }
+      }
     }
 
     return teams;
   }
 
-  // update team
-  Future<void> updateTeam(TeamModel team, List<UserModel> players) async {
-    DocumentReference teamRef =
-        _firestore.collection(collectionName).doc(team.id);
-
-    WriteBatch batch = _firestore.batch();
-
-    batch.set(teamRef, team.toJson(), SetOptions(merge: true));
-
-    for (var player in players) {
-      DocumentReference playerRef =
-          teamRef.collection(subCollectionName).doc(player.id);
-      batch.set(playerRef, player.toJson(), SetOptions(merge: true));
-    }
-
-    await batch.commit();
-  }
-
-  // delete team
   Future<void> deleteTeam(String teamId) async {
-    await _firestore.collection(collectionName).doc(teamId).delete();
-  }
-
-  Future<void> deleteTeamWithCollection(String teamId) async {
     await _firestore.runTransaction((transaction) async {
       CollectionReference teamCollection =
-          _firestore.collection(collectionName);
+          _firestore.collection(_collectionName);
       DocumentReference teamDocRef = teamCollection.doc(teamId);
 
-      // Delete sub-collection
       CollectionReference subCollection =
-          teamDocRef.collection(subCollectionName);
+          teamDocRef.collection(_subCollectionName);
       QuerySnapshot subCollectionSnapshot = await subCollection.get();
       for (QueryDocumentSnapshot docSnapshot in subCollectionSnapshot.docs) {
         transaction.delete(docSnapshot.reference);
       }
 
-      // Delete team document
       transaction.delete(teamDocRef);
     });
   }
 
-// add players plural
   Future<void> addPlayersToTeam(String teamId, List<UserModel> players) async {
     DocumentReference teamRef =
-        _firestore.collection(collectionName).doc(teamId);
+        _firestore.collection(_collectionName).doc(teamId);
 
     WriteBatch batch = _firestore.batch();
 
     for (var player in players) {
       DocumentReference playerRef =
-          teamRef.collection(subCollectionName).doc(player.id);
+          teamRef.collection(_subCollectionName).doc(player.id);
       batch.set(playerRef, player.toJson(), SetOptions(merge: true));
     }
 
     await batch.commit();
   }
 
-// remove players plural
   Future<void> removePlayersFromTeam(
       String teamId, List<String> playerIds) async {
     CollectionReference playersCollection = _firestore
-        .collection(collectionName)
+        .collection(_collectionName)
         .doc(teamId)
-        .collection(subCollectionName);
+        .collection(_subCollectionName);
 
     for (String playerId in playerIds) {
       playersCollection.doc(playerId).delete();
     }
   }
 
-// add player singular
-  Future<void> addPlayerToTeam(String teamId, UserModel player) async {
-    CollectionReference playersCollection = _firestore
-        .collection(collectionName)
-        .doc(teamId)
-        .collection(subCollectionName);
-
-    await playersCollection.add(player.toJson());
-  }
-
-// update player singular
-  Future<void> updatePlayerInTeam(
-      String teamId, String playerId, UserModel updatedPlayer) async {
-    CollectionReference playersCollection = _firestore
-        .collection(collectionName)
-        .doc(teamId)
-        .collection(subCollectionName);
-
-    await playersCollection.doc(playerId).update(updatedPlayer.toJson());
-  }
-
-// delete player singular
-  Future<void> deletePlayerFromTeam(String teamId, String playerId) async {
-    CollectionReference playersCollection = _firestore
-        .collection(collectionName)
-        .doc(teamId)
-        .collection(subCollectionName);
-
-    await playersCollection.doc(playerId).delete();
-  }
-
-// is Team name available
   Future<bool> isTeamNameAvailable(String teamName) async {
     QuerySnapshot teamSnap = await _firestore
-        .collection(collectionName)
-        .where('name_lowercase', isEqualTo: teamName.toLowerCase())
+        .collection(_collectionName)
+        .where('name_lowercase', isEqualTo: teamName.caseAndSpaceInsensitive)
         .get();
 
     return teamSnap.docs.isEmpty;

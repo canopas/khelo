@@ -12,6 +12,19 @@
     "common_sign_out_title": "Sign out",
     "common_add_title": "Add",
     "common_save_title": "Save",
+    "common_not_specified_title": "Not Specified",
+    "common_obscure_phone_number_text": "+{countryCode} ***** ***{lastDigits}",
+    "@common_obscure_phone_number_text": {
+        "description": "+{countryCode} ***** ***{lastDigits}",
+        "placeholders": {
+            "countryCode": {
+                "type": "String"
+            },
+            "lastDigits": {
+                "type": "String"
+            }
+        }
+    },
 
     "alert_confirm_default_title": "Are you sure?",
     "alert_confirm_default_message": "Are you sure you want to {deleteText}?",
@@ -85,11 +98,19 @@
     "add_team_add_as_member_description_text": "Add me as a team member",
     "add_team_enter_team_name_placeholder_text": "Enter team name",
     "add_team_location_text": "Location",
+    "add_team_players_text": "PLAYERS",
+    "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
 
     "add_team_member_screen_title": "Add team member",
-    "add_team_member_search_placeholder_text": "Search member with name",
+    "add_team_member_search_placeholder_text": "Search member name",
     "add_team_member_verify_placeholder_text": "Enter the last five digits of the phone number of the selected player.",
     "add_team_member_verify_title": "Verify",
+    "add_team_member_search_hint_text": "Search the person name above to add them in your team.",
+    "add_team_member_add_text": "ADD",
+    "add_team_member_added_text": "ADDED",
+
+    "team_list_add_members_title": "Add Members",
+    "team_list_edit_team_title": "Edit Team",
 
     "my_game_teams_tab_title": "Teams",
     "my_game_matches_tab_title": "Matches"

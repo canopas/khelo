@@ -21,12 +21,24 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(context.l10n.add_team_member_verify_title),
+      backgroundColor: context.colorScheme.containerLowOnSurface,
+      title: Text(
+        context.l10n.add_team_member_verify_title,
+        style: AppTextStyle.header1
+            .copyWith(color: context.colorScheme.textPrimary, fontSize: 26),
+      ),
       content: Wrap(
         children: [
-          Text(context.l10n.add_team_member_verify_placeholder_text),
+          Text(
+            context.l10n.add_team_member_verify_placeholder_text,
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+          ),
           TextField(
             maxLength: 5,
+            decoration: InputDecoration(
+                counterStyle: AppTextStyle.body1
+                    .copyWith(color: context.colorScheme.textDisabled)),
             textAlign: TextAlign.center,
             style: AppTextStyle.subtitle1
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 34),
@@ -47,9 +59,9 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
               context.pop();
             },
             child: Text(
-              "Cancel",
-              style: AppTextStyle.button
-                  .copyWith(color: context.colorScheme.textPrimary),
+              context.l10n.common_cancel_title,
+              style: AppTextStyle.button.copyWith(
+                  color: context.colorScheme.textPrimary, fontSize: 18),
             )),
         TextButton(
             onPressed: verificationNumber.trim().length == 5
@@ -62,11 +74,12 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
                   }
                 : null,
             child: Text(
-              "Verify",
+              context.l10n.add_team_member_verify_title,
               style: AppTextStyle.button.copyWith(
                   color: verificationNumber.trim().length == 5
                       ? context.colorScheme.textPrimary
-                      : context.colorScheme.textDisabled),
+                      : context.colorScheme.textDisabled,
+                  fontSize: 18),
             )),
       ],
     );

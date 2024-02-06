@@ -54,9 +54,16 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     state = state.copyWith(selectedUsers: updatedList);
   }
 
-  void addPlayersToTeam(String id) {
-    _teamService.addPlayersToTeam(id, state.selectedUsers);
-    state = state.copyWith(isAdded: true);
+  Future<void> addPlayersToTeam(String id) async {
+    state = state.copyWith(isAddInProgress: true);
+    try {
+      await _teamService.addPlayersToTeam(id, state.selectedUsers);
+      state = state.copyWith(isAddInProgress: false, isAdded: true);
+    } catch (e) {
+      state = state.copyWith(isAddInProgress: false);
+      debugPrint(
+          "AddTeamMemberViewNotifier: error while adding players to team -> $e");
+    }
   }
 
   @override
@@ -75,5 +82,6 @@ class AddTeamMemberState with _$AddTeamMemberState {
     @Default([]) List<UserModel> selectedUsers,
     Object? error,
     @Default(false) bool isAdded,
+    @Default(false) bool isAddInProgress,
   }) = _AddTeamMemberState;
 }

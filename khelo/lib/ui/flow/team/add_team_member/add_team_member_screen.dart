@@ -10,6 +10,7 @@ import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.da
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
 class AddTeamMemberScreen extends ConsumerWidget {
@@ -38,11 +39,18 @@ class AddTeamMemberScreen extends ConsumerWidget {
       actions: [
         Visibility(
           visible: state.selectedUsers.isNotEmpty,
-          child: IconButton(
-              onPressed: () {
-                notifier.addPlayersToTeam(team.id ?? "INVALID ID");
-              },
-              icon: const Icon(Icons.check)),
+          child: state.isAddInProgress
+              ? const AppProgressIndicator(
+                  size: AppProgressIndicatorSize.small,
+                )
+              : IconButton(
+                  onPressed: () {
+                    notifier.addPlayersToTeam(team.id ?? "INVALID ID");
+                  },
+                  icon: Icon(
+                    Icons.check,
+                    color: context.colorScheme.primary,
+                  )),
         )
       ],
       body: Padding(
@@ -53,9 +61,14 @@ class AddTeamMemberScreen extends ConsumerWidget {
               _searchTextField(context, notifier, state),
               Expanded(
                 child: state.searchedUsers.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
-                            "search above person to add them in your team"),
+                          context.l10n.add_team_member_search_hint_text,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyle.subtitle1.copyWith(
+                              color: context.colorScheme.textDisabled,
+                              fontSize: 20),
+                        ),
                       )
                     : ListView.separated(
                         separatorBuilder: (context, index) {
@@ -166,7 +179,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
                   Text(
                       user.player_role != null
                           ? _getPlayerRoleString(context, user.player_role!)
-                          : "Not Specified",
+                          : context.l10n.common_not_specified_title,
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary)),
                   if (user.phone != null) ...[
@@ -174,7 +187,9 @@ class AddTeamMemberScreen extends ConsumerWidget {
                       height: 2,
                     ),
                     Text(
-                      "***** ***${user.phone!.substring(user.phone!.length - 2)}",
+                      context.l10n.common_obscure_phone_number_text(
+                          user.phone!.substring(1, 3),
+                          user.phone!.substring(user.phone!.length - 2)),
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary),
                     ),
@@ -209,8 +224,8 @@ class AddTeamMemberScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(20)),
                 child: Text(team.players?.contains(user) == true ||
                         state.selectedUsers.contains(user)
-                    ? "ADDED"
-                    : "ADD"),
+                    ? context.l10n.add_team_member_added_text
+                    : context.l10n.add_team_member_add_text),
               ),
             ),
           ],

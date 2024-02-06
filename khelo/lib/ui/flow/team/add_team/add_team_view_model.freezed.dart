@@ -20,15 +20,15 @@ mixin _$AddTeamState {
       throw _privateConstructorUsedError;
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
   bool get isImageUploading => throw _privateConstructorUsedError;
-  bool? get isNameAvailable => throw _privateConstructorUsedError;
   bool get isAddMeCheckBoxEnable => throw _privateConstructorUsedError;
   bool get checkingForAvailability => throw _privateConstructorUsedError;
   bool get isAddBtnEnable => throw _privateConstructorUsedError;
   bool get isAddInProgress => throw _privateConstructorUsedError;
   bool get isPop => throw _privateConstructorUsedError;
-  List<String> get memberToDelete => throw _privateConstructorUsedError;
+  List<UserModel> get teamMembers => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
+  bool? get isNameAvailable => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
   TeamModel? get editTeam => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
@@ -47,15 +47,15 @@ abstract class $AddTeamStateCopyWith<$Res> {
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
-      String? imageUrl,
       bool isImageUploading,
-      bool? isNameAvailable,
       bool isAddMeCheckBoxEnable,
       bool checkingForAvailability,
       bool isAddBtnEnable,
       bool isAddInProgress,
       bool isPop,
-      List<String> memberToDelete,
+      List<UserModel> teamMembers,
+      String? imageUrl,
+      bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
       UserModel? currentUser});
@@ -80,15 +80,15 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
-    Object? imageUrl = freezed,
     Object? isImageUploading = null,
-    Object? isNameAvailable = freezed,
     Object? isAddMeCheckBoxEnable = null,
     Object? checkingForAvailability = null,
     Object? isAddBtnEnable = null,
     Object? isAddInProgress = null,
     Object? isPop = null,
-    Object? memberToDelete = null,
+    Object? teamMembers = null,
+    Object? imageUrl = freezed,
+    Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
     Object? currentUser = freezed,
@@ -102,18 +102,10 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       isImageUploading: null == isImageUploading
           ? _value.isImageUploading
           : isImageUploading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNameAvailable: freezed == isNameAvailable
-          ? _value.isNameAvailable
-          : isNameAvailable // ignore: cast_nullable_to_non_nullable
-              as bool?,
       isAddMeCheckBoxEnable: null == isAddMeCheckBoxEnable
           ? _value.isAddMeCheckBoxEnable
           : isAddMeCheckBoxEnable // ignore: cast_nullable_to_non_nullable
@@ -134,10 +126,18 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
           ? _value.isPop
           : isPop // ignore: cast_nullable_to_non_nullable
               as bool,
-      memberToDelete: null == memberToDelete
-          ? _value.memberToDelete
-          : memberToDelete // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      teamMembers: null == teamMembers
+          ? _value.teamMembers
+          : teamMembers // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isNameAvailable: freezed == isNameAvailable
+          ? _value.isNameAvailable
+          : isNameAvailable // ignore: cast_nullable_to_non_nullable
+              as bool?,
       team: freezed == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
@@ -201,15 +201,15 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
-      String? imageUrl,
       bool isImageUploading,
-      bool? isNameAvailable,
       bool isAddMeCheckBoxEnable,
       bool checkingForAvailability,
       bool isAddBtnEnable,
       bool isAddInProgress,
       bool isPop,
-      List<String> memberToDelete,
+      List<UserModel> teamMembers,
+      String? imageUrl,
+      bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
       UserModel? currentUser});
@@ -235,15 +235,15 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
-    Object? imageUrl = freezed,
     Object? isImageUploading = null,
-    Object? isNameAvailable = freezed,
     Object? isAddMeCheckBoxEnable = null,
     Object? checkingForAvailability = null,
     Object? isAddBtnEnable = null,
     Object? isAddInProgress = null,
     Object? isPop = null,
-    Object? memberToDelete = null,
+    Object? teamMembers = null,
+    Object? imageUrl = freezed,
+    Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
     Object? currentUser = freezed,
@@ -257,18 +257,10 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
       isImageUploading: null == isImageUploading
           ? _value.isImageUploading
           : isImageUploading // ignore: cast_nullable_to_non_nullable
               as bool,
-      isNameAvailable: freezed == isNameAvailable
-          ? _value.isNameAvailable
-          : isNameAvailable // ignore: cast_nullable_to_non_nullable
-              as bool?,
       isAddMeCheckBoxEnable: null == isAddMeCheckBoxEnable
           ? _value.isAddMeCheckBoxEnable
           : isAddMeCheckBoxEnable // ignore: cast_nullable_to_non_nullable
@@ -289,10 +281,18 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
           ? _value.isPop
           : isPop // ignore: cast_nullable_to_non_nullable
               as bool,
-      memberToDelete: null == memberToDelete
-          ? _value._memberToDelete
-          : memberToDelete // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+      teamMembers: null == teamMembers
+          ? _value._teamMembers
+          : teamMembers // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      isNameAvailable: freezed == isNameAvailable
+          ? _value.isNameAvailable
+          : isNameAvailable // ignore: cast_nullable_to_non_nullable
+              as bool?,
       team: freezed == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
@@ -315,19 +315,19 @@ class _$AddTeamStateImpl implements _AddTeamState {
   const _$AddTeamStateImpl(
       {required this.nameController,
       required this.locationController,
-      this.imageUrl = null,
       this.isImageUploading = false,
-      this.isNameAvailable = null,
       this.isAddMeCheckBoxEnable = true,
       this.checkingForAvailability = false,
       this.isAddBtnEnable = false,
       this.isAddInProgress = false,
       this.isPop = false,
-      final List<String> memberToDelete = const [],
-      this.team = null,
-      this.editTeam = null,
+      final List<UserModel> teamMembers = const [],
+      this.imageUrl,
+      this.isNameAvailable,
+      this.team,
+      this.editTeam,
       this.currentUser})
-      : _memberToDelete = memberToDelete;
+      : _teamMembers = teamMembers;
 
   @override
   final TextEditingController nameController;
@@ -335,13 +335,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
   final TextEditingController locationController;
   @override
   @JsonKey()
-  final String? imageUrl;
-  @override
-  @JsonKey()
   final bool isImageUploading;
-  @override
-  @JsonKey()
-  final bool? isNameAvailable;
   @override
   @JsonKey()
   final bool isAddMeCheckBoxEnable;
@@ -357,27 +351,29 @@ class _$AddTeamStateImpl implements _AddTeamState {
   @override
   @JsonKey()
   final bool isPop;
-  final List<String> _memberToDelete;
+  final List<UserModel> _teamMembers;
   @override
   @JsonKey()
-  List<String> get memberToDelete {
-    if (_memberToDelete is EqualUnmodifiableListView) return _memberToDelete;
+  List<UserModel> get teamMembers {
+    if (_teamMembers is EqualUnmodifiableListView) return _teamMembers;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_memberToDelete);
+    return EqualUnmodifiableListView(_teamMembers);
   }
 
   @override
-  @JsonKey()
+  final String? imageUrl;
+  @override
+  final bool? isNameAvailable;
+  @override
   final TeamModel? team;
   @override
-  @JsonKey()
   final TeamModel? editTeam;
   @override
   final UserModel? currentUser;
 
   @override
   String toString() {
-    return 'AddTeamState(nameController: $nameController, locationController: $locationController, imageUrl: $imageUrl, isImageUploading: $isImageUploading, isNameAvailable: $isNameAvailable, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, memberToDelete: $memberToDelete, team: $team, editTeam: $editTeam, currentUser: $currentUser)';
+    return 'AddTeamState(nameController: $nameController, locationController: $locationController, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers, imageUrl: $imageUrl, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser)';
   }
 
   @override
@@ -389,12 +385,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
                 other.nameController == nameController) &&
             (identical(other.locationController, locationController) ||
                 other.locationController == locationController) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
             (identical(other.isImageUploading, isImageUploading) ||
                 other.isImageUploading == isImageUploading) &&
-            (identical(other.isNameAvailable, isNameAvailable) ||
-                other.isNameAvailable == isNameAvailable) &&
             (identical(other.isAddMeCheckBoxEnable, isAddMeCheckBoxEnable) ||
                 other.isAddMeCheckBoxEnable == isAddMeCheckBoxEnable) &&
             (identical(
@@ -406,7 +398,11 @@ class _$AddTeamStateImpl implements _AddTeamState {
                 other.isAddInProgress == isAddInProgress) &&
             (identical(other.isPop, isPop) || other.isPop == isPop) &&
             const DeepCollectionEquality()
-                .equals(other._memberToDelete, _memberToDelete) &&
+                .equals(other._teamMembers, _teamMembers) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.isNameAvailable, isNameAvailable) ||
+                other.isNameAvailable == isNameAvailable) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.editTeam, editTeam) ||
                 other.editTeam == editTeam) &&
@@ -419,15 +415,15 @@ class _$AddTeamStateImpl implements _AddTeamState {
       runtimeType,
       nameController,
       locationController,
-      imageUrl,
       isImageUploading,
-      isNameAvailable,
       isAddMeCheckBoxEnable,
       checkingForAvailability,
       isAddBtnEnable,
       isAddInProgress,
       isPop,
-      const DeepCollectionEquality().hash(_memberToDelete),
+      const DeepCollectionEquality().hash(_teamMembers),
+      imageUrl,
+      isNameAvailable,
       team,
       editTeam,
       currentUser);
@@ -443,15 +439,15 @@ abstract class _AddTeamState implements AddTeamState {
   const factory _AddTeamState(
       {required final TextEditingController nameController,
       required final TextEditingController locationController,
-      final String? imageUrl,
       final bool isImageUploading,
-      final bool? isNameAvailable,
       final bool isAddMeCheckBoxEnable,
       final bool checkingForAvailability,
       final bool isAddBtnEnable,
       final bool isAddInProgress,
       final bool isPop,
-      final List<String> memberToDelete,
+      final List<UserModel> teamMembers,
+      final String? imageUrl,
+      final bool? isNameAvailable,
       final TeamModel? team,
       final TeamModel? editTeam,
       final UserModel? currentUser}) = _$AddTeamStateImpl;
@@ -461,11 +457,7 @@ abstract class _AddTeamState implements AddTeamState {
   @override
   TextEditingController get locationController;
   @override
-  String? get imageUrl;
-  @override
   bool get isImageUploading;
-  @override
-  bool? get isNameAvailable;
   @override
   bool get isAddMeCheckBoxEnable;
   @override
@@ -477,7 +469,11 @@ abstract class _AddTeamState implements AddTeamState {
   @override
   bool get isPop;
   @override
-  List<String> get memberToDelete;
+  List<UserModel> get teamMembers;
+  @override
+  String? get imageUrl;
+  @override
+  bool? get isNameAvailable;
   @override
   TeamModel? get team;
   @override

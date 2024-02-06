@@ -22,7 +22,7 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
     try {
-      final res = await _teamService.getTeamsWithPlayers();
+      final res = await _teamService.getTeams();
       state = state.copyWith(teams: res, loading: false);
     } catch (e) {
       state = state.copyWith(loading: false);

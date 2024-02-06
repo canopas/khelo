@@ -52,7 +52,6 @@ dependencies:
 
   # io
   freezed_annotation: ^2.4.1
-  uuid: ^4.0.0
 
   # auth
   firebase_core: ^2.24.2

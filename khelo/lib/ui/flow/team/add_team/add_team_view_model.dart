@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:data/api/user/user_models.dart';
+import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/api/team/team_model.dart';
@@ -8,7 +9,6 @@ import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uuid/uuid.dart';
 
 part 'add_team_view_model.freezed.dart';
 
@@ -38,8 +38,10 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   void setData({TeamModel? editTeam}) {
     state.nameController.text = editTeam?.name ?? "";
     state.locationController.text = editTeam?.city ?? "";
-    state =
-        state.copyWith(imageUrl: editTeam?.profile_img_url, editTeam: editTeam);
+    state = state.copyWith(
+        imageUrl: editTeam?.profile_img_url,
+        editTeam: editTeam,
+        teamMembers: editTeam?.players ?? []);
   }
 
   void _updateUser(UserModel? user) {
@@ -50,14 +52,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     if (state.editTeam == null) {
       return;
     }
-    // final team =
-    //     await _teamService.getTeamById(state.editTeam!.id ?? "INVALID ID");
-    // final filteredPlayers = team.players
-    //     ?.where((element) => !state.memberToDelete.contains(element.id))
-    //     .toList();
-    state = state.copyWith(
-        editTeam: state.editTeam
-            ?.copyWith(players: [...?state.editTeam?.players, ...players]));
+    state = state.copyWith(teamMembers: [...state.teamMembers, ...players]);
+    onValueChange();
   }
 
   void onAddMeCheckBoxTap() {
@@ -111,10 +107,14 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         players.add(state.currentUser!);
       }
 
+      if (state.editTeam != null) {
+        players = state.teamMembers;
+      }
+
       TeamModel team = TeamModel(
-          id: state.editTeam?.id ?? const Uuid().v4(),
+          id: state.editTeam?.id,
           name: name,
-          name_lowercase: name.toLowerCase().replaceAll(RegExp(r'\s+'), ""),
+          name_lowercase: name.caseAndSpaceInsensitive,
           profile_img_url: state.imageUrl,
           city: location.toLowerCase(),
           created_by: state.currentUser!.id,
@@ -125,11 +125,11 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       if (previousImageUrl != null) {
         await deleteUnusedImage(previousImageUrl);
       }
+
       if (state.editTeam != null) {
-        final filterList = state.memberToDelete
-            .where((element) => !(state.editTeam!.players ?? [])
-                .map((e) => e.id)
-                .contains(element))
+        final filterList = (state.editTeam!.players ?? [])
+            .where((element) => !state.teamMembers.contains(element))
+            .map((e) => e.id)
             .toList();
 
         await _teamService.removePlayersFromTeam(
@@ -147,16 +147,11 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   }
 
   Future<void> onValueChange() async {
-    final searchName =
-        state.nameController.text.trim().replaceAll(RegExp(r'\s+'), "");
-    final isAvailable = await _teamService.isTeamNameAvailable(searchName);
-    state = state.copyWith(
-        isNameAvailable: isAvailable ||
-            state.editTeam?.name_lowercase == searchName.toLowerCase());
-
     final isEnable = state.nameController.text.trim().length >= 3 &&
         state.locationController.text.trim().length >= 3 &&
-        state.isNameAvailable == true;
+        (state.isNameAvailable == true ||
+            state.editTeam?.name_lowercase ==
+                state.nameController.text.caseAndSpaceInsensitive);
     state = state.copyWith(isAddBtnEnable: isEnable);
   }
 
@@ -169,13 +164,13 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       state = state.copyWith(checkingForAvailability: true);
     }
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (state.nameController.text.trim().length >= 3) {
-        final searchName =
-            state.nameController.text.trim().replaceAll(RegExp(r'\s+'), "");
+      if (state.nameController.text.trim().length >= 3 &&
+          state.nameController.text.trim() != state.editTeam?.name) {
+        final searchName = state.nameController.text.caseAndSpaceInsensitive;
         final isAvailable = await _teamService.isTeamNameAvailable(searchName);
         state = state.copyWith(
-            isNameAvailable: isAvailable ||
-                state.editTeam?.name_lowercase == searchName.toLowerCase(),
+            isNameAvailable:
+                isAvailable || state.editTeam?.name_lowercase == searchName,
             checkingForAvailability: false);
       } else {
         state = state.copyWith(
@@ -196,40 +191,33 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   }
 
   Future<void> onRemoveUserFromTeam(UserModel user) async {
-    final updatedList = state.editTeam?.players?.toList();
-    if (updatedList == null) {
-      return;
-    }
+    final updatedList = state.teamMembers.toList();
     updatedList.removeWhere((element) => element.id == user.id);
-
-    // add only if not contain already
-    final deleteMember = state.memberToDelete.contains(user.id)
-        ? state.memberToDelete
-        : [...state.memberToDelete, user.id];
-    state = state.copyWith(
-        editTeam: state.editTeam?.copyWith(players: updatedList),
-        memberToDelete: deleteMember);
+    state = state.copyWith(teamMembers: updatedList);
     onValueChange();
   }
 
   Future<void> onTeamDelete() async {
+    if (state.editTeam == null) {
+      return;
+    }
+
     try {
       String? teamProfileImageUrl;
       String? currentImageUrl;
       if (state.imageUrl != null) {
-        if (state.imageUrl != state.editTeam?.profile_img_url &&
-            state.editTeam?.profile_img_url != null) {
+        if (state.imageUrl != state.editTeam!.profile_img_url &&
+            state.editTeam!.profile_img_url != null) {
           teamProfileImageUrl = state.editTeam!.profile_img_url!;
         }
         currentImageUrl = state.imageUrl!;
       } else {
-        if (state.editTeam?.profile_img_url != null) {
+        if (state.editTeam!.profile_img_url != null) {
           teamProfileImageUrl = state.editTeam!.profile_img_url!;
         }
       }
 
-      await _teamService
-          .deleteTeamWithCollection(state.editTeam?.id ?? "INVALID ID");
+      await _teamService.deleteTeam(state.editTeam!.id ?? "INVALID ID");
       state = state.copyWith(isPop: true);
 
       if (teamProfileImageUrl != null) {
@@ -239,7 +227,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         await deleteUnusedImage(currentImageUrl);
       } // do not merge above both if-conditions in if-else or any other control-flow, at a time both variable may have non-null value
     } catch (e) {
-      debugPrint("EditProfileViewNotifier: error while delete account -> $e");
+      debugPrint("AddTeamViewNotifier: error while delete team -> $e");
     }
   }
 
@@ -255,17 +243,17 @@ class AddTeamState with _$AddTeamState {
   const factory AddTeamState({
     required TextEditingController nameController,
     required TextEditingController locationController,
-    @Default(null) String? imageUrl,
     @Default(false) bool isImageUploading,
-    @Default(null) bool? isNameAvailable,
     @Default(true) bool isAddMeCheckBoxEnable,
     @Default(false) bool checkingForAvailability,
     @Default(false) bool isAddBtnEnable,
     @Default(false) bool isAddInProgress,
     @Default(false) bool isPop,
-    @Default([]) List<String> memberToDelete,
-    @Default(null) TeamModel? team,
-    @Default(null) TeamModel? editTeam,
+    @Default([]) List<UserModel> teamMembers,
+    String? imageUrl,
+    bool? isNameAvailable,
+    TeamModel? team,
+    TeamModel? editTeam,
     UserModel? currentUser,
   }) = _AddTeamState;
 }

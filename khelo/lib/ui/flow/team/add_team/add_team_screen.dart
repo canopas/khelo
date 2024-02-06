@@ -100,11 +100,13 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         ],
       ],
       body: Material(
+        color: Colors.transparent,
         child: Stack(
           children: [
             ListView(
               padding: context.mediaQueryPadding +
-                  const EdgeInsets.symmetric(horizontal: 16),
+                  const EdgeInsets.symmetric(horizontal: 16) +
+                  BottomStickyOverlay.padding,
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               children: [
                 _profileImageView(context, notifier, state),
@@ -119,9 +121,13 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]')),
                   ],
+                  style: AppTextStyle.header4
+                      .copyWith(color: context.colorScheme.textPrimary),
                   decoration: InputDecoration(
                     hintText:
                         context.l10n.add_team_enter_team_name_placeholder_text,
+                    hintStyle: AppTextStyle.header4
+                        .copyWith(color: context.colorScheme.textDisabled),
                     suffixIcon: state.checkingForAvailability
                         ? const AppProgressIndicator(
                             size: AppProgressIndicatorSize.small,
@@ -148,8 +154,12 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                     notifier.onValueChange();
                   },
                   controller: state.locationController,
+                  style: AppTextStyle.header4
+                      .copyWith(color: context.colorScheme.textPrimary),
                   decoration: InputDecoration(
                     hintText: context.l10n.add_team_location_text,
+                    hintStyle: AppTextStyle.header4
+                        .copyWith(color: context.colorScheme.textDisabled),
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -178,14 +188,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   Row(
                     children: [
                       Text(
-                        "PLAYERS",
+                        context.l10n.add_team_players_text,
                         style: AppTextStyle.header3
                             .copyWith(color: context.colorScheme.textPrimary),
                       ),
                       IconButton(
                           onPressed: () async {
                             final players = await AppRoute.addTeamMember(
-                                    team: state.editTeam!)
+                                    team: state.editTeam!
+                                        .copyWith(players: state.teamMembers))
                                 .push<List<UserModel>>(context);
                             if (players != null) {
                               notifier.updatePlayersList(players);
@@ -197,19 +208,18 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  for (final UserModel player
-                      in state.editTeam!.players ?? []) ...[
+                  for (final UserModel player in state.teamMembers) ...[
                     _userProfileCell(context, notifier, state, player),
                     const SizedBox(
                       height: 16,
                     ),
                   ],
-                  if ((state.editTeam!.players ?? []).isEmpty) ...[
+                  if ((state.teamMembers).isEmpty) ...[
                     const SizedBox(
                       height: 16,
                     ),
                     Text(
-                      "Added user will be shown here, tap on '+' button to add team member",
+                      context.l10n.add_team_add_hint_text,
                       textAlign: TextAlign.center,
                       style: AppTextStyle.subtitle1
                           .copyWith(color: context.colorScheme.textPrimary),
@@ -219,6 +229,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                     ),
                     const Divider(),
                   ],
+                  const SizedBox(
+                    height: 100,
+                  ),
                 ],
               ],
             ),
@@ -333,7 +346,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               Text(
                   user.player_role != null
                       ? _getPlayerRoleString(context, user.player_role!)
-                      : "Not Specified",
+                      : context.l10n.common_not_specified_title,
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary)),
               if (user.phone != null) ...[
@@ -341,7 +354,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   height: 2,
                 ),
                 Text(
-                  "***** ***${user.phone!.substring(user.phone!.length - 2)}",
+                  context.l10n.common_obscure_phone_number_text(
+                      user.phone!.substring(1, 3),
+                      user.phone!.substring(user.phone!.length - 2)),
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),

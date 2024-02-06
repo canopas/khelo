@@ -24,6 +24,7 @@ mixin _$AddTeamMemberState {
   List<UserModel> get selectedUsers => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   bool get isAdded => throw _privateConstructorUsedError;
+  bool get isAddInProgress => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AddTeamMemberStateCopyWith<AddTeamMemberState> get copyWith =>
@@ -42,7 +43,8 @@ abstract class $AddTeamMemberStateCopyWith<$Res> {
       List<UserModel> searchedUsers,
       List<UserModel> selectedUsers,
       Object? error,
-      bool isAdded});
+      bool isAdded,
+      bool isAddInProgress});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
     Object? selectedUsers = null,
     Object? error = freezed,
     Object? isAdded = null,
+    Object? isAddInProgress = null,
   }) {
     return _then(_value.copyWith(
       searchController: null == searchController
@@ -87,6 +90,10 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
           ? _value.isAdded
           : isAdded // ignore: cast_nullable_to_non_nullable
               as bool,
+      isAddInProgress: null == isAddInProgress
+          ? _value.isAddInProgress
+          : isAddInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -105,7 +112,8 @@ abstract class _$$AddTeamMemberStateImplCopyWith<$Res>
       List<UserModel> searchedUsers,
       List<UserModel> selectedUsers,
       Object? error,
-      bool isAdded});
+      bool isAdded,
+      bool isAddInProgress});
 }
 
 /// @nodoc
@@ -125,6 +133,7 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
     Object? selectedUsers = null,
     Object? error = freezed,
     Object? isAdded = null,
+    Object? isAddInProgress = null,
   }) {
     return _then(_$AddTeamMemberStateImpl(
       searchController: null == searchController
@@ -148,6 +157,10 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
           ? _value.isAdded
           : isAdded // ignore: cast_nullable_to_non_nullable
               as bool,
+      isAddInProgress: null == isAddInProgress
+          ? _value.isAddInProgress
+          : isAddInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -161,7 +174,8 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
       final List<UserModel> searchedUsers = const [],
       final List<UserModel> selectedUsers = const [],
       this.error,
-      this.isAdded = false})
+      this.isAdded = false,
+      this.isAddInProgress = false})
       : _searchedUsers = searchedUsers,
         _selectedUsers = selectedUsers;
 
@@ -192,10 +206,13 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
   @override
   @JsonKey()
   final bool isAdded;
+  @override
+  @JsonKey()
+  final bool isAddInProgress;
 
   @override
   String toString() {
-    return 'AddTeamMemberState(searchController: $searchController, verifyNumberController: $verifyNumberController, searchedUsers: $searchedUsers, selectedUsers: $selectedUsers, error: $error, isAdded: $isAdded)';
+    return 'AddTeamMemberState(searchController: $searchController, verifyNumberController: $verifyNumberController, searchedUsers: $searchedUsers, selectedUsers: $selectedUsers, error: $error, isAdded: $isAdded, isAddInProgress: $isAddInProgress)';
   }
 
   @override
@@ -212,7 +229,9 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
             const DeepCollectionEquality()
                 .equals(other._selectedUsers, _selectedUsers) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.isAdded, isAdded) || other.isAdded == isAdded));
+            (identical(other.isAdded, isAdded) || other.isAdded == isAdded) &&
+            (identical(other.isAddInProgress, isAddInProgress) ||
+                other.isAddInProgress == isAddInProgress));
   }
 
   @override
@@ -223,7 +242,8 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
       const DeepCollectionEquality().hash(_searchedUsers),
       const DeepCollectionEquality().hash(_selectedUsers),
       const DeepCollectionEquality().hash(error),
-      isAdded);
+      isAdded,
+      isAddInProgress);
 
   @JsonKey(ignore: true)
   @override
@@ -240,7 +260,8 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
       final List<UserModel> searchedUsers,
       final List<UserModel> selectedUsers,
       final Object? error,
-      final bool isAdded}) = _$AddTeamMemberStateImpl;
+      final bool isAdded,
+      final bool isAddInProgress}) = _$AddTeamMemberStateImpl;
 
   @override
   TextEditingController get searchController;
@@ -254,6 +275,8 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
   Object? get error;
   @override
   bool get isAdded;
+  @override
+  bool get isAddInProgress;
   @override
   @JsonKey(ignore: true)
   _$$AddTeamMemberStateImplCopyWith<_$AddTeamMemberStateImpl> get copyWith =>

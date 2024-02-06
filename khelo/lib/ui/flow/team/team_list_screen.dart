@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/button/large_icon_button.dart';
@@ -85,26 +86,35 @@ class TeamListScreen extends ConsumerWidget {
                 style: AppTextStyle.header4
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
-              Text(team.city ?? "Not Specified",
+              Text(team.city ?? context.l10n.common_not_specified_title,
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary)),
             ],
           ),
         ),
         PopupMenuButton<String>(
+          color: context.colorScheme.containerLowOnSurface,
+          iconColor: context.colorScheme.textPrimary,
           onSelected: (value) async {
-            if (value == "Add Members") {
+            if (value == context.l10n.team_list_add_members_title) {
               await AppRoute.addTeamMember(team: team).push(context);
-            } else if (value == "Edit Team") {
+            } else if (value == context.l10n.team_list_edit_team_title) {
               await AppRoute.addTeam(team: team).push(context);
             }
             notifier.loadTeamList();
           },
           itemBuilder: (BuildContext context) {
-            return {'Add Members', 'Edit Team'}.map((String choice) {
+            return {
+              context.l10n.team_list_add_members_title,
+              context.l10n.team_list_edit_team_title
+            }.map((String choice) {
               return PopupMenuItem<String>(
                 value: choice,
-                child: Text(choice),
+                child: Text(
+                  choice,
+                  style: AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
               );
             }).toList();
           },

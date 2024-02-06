@@ -16,7 +16,7 @@ import 'package:style/text/app_text_style.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  _observeUserSession(BuildContext context, WidgetRef ref) {
+  void _observeUserSession(BuildContext context, WidgetRef ref) {
     ref.listen(hasUserSession, (previous, next) {
       if (!next) {
         AppRoute.intro.go(context);
