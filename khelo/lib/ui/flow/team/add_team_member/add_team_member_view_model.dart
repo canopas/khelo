@@ -23,9 +23,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   Timer? _debounce;
 
   AddTeamMemberViewNotifier(this._userService, this._teamService)
-      : super(AddTeamMemberState(
-            searchController: TextEditingController(),
-            verifyNumberController: TextEditingController()));
+      : super(AddTeamMemberState(searchController: TextEditingController()));
 
   Future<void> search(String searchKey) async {
     final users = await _userService.searchUser(searchKey);
@@ -77,7 +75,6 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
 class AddTeamMemberState with _$AddTeamMemberState {
   const factory AddTeamMemberState({
     required TextEditingController searchController,
-    required TextEditingController verifyNumberController,
     @Default([]) List<UserModel> searchedUsers,
     @Default([]) List<UserModel> selectedUsers,
     Object? error,

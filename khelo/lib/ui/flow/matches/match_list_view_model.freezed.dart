@@ -17,6 +17,8 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MatchListViewState {
   Object? get error => throw _privateConstructorUsedError;
+  bool get loading => throw _privateConstructorUsedError;
+  List<MatchModel>? get matches => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MatchListViewStateCopyWith<MatchListViewState> get copyWith =>
@@ -29,7 +31,7 @@ abstract class $MatchListViewStateCopyWith<$Res> {
           MatchListViewState value, $Res Function(MatchListViewState) then) =
       _$MatchListViewStateCopyWithImpl<$Res, MatchListViewState>;
   @useResult
-  $Res call({Object? error});
+  $Res call({Object? error, bool loading, List<MatchModel>? matches});
 }
 
 /// @nodoc
@@ -46,9 +48,19 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? loading = null,
+    Object? matches = freezed,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      matches: freezed == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>?,
     ) as $Val);
   }
 }
@@ -61,7 +73,7 @@ abstract class _$$MatchListViewStateImplCopyWith<$Res>
       __$$MatchListViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error});
+  $Res call({Object? error, bool loading, List<MatchModel>? matches});
 }
 
 /// @nodoc
@@ -76,9 +88,19 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? loading = null,
+    Object? matches = freezed,
   }) {
     return _then(_$MatchListViewStateImpl(
       error: freezed == error ? _value.error : error,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      matches: freezed == matches
+          ? _value._matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>?,
     ));
   }
 }
@@ -86,14 +108,28 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MatchListViewStateImpl implements _MatchListViewState {
-  const _$MatchListViewStateImpl({this.error});
+  const _$MatchListViewStateImpl(
+      {this.error, this.loading = false, final List<MatchModel>? matches})
+      : _matches = matches;
 
   @override
   final Object? error;
+  @override
+  @JsonKey()
+  final bool loading;
+  final List<MatchModel>? _matches;
+  @override
+  List<MatchModel>? get matches {
+    final value = _matches;
+    if (value == null) return null;
+    if (_matches is EqualUnmodifiableListView) return _matches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'MatchListViewState(error: $error)';
+    return 'MatchListViewState(error: $error, loading: $loading, matches: $matches)';
   }
 
   @override
@@ -101,12 +137,17 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MatchListViewStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error));
+            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.loading, loading) || other.loading == loading) &&
+            const DeepCollectionEquality().equals(other._matches, _matches));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(error),
+      loading,
+      const DeepCollectionEquality().hash(_matches));
 
   @JsonKey(ignore: true)
   @override
@@ -117,11 +158,17 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
 }
 
 abstract class _MatchListViewState implements MatchListViewState {
-  const factory _MatchListViewState({final Object? error}) =
-      _$MatchListViewStateImpl;
+  const factory _MatchListViewState(
+      {final Object? error,
+      final bool loading,
+      final List<MatchModel>? matches}) = _$MatchListViewStateImpl;
 
   @override
   Object? get error;
+  @override
+  bool get loading;
+  @override
+  List<MatchModel>? get matches;
   @override
   @JsonKey(ignore: true)
   _$$MatchListViewStateImplCopyWith<_$MatchListViewStateImpl> get copyWith =>

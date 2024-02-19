@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
@@ -53,26 +53,10 @@ class TeamListScreen extends ConsumerWidget {
       BuildContext context, TeamListViewNotifier notifier, TeamModel team) {
     return Row(
       children: [
-        Container(
-          height: 50,
-          width: 50,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colorScheme.containerHigh,
-              image: team.profile_img_url != null
-                  ? DecorationImage(
-                      image: CachedNetworkImageProvider(team.profile_img_url!),
-                      fit: BoxFit.cover)
-                  : null),
-          child: team.profile_img_url == null
-              ? Text(
-                  team.name[0].toUpperCase(),
-                  style: AppTextStyle.header2.copyWith(
-                    color: context.colorScheme.secondary,
-                  ),
-                )
-              : null,
+        ImageAvatar(
+          initial: team.name[0].toUpperCase(),
+          imageUrl: team.profile_img_url,
+          size: 50,
         ),
         const SizedBox(
           width: 8,
@@ -93,7 +77,7 @@ class TeamListScreen extends ConsumerWidget {
           ),
         ),
         PopupMenuButton<String>(
-          color: context.colorScheme.containerLowOnSurface,
+          color: context.colorScheme.containerNormalOnSurface,
           iconColor: context.colorScheme.textPrimary,
           onSelected: (value) async {
             if (value == context.l10n.team_list_add_members_title) {

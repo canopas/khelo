@@ -6,6 +6,20 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class VerifyAddTeamMemberDialog extends StatefulWidget {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    required String phoneNumber,
+  }) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return VerifyAddTeamMemberDialog(
+          phoneNumber: phoneNumber,
+        );
+      },
+    );
+  }
+
   final String phoneNumber;
 
   const VerifyAddTeamMemberDialog({super.key, required this.phoneNumber});

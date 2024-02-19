@@ -8,50 +8,52 @@ final userServiceProvider = Provider((ref) {
   final service = UserService(ref.read(currentUserPod),
       ref.read(currentUserJsonPod.notifier), FirebaseFirestore.instance);
 
-  ref.listen(currentUserPod, (_, next) => service.currentUser = next);
+  ref.listen(currentUserPod, (_, next) => service._currentUser = next);
   return service;
 });
 
 class UserService {
-  UserModel? currentUser;
-  final StateController<String?> currentUserJsonController;
+  UserModel? _currentUser;
+  final StateController<String?> _currentUserJsonController;
   final FirebaseFirestore _firestore;
-  final String collectionName = 'users';
+  final String _collectionName = 'users';
 
   UserService(
-      this.currentUser, this.currentUserJsonController, this._firestore);
+      this._currentUser, this._currentUserJsonController, this._firestore);
 
   Future<void> deleteUser() async {
-    await _firestore.collection(collectionName).doc(currentUser?.id).delete();
-    currentUserJsonController.state = null;
+    await _firestore.collection(_collectionName).doc(_currentUser?.id).delete();
+    _currentUserJsonController.state = null;
   }
 
   Future<void> updateUser(UserModel user) async {
     DocumentReference userRef =
-        _firestore.collection(collectionName).doc(user.id);
+        _firestore.collection(_collectionName).doc(user.id);
 
     await userRef.set(user.toJson(), SetOptions(merge: true));
 
-    currentUserJsonController.state = user.toJsonString();
+    _currentUserJsonController.state = user.toJsonString();
   }
 
   Future<void> getUser(String id) async {
-    DocumentReference userRef = _firestore.collection(collectionName).doc(id);
+    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
     DocumentSnapshot snapshot = await userRef.get();
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
     var userModel = UserModel.fromJson(userData);
-    currentUserJsonController.state = userModel.toJsonString();
+    _currentUserJsonController.state = userModel.toJsonString();
+  }
+
+  Future<UserModel> getUserById(String id) async {
+    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
+    DocumentSnapshot snapshot = await userRef.get();
+    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+    var userModel = UserModel.fromJson(userData);
+    return userModel;
   }
 
   Future<List<UserModel>> searchUser(String searchKey) async {
-    // _firestore
-    //     .collection(collectionName)
-    //     .where('name_lowercase',
-    //         isGreaterThanOrEqualTo: searchKey.toLowerCase())
-    //     .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z');
-
     final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection(collectionName)
+        .collection(_collectionName)
         .where('name_lowercase',
             isGreaterThanOrEqualTo: searchKey.toLowerCase())
         .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z')
@@ -64,6 +66,6 @@ class UserService {
   }
 
   void signOutUser() {
-    currentUserJsonController.state = null;
+    _currentUserJsonController.state = null;
   }
 }

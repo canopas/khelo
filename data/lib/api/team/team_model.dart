@@ -4,7 +4,6 @@ import 'package:data/api/user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team_model.freezed.dart';
-
 part 'team_model.g.dart';
 
 @freezed

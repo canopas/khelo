@@ -1,11 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -142,27 +143,10 @@ class AddTeamMemberScreen extends ConsumerWidget {
         },
         child: Row(
           children: [
-            Container(
-              height: 50,
-              width: 50,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: context.colorScheme.containerHigh,
-                  image: user.profile_img_url != null
-                      ? DecorationImage(
-                          image:
-                              CachedNetworkImageProvider(user.profile_img_url!),
-                          fit: BoxFit.cover)
-                      : null),
-              child: user.profile_img_url == null
-                  ? Text(
-                      user.nameInitial,
-                      style: AppTextStyle.header2.copyWith(
-                        color: context.colorScheme.secondary,
-                      ),
-                    )
-                  : null,
+            ImageAvatar(
+              initial: user.nameInitial,
+              imageUrl: user.profile_img_url,
+              size: 50,
             ),
             const SizedBox(
               width: 8,
@@ -178,7 +162,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
                   ),
                   Text(
                       user.player_role != null
-                          ? _getPlayerRoleString(context, user.player_role!)
+                          ? user.player_role!.getString(context)
                           : context.l10n.common_not_specified_title,
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary)),
@@ -202,14 +186,10 @@ class AddTeamMemberScreen extends ConsumerWidget {
                       !state.selectedUsers.contains(user)
                   ? () async {
                       if (user.phone != null) {
-                        final res = await showDialog<bool>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return VerifyAddTeamMemberDialog(
-                                phoneNumber: user.phone!
-                                    .substring(user.phone!.length - 5));
-                          },
-                        );
+                        final res = await VerifyAddTeamMemberDialog.show(
+                            context,
+                            phoneNumber:
+                                user.phone!.substring(user.phone!.length - 5));
                         if (res != null && res && context.mounted) {
                           notifier.selectUser(user);
                         }
@@ -225,7 +205,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
                 child: Text(team.players?.contains(user) == true ||
                         state.selectedUsers.contains(user)
                     ? context.l10n.add_team_member_added_text
-                    : context.l10n.add_team_member_add_text),
+                    : context.l10n.common_add_title.toUpperCase()),
               ),
             ),
           ],
@@ -251,28 +231,10 @@ class AddTeamMemberScreen extends ConsumerWidget {
                   width: 65,
                   child: Stack(
                     children: [
-                      Container(
-                        height: 60,
-                        width: 60,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: context.colorScheme.containerHigh,
-                            border: Border.all(),
-                            image: user.profile_img_url != null
-                                ? DecorationImage(
-                                    image: CachedNetworkImageProvider(
-                                        user.profile_img_url!),
-                                    fit: BoxFit.cover)
-                                : null),
-                        child: user.profile_img_url == null
-                            ? Text(
-                                user.nameInitial,
-                                style: AppTextStyle.header2.copyWith(
-                                  color: context.colorScheme.secondary,
-                                ),
-                              )
-                            : null,
+                      ImageAvatar(
+                        initial: user.nameInitial,
+                        imageUrl: user.profile_img_url,
+                        size: 60,
                       ),
                       Align(
                         alignment: Alignment.topRight,
@@ -298,28 +260,5 @@ class AddTeamMemberScreen extends ConsumerWidget {
         ],
       ),
     );
-  }
-
-  String _getPlayerRoleString(BuildContext context, PlayerRole role) {
-    switch (role) {
-      case PlayerRole.topOrderBatter:
-        return context.l10n.player_role_top_order_batter_title;
-      case PlayerRole.middleOrderBatter:
-        return context.l10n.player_role_middle_order_batter_title;
-      case PlayerRole.wickerKeeperBatter:
-        return context.l10n.player_role_wicket_keeper_batter_title;
-      case PlayerRole.wicketKeeper:
-        return context.l10n.player_role_wicket_keeper_title;
-      case PlayerRole.bowler:
-        return context.l10n.player_role_bowler_title;
-      case PlayerRole.allRounder:
-        return context.l10n.player_role_all_rounder_title;
-      case PlayerRole.lowerOrderBatter:
-        return context.l10n.player_role_lower_order_batter_title;
-      case PlayerRole.openingBatter:
-        return context.l10n.player_role_opening_batter_title;
-      case PlayerRole.none:
-        return context.l10n.common_none_title;
-    }
   }
 }

@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/image_picker_sheet.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_view_model.dart';
@@ -310,26 +312,10 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       AddTeamState state, UserModel user) {
     return Row(
       children: [
-        Container(
-          height: 50,
-          width: 50,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: context.colorScheme.containerHigh,
-              image: user.profile_img_url != null
-                  ? DecorationImage(
-                      image: CachedNetworkImageProvider(user.profile_img_url!),
-                      fit: BoxFit.cover)
-                  : null),
-          child: user.profile_img_url == null
-              ? Text(
-                  user.nameInitial,
-                  style: AppTextStyle.header2.copyWith(
-                    color: context.colorScheme.secondary,
-                  ),
-                )
-              : null,
+        ImageAvatar(
+          initial: user.nameInitial,
+          imageUrl: user.profile_img_url,
+          size: 50,
         ),
         const SizedBox(
           width: 8,
@@ -345,7 +331,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               ),
               Text(
                   user.player_role != null
-                      ? _getPlayerRoleString(context, user.player_role!)
+                      ? user.player_role!.getString(context)
                       : context.l10n.common_not_specified_title,
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary)),
@@ -365,9 +351,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           ),
         ),
         IconButton(
-            onPressed: () {
-              notifier.onRemoveUserFromTeam(user);
-            },
+            onPressed: () => notifier.onRemoveUserFromTeam(user),
             icon: const Icon(Icons.close)),
       ],
     );
@@ -420,28 +404,5 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         );
       },
     );
-  }
-
-  String _getPlayerRoleString(BuildContext context, PlayerRole role) {
-    switch (role) {
-      case PlayerRole.topOrderBatter:
-        return context.l10n.player_role_top_order_batter_title;
-      case PlayerRole.middleOrderBatter:
-        return context.l10n.player_role_middle_order_batter_title;
-      case PlayerRole.wickerKeeperBatter:
-        return context.l10n.player_role_wicket_keeper_batter_title;
-      case PlayerRole.wicketKeeper:
-        return context.l10n.player_role_wicket_keeper_title;
-      case PlayerRole.bowler:
-        return context.l10n.player_role_bowler_title;
-      case PlayerRole.allRounder:
-        return context.l10n.player_role_all_rounder_title;
-      case PlayerRole.lowerOrderBatter:
-        return context.l10n.player_role_lower_order_batter_title;
-      case PlayerRole.openingBatter:
-        return context.l10n.player_role_opening_batter_title;
-      case PlayerRole.none:
-        return context.l10n.common_none_title;
-    }
   }
 }

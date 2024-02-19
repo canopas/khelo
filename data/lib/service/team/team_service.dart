@@ -159,4 +159,19 @@ class TeamService {
 
     return teamSnap.docs.isEmpty;
   }
+
+  Future<List<TeamModel>> searchTeam(String searchKey) async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+        .collection(_collectionName)
+        .where('name_lowercase',
+            isGreaterThanOrEqualTo: searchKey.caseAndSpaceInsensitive)
+        .where('name_lowercase',
+            isLessThan: '${searchKey.caseAndSpaceInsensitive}z')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return TeamModel.fromJson(data).copyWith(id: doc.id);
+    }).toList();
+  }
 }

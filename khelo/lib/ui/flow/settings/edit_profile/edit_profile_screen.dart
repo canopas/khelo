@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
@@ -141,7 +142,7 @@ class EditProfileScreen extends ConsumerWidget {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(
-                                    _getPlayerRoleString(context, items),
+                                    items.getString(context),
                                     style: AppTextStyle.body1.copyWith(
                                         color: context.colorScheme.textPrimary),
                                   ),
@@ -175,7 +176,7 @@ class EditProfileScreen extends ConsumerWidget {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(
-                                    _getBattingStyleString(context, items),
+                                    items.getString(context),
                                     style: AppTextStyle.body1.copyWith(
                                         color: context.colorScheme.textPrimary),
                                   ),
@@ -201,7 +202,7 @@ class EditProfileScreen extends ConsumerWidget {
                                 return DropdownMenuItem(
                                   value: items,
                                   child: Text(
-                                    _getBowlingStyleString(context, items),
+                                    items.getString(context),
                                     style: AppTextStyle.body1.copyWith(
                                         color: context.colorScheme.textPrimary),
                                   ),
@@ -372,81 +373,13 @@ class EditProfileScreen extends ConsumerWidget {
                 }
               }),
           Text(
-            _getGenderString(context, gender),
+            gender.getString(context),
             style: AppTextStyle.button.copyWith(
                 color: context.colorScheme.textSecondary, fontSize: 16),
           ),
         ],
       ),
     );
-  }
-
-  String _getGenderString(BuildContext context, UserGender gender) {
-    switch (gender) {
-      case UserGender.male:
-        return context.l10n.edit_profile_gender_male_title;
-      case UserGender.female:
-        return context.l10n.edit_profile_gender_female_title;
-      case UserGender.other:
-        return context.l10n.edit_profile_gender_other_title;
-      default:
-        return "";
-    }
-  }
-
-  String _getBattingStyleString(BuildContext context, BattingStyle style) {
-    switch (style) {
-      case BattingStyle.rightHandBat:
-        return context.l10n.batting_style_right_hand_bat_title;
-      case BattingStyle.leftHandBat:
-        return context.l10n.batting_style_left_hand_bat_title;
-    }
-  }
-
-  String _getBowlingStyleString(BuildContext context, BowlingStyle style) {
-    switch (style) {
-      case BowlingStyle.rightArmFast:
-        return context.l10n.bowling_style_right_arm_fast_title;
-      case BowlingStyle.rightArmMedium:
-        return context.l10n.bowling_style_right_arm_medium_title;
-      case BowlingStyle.leftArmFast:
-        return context.l10n.bowling_style_left_arm_fast_title;
-      case BowlingStyle.leftArmMedium:
-        return context.l10n.bowling_style_left_arm_medium_title;
-      case BowlingStyle.slowLeftArmOrthodox:
-        return context.l10n.bowling_style_slow_left_arm_orthodox_title;
-      case BowlingStyle.slowLeftArmChinaMan:
-        return context.l10n.bowling_style_slow_left_arm_chinaman_title;
-      case BowlingStyle.rightArmOffBreak:
-        return context.l10n.bowling_style_right_arm_off_break_title;
-      case BowlingStyle.rightArmLegBreak:
-        return context.l10n.bowling_style_right_arm_leg_break_title;
-      case BowlingStyle.none:
-        return context.l10n.common_none_title;
-    }
-  }
-
-  String _getPlayerRoleString(BuildContext context, PlayerRole role) {
-    switch (role) {
-      case PlayerRole.topOrderBatter:
-        return context.l10n.player_role_top_order_batter_title;
-      case PlayerRole.middleOrderBatter:
-        return context.l10n.player_role_middle_order_batter_title;
-      case PlayerRole.wickerKeeperBatter:
-        return context.l10n.player_role_wicket_keeper_batter_title;
-      case PlayerRole.wicketKeeper:
-        return context.l10n.player_role_wicket_keeper_title;
-      case PlayerRole.bowler:
-        return context.l10n.player_role_bowler_title;
-      case PlayerRole.allRounder:
-        return context.l10n.player_role_all_rounder_title;
-      case PlayerRole.lowerOrderBatter:
-        return context.l10n.player_role_lower_order_batter_title;
-      case PlayerRole.openingBatter:
-        return context.l10n.player_role_opening_batter_title;
-      case PlayerRole.none:
-        return context.l10n.common_none_title;
-    }
   }
 
   void _showDeleteAlert(BuildContext context, Function() onDelete) {
