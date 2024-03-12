@@ -34,7 +34,10 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
       actionsAlignment: MainAxisAlignment.spaceAround,
       actions: [
         OnTapScale(
-            onTap: () => context.pop(state.squad),
+            onTap: () => context.pop({
+                  "captain_id": state.captainId,
+                  "admin_id": state.adminId,
+                }),
             enabled: state.isOkayBtnEnable,
             child: Text(
               context.l10n.common_okay_title,
@@ -121,14 +124,14 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
         _captainAdminButton(
             context,
             context.l10n.select_squad_captain_short_title,
-            member.role.contains(PlayerMatchRole.captain), () {
+            state.captainId == member.player.id, () {
           notifier.onCaptainOrAdminSelect(
               PlayerMatchRole.captain, member.player.id);
         }),
         _captainAdminButton(
             context,
             context.l10n.select_squad_admin_short_title,
-            member.role.contains(PlayerMatchRole.admin), () {
+            state.adminId == member.player.id, () {
           notifier.onCaptainOrAdminSelect(
               PlayerMatchRole.admin, member.player.id);
         }),

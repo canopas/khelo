@@ -31,20 +31,13 @@ class MatchService {
     List<MatchModel> matches = [];
 
     for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
-      AddEditMatchRequest match =
-          AddEditMatchRequest.fromJson(mainDoc.data() as Map<String, dynamic>);
-      List<TeamModel> teams = await getTeamListFromTeamIds(match.team_ids);
-      List<MatchPlayer> playersA =
-          await getPlayerListFromPlayerIds(match.team_a_players);
-      List<MatchPlayer> playersB =
-          await getPlayerListFromPlayerIds(match.team_b_players);
+      Map<String, dynamic> mainDocData = mainDoc.data() as Map<String, dynamic>;
+      AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
 
-      // required data has been provided
+      List<MatchTeamModel> teams = await getTeamsList(match.teams);
       matches.add(MatchModel(
         id: match.id,
         teams: teams,
-        team_a_players: playersA,
-        team_b_players: playersB,
         match_type: match.match_type,
         number_of_over: match.number_of_over,
         over_per_bowler: match.over_per_bowler,
@@ -69,12 +62,7 @@ class MatchService {
     AddEditMatchRequest match =
         AddEditMatchRequest.fromJson(snapshot.data() as Map<String, dynamic>);
 
-    List<MatchPlayer> playersA =
-        await getPlayerListFromPlayerIds(match.team_a_players);
-    List<MatchPlayer> playersB =
-        await getPlayerListFromPlayerIds(match.team_b_players);
-
-    List<TeamModel> teams = await getTeamListFromTeamIds(match.team_ids);
+    List<MatchTeamModel> teams = await getTeamsList(match.teams);
     List<UserModel>? umpires = await getUserListFromUserIds(match.umpire_ids);
     List<UserModel>? commentators =
         await getUserListFromUserIds(match.commentator_ids);
@@ -88,8 +76,6 @@ class MatchService {
     var matchModel = MatchModel(
       id: match.id,
       teams: teams,
-      team_a_players: playersA,
-      team_b_players: playersB,
       match_type: match.match_type,
       number_of_over: match.number_of_over,
       over_per_bowler: match.over_per_bowler,
@@ -103,9 +89,9 @@ class MatchService {
       referee: referee,
       scorers: scorers,
       umpires: umpires,
-      power_play_overs1: match.power_play_overs1,
-      power_play_overs2: match.power_play_overs2,
-      power_play_overs3: match.power_play_overs3,
+      power_play_overs1: match.power_play_overs1 ?? [],
+      power_play_overs2: match.power_play_overs2 ?? [],
+      power_play_overs3: match.power_play_overs3 ?? [],
       toss_decision: match.toss_decision,
       toss_winner_id: match.toss_winner_id,
     );
@@ -120,16 +106,16 @@ class MatchService {
 
     Map<String, dynamic> matchJson = match.toJson();
 
-    final teamAPlayersJson = (matchJson['team_a_players'] as List)
-        .map((player) => (player as MatchPlayerRequest).toJson())
-        .toList();
+    final teamsJson = (matchJson['teams'] as List).map((team) {
+      final teamRequest = (team as AddMatchTeamRequest).toJson();
+      final squadJson =
+          (team).squad.map((playerRequest) => playerRequest.toJson()).toList();
+      teamRequest['squad'] = squadJson;
 
-    final teamBPlayersJson = (matchJson['team_b_players'] as List)
-        .map((player) => (player as MatchPlayerRequest).toJson())
-        .toList();
+      return teamRequest;
+    }).toList();
 
-    matchJson['team_a_players'] = teamAPlayersJson;
-    matchJson['team_b_players'] = teamBPlayersJson;
+    matchJson['teams'] = teamsJson;
 
     batch.set(matchRef, matchJson, SetOptions(merge: true));
     String newMatchId = matchRef.id;
@@ -149,10 +135,57 @@ class MatchService {
 
     Map<String, dynamic> tossDetails = {
       'toss_winner_id': tossWinnerId,
-      'toss_result': tossDecision.value,
+      'toss_decision': tossDecision.value,
     };
 
     await matchRef.update(tossDetails);
+  }
+
+  Future<void> updateMatchStatus(String matchId, MatchStatus status) async {
+    DocumentReference matchRef =
+        _firestore.collection(_collectionName).doc(matchId);
+
+    Map<String, dynamic> matchStatus = {
+      'match_status': status.value,
+    };
+
+    await matchRef.update(matchStatus);
+  }
+
+  Future<void> updateTeamsSquad(
+      String matchId, AddMatchTeamRequest teamRequest) async {
+    DocumentReference matchRef =
+        _firestore.collection(_collectionName).doc(matchId);
+
+    await _firestore.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(matchRef);
+
+      List<Map<String, dynamic>> existingTeams =
+          List<Map<String, dynamic>>.from(snapshot.get('teams') ?? []);
+
+      int teamIndex = existingTeams
+          .indexWhere((team) => team['team_id'] == teamRequest.team_id);
+
+      if (teamIndex != -1) {
+        List<Map<String, dynamic>> updatedSquad =
+            List<Map<String, dynamic>>.from(
+                existingTeams[teamIndex]['squad'] ?? []);
+
+        for (var updatedPlayer in teamRequest.squad) {
+          int existingPlayerIndex = updatedSquad
+              .indexWhere((player) => player['id'] == updatedPlayer.id);
+          if (existingPlayerIndex != -1) {
+            updatedSquad[existingPlayerIndex] = updatedPlayer.toJson();
+          } else {
+            updatedSquad.add(updatedPlayer.toJson());
+          }
+        }
+
+        existingTeams[teamIndex]['squad'] = updatedSquad;
+      }
+
+      transaction.update(matchRef, {'teams': existingTeams});
+    });
   }
 
   Future<void> deleteMatch(String matchId) async {
@@ -160,17 +193,6 @@ class MatchService {
   }
 
   // Helper Methods
-  Future<List<TeamModel>> getTeamListFromTeamIds(List<String> teamIds) async {
-    List<TeamModel> teams = [];
-
-    for (final id in teamIds) {
-      var teamModel = await _teamService.getTeamById(id);
-      teams.add(teamModel);
-    }
-
-    return teams;
-  }
-
   Future<List<UserModel>?> getUserListFromUserIds(List<String>? userIds) async {
     if (userIds == null) {
       return null;
@@ -183,16 +205,30 @@ class MatchService {
     return users;
   }
 
+  Future<List<MatchTeamModel>> getTeamsList(
+      List<AddMatchTeamRequest> teamList) async {
+    List<MatchTeamModel> teams = [];
+
+    await Future.forEach(teamList, (e) async {
+      TeamModel team = await _teamService.getTeamById(e.team_id);
+      List<MatchPlayer> squad = await getPlayerListFromPlayerIds(e.squad);
+      teams.add(MatchTeamModel(
+          team: team,
+          squad: squad,
+          captain_id: e.captain_id,
+          admin_id: e.admin_id));
+    });
+
+    return teams;
+  }
+
   Future<List<MatchPlayer>> getPlayerListFromPlayerIds(
       List<MatchPlayerRequest> players) async {
     List<MatchPlayer> squad = [];
     for (final player in players) {
       var userModel = await _userService.getUserById(player.id);
       squad.add(MatchPlayer(
-          player: userModel,
-          status: player.status,
-          role: player.role ?? [],
-          index: player.index));
+          player: userModel, status: player.status, index: player.index));
     }
     return squad;
   }

@@ -54,8 +54,10 @@ class MatchListScreen extends ConsumerWidget {
 
   Widget _matchList(BuildContext context, MatchListViewState state) {
     if (state.loading) {
-      return const Center(
-        child: AppProgressIndicator(),
+      return const Expanded(
+        child: Center(
+          child: AppProgressIndicator(),
+        ),
       );
     }
 
@@ -75,8 +77,10 @@ class MatchListScreen extends ConsumerWidget {
         ),
       );
     } else {
-      return Center(
-        child: Text(context.l10n.match_list_no_match_yet_title),
+      return Expanded(
+        child: Center(
+          child: Text(context.l10n.match_list_no_match_yet_title),
+        ),
       );
     }
   }
@@ -122,17 +126,29 @@ class MatchListScreen extends ConsumerWidget {
                   ],
                 ),
               ),
-              IconButton(
-                  onPressed: () {
-                    AppRoute.addMatch(matchId: match.id).push(context);
-                  },
-                  icon: const Icon(Icons.edit)),
+              if (match.match_status != MatchStatus.finish) ...[
+                IconButton(
+                    onPressed: () {
+                      if (match.match_status == MatchStatus.yetToStart) {
+                        AppRoute.addMatch(matchId: match.id).push(context);
+                      } else {
+                        AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                            .push(context);
+                      }
+                    },
+                    icon: Icon(
+                      match.match_status == MatchStatus.yetToStart
+                          ? Icons.edit
+                          : Icons.play_arrow_sharp,
+                      size: 30,
+                    )),
+              ],
             ],
           ),
-          Text(match.teams.first.name,
+          Text(match.teams.first.team.name,
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary)),
-          Text(match.teams.last.name,
+          Text(match.teams.last.team.name,
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary)),
         ],

@@ -12,7 +12,8 @@ class ScoreBoardButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        flex: 3,
+      child: Container(
+        color: context.colorScheme.secondaryVariant,
         child: Row(
           children: [
             Expanded(
@@ -128,7 +129,9 @@ class ScoreBoardButtons extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _scoreButton({
@@ -143,10 +146,10 @@ class ScoreBoardButtons extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: backgroundColor ?? context.colorScheme.containerLowOnSurface,
-            border: Border.all(
-                color: context.colorScheme.outline)),
+            border: Border.all(color: context.colorScheme.outline)),
         child: Text(
           btn.getTitle(context),
+          textAlign: TextAlign.center,
           style: AppTextStyle.header1
               .copyWith(color: tintColor ?? context.colorScheme.textSecondary),
         ),

@@ -1,7 +1,6 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
-import 'package:data/extensions/list_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -15,9 +14,18 @@ final selectSquadStateProvider = StateNotifierProvider.autoDispose<
 class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
   SelectSquadViewNotifier() : super(const SelectSquadViewState());
 
-  void setData(TeamModel team, List<MatchPlayer> squad) {
+  void setData(
+    TeamModel team,
+    List<MatchPlayer> squad,
+    String? captainId,
+    String? adminId,
+  ) {
     state = state.copyWith(
-        team: team, squad: squad, isDoneBtnEnable: squad.isNotEmpty);
+        team: team,
+        squad: squad,
+        isDoneBtnEnable: squad.length >= 2,
+        captainId: captainId,
+        adminId: adminId);
   }
 
   void removeFromSquad(UserModel user) {
@@ -33,36 +41,21 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
   }
 
   void onCaptainOrAdminSelect(PlayerMatchRole role, String id) {
-    state = state.copyWith(
-        squad: state.squad.updateWhere(
-      where: (element) => element.role.contains(role),
-      updated: (oldElement) {
-        final roles = oldElement.role.toList();
-        roles.remove(role);
-        return oldElement.copyWith(role: roles);
-      },
-    ));
-
-    state = state.copyWith(
-        squad: state.squad.updateWhere(
-      where: (element) => element.player.id == id,
-      updated: (oldElement) {
-        final roles = oldElement.role.toList();
-        roles.add(role);
-        return oldElement.copyWith(role: roles);
-      },
-    ));
+    switch (role) {
+      case PlayerMatchRole.captain:
+        state = state.copyWith(captainId: id);
+      case PlayerMatchRole.admin:
+        state = state.copyWith(adminId: id);
+    }
     onSelectionChange();
   }
 
   void onSquadChange() {
-    state = state.copyWith(isDoneBtnEnable: state.squad.isNotEmpty);
+    state = state.copyWith(isDoneBtnEnable: state.squad.length >= 2);
   }
 
   void onSelectionChange() {
-    final flattenList = state.squad.expand((e) => e.role).toList();
-    final isEnable = flattenList.contains(PlayerMatchRole.captain) &&
-        flattenList.contains(PlayerMatchRole.admin);
+    final isEnable = state.captainId != null && state.adminId != null;
     state = state.copyWith(isOkayBtnEnable: isEnable);
   }
 }
@@ -72,9 +65,10 @@ class SelectSquadViewState with _$SelectSquadViewState {
   const factory SelectSquadViewState({
     Object? error,
     TeamModel? team,
+    String? captainId,
+    String? adminId,
     @Default(false) bool isOkayBtnEnable,
     @Default(false) bool isDoneBtnEnable,
     @Default([]) List<MatchPlayer> squad,
   }) = _SelectSquadViewState;
 }
-

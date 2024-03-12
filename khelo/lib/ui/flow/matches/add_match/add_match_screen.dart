@@ -42,7 +42,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
                     "INVALID ID")
             .pushReplacement(context);
       } else if (next == false) {
-        context.pop();
+        AppRoute.scoreBoard(
+                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
+                    "INVALID ID")
+            .pushReplacement(context);
       }
     });
   }
@@ -98,14 +101,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     AddMatchViewState state,
   ) {
     return IconButton(
-      onPressed: state.isDoneBtnEnable
-          ? () {
-              notifier.addMatch(MatchStatus.yetToStart);
-            }
-          : null,
+      onPressed: state.isSaveBtnEnable ? () => notifier.addMatch() : null,
       icon: Icon(
         Icons.alarm,
-        color: state.isDoneBtnEnable
+        color: state.isSaveBtnEnable
             ? context.colorScheme.primary
             : context.colorScheme.textDisabled,
       ),
@@ -273,9 +272,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     return OnTapScale(
         onTap: () async {
           final squad = await AppRoute.selectSquad(
-                  team: team,
-                  squad: type == TeamType.a ? state.squadA : state.squadB)
-              .push<List<MatchPlayer>>(context);
+            team: team,
+            squad: type == TeamType.a ? state.squadA : state.squadB,
+            captainId: type == TeamType.a
+                ? state.teamACaptainId
+                : state.teamBCaptainId,
+            adminId:
+                type == TeamType.a ? state.teamAAdminId : state.teamBAdminId,
+          ).push<Map<String, dynamic>>(context);
           if (squad != null && context.mounted) {
             notifier.onSquadSelect(type, squad);
           }
@@ -692,9 +696,9 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     return BottomStickyOverlay(
       child: PrimaryButton(
         context.l10n.add_match_start_match_title,
-        enabled: state.isDoneBtnEnable,
+        enabled: state.isStartBtnEnable,
         progress: state.isAddMatchInProgress,
-        onPressed: () => notifier.addMatch(MatchStatus.running),
+        onPressed: () => notifier.addMatch(startMatch: true),
       ),
     );
   }

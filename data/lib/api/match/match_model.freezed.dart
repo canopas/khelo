@@ -21,15 +21,13 @@ MatchModel _$MatchModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchModel {
   String? get id => throw _privateConstructorUsedError;
-  List<TeamModel> get teams => throw _privateConstructorUsedError;
-  List<MatchPlayer> get team_a_players => throw _privateConstructorUsedError;
-  List<MatchPlayer> get team_b_players => throw _privateConstructorUsedError;
+  List<MatchTeamModel> get teams => throw _privateConstructorUsedError;
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
   int get over_per_bowler => throw _privateConstructorUsedError;
-  List<int>? get power_play_overs1 => throw _privateConstructorUsedError;
-  List<int>? get power_play_overs2 => throw _privateConstructorUsedError;
-  List<int>? get power_play_overs3 => throw _privateConstructorUsedError;
+  List<int> get power_play_overs1 => throw _privateConstructorUsedError;
+  List<int> get power_play_overs2 => throw _privateConstructorUsedError;
+  List<int> get power_play_overs3 => throw _privateConstructorUsedError;
   String get city => throw _privateConstructorUsedError;
   String get ground => throw _privateConstructorUsedError;
   DateTime get start_time => throw _privateConstructorUsedError;
@@ -57,15 +55,13 @@ abstract class $MatchModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      List<TeamModel> teams,
-      List<MatchPlayer> team_a_players,
-      List<MatchPlayer> team_b_players,
+      List<MatchTeamModel> teams,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
-      List<int>? power_play_overs1,
-      List<int>? power_play_overs2,
-      List<int>? power_play_overs3,
+      List<int> power_play_overs1,
+      List<int> power_play_overs2,
+      List<int> power_play_overs3,
       String city,
       String ground,
       DateTime start_time,
@@ -97,14 +93,12 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
   $Res call({
     Object? id = freezed,
     Object? teams = null,
-    Object? team_a_players = null,
-    Object? team_b_players = null,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
-    Object? power_play_overs1 = freezed,
-    Object? power_play_overs2 = freezed,
-    Object? power_play_overs3 = freezed,
+    Object? power_play_overs1 = null,
+    Object? power_play_overs2 = null,
+    Object? power_play_overs3 = null,
     Object? city = null,
     Object? ground = null,
     Object? start_time = null,
@@ -126,15 +120,7 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
       teams: null == teams
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
-      team_a_players: null == team_a_players
-          ? _value.team_a_players
-          : team_a_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayer>,
-      team_b_players: null == team_b_players
-          ? _value.team_b_players
-          : team_b_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayer>,
+              as List<MatchTeamModel>,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -147,18 +133,18 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
               as int,
-      power_play_overs1: freezed == power_play_overs1
+      power_play_overs1: null == power_play_overs1
           ? _value.power_play_overs1
           : power_play_overs1 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      power_play_overs2: freezed == power_play_overs2
+              as List<int>,
+      power_play_overs2: null == power_play_overs2
           ? _value.power_play_overs2
           : power_play_overs2 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      power_play_overs3: freezed == power_play_overs3
+              as List<int>,
+      power_play_overs3: null == power_play_overs3
           ? _value.power_play_overs3
           : power_play_overs3 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
       city: null == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -233,15 +219,13 @@ abstract class _$$MatchModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? id,
-      List<TeamModel> teams,
-      List<MatchPlayer> team_a_players,
-      List<MatchPlayer> team_b_players,
+      List<MatchTeamModel> teams,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
-      List<int>? power_play_overs1,
-      List<int>? power_play_overs2,
-      List<int>? power_play_overs3,
+      List<int> power_play_overs1,
+      List<int> power_play_overs2,
+      List<int> power_play_overs3,
       String city,
       String ground,
       DateTime start_time,
@@ -272,14 +256,12 @@ class __$$MatchModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? teams = null,
-    Object? team_a_players = null,
-    Object? team_b_players = null,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
-    Object? power_play_overs1 = freezed,
-    Object? power_play_overs2 = freezed,
-    Object? power_play_overs3 = freezed,
+    Object? power_play_overs1 = null,
+    Object? power_play_overs2 = null,
+    Object? power_play_overs3 = null,
     Object? city = null,
     Object? ground = null,
     Object? start_time = null,
@@ -301,15 +283,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
       teams: null == teams
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
-      team_a_players: null == team_a_players
-          ? _value._team_a_players
-          : team_a_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayer>,
-      team_b_players: null == team_b_players
-          ? _value._team_b_players
-          : team_b_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayer>,
+              as List<MatchTeamModel>,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -322,18 +296,18 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
               as int,
-      power_play_overs1: freezed == power_play_overs1
+      power_play_overs1: null == power_play_overs1
           ? _value._power_play_overs1
           : power_play_overs1 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      power_play_overs2: freezed == power_play_overs2
+              as List<int>,
+      power_play_overs2: null == power_play_overs2
           ? _value._power_play_overs2
           : power_play_overs2 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      power_play_overs3: freezed == power_play_overs3
+              as List<int>,
+      power_play_overs3: null == power_play_overs3
           ? _value._power_play_overs3
           : power_play_overs3 // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
+              as List<int>,
       city: null == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -391,15 +365,13 @@ class __$$MatchModelImplCopyWithImpl<$Res>
 class _$MatchModelImpl implements _MatchModel {
   const _$MatchModelImpl(
       {this.id,
-      required final List<TeamModel> teams,
-      required final List<MatchPlayer> team_a_players,
-      required final List<MatchPlayer> team_b_players,
+      required final List<MatchTeamModel> teams,
       required this.match_type,
       required this.number_of_over,
       required this.over_per_bowler,
-      final List<int>? power_play_overs1,
-      final List<int>? power_play_overs2,
-      final List<int>? power_play_overs3,
+      final List<int> power_play_overs1 = const [],
+      final List<int> power_play_overs2 = const [],
+      final List<int> power_play_overs3 = const [],
       required this.city,
       required this.ground,
       required this.start_time,
@@ -413,8 +385,6 @@ class _$MatchModelImpl implements _MatchModel {
       this.toss_decision,
       this.toss_winner_id})
       : _teams = teams,
-        _team_a_players = team_a_players,
-        _team_b_players = team_b_players,
         _power_play_overs1 = power_play_overs1,
         _power_play_overs2 = power_play_overs2,
         _power_play_overs3 = power_play_overs3,
@@ -427,28 +397,12 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   final String? id;
-  final List<TeamModel> _teams;
+  final List<MatchTeamModel> _teams;
   @override
-  List<TeamModel> get teams {
+  List<MatchTeamModel> get teams {
     if (_teams is EqualUnmodifiableListView) return _teams;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_teams);
-  }
-
-  final List<MatchPlayer> _team_a_players;
-  @override
-  List<MatchPlayer> get team_a_players {
-    if (_team_a_players is EqualUnmodifiableListView) return _team_a_players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_team_a_players);
-  }
-
-  final List<MatchPlayer> _team_b_players;
-  @override
-  List<MatchPlayer> get team_b_players {
-    if (_team_b_players is EqualUnmodifiableListView) return _team_b_players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_team_b_players);
   }
 
   @override
@@ -457,37 +411,34 @@ class _$MatchModelImpl implements _MatchModel {
   final int number_of_over;
   @override
   final int over_per_bowler;
-  final List<int>? _power_play_overs1;
+  final List<int> _power_play_overs1;
   @override
-  List<int>? get power_play_overs1 {
-    final value = _power_play_overs1;
-    if (value == null) return null;
+  @JsonKey()
+  List<int> get power_play_overs1 {
     if (_power_play_overs1 is EqualUnmodifiableListView)
       return _power_play_overs1;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_power_play_overs1);
   }
 
-  final List<int>? _power_play_overs2;
+  final List<int> _power_play_overs2;
   @override
-  List<int>? get power_play_overs2 {
-    final value = _power_play_overs2;
-    if (value == null) return null;
+  @JsonKey()
+  List<int> get power_play_overs2 {
     if (_power_play_overs2 is EqualUnmodifiableListView)
       return _power_play_overs2;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_power_play_overs2);
   }
 
-  final List<int>? _power_play_overs3;
+  final List<int> _power_play_overs3;
   @override
-  List<int>? get power_play_overs3 {
-    final value = _power_play_overs3;
-    if (value == null) return null;
+  @JsonKey()
+  List<int> get power_play_overs3 {
     if (_power_play_overs3 is EqualUnmodifiableListView)
       return _power_play_overs3;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_power_play_overs3);
   }
 
   @override
@@ -541,7 +492,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, team_a_players: $team_a_players, team_b_players: $team_b_players, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id)';
+    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id)';
   }
 
   @override
@@ -551,10 +502,6 @@ class _$MatchModelImpl implements _MatchModel {
             other is _$MatchModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
-            const DeepCollectionEquality()
-                .equals(other._team_a_players, _team_a_players) &&
-            const DeepCollectionEquality()
-                .equals(other._team_b_players, _team_b_players) &&
             (identical(other.match_type, match_type) ||
                 other.match_type == match_type) &&
             (identical(other.number_of_over, number_of_over) ||
@@ -594,8 +541,6 @@ class _$MatchModelImpl implements _MatchModel {
         runtimeType,
         id,
         const DeepCollectionEquality().hash(_teams),
-        const DeepCollectionEquality().hash(_team_a_players),
-        const DeepCollectionEquality().hash(_team_b_players),
         match_type,
         number_of_over,
         over_per_bowler,
@@ -633,15 +578,13 @@ class _$MatchModelImpl implements _MatchModel {
 abstract class _MatchModel implements MatchModel {
   const factory _MatchModel(
       {final String? id,
-      required final List<TeamModel> teams,
-      required final List<MatchPlayer> team_a_players,
-      required final List<MatchPlayer> team_b_players,
+      required final List<MatchTeamModel> teams,
       required final MatchType match_type,
       required final int number_of_over,
       required final int over_per_bowler,
-      final List<int>? power_play_overs1,
-      final List<int>? power_play_overs2,
-      final List<int>? power_play_overs3,
+      final List<int> power_play_overs1,
+      final List<int> power_play_overs2,
+      final List<int> power_play_overs3,
       required final String city,
       required final String ground,
       required final DateTime start_time,
@@ -661,11 +604,7 @@ abstract class _MatchModel implements MatchModel {
   @override
   String? get id;
   @override
-  List<TeamModel> get teams;
-  @override
-  List<MatchPlayer> get team_a_players;
-  @override
-  List<MatchPlayer> get team_b_players;
+  List<MatchTeamModel> get teams;
   @override
   MatchType get match_type;
   @override
@@ -673,11 +612,11 @@ abstract class _MatchModel implements MatchModel {
   @override
   int get over_per_bowler;
   @override
-  List<int>? get power_play_overs1;
+  List<int> get power_play_overs1;
   @override
-  List<int>? get power_play_overs2;
+  List<int> get power_play_overs2;
   @override
-  List<int>? get power_play_overs3;
+  List<int> get power_play_overs3;
   @override
   String get city;
   @override
@@ -708,6 +647,230 @@ abstract class _MatchModel implements MatchModel {
       throw _privateConstructorUsedError;
 }
 
+MatchTeamModel _$MatchTeamModelFromJson(Map<String, dynamic> json) {
+  return _MatchTeamModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$MatchTeamModel {
+  TeamModel get team => throw _privateConstructorUsedError;
+  String? get captain_id => throw _privateConstructorUsedError;
+  String? get admin_id => throw _privateConstructorUsedError;
+  List<MatchPlayer> get squad => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $MatchTeamModelCopyWith<MatchTeamModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MatchTeamModelCopyWith<$Res> {
+  factory $MatchTeamModelCopyWith(
+          MatchTeamModel value, $Res Function(MatchTeamModel) then) =
+      _$MatchTeamModelCopyWithImpl<$Res, MatchTeamModel>;
+  @useResult
+  $Res call(
+      {TeamModel team,
+      String? captain_id,
+      String? admin_id,
+      List<MatchPlayer> squad});
+
+  $TeamModelCopyWith<$Res> get team;
+}
+
+/// @nodoc
+class _$MatchTeamModelCopyWithImpl<$Res, $Val extends MatchTeamModel>
+    implements $MatchTeamModelCopyWith<$Res> {
+  _$MatchTeamModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team = null,
+    Object? captain_id = freezed,
+    Object? admin_id = freezed,
+    Object? squad = null,
+  }) {
+    return _then(_value.copyWith(
+      team: null == team
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as TeamModel,
+      captain_id: freezed == captain_id
+          ? _value.captain_id
+          : captain_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin_id: freezed == admin_id
+          ? _value.admin_id
+          : admin_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      squad: null == squad
+          ? _value.squad
+          : squad // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayer>,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamModelCopyWith<$Res> get team {
+    return $TeamModelCopyWith<$Res>(_value.team, (value) {
+      return _then(_value.copyWith(team: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$MatchTeamModelImplCopyWith<$Res>
+    implements $MatchTeamModelCopyWith<$Res> {
+  factory _$$MatchTeamModelImplCopyWith(_$MatchTeamModelImpl value,
+          $Res Function(_$MatchTeamModelImpl) then) =
+      __$$MatchTeamModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {TeamModel team,
+      String? captain_id,
+      String? admin_id,
+      List<MatchPlayer> squad});
+
+  @override
+  $TeamModelCopyWith<$Res> get team;
+}
+
+/// @nodoc
+class __$$MatchTeamModelImplCopyWithImpl<$Res>
+    extends _$MatchTeamModelCopyWithImpl<$Res, _$MatchTeamModelImpl>
+    implements _$$MatchTeamModelImplCopyWith<$Res> {
+  __$$MatchTeamModelImplCopyWithImpl(
+      _$MatchTeamModelImpl _value, $Res Function(_$MatchTeamModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team = null,
+    Object? captain_id = freezed,
+    Object? admin_id = freezed,
+    Object? squad = null,
+  }) {
+    return _then(_$MatchTeamModelImpl(
+      team: null == team
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as TeamModel,
+      captain_id: freezed == captain_id
+          ? _value.captain_id
+          : captain_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin_id: freezed == admin_id
+          ? _value.admin_id
+          : admin_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      squad: null == squad
+          ? _value._squad
+          : squad // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayer>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MatchTeamModelImpl implements _MatchTeamModel {
+  const _$MatchTeamModelImpl(
+      {required this.team,
+      this.captain_id,
+      this.admin_id,
+      final List<MatchPlayer> squad = const []})
+      : _squad = squad;
+
+  factory _$MatchTeamModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MatchTeamModelImplFromJson(json);
+
+  @override
+  final TeamModel team;
+  @override
+  final String? captain_id;
+  @override
+  final String? admin_id;
+  final List<MatchPlayer> _squad;
+  @override
+  @JsonKey()
+  List<MatchPlayer> get squad {
+    if (_squad is EqualUnmodifiableListView) return _squad;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_squad);
+  }
+
+  @override
+  String toString() {
+    return 'MatchTeamModel(team: $team, captain_id: $captain_id, admin_id: $admin_id, squad: $squad)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MatchTeamModelImpl &&
+            (identical(other.team, team) || other.team == team) &&
+            (identical(other.captain_id, captain_id) ||
+                other.captain_id == captain_id) &&
+            (identical(other.admin_id, admin_id) ||
+                other.admin_id == admin_id) &&
+            const DeepCollectionEquality().equals(other._squad, _squad));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, team, captain_id, admin_id,
+      const DeepCollectionEquality().hash(_squad));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MatchTeamModelImplCopyWith<_$MatchTeamModelImpl> get copyWith =>
+      __$$MatchTeamModelImplCopyWithImpl<_$MatchTeamModelImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MatchTeamModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _MatchTeamModel implements MatchTeamModel {
+  const factory _MatchTeamModel(
+      {required final TeamModel team,
+      final String? captain_id,
+      final String? admin_id,
+      final List<MatchPlayer> squad}) = _$MatchTeamModelImpl;
+
+  factory _MatchTeamModel.fromJson(Map<String, dynamic> json) =
+      _$MatchTeamModelImpl.fromJson;
+
+  @override
+  TeamModel get team;
+  @override
+  String? get captain_id;
+  @override
+  String? get admin_id;
+  @override
+  List<MatchPlayer> get squad;
+  @override
+  @JsonKey(ignore: true)
+  _$$MatchTeamModelImplCopyWith<_$MatchTeamModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 MatchPlayer _$MatchPlayerFromJson(Map<String, dynamic> json) {
   return _MatchPlayer.fromJson(json);
 }
@@ -715,7 +878,6 @@ MatchPlayer _$MatchPlayerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayer {
   UserModel get player => throw _privateConstructorUsedError;
-  List<PlayerMatchRole> get role => throw _privateConstructorUsedError;
   PlayerStatus? get status => throw _privateConstructorUsedError;
   int? get index => throw _privateConstructorUsedError;
 
@@ -731,11 +893,7 @@ abstract class $MatchPlayerCopyWith<$Res> {
           MatchPlayer value, $Res Function(MatchPlayer) then) =
       _$MatchPlayerCopyWithImpl<$Res, MatchPlayer>;
   @useResult
-  $Res call(
-      {UserModel player,
-      List<PlayerMatchRole> role,
-      PlayerStatus? status,
-      int? index});
+  $Res call({UserModel player, PlayerStatus? status, int? index});
 
   $UserModelCopyWith<$Res> get player;
 }
@@ -754,7 +912,6 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
   @override
   $Res call({
     Object? player = null,
-    Object? role = null,
     Object? status = freezed,
     Object? index = freezed,
   }) {
@@ -763,10 +920,6 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      role: null == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as List<PlayerMatchRole>,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -795,11 +948,7 @@ abstract class _$$MatchPlayerImplCopyWith<$Res>
       __$$MatchPlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {UserModel player,
-      List<PlayerMatchRole> role,
-      PlayerStatus? status,
-      int? index});
+  $Res call({UserModel player, PlayerStatus? status, int? index});
 
   @override
   $UserModelCopyWith<$Res> get player;
@@ -817,7 +966,6 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? player = null,
-    Object? role = null,
     Object? status = freezed,
     Object? index = freezed,
   }) {
@@ -826,10 +974,6 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      role: null == role
-          ? _value._role
-          : role // ignore: cast_nullable_to_non_nullable
-              as List<PlayerMatchRole>,
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -845,27 +989,13 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MatchPlayerImpl implements _MatchPlayer {
-  const _$MatchPlayerImpl(
-      {required this.player,
-      final List<PlayerMatchRole> role = const [],
-      this.status,
-      this.index})
-      : _role = role;
+  const _$MatchPlayerImpl({required this.player, this.status, this.index});
 
   factory _$MatchPlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$MatchPlayerImplFromJson(json);
 
   @override
   final UserModel player;
-  final List<PlayerMatchRole> _role;
-  @override
-  @JsonKey()
-  List<PlayerMatchRole> get role {
-    if (_role is EqualUnmodifiableListView) return _role;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_role);
-  }
-
   @override
   final PlayerStatus? status;
   @override
@@ -873,7 +1003,7 @@ class _$MatchPlayerImpl implements _MatchPlayer {
 
   @override
   String toString() {
-    return 'MatchPlayer(player: $player, role: $role, status: $status, index: $index)';
+    return 'MatchPlayer(player: $player, status: $status, index: $index)';
   }
 
   @override
@@ -882,15 +1012,13 @@ class _$MatchPlayerImpl implements _MatchPlayer {
         (other.runtimeType == runtimeType &&
             other is _$MatchPlayerImpl &&
             (identical(other.player, player) || other.player == player) &&
-            const DeepCollectionEquality().equals(other._role, _role) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.index, index) || other.index == index));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, player,
-      const DeepCollectionEquality().hash(_role), status, index);
+  int get hashCode => Object.hash(runtimeType, player, status, index);
 
   @JsonKey(ignore: true)
   @override
@@ -909,7 +1037,6 @@ class _$MatchPlayerImpl implements _MatchPlayer {
 abstract class _MatchPlayer implements MatchPlayer {
   const factory _MatchPlayer(
       {required final UserModel player,
-      final List<PlayerMatchRole> role,
       final PlayerStatus? status,
       final int? index}) = _$MatchPlayerImpl;
 
@@ -918,8 +1045,6 @@ abstract class _MatchPlayer implements MatchPlayer {
 
   @override
   UserModel get player;
-  @override
-  List<PlayerMatchRole> get role;
   @override
   PlayerStatus? get status;
   @override
@@ -937,11 +1062,7 @@ AddEditMatchRequest _$AddEditMatchRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AddEditMatchRequest {
   String? get id => throw _privateConstructorUsedError;
-  List<String> get team_ids => throw _privateConstructorUsedError;
-  List<MatchPlayerRequest> get team_a_players =>
-      throw _privateConstructorUsedError;
-  List<MatchPlayerRequest> get team_b_players =>
-      throw _privateConstructorUsedError;
+  List<AddMatchTeamRequest> get teams => throw _privateConstructorUsedError;
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
   int get over_per_bowler => throw _privateConstructorUsedError;
@@ -975,9 +1096,7 @@ abstract class $AddEditMatchRequestCopyWith<$Res> {
   @useResult
   $Res call(
       {String? id,
-      List<String> team_ids,
-      List<MatchPlayerRequest> team_a_players,
-      List<MatchPlayerRequest> team_b_players,
+      List<AddMatchTeamRequest> teams,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
@@ -1012,9 +1131,7 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
   @override
   $Res call({
     Object? id = freezed,
-    Object? team_ids = null,
-    Object? team_a_players = null,
-    Object? team_b_players = null,
+    Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
@@ -1039,18 +1156,10 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      team_ids: null == team_ids
-          ? _value.team_ids
-          : team_ids // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      team_a_players: null == team_a_players
-          ? _value.team_a_players
-          : team_a_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayerRequest>,
-      team_b_players: null == team_b_players
-          ? _value.team_b_players
-          : team_b_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayerRequest>,
+      teams: null == teams
+          ? _value.teams
+          : teams // ignore: cast_nullable_to_non_nullable
+              as List<AddMatchTeamRequest>,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -1137,9 +1246,7 @@ abstract class _$$AddEditMatchRequestImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? id,
-      List<String> team_ids,
-      List<MatchPlayerRequest> team_a_players,
-      List<MatchPlayerRequest> team_b_players,
+      List<AddMatchTeamRequest> teams,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
@@ -1172,9 +1279,7 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? team_ids = null,
-    Object? team_a_players = null,
-    Object? team_b_players = null,
+    Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
@@ -1199,18 +1304,10 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      team_ids: null == team_ids
-          ? _value._team_ids
-          : team_ids // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      team_a_players: null == team_a_players
-          ? _value._team_a_players
-          : team_a_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayerRequest>,
-      team_b_players: null == team_b_players
-          ? _value._team_b_players
-          : team_b_players // ignore: cast_nullable_to_non_nullable
-              as List<MatchPlayerRequest>,
+      teams: null == teams
+          ? _value._teams
+          : teams // ignore: cast_nullable_to_non_nullable
+              as List<AddMatchTeamRequest>,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -1292,9 +1389,7 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
 class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
   const _$AddEditMatchRequestImpl(
       {this.id,
-      required final List<String> team_ids,
-      required final List<MatchPlayerRequest> team_a_players,
-      required final List<MatchPlayerRequest> team_b_players,
+      required final List<AddMatchTeamRequest> teams,
       required this.match_type,
       required this.number_of_over,
       required this.over_per_bowler,
@@ -1313,9 +1408,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
       required this.match_status,
       this.toss_decision,
       this.toss_winner_id})
-      : _team_ids = team_ids,
-        _team_a_players = team_a_players,
-        _team_b_players = team_b_players,
+      : _teams = teams,
         _power_play_overs1 = power_play_overs1,
         _power_play_overs2 = power_play_overs2,
         _power_play_overs3 = power_play_overs3,
@@ -1328,28 +1421,12 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
 
   @override
   final String? id;
-  final List<String> _team_ids;
+  final List<AddMatchTeamRequest> _teams;
   @override
-  List<String> get team_ids {
-    if (_team_ids is EqualUnmodifiableListView) return _team_ids;
+  List<AddMatchTeamRequest> get teams {
+    if (_teams is EqualUnmodifiableListView) return _teams;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_team_ids);
-  }
-
-  final List<MatchPlayerRequest> _team_a_players;
-  @override
-  List<MatchPlayerRequest> get team_a_players {
-    if (_team_a_players is EqualUnmodifiableListView) return _team_a_players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_team_a_players);
-  }
-
-  final List<MatchPlayerRequest> _team_b_players;
-  @override
-  List<MatchPlayerRequest> get team_b_players {
-    if (_team_b_players is EqualUnmodifiableListView) return _team_b_players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_team_b_players);
+    return EqualUnmodifiableListView(_teams);
   }
 
   @override
@@ -1442,7 +1519,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
 
   @override
   String toString() {
-    return 'AddEditMatchRequest(id: $id, team_ids: $team_ids, team_a_players: $team_a_players, team_b_players: $team_b_players, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id)';
+    return 'AddEditMatchRequest(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id)';
   }
 
   @override
@@ -1451,11 +1528,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
         (other.runtimeType == runtimeType &&
             other is _$AddEditMatchRequestImpl &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._team_ids, _team_ids) &&
-            const DeepCollectionEquality()
-                .equals(other._team_a_players, _team_a_players) &&
-            const DeepCollectionEquality()
-                .equals(other._team_b_players, _team_b_players) &&
+            const DeepCollectionEquality().equals(other._teams, _teams) &&
             (identical(other.match_type, match_type) ||
                 other.match_type == match_type) &&
             (identical(other.number_of_over, number_of_over) ||
@@ -1497,9 +1570,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
   int get hashCode => Object.hashAll([
         runtimeType,
         id,
-        const DeepCollectionEquality().hash(_team_ids),
-        const DeepCollectionEquality().hash(_team_a_players),
-        const DeepCollectionEquality().hash(_team_b_players),
+        const DeepCollectionEquality().hash(_teams),
         match_type,
         number_of_over,
         over_per_bowler,
@@ -1538,9 +1609,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
 abstract class _AddEditMatchRequest implements AddEditMatchRequest {
   const factory _AddEditMatchRequest(
       {final String? id,
-      required final List<String> team_ids,
-      required final List<MatchPlayerRequest> team_a_players,
-      required final List<MatchPlayerRequest> team_b_players,
+      required final List<AddMatchTeamRequest> teams,
       required final MatchType match_type,
       required final int number_of_over,
       required final int over_per_bowler,
@@ -1566,11 +1635,7 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
   @override
   String? get id;
   @override
-  List<String> get team_ids;
-  @override
-  List<MatchPlayerRequest> get team_a_players;
-  @override
-  List<MatchPlayerRequest> get team_b_players;
+  List<AddMatchTeamRequest> get teams;
   @override
   MatchType get match_type;
   @override
@@ -1613,6 +1678,217 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
       throw _privateConstructorUsedError;
 }
 
+AddMatchTeamRequest _$AddMatchTeamRequestFromJson(Map<String, dynamic> json) {
+  return _AddMatchTeamRequest.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AddMatchTeamRequest {
+  String get team_id => throw _privateConstructorUsedError;
+  String? get captain_id => throw _privateConstructorUsedError;
+  String? get admin_id => throw _privateConstructorUsedError;
+  List<MatchPlayerRequest> get squad => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $AddMatchTeamRequestCopyWith<AddMatchTeamRequest> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AddMatchTeamRequestCopyWith<$Res> {
+  factory $AddMatchTeamRequestCopyWith(
+          AddMatchTeamRequest value, $Res Function(AddMatchTeamRequest) then) =
+      _$AddMatchTeamRequestCopyWithImpl<$Res, AddMatchTeamRequest>;
+  @useResult
+  $Res call(
+      {String team_id,
+      String? captain_id,
+      String? admin_id,
+      List<MatchPlayerRequest> squad});
+}
+
+/// @nodoc
+class _$AddMatchTeamRequestCopyWithImpl<$Res, $Val extends AddMatchTeamRequest>
+    implements $AddMatchTeamRequestCopyWith<$Res> {
+  _$AddMatchTeamRequestCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team_id = null,
+    Object? captain_id = freezed,
+    Object? admin_id = freezed,
+    Object? squad = null,
+  }) {
+    return _then(_value.copyWith(
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      captain_id: freezed == captain_id
+          ? _value.captain_id
+          : captain_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin_id: freezed == admin_id
+          ? _value.admin_id
+          : admin_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      squad: null == squad
+          ? _value.squad
+          : squad // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayerRequest>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AddMatchTeamRequestImplCopyWith<$Res>
+    implements $AddMatchTeamRequestCopyWith<$Res> {
+  factory _$$AddMatchTeamRequestImplCopyWith(_$AddMatchTeamRequestImpl value,
+          $Res Function(_$AddMatchTeamRequestImpl) then) =
+      __$$AddMatchTeamRequestImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String team_id,
+      String? captain_id,
+      String? admin_id,
+      List<MatchPlayerRequest> squad});
+}
+
+/// @nodoc
+class __$$AddMatchTeamRequestImplCopyWithImpl<$Res>
+    extends _$AddMatchTeamRequestCopyWithImpl<$Res, _$AddMatchTeamRequestImpl>
+    implements _$$AddMatchTeamRequestImplCopyWith<$Res> {
+  __$$AddMatchTeamRequestImplCopyWithImpl(_$AddMatchTeamRequestImpl _value,
+      $Res Function(_$AddMatchTeamRequestImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team_id = null,
+    Object? captain_id = freezed,
+    Object? admin_id = freezed,
+    Object? squad = null,
+  }) {
+    return _then(_$AddMatchTeamRequestImpl(
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      captain_id: freezed == captain_id
+          ? _value.captain_id
+          : captain_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      admin_id: freezed == admin_id
+          ? _value.admin_id
+          : admin_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      squad: null == squad
+          ? _value._squad
+          : squad // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayerRequest>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AddMatchTeamRequestImpl implements _AddMatchTeamRequest {
+  const _$AddMatchTeamRequestImpl(
+      {required this.team_id,
+      this.captain_id,
+      this.admin_id,
+      final List<MatchPlayerRequest> squad = const []})
+      : _squad = squad;
+
+  factory _$AddMatchTeamRequestImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AddMatchTeamRequestImplFromJson(json);
+
+  @override
+  final String team_id;
+  @override
+  final String? captain_id;
+  @override
+  final String? admin_id;
+  final List<MatchPlayerRequest> _squad;
+  @override
+  @JsonKey()
+  List<MatchPlayerRequest> get squad {
+    if (_squad is EqualUnmodifiableListView) return _squad;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_squad);
+  }
+
+  @override
+  String toString() {
+    return 'AddMatchTeamRequest(team_id: $team_id, captain_id: $captain_id, admin_id: $admin_id, squad: $squad)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AddMatchTeamRequestImpl &&
+            (identical(other.team_id, team_id) || other.team_id == team_id) &&
+            (identical(other.captain_id, captain_id) ||
+                other.captain_id == captain_id) &&
+            (identical(other.admin_id, admin_id) ||
+                other.admin_id == admin_id) &&
+            const DeepCollectionEquality().equals(other._squad, _squad));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, team_id, captain_id, admin_id,
+      const DeepCollectionEquality().hash(_squad));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AddMatchTeamRequestImplCopyWith<_$AddMatchTeamRequestImpl> get copyWith =>
+      __$$AddMatchTeamRequestImplCopyWithImpl<_$AddMatchTeamRequestImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AddMatchTeamRequestImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AddMatchTeamRequest implements AddMatchTeamRequest {
+  const factory _AddMatchTeamRequest(
+      {required final String team_id,
+      final String? captain_id,
+      final String? admin_id,
+      final List<MatchPlayerRequest> squad}) = _$AddMatchTeamRequestImpl;
+
+  factory _AddMatchTeamRequest.fromJson(Map<String, dynamic> json) =
+      _$AddMatchTeamRequestImpl.fromJson;
+
+  @override
+  String get team_id;
+  @override
+  String? get captain_id;
+  @override
+  String? get admin_id;
+  @override
+  List<MatchPlayerRequest> get squad;
+  @override
+  @JsonKey(ignore: true)
+  _$$AddMatchTeamRequestImplCopyWith<_$AddMatchTeamRequestImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 MatchPlayerRequest _$MatchPlayerRequestFromJson(Map<String, dynamic> json) {
   return _MatchPlayerRequest.fromJson(json);
 }
@@ -1620,7 +1896,6 @@ MatchPlayerRequest _$MatchPlayerRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayerRequest {
   String get id => throw _privateConstructorUsedError;
-  List<PlayerMatchRole>? get role => throw _privateConstructorUsedError;
   PlayerStatus get status => throw _privateConstructorUsedError;
   int? get index => throw _privateConstructorUsedError;
 
@@ -1636,11 +1911,7 @@ abstract class $MatchPlayerRequestCopyWith<$Res> {
           MatchPlayerRequest value, $Res Function(MatchPlayerRequest) then) =
       _$MatchPlayerRequestCopyWithImpl<$Res, MatchPlayerRequest>;
   @useResult
-  $Res call(
-      {String id,
-      List<PlayerMatchRole>? role,
-      PlayerStatus status,
-      int? index});
+  $Res call({String id, PlayerStatus status, int? index});
 }
 
 /// @nodoc
@@ -1657,7 +1928,6 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
   @override
   $Res call({
     Object? id = null,
-    Object? role = freezed,
     Object? status = null,
     Object? index = freezed,
   }) {
@@ -1666,10 +1936,6 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      role: freezed == role
-          ? _value.role
-          : role // ignore: cast_nullable_to_non_nullable
-              as List<PlayerMatchRole>?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -1690,11 +1956,7 @@ abstract class _$$MatchPlayerRequestImplCopyWith<$Res>
       __$$MatchPlayerRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      List<PlayerMatchRole>? role,
-      PlayerStatus status,
-      int? index});
+  $Res call({String id, PlayerStatus status, int? index});
 }
 
 /// @nodoc
@@ -1709,7 +1971,6 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? role = freezed,
     Object? status = null,
     Object? index = freezed,
   }) {
@@ -1718,10 +1979,6 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      role: freezed == role
-          ? _value._role
-          : role // ignore: cast_nullable_to_non_nullable
-              as List<PlayerMatchRole>?,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -1738,27 +1995,13 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
   const _$MatchPlayerRequestImpl(
-      {required this.id,
-      final List<PlayerMatchRole>? role,
-      required this.status,
-      this.index})
-      : _role = role;
+      {required this.id, required this.status, this.index});
 
   factory _$MatchPlayerRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$MatchPlayerRequestImplFromJson(json);
 
   @override
   final String id;
-  final List<PlayerMatchRole>? _role;
-  @override
-  List<PlayerMatchRole>? get role {
-    final value = _role;
-    if (value == null) return null;
-    if (_role is EqualUnmodifiableListView) return _role;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
   @override
   final PlayerStatus status;
   @override
@@ -1766,7 +2009,7 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 
   @override
   String toString() {
-    return 'MatchPlayerRequest(id: $id, role: $role, status: $status, index: $index)';
+    return 'MatchPlayerRequest(id: $id, status: $status, index: $index)';
   }
 
   @override
@@ -1775,15 +2018,13 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
         (other.runtimeType == runtimeType &&
             other is _$MatchPlayerRequestImpl &&
             (identical(other.id, id) || other.id == id) &&
-            const DeepCollectionEquality().equals(other._role, _role) &&
             (identical(other.status, status) || other.status == status) &&
             (identical(other.index, index) || other.index == index));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id,
-      const DeepCollectionEquality().hash(_role), status, index);
+  int get hashCode => Object.hash(runtimeType, id, status, index);
 
   @JsonKey(ignore: true)
   @override
@@ -1803,7 +2044,6 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   const factory _MatchPlayerRequest(
       {required final String id,
-      final List<PlayerMatchRole>? role,
       required final PlayerStatus status,
       final int? index}) = _$MatchPlayerRequestImpl;
 
@@ -1812,8 +2052,6 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
 
   @override
   String get id;
-  @override
-  List<PlayerMatchRole>? get role;
   @override
   PlayerStatus get status;
   @override

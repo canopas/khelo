@@ -1,3 +1,4 @@
+import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
@@ -133,6 +134,41 @@ extension TossDecisionString on TossDecision {
         return context.l10n.add_toss_detail_bat_text;
       case TossDecision.bowl:
         return context.l10n.add_toss_detail_bowl_text;
+    }
+  }
+}
+
+extension WicketTypeString on WicketType{
+  String getString(BuildContext context) {
+    switch (this) {
+      case WicketType.bowled:
+        return "Bowled";
+      case WicketType.caught:
+        return "Caught";
+      case WicketType.caughtBehind:
+        return "Caught Behind";
+      case WicketType.caughtAndBowled:
+        return "Caught And Bowled";
+      case WicketType.lbw:
+        return "Leg Before Wicket";
+      case WicketType.stumped:
+        return "Stumped";
+      case WicketType.runOut:
+        return "Run Out";
+      case WicketType.hitWicket:
+        return "Hit Wicket";
+      case WicketType.hitBallTwice:
+        return "Hit Ball Twice";
+      case WicketType.handledBall:
+        return "Handled Ball";
+      case WicketType.obstructingField:
+        return "Obstructing the Field";
+      case WicketType.timedOut:
+        return "Timed Out";
+      case WicketType.retired:
+        return "Retired";
+      case WicketType.retiredHurt:
+        return "Retired Hurt";
     }
   }
 }

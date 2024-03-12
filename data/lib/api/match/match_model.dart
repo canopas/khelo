@@ -12,15 +12,13 @@ part 'match_model.g.dart';
 class MatchModel with _$MatchModel {
   const factory MatchModel({
     String? id,
-    required List<TeamModel> teams,
-    required List<MatchPlayer> team_a_players,
-    required List<MatchPlayer> team_b_players,
+    required List<MatchTeamModel> teams,
     required MatchType match_type,
     required int number_of_over,
     required int over_per_bowler,
-    List<int>? power_play_overs1,
-    List<int>? power_play_overs2,
-    List<int>? power_play_overs3,
+    @Default([]) List<int> power_play_overs1,
+    @Default([]) List<int> power_play_overs2,
+    @Default([]) List<int> power_play_overs3,
     required String city,
     required String ground,
     required DateTime start_time,
@@ -40,10 +38,22 @@ class MatchModel with _$MatchModel {
 }
 
 @freezed
+class MatchTeamModel with _$MatchTeamModel {
+  const factory MatchTeamModel({
+    required TeamModel team,
+    String? captain_id,
+    String? admin_id,
+    @Default([]) List<MatchPlayer> squad,
+  }) = _MatchTeamModel;
+
+  factory MatchTeamModel.fromJson(Map<String, dynamic> json) =>
+      _$MatchTeamModelFromJson(json);
+}
+
+@freezed
 class MatchPlayer with _$MatchPlayer {
   const factory MatchPlayer({
     required UserModel player,
-    @Default([]) List<PlayerMatchRole> role,
     PlayerStatus? status,
     int? index,
   }) = _MatchPlayer;
@@ -56,9 +66,7 @@ class MatchPlayer with _$MatchPlayer {
 class AddEditMatchRequest with _$AddEditMatchRequest {
   const factory AddEditMatchRequest({
     String? id,
-    required List<String> team_ids,
-    required List<MatchPlayerRequest> team_a_players,
-    required List<MatchPlayerRequest> team_b_players,
+    required List<AddMatchTeamRequest> teams,
     required MatchType match_type,
     required int number_of_over,
     required int over_per_bowler,
@@ -84,10 +92,22 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
 }
 
 @freezed
+class AddMatchTeamRequest with _$AddMatchTeamRequest {
+  const factory AddMatchTeamRequest({
+    required String team_id,
+    String? captain_id,
+    String? admin_id,
+    @Default([]) List<MatchPlayerRequest> squad,
+  }) = _AddMatchTeamRequest;
+
+  factory AddMatchTeamRequest.fromJson(Map<String, dynamic> json) =>
+      _$AddMatchTeamRequestFromJson(json);
+}
+
+@freezed
 class MatchPlayerRequest with _$MatchPlayerRequest {
   const factory MatchPlayerRequest({
     required String id,
-    List<PlayerMatchRole>? role,
     required PlayerStatus status,
     int? index,
   }) = _MatchPlayerRequest;

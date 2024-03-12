@@ -18,8 +18,16 @@ import 'package:style/text/app_text_style.dart';
 class SelectSquadScreen extends ConsumerStatefulWidget {
   final TeamModel team;
   final List<MatchPlayer>? squad;
+  final String? captainId;
+  final String? adminId;
 
-  const SelectSquadScreen({super.key, required this.team, this.squad});
+  const SelectSquadScreen({
+    super.key,
+    required this.team,
+    this.squad,
+    this.captainId,
+    this.adminId,
+  });
 
   @override
   ConsumerState createState() => _SelectSquadScreenState();
@@ -32,7 +40,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(selectSquadStateProvider.notifier);
-    runPostFrame(() => notifier.setData(widget.team, widget.squad ?? []));
+    runPostFrame(() => notifier.setData(
+        widget.team, widget.squad ?? [], widget.captainId, widget.adminId));
   }
 
   @override
@@ -46,10 +55,12 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
         IconButton(
             onPressed: state.isDoneBtnEnable
                 ? () async {
-                    final result = await SelectAdminAndCaptainDialog.show<
-                        List<MatchPlayer>>(context);
+                    var result = await SelectAdminAndCaptainDialog.show<
+                        Map<String, dynamic>>(context);
                     if (result != null && context.mounted) {
-                      context.pop(result);
+                      Map<String, dynamic> updatedResult = Map.from(result);
+                      updatedResult["squad"] = state.squad;
+                      context.pop(updatedResult);
                     }
                   }
                 : null,
@@ -75,14 +86,15 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
       SelectSquadViewNotifier notifier, SelectSquadViewState state) {
     return Wrap(
       children: [
-        _sectionTitle(context, context.l10n.select_squad_playing_squad_title),
+        _sectionTitle(
+          context,
+          context.l10n.select_squad_playing_squad_title,
+          subtitle: context.l10n.select_squad_least_require_text,
+        ),
         if (state.squad.isEmpty) ...[
           _emptyList(context.l10n.select_squad_empty_squad_text)
         ] else ...[
           for (final member in state.squad) ...[
-            const SizedBox(
-              height: 16,
-            ),
             _userProfileCell(context, notifier, member, true)
           ],
         ],
@@ -99,9 +111,6 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           _emptyList(context.l10n.select_squad_empty_team_member_text)
         ] else ...[
           for (final member in getFilteredList(state)) ...[
-            const SizedBox(
-              height: 16,
-            ),
             _userProfileCell(
                 context, notifier, MatchPlayer(player: member), false)
           ],
@@ -129,7 +138,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
         [];
   }
 
-  Widget _sectionTitle(BuildContext context, String title) {
+  Widget _sectionTitle(BuildContext context, String title, {String? subtitle}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,6 +149,19 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           title,
           style: AppTextStyle.header1
               .copyWith(color: context.colorScheme.textSecondary),
+        ),
+        if (subtitle != null) ...[
+          const SizedBox(
+            height: 2,
+          ),
+          Text(
+            subtitle,
+            style: AppTextStyle.button
+                .copyWith(color: context.colorScheme.textDisabled),
+          ),
+        ],
+        const SizedBox(
+          height: 16,
         ),
       ],
     );

@@ -31,6 +31,7 @@ class AppRoute {
   static const pathSearchTeam = '/search-team';
   static const pathAddMatch = '/add-match';
   static const pathAddTossDetail = '/add-toss-detail';
+  static const pathScoreBoard = '/score-board';
 
   final String path;
   final String? name;
@@ -112,8 +113,12 @@ class AppRoute {
   static AppRoute get phoneLogin =>
       AppRoute("/phone-login", builder: (_) => SignInWithPhoneScreen());
 
-  static AppRoute get scoreBoard =>
-      AppRoute("/score-board", builder: (_) => const ScoreBoardScreen());
+  static AppRoute scoreBoard({required String matchId}) => AppRoute(
+        pathScoreBoard,
+        builder: (_) => ScoreBoardScreen(
+          matchId: matchId,
+        ),
+      );
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,
@@ -168,12 +173,16 @@ class AppRoute {
   static AppRoute selectSquad({
     required TeamModel team,
     List<MatchPlayer>? squad,
+    String? captainId,
+    String? adminId,
   }) =>
       AppRoute(
         pathSelectSquad,
         builder: (_) => SelectSquadScreen(
           team: team,
           squad: squad,
+          captainId: captainId,
+          adminId: adminId,
         ),
       );
 
@@ -211,7 +220,10 @@ class AppRoute {
       },
     ),
     phoneLogin.goRoute(),
-    scoreBoard.goRoute(),
+    GoRoute(
+      path: pathScoreBoard,
+      builder: (context, state) => state.widget(context),
+    ),
     GoRoute(
       path: pathAddTossDetail,
       builder: (context, state) => state.widget(context),

@@ -17,6 +17,47 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ScoreBoardViewState {
   Object? get error => throw _privateConstructorUsedError;
+  MatchModel? get match => throw _privateConstructorUsedError;
+  InningModel? get currentInning => throw _privateConstructorUsedError;
+  InningModel? get otherInning => throw _privateConstructorUsedError;
+  MatchPlayer? get bowler => throw _privateConstructorUsedError;
+  String? get strikerId => throw _privateConstructorUsedError;
+  List<MatchPlayer>? get batsMans => throw _privateConstructorUsedError;
+  DateTime? get showSelectBatsManSheet => throw _privateConstructorUsedError;
+  DateTime? get showSelectBowlerSheet => throw _privateConstructorUsedError;
+  DateTime? get showSelectPlayerSheet => throw _privateConstructorUsedError;
+  DateTime? get showSelectWicketTypeSheet => throw _privateConstructorUsedError;
+  DateTime? get showStrikerSelectionDialog =>
+      throw _privateConstructorUsedError;
+  DateTime? get showUndoBallConfirmationDialog =>
+      throw _privateConstructorUsedError;
+  DateTime? get showOverCompleteDialog => throw _privateConstructorUsedError;
+  DateTime? get showInningCompleteDialog => throw _privateConstructorUsedError;
+  DateTime? get showMatchCompleteDialog => throw _privateConstructorUsedError;
+  DateTime? get showBoundaryDialogForSix => throw _privateConstructorUsedError;
+  DateTime? get showBoundaryDialogForFour => throw _privateConstructorUsedError;
+  DateTime? get showAddExtraDialogForNoBall =>
+      throw _privateConstructorUsedError;
+  DateTime? get showAddExtraDialogForLegBye =>
+      throw _privateConstructorUsedError;
+  DateTime? get showAddExtraDialogForBye => throw _privateConstructorUsedError;
+  DateTime? get showAddExtraDialogForFiveSeven =>
+      throw _privateConstructorUsedError;
+  DateTime? get showPauseScoringDialog => throw _privateConstructorUsedError;
+  DateTime? get showAddPenaltyRunDialog => throw _privateConstructorUsedError;
+  DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
+  List<BallScoreModel> get currentScoresList =>
+      throw _privateConstructorUsedError;
+  List<BallScoreModel> get previousScoresList =>
+      throw _privateConstructorUsedError;
+  bool get loading => throw _privateConstructorUsedError;
+  bool get pop => throw _privateConstructorUsedError;
+  bool get continueWithInjuredPlayers => throw _privateConstructorUsedError;
+  int get ballCount => throw _privateConstructorUsedError;
+  int get overCount => throw _privateConstructorUsedError;
+  int get totalRuns => throw _privateConstructorUsedError;
+  int get wicketCount => throw _privateConstructorUsedError;
+  int get lastAssignedIndex => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ScoreBoardViewStateCopyWith<ScoreBoardViewState> get copyWith =>
@@ -29,7 +70,47 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
           ScoreBoardViewState value, $Res Function(ScoreBoardViewState) then) =
       _$ScoreBoardViewStateCopyWithImpl<$Res, ScoreBoardViewState>;
   @useResult
-  $Res call({Object? error});
+  $Res call(
+      {Object? error,
+      MatchModel? match,
+      InningModel? currentInning,
+      InningModel? otherInning,
+      MatchPlayer? bowler,
+      String? strikerId,
+      List<MatchPlayer>? batsMans,
+      DateTime? showSelectBatsManSheet,
+      DateTime? showSelectBowlerSheet,
+      DateTime? showSelectPlayerSheet,
+      DateTime? showSelectWicketTypeSheet,
+      DateTime? showStrikerSelectionDialog,
+      DateTime? showUndoBallConfirmationDialog,
+      DateTime? showOverCompleteDialog,
+      DateTime? showInningCompleteDialog,
+      DateTime? showMatchCompleteDialog,
+      DateTime? showBoundaryDialogForSix,
+      DateTime? showBoundaryDialogForFour,
+      DateTime? showAddExtraDialogForNoBall,
+      DateTime? showAddExtraDialogForLegBye,
+      DateTime? showAddExtraDialogForBye,
+      DateTime? showAddExtraDialogForFiveSeven,
+      DateTime? showPauseScoringDialog,
+      DateTime? showAddPenaltyRunDialog,
+      DateTime? invalidUndoToast,
+      List<BallScoreModel> currentScoresList,
+      List<BallScoreModel> previousScoresList,
+      bool loading,
+      bool pop,
+      bool continueWithInjuredPlayers,
+      int ballCount,
+      int overCount,
+      int totalRuns,
+      int wicketCount,
+      int lastAssignedIndex});
+
+  $MatchModelCopyWith<$Res>? get match;
+  $InningModelCopyWith<$Res>? get currentInning;
+  $InningModelCopyWith<$Res>? get otherInning;
+  $MatchPlayerCopyWith<$Res>? get bowler;
 }
 
 /// @nodoc
@@ -46,10 +127,228 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? match = freezed,
+    Object? currentInning = freezed,
+    Object? otherInning = freezed,
+    Object? bowler = freezed,
+    Object? strikerId = freezed,
+    Object? batsMans = freezed,
+    Object? showSelectBatsManSheet = freezed,
+    Object? showSelectBowlerSheet = freezed,
+    Object? showSelectPlayerSheet = freezed,
+    Object? showSelectWicketTypeSheet = freezed,
+    Object? showStrikerSelectionDialog = freezed,
+    Object? showUndoBallConfirmationDialog = freezed,
+    Object? showOverCompleteDialog = freezed,
+    Object? showInningCompleteDialog = freezed,
+    Object? showMatchCompleteDialog = freezed,
+    Object? showBoundaryDialogForSix = freezed,
+    Object? showBoundaryDialogForFour = freezed,
+    Object? showAddExtraDialogForNoBall = freezed,
+    Object? showAddExtraDialogForLegBye = freezed,
+    Object? showAddExtraDialogForBye = freezed,
+    Object? showAddExtraDialogForFiveSeven = freezed,
+    Object? showPauseScoringDialog = freezed,
+    Object? showAddPenaltyRunDialog = freezed,
+    Object? invalidUndoToast = freezed,
+    Object? currentScoresList = null,
+    Object? previousScoresList = null,
+    Object? loading = null,
+    Object? pop = null,
+    Object? continueWithInjuredPlayers = null,
+    Object? ballCount = null,
+    Object? overCount = null,
+    Object? totalRuns = null,
+    Object? wicketCount = null,
+    Object? lastAssignedIndex = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      match: freezed == match
+          ? _value.match
+          : match // ignore: cast_nullable_to_non_nullable
+              as MatchModel?,
+      currentInning: freezed == currentInning
+          ? _value.currentInning
+          : currentInning // ignore: cast_nullable_to_non_nullable
+              as InningModel?,
+      otherInning: freezed == otherInning
+          ? _value.otherInning
+          : otherInning // ignore: cast_nullable_to_non_nullable
+              as InningModel?,
+      bowler: freezed == bowler
+          ? _value.bowler
+          : bowler // ignore: cast_nullable_to_non_nullable
+              as MatchPlayer?,
+      strikerId: freezed == strikerId
+          ? _value.strikerId
+          : strikerId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      batsMans: freezed == batsMans
+          ? _value.batsMans
+          : batsMans // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayer>?,
+      showSelectBatsManSheet: freezed == showSelectBatsManSheet
+          ? _value.showSelectBatsManSheet
+          : showSelectBatsManSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectBowlerSheet: freezed == showSelectBowlerSheet
+          ? _value.showSelectBowlerSheet
+          : showSelectBowlerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectPlayerSheet: freezed == showSelectPlayerSheet
+          ? _value.showSelectPlayerSheet
+          : showSelectPlayerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectWicketTypeSheet: freezed == showSelectWicketTypeSheet
+          ? _value.showSelectWicketTypeSheet
+          : showSelectWicketTypeSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showStrikerSelectionDialog: freezed == showStrikerSelectionDialog
+          ? _value.showStrikerSelectionDialog
+          : showStrikerSelectionDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showUndoBallConfirmationDialog: freezed == showUndoBallConfirmationDialog
+          ? _value.showUndoBallConfirmationDialog
+          : showUndoBallConfirmationDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showOverCompleteDialog: freezed == showOverCompleteDialog
+          ? _value.showOverCompleteDialog
+          : showOverCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showInningCompleteDialog: freezed == showInningCompleteDialog
+          ? _value.showInningCompleteDialog
+          : showInningCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showMatchCompleteDialog: freezed == showMatchCompleteDialog
+          ? _value.showMatchCompleteDialog
+          : showMatchCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showBoundaryDialogForSix: freezed == showBoundaryDialogForSix
+          ? _value.showBoundaryDialogForSix
+          : showBoundaryDialogForSix // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showBoundaryDialogForFour: freezed == showBoundaryDialogForFour
+          ? _value.showBoundaryDialogForFour
+          : showBoundaryDialogForFour // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForNoBall: freezed == showAddExtraDialogForNoBall
+          ? _value.showAddExtraDialogForNoBall
+          : showAddExtraDialogForNoBall // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForLegBye: freezed == showAddExtraDialogForLegBye
+          ? _value.showAddExtraDialogForLegBye
+          : showAddExtraDialogForLegBye // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForBye: freezed == showAddExtraDialogForBye
+          ? _value.showAddExtraDialogForBye
+          : showAddExtraDialogForBye // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForFiveSeven: freezed == showAddExtraDialogForFiveSeven
+          ? _value.showAddExtraDialogForFiveSeven
+          : showAddExtraDialogForFiveSeven // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showPauseScoringDialog: freezed == showPauseScoringDialog
+          ? _value.showPauseScoringDialog
+          : showPauseScoringDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddPenaltyRunDialog: freezed == showAddPenaltyRunDialog
+          ? _value.showAddPenaltyRunDialog
+          : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      invalidUndoToast: freezed == invalidUndoToast
+          ? _value.invalidUndoToast
+          : invalidUndoToast // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      currentScoresList: null == currentScoresList
+          ? _value.currentScoresList
+          : currentScoresList // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      previousScoresList: null == previousScoresList
+          ? _value.previousScoresList
+          : previousScoresList // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pop: null == pop
+          ? _value.pop
+          : pop // ignore: cast_nullable_to_non_nullable
+              as bool,
+      continueWithInjuredPlayers: null == continueWithInjuredPlayers
+          ? _value.continueWithInjuredPlayers
+          : continueWithInjuredPlayers // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ballCount: null == ballCount
+          ? _value.ballCount
+          : ballCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      overCount: null == overCount
+          ? _value.overCount
+          : overCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalRuns: null == totalRuns
+          ? _value.totalRuns
+          : totalRuns // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicketCount: null == wicketCount
+          ? _value.wicketCount
+          : wicketCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastAssignedIndex: null == lastAssignedIndex
+          ? _value.lastAssignedIndex
+          : lastAssignedIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MatchModelCopyWith<$Res>? get match {
+    if (_value.match == null) {
+      return null;
+    }
+
+    return $MatchModelCopyWith<$Res>(_value.match!, (value) {
+      return _then(_value.copyWith(match: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $InningModelCopyWith<$Res>? get currentInning {
+    if (_value.currentInning == null) {
+      return null;
+    }
+
+    return $InningModelCopyWith<$Res>(_value.currentInning!, (value) {
+      return _then(_value.copyWith(currentInning: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $InningModelCopyWith<$Res>? get otherInning {
+    if (_value.otherInning == null) {
+      return null;
+    }
+
+    return $InningModelCopyWith<$Res>(_value.otherInning!, (value) {
+      return _then(_value.copyWith(otherInning: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MatchPlayerCopyWith<$Res>? get bowler {
+    if (_value.bowler == null) {
+      return null;
+    }
+
+    return $MatchPlayerCopyWith<$Res>(_value.bowler!, (value) {
+      return _then(_value.copyWith(bowler: value) as $Val);
+    });
   }
 }
 
@@ -61,7 +360,51 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       __$$ScoreBoardViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error});
+  $Res call(
+      {Object? error,
+      MatchModel? match,
+      InningModel? currentInning,
+      InningModel? otherInning,
+      MatchPlayer? bowler,
+      String? strikerId,
+      List<MatchPlayer>? batsMans,
+      DateTime? showSelectBatsManSheet,
+      DateTime? showSelectBowlerSheet,
+      DateTime? showSelectPlayerSheet,
+      DateTime? showSelectWicketTypeSheet,
+      DateTime? showStrikerSelectionDialog,
+      DateTime? showUndoBallConfirmationDialog,
+      DateTime? showOverCompleteDialog,
+      DateTime? showInningCompleteDialog,
+      DateTime? showMatchCompleteDialog,
+      DateTime? showBoundaryDialogForSix,
+      DateTime? showBoundaryDialogForFour,
+      DateTime? showAddExtraDialogForNoBall,
+      DateTime? showAddExtraDialogForLegBye,
+      DateTime? showAddExtraDialogForBye,
+      DateTime? showAddExtraDialogForFiveSeven,
+      DateTime? showPauseScoringDialog,
+      DateTime? showAddPenaltyRunDialog,
+      DateTime? invalidUndoToast,
+      List<BallScoreModel> currentScoresList,
+      List<BallScoreModel> previousScoresList,
+      bool loading,
+      bool pop,
+      bool continueWithInjuredPlayers,
+      int ballCount,
+      int overCount,
+      int totalRuns,
+      int wicketCount,
+      int lastAssignedIndex});
+
+  @override
+  $MatchModelCopyWith<$Res>? get match;
+  @override
+  $InningModelCopyWith<$Res>? get currentInning;
+  @override
+  $InningModelCopyWith<$Res>? get otherInning;
+  @override
+  $MatchPlayerCopyWith<$Res>? get bowler;
 }
 
 /// @nodoc
@@ -76,9 +419,179 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? match = freezed,
+    Object? currentInning = freezed,
+    Object? otherInning = freezed,
+    Object? bowler = freezed,
+    Object? strikerId = freezed,
+    Object? batsMans = freezed,
+    Object? showSelectBatsManSheet = freezed,
+    Object? showSelectBowlerSheet = freezed,
+    Object? showSelectPlayerSheet = freezed,
+    Object? showSelectWicketTypeSheet = freezed,
+    Object? showStrikerSelectionDialog = freezed,
+    Object? showUndoBallConfirmationDialog = freezed,
+    Object? showOverCompleteDialog = freezed,
+    Object? showInningCompleteDialog = freezed,
+    Object? showMatchCompleteDialog = freezed,
+    Object? showBoundaryDialogForSix = freezed,
+    Object? showBoundaryDialogForFour = freezed,
+    Object? showAddExtraDialogForNoBall = freezed,
+    Object? showAddExtraDialogForLegBye = freezed,
+    Object? showAddExtraDialogForBye = freezed,
+    Object? showAddExtraDialogForFiveSeven = freezed,
+    Object? showPauseScoringDialog = freezed,
+    Object? showAddPenaltyRunDialog = freezed,
+    Object? invalidUndoToast = freezed,
+    Object? currentScoresList = null,
+    Object? previousScoresList = null,
+    Object? loading = null,
+    Object? pop = null,
+    Object? continueWithInjuredPlayers = null,
+    Object? ballCount = null,
+    Object? overCount = null,
+    Object? totalRuns = null,
+    Object? wicketCount = null,
+    Object? lastAssignedIndex = null,
   }) {
     return _then(_$ScoreBoardViewStateImpl(
       error: freezed == error ? _value.error : error,
+      match: freezed == match
+          ? _value.match
+          : match // ignore: cast_nullable_to_non_nullable
+              as MatchModel?,
+      currentInning: freezed == currentInning
+          ? _value.currentInning
+          : currentInning // ignore: cast_nullable_to_non_nullable
+              as InningModel?,
+      otherInning: freezed == otherInning
+          ? _value.otherInning
+          : otherInning // ignore: cast_nullable_to_non_nullable
+              as InningModel?,
+      bowler: freezed == bowler
+          ? _value.bowler
+          : bowler // ignore: cast_nullable_to_non_nullable
+              as MatchPlayer?,
+      strikerId: freezed == strikerId
+          ? _value.strikerId
+          : strikerId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      batsMans: freezed == batsMans
+          ? _value._batsMans
+          : batsMans // ignore: cast_nullable_to_non_nullable
+              as List<MatchPlayer>?,
+      showSelectBatsManSheet: freezed == showSelectBatsManSheet
+          ? _value.showSelectBatsManSheet
+          : showSelectBatsManSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectBowlerSheet: freezed == showSelectBowlerSheet
+          ? _value.showSelectBowlerSheet
+          : showSelectBowlerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectPlayerSheet: freezed == showSelectPlayerSheet
+          ? _value.showSelectPlayerSheet
+          : showSelectPlayerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectWicketTypeSheet: freezed == showSelectWicketTypeSheet
+          ? _value.showSelectWicketTypeSheet
+          : showSelectWicketTypeSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showStrikerSelectionDialog: freezed == showStrikerSelectionDialog
+          ? _value.showStrikerSelectionDialog
+          : showStrikerSelectionDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showUndoBallConfirmationDialog: freezed == showUndoBallConfirmationDialog
+          ? _value.showUndoBallConfirmationDialog
+          : showUndoBallConfirmationDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showOverCompleteDialog: freezed == showOverCompleteDialog
+          ? _value.showOverCompleteDialog
+          : showOverCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showInningCompleteDialog: freezed == showInningCompleteDialog
+          ? _value.showInningCompleteDialog
+          : showInningCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showMatchCompleteDialog: freezed == showMatchCompleteDialog
+          ? _value.showMatchCompleteDialog
+          : showMatchCompleteDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showBoundaryDialogForSix: freezed == showBoundaryDialogForSix
+          ? _value.showBoundaryDialogForSix
+          : showBoundaryDialogForSix // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showBoundaryDialogForFour: freezed == showBoundaryDialogForFour
+          ? _value.showBoundaryDialogForFour
+          : showBoundaryDialogForFour // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForNoBall: freezed == showAddExtraDialogForNoBall
+          ? _value.showAddExtraDialogForNoBall
+          : showAddExtraDialogForNoBall // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForLegBye: freezed == showAddExtraDialogForLegBye
+          ? _value.showAddExtraDialogForLegBye
+          : showAddExtraDialogForLegBye // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForBye: freezed == showAddExtraDialogForBye
+          ? _value.showAddExtraDialogForBye
+          : showAddExtraDialogForBye // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddExtraDialogForFiveSeven: freezed == showAddExtraDialogForFiveSeven
+          ? _value.showAddExtraDialogForFiveSeven
+          : showAddExtraDialogForFiveSeven // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showPauseScoringDialog: freezed == showPauseScoringDialog
+          ? _value.showPauseScoringDialog
+          : showPauseScoringDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddPenaltyRunDialog: freezed == showAddPenaltyRunDialog
+          ? _value.showAddPenaltyRunDialog
+          : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      invalidUndoToast: freezed == invalidUndoToast
+          ? _value.invalidUndoToast
+          : invalidUndoToast // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      currentScoresList: null == currentScoresList
+          ? _value._currentScoresList
+          : currentScoresList // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      previousScoresList: null == previousScoresList
+          ? _value._previousScoresList
+          : previousScoresList // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      pop: null == pop
+          ? _value.pop
+          : pop // ignore: cast_nullable_to_non_nullable
+              as bool,
+      continueWithInjuredPlayers: null == continueWithInjuredPlayers
+          ? _value.continueWithInjuredPlayers
+          : continueWithInjuredPlayers // ignore: cast_nullable_to_non_nullable
+              as bool,
+      ballCount: null == ballCount
+          ? _value.ballCount
+          : ballCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      overCount: null == overCount
+          ? _value.overCount
+          : overCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalRuns: null == totalRuns
+          ? _value.totalRuns
+          : totalRuns // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicketCount: null == wicketCount
+          ? _value.wicketCount
+          : wicketCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      lastAssignedIndex: null == lastAssignedIndex
+          ? _value.lastAssignedIndex
+          : lastAssignedIndex // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -86,14 +599,152 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
-  const _$ScoreBoardViewStateImpl({this.error});
+  const _$ScoreBoardViewStateImpl(
+      {this.error,
+      this.match,
+      this.currentInning,
+      this.otherInning,
+      this.bowler,
+      this.strikerId,
+      final List<MatchPlayer>? batsMans,
+      this.showSelectBatsManSheet,
+      this.showSelectBowlerSheet,
+      this.showSelectPlayerSheet,
+      this.showSelectWicketTypeSheet,
+      this.showStrikerSelectionDialog,
+      this.showUndoBallConfirmationDialog,
+      this.showOverCompleteDialog,
+      this.showInningCompleteDialog,
+      this.showMatchCompleteDialog,
+      this.showBoundaryDialogForSix,
+      this.showBoundaryDialogForFour,
+      this.showAddExtraDialogForNoBall,
+      this.showAddExtraDialogForLegBye,
+      this.showAddExtraDialogForBye,
+      this.showAddExtraDialogForFiveSeven,
+      this.showPauseScoringDialog,
+      this.showAddPenaltyRunDialog,
+      this.invalidUndoToast,
+      final List<BallScoreModel> currentScoresList = const [],
+      final List<BallScoreModel> previousScoresList = const [],
+      this.loading = false,
+      this.pop = false,
+      this.continueWithInjuredPlayers = false,
+      this.ballCount = 0,
+      this.overCount = 1,
+      this.totalRuns = 0,
+      this.wicketCount = 0,
+      this.lastAssignedIndex = 0})
+      : _batsMans = batsMans,
+        _currentScoresList = currentScoresList,
+        _previousScoresList = previousScoresList;
 
   @override
   final Object? error;
+  @override
+  final MatchModel? match;
+  @override
+  final InningModel? currentInning;
+  @override
+  final InningModel? otherInning;
+  @override
+  final MatchPlayer? bowler;
+  @override
+  final String? strikerId;
+  final List<MatchPlayer>? _batsMans;
+  @override
+  List<MatchPlayer>? get batsMans {
+    final value = _batsMans;
+    if (value == null) return null;
+    if (_batsMans is EqualUnmodifiableListView) return _batsMans;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final DateTime? showSelectBatsManSheet;
+  @override
+  final DateTime? showSelectBowlerSheet;
+  @override
+  final DateTime? showSelectPlayerSheet;
+  @override
+  final DateTime? showSelectWicketTypeSheet;
+  @override
+  final DateTime? showStrikerSelectionDialog;
+  @override
+  final DateTime? showUndoBallConfirmationDialog;
+  @override
+  final DateTime? showOverCompleteDialog;
+  @override
+  final DateTime? showInningCompleteDialog;
+  @override
+  final DateTime? showMatchCompleteDialog;
+  @override
+  final DateTime? showBoundaryDialogForSix;
+  @override
+  final DateTime? showBoundaryDialogForFour;
+  @override
+  final DateTime? showAddExtraDialogForNoBall;
+  @override
+  final DateTime? showAddExtraDialogForLegBye;
+  @override
+  final DateTime? showAddExtraDialogForBye;
+  @override
+  final DateTime? showAddExtraDialogForFiveSeven;
+  @override
+  final DateTime? showPauseScoringDialog;
+  @override
+  final DateTime? showAddPenaltyRunDialog;
+  @override
+  final DateTime? invalidUndoToast;
+  final List<BallScoreModel> _currentScoresList;
+  @override
+  @JsonKey()
+  List<BallScoreModel> get currentScoresList {
+    if (_currentScoresList is EqualUnmodifiableListView)
+      return _currentScoresList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_currentScoresList);
+  }
+
+  final List<BallScoreModel> _previousScoresList;
+  @override
+  @JsonKey()
+  List<BallScoreModel> get previousScoresList {
+    if (_previousScoresList is EqualUnmodifiableListView)
+      return _previousScoresList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_previousScoresList);
+  }
+
+  @override
+  @JsonKey()
+  final bool loading;
+  @override
+  @JsonKey()
+  final bool pop;
+  @override
+  @JsonKey()
+  final bool continueWithInjuredPlayers;
+  @override
+  @JsonKey()
+  final int ballCount;
+  @override
+  @JsonKey()
+  final int overCount;
+  @override
+  @JsonKey()
+  final int totalRuns;
+  @override
+  @JsonKey()
+  final int wicketCount;
+  @override
+  @JsonKey()
+  final int lastAssignedIndex;
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error)';
+    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -101,12 +752,107 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ScoreBoardViewStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error));
+            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.match, match) || other.match == match) &&
+            (identical(other.currentInning, currentInning) ||
+                other.currentInning == currentInning) &&
+            (identical(other.otherInning, otherInning) ||
+                other.otherInning == otherInning) &&
+            (identical(other.bowler, bowler) || other.bowler == bowler) &&
+            (identical(other.strikerId, strikerId) ||
+                other.strikerId == strikerId) &&
+            const DeepCollectionEquality().equals(other._batsMans, _batsMans) &&
+            (identical(other.showSelectBatsManSheet, showSelectBatsManSheet) ||
+                other.showSelectBatsManSheet == showSelectBatsManSheet) &&
+            (identical(other.showSelectBowlerSheet, showSelectBowlerSheet) ||
+                other.showSelectBowlerSheet == showSelectBowlerSheet) &&
+            (identical(other.showSelectPlayerSheet, showSelectPlayerSheet) ||
+                other.showSelectPlayerSheet == showSelectPlayerSheet) &&
+            (identical(other.showSelectWicketTypeSheet, showSelectWicketTypeSheet) ||
+                other.showSelectWicketTypeSheet == showSelectWicketTypeSheet) &&
+            (identical(other.showStrikerSelectionDialog, showStrikerSelectionDialog) ||
+                other.showStrikerSelectionDialog ==
+                    showStrikerSelectionDialog) &&
+            (identical(other.showUndoBallConfirmationDialog, showUndoBallConfirmationDialog) ||
+                other.showUndoBallConfirmationDialog ==
+                    showUndoBallConfirmationDialog) &&
+            (identical(other.showOverCompleteDialog, showOverCompleteDialog) ||
+                other.showOverCompleteDialog == showOverCompleteDialog) &&
+            (identical(other.showInningCompleteDialog, showInningCompleteDialog) ||
+                other.showInningCompleteDialog == showInningCompleteDialog) &&
+            (identical(other.showMatchCompleteDialog, showMatchCompleteDialog) ||
+                other.showMatchCompleteDialog == showMatchCompleteDialog) &&
+            (identical(other.showBoundaryDialogForSix, showBoundaryDialogForSix) ||
+                other.showBoundaryDialogForSix == showBoundaryDialogForSix) &&
+            (identical(other.showBoundaryDialogForFour, showBoundaryDialogForFour) ||
+                other.showBoundaryDialogForFour == showBoundaryDialogForFour) &&
+            (identical(other.showAddExtraDialogForNoBall, showAddExtraDialogForNoBall) ||
+                other.showAddExtraDialogForNoBall ==
+                    showAddExtraDialogForNoBall) &&
+            (identical(other.showAddExtraDialogForLegBye, showAddExtraDialogForLegBye) ||
+                other.showAddExtraDialogForLegBye ==
+                    showAddExtraDialogForLegBye) &&
+            (identical(other.showAddExtraDialogForBye, showAddExtraDialogForBye) ||
+                other.showAddExtraDialogForBye == showAddExtraDialogForBye) &&
+            (identical(other.showAddExtraDialogForFiveSeven, showAddExtraDialogForFiveSeven) ||
+                other.showAddExtraDialogForFiveSeven ==
+                    showAddExtraDialogForFiveSeven) &&
+            (identical(other.showPauseScoringDialog, showPauseScoringDialog) ||
+                other.showPauseScoringDialog == showPauseScoringDialog) &&
+            (identical(other.showAddPenaltyRunDialog, showAddPenaltyRunDialog) ||
+                other.showAddPenaltyRunDialog == showAddPenaltyRunDialog) &&
+            (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
+            const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
+            const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.pop, pop) || other.pop == pop) &&
+            (identical(other.continueWithInjuredPlayers, continueWithInjuredPlayers) || other.continueWithInjuredPlayers == continueWithInjuredPlayers) &&
+            (identical(other.ballCount, ballCount) || other.ballCount == ballCount) &&
+            (identical(other.overCount, overCount) || other.overCount == overCount) &&
+            (identical(other.totalRuns, totalRuns) || other.totalRuns == totalRuns) &&
+            (identical(other.wicketCount, wicketCount) || other.wicketCount == wicketCount) &&
+            (identical(other.lastAssignedIndex, lastAssignedIndex) || other.lastAssignedIndex == lastAssignedIndex));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        const DeepCollectionEquality().hash(error),
+        match,
+        currentInning,
+        otherInning,
+        bowler,
+        strikerId,
+        const DeepCollectionEquality().hash(_batsMans),
+        showSelectBatsManSheet,
+        showSelectBowlerSheet,
+        showSelectPlayerSheet,
+        showSelectWicketTypeSheet,
+        showStrikerSelectionDialog,
+        showUndoBallConfirmationDialog,
+        showOverCompleteDialog,
+        showInningCompleteDialog,
+        showMatchCompleteDialog,
+        showBoundaryDialogForSix,
+        showBoundaryDialogForFour,
+        showAddExtraDialogForNoBall,
+        showAddExtraDialogForLegBye,
+        showAddExtraDialogForBye,
+        showAddExtraDialogForFiveSeven,
+        showPauseScoringDialog,
+        showAddPenaltyRunDialog,
+        invalidUndoToast,
+        const DeepCollectionEquality().hash(_currentScoresList),
+        const DeepCollectionEquality().hash(_previousScoresList),
+        loading,
+        pop,
+        continueWithInjuredPlayers,
+        ballCount,
+        overCount,
+        totalRuns,
+        wicketCount,
+        lastAssignedIndex
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -117,11 +863,113 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 }
 
 abstract class _ScoreBoardViewState implements ScoreBoardViewState {
-  const factory _ScoreBoardViewState({final Object? error}) =
-      _$ScoreBoardViewStateImpl;
+  const factory _ScoreBoardViewState(
+      {final Object? error,
+      final MatchModel? match,
+      final InningModel? currentInning,
+      final InningModel? otherInning,
+      final MatchPlayer? bowler,
+      final String? strikerId,
+      final List<MatchPlayer>? batsMans,
+      final DateTime? showSelectBatsManSheet,
+      final DateTime? showSelectBowlerSheet,
+      final DateTime? showSelectPlayerSheet,
+      final DateTime? showSelectWicketTypeSheet,
+      final DateTime? showStrikerSelectionDialog,
+      final DateTime? showUndoBallConfirmationDialog,
+      final DateTime? showOverCompleteDialog,
+      final DateTime? showInningCompleteDialog,
+      final DateTime? showMatchCompleteDialog,
+      final DateTime? showBoundaryDialogForSix,
+      final DateTime? showBoundaryDialogForFour,
+      final DateTime? showAddExtraDialogForNoBall,
+      final DateTime? showAddExtraDialogForLegBye,
+      final DateTime? showAddExtraDialogForBye,
+      final DateTime? showAddExtraDialogForFiveSeven,
+      final DateTime? showPauseScoringDialog,
+      final DateTime? showAddPenaltyRunDialog,
+      final DateTime? invalidUndoToast,
+      final List<BallScoreModel> currentScoresList,
+      final List<BallScoreModel> previousScoresList,
+      final bool loading,
+      final bool pop,
+      final bool continueWithInjuredPlayers,
+      final int ballCount,
+      final int overCount,
+      final int totalRuns,
+      final int wicketCount,
+      final int lastAssignedIndex}) = _$ScoreBoardViewStateImpl;
 
   @override
   Object? get error;
+  @override
+  MatchModel? get match;
+  @override
+  InningModel? get currentInning;
+  @override
+  InningModel? get otherInning;
+  @override
+  MatchPlayer? get bowler;
+  @override
+  String? get strikerId;
+  @override
+  List<MatchPlayer>? get batsMans;
+  @override
+  DateTime? get showSelectBatsManSheet;
+  @override
+  DateTime? get showSelectBowlerSheet;
+  @override
+  DateTime? get showSelectPlayerSheet;
+  @override
+  DateTime? get showSelectWicketTypeSheet;
+  @override
+  DateTime? get showStrikerSelectionDialog;
+  @override
+  DateTime? get showUndoBallConfirmationDialog;
+  @override
+  DateTime? get showOverCompleteDialog;
+  @override
+  DateTime? get showInningCompleteDialog;
+  @override
+  DateTime? get showMatchCompleteDialog;
+  @override
+  DateTime? get showBoundaryDialogForSix;
+  @override
+  DateTime? get showBoundaryDialogForFour;
+  @override
+  DateTime? get showAddExtraDialogForNoBall;
+  @override
+  DateTime? get showAddExtraDialogForLegBye;
+  @override
+  DateTime? get showAddExtraDialogForBye;
+  @override
+  DateTime? get showAddExtraDialogForFiveSeven;
+  @override
+  DateTime? get showPauseScoringDialog;
+  @override
+  DateTime? get showAddPenaltyRunDialog;
+  @override
+  DateTime? get invalidUndoToast;
+  @override
+  List<BallScoreModel> get currentScoresList;
+  @override
+  List<BallScoreModel> get previousScoresList;
+  @override
+  bool get loading;
+  @override
+  bool get pop;
+  @override
+  bool get continueWithInjuredPlayers;
+  @override
+  int get ballCount;
+  @override
+  int get overCount;
+  @override
+  int get totalRuns;
+  @override
+  int get wicketCount;
+  @override
+  int get lastAssignedIndex;
   @override
   @JsonKey(ignore: true)
   _$$ScoreBoardViewStateImplCopyWith<_$ScoreBoardViewStateImpl> get copyWith =>

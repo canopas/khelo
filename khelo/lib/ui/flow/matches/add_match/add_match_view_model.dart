@@ -63,15 +63,20 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       state.cityController.text = match.city.toString();
       state.groundController.text = match.ground.toString();
       state = state.copyWith(
+          match: match,
           matchTime: match.start_time,
-          teamA: match.teams.first,
-          teamB: match.teams.last,
-          squadA: match.team_a_players,
-          squadB: match.team_b_players,
+          teamA: match.teams.first.team,
+          teamACaptainId: match.teams.first.captain_id,
+          teamAAdminId: match.teams.first.admin_id,
+          squadA: match.teams.first.squad,
+          teamB: match.teams.last.team,
+          teamBCaptainId: match.teams.last.captain_id,
+          teamBAdminId: match.teams.last.admin_id,
+          squadB: match.teams.last.squad,
           firstPowerPlay: match.power_play_overs1,
           secondPowerPlay: match.power_play_overs2,
           thirdPowerPlay: match.power_play_overs3,
-          isPowerPlayButtonEnable: true,
+          isPowerPlayButtonEnable: match.number_of_over > 0,
           pitchType: match.pitch_type,
           matchType: match.match_type,
           ballType: match.ball_type,
@@ -82,6 +87,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
                   ...commentator,
                   ...scorer,
                 ],
+          isStartBtnEnable: true,
           loading: false);
     } catch (e) {
       state = state.copyWith(error: e, loading: false);
@@ -89,7 +95,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     }
   }
 
-  Future<void> addMatch(MatchStatus status) async {
+  Future<void> addMatch({bool startMatch = false}) async {
     try {
       final totalOvers = state.totalOverController.text.trim();
       final overPerBowler = state.overPerBowlerController.text.trim();
@@ -116,23 +122,34 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       final firstSquad = state.squadA
               ?.map((e) => MatchPlayerRequest(
                   id: e.player.id,
-                  role: e.role,
-                  status: PlayerStatus.yetToPlay))
+                  status: e.status ?? PlayerStatus.yetToPlay,
+                  index: e.index))
               .toList() ??
           [];
       final secondSquad = state.squadB
               ?.map((e) => MatchPlayerRequest(
                   id: e.player.id,
-                  role: e.role,
-                  status: PlayerStatus.yetToPlay))
+                  status: e.status ?? PlayerStatus.yetToPlay,
+                  index: e.index))
               .toList() ??
           [];
 
       final match = AddEditMatchRequest(
           id: matchId,
-          team_ids: [state.teamA!.id!, state.teamB!.id!],
-          team_a_players: firstSquad,
-          team_b_players: secondSquad,
+          teams: [
+            AddMatchTeamRequest(
+              team_id: state.teamA!.id!,
+              squad: firstSquad,
+              captain_id: state.teamACaptainId,
+              admin_id: state.teamAAdminId,
+            ),
+            AddMatchTeamRequest(
+              team_id: state.teamB!.id!,
+              squad: secondSquad,
+              captain_id: state.teamBCaptainId,
+              admin_id: state.teamBAdminId,
+            )
+          ],
           match_type: state.matchType,
           number_of_over: int.parse(totalOvers),
           over_per_bowler: int.parse(overPerBowler),
@@ -147,14 +164,20 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           umpire_ids: umpireIds,
           scorer_ids: scorerIds,
           commentator_ids: commentatorIds,
+          toss_decision: state.match?.toss_decision,
+          toss_winner_id: state.match?.toss_winner_id,
           referee_id: refereeId,
-          match_status: status);
+          match_status: startMatch
+              ? state.match?.match_status ?? MatchStatus.running
+              : MatchStatus.yetToStart);
 
-      await _matchService.updateMatch(match);
+      matchId = await _matchService.updateMatch(match);
 
       state = state.copyWith(
           isAddMatchInProgress: false,
-          pushTossDetailScreen: status == MatchStatus.running);
+          pushTossDetailScreen:
+              startMatch ? state.match?.toss_winner_id == null : null,
+          pop: !startMatch);
     } catch (e) {
       debugPrint("AddMatchViewNotifier: error while adding match -> $e");
     }
@@ -195,11 +218,17 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     onTextChange();
   }
 
-  void onSquadSelect(TeamType type, List<MatchPlayer> squad) {
+  void onSquadSelect(TeamType type, Map<String, dynamic> squadDetail) {
     if (type == TeamType.a) {
-      state = state.copyWith(squadA: squad);
+      state = state.copyWith(
+          squadA: squadDetail['squad'],
+          teamACaptainId: squadDetail['captain_id'],
+          teamAAdminId: squadDetail['admin_id']);
     } else {
-      state = state.copyWith(squadB: squad);
+      state = state.copyWith(
+          squadB: squadDetail['squad'],
+          teamBCaptainId: squadDetail['captain_id'],
+          teamBAdminId: squadDetail['admin_id']);
     }
     onTextChange();
   }
@@ -215,11 +244,14 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
         city.isNotEmpty &&
         ground.isNotEmpty &&
         state.teamA != null &&
-        state.teamB != null;
+        state.teamB != null &&
+        (state.squadA?.length ?? 0) >= 2 &&
+        (state.squadB?.length ?? 0) >= 2;
 
     state = state.copyWith(
-        isPowerPlayButtonEnable: totalOvers.isNotEmpty,
-        isDoneBtnEnable: isBtnEnable);
+        isPowerPlayButtonEnable: totalOvers.isNotEmpty && (int.tryParse(totalOvers) ?? 0) > 0,
+        isSaveBtnEnable: isBtnEnable,
+        isStartBtnEnable: isBtnEnable);
   }
 
   void onPowerPlayChange(List<List<int>> powerPlay) {
@@ -253,17 +285,23 @@ class AddMatchViewState with _$AddMatchViewState {
     required TextEditingController cityController,
     required TextEditingController groundController,
     Object? error,
+    MatchModel? match,
     TeamModel? teamA,
     TeamModel? teamB,
     List<MatchPlayer>? squadA,
     List<MatchPlayer>? squadB,
+    String? teamACaptainId,
+    String? teamBCaptainId,
+    String? teamAAdminId,
+    String? teamBAdminId,
     @Default([]) List<Officials> officials,
     @Default(PitchType.rough) PitchType pitchType,
     @Default(MatchType.limitedOvers) MatchType matchType,
     @Default(BallType.leather) BallType ballType,
     @Default(false) bool loading,
     @Default(false) bool isPowerPlayButtonEnable,
-    @Default(false) bool isDoneBtnEnable,
+    @Default(false) bool isSaveBtnEnable,
+    @Default(false) bool isStartBtnEnable,
     @Default(false) bool isAddMatchInProgress,
     @Default(null) bool? pushTossDetailScreen,
     @Default(null) bool? pop,

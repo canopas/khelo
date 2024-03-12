@@ -24,9 +24,9 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     try {
       final matches = await _matchService.getMatches();
       state = state.copyWith(matches: matches, loading: false);
-    } catch (e) {
+    } catch (e, stack) {
       state = state.copyWith(loading: false, error: e);
-      debugPrint("MatchListViewNotifier: error while load matches -> $e");
+      debugPrint("MatchListViewNotifier: error while load matches -> $e ,\nstack: $stack");
     }
   }
 }

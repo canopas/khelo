@@ -18,6 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SelectSquadViewState {
   Object? get error => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
+  String? get captainId => throw _privateConstructorUsedError;
+  String? get adminId => throw _privateConstructorUsedError;
   bool get isOkayBtnEnable => throw _privateConstructorUsedError;
   bool get isDoneBtnEnable => throw _privateConstructorUsedError;
   List<MatchPlayer> get squad => throw _privateConstructorUsedError;
@@ -36,6 +38,8 @@ abstract class $SelectSquadViewStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       TeamModel? team,
+      String? captainId,
+      String? adminId,
       bool isOkayBtnEnable,
       bool isDoneBtnEnable,
       List<MatchPlayer> squad});
@@ -59,6 +63,8 @@ class _$SelectSquadViewStateCopyWithImpl<$Res,
   $Res call({
     Object? error = freezed,
     Object? team = freezed,
+    Object? captainId = freezed,
+    Object? adminId = freezed,
     Object? isOkayBtnEnable = null,
     Object? isDoneBtnEnable = null,
     Object? squad = null,
@@ -69,6 +75,14 @@ class _$SelectSquadViewStateCopyWithImpl<$Res,
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      captainId: freezed == captainId
+          ? _value.captainId
+          : captainId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adminId: freezed == adminId
+          ? _value.adminId
+          : adminId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isOkayBtnEnable: null == isOkayBtnEnable
           ? _value.isOkayBtnEnable
           : isOkayBtnEnable // ignore: cast_nullable_to_non_nullable
@@ -108,6 +122,8 @@ abstract class _$$SelectSquadViewStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       TeamModel? team,
+      String? captainId,
+      String? adminId,
       bool isOkayBtnEnable,
       bool isDoneBtnEnable,
       List<MatchPlayer> squad});
@@ -129,6 +145,8 @@ class __$$SelectSquadViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? team = freezed,
+    Object? captainId = freezed,
+    Object? adminId = freezed,
     Object? isOkayBtnEnable = null,
     Object? isDoneBtnEnable = null,
     Object? squad = null,
@@ -139,6 +157,14 @@ class __$$SelectSquadViewStateImplCopyWithImpl<$Res>
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      captainId: freezed == captainId
+          ? _value.captainId
+          : captainId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adminId: freezed == adminId
+          ? _value.adminId
+          : adminId // ignore: cast_nullable_to_non_nullable
+              as String?,
       isOkayBtnEnable: null == isOkayBtnEnable
           ? _value.isOkayBtnEnable
           : isOkayBtnEnable // ignore: cast_nullable_to_non_nullable
@@ -161,6 +187,8 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
   const _$SelectSquadViewStateImpl(
       {this.error,
       this.team,
+      this.captainId,
+      this.adminId,
       this.isOkayBtnEnable = false,
       this.isDoneBtnEnable = false,
       final List<MatchPlayer> squad = const []})
@@ -170,6 +198,10 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
   final Object? error;
   @override
   final TeamModel? team;
+  @override
+  final String? captainId;
+  @override
+  final String? adminId;
   @override
   @JsonKey()
   final bool isOkayBtnEnable;
@@ -187,7 +219,7 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
 
   @override
   String toString() {
-    return 'SelectSquadViewState(error: $error, team: $team, isOkayBtnEnable: $isOkayBtnEnable, isDoneBtnEnable: $isDoneBtnEnable, squad: $squad)';
+    return 'SelectSquadViewState(error: $error, team: $team, captainId: $captainId, adminId: $adminId, isOkayBtnEnable: $isOkayBtnEnable, isDoneBtnEnable: $isDoneBtnEnable, squad: $squad)';
   }
 
   @override
@@ -197,6 +229,9 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
             other is _$SelectSquadViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.team, team) || other.team == team) &&
+            (identical(other.captainId, captainId) ||
+                other.captainId == captainId) &&
+            (identical(other.adminId, adminId) || other.adminId == adminId) &&
             (identical(other.isOkayBtnEnable, isOkayBtnEnable) ||
                 other.isOkayBtnEnable == isOkayBtnEnable) &&
             (identical(other.isDoneBtnEnable, isDoneBtnEnable) ||
@@ -209,6 +244,8 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       team,
+      captainId,
+      adminId,
       isOkayBtnEnable,
       isDoneBtnEnable,
       const DeepCollectionEquality().hash(_squad));
@@ -226,6 +263,8 @@ abstract class _SelectSquadViewState implements SelectSquadViewState {
   const factory _SelectSquadViewState(
       {final Object? error,
       final TeamModel? team,
+      final String? captainId,
+      final String? adminId,
       final bool isOkayBtnEnable,
       final bool isDoneBtnEnable,
       final List<MatchPlayer> squad}) = _$SelectSquadViewStateImpl;
@@ -234,6 +273,10 @@ abstract class _SelectSquadViewState implements SelectSquadViewState {
   Object? get error;
   @override
   TeamModel? get team;
+  @override
+  String? get captainId;
+  @override
+  String? get adminId;
   @override
   bool get isOkayBtnEnable;
   @override
