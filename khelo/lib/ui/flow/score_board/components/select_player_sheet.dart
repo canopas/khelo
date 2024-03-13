@@ -65,7 +65,8 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }
 
   Widget _body(BuildContext context, ScoreBoardViewState state) {
-    if (widget.type == PlayerSelectionType.all) {
+    if (widget.type == PlayerSelectionType.all ||
+        widget.type == PlayerSelectionType.batsManAndBowler) {
       return _allPlayerSelectionView(context, state);
     }
     return _specificPlayerSelectionView(context, state);
@@ -103,25 +104,32 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
                 const SizedBox(
                   height: 16,
                 ),
-                _userCell(
-                  context: context,
-                  user: batsMan2?.player,
-                  onTap: () async {
-                    final player = await SelectPlayerSheet.show<
-                            List<({List<MatchPlayer> players, String teamId})>>(
-                        context,
-                        type: PlayerSelectionType.batsMan,
-                        excludedIds: [
-                          batsMan1?.player.id ?? "INVALID ID",
-                          batsMan2?.player.id ?? "INVALID ID"
-                        ]);
-                    if (player != null && context.mounted) {
-                      setState(() {
-                        batsMan2 = player.first.players.first;
-                      });
-                    }
-                  },
-                ),
+                if (widget.type == PlayerSelectionType.all) ...[
+                  _userCell(
+                    context: context,
+                    user: batsMan2?.player,
+                    onTap: () async {
+                      final player = await SelectPlayerSheet.show<
+                              List<
+                                  ({
+                                    List<MatchPlayer> players,
+                                    String teamId
+                                  })>>(context,
+                          type: PlayerSelectionType.batsMan,
+                          excludedIds: [
+                            batsMan1?.player.id ?? "INVALID ID",
+                            batsMan2?.player.id ?? "INVALID ID"
+                          ]);
+                      if (player != null && context.mounted) {
+                        setState(() {
+                          batsMan2 = player.first.players.first;
+                        });
+                      }
+                    },
+                  ),
+                ] else ...[
+                  const Expanded(child: SizedBox()),
+                ],
               ],
             ),
             _sectionTitle(context, context.l10n.score_board_bowler_title),
@@ -387,9 +395,11 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         context.l10n.score_board_select_title,
         enabled: widget.type == PlayerSelectionType.all
             ? (batsMan1 != null && batsMan2 != null && bowler != null)
-            : widget.type == PlayerSelectionType.batsMan
-                ? batsMan1 != null
-                : bowler != null,
+            : widget.type == PlayerSelectionType.batsManAndBowler
+                ? (batsMan1 != null && bowler != null)
+                : widget.type == PlayerSelectionType.batsMan
+                    ? batsMan1 != null
+                    : bowler != null,
         onPressed: () {
           final List<({List<MatchPlayer> players, String teamId})>
               selectedPlayer = [];

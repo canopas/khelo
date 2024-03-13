@@ -58,6 +58,18 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeShowSelectBowlerAndBatsManSheet(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showSelectBowlerAndBatsManSheet),
+        (previous, next) {
+      if (next != null) {
+        _showSelectPlayerSheet(context, PlayerSelectionType.batsManAndBowler);
+      }
+    });
+  }
+
   void _observeShowSelectPlayerSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
@@ -255,6 +267,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
     _observeShowSelectBatsManSheet(context, ref);
     _observeShowSelectBowlerSheet(context, ref);
+    _observeShowSelectBowlerAndBatsManSheet(context, ref);
     _observeShowSelectPlayerSheet(context, ref);
     _observeShowSelectWicketTypeSheet(context, ref);
     _observeShowStrikerSelectionDialog(context, ref);
@@ -631,21 +644,13 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       extra = runBeforeWicket?.$1;
     }
 
-    if (type != WicketType.retiredHurt &&
-        type != WicketType.retired &&
-        type != WicketType.timedOut) {
-      notifier.addBall(
+    notifier.addBall(
         run: 0,
         extra: extra,
         playerOutId: outBatsMan?.id,
         wicketTakerId: wicketTakerId,
         wicketType: type,
-      );
-    } else {
-      if (context.mounted) {
-        notifier.onWicket(type, outBatsMan?.id, isOutWithoutDelivery: true);
-      }
-    }
+        switchStrike: extra != null ? extra % 2 == 0 : false);
   }
 
   Future<void> _showStrikerSelectionDialog(BuildContext context) async {

@@ -132,7 +132,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     final lastBall = state.currentScoresList.lastOrNull;
 
-    final bowlerId = lastBall?.ball_number != 5 ? lastBall?.bowler_id : null;
+    final bowlerId = lastBall?.ball_number != 6 ? lastBall?.bowler_id : null;
     final bowler = bowlerId != null
         ? state.match!.teams
             .firstWhere(
@@ -144,8 +144,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     bool showSelectAllPlayerSheet =
         bowler == null && (currentPlayingBatsMan.isEmpty);
-    int overCount =
-        int.parse((state.currentInning!.overs ?? 1).toStringAsFixed(0));
+    int overCount = int.parse(
+        (state.currentInning!.overs == 0 ? 1 : state.currentInning!.overs ?? 1)
+            .toStringAsFixed(0));
 
     state = state.copyWith(
       batsMans: currentPlayingBatsMan,
@@ -155,12 +156,21 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       totalRuns: state.currentInning!.total_runs ?? 0,
       wicketCount: state.otherInning!.total_wickets ?? 0,
       showSelectPlayerSheet: showSelectAllPlayerSheet ? DateTime.now() : null,
-      showSelectBowlerSheet:
-          bowler == null && !showSelectAllPlayerSheet ? DateTime.now() : null,
-      showSelectBatsManSheet:
-          currentPlayingBatsMan.length == 1 && !showSelectAllPlayerSheet
-              ? DateTime.now()
-              : null,
+      showSelectBowlerSheet: bowler == null &&
+              !showSelectAllPlayerSheet &&
+              currentPlayingBatsMan.length == 2
+          ? DateTime.now()
+          : null,
+      showSelectBowlerAndBatsManSheet: bowler == null &&
+              !showSelectAllPlayerSheet &&
+              currentPlayingBatsMan.length == 1
+          ? DateTime.now()
+          : null,
+      showSelectBatsManSheet: bowler != null &&
+              currentPlayingBatsMan.length == 1 &&
+              !showSelectAllPlayerSheet
+          ? DateTime.now()
+          : null,
       ballCount: lastBall?.ball_number ?? 0,
     );
   }
@@ -268,9 +278,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     WicketType? wicketType,
   }) async {
     int ballCount = state.ballCount;
-    if (extrasType == null ||
-        extrasType == ExtrasType.legBye ||
-        extrasType == ExtrasType.bye) {
+    if ((extrasType == null ||
+            extrasType == ExtrasType.legBye ||
+            extrasType == ExtrasType.bye) &&
+        wicketType != WicketType.retired &&
+        wicketType != WicketType.retiredHurt &&
+        wicketType != WicketType.timedOut) {
       ballCount = state.ballCount + 1;
     }
 
@@ -302,7 +315,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 : extra ?? 0));
 
     if (wicketType != null) {
-      onWicket(wicketType, playerOutId);
+      await onWicket(wicketType, playerOutId);
     }
 
     if (ball.inning_id != state.currentInning?.id &&
@@ -332,9 +345,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   Future<void> onWicket(
     WicketType wicketType,
-    String? playerOutId, {
-    bool isOutWithoutDelivery = false,
-  }) async {
+    String? playerOutId,
+  ) async {
     final outPlayer = state.batsMans
         ?.where((element) => element.player.id == playerOutId)
         .firstOrNull;
@@ -358,11 +370,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     if (wicketType != WicketType.retiredHurt) {
       state = state.copyWith(wicketCount: state.wicketCount + 1);
-    }
-
-    if (isOutWithoutDelivery) {
-      await _updateInningScoreDetails();
-      checkIfInningComplete(wicket: wicketType);
     }
   }
 
@@ -396,14 +403,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     if (state.otherInning?.innings_status == InningStatus.finish &&
         (state.totalRuns > (state.otherInning?.total_runs ?? 0))) {
-      // target-run-achieved
+      // targeted-run-achieved
       state = state.copyWith(showMatchCompleteDialog: DateTime.now());
     } else if (((playing?.length == 1) &&
             (yetToPlay?.isEmpty ?? true) &&
             (state.continueWithInjuredPlayers
                 ? injured?.isEmpty ?? true
                 : true)) ||
-        remainingBall == 0) {
+        remainingBall <= 0) {
       // TODO: playWithInjuredPlayer
       // all-out(inc. injured) OR all-overs-complete
       if (state.otherInning?.innings_status == InningStatus.finish) {
@@ -425,9 +432,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           .where((element) => (element.over_number == state.overCount &&
               element.extras_type != ExtrasType.noBall &&
               element.extras_type != ExtrasType.wide &&
-              element.extras_type != ExtrasType.penaltyRun))
+              element.extras_type != ExtrasType.penaltyRun &&
+              element.wicket_type != WicketType.retired &&
+              element.wicket_type != WicketType.retiredHurt &&
+              element.wicket_type != WicketType.timedOut))
           .toList();
-      // select scores which extra type is not no-ball, wide and penalty and overCount == over
       if (fairDeliveries.length == 6) {
         state = state.copyWith(showOverCompleteDialog: DateTime.now());
       } else {
@@ -586,15 +595,17 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   Future<void> startNextOver() async {
-    // if last ball had wicket and batsMan is single, show batsMan and Bowler
     final lastBall = state.currentScoresList.last;
-    if (lastBall.wicket_type != null && (state.batsMans?.length ?? 0) < 2) {
-      // select batsMan as well
-    }
+    bool showSelectBatsManAndBowlerSheet =
+        lastBall.wicket_type != null && (state.batsMans?.length ?? 0) == 1;
+
     state = state.copyWith(
         overCount: state.overCount + 1,
         ballCount: 0,
-        showSelectBowlerSheet: DateTime.now());
+        showSelectBowlerAndBatsManSheet:
+            showSelectBatsManAndBowlerSheet ? DateTime.now() : null,
+        showSelectBowlerSheet:
+            showSelectBatsManAndBowlerSheet ? null : DateTime.now());
   }
 
   Future<void> startNextInning() async {
@@ -725,7 +736,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 ? [...?state.batsMans, batsMans.first]
                 : batsMans
             : state.batsMans);
-    if (batsMans != null) {
+
+    if (!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId) ??
+        false)) {
       _showStrikerSelectionDialog();
     }
 
@@ -747,6 +760,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     List<MatchPlayer>? batsMans,
     DateTime? showSelectBatsManSheet,
     DateTime? showSelectBowlerSheet,
+    DateTime? showSelectBowlerAndBatsManSheet,
     DateTime? showSelectPlayerSheet,
     DateTime? showSelectWicketTypeSheet,
     DateTime? showStrikerSelectionDialog,

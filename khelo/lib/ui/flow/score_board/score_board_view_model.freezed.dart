@@ -25,6 +25,8 @@ mixin _$ScoreBoardViewState {
   List<MatchPlayer>? get batsMans => throw _privateConstructorUsedError;
   DateTime? get showSelectBatsManSheet => throw _privateConstructorUsedError;
   DateTime? get showSelectBowlerSheet => throw _privateConstructorUsedError;
+  DateTime? get showSelectBowlerAndBatsManSheet =>
+      throw _privateConstructorUsedError;
   DateTime? get showSelectPlayerSheet => throw _privateConstructorUsedError;
   DateTime? get showSelectWicketTypeSheet => throw _privateConstructorUsedError;
   DateTime? get showStrikerSelectionDialog =>
@@ -80,6 +82,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       List<MatchPlayer>? batsMans,
       DateTime? showSelectBatsManSheet,
       DateTime? showSelectBowlerSheet,
+      DateTime? showSelectBowlerAndBatsManSheet,
       DateTime? showSelectPlayerSheet,
       DateTime? showSelectWicketTypeSheet,
       DateTime? showStrikerSelectionDialog,
@@ -135,6 +138,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? batsMans = freezed,
     Object? showSelectBatsManSheet = freezed,
     Object? showSelectBowlerSheet = freezed,
+    Object? showSelectBowlerAndBatsManSheet = freezed,
     Object? showSelectPlayerSheet = freezed,
     Object? showSelectWicketTypeSheet = freezed,
     Object? showStrikerSelectionDialog = freezed,
@@ -195,6 +199,11 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       showSelectBowlerSheet: freezed == showSelectBowlerSheet
           ? _value.showSelectBowlerSheet
           : showSelectBowlerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectBowlerAndBatsManSheet: freezed ==
+              showSelectBowlerAndBatsManSheet
+          ? _value.showSelectBowlerAndBatsManSheet
+          : showSelectBowlerAndBatsManSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showSelectPlayerSheet: freezed == showSelectPlayerSheet
           ? _value.showSelectPlayerSheet
@@ -370,6 +379,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       List<MatchPlayer>? batsMans,
       DateTime? showSelectBatsManSheet,
       DateTime? showSelectBowlerSheet,
+      DateTime? showSelectBowlerAndBatsManSheet,
       DateTime? showSelectPlayerSheet,
       DateTime? showSelectWicketTypeSheet,
       DateTime? showStrikerSelectionDialog,
@@ -427,6 +437,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? batsMans = freezed,
     Object? showSelectBatsManSheet = freezed,
     Object? showSelectBowlerSheet = freezed,
+    Object? showSelectBowlerAndBatsManSheet = freezed,
     Object? showSelectPlayerSheet = freezed,
     Object? showSelectWicketTypeSheet = freezed,
     Object? showStrikerSelectionDialog = freezed,
@@ -487,6 +498,11 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
       showSelectBowlerSheet: freezed == showSelectBowlerSheet
           ? _value.showSelectBowlerSheet
           : showSelectBowlerSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showSelectBowlerAndBatsManSheet: freezed ==
+              showSelectBowlerAndBatsManSheet
+          ? _value.showSelectBowlerAndBatsManSheet
+          : showSelectBowlerAndBatsManSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showSelectPlayerSheet: freezed == showSelectPlayerSheet
           ? _value.showSelectPlayerSheet
@@ -609,6 +625,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       final List<MatchPlayer>? batsMans,
       this.showSelectBatsManSheet,
       this.showSelectBowlerSheet,
+      this.showSelectBowlerAndBatsManSheet,
       this.showSelectPlayerSheet,
       this.showSelectWicketTypeSheet,
       this.showStrikerSelectionDialog,
@@ -665,6 +682,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final DateTime? showSelectBatsManSheet;
   @override
   final DateTime? showSelectBowlerSheet;
+  @override
+  final DateTime? showSelectBowlerAndBatsManSheet;
   @override
   final DateTime? showSelectPlayerSheet;
   @override
@@ -744,7 +763,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -766,6 +785,9 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                 other.showSelectBatsManSheet == showSelectBatsManSheet) &&
             (identical(other.showSelectBowlerSheet, showSelectBowlerSheet) ||
                 other.showSelectBowlerSheet == showSelectBowlerSheet) &&
+            (identical(other.showSelectBowlerAndBatsManSheet, showSelectBowlerAndBatsManSheet) ||
+                other.showSelectBowlerAndBatsManSheet ==
+                    showSelectBowlerAndBatsManSheet) &&
             (identical(other.showSelectPlayerSheet, showSelectPlayerSheet) ||
                 other.showSelectPlayerSheet == showSelectPlayerSheet) &&
             (identical(other.showSelectWicketTypeSheet, showSelectWicketTypeSheet) ||
@@ -797,10 +819,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.showAddExtraDialogForFiveSeven, showAddExtraDialogForFiveSeven) ||
                 other.showAddExtraDialogForFiveSeven ==
                     showAddExtraDialogForFiveSeven) &&
-            (identical(other.showPauseScoringDialog, showPauseScoringDialog) ||
-                other.showPauseScoringDialog == showPauseScoringDialog) &&
-            (identical(other.showAddPenaltyRunDialog, showAddPenaltyRunDialog) ||
-                other.showAddPenaltyRunDialog == showAddPenaltyRunDialog) &&
+            (identical(other.showPauseScoringDialog, showPauseScoringDialog) || other.showPauseScoringDialog == showPauseScoringDialog) &&
+            (identical(other.showAddPenaltyRunDialog, showAddPenaltyRunDialog) || other.showAddPenaltyRunDialog == showAddPenaltyRunDialog) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
@@ -826,6 +846,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         const DeepCollectionEquality().hash(_batsMans),
         showSelectBatsManSheet,
         showSelectBowlerSheet,
+        showSelectBowlerAndBatsManSheet,
         showSelectPlayerSheet,
         showSelectWicketTypeSheet,
         showStrikerSelectionDialog,
@@ -873,6 +894,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final List<MatchPlayer>? batsMans,
       final DateTime? showSelectBatsManSheet,
       final DateTime? showSelectBowlerSheet,
+      final DateTime? showSelectBowlerAndBatsManSheet,
       final DateTime? showSelectPlayerSheet,
       final DateTime? showSelectWicketTypeSheet,
       final DateTime? showStrikerSelectionDialog,
@@ -918,6 +940,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   DateTime? get showSelectBatsManSheet;
   @override
   DateTime? get showSelectBowlerSheet;
+  @override
+  DateTime? get showSelectBowlerAndBatsManSheet;
   @override
   DateTime? get showSelectPlayerSheet;
   @override
