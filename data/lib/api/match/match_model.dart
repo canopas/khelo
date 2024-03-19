@@ -31,6 +31,7 @@ class MatchModel with _$MatchModel {
     required MatchStatus match_status,
     TossDecision? toss_decision,
     String? toss_winner_id,
+    String? current_playing_team_id,
   }) = _MatchModel;
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>
@@ -43,6 +44,9 @@ class MatchTeamModel with _$MatchTeamModel {
     required TeamModel team,
     String? captain_id,
     String? admin_id,
+    double? over,
+    int? run,
+    int? wicket,
     @Default([]) List<MatchPlayer> squad,
   }) = _MatchTeamModel;
 
@@ -85,6 +89,7 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
     required MatchStatus match_status,
     TossDecision? toss_decision,
     String? toss_winner_id,
+    String? current_playing_team_id,
   }) = _AddEditMatchRequest;
 
   factory AddEditMatchRequest.fromJson(Map<String, dynamic> json) =>
@@ -97,6 +102,9 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
     required String team_id,
     String? captain_id,
     String? admin_id,
+    double? over,
+    int? run,
+    int? wicket,
     @Default([]) List<MatchPlayerRequest> squad,
   }) = _AddMatchTeamRequest;
 

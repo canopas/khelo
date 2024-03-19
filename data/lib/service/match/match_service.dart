@@ -49,6 +49,7 @@ class MatchService {
         match_status: match.match_status,
         toss_winner_id: match.toss_winner_id,
         toss_decision: match.toss_decision,
+        current_playing_team_id: match.current_playing_team_id,
       ));
     }
 
@@ -94,6 +95,7 @@ class MatchService {
       power_play_overs3: match.power_play_overs3 ?? [],
       toss_decision: match.toss_decision,
       toss_winner_id: match.toss_winner_id,
+      current_playing_team_id: match.current_playing_team_id,
     );
 
     return matchModel;
@@ -152,6 +154,49 @@ class MatchService {
     await matchRef.update(matchStatus);
   }
 
+  Future<void> updateTeamScore({
+    required String matchId,
+    required String battingTeamId,
+    required int totalRun,
+    required double over,
+    required String bowlingTeamId,
+    required int wicket,
+    int? runs,
+  }) async {
+    DocumentReference matchRef =
+        _firestore.collection(_collectionName).doc(matchId);
+
+    await _firestore.runTransaction((transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(matchRef);
+
+      List<Map<String, dynamic>> existingTeams =
+          List<Map<String, dynamic>>.from(snapshot.get('teams') ?? []);
+
+      int battingTeamIndex =
+          existingTeams.indexWhere((team) => team['team_id'] == battingTeamId);
+      int bowlingTeamIndex =
+          existingTeams.indexWhere((team) => team['team_id'] == bowlingTeamId);
+
+      if (battingTeamIndex != -1 && bowlingTeamIndex != -1) {
+        existingTeams[battingTeamIndex]['run'] = totalRun;
+        existingTeams[battingTeamIndex]['over'] = over;
+        existingTeams[bowlingTeamIndex]['wicket'] = wicket;
+        if (runs != null) {
+          existingTeams[bowlingTeamIndex]['run'] = runs;
+        }
+      }
+
+      transaction.update(matchRef, {'teams': existingTeams});
+    });
+  }
+
+  Future<void> updateCurrentPlayingTeam(String matchId, String? teamId) async {
+    DocumentReference matchRef =
+        _firestore.collection(_collectionName).doc(matchId);
+
+    await matchRef.update({'current_playing_team_id': teamId});
+  }
+
   Future<void> updateTeamsSquad(
       String matchId, AddMatchTeamRequest teamRequest) async {
     DocumentReference matchRef =
@@ -188,6 +233,82 @@ class MatchService {
     });
   }
 
+  Future<List<MatchModel>> getMatchesByTeamId(String teamId) async {
+    CollectionReference matchCollection =
+        _firestore.collection(_collectionName);
+
+    QuerySnapshot mainCollectionSnapshotOne =
+        await matchCollection.where("teams.0.team_id", isEqualTo: teamId).get();
+
+    QuerySnapshot mainCollectionSnapshotTwo =
+        await matchCollection.where("teams.1.team_id", isEqualTo: teamId).get();
+
+    final combinedDocs = mainCollectionSnapshotOne.docs;
+    combinedDocs.addAll(mainCollectionSnapshotTwo.docs);
+
+    List<MatchModel> matches = [];
+
+    for (QueryDocumentSnapshot mainDoc in combinedDocs) {
+      Map<String, dynamic> mainDocData = mainDoc.data() as Map<String, dynamic>;
+      AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+
+      List<MatchTeamModel> teams = await getTeamsList(match.teams);
+      matches.add(MatchModel(
+        id: match.id,
+        teams: teams,
+        match_type: match.match_type,
+        number_of_over: match.number_of_over,
+        over_per_bowler: match.over_per_bowler,
+        city: match.city,
+        ground: match.ground,
+        start_time: match.start_time,
+        ball_type: match.ball_type,
+        pitch_type: match.pitch_type,
+        match_status: match.match_status,
+        toss_winner_id: match.toss_winner_id,
+        toss_decision: match.toss_decision,
+        current_playing_team_id: match.current_playing_team_id,
+      ));
+    }
+
+    return matches;
+  }
+
+  Future<List<MatchModel>> getMatchesByTeamIdV1(String teamId) async {
+    CollectionReference matchCollection =
+        _firestore.collection(_collectionName);
+
+    QuerySnapshot mainCollectionSnapshot = await matchCollection.get();
+
+    List<MatchModel> matches = [];
+
+    for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
+      Map<String, dynamic> mainDocData = mainDoc.data() as Map<String, dynamic>;
+      AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+      if (match.teams.map((e) => e.team_id).contains(teamId)) {
+        List<MatchTeamModel> teams = await getTeamsList(match.teams);
+        matches.add(MatchModel(
+          id: match.id,
+          teams: teams,
+          match_type: match.match_type,
+          number_of_over: match.number_of_over,
+          over_per_bowler: match.over_per_bowler,
+          city: match.city,
+          ground: match.ground,
+          start_time: match.start_time,
+          ball_type: match.ball_type,
+          pitch_type: match.pitch_type,
+          match_status: match.match_status,
+          toss_winner_id: match.toss_winner_id,
+          toss_decision: match.toss_decision,
+          current_playing_team_id: match.current_playing_team_id,
+        ));
+      }
+    }
+
+    return matches;
+  }
+
   Future<void> deleteMatch(String matchId) async {
     await _firestore.collection(_collectionName).doc(matchId).delete();
   }
@@ -213,10 +334,14 @@ class MatchService {
       TeamModel team = await _teamService.getTeamById(e.team_id);
       List<MatchPlayer> squad = await getPlayerListFromPlayerIds(e.squad);
       teams.add(MatchTeamModel(
-          team: team,
-          squad: squad,
-          captain_id: e.captain_id,
-          admin_id: e.admin_id));
+        team: team,
+        squad: squad,
+        over: e.over,
+        run: e.run,
+        wicket: e.wicket,
+        captain_id: e.captain_id,
+        admin_id: e.admin_id,
+      ));
     });
 
     return teams;
@@ -228,7 +353,10 @@ class MatchService {
     for (final player in players) {
       var userModel = await _userService.getUserById(player.id);
       squad.add(MatchPlayer(
-          player: userModel, status: player.status, index: player.index));
+        player: userModel,
+        status: player.status,
+        index: player.index,
+      ));
     }
     return squad;
   }

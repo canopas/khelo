@@ -208,6 +208,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       );
       final firstId = await _inningService.updateInning(firstInning);
       final secondId = await _inningService.updateInning(secondInning);
+
+      await _matchService.updateCurrentPlayingTeam(
+          state.match!.id ?? "INVALID ID",
+          state.match!.toss_decision == TossDecision.bat
+              ? firstInning.team_id
+              : secondInning.team_id);
+
       state = state.copyWith(
           currentInning: state.match!.toss_decision == TossDecision.bat
               ? firstInning.copyWith(id: firstId)
@@ -215,6 +222,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           otherInning: state.match!.toss_decision == TossDecision.bat
               ? secondInning.copyWith(id: secondId)
               : firstInning.copyWith(id: firstId),
+          match: state.match!.copyWith(
+              current_playing_team_id:
+                  state.match!.toss_decision == TossDecision.bat
+                      ? firstInning.team_id
+                      : secondInning.team_id),
           showSelectPlayerSheet: DateTime.now(),
           loading: false);
     } catch (e) {
@@ -456,7 +468,32 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           bowlingTeamInningId: state.otherInning?.id ?? "INVALID ID",
           wicketCount: state.wicketCount,
           runs: state.otherInning?.total_runs);
+
+      await _matchService.updateTeamScore(
+          matchId: state.match?.id ?? "INVALID ID",
+          battingTeamId: state.currentInning?.team_id ?? "INVALID ID",
+          totalRun: state.totalRuns,
+          over: double.parse("${state.overCount}.${state.ballCount}"),
+          bowlingTeamId: state.otherInning?.team_id ?? "INVALID ID",
+          wicket: state.wicketCount,
+          runs: state.otherInning?.total_runs);
+
+      // update match state
+      final teams = state.match?.teams.toList();
+      teams?.map((e) {
+        if (e.team.id == state.currentInning?.team_id) {
+          return e.copyWith(
+              over: double.parse("${state.overCount}.${state.ballCount}"),
+              run: state.totalRuns);
+        } else {
+          return e.copyWith(
+              wicket: state.wicketCount, run: state.otherInning?.total_runs);
+        }
+      }).toList();
+
       state = state.copyWith(
+          match:
+              state.match?.copyWith(teams: teams ?? state.match?.teams ?? []),
           currentInning: state.currentInning?.copyWith(
               overs: double.parse("${state.overCount}.${state.ballCount}"),
               total_runs: state.totalRuns),
@@ -624,6 +661,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         inningId: state.otherInning?.id ?? "INVALID ID",
         status: InningStatus.running);
 
+    await _matchService.updateCurrentPlayingTeam(
+        state.match?.id ?? "INVALID ID", state.otherInning?.team_id);
+
     final swappedCurrentInning =
         state.otherInning?.copyWith(innings_status: InningStatus.running);
     final swappedOtherInning =
@@ -640,6 +680,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         currentScoresList: List.empty(),
         otherInning: swappedOtherInning,
         currentInning: swappedCurrentInning,
+        match: state.match
+            ?.copyWith(current_playing_team_id: swappedCurrentInning?.team_id),
         showSelectPlayerSheet: DateTime.now());
   }
 

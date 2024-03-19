@@ -48,6 +48,7 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
       toss_decision:
           $enumDecodeNullable(_$TossDecisionEnumMap, json['toss_decision']),
       toss_winner_id: json['toss_winner_id'] as String?,
+      current_playing_team_id: json['current_playing_team_id'] as String?,
     );
 
 Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
@@ -72,6 +73,7 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'match_status': _$MatchStatusEnumMap[instance.match_status]!,
       'toss_decision': _$TossDecisionEnumMap[instance.toss_decision],
       'toss_winner_id': instance.toss_winner_id,
+      'current_playing_team_id': instance.current_playing_team_id,
     };
 
 const _$MatchTypeEnumMap = {
@@ -112,6 +114,9 @@ _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map<String, dynamic> json) =>
       team: TeamModel.fromJson(json['team'] as Map<String, dynamic>),
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
+      over: (json['over'] as num?)?.toDouble(),
+      run: json['run'] as int?,
+      wicket: json['wicket'] as int?,
       squad: (json['squad'] as List<dynamic>?)
               ?.map((e) => MatchPlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -124,6 +129,9 @@ Map<String, dynamic> _$$MatchTeamModelImplToJson(
       'team': instance.team,
       'captain_id': instance.captain_id,
       'admin_id': instance.admin_id,
+      'over': instance.over,
+      'run': instance.run,
+      'wicket': instance.wicket,
       'squad': instance.squad,
     };
 
@@ -189,6 +197,7 @@ _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(
       toss_decision:
           $enumDecodeNullable(_$TossDecisionEnumMap, json['toss_decision']),
       toss_winner_id: json['toss_winner_id'] as String?,
+      current_playing_team_id: json['current_playing_team_id'] as String?,
     );
 
 Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
@@ -214,6 +223,7 @@ Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
       'match_status': _$MatchStatusEnumMap[instance.match_status]!,
       'toss_decision': _$TossDecisionEnumMap[instance.toss_decision],
       'toss_winner_id': instance.toss_winner_id,
+      'current_playing_team_id': instance.current_playing_team_id,
     };
 
 _$AddMatchTeamRequestImpl _$$AddMatchTeamRequestImplFromJson(
@@ -222,6 +232,9 @@ _$AddMatchTeamRequestImpl _$$AddMatchTeamRequestImplFromJson(
       team_id: json['team_id'] as String,
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
+      over: (json['over'] as num?)?.toDouble(),
+      run: json['run'] as int?,
+      wicket: json['wicket'] as int?,
       squad: (json['squad'] as List<dynamic>?)
               ?.map(
                   (e) => MatchPlayerRequest.fromJson(e as Map<String, dynamic>))
@@ -235,6 +248,9 @@ Map<String, dynamic> _$$AddMatchTeamRequestImplToJson(
       'team_id': instance.team_id,
       'captain_id': instance.captain_id,
       'admin_id': instance.admin_id,
+      'over': instance.over,
+      'run': instance.run,
+      'wicket': instance.wicket,
       'squad': instance.squad,
     };
 

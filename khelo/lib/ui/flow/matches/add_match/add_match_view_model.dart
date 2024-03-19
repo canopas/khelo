@@ -21,11 +21,12 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
   AddMatchViewNotifier(this._matchService)
       : super(AddMatchViewState(
-            totalOverController: TextEditingController(),
-            overPerBowlerController: TextEditingController(),
-            cityController: TextEditingController(),
-            groundController: TextEditingController(),
-            matchTime: DateTime.now()));
+          totalOverController: TextEditingController(),
+          overPerBowlerController: TextEditingController(),
+          cityController: TextEditingController(),
+          groundController: TextEditingController(),
+          matchTime: DateTime.now(),
+        ));
 
   void setData(String? matchId) {
     this.matchId = matchId;
@@ -167,6 +168,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           toss_decision: state.match?.toss_decision,
           toss_winner_id: state.match?.toss_winner_id,
           referee_id: refereeId,
+          current_playing_team_id: state.match?.current_playing_team_id,
           match_status: startMatch
               ? state.match?.match_status ?? MatchStatus.running
               : MatchStatus.yetToStart);
@@ -249,7 +251,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
         (state.squadB?.length ?? 0) >= 2;
 
     state = state.copyWith(
-        isPowerPlayButtonEnable: totalOvers.isNotEmpty && (int.tryParse(totalOvers) ?? 0) > 0,
+        isPowerPlayButtonEnable:
+            totalOvers.isNotEmpty && (int.tryParse(totalOvers) ?? 0) > 0,
         isSaveBtnEnable: isBtnEnable,
         isStartBtnEnable: isBtnEnable);
   }

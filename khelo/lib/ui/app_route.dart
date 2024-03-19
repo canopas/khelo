@@ -16,6 +16,7 @@ import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
+import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
@@ -32,6 +33,7 @@ class AppRoute {
   static const pathAddMatch = '/add-match';
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
+  static const pathTeamDetail = '/team-detail';
 
   final String path;
   final String? name;
@@ -196,6 +198,10 @@ class AppRoute {
       pathEditProfile,
       builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
+  static AppRoute teamDetail({required String teamId}) =>
+      AppRoute(pathTeamDetail,
+          builder: (_) => TeamDetailScreen(teamId: teamId));
+
   static final routes = [
     GoRoute(
       path: main.path,
@@ -246,6 +252,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathSelectSquad,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathTeamDetail,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

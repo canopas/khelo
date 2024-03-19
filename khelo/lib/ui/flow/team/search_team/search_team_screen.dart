@@ -195,12 +195,16 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                     style: AppTextStyle.header4
                         .copyWith(color: context.colorScheme.textPrimary),
                   ),
-                  Text(
-                      team.city != null
+                  Text.rich(TextSpan(
+                      text: team.city != null
                           ? team.city!
                           : context.l10n.common_not_specified_title,
                       style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary)),
+                          .copyWith(color: context.colorScheme.textSecondary),
+                      children: [
+                        TextSpan(
+                            text: " - ${team.players?.length ?? 0} Members")
+                      ])),
                 ],
               ),
             ),

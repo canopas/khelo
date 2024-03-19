@@ -5,6 +5,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/large_icon_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -51,59 +52,74 @@ class TeamListScreen extends ConsumerWidget {
 
   Widget _teamListCell(
       BuildContext context, TeamListViewNotifier notifier, TeamModel team) {
-    return Row(
-      children: [
-        ImageAvatar(
-          initial: team.name[0].toUpperCase(),
-          imageUrl: team.profile_img_url,
-          size: 50,
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                team.name,
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              Text(team.city ?? context.l10n.common_not_specified_title,
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textSecondary)),
-            ],
+    return OnTapScale(
+      onTap: () {
+        AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
+      },
+      child: Row(
+        children: [
+          ImageAvatar(
+            initial: team.name[0].toUpperCase(),
+            imageUrl: team.profile_img_url,
+            size: 50,
           ),
-        ),
-        PopupMenuButton<String>(
-          color: context.colorScheme.containerNormalOnSurface,
-          iconColor: context.colorScheme.textPrimary,
-          onSelected: (value) async {
-            if (value == context.l10n.team_list_add_members_title) {
-              await AppRoute.addTeamMember(team: team).push(context);
-            } else if (value == context.l10n.team_list_edit_team_title) {
-              await AppRoute.addTeam(team: team).push(context);
-            }
-            notifier.loadTeamList();
-          },
-          itemBuilder: (BuildContext context) {
-            return {
-              context.l10n.team_list_add_members_title,
-              context.l10n.team_list_edit_team_title
-            }.map((String choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Text(
-                  choice,
-                  style: AppTextStyle.subtitle1
+          const SizedBox(
+            width: 8,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  team.name,
+                  style: AppTextStyle.header4
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
-              );
-            }).toList();
-          },
-        ),
-      ],
+                Text(team.city ?? context.l10n.common_not_specified_title,
+                    style: AppTextStyle.subtitle2
+                        .copyWith(color: context.colorScheme.textSecondary)),
+              ],
+            ),
+          ),
+          _moreActionButton(
+            context,
+            onSelect: (value) async {
+              if (value == context.l10n.team_list_add_members_title) {
+                await AppRoute.addTeamMember(team: team).push(context);
+              } else if (value == context.l10n.team_list_edit_team_title) {
+                await AppRoute.addTeam(team: team).push(context);
+              }
+              notifier.loadTeamList();
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _moreActionButton(
+    BuildContext context, {
+    required Function(String) onSelect,
+  }) {
+    return PopupMenuButton<String>(
+      color: context.colorScheme.containerNormalOnSurface,
+      iconColor: context.colorScheme.textPrimary,
+      onSelected: (value) => onSelect(value),
+      itemBuilder: (BuildContext context) {
+        return {
+          context.l10n.team_list_add_members_title,
+          context.l10n.team_list_edit_team_title
+        }.map((String choice) {
+          return PopupMenuItem<String>(
+            value: choice,
+            child: Text(
+              choice,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+          );
+        }).toList();
+      },
     );
   }
 

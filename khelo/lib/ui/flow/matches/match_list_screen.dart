@@ -64,6 +64,7 @@ class MatchListScreen extends ConsumerWidget {
     if (state.matches != null && state.matches!.isNotEmpty) {
       return Expanded(
         child: ListView.separated(
+          padding: const EdgeInsets.only(bottom: 40),
           itemCount: state.matches!.length,
           separatorBuilder: (context, index) {
             return const SizedBox(
@@ -145,14 +146,112 @@ class MatchListScreen extends ConsumerWidget {
               ],
             ],
           ),
-          Text(match.teams.first.team.name,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary)),
-          Text(match.teams.last.team.name,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary)),
+          _teamNameView(
+            context,
+            team: match.teams.first,
+            wicket: match.teams.last.wicket ?? 0,
+            totalOvers: match.number_of_over,
+            isRunning:
+                match.current_playing_team_id == match.teams.first.team.id,
+          ),
+          _teamNameView(
+            context,
+            team: match.teams.last,
+            wicket: match.teams.first.wicket ?? 0,
+            totalOvers: match.number_of_over,
+            isRunning:
+                match.current_playing_team_id == match.teams.last.team.id,
+          ),
+          if (match.match_status == MatchStatus.finish) ...[
+            _winnerMessageText(context, match)
+          ]
         ],
       ),
     );
+  }
+
+  Widget _teamNameView(
+    BuildContext context, {
+    required MatchTeamModel team,
+    required int wicket,
+    required int totalOvers,
+    required bool isRunning,
+  }) {
+    final over = (team.over ?? 0) - 1;
+
+    return Text.rich(TextSpan(
+        text: team.team.name,
+        style: AppTextStyle.subtitle2.copyWith(
+            color: isRunning
+                ? context.colorScheme.primary
+                : context.colorScheme.textPrimary),
+        children: isRunning
+            ? [
+                TextSpan(
+                  text: " - ",
+                  style: AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textSecondary),
+                ),
+                TextSpan(
+                  text: "${team.run}/$wicket",
+                  style: AppTextStyle.header4
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                TextSpan(
+                  text: " (${over.toStringAsFixed(1)}/$totalOvers)",
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.textSecondary),
+                ),
+              ]
+            : List.empty()));
+  }
+
+  Widget _winnerMessageText(BuildContext context, MatchModel match) {
+    final firstTeam = match.toss_decision == TossDecision.bat
+        ? match.teams
+            .firstWhere((element) => element.team.id == match.toss_winner_id)
+        : match.teams
+            .firstWhere((element) => element.team.id != match.toss_winner_id);
+    final secondTeam = match.teams
+        .firstWhere((element) => element.team.id != firstTeam.team.id);
+
+    if (firstTeam.run! > secondTeam.run!) {
+      // first batting team won
+      final teamName = firstTeam.team.name;
+
+      final runDifference = firstTeam.run! - secondTeam.run!;
+
+      return _messageText(context, teamName, runDifference,
+          context.l10n.score_board_runs_dot_title);
+    } else {
+      // second batting team won
+      final teamName = secondTeam.team.name;
+
+      final wicketDifference =
+          secondTeam.squad.length - (firstTeam.wicket ?? 0);
+
+      return _messageText(context, teamName, wicketDifference,
+          context.l10n.score_board_wickets_dot_title);
+    }
+  }
+
+  Widget _messageText(BuildContext context, String? teamName, int difference,
+      String trailingText) {
+    return Text.rich(TextSpan(
+        text: "$teamName",
+        style:
+            AppTextStyle.subtitle2.copyWith(color: context.colorScheme.primary),
+        children: [
+          TextSpan(
+              text: context.l10n.score_board_won_by_title,
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textSecondary)),
+          TextSpan(
+            text: "$difference",
+          ),
+          TextSpan(
+            text: trailingText,
+          ),
+        ]));
   }
 }

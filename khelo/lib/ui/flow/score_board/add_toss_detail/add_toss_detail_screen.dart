@@ -184,6 +184,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ImageAvatar(
                 imageUrl: imgUrl,
@@ -195,6 +196,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
               ),
               Text(
                 name ?? "",
+                textAlign: TextAlign.center,
                 style: AppTextStyle.subtitle1
                     .copyWith(color: context.colorScheme.textPrimary),
               )

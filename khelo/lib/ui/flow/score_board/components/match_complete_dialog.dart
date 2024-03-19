@@ -134,7 +134,6 @@ class MatchCompleteDialog extends ConsumerWidget {
 
     final ballCount = inningOver - inningOver.truncate();
     final over = inningOver - 1;
-
     final overCount = over + ballCount;
 
     return (
