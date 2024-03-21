@@ -2,6 +2,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -146,21 +147,32 @@ class MatchListScreen extends ConsumerWidget {
               ],
             ],
           ),
-          _teamNameView(
-            context,
-            team: match.teams.first,
-            wicket: match.teams.last.wicket ?? 0,
-            totalOvers: match.number_of_over,
-            isRunning:
-                match.current_playing_team_id == match.teams.first.team.id,
-          ),
-          _teamNameView(
-            context,
-            team: match.teams.last,
-            wicket: match.teams.first.wicket ?? 0,
-            totalOvers: match.number_of_over,
-            isRunning:
-                match.current_playing_team_id == match.teams.last.team.id,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _teamNameView(
+                    context,
+                    team: match.teams.first,
+                    wicket: match.teams.last.wicket ?? 0,
+                    totalOvers: match.number_of_over,
+                    isRunning: match.current_playing_team_id ==
+                        match.teams.first.team.id,
+                  ),
+                  _teamNameView(
+                    context,
+                    team: match.teams.last,
+                    wicket: match.teams.first.wicket ?? 0,
+                    totalOvers: match.number_of_over,
+                    isRunning: match.current_playing_team_id ==
+                        match.teams.last.team.id,
+                  ),
+                ],
+              ),
+              MatchStatusTag(status: match.match_status)
+            ],
           ),
           if (match.match_status == MatchStatus.finish) ...[
             _winnerMessageText(context, match)

@@ -281,6 +281,7 @@
     "score_board_pause_scoring_title" : "Pause Scoring",
     "score_board_penalty_run_title" : "Penalty Run",
     "score_board_pause_title" : "Pause",
+    "score_board_power_play_title" : "Power-Play ",
     "score_board_pause_scoring_description_text" : "are you sure you want to pause scoring?",
     "score_board_need_run_text": "Need {run} in {ball}",
     "@score_board_need_run_text": {
@@ -314,6 +315,75 @@
     "team_detail_run_rate_title": "Run Rate",
     "team_detail_match_played_title": "\nMatch played",
     "team_detail_matches_played_title": "\nMatches played",
+
+    "match_status_yet_to_start_title" : "Yet to start",
+    "match_status_running_title" : "Running",
+    "match_status_finish_title" : "Finish",
+
+    "wicket_type_bowled_title" : "Bowled",
+    "wicket_type_caught_title" : "Caught",
+    "wicket_type_caught_behind_title" : "Caught Behind",
+    "wicket_type_caught_bowled_title" : "Caught And Bowled",
+    "wicket_type_leg_before_wicket_title" : "Leg Before Wicket",
+    "wicket_type_stumped_title" : "Stumped",
+    "wicket_type_run_out_title" : "Run Out",
+    "wicket_type_hit_wicket_title" : "Hit Wicket",
+    "wicket_type_hit_ball_twice_title" : "Hit Ball Twice",
+    "wicket_type_handled_ball_title" : "Handled Ball",
+    "wicket_type_obstructing_field_title" : "Obstructing the Field",
+    "wicket_type_timed_out_title" : "Timed Out",
+    "wicket_type_retired_title" : "Retired",
+    "wicket_type_retired_hurt_title" : "Retired Hurt",
+
+    "my_stat_screen_title": "My Stats",
+    "my_stat_stats_tab_title": "Stats",
+    "my_stat_matches_tab_title": "Matches",
+    "my_stat_stats_batting_statics_title": "Batting Statistics",
+    "my_stat_stats_run_scored_title": "Run scored",
+    "my_stat_stats_bowling_title": "Bowling",
+    "my_stat_stats_batting_title": "Batting",
+    "my_stat_stats_average_title": "average",
+    "my_stat_stats_strike_rate_title": "\nStrike rate",
+    "my_stat_stats_ball_faced_title": " Ball faced",
+    "my_stat_stats_bowling_statics_title": "Bowling Statistics",
+    "my_stat_stats_wicket_taken_title": "Wicket taken",
+    "my_stat_stats_economy_rate_title": " Economy rate",
+    "my_stat_stats_fielding_statics_title": "Fielding Statistics",
+    "my_stat_stats_catches_title": "Catches",
+    "my_stat_stats_run_out_title": " Run out",
+    "my_stat_stats_stumping_title": " Stumping",
+
+    "match_stat_screen_title" : "Match Stat",
+    "match_stat_wicket_taken_title" : " Wicket taken",
+    "match_stat_in_over_text" : " (in {count} Over)",
+    "@match_stat_in_over_text": {
+        "description": " (in {count} Over)",
+        "placeholders": {
+            "count": {
+                "type": "String"
+            }
+        }
+    },
+    "match_stat_fours_title" : "\nFours",
+    "match_stat_sixes_title" : "\nSixes",
+    "match_stat_played_squad_title" : "Played Squad",
+    "match_stat_count_player_text" : "({count} player)",
+    "@match_stat_count_player_text": {
+        "description": "({count} player)",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "match_stat_count_wickets_text" : "{count, plural, =0{{count} Wickets} =1{{count} Wicket} other{{count} Wickets}}",
+    "@match_stat_count_wickets_text": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "match_stat_bat_avg_title": "\nBat-Avg",
+    "match_stat_extra_awarded_title": " Extra awarded",
 
     "my_game_teams_tab_title": "Teams",
     "my_game_matches_tab_title": "Matches"

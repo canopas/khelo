@@ -359,32 +359,75 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     ScoreBoardViewState state,
   ) {
     final currentOver = _getCurrentOver(state);
-    return Center(
-      child: Wrap(
-        alignment: WrapAlignment.center,
-        direction: Axis.vertical,
-        children: [
-          Text.rich(
-            textAlign: TextAlign.center,
-            TextSpan(
-              children: [
+
+    return Stack(
+      children: [
+        _powerPlayTag(context, state),
+        Center(
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            direction: Axis.vertical,
+            children: [
+              Text.rich(
+                textAlign: TextAlign.center,
                 TextSpan(
-                  text: '${state.totalRuns}/${state.wicketCount}',
-                  style: AppTextStyle.subtitle1.copyWith(
-                      color: context.colorScheme.textPrimary, fontSize: 39),
+                  children: [
+                    TextSpan(
+                      text: '${state.totalRuns}/${state.wicketCount}',
+                      style: AppTextStyle.subtitle1.copyWith(
+                          color: context.colorScheme.textPrimary, fontSize: 39),
+                    ),
+                    TextSpan(
+                      text: '($currentOver/${state.match?.number_of_over})',
+                      style: AppTextStyle.header4
+                          .copyWith(color: context.colorScheme.textSecondary),
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: '($currentOver/${state.match?.number_of_over})',
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.textSecondary),
-                ),
-              ],
-            ),
+              ),
+              _runNeededText(context, state),
+            ],
           ),
-          _runNeededText(context, state),
-        ],
-      ),
+        ),
+      ],
     );
+  }
+
+  Widget _powerPlayTag(
+    BuildContext context,
+    ScoreBoardViewState state,
+  ) {
+    final powerPlay = _getPowerPlayCount(state);
+    if (powerPlay != null) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        decoration: BoxDecoration(
+            color: context.colorScheme.primary,
+            borderRadius:
+                const BorderRadius.horizontal(right: Radius.circular(12))),
+        child: Text(
+          context.l10n.score_board_power_play_title + powerPlay.toString(),
+          style: AppTextStyle.body1.copyWith(
+              color: context.colorScheme.textInversePrimary,
+              fontWeight: FontWeight.w500),
+        ),
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  int? _getPowerPlayCount(ScoreBoardViewState state) {
+    if (state.match?.power_play_overs1.contains(state.overCount) ?? false) {
+      return 1;
+    } else if (state.match?.power_play_overs2.contains(state.overCount) ??
+        false) {
+      return 2;
+    } else if (state.match?.power_play_overs3.contains(state.overCount) ??
+        false) {
+      return 3;
+    }
+    return null;
   }
 
   Widget _runNeededText(

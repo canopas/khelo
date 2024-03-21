@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -84,6 +85,10 @@ class TeamDetailMatchContent extends ConsumerWidget {
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textSecondary),
             ),
+            const SizedBox(
+              height: 4,
+            ),
+            MatchStatusTag(status: match.match_status)
           ],
         ),
       ],

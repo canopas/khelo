@@ -52,7 +52,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     }
     try {
       final matches = await _matchService
-          .getMatchesByTeamIdV1(state.team!.id ?? "INVALID ID");
+          .getMatchesByTeamId(state.team!.id ?? "INVALID ID");
       state = state.copyWith(matches: matches);
     } catch (e) {
       debugPrint(

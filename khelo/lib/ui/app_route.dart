@@ -14,6 +14,7 @@ import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen
 import 'package:khelo/ui/flow/score_board/score_board_screen.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
+import 'package:khelo/ui/flow/stats/user_match/match_detail_stat/match_detail_stat_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
@@ -34,6 +35,7 @@ class AppRoute {
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
   static const pathTeamDetail = '/team-detail';
+  static const pathMatchDetailStat = '/match-detail-stat';
 
   final String path;
   final String? name;
@@ -132,6 +134,13 @@ class AppRoute {
   static AppRoute addMatch({String? matchId}) => AppRoute(
         pathAddMatch,
         builder: (_) => AddMatchScreen(
+          matchId: matchId,
+        ),
+      );
+
+  static AppRoute matchDetailStat({required String matchId}) => AppRoute(
+        pathMatchDetailStat,
+        builder: (_) => MatchDetailStatScreen(
           matchId: matchId,
         ),
       );
@@ -236,6 +245,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddMatch,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathMatchDetailStat,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

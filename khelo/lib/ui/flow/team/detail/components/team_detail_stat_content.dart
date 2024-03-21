@@ -13,7 +13,10 @@ class TeamDetailStatContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
 
-    if (state.matches?.isEmpty ?? true) {
+    if (state.matches
+            ?.where((element) => element.match_status == MatchStatus.finish)
+            .isEmpty ??
+        true) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),

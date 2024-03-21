@@ -3,6 +3,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:style/extensions/context_extensions.dart';
 
 extension BallTypeString on BallType {
   String getString(BuildContext context) {
@@ -138,37 +139,61 @@ extension TossDecisionString on TossDecision {
   }
 }
 
-extension WicketTypeString on WicketType{
+extension MatchStatusString on MatchStatus {
+  String getString(BuildContext context) {
+    switch (this) {
+      case MatchStatus.yetToStart:
+        return context.l10n.match_status_yet_to_start_title;
+      case MatchStatus.running:
+        return context.l10n.match_status_running_title;
+      case MatchStatus.finish:
+        return context.l10n.match_status_finish_title;
+    }
+  }
+
+  Color getColor(BuildContext context) {
+    switch (this) {
+      case MatchStatus.yetToStart:
+        return context.colorScheme.warning;
+      case MatchStatus.running:
+        return context.colorScheme.alert;
+      case MatchStatus.finish:
+        return context.colorScheme.positive;
+    }
+  }
+}
+
+extension WicketTypeString on WicketType {
   String getString(BuildContext context) {
     switch (this) {
       case WicketType.bowled:
-        return "Bowled";
+        return context.l10n.wicket_type_bowled_title;
       case WicketType.caught:
-        return "Caught";
+        return context.l10n.wicket_type_caught_title;
       case WicketType.caughtBehind:
-        return "Caught Behind";
+        return context.l10n.wicket_type_caught_behind_title;
       case WicketType.caughtAndBowled:
-        return "Caught And Bowled";
+        return context.l10n.wicket_type_caught_bowled_title;
       case WicketType.lbw:
-        return "Leg Before Wicket";
+        return context.l10n.wicket_type_leg_before_wicket_title;
       case WicketType.stumped:
-        return "Stumped";
+        return context.l10n.wicket_type_stumped_title;
       case WicketType.runOut:
-        return "Run Out";
+        return context.l10n.wicket_type_run_out_title;
       case WicketType.hitWicket:
-        return "Hit Wicket";
+        return context.l10n.wicket_type_hit_wicket_title;
       case WicketType.hitBallTwice:
-        return "Hit Ball Twice";
+        return context.l10n.wicket_type_hit_ball_twice_title;
       case WicketType.handledBall:
-        return "Handled Ball";
+        return context.l10n.wicket_type_handled_ball_title;
       case WicketType.obstructingField:
-        return "Obstructing the Field";
+        return context.l10n.wicket_type_obstructing_field_title;
       case WicketType.timedOut:
-        return "Timed Out";
+        return context.l10n.wicket_type_timed_out_title;
       case WicketType.retired:
-        return "Retired";
+        return context.l10n.wicket_type_retired_title;
       case WicketType.retiredHurt:
-        return "Retired Hurt";
+        return context.l10n.wicket_type_retired_hurt_title;
     }
   }
 }
