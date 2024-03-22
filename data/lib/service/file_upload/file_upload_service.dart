@@ -27,7 +27,6 @@ class FileUploadService {
           .ref()
           .child('${type.value}/$imgName')
           .putFile(file);
-      // TODO: resolve rules of firebase storage and fireStore
       var downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } else {

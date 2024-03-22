@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_style.dart';
 
 import '../sign_in_with_phone_view_model.dart';
 
@@ -34,6 +35,10 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
                       size: 22,
                     ),
                     fillColor: context.colorScheme.containerLow,
+                    style: AppTextStyle.body1
+                        .copyWith(color: context.colorScheme.textPrimary),
+                    hintStyle: AppTextStyle.body1
+                        .copyWith(color: context.colorScheme.textDisabled),
                     filter: filter,
                   ),
                   codeBuilder: (code) => GestureDetector(
@@ -42,6 +47,10 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
                     },
                     child: DefaultCountryCodeListItemView(
                       code: code,
+                      dialCodeStyle: AppTextStyle.body1
+                          .copyWith(color: context.colorScheme.textPrimary),
+                      nameStyle: AppTextStyle.body1
+                          .copyWith(color: context.colorScheme.textPrimary),
                     ),
                   ),
                   backgroundColor: () => context.colorScheme.surface,

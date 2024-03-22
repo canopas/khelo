@@ -19,6 +19,7 @@ mixin _$PhoneVerificationState {
   bool get verifying => throw _privateConstructorUsedError;
   bool get enableVerify => throw _privateConstructorUsedError;
   bool get isVerificationComplete => throw _privateConstructorUsedError;
+  bool get showErrorVerificationCodeText => throw _privateConstructorUsedError;
   String? get verificationId => throw _privateConstructorUsedError;
   String get otp => throw _privateConstructorUsedError;
   Duration get activeResendDuration => throw _privateConstructorUsedError;
@@ -39,6 +40,7 @@ abstract class $PhoneVerificationStateCopyWith<$Res> {
       {bool verifying,
       bool enableVerify,
       bool isVerificationComplete,
+      bool showErrorVerificationCodeText,
       String? verificationId,
       String otp,
       Duration activeResendDuration,
@@ -62,6 +64,7 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
     Object? verifying = null,
     Object? enableVerify = null,
     Object? isVerificationComplete = null,
+    Object? showErrorVerificationCodeText = null,
     Object? verificationId = freezed,
     Object? otp = null,
     Object? activeResendDuration = null,
@@ -79,6 +82,10 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
       isVerificationComplete: null == isVerificationComplete
           ? _value.isVerificationComplete
           : isVerificationComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showErrorVerificationCodeText: null == showErrorVerificationCodeText
+          ? _value.showErrorVerificationCodeText
+          : showErrorVerificationCodeText // ignore: cast_nullable_to_non_nullable
               as bool,
       verificationId: freezed == verificationId
           ? _value.verificationId
@@ -110,6 +117,7 @@ abstract class _$$PhoneVerificationStateImplCopyWith<$Res>
       {bool verifying,
       bool enableVerify,
       bool isVerificationComplete,
+      bool showErrorVerificationCodeText,
       String? verificationId,
       String otp,
       Duration activeResendDuration,
@@ -132,6 +140,7 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
     Object? verifying = null,
     Object? enableVerify = null,
     Object? isVerificationComplete = null,
+    Object? showErrorVerificationCodeText = null,
     Object? verificationId = freezed,
     Object? otp = null,
     Object? activeResendDuration = null,
@@ -149,6 +158,10 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
       isVerificationComplete: null == isVerificationComplete
           ? _value.isVerificationComplete
           : isVerificationComplete // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showErrorVerificationCodeText: null == showErrorVerificationCodeText
+          ? _value.showErrorVerificationCodeText
+          : showErrorVerificationCodeText // ignore: cast_nullable_to_non_nullable
               as bool,
       verificationId: freezed == verificationId
           ? _value.verificationId
@@ -174,6 +187,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
       {this.verifying = false,
       this.enableVerify = false,
       this.isVerificationComplete = false,
+      this.showErrorVerificationCodeText = false,
       this.verificationId,
       this.otp = '',
       this.activeResendDuration = const Duration(seconds: 30),
@@ -189,6 +203,9 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
   @JsonKey()
   final bool isVerificationComplete;
   @override
+  @JsonKey()
+  final bool showErrorVerificationCodeText;
+  @override
   final String? verificationId;
   @override
   @JsonKey()
@@ -201,7 +218,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
 
   @override
   String toString() {
-    return 'PhoneVerificationState(verifying: $verifying, enableVerify: $enableVerify, isVerificationComplete: $isVerificationComplete, verificationId: $verificationId, otp: $otp, activeResendDuration: $activeResendDuration, error: $error)';
+    return 'PhoneVerificationState(verifying: $verifying, enableVerify: $enableVerify, isVerificationComplete: $isVerificationComplete, showErrorVerificationCodeText: $showErrorVerificationCodeText, verificationId: $verificationId, otp: $otp, activeResendDuration: $activeResendDuration, error: $error)';
   }
 
   @override
@@ -215,6 +232,10 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
                 other.enableVerify == enableVerify) &&
             (identical(other.isVerificationComplete, isVerificationComplete) ||
                 other.isVerificationComplete == isVerificationComplete) &&
+            (identical(other.showErrorVerificationCodeText,
+                    showErrorVerificationCodeText) ||
+                other.showErrorVerificationCodeText ==
+                    showErrorVerificationCodeText) &&
             (identical(other.verificationId, verificationId) ||
                 other.verificationId == verificationId) &&
             (identical(other.otp, otp) || other.otp == otp) &&
@@ -229,6 +250,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
       verifying,
       enableVerify,
       isVerificationComplete,
+      showErrorVerificationCodeText,
       verificationId,
       otp,
       activeResendDuration,
@@ -247,6 +269,7 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
       {final bool verifying,
       final bool enableVerify,
       final bool isVerificationComplete,
+      final bool showErrorVerificationCodeText,
       final String? verificationId,
       final String otp,
       final Duration activeResendDuration,
@@ -258,6 +281,8 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
   bool get enableVerify;
   @override
   bool get isVerificationComplete;
+  @override
+  bool get showErrorVerificationCodeText;
   @override
   String? get verificationId;
   @override

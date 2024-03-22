@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
@@ -5,6 +6,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_list_screen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
+import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -91,6 +93,16 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
               _controller.jumpToPage(1);
             },
           ),
+          if (_selectedTab == 0) ...[
+            const Spacer(),
+            IconButton(
+                onPressed: () {
+                  ref
+                      .read(teamListViewStateProvider.notifier)
+                      .onFilterButtonTap();
+                },
+                icon: const Icon(CupertinoIcons.slider_horizontal_3))
+          ]
         ],
       ),
     );

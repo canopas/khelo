@@ -11,7 +11,7 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-import 'components/sign_in_with_phone_input_fields.dart';
+import 'components/sign_in_with_phone_country_picker.dart';
 
 class SignInWithPhoneScreen extends ConsumerWidget {
   SignInWithPhoneScreen({super.key});

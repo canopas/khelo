@@ -152,8 +152,7 @@ class MatchService {
   }
 
   Future<List<MatchModel>> getMatchesByTeamId(String teamId) async {
-    CollectionReference matchCollection =
-        _firestore.collection(_collectionName);
+    CollectionReference matchCollection = _firestore.collection(_collectionName);
 
     QuerySnapshot mainCollectionSnapshot = await matchCollection.get();
 
@@ -327,11 +326,7 @@ class MatchService {
     if (userIds == null) {
       return null;
     }
-    List<UserModel> users = [];
-    for (final id in userIds) {
-      var userModel = await _userService.getUserById(id);
-      users.add(userModel);
-    }
+    List<UserModel> users = await _userService.getUsersByIds(userIds);
     return users;
   }
 
@@ -358,15 +353,21 @@ class MatchService {
 
   Future<List<MatchPlayer>> getPlayerListFromPlayerIds(
       List<MatchPlayerRequest> players) async {
-    List<MatchPlayer> squad = [];
-    for (final player in players) {
-      var userModel = await _userService.getUserById(player.id);
-      squad.add(MatchPlayer(
-        player: userModel,
-        status: player.status,
-        index: player.index,
-      ));
-    }
+    List<String> playerIds = players.map((player) => player.id).toList();
+
+    List<UserModel> users = await _userService.getUsersByIds(playerIds);
+
+    List<MatchPlayer> squad = users.map((user) {
+      final matchPlayer =
+          players.firstWhere((element) => element.id == user.id);
+
+      return MatchPlayer(
+        player: user,
+        status: matchPlayer.status,
+        index: matchPlayer.index,
+      );
+    }).toList();
+
     return squad;
   }
 }

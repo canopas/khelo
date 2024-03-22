@@ -26,25 +26,47 @@ class _EnterOTPViewState extends ConsumerState<EnterOTPView> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.watch(phoneVerificationStateProvider.notifier);
+    final state = ref.watch(phoneVerificationStateProvider);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       mainAxisSize: MainAxisSize.min,
       children: [
         for (int i = 0; i < widget.count; i++) ...[
-          otpCellTextField(context, notifier, i),
+          otpCellTextField(
+            context,
+            notifier,
+            i,
+            state.showErrorVerificationCodeText,
+          ),
         ],
       ],
     );
   }
 
   Widget otpCellTextField(
-      BuildContext context, PhoneVerificationViewNotifier notifier, int index) {
+    BuildContext context,
+    PhoneVerificationViewNotifier notifier,
+    int index,
+    bool isError,
+  ) {
     return SizedBox(
         width: 50,
         child: CupertinoTextField(
           maxLength: 1,
           autofocus: index == 0,
           textAlign: TextAlign.center,
+          cursorColor: isError
+              ? context.colorScheme.alert.withOpacity(0.5)
+              : context.colorScheme.primary,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+                color: isError
+                    ? context.colorScheme.alert.withOpacity(0.5)
+                    : context.colorScheme.containerLowOnSurface,
+                width: 2),
+          ),
           style: AppTextStyle.header1
               .copyWith(color: context.colorScheme.textPrimary, fontSize: 26),
           keyboardType: TextInputType.number,

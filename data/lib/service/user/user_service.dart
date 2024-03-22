@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data/extensions/list_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
@@ -21,9 +22,12 @@ class UserService {
   UserService(
       this._currentUser, this._currentUserJsonController, this._firestore);
 
-  Future<void> deleteUser() async {
-    await _firestore.collection(_collectionName).doc(_currentUser?.id).delete();
-    _currentUserJsonController.state = null;
+  Future<void> getUser(String id) async {
+    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
+    DocumentSnapshot snapshot = await userRef.get();
+    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+    var userModel = UserModel.fromJson(userData);
+    _currentUserJsonController.state = userModel.toJsonString();
   }
 
   Future<void> updateUser(UserModel user) async {
@@ -35,12 +39,9 @@ class UserService {
     _currentUserJsonController.state = user.toJsonString();
   }
 
-  Future<void> getUser(String id) async {
-    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
-    DocumentSnapshot snapshot = await userRef.get();
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-    var userModel = UserModel.fromJson(userData);
-    _currentUserJsonController.state = userModel.toJsonString();
+  Future<void> deleteUser() async {
+    await _firestore.collection(_collectionName).doc(_currentUser?.id).delete();
+    _currentUserJsonController.state = null;
   }
 
   Future<UserModel> getUserById(String id) async {
@@ -49,6 +50,24 @@ class UserService {
     Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
     var userModel = UserModel.fromJson(userData);
     return userModel;
+  }
+
+  Future<List<UserModel>> getUsersByIds(List<String> ids) async {
+    List<UserModel> users = [];
+
+    for (final tenIds in ids.chunked(10)) {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection(_collectionName)
+          .where('id', whereIn: tenIds)
+          .get();
+
+      users.addAll(snapshot.docs.map((doc) {
+        final data = doc.data();
+        return UserModel.fromJson(data).copyWith(id: doc.id);
+      }).toList());
+    }
+
+    return users;
   }
 
   Future<List<UserModel>> searchUser(String searchKey) async {

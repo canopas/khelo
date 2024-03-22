@@ -17,8 +17,11 @@ class PhoneVerificationScreen extends ConsumerStatefulWidget {
   final String phoneNumber;
   final String verificationId;
 
-  const PhoneVerificationScreen(
-      {super.key, required this.phoneNumber, required this.verificationId});
+  const PhoneVerificationScreen({
+    super.key,
+    required this.phoneNumber,
+    required this.verificationId,
+  });
 
   @override
   ConsumerState createState() => _PhoneVerificationScreenState();
@@ -74,6 +77,15 @@ class _PhoneVerificationScreenState
               const EnterOTPView(
                 count: 6,
               ),
+              const SizedBox(
+                height: 8,
+              ),
+              if (state.showErrorVerificationCodeText) ...[
+                Text(context.l10n.otp_verification_incorrect_otp_error_text,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.body2
+                        .copyWith(color: context.colorScheme.alert)),
+              ],
               const SizedBox(
                 height: 24,
               ),

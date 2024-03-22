@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
+import 'package:data/service/team/team_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -194,6 +195,19 @@ extension WicketTypeString on WicketType {
         return context.l10n.wicket_type_retired_title;
       case WicketType.retiredHurt:
         return context.l10n.wicket_type_retired_hurt_title;
+    }
+  }
+}
+
+extension TeamFilterOptionString on TeamFilterOption {
+  String getString(BuildContext context) {
+    switch (this) {
+      case TeamFilterOption.all:
+        return context.l10n.team_list_all_teams_title;
+      case TeamFilterOption.createdByMe:
+        return context.l10n.team_list_created_by_me_title;
+      case TeamFilterOption.memberMe:
+        return context.l10n.team_list_me_as_member_title;
     }
   }
 }

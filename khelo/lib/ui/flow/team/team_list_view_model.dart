@@ -20,14 +20,26 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   }
 
   Future<void> loadTeamList() async {
-    state = state.copyWith(loading: true);
+    state = state.copyWith(loading: state.teams.isEmpty);
     try {
-      final res = await _teamService.getTeams();
+      final res =
+          await _teamService.getUserRelatedTeams(option: state.selectedFilter);
       state = state.copyWith(teams: res, loading: false);
     } catch (e) {
       state = state.copyWith(loading: false);
       debugPrint("TeamListViewNotifier: error while loading team list -> $e");
     }
+  }
+
+  void onFilterOptionSelect(TeamFilterOption filter) {
+    if (filter != state.selectedFilter) {
+      state = state.copyWith(selectedFilter: filter);
+      loadTeamList();
+    }
+  }
+
+  void onFilterButtonTap() {
+    state = state.copyWith(showFilterOptionSheet: DateTime.now());
   }
 }
 
@@ -35,7 +47,9 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
 class TeamListViewState with _$TeamListViewState {
   const factory TeamListViewState({
     Object? error,
+    DateTime? showFilterOptionSheet,
     @Default([]) List<TeamModel> teams,
     @Default(true) bool loading,
+    @Default(TeamFilterOption.all) TeamFilterOption selectedFilter,
   }) = _TeamListViewState;
 }

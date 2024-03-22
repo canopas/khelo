@@ -111,16 +111,17 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         players = state.teamMembers;
       }
 
-      TeamModel team = TeamModel(
+      AddTeamRequestModel team = AddTeamRequestModel(
           id: state.editTeam?.id,
           name: name,
           name_lowercase: name.caseAndSpaceInsensitive,
           profile_img_url: state.imageUrl,
           city: location.toLowerCase(),
           created_by: state.currentUser!.id,
+          players: players.map((e) => e.id).toList(),
           created_at: state.editTeam?.created_at ?? DateTime.now());
 
-      await _teamService.updateTeam(team, players);
+      await _teamService.updateTeam(team);
 
       if (previousImageUrl != null) {
         await deleteUnusedImage(previousImageUrl);
@@ -137,8 +138,16 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
         state = state.copyWith(isAddInProgress: false, isPop: true);
       } else {
-        state = state.copyWith(
-            isAddInProgress: false, team: team.copyWith(players: players));
+        final teamModel = TeamModel(
+            id: state.editTeam?.id,
+            name: name,
+            name_lowercase: name.caseAndSpaceInsensitive,
+            profile_img_url: state.imageUrl,
+            city: location.toLowerCase(),
+            created_by: state.currentUser!.id,
+            players: players,
+            created_at: state.editTeam?.created_at ?? DateTime.now());
+        state = state.copyWith(isAddInProgress: false, team: teamModel);
       }
     } catch (e) {
       state = state.copyWith(isAddInProgress: false);

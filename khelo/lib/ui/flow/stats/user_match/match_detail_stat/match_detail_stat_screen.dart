@@ -306,6 +306,8 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
       ),
       trailing: Text(
         batAvg.toStringAsFixed(2) + context.l10n.match_stat_bat_avg_title,
+        style: AppTextStyle.body2
+            .copyWith(color: context.colorScheme.textSecondary),
         textAlign: TextAlign.center,
       ),
     );

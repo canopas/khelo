@@ -54,6 +54,7 @@
     "otp_verification_verify_otp_text": "Verify OTP",
     "otp_verification_enter_otp_text": "Enter OTP you received",
     "otp_verification_resend_code_text": "Resend Code",
+    "otp_verification_incorrect_otp_error_text": "*Please enter correct OTP",
 
     "edit_profile_screen_title": "Edit profile",
     "edit_profile_select_birth_date_placeholder": "Select your date of birth",
@@ -116,6 +117,9 @@
 
     "team_list_add_members_title": "Add Members",
     "team_list_edit_team_title": "Edit Team",
+    "team_list_all_teams_title": "All teams",
+    "team_list_created_by_me_title": "Created by me",
+    "team_list_me_as_member_title": "Me as member",
 
     "match_list_start_match_text": "Start a Match?",
     "match_list_start_title": "Start",

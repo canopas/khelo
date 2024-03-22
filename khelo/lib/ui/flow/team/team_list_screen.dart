@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/large_icon_button.dart';
@@ -14,11 +16,21 @@ import 'package:style/text/app_text_style.dart';
 class TeamListScreen extends ConsumerWidget {
   const TeamListScreen({super.key});
 
+  void _observeShowFilterOptionSheet(
+      BuildContext context, WidgetRef ref, TeamListViewNotifier notifier) {
+    ref.listen(
+        teamListViewStateProvider
+            .select((value) => value.showFilterOptionSheet), (previous, next) {
+      showFilterOptionSheet(context, notifier);
+    });
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(teamListViewStateProvider.notifier);
     final state = ref.watch(teamListViewStateProvider);
 
+    _observeShowFilterOptionSheet(context, ref, notifier);
     return _teamList(context, notifier, state);
   }
 
@@ -32,11 +44,25 @@ class TeamListScreen extends ConsumerWidget {
       children: [
         ListView.separated(
           padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
           itemBuilder: (context, index) {
             final team = state.teams[index];
-
-            return _teamListCell(context, notifier, team);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (index == 0) ...[
+                  Text(
+                    state.selectedFilter.getString(context),
+                    style: AppTextStyle.subtitle1.copyWith(
+                        color: context.colorScheme.textPrimary, fontSize: 20),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  )
+                ],
+                _teamListCell(context, notifier, team),
+              ],
+            );
           },
           itemCount: state.teams.length,
           separatorBuilder: (context, index) {
@@ -144,5 +170,12 @@ class TeamListScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void showFilterOptionSheet(
+    BuildContext context,
+    TeamListViewNotifier notifier,
+  ) {
+    SelectFilterOptionSheet.show(context);
   }
 }

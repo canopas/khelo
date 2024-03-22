@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$TeamListViewState {
   Object? get error => throw _privateConstructorUsedError;
+  DateTime? get showFilterOptionSheet => throw _privateConstructorUsedError;
   List<TeamModel> get teams => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  TeamFilterOption get selectedFilter => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TeamListViewStateCopyWith<TeamListViewState> get copyWith =>
@@ -31,7 +33,12 @@ abstract class $TeamListViewStateCopyWith<$Res> {
           TeamListViewState value, $Res Function(TeamListViewState) then) =
       _$TeamListViewStateCopyWithImpl<$Res, TeamListViewState>;
   @useResult
-  $Res call({Object? error, List<TeamModel> teams, bool loading});
+  $Res call(
+      {Object? error,
+      DateTime? showFilterOptionSheet,
+      List<TeamModel> teams,
+      bool loading,
+      TeamFilterOption selectedFilter});
 }
 
 /// @nodoc
@@ -48,11 +55,17 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? showFilterOptionSheet = freezed,
     Object? teams = null,
     Object? loading = null,
+    Object? selectedFilter = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      showFilterOptionSheet: freezed == showFilterOptionSheet
+          ? _value.showFilterOptionSheet
+          : showFilterOptionSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       teams: null == teams
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -61,6 +74,10 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedFilter: null == selectedFilter
+          ? _value.selectedFilter
+          : selectedFilter // ignore: cast_nullable_to_non_nullable
+              as TeamFilterOption,
     ) as $Val);
   }
 }
@@ -73,7 +90,12 @@ abstract class _$$TeamListViewStateImplCopyWith<$Res>
       __$$TeamListViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, List<TeamModel> teams, bool loading});
+  $Res call(
+      {Object? error,
+      DateTime? showFilterOptionSheet,
+      List<TeamModel> teams,
+      bool loading,
+      TeamFilterOption selectedFilter});
 }
 
 /// @nodoc
@@ -88,11 +110,17 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? showFilterOptionSheet = freezed,
     Object? teams = null,
     Object? loading = null,
+    Object? selectedFilter = null,
   }) {
     return _then(_$TeamListViewStateImpl(
       error: freezed == error ? _value.error : error,
+      showFilterOptionSheet: freezed == showFilterOptionSheet
+          ? _value.showFilterOptionSheet
+          : showFilterOptionSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       teams: null == teams
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -101,6 +129,10 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedFilter: null == selectedFilter
+          ? _value.selectedFilter
+          : selectedFilter // ignore: cast_nullable_to_non_nullable
+              as TeamFilterOption,
     ));
   }
 }
@@ -109,11 +141,17 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
 
 class _$TeamListViewStateImpl implements _TeamListViewState {
   const _$TeamListViewStateImpl(
-      {this.error, final List<TeamModel> teams = const [], this.loading = true})
+      {this.error,
+      this.showFilterOptionSheet,
+      final List<TeamModel> teams = const [],
+      this.loading = true,
+      this.selectedFilter = TeamFilterOption.all})
       : _teams = teams;
 
   @override
   final Object? error;
+  @override
+  final DateTime? showFilterOptionSheet;
   final List<TeamModel> _teams;
   @override
   @JsonKey()
@@ -126,10 +164,13 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
   @override
   @JsonKey()
   final bool loading;
+  @override
+  @JsonKey()
+  final TeamFilterOption selectedFilter;
 
   @override
   String toString() {
-    return 'TeamListViewState(error: $error, teams: $teams, loading: $loading)';
+    return 'TeamListViewState(error: $error, showFilterOptionSheet: $showFilterOptionSheet, teams: $teams, loading: $loading, selectedFilter: $selectedFilter)';
   }
 
   @override
@@ -138,16 +179,22 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
         (other.runtimeType == runtimeType &&
             other is _$TeamListViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.showFilterOptionSheet, showFilterOptionSheet) ||
+                other.showFilterOptionSheet == showFilterOptionSheet) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
-            (identical(other.loading, loading) || other.loading == loading));
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.selectedFilter, selectedFilter) ||
+                other.selectedFilter == selectedFilter));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      showFilterOptionSheet,
       const DeepCollectionEquality().hash(_teams),
-      loading);
+      loading,
+      selectedFilter);
 
   @JsonKey(ignore: true)
   @override
@@ -160,15 +207,21 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
 abstract class _TeamListViewState implements TeamListViewState {
   const factory _TeamListViewState(
       {final Object? error,
+      final DateTime? showFilterOptionSheet,
       final List<TeamModel> teams,
-      final bool loading}) = _$TeamListViewStateImpl;
+      final bool loading,
+      final TeamFilterOption selectedFilter}) = _$TeamListViewStateImpl;
 
   @override
   Object? get error;
   @override
+  DateTime? get showFilterOptionSheet;
+  @override
   List<TeamModel> get teams;
   @override
   bool get loading;
+  @override
+  TeamFilterOption get selectedFilter;
   @override
   @JsonKey(ignore: true)
   _$$TeamListViewStateImplCopyWith<_$TeamListViewStateImpl> get copyWith =>

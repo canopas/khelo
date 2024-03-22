@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:data/service/auth/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -41,9 +42,9 @@ class PhoneVerificationViewNotifier
 
   void updateOTP(String otp) {
     state = state.copyWith(
-      otp: otp,
-      enableVerify: otp.length == 6,
-    );
+        otp: otp,
+        enableVerify: otp.length == 6,
+        showErrorVerificationCodeText: false);
 
     if (!firstAutoVerificationComplete && otp.length == 6) {
       verifyOTP();
@@ -61,7 +62,7 @@ class PhoneVerificationViewNotifier
 
   Future<void> resendCode({required String phone}) async {
     try {
-      state = state.copyWith(error: null);
+      state = state.copyWith(showErrorVerificationCodeText: false);
       updateResendCodeTimerDuration();
       _authService.verifyPhoneNumber(
         phoneNumber: phone,
@@ -83,10 +84,21 @@ class PhoneVerificationViewNotifier
 
   Future<void> verifyOTP() async {
     if (state.verificationId == null) return;
-    state = state.copyWith(verifying: true, error: null);
+    state =
+        state.copyWith(verifying: true, showErrorVerificationCodeText: false);
     try {
       await _authService.verifyOTP(state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "invalid-verification-code") {
+        state = state.copyWith(
+            verifying: false, showErrorVerificationCodeText: true);
+      } else {
+        //network-request-failed
+        state = state.copyWith(verifying: false, error: e);
+      }
+      debugPrint(
+          "PhoneVerificationViewNotifier: error in FirebaseAuthException: verifyOTP -> $e");
     } catch (e) {
       state = state.copyWith(verifying: false, error: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");
@@ -106,6 +118,7 @@ class PhoneVerificationState with _$PhoneVerificationState {
     @Default(false) bool verifying,
     @Default(false) bool enableVerify,
     @Default(false) bool isVerificationComplete,
+    @Default(false) bool showErrorVerificationCodeText,
     String? verificationId,
     @Default('') String otp,
     @Default(Duration(seconds: 30)) Duration activeResendDuration,

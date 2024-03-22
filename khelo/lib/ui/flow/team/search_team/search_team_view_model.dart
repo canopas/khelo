@@ -30,7 +30,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
     try {
-      final res = await _teamService.getTeams();
+      final res = await _teamService.getUserRelatedTeams();
 
       final filteredResult =
           res.where((element) => !excludedIds.contains(element.id)).toList();
