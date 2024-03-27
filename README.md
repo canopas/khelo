@@ -42,7 +42,17 @@ It's like having a personal assistant for your team!
 
 
 ## Features 🌟🌟
-Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
+
+- **Profile Management**: Create and manage profiles for players, coaches, and team managers effortlessly.
+- **Team Creation**: Form your dream team by adding players and managing team compositions with ease..
+- **Player Management**: Keep track of player details, including statistics, performance history, and personal information.
+- **Match Data Recording**:  Record detailed match data, including scores, wickets, runs, and other custom metrics, providing a comprehensive overview of each game.
+- **Performance Tracking**:  Monitor and analyze player performance over time, enabling informed decision-making and strategic planning.
+- **Team Statistics**: Gain insights into team performance through comprehensive statistical analysis and reporting tools.
+- **Toss Details**: Record toss details, including which team won the toss and their choice, enhancing match documentation and analysis.
+
+ > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
+
 
 ## Created & Maintained By
 Khelo is owned and maintained by the Canopas team.
