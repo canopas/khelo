@@ -12,6 +12,31 @@ It's like having a personal assistant for your team!
 ## Download App
 
 ## Screenshots
+<table>
+  <tr>
+  <th width="32%" >Matches Record/Join Space</th>
+  <th  width="32%" >Score Board</th>
+   <th  width="32%" >Performance Record</th>
+  </tr>
+    <tr>
+  <td><img src="./screenshots/matches-stat.png" /></td>
+  <td> <img src="./screenshots/score-board.png"  /> </td>
+  <td> <img src="./screenshots/my-stat.png" /> </td>
+  </tr>  
+</table>
+
+<table>
+  <tr>
+  <th width="32%" >Start new Match</th>
+  <th  width="32%" >Add Players</th>
+   <th  width="32%" >Edit Profile Screen</th>
+  </tr>
+    <tr>
+  <td><img src="./screenshots/add-match.png" /></td>
+  <td> <img src="./screenshots/add-team-member.png"  /> </td>
+  <td> <img src="./screenshots/edit-profile.png" /> </td>
+  </tr>  
+</table>
 
 
 ## Features 🌟🌟
