@@ -1,28 +1,30 @@
-## 🏏 Khelo- From Streets to Stadiums
+<p align="center"> <a href="https://canopas.com/contact"><img src="./cta/cta_banner.png"></a></p>
+
+# Khelo- From Streets to Stadiums🏏
 Khelo - an open source ultimate companion for all things cricket!
 
 ------ COVER IMAGE--------
 
-### Overview
+## Overview
 Welcome to Khelo, an open source multiplatform app is designed to cater to all your cricket needs, whether you're cricket enthusiast, a team manager, or a player. With a wide array of features, our app simplifies the management of cricket teams, players, matches, and performance records.
 It's like having a personal assistant for your team!
 
 
-### Download App
+## Download App
 
-### Screenshots
+## Screenshots
 
 
 ## Features 🌟🌟
 Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
-### Created & Maintained By
+## Created & Maintained By
 Khelo is owned and maintained by the Canopas team.
 
 You can follow them on Twitter at @canopassoftware for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
 
-### Licence 📄
+## Licence 📄
 **Khelo** is licensed under the Apache License, Version 2.0.
 
 `Copyright 2024 Canopas Software LLP
