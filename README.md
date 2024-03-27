@@ -11,6 +11,8 @@ It's like having a personal assistant for your team!
 
 ## Download App
 
+<img src="./cta/play-store.png" width="200" ></img> <img src="./cta/app-store.png" width="200"></img>
+
 ## Screenshots
 <table>
   <tr>
