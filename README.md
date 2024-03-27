@@ -9,6 +9,8 @@ Khelo - an open-source ultimate companion for all things cricket!
 Welcome to Khelo, an open-source multi-platform app designed to cater to all your cricket needs, whether you're a cricket enthusiast, a team manager, or a player. With a wide array of features, our app simplifies the management of cricket teams, players, matches, and performance records.
 It's like having a personal assistant for your team!
 
+Khelo is an open-source Flutter project written in Dart using Firestore database, Firebase authentication, and cloud firestore. This project uses Riverpod as state management library and it adapts clean architecture approach, organized into multiple modules.
+
 ## Download App
 
 <img src="./cta/google play.png" width="200" ></img> <img src="./cta/app store.png" width="200"></img>
