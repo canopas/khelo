@@ -66,6 +66,7 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             state = state.copyWith(verifying: false, signInSuccess: true);
           },
           onVerificationFailed: (error) {
+            print(error);
             state = state.copyWith(verifying: false, error: error);
           },
           onCodeSent: (verificationId, _) {
