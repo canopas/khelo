@@ -35,33 +35,35 @@ class IsBoundaryDialog extends StatelessWidget {
       actionsAlignment: MainAxisAlignment.spaceAround,
       actionsOverflowButtonSpacing: 8,
       actions: [
-        OnTapScale(
-          onTap: () {
-            context.pop(false);
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Text(
-              context.l10n.common_no_title,
-              style: AppTextStyle.button
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ),
+        _actionButton(
+          context,
+          title: context.l10n.common_no_title,
+          onTap: () => context.pop(false),
         ),
-        OnTapScale(
-          onTap: () {
-            context.pop(true);
-          },
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-            child: Text(
-              context.l10n.common_yes_title,
-              style: AppTextStyle.button
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ),
+        _actionButton(
+          context,
+          title: context.l10n.common_yes_title,
+          onTap: () => context.pop(true),
         ),
       ],
+    );
+  }
+
+  Widget _actionButton(
+    BuildContext context, {
+    required String title,
+    required Function() onTap,
+  }) {
+    return OnTapScale(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Text(
+          title,
+          style: AppTextStyle.button
+              .copyWith(color: context.colorScheme.textPrimary),
+        ),
+      ),
     );
   }
 }

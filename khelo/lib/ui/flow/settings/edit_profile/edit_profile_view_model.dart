@@ -242,6 +242,7 @@ class EditProfileState with _$EditProfileState {
     required TextEditingController nameController,
     required TextEditingController emailController,
     required TextEditingController locationController,
+    UserModel? currentUser,
     @Default(null) String? imageUrl,
     @Default(null) UserGender? gender,
     @Default(null) BattingStyle? battingStyle,
@@ -251,6 +252,5 @@ class EditProfileState with _$EditProfileState {
     @Default(false) bool isImageUploading,
     @Default(false) bool isSaved,
     @Default(false) bool isSaveInProgress,
-    UserModel? currentUser,
   }) = _EditProfileState;
 }

@@ -151,8 +151,6 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           ),
           _teamProfileCell(context, notifier, state, team)
         ],
-
-        // show team member of current user
         if (state.userTeams.isNotEmpty) ...[
           _sectionTitle(context, context.l10n.search_team_your_teams_title),
           for (final team in state.userTeams) ...[
@@ -166,14 +164,18 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     );
   }
 
-  Widget _teamProfileCell(BuildContext context, SearchTeamViewNotifier notifier,
-      SearchTeamState state, TeamModel team) {
+  Widget _teamProfileCell(
+    BuildContext context,
+    SearchTeamViewNotifier notifier,
+    SearchTeamState state,
+    TeamModel team,
+  ) {
     return OnTapScale(
         onTap: () {
           notifier.onTeamCellTap(team);
         },
         onLongTap: () {
-          // TODO: show members of team in dialog (play haptic feedback).
+          // TODO: play haptic feedback.
           TeamMemberDialog.show<bool>(context, team: team);
         },
         child: Row(
@@ -203,7 +205,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                           .copyWith(color: context.colorScheme.textSecondary),
                       children: [
                         TextSpan(
-                            text: " - ${team.players?.length ?? 0} Members")
+                            text:
+                                " - ${context.l10n.search_team_member_title(team.players?.length ?? 0)}")
                       ])),
                 ],
               ),

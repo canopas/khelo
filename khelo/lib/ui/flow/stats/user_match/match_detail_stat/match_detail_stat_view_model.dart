@@ -25,8 +25,10 @@ class MatchDetailStatViewNotifier
   final BallScoreService _ballScoreService;
 
   MatchDetailStatViewNotifier(
-      this._matchService, this._inningService, this._ballScoreService)
-      : super(const MatchDetailStatViewState());
+    this._matchService,
+    this._inningService,
+    this._ballScoreService,
+  ) : super(const MatchDetailStatViewState());
 
   void setData(String matchId) {
     state = state.copyWith(matchId: matchId);
@@ -79,12 +81,12 @@ class MatchDetailStatViewNotifier
 class MatchDetailStatViewState with _$MatchDetailStatViewState {
   const factory MatchDetailStatViewState({
     Object? error,
-    @Default(false) bool loading,
     String? matchId,
     MatchModel? match,
     InningModel? firstInning,
     InningModel? secondInning,
     List<BallScoreModel>? firstScore,
     List<BallScoreModel>? secondScore,
+    @Default(false) bool loading,
   }) = _MatchDetailStatViewState;
 }

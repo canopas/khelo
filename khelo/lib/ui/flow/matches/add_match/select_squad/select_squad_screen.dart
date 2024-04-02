@@ -9,7 +9,9 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/select_admin_and_captain_dialog.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -82,8 +84,11 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     );
   }
 
-  Widget _playingSquadList(BuildContext context,
-      SelectSquadViewNotifier notifier, SelectSquadViewState state) {
+  Widget _playingSquadList(
+    BuildContext context,
+    SelectSquadViewNotifier notifier,
+    SelectSquadViewState state,
+  ) {
     return Wrap(
       children: [
         _sectionTitle(
@@ -95,15 +100,18 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           _emptyList(context.l10n.select_squad_empty_squad_text)
         ] else ...[
           for (final member in state.squad) ...[
-            _userProfileCell(context, notifier, member, true)
+            _userProfileCell(context, notifier, member: member, isRemove: true)
           ],
         ],
       ],
     );
   }
 
-  Widget _teamMemberList(BuildContext context, SelectSquadViewNotifier notifier,
-      SelectSquadViewState state) {
+  Widget _teamMemberList(
+    BuildContext context,
+    SelectSquadViewNotifier notifier,
+    SelectSquadViewState state,
+  ) {
     return Wrap(
       children: [
         _sectionTitle(context, context.l10n.select_squad_rest_of_team_title),
@@ -112,7 +120,11 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
         ] else ...[
           for (final member in getFilteredList(state)) ...[
             _userProfileCell(
-                context, notifier, MatchPlayer(player: member), false)
+              context,
+              notifier,
+              member: MatchPlayer(player: member),
+              isRemove: false,
+            )
           ],
         ],
       ],
@@ -167,11 +179,15 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     );
   }
 
-  Widget _userProfileCell(BuildContext context,
-      SelectSquadViewNotifier notifier, MatchPlayer member, bool isRemove) {
+  Widget _userProfileCell(
+    BuildContext context,
+    SelectSquadViewNotifier notifier, {
+    required MatchPlayer member,
+    required bool isRemove,
+  }) {
     return GestureDetector(
         onTap: () {
-          // TODO: show userDetail Sheet
+          UserDetailSheet.show(context, member.player);
         },
         child: Row(
           children: [
@@ -203,10 +219,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                       height: 2,
                     ),
                     Text(
-                      context.l10n.common_obscure_phone_number_text(
-                          member.player.phone!.substring(1, 3),
-                          member.player.phone!
-                              .substring(member.player.phone!.length - 2)),
+                      member.player.phone
+                          .format(context, StringFormats.obscurePhoneNumber),
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary),
                     ),
@@ -214,13 +228,22 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                 ],
               ),
             ),
-            _trailingButton(context, notifier, member, isRemove)
+            _trailingButton(
+              context,
+              notifier,
+              member: member,
+              isRemove: isRemove,
+            )
           ],
         ));
   }
 
-  Widget _trailingButton(BuildContext context, SelectSquadViewNotifier notifier,
-      MatchPlayer member, bool isRemove) {
+  Widget _trailingButton(
+    BuildContext context,
+    SelectSquadViewNotifier notifier, {
+    required MatchPlayer member,
+    required bool isRemove,
+  }) {
     if (isRemove) {
       return IconButton(
           onPressed: () => notifier.removeFromSquad(member.player),

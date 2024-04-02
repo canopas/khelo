@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'match_list_view_model.dart';
+part of 'home_view_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,29 +15,29 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$MatchListViewState {
+mixin _$HomeViewState {
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
-  List<MatchModel>? get matches => throw _privateConstructorUsedError;
+  List<MatchModel> get matches => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $MatchListViewStateCopyWith<MatchListViewState> get copyWith =>
+  $HomeViewStateCopyWith<HomeViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MatchListViewStateCopyWith<$Res> {
-  factory $MatchListViewStateCopyWith(
-          MatchListViewState value, $Res Function(MatchListViewState) then) =
-      _$MatchListViewStateCopyWithImpl<$Res, MatchListViewState>;
+abstract class $HomeViewStateCopyWith<$Res> {
+  factory $HomeViewStateCopyWith(
+          HomeViewState value, $Res Function(HomeViewState) then) =
+      _$HomeViewStateCopyWithImpl<$Res, HomeViewState>;
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel>? matches});
+  $Res call({Object? error, bool loading, List<MatchModel> matches});
 }
 
 /// @nodoc
-class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
-    implements $MatchListViewStateCopyWith<$Res> {
-  _$MatchListViewStateCopyWithImpl(this._value, this._then);
+class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
+    implements $HomeViewStateCopyWith<$Res> {
+  _$HomeViewStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -49,7 +49,7 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
   $Res call({
     Object? error = freezed,
     Object? loading = null,
-    Object? matches = freezed,
+    Object? matches = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -57,31 +57,31 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      matches: freezed == matches
+      matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$MatchListViewStateImplCopyWith<$Res>
-    implements $MatchListViewStateCopyWith<$Res> {
-  factory _$$MatchListViewStateImplCopyWith(_$MatchListViewStateImpl value,
-          $Res Function(_$MatchListViewStateImpl) then) =
-      __$$MatchListViewStateImplCopyWithImpl<$Res>;
+abstract class _$$HomeViewStateImplCopyWith<$Res>
+    implements $HomeViewStateCopyWith<$Res> {
+  factory _$$HomeViewStateImplCopyWith(
+          _$HomeViewStateImpl value, $Res Function(_$HomeViewStateImpl) then) =
+      __$$HomeViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel>? matches});
+  $Res call({Object? error, bool loading, List<MatchModel> matches});
 }
 
 /// @nodoc
-class __$$MatchListViewStateImplCopyWithImpl<$Res>
-    extends _$MatchListViewStateCopyWithImpl<$Res, _$MatchListViewStateImpl>
-    implements _$$MatchListViewStateImplCopyWith<$Res> {
-  __$$MatchListViewStateImplCopyWithImpl(_$MatchListViewStateImpl _value,
-      $Res Function(_$MatchListViewStateImpl) _then)
+class __$$HomeViewStateImplCopyWithImpl<$Res>
+    extends _$HomeViewStateCopyWithImpl<$Res, _$HomeViewStateImpl>
+    implements _$$HomeViewStateImplCopyWith<$Res> {
+  __$$HomeViewStateImplCopyWithImpl(
+      _$HomeViewStateImpl _value, $Res Function(_$HomeViewStateImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -89,27 +89,29 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? loading = null,
-    Object? matches = freezed,
+    Object? matches = null,
   }) {
-    return _then(_$MatchListViewStateImpl(
+    return _then(_$HomeViewStateImpl(
       error: freezed == error ? _value.error : error,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      matches: freezed == matches
+      matches: null == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$MatchListViewStateImpl implements _MatchListViewState {
-  const _$MatchListViewStateImpl(
-      {this.error, this.loading = false, final List<MatchModel>? matches})
+class _$HomeViewStateImpl implements _HomeViewState {
+  const _$HomeViewStateImpl(
+      {this.error,
+      this.loading = false,
+      final List<MatchModel> matches = const []})
       : _matches = matches;
 
   @override
@@ -117,26 +119,25 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
   @override
   @JsonKey()
   final bool loading;
-  final List<MatchModel>? _matches;
+  final List<MatchModel> _matches;
   @override
-  List<MatchModel>? get matches {
-    final value = _matches;
-    if (value == null) return null;
+  @JsonKey()
+  List<MatchModel> get matches {
     if (_matches is EqualUnmodifiableListView) return _matches;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_matches);
   }
 
   @override
   String toString() {
-    return 'MatchListViewState(error: $error, loading: $loading, matches: $matches)';
+    return 'HomeViewState(error: $error, loading: $loading, matches: $matches)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MatchListViewStateImpl &&
+            other is _$HomeViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             const DeepCollectionEquality().equals(other._matches, _matches));
@@ -152,25 +153,24 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MatchListViewStateImplCopyWith<_$MatchListViewStateImpl> get copyWith =>
-      __$$MatchListViewStateImplCopyWithImpl<_$MatchListViewStateImpl>(
-          this, _$identity);
+  _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
+      __$$HomeViewStateImplCopyWithImpl<_$HomeViewStateImpl>(this, _$identity);
 }
 
-abstract class _MatchListViewState implements MatchListViewState {
-  const factory _MatchListViewState(
+abstract class _HomeViewState implements HomeViewState {
+  const factory _HomeViewState(
       {final Object? error,
       final bool loading,
-      final List<MatchModel>? matches}) = _$MatchListViewStateImpl;
+      final List<MatchModel> matches}) = _$HomeViewStateImpl;
 
   @override
   Object? get error;
   @override
   bool get loading;
   @override
-  List<MatchModel>? get matches;
+  List<MatchModel> get matches;
   @override
   @JsonKey(ignore: true)
-  _$$MatchListViewStateImplCopyWith<_$MatchListViewStateImpl> get copyWith =>
+  _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

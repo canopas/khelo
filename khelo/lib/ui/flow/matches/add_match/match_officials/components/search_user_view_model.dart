@@ -54,8 +54,8 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
 class SearchUserViewState with _$SearchUserViewState {
   const factory SearchUserViewState({
     required TextEditingController searchController,
-    @Default([]) List<UserModel> searchedUsers,
-    UserModel? selectedUser,
     Object? error,
+    UserModel? selectedUser,
+    @Default([]) List<UserModel> searchedUsers,
   }) = _SearchUserViewState;
 }

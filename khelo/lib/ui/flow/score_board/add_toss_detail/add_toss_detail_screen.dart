@@ -126,9 +126,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
                     image: getTossDecisionImage(decision),
                     title: decision.getString(context),
                     isSelected: state.tossWinnerDecision == decision,
-                    onTap: () {
-                      notifier.onOptionSelect(decision);
-                    },
+                    onTap: () => notifier.onOptionSelect(decision),
                   ))
               .toList(),
         ),
@@ -216,7 +214,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
   }) {
     return Expanded(
       child: OnTapScale(
-        onTap: () => onTap(),
+        onTap: onTap,
         child: Column(
           children: [
             Container(
@@ -251,8 +249,11 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     );
   }
 
-  Widget _stickyButton(BuildContext context, AddTossDetailViewNotifier notifier,
-      AddTossDetailState state) {
+  Widget _stickyButton(
+    BuildContext context,
+    AddTossDetailViewNotifier notifier,
+    AddTossDetailState state,
+  ) {
     return BottomStickyOverlay(
       child: PrimaryButton(
         context.l10n.common_next_title,

@@ -115,13 +115,13 @@ class PhoneVerificationViewNotifier
 @freezed
 class PhoneVerificationState with _$PhoneVerificationState {
   const factory PhoneVerificationState({
+    Object? error,
+    String? verificationId,
     @Default(false) bool verifying,
     @Default(false) bool enableVerify,
     @Default(false) bool isVerificationComplete,
     @Default(false) bool showErrorVerificationCodeText,
-    String? verificationId,
     @Default('') String otp,
     @Default(Duration(seconds: 30)) Duration activeResendDuration,
-    Object? error,
   }) = _PhoneVerificationState;
 }

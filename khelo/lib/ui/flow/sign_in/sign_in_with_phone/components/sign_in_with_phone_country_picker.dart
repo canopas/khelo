@@ -41,9 +41,7 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
                     filter: filter,
                   ),
                   codeBuilder: (code) => GestureDetector(
-                    onTap: () {
-                      context.pop(code);
-                    },
+                    onTap: () => context.pop(code),
                     child: DefaultCountryCodeListItemView(
                       code: code,
                       dialCodeStyle: AppTextStyle.body1

@@ -24,7 +24,7 @@ class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
   Future<void> loadUserMatches() async {
     state = state.copyWith(loading: true);
     try {
-      final matches = await _matchService.getCurrentUserMatches();
+      final matches = await _matchService.getCurrentUserPlayedMatches();
       state = state.copyWith(matches: matches, loading: false);
     } catch (e) {
       state = state.copyWith(error: e, loading: false);

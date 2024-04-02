@@ -37,16 +37,12 @@ class MatchCompleteDialog extends ConsumerWidget {
         PrimaryButton(
           expanded: false,
           context.l10n.score_board_undo_last_ball_title,
-          onPressed: () {
-            context.pop(false);
-          },
+          onPressed: () => context.pop(false),
         ),
         PrimaryButton(
           context.l10n.score_board_end_match_title,
           expanded: false,
-          onPressed: () {
-            context.pop(true);
-          },
+          onPressed: () => context.pop(true),
         ),
       ],
     );

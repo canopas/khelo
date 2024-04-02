@@ -17,11 +17,13 @@ class TeamListScreen extends ConsumerWidget {
   const TeamListScreen({super.key});
 
   void _observeShowFilterOptionSheet(
-      BuildContext context, WidgetRef ref, TeamListViewNotifier notifier) {
+    BuildContext context,
+    WidgetRef ref,
+  ) {
     ref.listen(
         teamListViewStateProvider
             .select((value) => value.showFilterOptionSheet), (previous, next) {
-      showFilterOptionSheet(context, notifier);
+      SelectFilterOptionSheet.show(context);
     });
   }
 
@@ -30,12 +32,15 @@ class TeamListScreen extends ConsumerWidget {
     final notifier = ref.watch(teamListViewStateProvider.notifier);
     final state = ref.watch(teamListViewStateProvider);
 
-    _observeShowFilterOptionSheet(context, ref, notifier);
+    _observeShowFilterOptionSheet(context, ref);
     return _teamList(context, notifier, state);
   }
 
-  Widget _teamList(BuildContext context, TeamListViewNotifier notifier,
-      TeamListViewState state) {
+  Widget _teamList(
+    BuildContext context,
+    TeamListViewNotifier notifier,
+    TeamListViewState state,
+  ) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -77,7 +82,10 @@ class TeamListScreen extends ConsumerWidget {
   }
 
   Widget _teamListCell(
-      BuildContext context, TeamListViewNotifier notifier, TeamModel team) {
+    BuildContext context,
+    TeamListViewNotifier notifier,
+    TeamModel team,
+  ) {
     return OnTapScale(
       onTap: () {
         AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
@@ -170,12 +178,5 @@ class TeamListScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  void showFilterOptionSheet(
-    BuildContext context,
-    TeamListViewNotifier notifier,
-  ) {
-    SelectFilterOptionSheet.show(context);
   }
 }

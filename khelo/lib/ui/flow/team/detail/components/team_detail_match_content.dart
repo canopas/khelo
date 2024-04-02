@@ -1,10 +1,10 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -40,7 +40,10 @@ class TeamDetailMatchContent extends ConsumerWidget {
           const SizedBox(
             height: 16,
           ),
-        ]
+        ],
+        const SizedBox(
+          height: 34,
+        ),
       ],
     );
   }
@@ -69,14 +72,12 @@ class TeamDetailMatchContent extends ConsumerWidget {
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
             Text(
-              "Overs: ${match.number_of_over.toString()}",
+              "${context.l10n.team_detail_overs_title} ${match.number_of_over.toString()}",
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textSecondary),
             ),
             Text(
-              DateFormat(
-                      'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
-                  .format(match.start_time),
+              match.start_time.format(context, DateFormatType.dateAndTime),
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textSecondary),
             ),

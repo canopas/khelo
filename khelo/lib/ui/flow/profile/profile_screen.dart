@@ -34,11 +34,12 @@ class ProfileScreen extends ConsumerWidget {
       title: context.l10n.tab_profile_title,
       actions: [
         TextButton(
-            onPressed: () {
-              _showSignOutAlert(context, () {
-                notifier.onSignOutTap();
-              });
-            },
+            onPressed: () => _showSignOutAlert(
+                  context,
+                  onSignOut: () {
+                    notifier.onSignOutTap();
+                  },
+                ),
             child: Text(
               context.l10n.common_sign_out_title,
               style: AppTextStyle.button
@@ -92,7 +93,9 @@ class ProfileScreen extends ConsumerWidget {
               child: state.currentUser?.profile_img_url == null
                   ? Text(state.currentUser?.nameInitial ?? '?',
                       style: AppTextStyle.header1.copyWith(
-                          color: context.colorScheme.secondary, fontSize: 40))
+                        color: context.colorScheme.secondary,
+                        fontSize: 40,
+                      ))
                   : null,
             ),
             const SizedBox(
@@ -150,7 +153,10 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 
-  void _showSignOutAlert(BuildContext context, Function() onSignOut) {
+  void _showSignOutAlert(
+    BuildContext context, {
+    required Function() onSignOut,
+  }) {
     showAdaptiveDialog(
       context: context,
       builder: (context) {
@@ -160,9 +166,7 @@ class ProfileScreen extends ConsumerWidget {
               context.l10n.common_sign_out_title.toLowerCase())),
           actions: [
             TextButton(
-              onPressed: () {
-                context.pop();
-              },
+              onPressed: () => context.pop(),
               child: Text(
                 context.l10n.common_cancel_title,
                 style: TextStyle(color: context.colorScheme.textSecondary),

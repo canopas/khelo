@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -29,7 +30,11 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
 
     return AlertDialog(
       backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(context.l10n.select_squad_select_admin_captain_title),
+      title: Text(
+        context.l10n.select_squad_select_admin_captain_title,
+        style: AppTextStyle.subtitle1
+            .copyWith(color: context.colorScheme.textPrimary),
+      ),
       content: _selectCaptainContent(context, notifier, state),
       actionsAlignment: MainAxisAlignment.spaceAround,
       actions: [
@@ -50,8 +55,11 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
     );
   }
 
-  Widget _selectCaptainContent(BuildContext context,
-      SelectSquadViewNotifier notifier, SelectSquadViewState state) {
+  Widget _selectCaptainContent(
+    BuildContext context,
+    SelectSquadViewNotifier notifier,
+    SelectSquadViewState state,
+  ) {
     return SingleChildScrollView(
       child: Wrap(
         runSpacing: 16,
@@ -65,10 +73,11 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
   }
 
   Widget _userProfileCell(
-      BuildContext context,
-      SelectSquadViewNotifier notifier,
-      SelectSquadViewState state,
-      MatchPlayer member) {
+    BuildContext context,
+    SelectSquadViewNotifier notifier,
+    SelectSquadViewState state,
+    MatchPlayer member,
+  ) {
     return Row(
       children: [
         ImageAvatar(
@@ -99,10 +108,8 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
                   height: 2,
                 ),
                 Text(
-                  context.l10n.common_obscure_phone_number_text(
-                      member.player.phone!.substring(1, 3),
-                      member.player.phone!
-                          .substring(member.player.phone!.length - 2)),
+                  member.player.phone
+                      .format(context, StringFormats.obscurePhoneNumber),
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),
@@ -122,25 +129,33 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
       spacing: 8,
       children: [
         _captainAdminButton(
-            context,
-            context.l10n.select_squad_captain_short_title,
-            state.captainId == member.player.id, () {
-          notifier.onCaptainOrAdminSelect(
-              PlayerMatchRole.captain, member.player.id);
-        }),
+          context,
+          title: context.l10n.select_squad_captain_short_title,
+          isSelected: state.captainId == member.player.id,
+          onTap: () => notifier.onCaptainOrAdminSelect(
+            PlayerMatchRole.captain,
+            member.player.id,
+          ),
+        ),
         _captainAdminButton(
-            context,
-            context.l10n.select_squad_admin_short_title,
-            state.adminId == member.player.id, () {
-          notifier.onCaptainOrAdminSelect(
-              PlayerMatchRole.admin, member.player.id);
-        }),
+          context,
+          title: context.l10n.select_squad_admin_short_title,
+          isSelected: state.adminId == member.player.id,
+          onTap: () => notifier.onCaptainOrAdminSelect(
+            PlayerMatchRole.admin,
+            member.player.id,
+          ),
+        ),
       ],
     );
   }
 
   Widget _captainAdminButton(
-      BuildContext context, String title, bool isSelected, Function() onTap) {
+    BuildContext context, {
+    required String title,
+    required bool isSelected,
+    required Function() onTap,
+  }) {
     return OnTapScale(
         onTap: () {
           if (!isSelected) {

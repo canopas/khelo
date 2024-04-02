@@ -38,7 +38,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
       state = state.copyWith(userTeams: filteredResult, loading: false);
     } catch (e) {
       state = state.copyWith(loading: false);
-      debugPrint("SearchTeamViewNotifier: error while loading team list");
+      debugPrint("SearchTeamViewNotifier: error while loading team list -> $e");
     }
   }
 
@@ -76,10 +76,10 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
 class SearchTeamState with _$SearchTeamState {
   const factory SearchTeamState({
     required TextEditingController searchController,
+    Object? error,
+    TeamModel? selectedTeam,
     @Default([]) List<TeamModel> searchResults,
     @Default([]) List<TeamModel> userTeams,
-    TeamModel? selectedTeam,
     @Default(false) bool loading,
-    Object? error,
   }) = _SearchTeamState;
 }

@@ -78,9 +78,9 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
 class AddTeamMemberState with _$AddTeamMemberState {
   const factory AddTeamMemberState({
     required TextEditingController searchController,
+    Object? error,
     @Default([]) List<UserModel> searchedUsers,
     @Default([]) List<UserModel> selectedUsers,
-    Object? error,
     @Default(false) bool isAdded,
     @Default(false) bool isAddInProgress,
   }) = _AddTeamMemberState;

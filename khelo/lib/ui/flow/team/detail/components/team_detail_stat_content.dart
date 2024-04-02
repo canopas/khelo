@@ -57,7 +57,8 @@ class TeamDetailStatContent extends ConsumerWidget {
         const SizedBox(height: 16),
         _highestAndLowestRunCount(context, state),
         const SizedBox(height: 16),
-        _runRateCount(context, state)
+        _runRateCount(context, state),
+        const SizedBox(height: 50),
       ],
     );
   }

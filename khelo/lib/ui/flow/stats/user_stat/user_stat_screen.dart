@@ -285,7 +285,7 @@ class UserStatScreen extends ConsumerWidget {
       children: [
         _sectionTitle(
             context, context.l10n.my_stat_stats_bowling_statics_title),
-        _runScoredView(context, context.l10n.my_stat_stats_wicket_taken_title,
+        _runScoredView(context, context.l10n.common_wicket_taken_title,
             wickets.toString()),
         const SizedBox(height: 16),
         _averageAndStrikeRateView(context, state, true),
@@ -354,14 +354,18 @@ class UserStatScreen extends ConsumerWidget {
     return Row(
       children: [
         Expanded(
-            child: _averageCellView(context,
-                context.l10n.my_stat_stats_run_out_title, runOut.toString())),
+            child: _averageCellView(
+          context,
+          context.l10n.my_stat_stats_run_out_title,
+          runOut.toString(),
+        )),
         const SizedBox(width: 16),
         Expanded(
             child: _averageCellView(
-                context,
-                context.l10n.my_stat_stats_stumping_title,
-                stumping.toString())),
+          context,
+          context.l10n.my_stat_stats_stumping_title,
+          stumping.toString(),
+        )),
       ],
     );
   }

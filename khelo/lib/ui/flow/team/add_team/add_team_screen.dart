@@ -11,6 +11,7 @@ import 'package:khelo/components/image_picker_sheet.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -90,9 +91,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           actionButton(
             context,
             onPressed: () {
-              _showDeleteAlert(context, () {
-                notifier.onTeamDelete();
-              });
+              _showDeleteAlert(context, onDelete: notifier.onTeamDelete);
             },
             icon: Icon(
               Icons.delete_outline,
@@ -245,7 +244,10 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
   }
 
   Widget _profileImageView(
-      BuildContext context, AddTeamViewNotifier notifier, AddTeamState state) {
+    BuildContext context,
+    AddTeamViewNotifier notifier,
+    AddTeamState state,
+  ) {
     return Center(
       child: SizedBox(
         height: profileViewHeight,
@@ -308,8 +310,12 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     );
   }
 
-  Widget _userProfileCell(BuildContext context, AddTeamViewNotifier notifier,
-      AddTeamState state, UserModel user) {
+  Widget _userProfileCell(
+    BuildContext context,
+    AddTeamViewNotifier notifier,
+    AddTeamState state,
+    UserModel user,
+  ) {
     return Row(
       children: [
         ImageAvatar(
@@ -340,9 +346,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   height: 2,
                 ),
                 Text(
-                  context.l10n.common_obscure_phone_number_text(
-                      user.phone!.substring(1, 3),
-                      user.phone!.substring(user.phone!.length - 2)),
+                  user.phone.format(context, StringFormats.obscurePhoneNumber),
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),
@@ -367,14 +371,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             !state.isImageUploading &&
             !state.checkingForAvailability,
         progress: state.isAddInProgress,
-        onPressed: () {
-          notifier.onAddBtnTap();
-        },
+        onPressed: () => notifier.onAddBtnTap(),
       ),
     );
   }
 
-  void _showDeleteAlert(BuildContext context, Function() onDelete) {
+  void _showDeleteAlert(
+    BuildContext context, {
+    required Function() onDelete,
+  }) {
     showAdaptiveDialog(
       context: context,
       builder: (context) {

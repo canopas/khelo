@@ -24,8 +24,9 @@ class AddMatchOfficialsViewNotifier
     if (isAlreadyAdded(type, user.id)) {
       return;
     }
-    state =
-        state.copyWith(officials: [...state.officials, Officials(type, user)]);
+    state = state.copyWith(
+      officials: [...state.officials, Officials(type, user)],
+    );
   }
 
   void removeOfficial(MatchOfficials type, UserModel user) {
