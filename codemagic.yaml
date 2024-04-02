@@ -72,6 +72,9 @@ workflows:
         distribution_type: app_store
         bundle_identifier: com.canopas.khelo
 
+      groups:
+        - app_credentials
+
       vars:
         APP_ID: 6480175424
       flutter: stable
@@ -112,7 +115,7 @@ workflows:
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
-          --export-options-plist=$CM_BUILD_DIR/khelo/ios/Runner/export_options.plist
+          --export-options-plist=$CM_BUILD_DIR/khelo/ios/Runner/ExportOptions.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
