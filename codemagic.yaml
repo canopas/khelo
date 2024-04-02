@@ -20,9 +20,10 @@ workflows:
 
       - name: Decode variables
         script: |
-          cd khelo
           echo $GOOGLE_SERVICES_JSON | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
           echo $FIREBASE_OPTIONS | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+          echo Decoded google-services.json!
+          ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
       - name: Get Flutter Packages
         script: |
