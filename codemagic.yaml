@@ -114,7 +114,7 @@ workflows:
         script: |
           cd khelo
           flutter build ipa --release \
-          --export-options-plist=ios/Runner/ExportOptions.plist
+          --export-options-plist=/Users/builderExportOptions.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
