@@ -110,12 +110,11 @@ workflows:
           flutter clean
           flutter pub get
 
-  
-
       - name: Flutter build ipa
         script: |
+          cd khelo
           flutter build ipa --release \
-          --export-options-plist=$CM_BUILD_DIR/khelo/ios/Runner/ExportOptions.plist
+          --export-options-plist=ios/Runner/ExportOptions.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
