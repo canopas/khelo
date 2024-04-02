@@ -16,14 +16,13 @@ workflows:
 
       - name: Set up local.properties
         script: |
-          cd khelo
-          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/khelo/android/local.properties"
 
       - name: Decode variables
         script: |
           cd khelo
-          echo $GOOGLE_SERVICES_JSON | base64 --decode > android/app/google-services.json
-          echo $FIREBASE_OPTIONS | base64 --decode > lib/firebase_options.dart
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
+          echo $FIREBASE_OPTIONS | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
       - name: Get Flutter Packages
         script: |
