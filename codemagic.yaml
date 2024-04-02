@@ -9,7 +9,7 @@ workflows:
       android_signing:
         - ANDROID_KEYSTORE
       groups:
-        - khelo
+        - google_credentials
 
 
     scripts:
