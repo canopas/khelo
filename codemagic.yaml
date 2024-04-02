@@ -1,0 +1,57 @@
+workflows:
+
+  android-workflow-id:
+    name: Android build
+    instance_type: mac_mini_m1
+    max_build_duration: 120
+    environment:
+      flutter: stable
+      android_signing:
+        - ANDROID_KEYSTORE
+      groups:
+        - khelo
+
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties
+
+      - name: Get Flutter Packages
+        script: |
+
+          cd ../data
+          flutter clean
+          flutter pub get
+
+          cd ../style
+          flutter clean
+          flutter pub get
+          
+          cd khelo
+          flutter clean
+          flutter pub get
+
+      - name: Flutter analyze
+        script: |
+          flutter analyze
+
+      - name: Build AAB with Flutter
+        script:  |
+          flutter build appbundle --release \
+          build_name=1.0.2 \
+          build-number=3
+
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+
+    publishing:
+
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        submit_as_draft: true
+
+
+  ios-workflow-id:
+    name: iOS build
