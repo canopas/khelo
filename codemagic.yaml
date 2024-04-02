@@ -87,7 +87,7 @@ workflows:
       - name: Decode variables
         script: |
           echo $GOOGLE_SERVICE_PLIST_BASE64| base64 --decode > $CM_BUILD_DIR/khelo/ios/Runner/GoogleService-Info.plist
-          echo $FIREBASE_OPTIONS | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+          echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
           echo Decoded google-services.json!
           ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
