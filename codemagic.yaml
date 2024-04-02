@@ -42,8 +42,8 @@ workflows:
         script:  |
           cd khelo
           flutter build appbundle --release \
-          build_name=1.0.2 \
-          build-number=3
+          build_name=1.0.0 \
+          build-number=4
 
     artifacts:
       - build/**/outputs/**/*.aab
