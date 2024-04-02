@@ -120,7 +120,7 @@ workflows:
           
           flutter build ipa --release \
           --build-name=1.0.$BUILD_NUMBER \
-          --build-number=$BUILD_NUMBER
+          --build-number=$BUILD_NUMBER \
           --export-options-plist=$HOME/export_options.plist
 
     artifacts:
