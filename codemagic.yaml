@@ -112,7 +112,7 @@ workflows:
       - name: Flutter build ipa
         script: |
           flutter build ipa --release \
-          --export-options-plist=/Users/builder/export_options.plist
+          --export-options-plist=$CM_BUILD_DIR/khelo/ios/Runner/export_options.plist
 
     artifacts:
       - build/ios/ipa/*.ipa
