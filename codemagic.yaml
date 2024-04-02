@@ -13,10 +13,6 @@ workflows:
 
 
     scripts:
-      - name: Decode variables
-        script: |
-          echo $GOOGLE_SERVICES_JSON | base64 --decode > android/app/google-services.json
-          echo $FIREBASE_OPTIONS | base64 --decode > lib/firebase_options.dart
 
       - name: Set up local.properties
         script: |
@@ -36,6 +32,11 @@ workflows:
           cd khelo
           flutter clean
           flutter pub get
+
+      - name: Decode variables
+        script: |
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > android/app/google-services.json
+          echo $FIREBASE_OPTIONS | base64 --decode > lib/firebase_options.dart
 
       - name: Flutter analyze
         script: |
