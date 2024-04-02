@@ -18,7 +18,6 @@
     "common_next_title": "Next",
     "common_yes_title": "Yes",
     "common_no_title": "No",
-    "common_no_title": "No",
     "common_wicket_taken_title" : " Wicket taken",
     "common_not_specified_title": "Not Specified",
     "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
