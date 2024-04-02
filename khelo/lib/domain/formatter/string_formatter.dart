@@ -14,7 +14,7 @@ extension StringExtension on String? {
         }
         return context.l10n.common_obscure_phone_number_text(
             this!.substring(0, 3),
-            this!.substring(this!.length - 2)); // TODO: change to 1 if needed
+            this!.substring(this!.length - 2));
     }
   }
 }
