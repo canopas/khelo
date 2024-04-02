@@ -11,6 +11,7 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/page_views/expandable_page_view.dart';
 
 import 'components/team_detail_match_content.dart';
 import 'components/team_detail_stat_content.dart';
@@ -119,24 +120,22 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   }
 
   Widget _content(BuildContext context) {
-    return SizedBox(
-      height: 800,
-      child: Column(
-        children: [
-          _tabView(context),
-          Expanded(
-            child: PageView(
-              controller: _controller,
-              children: _tabs,
-              onPageChanged: (index) {
-                setState(() {
-                  notifier.onTabChange(index);
-                });
-              },
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        _tabView(context),
+        ExpandablePageView(
+          itemCount: _tabs.length,
+          controller: _controller,
+          itemBuilder: (context, index) {
+            return _tabs[index];
+          },
+          onPageChanged: (index) {
+            setState(() {
+              notifier.onTabChange(index);
+            });
+          },
+        ),
+      ],
     );
   }
 
@@ -194,5 +193,11 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

@@ -139,7 +139,6 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
                   context: context,
                   user: bowler?.player,
                   onTap: () async {
-                    // call itSelf for bowler selection
                     final player = await SelectPlayerSheet.show<
                             List<({String teamId, List<MatchPlayer> players})>>(
                         context,
@@ -191,7 +190,7 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }) {
     return Expanded(
       child: OnTapScale(
-        onTap: () => onTap(),
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -236,7 +235,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }
 
   Widget _specificPlayerSelectionView(
-      BuildContext context, ScoreBoardViewState state) {
+    BuildContext context,
+    ScoreBoardViewState state,
+  ) {
     final list = getFilteredList(state);
     return Stack(
       children: [
@@ -258,12 +259,12 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
                   childAspectRatio: 0.7),
               itemCount: list.length,
               itemBuilder: (context, index) {
-                return _userCell1(
+                return _userCellWithTag(
                   context: context,
                   state: state,
                   user: list[index].player,
                   tag: list[index].status == PlayerStatus.injured
-                      ? "Injured"
+                      ? context.l10n.score_board_injured_tag_title
                       : null,
                   isSelected: widget.type == PlayerSelectionType.batsMan
                       ? batsMan1?.player.id == list[index].player.id
@@ -316,7 +317,7 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         status != PlayerStatus.suspended;
   }
 
-  Widget _userCell1({
+  Widget _userCellWithTag({
     required BuildContext context,
     required ScoreBoardViewState state,
     UserModel? user,
@@ -324,9 +325,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     required bool isSelected,
     required Function() onTap,
   }) {
-    final overCount = _getOverCount(state, user?.id ?? "INVALID_ID");
+    final overCount = _getOverCount(state, user?.id ?? "INVALID ID");
     return OnTapScale(
-      onTap: () => onTap(),
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -435,4 +436,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }
 }
 
-enum PlayerSelectionType { bowler, batsMan, all, batsManAndBowler }
+enum PlayerSelectionType {
+  bowler,
+  batsMan,
+  all,
+  batsManAndBowler,
+}

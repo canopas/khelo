@@ -21,7 +21,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
     return AppPage(
       body: Builder(builder: (context) {
         return Padding(
-          padding: MediaQuery.of(context).padding +
+          padding: context.mediaQueryPadding +
               const EdgeInsets.symmetric(horizontal: 16.0),
           child: SizedBox(
             width: double.infinity,
@@ -49,9 +49,7 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                 ),
                 PrimaryButton(
                   context.l10n.intro_sign_in_btn_text,
-                  onPressed: () async {
-                    await AppRoute.phoneLogin.push(context);
-                  },
+                  onPressed: () => AppRoute.phoneLogin.push(context),
                 ),
               ],
             ),

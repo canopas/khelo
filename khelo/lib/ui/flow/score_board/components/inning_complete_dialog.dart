@@ -37,16 +37,12 @@ class InningCompleteDialog extends ConsumerWidget {
         PrimaryButton(
           expanded: false,
           context.l10n.score_board_undo_last_ball_title,
-          onPressed: () {
-            context.pop(false);
-          },
+          onPressed: () => context.pop(false),
         ),
         PrimaryButton(
           context.l10n.score_board_start_next_inning_title,
           expanded: false,
-          onPressed: () {
-            context.pop(true);
-          },
+          onPressed: () => context.pop(true),
         ),
       ],
     );
@@ -55,6 +51,7 @@ class InningCompleteDialog extends ConsumerWidget {
   Widget _inningContent(BuildContext context, ScoreBoardViewState state) {
     final teamName = _getCurrentTeamName(context, state);
     final extras = _getExtras(state);
+
     return Wrap(
       direction: Axis.vertical,
       children: [
@@ -65,24 +62,36 @@ class InningCompleteDialog extends ConsumerWidget {
         ),
         Row(
           children: [
-            _subTitleText(context, "${context.l10n.score_board_runs_title}:",
-                state.totalRuns.toString()),
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_runs_title}:",
+              subTitle: state.totalRuns.toString(),
+            ),
             const SizedBox(
               width: 16,
             ),
-            _subTitleText(context, "${context.l10n.score_board_wickets_text}:",
-                state.wicketCount.toString())
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_wickets_text}:",
+              subTitle: state.wicketCount.toString(),
+            )
           ],
         ),
         Row(
           children: [
-            _subTitleText(context, "${context.l10n.score_board_extras_title}:",
-                extras.toString()),
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_extras_title}:",
+              subTitle: extras.toString(),
+            ),
             const SizedBox(
               width: 16,
             ),
-            _subTitleText(context, "${context.l10n.score_board_overs_title}:",
-                _getOverCount(state))
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_overs_title}:",
+              subTitle: _getOverCount(state),
+            )
           ],
         ),
       ],
@@ -93,7 +102,11 @@ class InningCompleteDialog extends ConsumerWidget {
     return "${state.overCount - 1}.${state.ballCount}";
   }
 
-  Widget _subTitleText(BuildContext context, String title, String subTitle) {
+  Widget _subTitleText(
+    BuildContext context, {
+    required String title,
+    required String subTitle,
+  }) {
     return Text.rich(TextSpan(
         text: title,
         style: AppTextStyle.subtitle2

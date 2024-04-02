@@ -1,10 +1,10 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -68,9 +68,7 @@ class MatchListScreen extends ConsumerWidget {
           padding: const EdgeInsets.only(bottom: 40),
           itemCount: state.matches!.length,
           separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
-            );
+            return const SizedBox(height: 16);
           },
           itemBuilder: (context, index) {
             final match = state.matches![index];
@@ -81,7 +79,11 @@ class MatchListScreen extends ConsumerWidget {
     } else {
       return Expanded(
         child: Center(
-          child: Text(context.l10n.match_list_no_match_yet_title),
+          child: Text(
+            context.l10n.match_list_no_match_yet_title,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
         ),
       );
     }
@@ -99,86 +101,100 @@ class MatchListScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      match.match_type.getString(context),
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textPrimary),
-                    ),
-                    Text(match.ground,
-                        style: AppTextStyle.subtitle2
-                            .copyWith(color: context.colorScheme.textPrimary)),
-                    Text(
-                        DateFormat(
-                                'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
-                            .format(match.start_time),
-                        style: AppTextStyle.subtitle2
-                            .copyWith(color: context.colorScheme.textPrimary)),
-                    Text(
-                        context.l10n
-                            .match_list_overs_title(match.number_of_over),
-                        style: AppTextStyle.subtitle2
-                            .copyWith(color: context.colorScheme.textPrimary)),
-                    Divider(color: context.colorScheme.outline),
-                  ],
-                ),
-              ),
-              if (match.match_status != MatchStatus.finish) ...[
-                IconButton(
-                    onPressed: () {
-                      if (match.match_status == MatchStatus.yetToStart) {
-                        AppRoute.addMatch(matchId: match.id).push(context);
-                      } else {
-                        AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                            .push(context);
-                      }
-                    },
-                    icon: Icon(
-                      match.match_status == MatchStatus.yetToStart
-                          ? Icons.edit
-                          : Icons.play_arrow_sharp,
-                      size: 30,
-                    )),
-              ],
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _teamNameView(
-                    context,
-                    team: match.teams.first,
-                    wicket: match.teams.last.wicket ?? 0,
-                    totalOvers: match.number_of_over,
-                    isRunning: match.current_playing_team_id ==
-                        match.teams.first.team.id,
-                  ),
-                  _teamNameView(
-                    context,
-                    team: match.teams.last,
-                    wicket: match.teams.first.wicket ?? 0,
-                    totalOvers: match.number_of_over,
-                    isRunning: match.current_playing_team_id ==
-                        match.teams.last.team.id,
-                  ),
-                ],
-              ),
-              MatchStatusTag(status: match.match_status)
-            ],
-          ),
+          _matchOtherDetail(context, match),
+          _teamsAndStatusView(context, match),
           if (match.match_status == MatchStatus.finish) ...[
             _winnerMessageText(context, match)
           ]
         ],
       ),
+    );
+  }
+
+  Widget _matchOtherDetail(BuildContext context, MatchModel match) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                match.match_type.getString(context),
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              Text(match.ground,
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary)),
+              Text(match.start_time.format(context, DateFormatType.dateAndTime),
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary)),
+              Text(context.l10n.match_list_overs_title(match.number_of_over),
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary)),
+              Divider(color: context.colorScheme.outline),
+            ],
+          ),
+        ),
+        _matchEditOrResumeActionButton(context, match),
+      ],
+    );
+  }
+
+  Widget _matchEditOrResumeActionButton(
+    BuildContext context,
+    MatchModel match,
+  ) {
+    if (match.match_status != MatchStatus.finish) {
+      return IconButton(
+          onPressed: () {
+            if (match.match_status == MatchStatus.yetToStart) {
+              AppRoute.addMatch(matchId: match.id).push(context);
+            } else {
+              AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                  .push(context);
+            }
+          },
+          icon: Icon(
+            match.match_status == MatchStatus.yetToStart
+                ? Icons.edit
+                : Icons.play_arrow_sharp,
+            size: 30,
+          ));
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget _teamsAndStatusView(BuildContext context, MatchModel match) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _teamNameView(
+              context,
+              team: match.teams.first,
+              wicket: match.teams.last.wicket ?? 0,
+              totalOvers: match.number_of_over,
+              isRunning:
+                  match.current_playing_team_id == match.teams.first.team.id &&
+                      match.match_status == MatchStatus.running,
+            ),
+            _teamNameView(
+              context,
+              team: match.teams.last,
+              wicket: match.teams.first.wicket ?? 0,
+              totalOvers: match.number_of_over,
+              isRunning:
+                  match.current_playing_team_id == match.teams.last.team.id &&
+                      match.match_status == MatchStatus.running,
+            ),
+          ],
+        ),
+        MatchStatusTag(status: match.match_status)
+      ],
     );
   }
 
@@ -233,8 +249,12 @@ class MatchListScreen extends ConsumerWidget {
 
       final runDifference = firstTeam.run! - secondTeam.run!;
 
-      return _messageText(context, teamName, runDifference,
-          context.l10n.score_board_runs_dot_title);
+      return _messageText(
+        context,
+        teamName,
+        difference: runDifference,
+        trailingText: context.l10n.score_board_runs_dot_title,
+      );
     } else {
       // second batting team won
       final teamName = secondTeam.team.name;
@@ -242,13 +262,21 @@ class MatchListScreen extends ConsumerWidget {
       final wicketDifference =
           secondTeam.squad.length - (firstTeam.wicket ?? 0);
 
-      return _messageText(context, teamName, wicketDifference,
-          context.l10n.score_board_wickets_dot_title);
+      return _messageText(
+        context,
+        teamName,
+        difference: wicketDifference,
+        trailingText: context.l10n.score_board_wickets_dot_title,
+      );
     }
   }
 
-  Widget _messageText(BuildContext context, String? teamName, int difference,
-      String trailingText) {
+  Widget _messageText(
+    BuildContext context,
+    String? teamName, {
+    required int difference,
+    required String trailingText,
+  }) {
     return Text.rich(TextSpan(
         text: "$teamName",
         style:

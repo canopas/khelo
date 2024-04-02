@@ -7,6 +7,8 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -133,14 +135,13 @@ class AddTeamMemberScreen extends ConsumerWidget {
   }
 
   Widget _userProfileCell(
-      BuildContext context,
-      AddTeamMemberViewNotifier notifier,
-      AddTeamMemberState state,
-      UserModel user) {
+    BuildContext context,
+    AddTeamMemberViewNotifier notifier,
+    AddTeamMemberState state,
+    UserModel user,
+  ) {
     return GestureDetector(
-        onTap: () {
-          // TODO: show userDetail Sheet
-        },
+        onTap: () => UserDetailSheet.show(context, user),
         child: Row(
           children: [
             ImageAvatar(
@@ -171,9 +172,8 @@ class AddTeamMemberScreen extends ConsumerWidget {
                       height: 2,
                     ),
                     Text(
-                      context.l10n.common_obscure_phone_number_text(
-                          user.phone!.substring(1, 3),
-                          user.phone!.substring(user.phone!.length - 2)),
+                      user.phone
+                          .format(context, StringFormats.obscurePhoneNumber),
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary),
                     ),

@@ -56,8 +56,10 @@ class EditProfileScreen extends ConsumerWidget {
         actions: [
           if (!isToCreateAccount) ...[
             IconButton(
-                onPressed: () =>
-                    _showDeleteAlert(context, () => notifier.onDeleteTap()),
+                onPressed: () => _showDeleteAlert(
+                      context,
+                      onDelete: () => notifier.onDeleteTap(),
+                    ),
                 icon: const Icon(Icons.delete_outline))
           ]
         ],
@@ -231,8 +233,11 @@ class EditProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _profileImageView(BuildContext context,
-      EditProfileViewNotifier notifier, EditProfileState state) {
+  Widget _profileImageView(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+  ) {
     return Center(
       child: SizedBox(
         height: profileViewHeight,
@@ -295,8 +300,13 @@ class EditProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _textInputField(BuildContext context, EditProfileViewNotifier notifier,
-      EditProfileState state, String label, TextEditingController controller) {
+  Widget _textInputField(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+    String label,
+    TextEditingController controller,
+  ) {
     return TextField(
       controller: controller,
       onChanged: (value) => notifier.onValueChange(),
@@ -330,8 +340,11 @@ class EditProfileScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _selectDate(BuildContext context,
-      EditProfileViewNotifier notifier, EditProfileState state) async {
+  Future<void> _selectDate(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+  ) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         helpText: context.l10n.edit_profile_select_birth_date_placeholder,
@@ -343,8 +356,11 @@ class EditProfileScreen extends ConsumerWidget {
     }
   }
 
-  Widget _genderOptionView(BuildContext context,
-      EditProfileViewNotifier notifier, EditProfileState state) {
+  Widget _genderOptionView(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -355,8 +371,12 @@ class EditProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _radioBtnCell(BuildContext context, EditProfileViewNotifier notifier,
-      EditProfileState state, UserGender gender) {
+  Widget _radioBtnCell(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+    UserGender gender,
+  ) {
     return OnTapScale(
       onTap: () => notifier.onGenderSelect(gender: gender),
       child: Wrap(
@@ -382,7 +402,10 @@ class EditProfileScreen extends ConsumerWidget {
     );
   }
 
-  void _showDeleteAlert(BuildContext context, Function() onDelete) {
+  void _showDeleteAlert(
+    BuildContext context, {
+    required Function() onDelete,
+  }) {
     showAdaptiveDialog(
       context: context,
       builder: (context) {

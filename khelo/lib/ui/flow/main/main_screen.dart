@@ -13,9 +13,7 @@ import 'package:style/navigation/bottom_navigation_bar.dart';
 import '../home/home_screen.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  final String? communityShareId;
-
-  const MainScreen({super.key, this.communityShareId});
+  const MainScreen({super.key});
 
   @override
   ConsumerState<MainScreen> createState() => _MainScreenState();

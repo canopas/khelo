@@ -2,10 +2,10 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -78,10 +78,7 @@ class UserMatchListScreen extends ConsumerWidget {
             Text(match.ground,
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary)),
-            Text(
-                DateFormat(
-                        'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
-                    .format(match.start_time),
+            Text(match.start_time.format(context, DateFormatType.dateAndTime),
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary)),
             Divider(color: context.colorScheme.outline),
@@ -142,8 +139,12 @@ class UserMatchListScreen extends ConsumerWidget {
     }
   }
 
-  Widget _messageText(BuildContext context, String? teamName, int difference,
-      String trailingText) {
+  Widget _messageText(
+    BuildContext context,
+    String? teamName,
+    int difference,
+    String trailingText,
+  ) {
     return Text.rich(TextSpan(
         text: "$teamName",
         style:

@@ -29,8 +29,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   String? matchId;
 
   ScoreBoardViewNotifier(
-      this._matchService, this._inningService, this._ballScoreService)
-      : super(const ScoreBoardViewState());
+    this._matchService,
+    this._inningService,
+    this._ballScoreService,
+  ) : super(const ScoreBoardViewState());
 
   void setData(String matchId) {
     this.matchId = matchId;
@@ -415,7 +417,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     if (state.otherInning?.innings_status == InningStatus.finish &&
         (state.totalRuns > (state.otherInning?.total_runs ?? 0))) {
-      // targeted-run-achieved
       state = state.copyWith(showMatchCompleteDialog: DateTime.now());
     } else if (((playing?.length == 1) &&
             (yetToPlay?.isEmpty ?? true) &&
@@ -478,7 +479,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           wicket: state.wicketCount,
           runs: state.otherInning?.total_runs);
 
-      // update match state
       final teams = state.match?.teams.toList();
       teams?.map((e) {
         if (e.team.id == state.currentInning?.team_id) {
@@ -529,7 +529,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         final outPlayer = battingTeam?.firstWhere(
             (element) => element.player.id == lastBall?.player_out_id);
 
-        // every new player would be appended at last
         final newBatsMan = state.batsMans?.elementAtOrNull(1);
         if (newBatsMan != null && outPlayer != null) {
           final updateList = [

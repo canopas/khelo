@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/components/search_user_view_model.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -16,7 +18,6 @@ class SearchUserBottomSheet extends ConsumerWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      isDismissible: true,
       showDragHandle: true,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
@@ -57,14 +58,14 @@ class SearchUserBottomSheet extends ConsumerWidget {
                     context.l10n.search_user_empty_text,
                     textAlign: TextAlign.center,
                     style: AppTextStyle.subtitle1.copyWith(
-                        color: context.colorScheme.textDisabled, fontSize: 20),
+                      color: context.colorScheme.textDisabled,
+                      fontSize: 20,
+                    ),
                   ),
                 )
               : ListView.separated(
                   separatorBuilder: (context, index) {
-                    return const SizedBox(
-                      height: 16,
-                    );
+                    return const SizedBox(height: 16);
                   },
                   itemCount: state.searchedUsers.length,
                   itemBuilder: (context, index) {
@@ -116,12 +117,14 @@ class SearchUserBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _userProfileCell(BuildContext context, SearchUserViewNotifier notifier,
-      SearchUserViewState state, UserModel user) {
+  Widget _userProfileCell(
+    BuildContext context,
+    SearchUserViewNotifier notifier,
+    SearchUserViewState state,
+    UserModel user,
+  ) {
     return GestureDetector(
-        onTap: () {
-          // TODO: show userDetail Sheet
-        },
+        onTap: () => UserDetailSheet.show(context, user),
         child: Row(
           children: [
             ImageAvatar(
@@ -152,9 +155,8 @@ class SearchUserBottomSheet extends ConsumerWidget {
                       height: 2,
                     ),
                     Text(
-                      context.l10n.common_obscure_phone_number_text(
-                          user.phone!.substring(1, 3),
-                          user.phone!.substring(user.phone!.length - 2)),
+                      user.phone
+                          .format(context, StringFormats.obscurePhoneNumber),
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary),
                     ),

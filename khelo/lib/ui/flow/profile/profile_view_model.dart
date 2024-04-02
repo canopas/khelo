@@ -13,6 +13,7 @@ final profileStateProvider =
     ref.read(authServiceProvider),
     ref.read(currentUserPod),
   );
+
   ref.listen(currentUserPod, (_, next) => notifier._updateUser(next));
   return notifier;
 });
@@ -38,5 +39,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
 
 @freezed
 class ProfileState with _$ProfileState {
-  const factory ProfileState({UserModel? currentUser}) = _ProfileState;
+  const factory ProfileState({
+    UserModel? currentUser,
+  }) = _ProfileState;
 }

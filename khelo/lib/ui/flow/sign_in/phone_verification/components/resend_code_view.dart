@@ -10,7 +10,10 @@ import '../phone_verification_view_model.dart';
 class PhoneVerificationResendCodeView extends ConsumerWidget {
   final String phoneNumber;
 
-  const PhoneVerificationResendCodeView({super.key, required this.phoneNumber});
+  const PhoneVerificationResendCodeView({
+    super.key,
+    required this.phoneNumber,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

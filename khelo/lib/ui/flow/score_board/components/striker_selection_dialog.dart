@@ -26,8 +26,10 @@ class StrikerSelectionDialog extends ConsumerStatefulWidget {
 
   final bool isForStrikerSelection;
 
-  const StrikerSelectionDialog(
-      {super.key, required this.isForStrikerSelection});
+  const StrikerSelectionDialog({
+    super.key,
+    required this.isForStrikerSelection,
+  });
 
   @override
   ConsumerState createState() => _StrikerSelectionDialogState();
@@ -93,7 +95,7 @@ class _StrikerSelectionDialogState
     required Function() onTap,
   }) {
     return OnTapScale(
-      onTap: () => onTap(),
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(

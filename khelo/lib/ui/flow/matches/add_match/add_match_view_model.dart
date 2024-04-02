@@ -298,6 +298,9 @@ class AddMatchViewState with _$AddMatchViewState {
     String? teamAAdminId,
     String? teamBAdminId,
     @Default([]) List<Officials> officials,
+    @Default([]) List<int>? firstPowerPlay,
+    @Default([]) List<int>? secondPowerPlay,
+    @Default([]) List<int>? thirdPowerPlay,
     @Default(PitchType.rough) PitchType pitchType,
     @Default(MatchType.limitedOvers) MatchType matchType,
     @Default(BallType.leather) BallType ballType,
@@ -308,9 +311,6 @@ class AddMatchViewState with _$AddMatchViewState {
     @Default(false) bool isAddMatchInProgress,
     @Default(null) bool? pushTossDetailScreen,
     @Default(null) bool? pop,
-    @Default([]) List<int>? firstPowerPlay,
-    @Default([]) List<int>? secondPowerPlay,
-    @Default([]) List<int>? thirdPowerPlay,
   }) = _AddMatchViewState;
 }
 

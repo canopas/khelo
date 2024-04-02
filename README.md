@@ -46,7 +46,7 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
 ## Features 🌟🌟
 
 - **Profile Management**: Create and manage profiles for players, coaches, and team managers effortlessly.
-- **Team Creation**: Form your dream team by adding players and managing team compositions with ease..
+- **Team Creation**: Form your dream team by adding players and managing team compositions with ease.
 - **Player Management**: Keep track of player details, including statistics, performance history, and personal information.
 - **Match Data Recording**:  Record detailed match data, including scores, wickets, runs, and other custom metrics, providing a comprehensive overview of each game.
 - **Performance Tracking**:  Monitor and analyze player performance over time, enabling informed decision-making and strategic planning.

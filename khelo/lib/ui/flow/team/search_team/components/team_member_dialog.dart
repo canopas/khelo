@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -30,14 +31,21 @@ class TeamMemberDialog extends StatelessWidget {
   final TeamModel team;
   final bool isForVerification;
 
-  const TeamMemberDialog(
-      {super.key, required this.team, this.isForVerification = false});
+  const TeamMemberDialog({
+    super.key,
+    required this.team,
+    this.isForVerification = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(team.name),
+      title: Text(
+        team.name,
+        style: AppTextStyle.subtitle1
+            .copyWith(color: context.colorScheme.textPrimary),
+      ),
       content: SingleChildScrollView(
         child: Wrap(
           runSpacing: 16,
@@ -82,9 +90,7 @@ class TeamMemberDialog extends StatelessWidget {
                   height: 2,
                 ),
                 Text(
-                  context.l10n.common_obscure_phone_number_text(
-                      user.phone!.substring(1, 3),
-                      user.phone!.substring(user.phone!.length - 2)),
+                  user.phone.format(context, StringFormats.obscurePhoneNumber),
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),

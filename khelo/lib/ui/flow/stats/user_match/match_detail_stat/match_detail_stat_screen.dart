@@ -53,17 +53,18 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
             return _teamDetailView(context, state, state.match!.teams[index]);
           },
           separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
-            );
+            return const SizedBox(height: 16);
           },
           itemCount: state.match?.teams.length ?? 0);
     }
     return const SizedBox();
   }
 
-  Widget _teamDetailView(BuildContext context, MatchDetailStatViewState state,
-      MatchTeamModel team) {
+  Widget _teamDetailView(
+    BuildContext context,
+    MatchDetailStatViewState state,
+    MatchTeamModel team,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -121,8 +122,11 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
     );
   }
 
-  Widget _teamScoreView(BuildContext context, MatchDetailStatViewState state,
-      MatchTeamModel team) {
+  Widget _teamScoreView(
+    BuildContext context,
+    MatchDetailStatViewState state,
+    MatchTeamModel team,
+  ) {
     return Column(
       children: [
         _runScoredText(context, team.run ?? 0, team.over ?? 0),
@@ -150,8 +154,12 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
     return Row(
       children: [
         Expanded(
-            child: _boundaryCountCell(
-                context, context.l10n.match_stat_wicket_taken_title, wicket))
+          child: _boundaryCountCell(
+            context,
+            context.l10n.common_wicket_taken_title,
+            wicket,
+          ),
+        )
       ],
     );
   }
@@ -228,8 +236,11 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
     );
   }
 
-  Widget _squadExpansionView(BuildContext context,
-      MatchDetailStatViewState state, MatchTeamModel team) {
+  Widget _squadExpansionView(
+    BuildContext context,
+    MatchDetailStatViewState state,
+    MatchTeamModel team,
+  ) {
     return Material(
       color: Colors.transparent,
       child: Card(
@@ -365,7 +376,10 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
   }
 
   Widget _extraAwarded(
-      BuildContext context, MatchDetailStatViewState state, String teamId) {
+    BuildContext context,
+    MatchDetailStatViewState state,
+    String teamId,
+  ) {
     final extra = _calculateExtras(state, teamId);
     return Row(
       children: [

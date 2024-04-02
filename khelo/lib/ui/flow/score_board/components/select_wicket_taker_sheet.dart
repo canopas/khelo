@@ -108,7 +108,7 @@ class _SelectWicketTakerSheetState
                   childAspectRatio: 0.7),
               itemCount: list.length,
               itemBuilder: (context, index) {
-                return _userCell1(
+                return _userCell(
                   context: context,
                   user: list[index].player,
                   isSelected: selectedId == list[index].player.id,
@@ -140,14 +140,14 @@ class _SelectWicketTakerSheetState
     return teamPlayers ?? [];
   }
 
-  Widget _userCell1({
+  Widget _userCell({
     required BuildContext context,
     UserModel? user,
     required bool isSelected,
     required Function() onTap,
   }) {
     return OnTapScale(
-      onTap: () => onTap(),
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -180,17 +180,13 @@ class _SelectWicketTakerSheetState
     );
   }
 
-  Widget _stickyButton(
-    BuildContext context,
-  ) {
+  Widget _stickyButton(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: PrimaryButton(
         context.l10n.score_board_select_title,
         enabled: selectedId != null,
-        onPressed: () {
-          context.pop(selectedId);
-        },
+        onPressed: () => context.pop(selectedId),
       ),
     );
   }

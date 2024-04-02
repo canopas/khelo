@@ -84,11 +84,11 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
 class SignInWithPhoneState with _$SignInWithPhoneState {
   const factory SignInWithPhoneState({
     required CountryCode code,
+    Object? error,
+    String? verificationId,
     @Default(false) bool verifying,
     @Default(false) bool signInSuccess,
-    String? verificationId,
     @Default(false) bool enableBtn,
-    Object? error,
     @Default('') String phone,
   }) = _SignInWithPhoneState;
 }

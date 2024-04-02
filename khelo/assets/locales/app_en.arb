@@ -18,8 +18,10 @@
     "common_next_title": "Next",
     "common_yes_title": "Yes",
     "common_no_title": "No",
+    "common_no_title": "No",
+    "common_wicket_taken_title" : " Wicket taken",
     "common_not_specified_title": "Not Specified",
-    "common_obscure_phone_number_text": "+{countryCode} ***** ***{lastDigits}",
+    "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
     "@common_obscure_phone_number_text": {
         "description": "+{countryCode} ***** ***{lastDigits}",
         "placeholders": {
@@ -70,6 +72,8 @@
     "edit_profile_gender_female_title": "Female",
     "edit_profile_gender_other_title": "Other",
     "edit_profile_save_title": "SAVE",
+
+    "home_screen_title": "Home",
 
     "image_picker_choose_option_title": "Choose an option.",
     "image_picker_crop_image_title": "Crop Image",
@@ -170,6 +174,7 @@
     "add_match_start_match_title": "Start Match",
     "add_match_no_of_over_title": "no. of over",
     "add_match_over_per_bowler_title": "over per bowler",
+    "add_match_joined_on_title": "Joined on",
 
     "add_match_officials_screen_title": "Add Match Officials",
     "add_match_officials_add_officials_title": "Add Officials",
@@ -178,6 +183,12 @@
     "search_team_search_placeholder_title": "Search team name",
     "search_team_your_teams_title": "Your Teams",
     "search_team_select_title": "Select",
+    "search_team_member_title" : "{count, plural, =0{{count} Members} =1{{count} Member} other{{count} Members}}",
+    "@search_team_member_title": {
+        "placeholders": {
+            "count": {}
+        }
+    },
 
     "search_user_hint_title": "Search user name",
     "search_user_empty_text": "Search the person name in above input area.",
@@ -267,6 +278,7 @@
         }
     },
     "score_board_choose_fielder_title" : "choose Fielder",
+    "score_board_injured_tag_title" : "Injured",
     "score_board_who_on_strike_title" : "Who's on Strike?",
     "score_board_who_got_out_title" : "Who got out",
     "score_board_runs_dot_title" : " Runs.",
@@ -319,6 +331,7 @@
     "team_detail_run_rate_title": "Run Rate",
     "team_detail_match_played_title": "\nMatch played",
     "team_detail_matches_played_title": "\nMatches played",
+    "team_detail_overs_title": "Overs:",
 
     "match_status_yet_to_start_title" : "Yet to start",
     "match_status_running_title" : "Running",
@@ -350,7 +363,6 @@
     "my_stat_stats_strike_rate_title": "\nStrike rate",
     "my_stat_stats_ball_faced_title": " Ball faced",
     "my_stat_stats_bowling_statics_title": "Bowling Statistics",
-    "my_stat_stats_wicket_taken_title": "Wicket taken",
     "my_stat_stats_economy_rate_title": " Economy rate",
     "my_stat_stats_fielding_statics_title": "Fielding Statistics",
     "my_stat_stats_catches_title": "Catches",
@@ -358,7 +370,6 @@
     "my_stat_stats_stumping_title": " Stumping",
 
     "match_stat_screen_title" : "Match Stat",
-    "match_stat_wicket_taken_title" : " Wicket taken",
     "match_stat_in_over_text" : " (in {count} Over)",
     "@match_stat_in_over_text": {
         "description": " (in {count} Over)",

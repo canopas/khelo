@@ -22,11 +22,12 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   Future<void> loadMatches() async {
     state = state.copyWith(loading: true);
     try {
-      final matches = await _matchService.getMatches();
+      final matches = await _matchService.getCurrentUserRelatedMatches();
       state = state.copyWith(matches: matches, loading: false);
     } catch (e, stack) {
       state = state.copyWith(loading: false, error: e);
-      debugPrint("MatchListViewNotifier: error while load matches -> $e ,\nstack: $stack");
+      debugPrint(
+          "MatchListViewNotifier: error while load matches -> $e ,\nstack: $stack");
     }
   }
 }
@@ -35,7 +36,7 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
 class MatchListViewState with _$MatchListViewState {
   const factory MatchListViewState({
     Object? error,
-    @Default(false) bool loading,
     List<MatchModel>? matches,
+    @Default(false) bool loading,
   }) = _MatchListViewState;
 }

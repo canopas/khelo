@@ -252,6 +252,11 @@ class AddTeamState with _$AddTeamState {
   const factory AddTeamState({
     required TextEditingController nameController,
     required TextEditingController locationController,
+    String? imageUrl,
+    bool? isNameAvailable,
+    TeamModel? team,
+    TeamModel? editTeam,
+    UserModel? currentUser,
     @Default(false) bool isImageUploading,
     @Default(true) bool isAddMeCheckBoxEnable,
     @Default(false) bool checkingForAvailability,
@@ -259,10 +264,5 @@ class AddTeamState with _$AddTeamState {
     @Default(false) bool isAddInProgress,
     @Default(false) bool isPop,
     @Default([]) List<UserModel> teamMembers,
-    String? imageUrl,
-    bool? isNameAvailable,
-    TeamModel? team,
-    TeamModel? editTeam,
-    UserModel? currentUser,
   }) = _AddTeamState;
 }

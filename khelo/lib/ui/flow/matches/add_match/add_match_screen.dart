@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
@@ -117,7 +117,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     AddMatchViewState state,
   ) {
     return IconButton(
-      onPressed: () => _showDeleteAlert(context, () => notifier.deleteMatch()),
+      onPressed: () => _showDeleteAlert(
+        context,
+        onDelete: () => notifier.deleteMatch(),
+      ),
       icon: const Icon(
         Icons.delete_outline,
       ),
@@ -200,8 +203,12 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  Widget _selectTeamCell(BuildContext context, AddMatchViewNotifier notifier,
-      AddMatchViewState state, TeamType type) {
+  Widget _selectTeamCell(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+    TeamType type,
+  ) {
     final TeamModel? team = type == TeamType.a ? state.teamA : state.teamB;
     return Column(
       children: [
@@ -267,8 +274,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  Widget _selectSquadButton(BuildContext context, AddMatchViewNotifier notifier,
-      AddMatchViewState state, TeamModel team, TeamType type) {
+  Widget _selectSquadButton(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+    TeamModel team,
+    TeamType type,
+  ) {
     return OnTapScale(
         onTap: () async {
           final squad = await AppRoute.selectSquad(
@@ -328,15 +340,15 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
             onTap: () => _selectDateTime(context, notifier, state),
             child: Text.rich(TextSpan(children: [
               WidgetSpan(
-                  child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Icon(Icons.calendar_today,
-                    color: context.colorScheme.textPrimary),
-              )),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Icon(Icons.calendar_today,
+                      color: context.colorScheme.textPrimary),
+                ),
+              ),
               TextSpan(
-                  text: DateFormat(
-                          'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
-                      .format(state.matchTime),
+                  text: state.matchTime
+                      .format(context, DateFormatType.dateAndTime),
                   style: AppTextStyle.subtitle1.copyWith(
                       color: context.colorScheme.textSecondary, fontSize: 22)),
             ])),
@@ -691,8 +703,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  Widget _stickyButton(BuildContext context, AddMatchViewNotifier notifier,
-      AddMatchViewState state) {
+  Widget _stickyButton(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+  ) {
     return BottomStickyOverlay(
       child: PrimaryButton(
         context.l10n.add_match_start_match_title,
@@ -703,8 +718,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  Future<void> _selectDateTime(BuildContext context,
-      AddMatchViewNotifier notifier, AddMatchViewState state) async {
+  Future<void> _selectDateTime(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+  ) async {
     showDatePicker(
       context: context,
       initialDate: state.matchTime,
@@ -742,8 +760,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     }
   }
 
-  Widget _overDetail(BuildContext context, AddMatchViewNotifier notifier,
-      AddMatchViewState state) {
+  Widget _overDetail(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -768,7 +789,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  void _showDeleteAlert(BuildContext context, Function() onDelete) {
+  void _showDeleteAlert(
+    BuildContext context, {
+    required Function() onDelete,
+  }) {
     showAdaptiveDialog(
       context: context,
       builder: (context) {

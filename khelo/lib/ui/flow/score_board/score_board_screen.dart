@@ -301,7 +301,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Widget _moreOptionButton(
-      BuildContext context, ScoreBoardViewNotifier notifier) {
+    BuildContext context,
+    ScoreBoardViewNotifier notifier,
+  ) {
     return PopupMenuButton(
       color: context.colorScheme.containerNormalOnSurface,
       onSelected: notifier.onMatchOptionSelect,
@@ -586,9 +588,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         children: [
           for (final ball in _getFilteredCurrentOverBall(state)) ...[
             _ballView(context, ball),
-            const SizedBox(
-              width: 8,
-            )
+            const SizedBox(width: 8)
           ]
         ],
       ),
@@ -677,7 +677,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             type == WicketType.caughtBehind) &&
         context.mounted) {
       wicketTakerId = await SelectWicketTakerSheet.show<String>(context);
-    } // who caught the ball
+    }
 
     int? extra;
     if (type == WicketType.runOut && context.mounted) {
@@ -789,9 +789,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showAddExtraDialog(
-      BuildContext context, ExtrasType? extra) async {
-    final extraData = await AddExtraDialog.show<(int, bool, bool)>(context,
-        extrasType: extra, isFiveSeven: extra == null);
+    BuildContext context,
+    ExtrasType? extra,
+  ) async {
+    final extraData = await AddExtraDialog.show<(int, bool, bool)>(
+      context,
+      extrasType: extra,
+      isFiveSeven: extra == null,
+    );
     if (context.mounted && extraData != null) {
       int runs = extraData.$1;
       bool isBoundary = extraData.$2;
@@ -812,9 +817,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
           extra: runs,
         );
       } else {
-        notifier.addBall(
-          run: runs,
-        );
+        notifier.addBall(run: runs);
       }
     }
   }

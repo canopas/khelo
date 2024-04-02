@@ -39,16 +39,12 @@ class OverCompleteDialog extends ConsumerWidget {
         PrimaryButton(
           expanded: false,
           context.l10n.score_board_undo_last_ball_title,
-          onPressed: () {
-            context.pop(false);
-          },
+          onPressed: () => context.pop(false),
         ),
         PrimaryButton(
           context.l10n.score_board_start_next_over_title,
           expanded: false,
-          onPressed: () {
-            context.pop(true);
-          },
+          onPressed: () => context.pop(true),
         ),
       ],
     );
@@ -63,18 +59,27 @@ class OverCompleteDialog extends ConsumerWidget {
         _overSummaryText(context, state),
         Row(
           children: [
-            _subTitleText(context, "${context.l10n.score_board_runs_title}:",
-                run.toString()),
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_runs_title}:",
+              subTitle: run.toString(),
+            ),
             const SizedBox(
               width: 8,
             ),
-            _subTitleText(context, "${context.l10n.score_board_wickets_text}:",
-                wicket.toString()),
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_wickets_text}:",
+              subTitle: wicket.toString(),
+            ),
             const SizedBox(
               width: 8,
             ),
-            _subTitleText(context, "${context.l10n.score_board_extras_title}:",
-                extra.toString()),
+            _subTitleText(
+              context,
+              title: "${context.l10n.score_board_extras_title}:",
+              subTitle: extra.toString(),
+            ),
           ],
         ),
         const Divider(),
@@ -111,7 +116,11 @@ class OverCompleteDialog extends ConsumerWidget {
         ]));
   }
 
-  Widget _subTitleText(BuildContext context, String title, String subTitle) {
+  Widget _subTitleText(
+    BuildContext context, {
+    required String title,
+    required String subTitle,
+  }) {
     return Text.rich(TextSpan(
         text: title,
         style: AppTextStyle.subtitle2
@@ -148,7 +157,10 @@ class OverCompleteDialog extends ConsumerWidget {
   }
 
   Widget _batsManIndividualScore(
-      BuildContext context, ScoreBoardViewState state, MatchPlayer batsMan) {
+    BuildContext context,
+    ScoreBoardViewState state,
+    MatchPlayer batsMan,
+  ) {
     final (run, ball) = _getBatsManTotalRuns(state, batsMan.player.id);
     return Text.rich(TextSpan(
         text: batsMan.player.name,

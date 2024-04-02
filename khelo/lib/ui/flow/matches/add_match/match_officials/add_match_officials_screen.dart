@@ -66,7 +66,9 @@ class _AddMatchOfficialsScreenState
   }
 
   List<UserModel> _getFilteredUser(
-      AddMatchOfficialsState state, MatchOfficials type) {
+    AddMatchOfficialsState state,
+    MatchOfficials type,
+  ) {
     return state.officials
         .where((element) => element.type == type)
         .map((e) => e.user)
@@ -96,10 +98,11 @@ class _AddMatchOfficialsScreenState
   }
 
   Widget _officialList(
-      BuildContext context,
-      AddMatchOfficialsViewNotifier notifier,
-      AddMatchOfficialsState state,
-      MatchOfficials type) {
+    BuildContext context,
+    AddMatchOfficialsViewNotifier notifier,
+    AddMatchOfficialsState state,
+    MatchOfficials type,
+  ) {
     final users = _getFilteredUser(state, type);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -197,9 +200,7 @@ class _AddMatchOfficialsScreenState
         context.l10n.add_match_officials_add_officials_title,
         enabled: true,
         progress: false,
-        onPressed: () {
-          context.pop(state.officials);
-        },
+        onPressed: () => context.pop(state.officials),
       ),
     );
   }
