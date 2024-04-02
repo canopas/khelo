@@ -16,11 +16,16 @@ workflows:
 
       - name: Set up local.properties
         script: |
-          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Decode variables
+        script: |
+          cd khelo
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > android/app/google-services.json
+          echo $FIREBASE_OPTIONS | base64 --decode > lib/firebase_options.dart
 
       - name: Get Flutter Packages
         script: |
-
           cd ../data
           flutter clean
           flutter pub get
@@ -33,10 +38,6 @@ workflows:
           flutter clean
           flutter pub get
 
-      - name: Decode variables
-        script: |
-          echo $GOOGLE_SERVICES_JSON | base64 --decode > android/app/google-services.json
-          echo $FIREBASE_OPTIONS | base64 --decode > lib/firebase_options.dart
 
       - name: Flutter analyze
         script: |
