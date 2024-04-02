@@ -10,6 +10,7 @@ workflows:
         - ANDROID_KEYSTORE
       groups:
         - google_credentials
+        - app_credentials
 
 
     scripts:
@@ -20,8 +21,8 @@ workflows:
 
       - name: Decode variables
         script: |
-          echo $GOOGLE_SERVICES_JSON | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
-          echo $FIREBASE_OPTIONS | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+          echo $GOOGLE_SERVICES_JSON_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
+          echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
           echo Decoded google-services.json!
           ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
@@ -60,4 +61,69 @@ workflows:
 
 
   ios-workflow-id:
+
     name: iOS build
+
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.canopas.khelo
+
+      vars:
+        APP_ID: 6480175424
+
+      flutter: stable
+
+    scripts:
+
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+
+      - name: Decode variables
+        script: |
+          echo $GOOGLE_SERVICE_PLIST_BASE64| base64 --decode > $CM_BUILD_DIR/khelo/ios/Runner/GoogleService-Info.plist
+          echo $FIREBASE_OPTIONS | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+          echo Decoded google-services.json!
+          ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+
+      - name: Install Pods
+        script:
+          cd khelo/ios
+          find . -name "Podfile" -execdir pod install \;
+
+      - name: Get Flutter Packages
+        script: |
+          cd ../data
+          flutter clean
+          flutter pub get
+
+          cd ../style
+          flutter clean
+          flutter pub get
+
+          cd khelo
+          flutter clean
+          flutter pub get
+
+  
+
+      - name: Flutter build ipa
+        script: |
+          flutter build ipa --release \
+          --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    integrations:
+      app_store_connect: github-ci-april-24
+
+    publishing:
+      app_store_connect:
+        auth: integration
+
