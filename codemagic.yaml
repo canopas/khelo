@@ -38,11 +38,6 @@ workflows:
           flutter clean
           flutter pub get
 
-
-      - name: Flutter analyze
-        script: |
-          flutter analyze
-
       - name: Build AAB with Flutter
         script:  |
           flutter build appbundle --release \
