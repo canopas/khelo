@@ -16,6 +16,7 @@ workflows:
 
       - name: Set up local.properties
         script: |
+          cd khelo
           echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
 
       - name: Decode variables
