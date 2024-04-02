@@ -42,6 +42,8 @@ workflows:
       - name: Build AAB with Flutter
         script:  |
           cd khelo
+          ls $CM_BUILD_DIR/khelo/lib
+
           flutter build appbundle --release
 
     artifacts:
