@@ -44,7 +44,7 @@ workflows:
       - name: Build AAB with Flutter
         script:  |
           cd khelo
-          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))
+          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" ) + 1))
           
           echo $BUILD_NUMBER 
           flutter build appbundle --release \
