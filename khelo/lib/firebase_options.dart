@@ -49,25 +49,28 @@ class DefaultFirebaseOptions {
     messagingSenderId: '92999931839',
     projectId: 'khelo-dev-8040e',
     authDomain: 'khelo-dev-8040e.firebaseapp.com',
+    databaseURL: 'https://khelo-dev-8040e-default-rtdb.firebaseio.com',
     storageBucket: 'khelo-dev-8040e.appspot.com',
     measurementId: 'G-W9Y0Z1TN2R',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCj8mdOgjpM9J6tI-4D195GThJV26lGm-w',
-    appId: '1:92999931839:android:6bb53b7449b2b928ac330a',
+    appId: '1:92999931839:android:1ac9d94bec982f25ac330a',
     messagingSenderId: '92999931839',
     projectId: 'khelo-dev-8040e',
+    databaseURL: 'https://khelo-dev-8040e-default-rtdb.firebaseio.com',
     storageBucket: 'khelo-dev-8040e.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAkdjFi8wkE4vf69Wqa45juwLxPEREIOD0',
-    appId: '1:92999931839:ios:06a5606f88805af9ac330a',
+    appId: '1:92999931839:ios:f166ae55796f68ceac330a',
     messagingSenderId: '92999931839',
     projectId: 'khelo-dev-8040e',
+    databaseURL: 'https://khelo-dev-8040e-default-rtdb.firebaseio.com',
     storageBucket: 'khelo-dev-8040e.appspot.com',
-    iosBundleId: 'com.example.khelo',
+    iosBundleId: 'com.canopas.khelo',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -75,6 +78,7 @@ class DefaultFirebaseOptions {
     appId: '1:92999931839:ios:984233dbd06405beac330a',
     messagingSenderId: '92999931839',
     projectId: 'khelo-dev-8040e',
+    databaseURL: 'https://khelo-dev-8040e-default-rtdb.firebaseio.com',
     storageBucket: 'khelo-dev-8040e.appspot.com',
     iosBundleId: 'com.example.khelo.RunnerTests',
   );

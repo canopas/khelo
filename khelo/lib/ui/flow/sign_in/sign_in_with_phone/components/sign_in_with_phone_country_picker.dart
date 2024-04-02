@@ -13,7 +13,6 @@ class SignInWithPhoneCountryPicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final notifier = ref.watch(signInWithPhoneStateProvider.notifier);
     final countryCode = ref.watch(
       signInWithPhoneStateProvider.select((value) => value.code),

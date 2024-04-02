@@ -1,18 +1,32 @@
 {
   "project_info": {
     "project_number": "92999931839",
+    "firebase_url": "https://khelo-dev-8040e-default-rtdb.firebaseio.com",
     "project_id": "khelo-dev-8040e",
     "storage_bucket": "khelo-dev-8040e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:92999931839:android:6bb53b7449b2b928ac330a",
+        "mobilesdk_app_id": "1:92999931839:android:1ac9d94bec982f25ac330a",
         "android_client_info": {
-          "package_name": "com.example.khelo"
+          "package_name": "com.canopas.khelo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "92999931839-e2tgsvpugv0j2a5dt702kouhkrcrb7jg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.canopas.khelo",
+            "certificate_hash": "4ab81672d5e41673d75f286d141e81e7a638b8d1"
+          }
+        },
+        {
+          "client_id": "92999931839-qg7mgdinslkq27j9hig9fhtgbeud3tka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCj8mdOgjpM9J6tI-4D195GThJV26lGm-w"
@@ -20,7 +34,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92999931839-qg7mgdinslkq27j9hig9fhtgbeud3tka.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92999931839-2qaecchvsj42m5lhe9eob9be4vodj6gi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.canopas.khelo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92999931839:android:6bb53b7449b2b928ac330a",
+        "android_client_info": {
+          "package_name": "com.example.khelo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92999931839-8ia6o7l4pahhjjtdgnp1aoenp7583haf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.khelo",
+            "certificate_hash": "8da4bde884b6a8b0d97d4a5ea1c0a45ca0168163"
+          }
+        },
+        {
+          "client_id": "92999931839-qg7mgdinslkq27j9hig9fhtgbeud3tka.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj8mdOgjpM9J6tI-4D195GThJV26lGm-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92999931839-qg7mgdinslkq27j9hig9fhtgbeud3tka.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "92999931839-2qaecchvsj42m5lhe9eob9be4vodj6gi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.canopas.khelo"
+              }
+            }
+          ]
         }
       }
     }

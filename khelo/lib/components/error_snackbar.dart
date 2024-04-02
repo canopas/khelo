@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 void showSnackBar(
-    BuildContext context,
-    String text, {
-      SnackBarLength length = SnackBarLength.short,
-    }) {
+  BuildContext context,
+  String text, {
+  SnackBarLength length = SnackBarLength.short,
+}) {
   if (Platform.isIOS) {
     Fluttertoast.showToast(
       msg: text,
