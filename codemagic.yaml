@@ -10,6 +10,8 @@ workflows:
         - ANDROID_KEYSTORE
       groups:
         - khelo
+      vars:
+        GOOGLE_PLAY_TRACK: "alpha"
 
     scripts:
       - name: Decode variables
