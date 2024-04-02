@@ -74,7 +74,6 @@ workflows:
 
       vars:
         APP_ID: 6480175424
-
       flutter: stable
 
     scripts:
