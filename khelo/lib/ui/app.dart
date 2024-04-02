@@ -55,6 +55,7 @@ class _AppState extends ConsumerState<App> {
           builder: (context) {
             if (Platform.isIOS) {
               return CupertinoApp.router(
+                debugShowCheckedModeBanner: false,
                 routerConfig: _router,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,
@@ -69,6 +70,7 @@ class _AppState extends ConsumerState<App> {
               );
             } else {
               return MaterialApp.router(
+                debugShowCheckedModeBanner: false,
                 routerConfig: _router,
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 supportedLocales: AppLocalizations.supportedLocales,

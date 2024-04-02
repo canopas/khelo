@@ -6,7 +6,10 @@ import 'package:style/text/app_text_style.dart';
 
 class MatchStatusTag extends StatelessWidget {
   final MatchStatus status;
-  const MatchStatusTag({super.key, required this.status,});
+  const MatchStatusTag({
+    super.key,
+    required this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class MatchStatusTag extends StatelessWidget {
       child: Text(
         status.getString(context),
         style:
-        AppTextStyle.body2.copyWith(color: context.colorScheme.textPrimary),
+            AppTextStyle.body2.copyWith(color: context.colorScheme.textPrimary),
       ),
     );
   }
