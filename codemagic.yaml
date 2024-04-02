@@ -12,6 +12,9 @@ workflows:
         - google_credentials
         - app_credentials
 
+      vars:
+        PACKAGE_NAME: com.canopas.khelo
+        GOOGLE_PLAY_TRACK: internal
 
     scripts:
 
@@ -23,8 +26,6 @@ workflows:
         script: |
           echo $GOOGLE_SERVICES_JSON_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
           echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
-          echo Decoded google-services.json!
-          ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
       - name: Get Flutter Packages
         script: |
@@ -43,12 +44,15 @@ workflows:
       - name: Build AAB with Flutter
         script:  |
           cd khelo
-          ls $CM_BUILD_DIR/khelo/lib
-
-          flutter build appbundle --release
+          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" -- tracks="$GOOGLE_PLAY_TRACK") + 1))
+          
+          echo $BUILD_NUMBER 
+          flutter build appbundle --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build_number=$BUILD_NUMBER
 
     artifacts:
-      - build/**/outputs/**/*.aab
+      - build/app/outputs/bundle/release/*.aab
       - build/**/outputs/**/mapping.txt
       - flutter_drive.log
 
@@ -88,8 +92,6 @@ workflows:
         script: |
           echo $GOOGLE_SERVICE_PLIST_BASE64| base64 --decode > $CM_BUILD_DIR/khelo/ios/Runner/GoogleService-Info.plist
           echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
-          echo Decoded google-services.json!
-          ls $CM_BUILD_DIR/khelo/lib/firebase_options.dart
 
       - name: Install Pods
         script:
@@ -113,7 +115,12 @@ workflows:
       - name: Flutter build ipa
         script: |
           cd khelo
+          BUILD_NUMBER=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1))
+          
+          
           flutter build ipa --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER
           --export-options-plist=$HOME/export_options.plist
 
     artifacts:
