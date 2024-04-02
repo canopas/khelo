@@ -41,9 +41,7 @@ workflows:
       - name: Build AAB with Flutter
         script:  |
           cd khelo
-          flutter build appbundle --release \
-          build_name=1.0.0 \
-          build-number=4
+          flutter build appbundle --release
 
     artifacts:
       - build/**/outputs/**/*.aab
