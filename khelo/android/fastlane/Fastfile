@@ -22,17 +22,17 @@ platform :android do
 
     versionName = options[:versionName]
     versionCode = options[:versionCode]
+
     Dir.chdir "../.." do
-       sh("flutter", "build", "appbundle", "--release", "--build-number=#{versionCode}" ,"--build-name=#{versionName}")  end
+       sh("flutter", "build", "appbundle", "--release", "--build-number=#{versionCode}" ,"--build-name=#{versionName}")
     end
 
-     upload_to_play_store(
-       track: 'internal',
-       skip_upload_metadata: true,
-       skip_upload_images: true,
-       skip_upload_apk: true,
-       aab: '../build/app/outputs/bundle/release/app-release.aab',
-       skip_upload_screenshots: true)
-    end
-
+    upload_to_play_store(
+      track: 'internal',
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_apk: true,
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_screenshots: true)
+  end
 end
