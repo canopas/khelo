@@ -34,15 +34,18 @@ jobs:
 
     - name: Install Dependencies
       run: |
-        cd ../data
+        cd ..
+        cd data
         flutter clean
         flutter pub get
 
-        cd ../style
+        cd ..
+        cd style
         flutter clean
         flutter pub get
         
-        cd ../khelo
+        cd ..
+        cd khelo
         flutter clean
         flutter pub get
 
