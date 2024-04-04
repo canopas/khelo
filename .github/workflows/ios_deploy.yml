@@ -68,17 +68,18 @@ jobs:
     - name: Set up code signing settings on Xcode project
       run: xcode-project use-profiles
 
-    - name: Increment build number
-      run: |
-        cd khelo/ios
-        LATEST_BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
-        echo "Generate build number $LATEST_BUILD_NUMBER"
-        agvtool new-version -all $LATEST_BUILD_NUMBER
-
     - name: Build ipa for distribution
       run: |
         cd khelo
-        flutter build ipa --release --export-options-plist=$HOME/export_options.plist
+        file='VERSION'
+        fileData=`cat $file`
+        IFS='.'
+        read -a versionValue <<< "$fileData"
+        buildNumber=$(( ${versionValue[0]} * 1000000 + ${versionValue[1]} * 10000 + ${{ github.run_number }} ))
+        IFS=''
+        buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
+        echo "Generating android build $buildName $buildNumber"   
+        flutter build ipa --release --build-number=$buildNumber --build-name=$buildName --export-options-plist=$HOME/export_options.plist
 
     - name: Publish the app to App Store Connect
       run: |

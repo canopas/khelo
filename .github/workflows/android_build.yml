@@ -1,6 +1,10 @@
 name: Android Build APK
 
-on: push
+on:
+  push:
+    branches:
+      - main
+    workflow_dispatch:
 
 jobs:
 
@@ -67,9 +71,7 @@ jobs:
           buildNumber=$(( ${versionValue[0]} * 1000000 + ${versionValue[1]} * 10000 + ${{ github.run_number }} ))
           IFS=''
           buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
-          echo "Generating android build $buildName $buildNumber"
-          
-          cd android
+          echo "Generating android build $buildName $buildNumber"          
           flutter build apk --release --build-number=$buildNumber --build-name=$buildName
           mv build/app/outputs/apk/release/Khelo*.apk .
 
