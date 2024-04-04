@@ -16,6 +16,13 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Retrieve the secret and decode it to file
+        env:
+          FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+        run: |
+          cd khelo
+          echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
+
       - name: Install dependencies
         run: |
           cd data && flutter clean && flutter pub get
