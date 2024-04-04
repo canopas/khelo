@@ -71,7 +71,7 @@ jobs:
 
     - name: Increment build number
       run: |
-        cd ios
+        cd khelo/ios
         agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
 
     - name: Build ipa for distribution
