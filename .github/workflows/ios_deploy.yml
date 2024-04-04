@@ -14,6 +14,8 @@ jobs:
       DIST_CERTIFICATE: ${{ secrets.DIST_CERTIFICATE_BASE64 }}
       DIST_CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERTIFICATE_PASSWORD }}
       DIST_PROFILE: ${{ secrets.DIST_PROFILE_BASE64 }}
+      FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+      GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
 
     steps:
     - name: Checkout
@@ -27,12 +29,14 @@ jobs:
 
     - name: Retrieve the secret and decode it to file
       run: |
-        .github/script/install_secret_script.sh
+        cd khelo
+        echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
+        echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -di > android/app/google-services.json
         
 
     - name: Install Dependencies
       run: |
-        cd data
+        cd ../data
         flutter clean
         flutter pub get
 
