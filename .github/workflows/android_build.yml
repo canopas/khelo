@@ -57,6 +57,8 @@ jobs:
           APKSIGN_KEY_PASS: ${{ secrets.APKSIGN_KEY_PASS }}
 
         run: |
+          echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
+          export APKSIGN_KEYSTORE=`pwd`/release.jks
           cd khelo
           file='VERSION'
           fileData=`cat $file`
@@ -66,8 +68,7 @@ jobs:
           IFS=''
           buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
           echo "Generating android build $buildName $buildNumber"
-          echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
-          export APKSIGN_KEYSTORE=`pwd`/release.jks
+          
           cd android
           flutter build apk --release --build-number=$buildNumber --build-name=$buildName
           mv build/app/outputs/apk/release/Khelo*.apk .
