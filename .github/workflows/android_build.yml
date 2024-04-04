@@ -69,7 +69,7 @@ jobs:
           echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
           export APKSIGN_KEYSTORE=`pwd`/release.jks
           cd android
-          flutter build apk --release --build-number=$buildNumber --buildName=$buildName
+          flutter build apk --release --build-number=$buildNumber --build-name=$buildName
           mv build/app/outputs/apk/release/Khelo*.apk .
 
       - name: Upload APK Artifact
