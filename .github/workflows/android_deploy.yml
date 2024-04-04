@@ -59,6 +59,7 @@ jobs:
           APKSIGN_KEY_PASS: ${{ secrets.APKSIGN_KEY_PASS }}
 
         run: |
+          cd khelo
           file= 'VERSION'
           fileData= `cat $file`
           IFS='.'
