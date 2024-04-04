@@ -40,20 +40,11 @@ jobs:
         echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > ios/Runner/GoogleService-Info.plist
 
     - name: Install Dependencies
-      run: |     
-        cd data
-        flutter clean
-        flutter pub get
-
+      run: |
+        cd data && flutter clean && flutter pub get
+        cd ../style && flutter clean && flutter pub get
+        cd ../khelo && flutter clean && flutter pub get
         cd ..
-        cd style
-        flutter clean
-        flutter pub get
-        
-        cd ..
-        cd khelo
-        flutter clean
-        flutter pub get
 
     - name: Install Codemagic CLI tools
       run: pip install codemagic-cli-tools
