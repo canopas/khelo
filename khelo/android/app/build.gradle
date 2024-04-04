@@ -56,7 +56,7 @@ android {
 
 
     signingConfigs {
-        if (System.getenv("APKSIGN_KEYSTORE")!= null){
+        if (System.getenv("APKSIGN_KEYSTORE") != null){
             release {
                 storeFile file(System.getenv("APKSIGN_KEYSTORE"))
                 storePassword System.getenv("APKSIGN_KEYSTORE_PASS")

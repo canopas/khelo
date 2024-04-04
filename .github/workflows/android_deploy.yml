@@ -72,7 +72,7 @@ jobs:
           cd android
           gem install bundler -v 2.4.22
           bundle install
-          echo $APP_PLAY_SERVICE_JSON | base64 --decode > google_play_api_key.json
+          echo $APP_PLAY_SERVICE_JSON > google_play_api_key.json
           bundle exec fastlane supply init --track internal
           bundle exec fastlane upload_internal versionName:$buildName versionCode:$buildNumber
           
