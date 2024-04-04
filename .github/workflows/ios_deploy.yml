@@ -35,6 +35,7 @@ jobs:
     - name: Install Dependencies
       run: |
         cd ..
+        ls -R
         cd data
         flutter clean
         flutter pub get
