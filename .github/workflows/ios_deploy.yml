@@ -15,7 +15,6 @@ jobs:
       DIST_CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERTIFICATE_PASSWORD }}
       DIST_PROFILE: ${{ secrets.DIST_PROFILE_BASE64 }}
       FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
-      GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
 
     steps:
     - name: Checkout
@@ -57,7 +56,7 @@ jobs:
     - name: Set up Provisioning Profiles
       run: |
         PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
-        mkdir -p "$PROFILE_HOME"
+        mkdir -p "$PROFILES_HOME"
         PROFILE_PATH="$(mktemp "$PROFILES_HOME"/$(uuidgen).mobileprovision)"
         echo ${DIST_PROFILE} | base64 --decode > "$PROFILE_PATH"
         echo "Saved Provisioning profile $PROFILE_PATH"
