@@ -29,24 +29,23 @@ jobs:
 
     - name: Retrieve the secret and decode it to file
       run: |
-        cd khelo
+        cd ./khelo/khelo
         echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart        
 
     - name: Install Dependencies
       run: |
         cd ..
-        ls -R
-        cd data
+        cd ./khelo/style
         flutter clean
         flutter pub get
 
         cd ..
-        cd style
+        cd ./khelo/style
         flutter clean
         flutter pub get
         
         cd ..
-        cd khelo
+        cd ./khelo/khelo
         flutter clean
         flutter pub get
 
