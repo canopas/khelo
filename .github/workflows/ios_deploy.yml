@@ -1,0 +1,86 @@
+name: Publish to App Store Connect
+
+on: push
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    env:
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APP_STORE_CONNECT_KEY_IDENTIFIER: ${{ secrets.APP_STORE_CONNECT_KEY_IDENTIFIER }}
+      APP_STORE_CONNECT_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_PRIVATE_KEY }}
+      APP_STORE_APP_ID: ${{ secrets.APP_STORE_APP_ID }}
+      DIST_CERTIFICATE: ${{ secrets.DIST_CERTIFICATE_BASE64 }}
+      DIST_CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERTIFICATE_PASSWORD }}
+      DIST_PROFILE: ${{ secrets.DIST_PROFILE_BASE64 }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        channel: 'stable'
+        cache: true
+
+    - name: Retrieve the secret and decode it to file
+      run: |
+        .github/script/install_secret_script.sh
+        
+
+    - name: Install Dependencies
+      run: |
+        cd data
+        flutter clean
+        flutter pub get
+
+        cd ../style
+        flutter clean
+        flutter pub get
+        
+        cd ../khelo
+        flutter clean
+        flutter pub get
+
+    - name: Install Codemagic CLI tools
+      run: pip install codemagic-cli-tools
+
+    - name: Set up keychain
+      run: keychain initialize
+
+    - name: Set up Provisioning Profiles
+      run: |
+        PROFILES_HOME="$HOME/Library/MobileDevice/Provisioning Profiles"
+        mkdir -p "$PROFILE_HOME"
+        PROFILE_PATH="$(mktemp "$PROFILES_HOME"/$(uuidgen).mobileprovision)"
+        echo ${DIST_PROFILE} | base64 --decode > "$PROFILE_PATH"
+        echo "Saved Provisioning profile $PROFILE_PATH"
+
+    - name: Set up Signing certificate
+      run: |
+        echo $DIST_CERTIFICATE | base64 --decode > tmp/certificate.p12
+        keychain add-certificates --certificate /tmp/certificate.p12 --certificate-password $DIST_CERTIFICATE_PASSWORD
+
+    - name: Set up code signing settings on Xcode project
+      run: xcode-project use-profiles
+
+    - name: Increment build number
+      run: |
+        cd ios
+        agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+
+    - name: Build ipa for distribution
+      run: |
+        flutter build ipa --release --export-options-plist=$HOME/export_options.plist
+
+    - name: Publish the app to App Store Connect
+      run: |
+        APP_FILE=$(find $(pwd) -name "*.ipa")
+        app-store-connect publish \
+        --path "$APP_FILE"
+      
+
+
+
