@@ -24,12 +24,10 @@ jobs:
           channel: stable
           cache: true
 
-
-
       - name: Set up ruby env
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7.2
+          ruby-version: 3.3.0
           bundle-cache: true
 
       - name: Retrieve the secret and decode it to file
@@ -71,7 +69,7 @@ jobs:
           echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
           export APKSIGN_KEYSTORE=`pwd`/release.jks
           cd android
-          gem install bundler 
+          gem install bundler -v 2.4.22
           bundle install
           echo $APP_PAY_SERVICE_JSON > google_play_api_key.json
           bundle exec fastlane supply init --track internal
