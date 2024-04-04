@@ -58,8 +58,8 @@ jobs:
           APKSIGN_KEY_PASS: ${{ secrets.APKSIGN_KEY_PASS }}
 
         run: |
-          echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
-          export APKSIGN_KEYSTORE=`pwd`/release.jks
+          echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.keystore
+          export APKSIGN_KEYSTORE=`pwd`/release.keystore
           cd khelo
           file='VERSION'
           fileData=`cat $file`
@@ -72,7 +72,7 @@ jobs:
           cd android
           gem install bundler -v 2.4.22
           bundle install
-          echo $APP_PLAY_SERVICE_JSON > google_play_api_key.json
+          echo $APP_PLAY_SERVICE_JSON | base64 -di > google_play_api_key.json
           bundle exec fastlane supply init --track internal
           bundle exec fastlane upload_internal versionName:$buildName versionCode:$buildNumber
           
