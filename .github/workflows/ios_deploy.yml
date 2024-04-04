@@ -76,6 +76,7 @@ jobs:
 
     - name: Build ipa for distribution
       run: |
+        cd khelo
         flutter build ipa --release --export-options-plist=$HOME/export_options.plist
 
     - name: Publish the app to App Store Connect
