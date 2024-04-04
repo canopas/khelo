@@ -15,6 +15,8 @@ jobs:
       DIST_CERTIFICATE_PASSWORD: ${{ secrets.DIST_CERTIFICATE_PASSWORD }}
       DIST_PROFILE: ${{ secrets.DIST_PROFILE_BASE64 }}
       FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
+      GOOGLE_SERVICE_INFO_PLIST_BASE64: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_BASE64 }}
+
 
     steps:
     - name: Checkout
@@ -29,7 +31,8 @@ jobs:
     - name: Retrieve the secret and decode it to file
       run: |
         cd khelo
-        echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart        
+        echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart  
+        echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > lib/ios/Runner/GoogleService-Info.plist
 
     - name: Install Dependencies
       run: |     
@@ -72,7 +75,9 @@ jobs:
     - name: Increment build number
       run: |
         cd khelo/ios
-        agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+        LATEST_BUILD_NUMBER=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+        echo "Generate build number $LATEST_BUILD_NUMBER"
+        agvtool new-version -all $LATEST_BUILD_NUMBER
 
     - name: Build ipa for distribution
       run: |
