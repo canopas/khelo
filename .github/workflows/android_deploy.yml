@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up JDK 1.8
-        uses: actions/ setup-java@v1
+        uses: actions/setup-java@v1
         with:
           java-version: 17.0.6
           cache: 'gradle'
@@ -31,7 +31,7 @@ jobs:
           bundle-cache: true
 
       - name: Retrieve the secret and decode it to file
-        run: .github/script/ install_secret_script.sh
+        run: .github/script/install_secret_script.sh
 
       - name: Deploy Internally
         env:
@@ -51,6 +51,13 @@ jobs:
           buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
           echo "Generating android build $buildName $buildNumber"
           echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.jks
+          export APKSIGN_KEYSTORE = `pwd`/release.jks
+          cd android
+          gem install bundler -v 2.4.22
+          bundle install
+          echo $APP_PAY_SERVICE_JSON > google_play_api_key.json
+          bundle exec fastlane supply init --track internal
+          bundle exec fastlane upload_internal versionName:$buildName versionCode:$buildNumber
           
 
 

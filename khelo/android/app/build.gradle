@@ -56,12 +56,12 @@ android {
 
 
     signingConfigs {
-        if (System.getenv()["CI"]){
+        if (System.getenv("APKSIGN_KEYSTORE")!= null){
             release {
-                storeFile file(System.getenv()["CM_KEYSTORE_PATH"])
-                storePassword System.getenv()["CM_KEYSTORE_PASSWORD"]
-                keyAlias System.getenv()["CM_KEY_ALIAS"]
-                keyPassword System.getenv()["CM_KEY_PASSWORD"]
+                storeFile file(System.getenv("APKSIGN_KEYSTORE"))
+                storePassword System.getenv("APKSIGN_KEYSTORE_PASS")
+                keyAlias System.getenv("APKSIGN_KEY_ALIAS")
+                keyPassword System.getenv("APKSIGN_KEY_PASS")
             }
         } else {
             release {
