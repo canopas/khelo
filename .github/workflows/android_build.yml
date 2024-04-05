@@ -1,6 +1,10 @@
 name: Android Build APK
 
-on: push
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 
 
