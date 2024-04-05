@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-    workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
 
@@ -54,7 +54,6 @@ jobs:
 
       - name: Deploy Internally
         env:
-          APP_PLAY_SERVICE_JSON: ${{ secrets.APP_PLAY_SERVICE_JSON_BASE64 }}
           APKSIGN_KEYSTORE_BASE64: ${{ secrets.APKSIGN_KEYSTORE_BASE64 }}
           APKSIGN_KEYSTORE_PASS: ${{ secrets.APKSIGN_KEYSTORE_PASS }}
           APKSIGN_KEY_ALIAS: ${{ secrets.APKSIGN_KEY_ALIAS }}
