@@ -50,6 +50,11 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "Khelo-${variant.name}-${versionName}-${versionCode}.apk"
+            }
+        }
         multiDexEnabled true
     }
 
