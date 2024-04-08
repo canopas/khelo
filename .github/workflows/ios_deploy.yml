@@ -1,16 +1,16 @@
 name: Publish to App Store Connect
 
-on: push
-#  workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-13
 
     env:
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
