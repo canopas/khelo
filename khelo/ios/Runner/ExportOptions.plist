@@ -1,0 +1,23 @@
+<plist version="1.0">
+<dict>
+	<key>destination</key>
+	<string>export</string>
+	<key>method</key>
+	<string>app-store</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>com.canopas.khelo</key>
+		<string>cca5557b-d528-4f32-b358-518500216d92</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>1EDB213DC565912BC6BC866ADEBF192575C633DC</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>S985H2T7J8</string>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>

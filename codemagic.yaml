@@ -1,0 +1,137 @@
+workflows:
+
+  android-workflow-id:
+    name: Android build
+    instance_type: mac_mini_m1
+    max_build_duration: 120
+    environment:
+      flutter: stable
+      android_signing:
+        - ANDROID_KEYSTORE
+      groups:
+        - google_credentials
+        - app_credentials
+
+      vars:
+        PACKAGE_NAME: com.canopas.khelo
+        GOOGLE_PLAY_TRACK: internal
+
+    scripts:
+
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/khelo/android/local.properties"
+
+      - name: Decode variables
+        script: |
+          echo $GOOGLE_SERVICES_JSON_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/android/app/google-services.json
+          echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+
+      - name: Get Flutter Packages
+        script: |
+          cd ../data
+          flutter clean
+          flutter pub get
+
+          cd ../style
+          flutter clean
+          flutter pub get
+          
+          cd khelo
+          flutter clean
+          flutter pub get
+
+      - name: Build AAB with Flutter
+        script:  |
+          cd khelo
+          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" ) + 1))
+          
+          echo $BUILD_NUMBER 
+          flutter build appbundle --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER
+
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+
+    publishing:
+
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: GOOGLE_PLAY_TRACK
+        submit_as_draft: true
+
+
+  ios-workflow-id:
+
+    name: iOS build
+
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.canopas.khelo
+
+      groups:
+        - app_credentials
+
+      vars:
+        APP_ID: 6480175424
+      flutter: stable
+
+    scripts:
+
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+
+      - name: Decode variables
+        script: |
+          echo $GOOGLE_SERVICE_PLIST_BASE64| base64 --decode > $CM_BUILD_DIR/khelo/ios/Runner/GoogleService-Info.plist
+          echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > $CM_BUILD_DIR/khelo/lib/firebase_options.dart
+
+      - name: Install Pods
+        script:
+          cd khelo/ios
+          find . -name "Podfile" -execdir pod install \;
+
+      - name: Get Flutter Packages
+        script: |
+          cd ../data
+          flutter clean
+          flutter pub get
+
+          cd ../style
+          flutter clean
+          flutter pub get
+
+          cd khelo
+          flutter clean
+          flutter pub get
+
+      - name: Flutter build ipa
+        script: |
+          cd khelo
+          BUILD_NUMBER=$(($(app-store-connect get-latest-app-store-build-number "$APP_ID") + 1))
+          
+          
+          flutter build ipa --release \
+          --build-name=1.0.$BUILD_NUMBER \
+          --build-number=$BUILD_NUMBER \
+          --export-options-plist=$HOME/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    integrations:
+      app_store_connect: github-ci-april-24
+
+    publishing:
+      app_store_connect:
+        auth: integration
+
