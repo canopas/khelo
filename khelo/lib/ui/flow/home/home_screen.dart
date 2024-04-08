@@ -140,7 +140,7 @@ class HomeScreen extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 24),
             children: [
               TextSpan(
-                  text: " (${((team.over ?? 1) - 1).toStringAsFixed(1)})",
+                  text: " (${team.over ?? 0})",
                   style: AppTextStyle.body1
                       .copyWith(color: context.colorScheme.textPrimary))
             ])),

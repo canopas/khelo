@@ -12,18 +12,18 @@ part of 'match_detail_stat_view_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$MatchDetailStatViewState {
   Object? get error => throw _privateConstructorUsedError;
-  bool get loading => throw _privateConstructorUsedError;
   String? get matchId => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   InningModel? get firstInning => throw _privateConstructorUsedError;
   InningModel? get secondInning => throw _privateConstructorUsedError;
   List<BallScoreModel>? get firstScore => throw _privateConstructorUsedError;
   List<BallScoreModel>? get secondScore => throw _privateConstructorUsedError;
+  bool get loading => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MatchDetailStatViewStateCopyWith<MatchDetailStatViewState> get copyWith =>
@@ -38,13 +38,13 @@ abstract class $MatchDetailStatViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
-      bool loading,
       String? matchId,
       MatchModel? match,
       InningModel? firstInning,
       InningModel? secondInning,
       List<BallScoreModel>? firstScore,
-      List<BallScoreModel>? secondScore});
+      List<BallScoreModel>? secondScore,
+      bool loading});
 
   $MatchModelCopyWith<$Res>? get match;
   $InningModelCopyWith<$Res>? get firstInning;
@@ -66,20 +66,16 @@ class _$MatchDetailStatViewStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? error = freezed,
-    Object? loading = null,
     Object? matchId = freezed,
     Object? match = freezed,
     Object? firstInning = freezed,
     Object? secondInning = freezed,
     Object? firstScore = freezed,
     Object? secondScore = freezed,
+    Object? loading = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
-              as bool,
       matchId: freezed == matchId
           ? _value.matchId
           : matchId // ignore: cast_nullable_to_non_nullable
@@ -104,6 +100,10 @@ class _$MatchDetailStatViewStateCopyWithImpl<$Res,
           ? _value.secondScore
           : secondScore // ignore: cast_nullable_to_non_nullable
               as List<BallScoreModel>?,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -155,13 +155,13 @@ abstract class _$$MatchDetailStatViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
-      bool loading,
       String? matchId,
       MatchModel? match,
       InningModel? firstInning,
       InningModel? secondInning,
       List<BallScoreModel>? firstScore,
-      List<BallScoreModel>? secondScore});
+      List<BallScoreModel>? secondScore,
+      bool loading});
 
   @override
   $MatchModelCopyWith<$Res>? get match;
@@ -185,20 +185,16 @@ class __$$MatchDetailStatViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
-    Object? loading = null,
     Object? matchId = freezed,
     Object? match = freezed,
     Object? firstInning = freezed,
     Object? secondInning = freezed,
     Object? firstScore = freezed,
     Object? secondScore = freezed,
+    Object? loading = null,
   }) {
     return _then(_$MatchDetailStatViewStateImpl(
       error: freezed == error ? _value.error : error,
-      loading: null == loading
-          ? _value.loading
-          : loading // ignore: cast_nullable_to_non_nullable
-              as bool,
       matchId: freezed == matchId
           ? _value.matchId
           : matchId // ignore: cast_nullable_to_non_nullable
@@ -223,6 +219,10 @@ class __$$MatchDetailStatViewStateImplCopyWithImpl<$Res>
           ? _value._secondScore
           : secondScore // ignore: cast_nullable_to_non_nullable
               as List<BallScoreModel>?,
+      loading: null == loading
+          ? _value.loading
+          : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -232,21 +232,18 @@ class __$$MatchDetailStatViewStateImplCopyWithImpl<$Res>
 class _$MatchDetailStatViewStateImpl implements _MatchDetailStatViewState {
   const _$MatchDetailStatViewStateImpl(
       {this.error,
-      this.loading = false,
       this.matchId,
       this.match,
       this.firstInning,
       this.secondInning,
       final List<BallScoreModel>? firstScore,
-      final List<BallScoreModel>? secondScore})
+      final List<BallScoreModel>? secondScore,
+      this.loading = false})
       : _firstScore = firstScore,
         _secondScore = secondScore;
 
   @override
   final Object? error;
-  @override
-  @JsonKey()
-  final bool loading;
   @override
   final String? matchId;
   @override
@@ -276,8 +273,12 @@ class _$MatchDetailStatViewStateImpl implements _MatchDetailStatViewState {
   }
 
   @override
+  @JsonKey()
+  final bool loading;
+
+  @override
   String toString() {
-    return 'MatchDetailStatViewState(error: $error, loading: $loading, matchId: $matchId, match: $match, firstInning: $firstInning, secondInning: $secondInning, firstScore: $firstScore, secondScore: $secondScore)';
+    return 'MatchDetailStatViewState(error: $error, matchId: $matchId, match: $match, firstInning: $firstInning, secondInning: $secondInning, firstScore: $firstScore, secondScore: $secondScore, loading: $loading)';
   }
 
   @override
@@ -286,7 +287,6 @@ class _$MatchDetailStatViewStateImpl implements _MatchDetailStatViewState {
         (other.runtimeType == runtimeType &&
             other is _$MatchDetailStatViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.matchId, matchId) || other.matchId == matchId) &&
             (identical(other.match, match) || other.match == match) &&
             (identical(other.firstInning, firstInning) ||
@@ -296,20 +296,21 @@ class _$MatchDetailStatViewStateImpl implements _MatchDetailStatViewState {
             const DeepCollectionEquality()
                 .equals(other._firstScore, _firstScore) &&
             const DeepCollectionEquality()
-                .equals(other._secondScore, _secondScore));
+                .equals(other._secondScore, _secondScore) &&
+            (identical(other.loading, loading) || other.loading == loading));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
-      loading,
       matchId,
       match,
       firstInning,
       secondInning,
       const DeepCollectionEquality().hash(_firstScore),
-      const DeepCollectionEquality().hash(_secondScore));
+      const DeepCollectionEquality().hash(_secondScore),
+      loading);
 
   @JsonKey(ignore: true)
   @override
@@ -321,20 +322,17 @@ class _$MatchDetailStatViewStateImpl implements _MatchDetailStatViewState {
 
 abstract class _MatchDetailStatViewState implements MatchDetailStatViewState {
   const factory _MatchDetailStatViewState(
-          {final Object? error,
-          final bool loading,
-          final String? matchId,
-          final MatchModel? match,
-          final InningModel? firstInning,
-          final InningModel? secondInning,
-          final List<BallScoreModel>? firstScore,
-          final List<BallScoreModel>? secondScore}) =
-      _$MatchDetailStatViewStateImpl;
+      {final Object? error,
+      final String? matchId,
+      final MatchModel? match,
+      final InningModel? firstInning,
+      final InningModel? secondInning,
+      final List<BallScoreModel>? firstScore,
+      final List<BallScoreModel>? secondScore,
+      final bool loading}) = _$MatchDetailStatViewStateImpl;
 
   @override
   Object? get error;
-  @override
-  bool get loading;
   @override
   String? get matchId;
   @override
@@ -347,6 +345,8 @@ abstract class _MatchDetailStatViewState implements MatchDetailStatViewState {
   List<BallScoreModel>? get firstScore;
   @override
   List<BallScoreModel>? get secondScore;
+  @override
+  bool get loading;
   @override
   @JsonKey(ignore: true)
   _$$MatchDetailStatViewStateImplCopyWith<_$MatchDetailStatViewStateImpl>

@@ -99,7 +99,8 @@ class InningCompleteDialog extends ConsumerWidget {
   }
 
   String _getOverCount(ScoreBoardViewState state) {
-    return "${state.overCount - 1}.${state.ballCount}";
+    return state.currentInning?.overs?.toString() ??
+        "${state.overCount - 1}.${state.ballCount}";
   }
 
   Widget _subTitleText(

@@ -24,13 +24,14 @@ class TeamDetailMatchContent extends ConsumerWidget {
             context.l10n.team_detail_empty_match_title,
             textAlign: TextAlign.center,
             style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
+                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           ),
         ),
       );
     }
 
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         const SizedBox(
           height: 24,

@@ -1,5 +1,4 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
-import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +10,13 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_dialog.dart';
+import 'package:khelo/ui/flow/score_board/components/confirm_action_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/is_boundary_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_dialog.dart';
+import 'package:khelo/ui/flow/score_board/components/more_option_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
+import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
@@ -22,7 +24,6 @@ import 'package:khelo/ui/flow/score_board/components/striker_selection_dialog.da
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 
 import 'components/inning_complete_dialog.dart';
 
@@ -38,44 +39,63 @@ class ScoreBoardScreen extends ConsumerStatefulWidget {
 class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   late ScoreBoardViewNotifier notifier;
 
-  void _observeShowSelectBatsManSheet(BuildContext context, WidgetRef ref) {
+  void _observeShowSelectBatsManSheet(
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectBatsManSheet),
         (previous, next) {
       if (next != null) {
-        _showSelectPlayerSheet(context, PlayerSelectionType.batsMan);
+        _showSelectPlayerSheet(context, state, PlayerSelectionType.batsMan);
       }
     });
   }
 
-  void _observeShowSelectBowlerSheet(BuildContext context, WidgetRef ref) {
+  void _observeShowSelectBowlerSheet(
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectBowlerSheet),
         (previous, next) {
       if (next != null) {
-        _showSelectPlayerSheet(context, PlayerSelectionType.bowler);
+        _showSelectPlayerSheet(context, state, PlayerSelectionType.bowler);
       }
     });
   }
 
   void _observeShowSelectBowlerAndBatsManSheet(
-      BuildContext context, WidgetRef ref) {
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider
             .select((value) => value.showSelectBowlerAndBatsManSheet),
         (previous, next) {
       if (next != null) {
-        _showSelectPlayerSheet(context, PlayerSelectionType.batsManAndBowler);
+        _showSelectPlayerSheet(
+          context,
+          state,
+          PlayerSelectionType.batsManAndBowler,
+        );
       }
     });
   }
 
-  void _observeShowSelectPlayerSheet(BuildContext context, WidgetRef ref) {
+  void _observeShowSelectPlayerSheet(
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
         (previous, next) {
       if (next != null) {
-        _showSelectPlayerSheet(context, PlayerSelectionType.all);
+        _showSelectPlayerSheet(context, state, PlayerSelectionType.all);
       }
     });
   }
@@ -106,9 +126,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showUndoBallConfirmationDialog), (previous, next) {
       if (next != null) {
-        _showUndoBallConfirmationDialog(
+        ConfirmActionDialog.show(
           context,
-          onUndo: notifier.undoLastBall,
+          title: context.l10n.score_board_undo_last_ball_title,
+          description: context.l10n.score_board_undo_last_ball_description_text,
+          primaryButtonText: context.l10n.score_board_undo_title,
+          onConfirmation: notifier.undoLastBall,
         );
       }
     });
@@ -221,9 +244,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showPauseScoringDialog),
         (previous, next) {
       if (next != null) {
-        _showPauseScoringDialog(
+        ConfirmActionDialog.show(
           context,
-          onPause: () => notifier.onPauseScoring(),
+          title: context.l10n.score_board_pause_scoring_title,
+          description: context.l10n.score_board_pause_scoring_description_text,
+          primaryButtonText: context.l10n.score_board_pause_title,
+          onConfirmation: notifier.onPauseScoring,
         );
       }
     });
@@ -247,8 +273,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         (previous, next) {
       if (next != null) {
         showSnackBar(
-            context, context.l10n.score_board_can_undo_till_running_over_title,
-            length: SnackBarLength.long);
+          context,
+          context.l10n.score_board_can_undo_till_running_over_title,
+          length: SnackBarLength.long,
+        );
       }
     });
   }
@@ -265,10 +293,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     notifier = ref.watch(scoreBoardStateProvider.notifier);
     final state = ref.watch(scoreBoardStateProvider);
 
-    _observeShowSelectBatsManSheet(context, ref);
-    _observeShowSelectBowlerSheet(context, ref);
-    _observeShowSelectBowlerAndBatsManSheet(context, ref);
-    _observeShowSelectPlayerSheet(context, ref);
+    _observeShowSelectBatsManSheet(context, ref, state);
+    _observeShowSelectBowlerSheet(context, ref, state);
+    _observeShowSelectBowlerAndBatsManSheet(context, ref, state);
+    _observeShowSelectPlayerSheet(context, ref, state);
     _observeShowSelectWicketTypeSheet(context, ref);
     _observeShowStrikerSelectionDialog(context, ref);
     _observeShowUndoBallConfirmationDialog(context, ref);
@@ -290,7 +318,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       canPop: false,
       child: AppPage(
         title: context.l10n.score_board_screen_title,
-        actions: [_moreOptionButton(context, notifier)],
+        actions: [_moreOptionButton(context, notifier, state)],
         automaticallyImplyLeading: false,
         body: Padding(
           padding: context.mediaQueryPadding,
@@ -303,23 +331,22 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   Widget _moreOptionButton(
     BuildContext context,
     ScoreBoardViewNotifier notifier,
+    ScoreBoardViewState state,
   ) {
-    return PopupMenuButton(
-      color: context.colorScheme.containerNormalOnSurface,
-      onSelected: notifier.onMatchOptionSelect,
-      itemBuilder: (BuildContext context) {
-        return MatchOption.values
-            .map((option) => PopupMenuItem(
-                  value: option,
-                  child: Text(
-                    option.getTitle(context),
-                    style: AppTextStyle.subtitle1
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                ))
-            .toList();
-      },
-    );
+    return IconButton(
+        onPressed: () async {
+          final selection = await MoreOptionDialog.show<
+                  ({MatchOption option, bool contWithInjPlayer})>(context,
+              continueWithInjPlayer: state.continueWithInjuredPlayers);
+
+          if (selection != null && context.mounted) {
+            notifier.onMatchOptionSelect(
+              selection.option,
+              selection.contWithInjPlayer,
+            );
+          }
+        },
+        icon: const Icon(Icons.more_horiz));
   }
 
   Widget _body(
@@ -333,327 +360,35 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
     return Column(
       children: [
-        _scoreDisplayView(context, state),
-        ScoreBoardButtons(
-          onTap: notifier.onScoreButtonTap,
-        ),
+        const ScoreDisplayView(),
+        ScoreBoardButtons(onTap: notifier.onScoreButtonTap),
       ],
     );
-  }
-
-  Widget _scoreDisplayView(BuildContext context, ScoreBoardViewState state) {
-    return Expanded(
-      child: ListView(
-        children: [
-          _matchScoreView(context, state),
-          const SizedBox(
-            height: 24,
-          ),
-          _batsManDetailsView(context, state),
-          _bowlerAndBallDetailView(context, state),
-        ],
-      ),
-    );
-  }
-
-  Widget _matchScoreView(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    final currentOver = _getCurrentOver(state);
-
-    return Stack(
-      children: [
-        _powerPlayTag(context, state),
-        Center(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            direction: Axis.vertical,
-            children: [
-              Text.rich(
-                textAlign: TextAlign.center,
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '${state.totalRuns}/${state.wicketCount}',
-                      style: AppTextStyle.subtitle1.copyWith(
-                          color: context.colorScheme.textPrimary, fontSize: 39),
-                    ),
-                    TextSpan(
-                      text: '($currentOver/${state.match?.number_of_over})',
-                      style: AppTextStyle.header4
-                          .copyWith(color: context.colorScheme.textSecondary),
-                    ),
-                  ],
-                ),
-              ),
-              _runNeededText(context, state),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _powerPlayTag(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    final powerPlay = _getPowerPlayCount(state);
-    if (powerPlay != null) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        decoration: BoxDecoration(
-            color: context.colorScheme.primary,
-            borderRadius:
-                const BorderRadius.horizontal(right: Radius.circular(12))),
-        child: Text(
-          context.l10n.score_board_power_play_title + powerPlay.toString(),
-          style: AppTextStyle.body1.copyWith(
-              color: context.colorScheme.textInversePrimary,
-              fontWeight: FontWeight.w500),
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
-
-  int? _getPowerPlayCount(ScoreBoardViewState state) {
-    if (state.match?.power_play_overs1.contains(state.overCount) ?? false) {
-      return 1;
-    } else if (state.match?.power_play_overs2.contains(state.overCount) ??
-        false) {
-      return 2;
-    } else if (state.match?.power_play_overs3.contains(state.overCount) ??
-        false) {
-      return 3;
-    }
-    return null;
-  }
-
-  Widget _runNeededText(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    if (state.otherInning?.innings_status == InningStatus.finish) {
-      final requiredRun = ((state.otherInning?.total_runs ?? 0) + 1) -
-          (state.currentInning?.total_runs ?? 0);
-      final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
-      final pendingBall = (pendingOver * 6) + (6 - state.ballCount);
-      return Text(
-        context.l10n.score_board_need_run_text(requiredRun, pendingBall),
-        textAlign: TextAlign.center,
-        style:
-            AppTextStyle.subtitle1.copyWith(color: context.colorScheme.warning),
-      );
-    } else {
-      return const SizedBox();
-    }
-  }
-
-  String _getCurrentOver(ScoreBoardViewState state) {
-    return "${state.overCount - 1}.${state.ballCount}";
-  }
-
-  Widget _batsManDetailsView(BuildContext context, ScoreBoardViewState state) {
-    return Row(
-      children: [
-        _batManCellView(context, state, state.batsMans?.firstOrNull),
-        _batManCellView(context, state, state.batsMans?.elementAtOrNull(1)),
-      ],
-    );
-  }
-
-  Widget _batManCellView(
-    BuildContext context,
-    ScoreBoardViewState state,
-    MatchPlayer? user,
-  ) {
-    bool isOnStrike = state.strikerId == user?.player.id;
-    final (run, ball) =
-        _getBatsManTotalRuns(state, user?.player.id ?? "INVALID ID");
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            border: Border.all(color: context.colorScheme.outline)),
-        child: Row(
-          children: [
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Icon(
-                  Icons.sports_cricket,
-                  color: isOnStrike
-                      ? context.colorScheme.primary
-                      : context.colorScheme.textDisabled,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user?.player.name ?? context.l10n.score_board_player_title,
-                    style: AppTextStyle.header1
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                  Text(
-                    "$run($ball)",
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textSecondary),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  (int, int) _getBatsManTotalRuns(ScoreBoardViewState state, String batsManId) {
-    final scoresList = state.currentScoresList
-        .where((element) => element.batsman_id == batsManId);
-
-    int totalRuns = scoresList
-        .where((element) => (element.extras_type == ExtrasType.noBall ||
-            element.extras_type == null))
-        .fold(0, (sum, element) => sum + (element.runs_scored ?? 0));
-
-    final batsManFacedBall = scoresList
-        .where((element) => (element.extras_type != ExtrasType.wide))
-        .length;
-
-    return (totalRuns, batsManFacedBall);
-  }
-
-  Widget _bowlerAndBallDetailView(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      color: context.colorScheme.secondaryVariant,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _bowlerNameView(
-              context,
-              state.bowler?.player.name ??
-                  context.l10n.score_board_player_title),
-          const SizedBox(
-            height: 16,
-          ),
-          _ballHistoryListView(context, state),
-        ],
-      ),
-    );
-  }
-
-  Widget _bowlerNameView(BuildContext context, String name) {
-    return Text.rich(
-      TextSpan(
-        children: [
-          WidgetSpan(
-              child: Icon(
-            Icons.sports_baseball_outlined,
-            color: context.colorScheme.surface,
-          )),
-          TextSpan(
-            text: ' $name',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: context.colorScheme.textPrimary),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _ballHistoryListView(BuildContext context, ScoreBoardViewState state) {
-    return SingleChildScrollView(
-      reverse: true,
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (final ball in _getFilteredCurrentOverBall(state)) ...[
-            _ballView(context, ball),
-            const SizedBox(width: 8)
-          ]
-        ],
-      ),
-    );
-  }
-
-  List<BallScoreModel> _getFilteredCurrentOverBall(ScoreBoardViewState state) {
-    final list = state.currentScoresList
-        .where((element) =>
-            element.over_number == state.overCount &&
-            element.extras_type != ExtrasType.penaltyRun)
-        .toList();
-    return list;
-  }
-
-  Widget _ballView(BuildContext context, BallScoreModel ball) {
-    return Container(
-      height: 50,
-      width: 50,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: context.colorScheme.containerLow,
-          border: Border.all(color: context.colorScheme.outline)),
-      child: Text(_getTextBasedOnBall(context, ball)),
-    );
-  }
-
-  String _getTextBasedOnBall(BuildContext context, BallScoreModel ball) {
-    if (ball.wicket_type != null) {
-      return context.l10n.score_board_wicket_short_text;
-    } else if (ball.extras_type != null) {
-      switch (ball.extras_type!) {
-        case ExtrasType.wide:
-          return context.l10n.score_board_wide_ball_short_text;
-        case ExtrasType.noBall:
-          return context.l10n.score_board_no_ball_short_text;
-        case ExtrasType.bye:
-          return context.l10n.score_board_run_sup_script_text(
-              "${ball.extras_awarded ?? 0}",
-              context.l10n.score_board_bye_short_text);
-        case ExtrasType.legBye:
-          return context.l10n.score_board_run_sup_script_text(
-              "${ball.extras_awarded ?? 0}",
-              context.l10n.score_board_leg_bye_short_text);
-        case ExtrasType.penaltyRun:
-          return "P";
-      }
-    } else if (ball.wicket_type == null && ball.extras_type == null) {
-      return "${ball.runs_scored}";
-    } else {
-      return "";
-    }
   }
 
   Future<void> _showSelectPlayerSheet(
     BuildContext context,
+    ScoreBoardViewState state,
     PlayerSelectionType type,
   ) async {
-    final players = await SelectPlayerSheet.show<
-            List<({String teamId, List<MatchPlayer> players})>>(context,
-        type: type);
-    if (players != null && context.mounted) {
-      notifier.setPlayers(players);
+    final result = await SelectPlayerSheet.show<
+        ({
+          List<({List<MatchPlayer> players, String teamId})>? selectedPlayer,
+          bool contWithInjPlayer,
+          bool reviewResult
+        })>(
+      context,
+      type: type,
+      continueWithInjPlayer: state.continueWithInjuredPlayers,
+    );
+    if (result != null && context.mounted) {
+      if (result.reviewResult) {
+        notifier.onReviewMatchResult(result.contWithInjPlayer);
+      } else if (result.selectedPlayer != null) {
+        notifier.setPlayers(
+            currentPlayers: result.selectedPlayer!,
+            contWithInjPlayer: result.contWithInjPlayer);
+      }
     }
   }
 
@@ -666,8 +401,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Future<void> _onWicketTypeSelect(
       BuildContext context, WicketType type) async {
-    final outBatsMan = await StrikerSelectionDialog.show<UserModel>(context,
-        isForStrikerSelection: false); // who got out
+    final outBatsMan = await StrikerSelectionDialog.show<UserModel>(
+      context,
+      isForStrikerSelection: false,
+    );
 
     String? wicketTakerId;
     if ((type == WicketType.caught ||
@@ -701,48 +438,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     if (striker != null && context.mounted) {
       notifier.setOrSwitchStriker(batsMan: striker);
     }
-  }
-
-  void _showUndoBallConfirmationDialog(
-    BuildContext context, {
-    required Function() onUndo,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(
-            context.l10n.score_board_undo_last_ball_title,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          content: Text(
-            context.l10n.score_board_undo_last_ball_description_text,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onUndo();
-              },
-              child: Text(
-                context.l10n.score_board_undo_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> _showOverCompleteDialog(BuildContext context) async {
@@ -820,48 +515,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         notifier.addBall(run: runs);
       }
     }
-  }
-
-  void _showPauseScoringDialog(
-    BuildContext context, {
-    required Function() onPause,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(
-            context.l10n.score_board_pause_scoring_title,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          content: Text(
-            context.l10n.score_board_pause_scoring_description_text,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onPause();
-              },
-              child: Text(
-                context.l10n.score_board_pause_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> _showAddPenaltyRunDialog(BuildContext context) async {

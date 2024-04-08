@@ -2,7 +2,9 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/match_status_tag.dart';
+import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -103,9 +105,7 @@ class MatchListScreen extends ConsumerWidget {
         children: [
           _matchOtherDetail(context, match),
           _teamsAndStatusView(context, match),
-          if (match.match_status == MatchStatus.finish) ...[
-            _winnerMessageText(context, match)
-          ]
+          _winnerMessageText(context, match)
         ],
       ),
     );
@@ -205,8 +205,6 @@ class MatchListScreen extends ConsumerWidget {
     required int totalOvers,
     required bool isRunning,
   }) {
-    final over = (team.over ?? 0) - 1;
-
     return Text.rich(TextSpan(
         text: team.team.name,
         style: AppTextStyle.subtitle2.copyWith(
@@ -226,7 +224,7 @@ class MatchListScreen extends ConsumerWidget {
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 TextSpan(
-                  text: " (${over.toStringAsFixed(1)}/$totalOvers)",
+                  text: " (${team.over ?? 0}/$totalOvers)",
                   style: AppTextStyle.body2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),
@@ -235,63 +233,15 @@ class MatchListScreen extends ConsumerWidget {
   }
 
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
-    final firstTeam = match.toss_decision == TossDecision.bat
-        ? match.teams
-            .firstWhere((element) => element.team.id == match.toss_winner_id)
-        : match.teams
-            .firstWhere((element) => element.team.id != match.toss_winner_id);
-    final secondTeam = match.teams
-        .firstWhere((element) => element.team.id != firstTeam.team.id);
-
-    if (firstTeam.run! > secondTeam.run!) {
-      // first batting team won
-      final teamName = firstTeam.team.name;
-
-      final runDifference = firstTeam.run! - secondTeam.run!;
-
-      return _messageText(
-        context,
-        teamName,
-        difference: runDifference,
-        trailingText: context.l10n.score_board_runs_dot_title,
+    final winSummary = match.getWinnerSummary(context);
+    if (match.match_status == MatchStatus.finish && winSummary != null) {
+      return WonByMessageText(
+        teamName: winSummary.teamName,
+        difference: winSummary.difference,
+        trailingText: winSummary.wonByText,
       );
     } else {
-      // second batting team won
-      final teamName = secondTeam.team.name;
-
-      final wicketDifference =
-          secondTeam.squad.length - (firstTeam.wicket ?? 0);
-
-      return _messageText(
-        context,
-        teamName,
-        difference: wicketDifference,
-        trailingText: context.l10n.score_board_wickets_dot_title,
-      );
+      return const SizedBox();
     }
-  }
-
-  Widget _messageText(
-    BuildContext context,
-    String? teamName, {
-    required int difference,
-    required String trailingText,
-  }) {
-    return Text.rich(TextSpan(
-        text: "$teamName",
-        style:
-            AppTextStyle.subtitle2.copyWith(color: context.colorScheme.primary),
-        children: [
-          TextSpan(
-              text: context.l10n.score_board_won_by_title,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textSecondary)),
-          TextSpan(
-            text: "$difference",
-          ),
-          TextSpan(
-            text: trailingText,
-          ),
-        ]));
   }
 }

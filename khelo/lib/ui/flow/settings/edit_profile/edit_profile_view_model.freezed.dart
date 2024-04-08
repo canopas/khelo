@@ -23,6 +23,7 @@ mixin _$EditProfileState {
       throw _privateConstructorUsedError;
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
+  UserModel? get currentUser => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   UserGender? get gender => throw _privateConstructorUsedError;
   BattingStyle? get battingStyle => throw _privateConstructorUsedError;
@@ -32,7 +33,6 @@ mixin _$EditProfileState {
   bool get isImageUploading => throw _privateConstructorUsedError;
   bool get isSaved => throw _privateConstructorUsedError;
   bool get isSaveInProgress => throw _privateConstructorUsedError;
-  UserModel? get currentUser => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EditProfileStateCopyWith<EditProfileState> get copyWith =>
@@ -50,6 +50,7 @@ abstract class $EditProfileStateCopyWith<$Res> {
       TextEditingController nameController,
       TextEditingController emailController,
       TextEditingController locationController,
+      UserModel? currentUser,
       String? imageUrl,
       UserGender? gender,
       BattingStyle? battingStyle,
@@ -58,8 +59,7 @@ abstract class $EditProfileStateCopyWith<$Res> {
       bool isButtonEnable,
       bool isImageUploading,
       bool isSaved,
-      bool isSaveInProgress,
-      UserModel? currentUser});
+      bool isSaveInProgress});
 
   $UserModelCopyWith<$Res>? get currentUser;
 }
@@ -81,6 +81,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? nameController = null,
     Object? emailController = null,
     Object? locationController = null,
+    Object? currentUser = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
     Object? battingStyle = freezed,
@@ -90,7 +91,6 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
-    Object? currentUser = freezed,
   }) {
     return _then(_value.copyWith(
       dob: null == dob
@@ -109,6 +109,10 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -145,10 +149,6 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.isSaveInProgress
           : isSaveInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentUser: freezed == currentUser
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
     ) as $Val);
   }
 
@@ -178,6 +178,7 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       TextEditingController nameController,
       TextEditingController emailController,
       TextEditingController locationController,
+      UserModel? currentUser,
       String? imageUrl,
       UserGender? gender,
       BattingStyle? battingStyle,
@@ -186,8 +187,7 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       bool isButtonEnable,
       bool isImageUploading,
       bool isSaved,
-      bool isSaveInProgress,
-      UserModel? currentUser});
+      bool isSaveInProgress});
 
   @override
   $UserModelCopyWith<$Res>? get currentUser;
@@ -208,6 +208,7 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? nameController = null,
     Object? emailController = null,
     Object? locationController = null,
+    Object? currentUser = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
     Object? battingStyle = freezed,
@@ -217,7 +218,6 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
-    Object? currentUser = freezed,
   }) {
     return _then(_$EditProfileStateImpl(
       dob: null == dob
@@ -236,6 +236,10 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      currentUser: freezed == currentUser
+          ? _value.currentUser
+          : currentUser // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -272,10 +276,6 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.isSaveInProgress
           : isSaveInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentUser: freezed == currentUser
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
     ));
   }
 }
@@ -288,6 +288,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       required this.nameController,
       required this.emailController,
       required this.locationController,
+      this.currentUser,
       this.imageUrl = null,
       this.gender = null,
       this.battingStyle = null,
@@ -296,8 +297,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       this.isButtonEnable = false,
       this.isImageUploading = false,
       this.isSaved = false,
-      this.isSaveInProgress = false,
-      this.currentUser});
+      this.isSaveInProgress = false});
 
   @override
   final DateTime dob;
@@ -307,6 +307,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
   final TextEditingController emailController;
   @override
   final TextEditingController locationController;
+  @override
+  final UserModel? currentUser;
   @override
   @JsonKey()
   final String? imageUrl;
@@ -334,12 +336,10 @@ class _$EditProfileStateImpl implements _EditProfileState {
   @override
   @JsonKey()
   final bool isSaveInProgress;
-  @override
-  final UserModel? currentUser;
 
   @override
   String toString() {
-    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress, currentUser: $currentUser)';
+    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, currentUser: $currentUser, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
   }
 
   @override
@@ -354,6 +354,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 other.emailController == emailController) &&
             (identical(other.locationController, locationController) ||
                 other.locationController == locationController) &&
+            (identical(other.currentUser, currentUser) ||
+                other.currentUser == currentUser) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -369,9 +371,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 other.isImageUploading == isImageUploading) &&
             (identical(other.isSaved, isSaved) || other.isSaved == isSaved) &&
             (identical(other.isSaveInProgress, isSaveInProgress) ||
-                other.isSaveInProgress == isSaveInProgress) &&
-            (identical(other.currentUser, currentUser) ||
-                other.currentUser == currentUser));
+                other.isSaveInProgress == isSaveInProgress));
   }
 
   @override
@@ -381,6 +381,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       nameController,
       emailController,
       locationController,
+      currentUser,
       imageUrl,
       gender,
       battingStyle,
@@ -389,8 +390,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       isButtonEnable,
       isImageUploading,
       isSaved,
-      isSaveInProgress,
-      currentUser);
+      isSaveInProgress);
 
   @JsonKey(ignore: true)
   @override
@@ -406,6 +406,7 @@ abstract class _EditProfileState implements EditProfileState {
       required final TextEditingController nameController,
       required final TextEditingController emailController,
       required final TextEditingController locationController,
+      final UserModel? currentUser,
       final String? imageUrl,
       final UserGender? gender,
       final BattingStyle? battingStyle,
@@ -414,8 +415,7 @@ abstract class _EditProfileState implements EditProfileState {
       final bool isButtonEnable,
       final bool isImageUploading,
       final bool isSaved,
-      final bool isSaveInProgress,
-      final UserModel? currentUser}) = _$EditProfileStateImpl;
+      final bool isSaveInProgress}) = _$EditProfileStateImpl;
 
   @override
   DateTime get dob;
@@ -425,6 +425,8 @@ abstract class _EditProfileState implements EditProfileState {
   TextEditingController get emailController;
   @override
   TextEditingController get locationController;
+  @override
+  UserModel? get currentUser;
   @override
   String? get imageUrl;
   @override
@@ -443,8 +445,6 @@ abstract class _EditProfileState implements EditProfileState {
   bool get isSaved;
   @override
   bool get isSaveInProgress;
-  @override
-  UserModel? get currentUser;
   @override
   @JsonKey(ignore: true)
   _$$EditProfileStateImplCopyWith<_$EditProfileStateImpl> get copyWith =>

@@ -24,7 +24,7 @@ class TeamDetailStatContent extends ConsumerWidget {
             context.l10n.team_detail_empty_stat_title,
             textAlign: TextAlign.center,
             style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
+                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           ),
         ),
       );
@@ -34,7 +34,8 @@ class TeamDetailStatContent extends ConsumerWidget {
   }
 
   Widget _content(BuildContext context, TeamDetailState state) {
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         const SizedBox(height: 24),
         _matchPlayedCount(context, state),
@@ -46,13 +47,13 @@ class TeamDetailStatContent extends ConsumerWidget {
         _averageCountView(
           context,
           context.l10n.team_detail_batting_average_title,
-          "${_calculateTeamBattingAverage(state)}",
+          _calculateTeamBattingAverage(state).toStringAsFixed(2),
         ),
         const SizedBox(height: 16),
         _averageCountView(
           context,
           context.l10n.team_detail_bowling_average_title,
-          "${_calculateTeamBowlingAverage(state)}",
+          _calculateTeamBowlingAverage(state).toStringAsFixed(2),
         ),
         const SizedBox(height: 16),
         _highestAndLowestRunCount(context, state),

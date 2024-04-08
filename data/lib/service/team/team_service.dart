@@ -27,8 +27,7 @@ class TeamService {
   TeamService(this._currentUserId, this._firestore, this._userService);
 
   Future<String> updateTeam(AddTeamRequestModel team) async {
-    DocumentReference teamRef =
-        _firestore.collection(_collectionName).doc(team.id);
+    DocumentReference teamRef = _firestore.collection(_collectionName).doc(team.id);
     WriteBatch batch = _firestore.batch();
 
     batch.set(teamRef, team.toJson(), SetOptions(merge: true));
@@ -129,7 +128,8 @@ class TeamService {
     DocumentReference teamRef =
         _firestore.collection(_collectionName).doc(teamId);
 
-    await teamRef.update({'players': FieldValue.arrayUnion(players)});
+    await teamRef.set(
+        {'players': FieldValue.arrayUnion(players)}, SetOptions(merge: true));
   }
 
   Future<void> removePlayersFromTeam(

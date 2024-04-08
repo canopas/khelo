@@ -52,7 +52,11 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     state = state.copyWith(selectedUsers: updatedList);
   }
 
-  Future<void> addPlayersToTeam(String id) async {
+  Future<void> addPlayersToTeam(String? id) async {
+    if (id == null) {
+      return;
+    }
+
     state = state.copyWith(isAddInProgress: true);
     try {
       await _teamService.addPlayersToTeam(

@@ -18,6 +18,8 @@
     "common_next_title": "Next",
     "common_yes_title": "Yes",
     "common_no_title": "No",
+    "common_runs_dot_title": " Runs.",
+    "common_wickets_dot_title": " Wickets.",
     "common_wicket_taken_title": " Wicket taken",
     "common_not_specified_title": "Not Specified",
     "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
@@ -258,6 +260,7 @@
     "score_board_match_complete_title": "Match Complete",
     "score_board_end_match_title": "End Match",
     "score_board_start_next_inning_title": "Start Next Inning",
+    "score_board_end_inning_title": "End Inning",
     "score_board_current_team_title": "Current Team",
     "score_board_team_title": "Team",
     "score_board_r_title": "R",
@@ -266,7 +269,16 @@
     "score_board_won_by_title": " Won By ",
     "score_board_select_player_title": "Select Player",
     "score_board_select_title": "select",
-    "score_board_choose_batsman_title": "choose Batsman",
+    "score_board_choose_batsman_title": "choose Batsman at position {pos}",
+    "@score_board_choose_bowler_for_over_title": {
+        "description": "choose Batsman at position {pos}",
+        "placeholders": {
+            "pos": {
+                "type": "int"
+            }
+        }
+    },
+    "score_board_choose_opening_batsmen_title": "choose opening Batsmen",
     "score_board_choose_bowler_for_over_title": "choose Bowler for over {over}",
     "@score_board_choose_bowler_for_over_title": {
         "description": "choose Bowler for over {over}",
@@ -280,23 +292,21 @@
     "score_board_injured_tag_title": "Injured",
     "score_board_who_on_strike_title": "Who's on Strike?",
     "score_board_who_got_out_title": "Who got out",
-    "score_board_runs_dot_title": " Runs.",
-    "score_board_wickets_dot_title": " Wickets.",
     "score_board_end_of_over_title": "End Of Over ",
     "score_board_start_next_over_title": "Start Next Over",
     "score_board_batsman_title": "batsMan",
     "score_board_bowler_title": "bowler",
-    "score_board_change_striker_title": "Change striker",
+    "score_board_change_striker_title": "Change Striker",
     "score_board_add_substitute_title": "Add substitute",
-    "score_board_pause_scoring_title": "Pause scoring",
     "score_board_by_title": " by ",
     "score_board_can_undo_till_running_over_title": "Undo is only allowed till running over",
     "score_board_undo_last_ball_title": "Undo Last Ball",
     "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
     "score_board_pause_scoring_title": "Pause Scoring",
     "score_board_penalty_run_title": "Penalty Run",
+    "score_board_continue_with_injured_player_title": "Continue With Injured Player",
     "score_board_pause_title": "Pause",
-    "score_board_power_play_title": "Power-Play ",
+    "score_board_more_options_title": "More Options",
     "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
     "score_board_need_run_text": "Need {run} in {ball}",
     "@score_board_need_run_text": {
