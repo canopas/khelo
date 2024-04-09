@@ -28,19 +28,19 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
         return SelectPlayerSheet(
-          type: type,
+          playerSelectionType: type,
           continueWithInjPlayer: continueWithInjPlayer,
         );
       },
     );
   }
 
-  final PlayerSelectionType type;
+  final PlayerSelectionType playerSelectionType;
   final bool continueWithInjPlayer;
 
   const SelectPlayerSheet({
     super.key,
-    required this.type,
+    required this.playerSelectionType,
     required this.continueWithInjPlayer,
   });
 
@@ -78,12 +78,17 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    final batsManList =
-        getFilteredList(state, type: PlayerSelectionType.batsMan);
-    final bowlerList = getFilteredList(state, type: PlayerSelectionType.bowler);
+    final List<MatchPlayer> batsManList =
+        widget.playerSelectionType != PlayerSelectionType.bowler
+            ? _getFilteredList(state, type: PlayerSelectionType.batsMan)
+            : [];
+    final List<MatchPlayer> bowlerList =
+        widget.playerSelectionType != PlayerSelectionType.batsMan
+            ? _getFilteredList(state, type: PlayerSelectionType.bowler)
+            : [];
 
     final showCheckBox =
-        batsManList.map((e) => e.status).contains(PlayerStatus.injured);
+        batsManList.any((element) => element.status == PlayerStatus.injured);
 
     final injuredPlayerRemained =
         batsManList.every((e) => e.status == PlayerStatus.injured);
@@ -93,11 +98,11 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         ListView(
           children: [
             // batsman
-            if (widget.type != PlayerSelectionType.bowler &&
+            if (widget.playerSelectionType != PlayerSelectionType.bowler &&
                 batsManList.isNotEmpty) ...[
               _sectionTitle(
                   context,
-                  (widget.type == PlayerSelectionType.all)
+                  (widget.playerSelectionType == PlayerSelectionType.all)
                       ? context.l10n.score_board_choose_opening_batsmen_title
                       : context.l10n.score_board_choose_batsman_title(
                           state.lastAssignedIndex + 1)),
@@ -110,7 +115,7 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
             ],
 
             // bowler
-            if (widget.type != PlayerSelectionType.batsMan) ...[
+            if (widget.playerSelectionType != PlayerSelectionType.batsMan) ...[
               _sectionTitle(
                   context,
                   context.l10n.score_board_choose_bowler_for_over_title(
@@ -129,7 +134,7 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     );
   }
 
-  List<MatchPlayer> getFilteredList(
+  List<MatchPlayer> _getFilteredList(
     ScoreBoardViewState state, {
     required PlayerSelectionType type,
   }) {
@@ -145,12 +150,14 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         .firstWhere((element) => element.team.id == teamId)
         .squad;
 
-    return teamPlayers
-            ?.where((element) => (type == PlayerSelectionType.batsMan)
-                ? _isPlayerEligibleForBatsman(element.status)
-                : true)
-            .toList() ??
-        [];
+    if (type == PlayerSelectionType.bowler) {
+      return teamPlayers ?? [];
+    } else {
+      return teamPlayers
+              ?.where((element) => _isPlayerEligibleForBatsman(element.status))
+              .toList() ??
+          [];
+    }
   }
 
   bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
@@ -190,43 +197,45 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
           childAspectRatio: 0.7),
       itemCount: list.length,
       itemBuilder: (context, index) {
+        final player = list[index];
+
         return _userCellWithTag(
           context: context,
           state: state,
           showOverCount: type == PlayerSelectionType.bowler,
-          user: list[index].player,
-          tag: list[index].status == PlayerStatus.injured &&
+          user: player.player,
+          tag: player.status == PlayerStatus.injured &&
                   type == PlayerSelectionType.batsMan
               ? context.l10n.score_board_injured_tag_title
               : null,
           isSelected: type == PlayerSelectionType.batsMan
               ? [batsMan1?.player.id, batsMan2?.player.id]
-                  .contains(list[index].player.id)
-              : bowler?.player.id == list[index].player.id,
-          disableCell: list[index].status == PlayerStatus.injured &&
+                  .contains(player.player.id)
+              : bowler?.player.id == player.player.id,
+          disableCell: player.status == PlayerStatus.injured &&
               type == PlayerSelectionType.batsMan &&
               !isEnabled,
           onTap: () {
             setState(() {
               if (type == PlayerSelectionType.batsMan) {
-                if (widget.type == PlayerSelectionType.all) {
-                  if (batsMan1?.player.id == list[index].player.id) {
+                if (widget.playerSelectionType == PlayerSelectionType.all) {
+                  if (batsMan1?.player.id == player.player.id) {
                     batsMan1 = null;
-                  } else if (batsMan2?.player.id == list[index].player.id) {
+                  } else if (batsMan2?.player.id == player.player.id) {
                     batsMan2 = null;
                   } else if (batsMan1 == null) {
-                    batsMan1 = list[index];
+                    batsMan1 = player;
                   } else if (batsMan2 == null) {
-                    batsMan2 = list[index];
+                    batsMan2 = player;
                   } else {
                     return;
                     // extra else to suppress lint suggestion of using ??= for batsMan2 assignment
                   }
                 } else {
-                  batsMan1 = list[index];
+                  batsMan1 = player;
                 }
               } else {
-                bowler = list[index];
+                bowler = player;
               }
             });
           },
@@ -245,10 +254,8 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     required bool disableCell,
     required Function() onTap,
   }) {
-    int overCount = 0;
-    if (showOverCount) {
-      overCount = _getOverCount(state, user?.id ?? "INVALID ID");
-    }
+    final overCount =
+        showOverCount ? _getOverCount(state, user?.id ?? "INVALID ID") : 0;
 
     return OnTapScale(
       enabled: !disableCell,
@@ -368,7 +375,8 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
           if (!isEnabled) {
             if (batsMan1?.status == PlayerStatus.injured) {
               batsMan1 = null;
-            } else if (batsMan2?.status == PlayerStatus.injured) {
+            }
+            if (batsMan2?.status == PlayerStatus.injured) {
               batsMan2 = null;
             }
           }
@@ -407,12 +415,12 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }
 
   bool _isStickyButtonEnable(bool injuredPlayerRemained) {
-    return widget.type == PlayerSelectionType.all
+    return widget.playerSelectionType == PlayerSelectionType.all
         ? (batsMan1 != null && batsMan2 != null && bowler != null)
-        : widget.type == PlayerSelectionType.batsManAndBowler
+        : widget.playerSelectionType == PlayerSelectionType.batsManAndBowler
             ? (((injuredPlayerRemained && !isEnabled) || batsMan1 != null) &&
                 bowler != null)
-            : widget.type == PlayerSelectionType.batsMan
+            : widget.playerSelectionType == PlayerSelectionType.batsMan
                 ? (injuredPlayerRemained && !isEnabled) || batsMan1 != null
                 : bowler != null;
   }
@@ -432,7 +440,7 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
       final List<({List<MatchPlayer> players, String teamId})> selectedPlayer =
           [];
 
-      if (widget.type != PlayerSelectionType.batsMan) {
+      if (widget.playerSelectionType != PlayerSelectionType.batsMan) {
         selectedPlayer.add(
           (
             teamId: state.otherInning?.team_id ?? "INVALID ID",
@@ -441,10 +449,10 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         );
       }
 
-      if (widget.type != PlayerSelectionType.bowler) {
+      if (widget.playerSelectionType != PlayerSelectionType.bowler) {
         List<MatchPlayer> players = [batsMan1!];
 
-        if (widget.type == PlayerSelectionType.all) {
+        if (widget.playerSelectionType == PlayerSelectionType.all) {
           players.add(batsMan2!);
         }
 

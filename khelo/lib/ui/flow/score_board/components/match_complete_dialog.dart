@@ -11,17 +11,24 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class MatchCompleteDialog extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    required bool showUndoButton,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return const MatchCompleteDialog();
+        return MatchCompleteDialog(
+          showUndoButton: showUndoButton,
+        );
       },
     );
   }
 
-  const MatchCompleteDialog({super.key});
+  final bool showUndoButton;
+
+  const MatchCompleteDialog({super.key, required this.showUndoButton});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,11 +43,13 @@ class MatchCompleteDialog extends ConsumerWidget {
       content: _matchContent(context, state),
       actionsOverflowButtonSpacing: 8,
       actions: [
-        PrimaryButton(
-          expanded: false,
-          context.l10n.score_board_undo_last_ball_title,
-          onPressed: () => context.pop(false),
-        ),
+        if (showUndoButton) ...[
+          PrimaryButton(
+            context.l10n.score_board_undo_last_ball_title,
+            expanded: false,
+            onPressed: () => context.pop(false),
+          ),
+        ],
         PrimaryButton(
           context.l10n.score_board_end_match_title,
           expanded: false,

@@ -75,6 +75,8 @@
     "edit_profile_save_title": "SAVE",
 
     "home_screen_title": "Home",
+    "home_screen_no_matches_title": "No matches are running currently",
+    "home_screen_no_matches_description_text": "Running matches will be shown here, Stay tuned for some intense matches.",
 
     "image_picker_choose_option_title": "Choose an option.",
     "image_picker_crop_image_title": "Crop Image",

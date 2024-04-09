@@ -147,22 +147,30 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowInningCompleteDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowInningCompleteDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider.select(
             (value) => value.showInningCompleteDialog), (previous, next) {
       if (next != null) {
-        _showInningCompleteDialog(context);
+        _showInningCompleteDialog(context, state);
       }
     });
   }
 
-  void _observeShowMatchCompleteDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowMatchCompleteDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ScoreBoardViewState state,
+  ) {
     ref.listen(
         scoreBoardStateProvider.select(
             (value) => value.showMatchCompleteDialog), (previous, next) {
       if (next != null) {
-        _showMatchCompleteDialog(context);
+        _showMatchCompleteDialog(context, state);
       }
     });
   }
@@ -301,8 +309,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowStrikerSelectionDialog(context, ref);
     _observeShowUndoBallConfirmationDialog(context, ref);
     _observeShowOverCompleteDialog(context, ref);
-    _observeShowInningCompleteDialog(context, ref);
-    _observeShowMatchCompleteDialog(context, ref);
+    _observeShowInningCompleteDialog(context, ref, state);
+    _observeShowMatchCompleteDialog(context, ref, state);
     _observeShowBoundaryDialogForSix(context, ref);
     _observeShowBoundaryDialogForFour(context, ref);
     _observeShowAddExtraDialogForNoBall(context, ref);
@@ -451,8 +459,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showInningCompleteDialog(BuildContext context) async {
-    final startNext = await InningCompleteDialog.show<bool>(context);
+  Future<void> _showInningCompleteDialog(
+      BuildContext context, ScoreBoardViewState state) async {
+    final showUndoButton =
+        !(_isInjuredPlayerRemained(state) && !state.continueWithInjuredPlayers);
+    final startNext = await InningCompleteDialog.show<bool>(context,
+        showUndoButton: showUndoButton);
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextInning();
@@ -462,8 +474,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showMatchCompleteDialog(BuildContext context) async {
-    final endMatch = await MatchCompleteDialog.show<bool>(context);
+  Future<void> _showMatchCompleteDialog(
+      BuildContext context, ScoreBoardViewState state) async {
+    final showUndoButton =
+        !(_isInjuredPlayerRemained(state) && !state.continueWithInjuredPlayers);
+    final endMatch = await MatchCompleteDialog.show<bool>(context,
+        showUndoButton: showUndoButton);
     if (endMatch != null && context.mounted) {
       if (endMatch) {
         notifier.endMatch();
@@ -471,6 +487,28 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         notifier.undoLastBall();
       }
     }
+  }
+
+  bool _isInjuredPlayerRemained(ScoreBoardViewState state) {
+    if (state.match == null) {
+      return false;
+    }
+
+    final teamPlayers = state.match?.teams
+        .firstWhere(
+            (element) => element.team.id == state.currentInning?.team_id)
+        .squad;
+
+    return teamPlayers
+            ?.where((element) => _isPlayerEligibleForBatsman(element.status))
+            .every((e) => e.status == PlayerStatus.injured) ??
+        false;
+  }
+
+  bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
+    return status != PlayerStatus.played &&
+        status != PlayerStatus.playing &&
+        status != PlayerStatus.suspended;
   }
 
   Future<void> _showBoundaryDialog(BuildContext context, int run) async {

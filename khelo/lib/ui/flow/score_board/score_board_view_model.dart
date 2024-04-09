@@ -643,21 +643,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       updateList.removeWhere((element) => element.id == lastBall.id);
 
       state = state.copyWith(
-        currentScoresList: updateList,
-        ballCount: (lastBall.extras_type == ExtrasType.noBall ||
-                lastBall.extras_type == ExtrasType.wide)
-            ? state.ballCount
-            : state.ballCount - 1,
-        wicketCount: lastBall.wicket_type != null &&
-                lastBall.wicket_type != WicketType.retiredHurt
-            ? state.wicketCount - 1
-            : state.wicketCount,
-        lastAssignedIndex: lastBall.wicket_type != null
-            ? state.lastAssignedIndex - 1
-            : state.lastAssignedIndex,
-        totalRuns: state.totalRuns -
-            ((lastBall.extras_awarded ?? 0) + (lastBall.runs_scored ?? 0)),
-      );
+          currentScoresList: updateList,
+          ballCount: (lastBall.extras_type == ExtrasType.noBall ||
+                  lastBall.extras_type == ExtrasType.wide)
+              ? state.ballCount
+              : state.ballCount - 1,
+          wicketCount: lastBall.wicket_type != null &&
+                  lastBall.wicket_type != WicketType.retiredHurt
+              ? state.wicketCount - 1
+              : state.wicketCount,
+          lastAssignedIndex: lastBall.wicket_type != null
+              ? state.lastAssignedIndex - 1
+              : state.lastAssignedIndex,
+          totalRuns: state.totalRuns -
+              ((lastBall.extras_awarded ?? 0) + (lastBall.runs_scored ?? 0)),
+          strikerId: lastBall.wicket_type == null
+              ? lastBall.batsman_id
+              : state.strikerId);
 
       if (!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId) ??
           false)) {

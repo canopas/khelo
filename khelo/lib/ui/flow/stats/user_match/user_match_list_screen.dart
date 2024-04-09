@@ -29,17 +29,27 @@ class UserMatchListScreen extends ConsumerWidget {
   }
 
   Widget _body(BuildContext context, UserMatchListState state) {
-    return ListView.separated(
-        padding: const EdgeInsets.only(bottom: 50, top: 24),
-        itemBuilder: (context, index) {
-          return _matchListCell(context, state.matches.elementAt(index));
-        },
-        separatorBuilder: (context, index) {
-          return const SizedBox(
-            height: 16,
-          );
-        },
-        itemCount: state.matches.length);
+    if (state.matches.isNotEmpty) {
+      return ListView.separated(
+          padding: const EdgeInsets.only(bottom: 50, top: 24),
+          itemBuilder: (context, index) {
+            return _matchListCell(context, state.matches.elementAt(index));
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(
+              height: 16,
+            );
+          },
+          itemCount: state.matches.length);
+    } else {
+      return Center(
+        child: Text(
+          context.l10n.match_list_no_match_yet_title,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.textPrimary),
+        ),
+      );
+    }
   }
 
   Widget _matchListCell(BuildContext context, MatchModel match) {
