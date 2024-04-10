@@ -17,11 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$SignInWithPhoneState {
   CountryCode get code => throw _privateConstructorUsedError;
+  Object? get error => throw _privateConstructorUsedError;
+  String? get verificationId => throw _privateConstructorUsedError;
   bool get verifying => throw _privateConstructorUsedError;
   bool get signInSuccess => throw _privateConstructorUsedError;
-  String? get verificationId => throw _privateConstructorUsedError;
   bool get enableBtn => throw _privateConstructorUsedError;
-  Object? get error => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -37,11 +37,11 @@ abstract class $SignInWithPhoneStateCopyWith<$Res> {
   @useResult
   $Res call(
       {CountryCode code,
+      Object? error,
+      String? verificationId,
       bool verifying,
       bool signInSuccess,
-      String? verificationId,
       bool enableBtn,
-      Object? error,
       String phone});
 }
 
@@ -60,11 +60,11 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? code = null,
+    Object? error = freezed,
+    Object? verificationId = freezed,
     Object? verifying = null,
     Object? signInSuccess = null,
-    Object? verificationId = freezed,
     Object? enableBtn = null,
-    Object? error = freezed,
     Object? phone = null,
   }) {
     return _then(_value.copyWith(
@@ -72,6 +72,11 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as CountryCode,
+      error: freezed == error ? _value.error : error,
+      verificationId: freezed == verificationId
+          ? _value.verificationId
+          : verificationId // ignore: cast_nullable_to_non_nullable
+              as String?,
       verifying: null == verifying
           ? _value.verifying
           : verifying // ignore: cast_nullable_to_non_nullable
@@ -80,15 +85,10 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
           ? _value.signInSuccess
           : signInSuccess // ignore: cast_nullable_to_non_nullable
               as bool,
-      verificationId: freezed == verificationId
-          ? _value.verificationId
-          : verificationId // ignore: cast_nullable_to_non_nullable
-              as String?,
       enableBtn: null == enableBtn
           ? _value.enableBtn
           : enableBtn // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
       phone: null == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -107,11 +107,11 @@ abstract class _$$SignInWithPhoneStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {CountryCode code,
+      Object? error,
+      String? verificationId,
       bool verifying,
       bool signInSuccess,
-      String? verificationId,
       bool enableBtn,
-      Object? error,
       String phone});
 }
 
@@ -127,11 +127,11 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? code = null,
+    Object? error = freezed,
+    Object? verificationId = freezed,
     Object? verifying = null,
     Object? signInSuccess = null,
-    Object? verificationId = freezed,
     Object? enableBtn = null,
-    Object? error = freezed,
     Object? phone = null,
   }) {
     return _then(_$SignInWithPhoneStateImpl(
@@ -139,6 +139,11 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
               as CountryCode,
+      error: freezed == error ? _value.error : error,
+      verificationId: freezed == verificationId
+          ? _value.verificationId
+          : verificationId // ignore: cast_nullable_to_non_nullable
+              as String?,
       verifying: null == verifying
           ? _value.verifying
           : verifying // ignore: cast_nullable_to_non_nullable
@@ -147,15 +152,10 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
           ? _value.signInSuccess
           : signInSuccess // ignore: cast_nullable_to_non_nullable
               as bool,
-      verificationId: freezed == verificationId
-          ? _value.verificationId
-          : verificationId // ignore: cast_nullable_to_non_nullable
-              as String?,
       enableBtn: null == enableBtn
           ? _value.enableBtn
           : enableBtn // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
       phone: null == phone
           ? _value.phone
           : phone // ignore: cast_nullable_to_non_nullable
@@ -169,15 +169,19 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
 class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
   const _$SignInWithPhoneStateImpl(
       {required this.code,
+      this.error,
+      this.verificationId,
       this.verifying = false,
       this.signInSuccess = false,
-      this.verificationId,
       this.enableBtn = false,
-      this.error,
       this.phone = ''});
 
   @override
   final CountryCode code;
+  @override
+  final Object? error;
+  @override
+  final String? verificationId;
   @override
   @JsonKey()
   final bool verifying;
@@ -185,19 +189,15 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
   @JsonKey()
   final bool signInSuccess;
   @override
-  final String? verificationId;
-  @override
   @JsonKey()
   final bool enableBtn;
-  @override
-  final Object? error;
   @override
   @JsonKey()
   final String phone;
 
   @override
   String toString() {
-    return 'SignInWithPhoneState(code: $code, verifying: $verifying, signInSuccess: $signInSuccess, verificationId: $verificationId, enableBtn: $enableBtn, error: $error, phone: $phone)';
+    return 'SignInWithPhoneState(code: $code, error: $error, verificationId: $verificationId, verifying: $verifying, signInSuccess: $signInSuccess, enableBtn: $enableBtn, phone: $phone)';
   }
 
   @override
@@ -206,15 +206,15 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
         (other.runtimeType == runtimeType &&
             other is _$SignInWithPhoneStateImpl &&
             (identical(other.code, code) || other.code == code) &&
+            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.verificationId, verificationId) ||
+                other.verificationId == verificationId) &&
             (identical(other.verifying, verifying) ||
                 other.verifying == verifying) &&
             (identical(other.signInSuccess, signInSuccess) ||
                 other.signInSuccess == signInSuccess) &&
-            (identical(other.verificationId, verificationId) ||
-                other.verificationId == verificationId) &&
             (identical(other.enableBtn, enableBtn) ||
                 other.enableBtn == enableBtn) &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.phone, phone) || other.phone == phone));
   }
 
@@ -222,11 +222,11 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
   int get hashCode => Object.hash(
       runtimeType,
       code,
+      const DeepCollectionEquality().hash(error),
+      verificationId,
       verifying,
       signInSuccess,
-      verificationId,
       enableBtn,
-      const DeepCollectionEquality().hash(error),
       phone);
 
   @JsonKey(ignore: true)
@@ -241,25 +241,25 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
 abstract class _SignInWithPhoneState implements SignInWithPhoneState {
   const factory _SignInWithPhoneState(
       {required final CountryCode code,
+      final Object? error,
+      final String? verificationId,
       final bool verifying,
       final bool signInSuccess,
-      final String? verificationId,
       final bool enableBtn,
-      final Object? error,
       final String phone}) = _$SignInWithPhoneStateImpl;
 
   @override
   CountryCode get code;
   @override
+  Object? get error;
+  @override
+  String? get verificationId;
+  @override
   bool get verifying;
   @override
   bool get signInSuccess;
   @override
-  String? get verificationId;
-  @override
   bool get enableBtn;
-  @override
-  Object? get error;
   @override
   String get phone;
   @override

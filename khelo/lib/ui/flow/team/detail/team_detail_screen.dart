@@ -11,7 +11,6 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/page_views/expandable_page_view.dart';
 
 import 'components/team_detail_match_content.dart';
 import 'components/team_detail_stat_content.dart';
@@ -67,75 +66,74 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         child: AppProgressIndicator(),
       );
     }
-    return ListView(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        _teamProfileView(context, state),
-        _content(context),
-      ],
+    return Padding(
+      padding: context.mediaQueryPadding,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _teamProfileView(context, state),
+          _tabView(context),
+          _content(context),
+        ],
+      ),
     );
   }
 
   Widget _teamProfileView(BuildContext context, TeamDetailState state) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            // profile view
-            ImageAvatar(
-              initial: state.team?.name[0].toUpperCase() ?? "?",
-              imageUrl: state.team?.profile_img_url,
-              size: 90,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(state.team?.name ?? "",
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textPrimary)),
-                Text(state.team?.city ?? "",
-                    style: AppTextStyle.subtitle2
-                        .copyWith(color: context.colorScheme.textPrimary)),
-                Text(
-                    DateFormat.yMMMd()
-                        .format(state.team?.created_at ?? DateTime.now()),
-                    style: AppTextStyle.subtitle2
-                        .copyWith(color: context.colorScheme.textPrimary)),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        const Divider(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // profile view
+              ImageAvatar(
+                initial: state.team?.name[0].toUpperCase() ?? "?",
+                imageUrl: state.team?.profile_img_url,
+                size: 90,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(state.team?.name ?? "",
+                      style: AppTextStyle.header4
+                          .copyWith(color: context.colorScheme.textPrimary)),
+                  Text(state.team?.city ?? "",
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textPrimary)),
+                  Text(
+                      DateFormat.yMMMd()
+                          .format(state.team?.created_at ?? DateTime.now()),
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textPrimary)),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          const Divider(),
+        ],
+      ),
     );
   }
 
   Widget _content(BuildContext context) {
-    return Column(
-      children: [
-        _tabView(context),
-        ExpandablePageView(
-          itemCount: _tabs.length,
-          controller: _controller,
-          itemBuilder: (context, index) {
-            return _tabs[index];
-          },
-          onPageChanged: (index) {
-            setState(() {
-              notifier.onTabChange(index);
-            });
-          },
-        ),
-      ],
+    return Expanded(
+      child: PageView(
+        controller: _controller,
+        children: _tabs,
+        onPageChanged: (index) {
+          notifier.onTabChange(index);
+          setState(() {});
+        },
+      ),
     );
   }
 

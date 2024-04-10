@@ -14,6 +14,7 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
       ball_number: json['ball_number'] as int,
       bowler_id: json['bowler_id'] as String,
       batsman_id: json['batsman_id'] as String,
+      non_striker_id: json['non_striker_id'] as String,
       runs_scored: json['runs_scored'] as int?,
       extras_type:
           $enumDecodeNullable(_$ExtrasTypeEnumMap, json['extras_type']),
@@ -36,6 +37,7 @@ Map<String, dynamic> _$$BallScoreModelImplToJson(
       'ball_number': instance.ball_number,
       'bowler_id': instance.bowler_id,
       'batsman_id': instance.batsman_id,
+      'non_striker_id': instance.non_striker_id,
       'runs_scored': instance.runs_scored,
       'extras_type': _$ExtrasTypeEnumMap[instance.extras_type],
       'extras_awarded': instance.extras_awarded,

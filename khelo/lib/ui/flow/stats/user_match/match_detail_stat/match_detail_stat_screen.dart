@@ -165,15 +165,13 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
   }
 
   Widget _runScoredText(BuildContext context, int run, double over) {
-    final overCount = over != 0 ? over - 1 : over;
     return Text.rich(TextSpan(
         text: run.toString(),
         style: AppTextStyle.subtitle1
             .copyWith(color: context.colorScheme.textPrimary, fontSize: 22),
         children: [
           TextSpan(
-            text: context.l10n
-                .match_stat_in_over_text(overCount.toStringAsFixed(1)),
+            text: context.l10n.match_stat_in_over_text(over.toString()),
             style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),

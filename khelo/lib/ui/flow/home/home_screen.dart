@@ -32,12 +32,16 @@ class HomeScreen extends ConsumerWidget {
       return const Center(child: AppProgressIndicator());
     }
 
-    return ListView(
-      padding: context.mediaQueryPadding,
-      children: [
-        _matchCardSlider(context, state),
-      ],
-    );
+    if (state.matches.isNotEmpty) {
+      return ListView(
+        padding: context.mediaQueryPadding,
+        children: [
+          _matchCardSlider(context, state),
+        ],
+      );
+    } else {
+      return _emptyMatchView(context);
+    }
   }
 
   Widget _matchCardSlider(
@@ -140,7 +144,7 @@ class HomeScreen extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 24),
             children: [
               TextSpan(
-                  text: " (${((team.over ?? 1) - 1).toStringAsFixed(1)})",
+                  text: " (${team.over ?? 0})",
                   style: AppTextStyle.body1
                       .copyWith(color: context.colorScheme.textPrimary))
             ])),
@@ -170,6 +174,37 @@ class HomeScreen extends ConsumerWidget {
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary)),
       ],
+    );
+  }
+
+  Widget _emptyMatchView(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: context.colorScheme.primary)),
+      child: IntrinsicHeight(
+        child: Column(
+          children: [
+            Text(
+              context.l10n.home_screen_no_matches_title,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.header2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              context.l10n.home_screen_no_matches_description_text,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textSecondary),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

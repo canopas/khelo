@@ -18,9 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SearchUserViewState {
   TextEditingController get searchController =>
       throw _privateConstructorUsedError;
-  List<UserModel> get searchedUsers => throw _privateConstructorUsedError;
-  UserModel? get selectedUser => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
+  UserModel? get selectedUser => throw _privateConstructorUsedError;
+  List<UserModel> get searchedUsers => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchUserViewStateCopyWith<SearchUserViewState> get copyWith =>
@@ -35,9 +35,9 @@ abstract class $SearchUserViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {TextEditingController searchController,
-      List<UserModel> searchedUsers,
+      Object? error,
       UserModel? selectedUser,
-      Object? error});
+      List<UserModel> searchedUsers});
 
   $UserModelCopyWith<$Res>? get selectedUser;
 }
@@ -56,24 +56,24 @@ class _$SearchUserViewStateCopyWithImpl<$Res, $Val extends SearchUserViewState>
   @override
   $Res call({
     Object? searchController = null,
-    Object? searchedUsers = null,
-    Object? selectedUser = freezed,
     Object? error = freezed,
+    Object? selectedUser = freezed,
+    Object? searchedUsers = null,
   }) {
     return _then(_value.copyWith(
       searchController: null == searchController
           ? _value.searchController
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
-      searchedUsers: null == searchedUsers
-          ? _value.searchedUsers
-          : searchedUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+      error: freezed == error ? _value.error : error,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
-      error: freezed == error ? _value.error : error,
+      searchedUsers: null == searchedUsers
+          ? _value.searchedUsers
+          : searchedUsers // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
     ) as $Val);
   }
 
@@ -100,9 +100,9 @@ abstract class _$$SearchUserViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {TextEditingController searchController,
-      List<UserModel> searchedUsers,
+      Object? error,
       UserModel? selectedUser,
-      Object? error});
+      List<UserModel> searchedUsers});
 
   @override
   $UserModelCopyWith<$Res>? get selectedUser;
@@ -120,24 +120,24 @@ class __$$SearchUserViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? searchController = null,
-    Object? searchedUsers = null,
-    Object? selectedUser = freezed,
     Object? error = freezed,
+    Object? selectedUser = freezed,
+    Object? searchedUsers = null,
   }) {
     return _then(_$SearchUserViewStateImpl(
       searchController: null == searchController
           ? _value.searchController
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
-      searchedUsers: null == searchedUsers
-          ? _value._searchedUsers
-          : searchedUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+      error: freezed == error ? _value.error : error,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
-      error: freezed == error ? _value.error : error,
+      searchedUsers: null == searchedUsers
+          ? _value._searchedUsers
+          : searchedUsers // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
     ));
   }
 }
@@ -147,13 +147,17 @@ class __$$SearchUserViewStateImplCopyWithImpl<$Res>
 class _$SearchUserViewStateImpl implements _SearchUserViewState {
   const _$SearchUserViewStateImpl(
       {required this.searchController,
-      final List<UserModel> searchedUsers = const [],
+      this.error,
       this.selectedUser,
-      this.error})
+      final List<UserModel> searchedUsers = const []})
       : _searchedUsers = searchedUsers;
 
   @override
   final TextEditingController searchController;
+  @override
+  final Object? error;
+  @override
+  final UserModel? selectedUser;
   final List<UserModel> _searchedUsers;
   @override
   @JsonKey()
@@ -164,13 +168,8 @@ class _$SearchUserViewStateImpl implements _SearchUserViewState {
   }
 
   @override
-  final UserModel? selectedUser;
-  @override
-  final Object? error;
-
-  @override
   String toString() {
-    return 'SearchUserViewState(searchController: $searchController, searchedUsers: $searchedUsers, selectedUser: $selectedUser, error: $error)';
+    return 'SearchUserViewState(searchController: $searchController, error: $error, selectedUser: $selectedUser, searchedUsers: $searchedUsers)';
   }
 
   @override
@@ -180,20 +179,20 @@ class _$SearchUserViewStateImpl implements _SearchUserViewState {
             other is _$SearchUserViewStateImpl &&
             (identical(other.searchController, searchController) ||
                 other.searchController == searchController) &&
-            const DeepCollectionEquality()
-                .equals(other._searchedUsers, _searchedUsers) &&
+            const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.selectedUser, selectedUser) ||
                 other.selectedUser == selectedUser) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            const DeepCollectionEquality()
+                .equals(other._searchedUsers, _searchedUsers));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       searchController,
-      const DeepCollectionEquality().hash(_searchedUsers),
+      const DeepCollectionEquality().hash(error),
       selectedUser,
-      const DeepCollectionEquality().hash(error));
+      const DeepCollectionEquality().hash(_searchedUsers));
 
   @JsonKey(ignore: true)
   @override
@@ -206,18 +205,18 @@ class _$SearchUserViewStateImpl implements _SearchUserViewState {
 abstract class _SearchUserViewState implements SearchUserViewState {
   const factory _SearchUserViewState(
       {required final TextEditingController searchController,
-      final List<UserModel> searchedUsers,
+      final Object? error,
       final UserModel? selectedUser,
-      final Object? error}) = _$SearchUserViewStateImpl;
+      final List<UserModel> searchedUsers}) = _$SearchUserViewStateImpl;
 
   @override
   TextEditingController get searchController;
   @override
-  List<UserModel> get searchedUsers;
+  Object? get error;
   @override
   UserModel? get selectedUser;
   @override
-  Object? get error;
+  List<UserModel> get searchedUsers;
   @override
   @JsonKey(ignore: true)
   _$$SearchUserViewStateImplCopyWith<_$SearchUserViewStateImpl> get copyWith =>

@@ -12,7 +12,7 @@ part of 'add_match_view_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$AddMatchViewState {
@@ -36,6 +36,9 @@ mixin _$AddMatchViewState {
   String? get teamAAdminId => throw _privateConstructorUsedError;
   String? get teamBAdminId => throw _privateConstructorUsedError;
   List<Officials> get officials => throw _privateConstructorUsedError;
+  List<int>? get firstPowerPlay => throw _privateConstructorUsedError;
+  List<int>? get secondPowerPlay => throw _privateConstructorUsedError;
+  List<int>? get thirdPowerPlay => throw _privateConstructorUsedError;
   PitchType get pitchType => throw _privateConstructorUsedError;
   MatchType get matchType => throw _privateConstructorUsedError;
   BallType get ballType => throw _privateConstructorUsedError;
@@ -46,9 +49,6 @@ mixin _$AddMatchViewState {
   bool get isAddMatchInProgress => throw _privateConstructorUsedError;
   bool? get pushTossDetailScreen => throw _privateConstructorUsedError;
   bool? get pop => throw _privateConstructorUsedError;
-  List<int>? get firstPowerPlay => throw _privateConstructorUsedError;
-  List<int>? get secondPowerPlay => throw _privateConstructorUsedError;
-  List<int>? get thirdPowerPlay => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AddMatchViewStateCopyWith<AddMatchViewState> get copyWith =>
@@ -78,6 +78,9 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       String? teamAAdminId,
       String? teamBAdminId,
       List<Officials> officials,
+      List<int>? firstPowerPlay,
+      List<int>? secondPowerPlay,
+      List<int>? thirdPowerPlay,
       PitchType pitchType,
       MatchType matchType,
       BallType ballType,
@@ -87,10 +90,7 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       bool isStartBtnEnable,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
-      bool? pop,
-      List<int>? firstPowerPlay,
-      List<int>? secondPowerPlay,
-      List<int>? thirdPowerPlay});
+      bool? pop});
 
   $MatchModelCopyWith<$Res>? get match;
   $TeamModelCopyWith<$Res>? get teamA;
@@ -126,6 +126,9 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? teamAAdminId = freezed,
     Object? teamBAdminId = freezed,
     Object? officials = null,
+    Object? firstPowerPlay = freezed,
+    Object? secondPowerPlay = freezed,
+    Object? thirdPowerPlay = freezed,
     Object? pitchType = null,
     Object? matchType = null,
     Object? ballType = null,
@@ -136,9 +139,6 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
     Object? pop = freezed,
-    Object? firstPowerPlay = freezed,
-    Object? secondPowerPlay = freezed,
-    Object? thirdPowerPlay = freezed,
   }) {
     return _then(_value.copyWith(
       matchTime: null == matchTime
@@ -202,6 +202,18 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           ? _value.officials
           : officials // ignore: cast_nullable_to_non_nullable
               as List<Officials>,
+      firstPowerPlay: freezed == firstPowerPlay
+          ? _value.firstPowerPlay
+          : firstPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
+      secondPowerPlay: freezed == secondPowerPlay
+          ? _value.secondPowerPlay
+          : secondPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
+      thirdPowerPlay: freezed == thirdPowerPlay
+          ? _value.thirdPowerPlay
+          : thirdPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       pitchType: null == pitchType
           ? _value.pitchType
           : pitchType // ignore: cast_nullable_to_non_nullable
@@ -242,18 +254,6 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
               as bool?,
-      firstPowerPlay: freezed == firstPowerPlay
-          ? _value.firstPowerPlay
-          : firstPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      secondPowerPlay: freezed == secondPowerPlay
-          ? _value.secondPowerPlay
-          : secondPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      thirdPowerPlay: freezed == thirdPowerPlay
-          ? _value.thirdPowerPlay
-          : thirdPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
     ) as $Val);
   }
 
@@ -319,6 +319,9 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       String? teamAAdminId,
       String? teamBAdminId,
       List<Officials> officials,
+      List<int>? firstPowerPlay,
+      List<int>? secondPowerPlay,
+      List<int>? thirdPowerPlay,
       PitchType pitchType,
       MatchType matchType,
       BallType ballType,
@@ -328,10 +331,7 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       bool isStartBtnEnable,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
-      bool? pop,
-      List<int>? firstPowerPlay,
-      List<int>? secondPowerPlay,
-      List<int>? thirdPowerPlay});
+      bool? pop});
 
   @override
   $MatchModelCopyWith<$Res>? get match;
@@ -368,6 +368,9 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? teamAAdminId = freezed,
     Object? teamBAdminId = freezed,
     Object? officials = null,
+    Object? firstPowerPlay = freezed,
+    Object? secondPowerPlay = freezed,
+    Object? thirdPowerPlay = freezed,
     Object? pitchType = null,
     Object? matchType = null,
     Object? ballType = null,
@@ -378,9 +381,6 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
     Object? pop = freezed,
-    Object? firstPowerPlay = freezed,
-    Object? secondPowerPlay = freezed,
-    Object? thirdPowerPlay = freezed,
   }) {
     return _then(_$AddMatchViewStateImpl(
       matchTime: null == matchTime
@@ -444,6 +444,18 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           ? _value._officials
           : officials // ignore: cast_nullable_to_non_nullable
               as List<Officials>,
+      firstPowerPlay: freezed == firstPowerPlay
+          ? _value._firstPowerPlay
+          : firstPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
+      secondPowerPlay: freezed == secondPowerPlay
+          ? _value._secondPowerPlay
+          : secondPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
+      thirdPowerPlay: freezed == thirdPowerPlay
+          ? _value._thirdPowerPlay
+          : thirdPowerPlay // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
       pitchType: null == pitchType
           ? _value.pitchType
           : pitchType // ignore: cast_nullable_to_non_nullable
@@ -484,18 +496,6 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
               as bool?,
-      firstPowerPlay: freezed == firstPowerPlay
-          ? _value._firstPowerPlay
-          : firstPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      secondPowerPlay: freezed == secondPowerPlay
-          ? _value._secondPowerPlay
-          : secondPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
-      thirdPowerPlay: freezed == thirdPowerPlay
-          ? _value._thirdPowerPlay
-          : thirdPowerPlay // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
     ));
   }
 }
@@ -520,6 +520,9 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       this.teamAAdminId,
       this.teamBAdminId,
       final List<Officials> officials = const [],
+      final List<int>? firstPowerPlay = const [],
+      final List<int>? secondPowerPlay = const [],
+      final List<int>? thirdPowerPlay = const [],
       this.pitchType = PitchType.rough,
       this.matchType = MatchType.limitedOvers,
       this.ballType = BallType.leather,
@@ -529,10 +532,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       this.isStartBtnEnable = false,
       this.isAddMatchInProgress = false,
       this.pushTossDetailScreen = null,
-      this.pop = null,
-      final List<int>? firstPowerPlay = const [],
-      final List<int>? secondPowerPlay = const [],
-      final List<int>? thirdPowerPlay = const []})
+      this.pop = null})
       : _squadA = squadA,
         _squadB = squadB,
         _officials = officials,
@@ -595,36 +595,6 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
     return EqualUnmodifiableListView(_officials);
   }
 
-  @override
-  @JsonKey()
-  final PitchType pitchType;
-  @override
-  @JsonKey()
-  final MatchType matchType;
-  @override
-  @JsonKey()
-  final BallType ballType;
-  @override
-  @JsonKey()
-  final bool loading;
-  @override
-  @JsonKey()
-  final bool isPowerPlayButtonEnable;
-  @override
-  @JsonKey()
-  final bool isSaveBtnEnable;
-  @override
-  @JsonKey()
-  final bool isStartBtnEnable;
-  @override
-  @JsonKey()
-  final bool isAddMatchInProgress;
-  @override
-  @JsonKey()
-  final bool? pushTossDetailScreen;
-  @override
-  @JsonKey()
-  final bool? pop;
   final List<int>? _firstPowerPlay;
   @override
   @JsonKey()
@@ -659,8 +629,39 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   }
 
   @override
+  @JsonKey()
+  final PitchType pitchType;
+  @override
+  @JsonKey()
+  final MatchType matchType;
+  @override
+  @JsonKey()
+  final BallType ballType;
+  @override
+  @JsonKey()
+  final bool loading;
+  @override
+  @JsonKey()
+  final bool isPowerPlayButtonEnable;
+  @override
+  @JsonKey()
+  final bool isSaveBtnEnable;
+  @override
+  @JsonKey()
+  final bool isStartBtnEnable;
+  @override
+  @JsonKey()
+  final bool isAddMatchInProgress;
+  @override
+  @JsonKey()
+  final bool? pushTossDetailScreen;
+  @override
+  @JsonKey()
+  final bool? pop;
+
+  @override
   String toString() {
-    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, isSaveBtnEnable: $isSaveBtnEnable, isStartBtnEnable: $isStartBtnEnable, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay)';
+    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, isSaveBtnEnable: $isSaveBtnEnable, isStartBtnEnable: $isStartBtnEnable, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
   }
 
   @override
@@ -695,6 +696,12 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
                 other.teamBAdminId == teamBAdminId) &&
             const DeepCollectionEquality()
                 .equals(other._officials, _officials) &&
+            const DeepCollectionEquality()
+                .equals(other._firstPowerPlay, _firstPowerPlay) &&
+            const DeepCollectionEquality()
+                .equals(other._secondPowerPlay, _secondPowerPlay) &&
+            const DeepCollectionEquality()
+                .equals(other._thirdPowerPlay, _thirdPowerPlay) &&
             (identical(other.pitchType, pitchType) ||
                 other.pitchType == pitchType) &&
             (identical(other.matchType, matchType) ||
@@ -713,13 +720,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
                 other.isAddMatchInProgress == isAddMatchInProgress) &&
             (identical(other.pushTossDetailScreen, pushTossDetailScreen) ||
                 other.pushTossDetailScreen == pushTossDetailScreen) &&
-            (identical(other.pop, pop) || other.pop == pop) &&
-            const DeepCollectionEquality()
-                .equals(other._firstPowerPlay, _firstPowerPlay) &&
-            const DeepCollectionEquality()
-                .equals(other._secondPowerPlay, _secondPowerPlay) &&
-            const DeepCollectionEquality()
-                .equals(other._thirdPowerPlay, _thirdPowerPlay));
+            (identical(other.pop, pop) || other.pop == pop));
   }
 
   @override
@@ -741,6 +742,9 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         teamAAdminId,
         teamBAdminId,
         const DeepCollectionEquality().hash(_officials),
+        const DeepCollectionEquality().hash(_firstPowerPlay),
+        const DeepCollectionEquality().hash(_secondPowerPlay),
+        const DeepCollectionEquality().hash(_thirdPowerPlay),
         pitchType,
         matchType,
         ballType,
@@ -750,10 +754,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         isStartBtnEnable,
         isAddMatchInProgress,
         pushTossDetailScreen,
-        pop,
-        const DeepCollectionEquality().hash(_firstPowerPlay),
-        const DeepCollectionEquality().hash(_secondPowerPlay),
-        const DeepCollectionEquality().hash(_thirdPowerPlay)
+        pop
       ]);
 
   @JsonKey(ignore: true)
@@ -782,6 +783,9 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       final String? teamAAdminId,
       final String? teamBAdminId,
       final List<Officials> officials,
+      final List<int>? firstPowerPlay,
+      final List<int>? secondPowerPlay,
+      final List<int>? thirdPowerPlay,
       final PitchType pitchType,
       final MatchType matchType,
       final BallType ballType,
@@ -791,10 +795,7 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       final bool isStartBtnEnable,
       final bool isAddMatchInProgress,
       final bool? pushTossDetailScreen,
-      final bool? pop,
-      final List<int>? firstPowerPlay,
-      final List<int>? secondPowerPlay,
-      final List<int>? thirdPowerPlay}) = _$AddMatchViewStateImpl;
+      final bool? pop}) = _$AddMatchViewStateImpl;
 
   @override
   DateTime get matchTime;
@@ -829,6 +830,12 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   @override
   List<Officials> get officials;
   @override
+  List<int>? get firstPowerPlay;
+  @override
+  List<int>? get secondPowerPlay;
+  @override
+  List<int>? get thirdPowerPlay;
+  @override
   PitchType get pitchType;
   @override
   MatchType get matchType;
@@ -848,12 +855,6 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   bool? get pushTossDetailScreen;
   @override
   bool? get pop;
-  @override
-  List<int>? get firstPowerPlay;
-  @override
-  List<int>? get secondPowerPlay;
-  @override
-  List<int>? get thirdPowerPlay;
   @override
   @JsonKey(ignore: true)
   _$$AddMatchViewStateImplCopyWith<_$AddMatchViewStateImpl> get copyWith =>

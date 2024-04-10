@@ -26,6 +26,7 @@ mixin _$BallScoreModel {
   int get ball_number => throw _privateConstructorUsedError;
   String get bowler_id => throw _privateConstructorUsedError;
   String get batsman_id => throw _privateConstructorUsedError;
+  String get non_striker_id => throw _privateConstructorUsedError;
   int? get runs_scored => throw _privateConstructorUsedError;
   ExtrasType? get extras_type => throw _privateConstructorUsedError;
   int? get extras_awarded => throw _privateConstructorUsedError;
@@ -55,6 +56,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
       int ball_number,
       String bowler_id,
       String batsman_id,
+      String non_striker_id,
       int? runs_scored,
       ExtrasType? extras_type,
       int? extras_awarded,
@@ -85,6 +87,7 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
     Object? ball_number = null,
     Object? bowler_id = null,
     Object? batsman_id = null,
+    Object? non_striker_id = null,
     Object? runs_scored = freezed,
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
@@ -119,6 +122,10 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
       batsman_id: null == batsman_id
           ? _value.batsman_id
           : batsman_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      non_striker_id: null == non_striker_id
+          ? _value.non_striker_id
+          : non_striker_id // ignore: cast_nullable_to_non_nullable
               as String,
       runs_scored: freezed == runs_scored
           ? _value.runs_scored
@@ -175,6 +182,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
       int ball_number,
       String bowler_id,
       String batsman_id,
+      String non_striker_id,
       int? runs_scored,
       ExtrasType? extras_type,
       int? extras_awarded,
@@ -203,6 +211,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
     Object? ball_number = null,
     Object? bowler_id = null,
     Object? batsman_id = null,
+    Object? non_striker_id = null,
     Object? runs_scored = freezed,
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
@@ -237,6 +246,10 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
       batsman_id: null == batsman_id
           ? _value.batsman_id
           : batsman_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      non_striker_id: null == non_striker_id
+          ? _value.non_striker_id
+          : non_striker_id // ignore: cast_nullable_to_non_nullable
               as String,
       runs_scored: freezed == runs_scored
           ? _value.runs_scored
@@ -288,6 +301,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       required this.ball_number,
       required this.bowler_id,
       required this.batsman_id,
+      required this.non_striker_id,
       this.runs_scored,
       this.extras_type,
       this.extras_awarded,
@@ -314,6 +328,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   @override
   final String batsman_id;
   @override
+  final String non_striker_id;
+  @override
   final int? runs_scored;
   @override
   final ExtrasType? extras_type;
@@ -334,7 +350,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
 
   @override
   String toString() {
-    return 'BallScoreModel(id: $id, inning_id: $inning_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
+    return 'BallScoreModel(id: $id, inning_id: $inning_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
   }
 
   @override
@@ -353,6 +369,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
                 other.bowler_id == bowler_id) &&
             (identical(other.batsman_id, batsman_id) ||
                 other.batsman_id == batsman_id) &&
+            (identical(other.non_striker_id, non_striker_id) ||
+                other.non_striker_id == non_striker_id) &&
             (identical(other.runs_scored, runs_scored) ||
                 other.runs_scored == runs_scored) &&
             (identical(other.extras_type, extras_type) ||
@@ -380,6 +398,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       ball_number,
       bowler_id,
       batsman_id,
+      non_striker_id,
       runs_scored,
       extras_type,
       extras_awarded,
@@ -413,6 +432,7 @@ abstract class _BallScoreModel implements BallScoreModel {
       required final int ball_number,
       required final String bowler_id,
       required final String batsman_id,
+      required final String non_striker_id,
       final int? runs_scored,
       final ExtrasType? extras_type,
       final int? extras_awarded,
@@ -438,6 +458,8 @@ abstract class _BallScoreModel implements BallScoreModel {
   String get bowler_id;
   @override
   String get batsman_id;
+  @override
+  String get non_striker_id;
   @override
   int? get runs_scored;
   @override

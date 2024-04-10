@@ -48,7 +48,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
                 )
               : IconButton(
                   onPressed: () {
-                    notifier.addPlayersToTeam(team.id ?? "INVALID ID");
+                    notifier.addPlayersToTeam(team.id);
                   },
                   icon: Icon(
                     Icons.check,

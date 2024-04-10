@@ -29,7 +29,8 @@ class TeamDetailMemberContent extends ConsumerWidget {
       );
     }
 
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       children: [
         const SizedBox(
           height: 24,

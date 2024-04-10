@@ -2,30 +2,40 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class MatchCompleteDialog extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    bool showUndoButton = true,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return const MatchCompleteDialog();
+        return MatchCompleteDialog(
+          showUndoButton: showUndoButton,
+        );
       },
     );
   }
 
-  const MatchCompleteDialog({super.key});
+  final bool showUndoButton;
+
+  const MatchCompleteDialog({super.key, required this.showUndoButton});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(scoreBoardStateProvider);
+    final state = ref.watch(scoreBoardStateProvider);
+
     return AlertDialog(
-      backgroundColor: context.colorScheme.containerLowOnSurface,
+      backgroundColor: context.colorScheme.surface,
       title: Text(
         context.l10n.score_board_match_complete_title,
         style: AppTextStyle.subtitle1
@@ -34,11 +44,13 @@ class MatchCompleteDialog extends ConsumerWidget {
       content: _matchContent(context, state),
       actionsOverflowButtonSpacing: 8,
       actions: [
-        PrimaryButton(
-          expanded: false,
-          context.l10n.score_board_undo_last_ball_title,
-          onPressed: () => context.pop(false),
-        ),
+        if (showUndoButton) ...[
+          PrimaryButton(
+            context.l10n.score_board_undo_last_ball_title,
+            expanded: false,
+            onPressed: () => context.pop(false),
+          ),
+        ],
         PrimaryButton(
           context.l10n.score_board_end_match_title,
           expanded: false,
@@ -53,7 +65,7 @@ class MatchCompleteDialog extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _winnerMessageText(context, state),
+        _winnerMessageText(context, state.match),
         const SizedBox(
           height: 16,
         ),
@@ -92,7 +104,10 @@ class MatchCompleteDialog extends ConsumerWidget {
   }
 
   TableRow _teamMatchScores(
-      BuildContext context, ScoreBoardViewState state, MatchTeamModel team) {
+    BuildContext context,
+    ScoreBoardViewState state,
+    MatchTeamModel team,
+  ) {
     final (run, wicket, overs) =
         _getTeamRunDetails(state, team.team.id ?? "INVALID ID");
     return TableRow(
@@ -126,65 +141,28 @@ class MatchCompleteDialog extends ConsumerWidget {
         ? state.currentInning
         : state.otherInning;
 
-    final inningOver = teamInning?.overs ?? 0;
-
-    final ballCount = inningOver - inningOver.truncate();
-    final over = inningOver - 1;
-    final overCount = over + ballCount;
-
     return (
       teamInning?.total_runs ?? 0,
       teamInning?.total_wickets ?? 0,
-      overCount
+      teamInning?.overs ?? 0
     );
   }
 
-  Widget _winnerMessageText(BuildContext context, ScoreBoardViewState state) {
-    final firstInning = state.otherInning;
-    final secondInning = state.currentInning;
-
-    if (firstInning!.total_runs! > secondInning!.total_runs!) {
-      final teamName = state.match?.teams
-          .where((element) => element.team.id == firstInning.team_id)
-          .firstOrNull
-          ?.team
-          .name;
-
-      final runDifference = firstInning.total_runs! - secondInning.total_runs!;
-
-      return _messageText(context, teamName, runDifference,
-          context.l10n.score_board_runs_dot_title);
-    } else {
-      final team = state.match?.teams
-          .where((element) => element.team.id == secondInning.team_id)
-          .firstOrNull;
-      final teamName = team?.team.name;
-
-      final wicketDifference = team!.squad.length - state.wicketCount;
-
-      return _messageText(context, teamName, wicketDifference,
-          context.l10n.score_board_wickets_dot_title);
+  Widget _winnerMessageText(BuildContext context, MatchModel? match) {
+    if (match == null) {
+      return const SizedBox();
     }
-  }
-
-  Widget _messageText(BuildContext context, String? teamName, int difference,
-      String trailingText) {
-    return Text.rich(TextSpan(
-        text: "$teamName",
-        style: AppTextStyle.header4
-            .copyWith(color: context.colorScheme.textPrimary),
-        children: [
-          TextSpan(
-              text: context.l10n.score_board_won_by_title,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textSecondary)),
-          TextSpan(
-            text: "$difference",
-          ),
-          TextSpan(
-              text: trailingText,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textSecondary)),
-        ]));
+    final winSummary = match
+        .copyWith(match_status: MatchStatus.finish)
+        .getWinnerSummary(context);
+    if (winSummary != null) {
+      return WonByMessageText(
+        teamName: winSummary.teamName,
+        difference: winSummary.difference,
+        trailingText: winSummary.wonByText,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 }

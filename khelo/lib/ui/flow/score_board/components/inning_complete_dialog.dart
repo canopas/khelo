@@ -8,21 +8,28 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class InningCompleteDialog extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    bool showUndoButton = true,
+  }) {
     return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
-        return const InningCompleteDialog();
+        return InningCompleteDialog(
+          showUndoButton: showUndoButton,
+        );
       },
     );
   }
 
-  const InningCompleteDialog({super.key});
+  final bool showUndoButton;
+
+  const InningCompleteDialog({super.key, required this.showUndoButton});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(scoreBoardStateProvider);
+    final state = ref.watch(scoreBoardStateProvider);
 
     return AlertDialog(
       backgroundColor: context.colorScheme.containerLowOnSurface,
@@ -34,11 +41,13 @@ class InningCompleteDialog extends ConsumerWidget {
       content: _inningContent(context, state),
       actionsOverflowButtonSpacing: 8,
       actions: [
-        PrimaryButton(
-          expanded: false,
-          context.l10n.score_board_undo_last_ball_title,
-          onPressed: () => context.pop(false),
-        ),
+        if (showUndoButton) ...[
+          PrimaryButton(
+            context.l10n.score_board_undo_last_ball_title,
+            expanded: false,
+            onPressed: () => context.pop(false),
+          ),
+        ],
         PrimaryButton(
           context.l10n.score_board_start_next_inning_title,
           expanded: false,
@@ -99,7 +108,8 @@ class InningCompleteDialog extends ConsumerWidget {
   }
 
   String _getOverCount(ScoreBoardViewState state) {
-    return "${state.overCount - 1}.${state.ballCount}";
+    return state.currentInning?.overs?.toString() ??
+        "${state.overCount - 1}.${state.ballCount}";
   }
 
   Widget _subTitleText(

@@ -18,11 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SearchTeamState {
   TextEditingController get searchController =>
       throw _privateConstructorUsedError;
+  Object? get error => throw _privateConstructorUsedError;
+  TeamModel? get selectedTeam => throw _privateConstructorUsedError;
   List<TeamModel> get searchResults => throw _privateConstructorUsedError;
   List<TeamModel> get userTeams => throw _privateConstructorUsedError;
-  TeamModel? get selectedTeam => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
-  Object? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchTeamStateCopyWith<SearchTeamState> get copyWith =>
@@ -37,11 +37,11 @@ abstract class $SearchTeamStateCopyWith<$Res> {
   @useResult
   $Res call(
       {TextEditingController searchController,
+      Object? error,
+      TeamModel? selectedTeam,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
-      TeamModel? selectedTeam,
-      bool loading,
-      Object? error});
+      bool loading});
 
   $TeamModelCopyWith<$Res>? get selectedTeam;
 }
@@ -60,17 +60,22 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
   @override
   $Res call({
     Object? searchController = null,
+    Object? error = freezed,
+    Object? selectedTeam = freezed,
     Object? searchResults = null,
     Object? userTeams = null,
-    Object? selectedTeam = freezed,
     Object? loading = null,
-    Object? error = freezed,
   }) {
     return _then(_value.copyWith(
       searchController: null == searchController
           ? _value.searchController
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      error: freezed == error ? _value.error : error,
+      selectedTeam: freezed == selectedTeam
+          ? _value.selectedTeam
+          : selectedTeam // ignore: cast_nullable_to_non_nullable
+              as TeamModel?,
       searchResults: null == searchResults
           ? _value.searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -79,15 +84,10 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
           ? _value.userTeams
           : userTeams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      selectedTeam: freezed == selectedTeam
-          ? _value.selectedTeam
-          : selectedTeam // ignore: cast_nullable_to_non_nullable
-              as TeamModel?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
     ) as $Val);
   }
 
@@ -114,11 +114,11 @@ abstract class _$$SearchTeamStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {TextEditingController searchController,
+      Object? error,
+      TeamModel? selectedTeam,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
-      TeamModel? selectedTeam,
-      bool loading,
-      Object? error});
+      bool loading});
 
   @override
   $TeamModelCopyWith<$Res>? get selectedTeam;
@@ -136,17 +136,22 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? searchController = null,
+    Object? error = freezed,
+    Object? selectedTeam = freezed,
     Object? searchResults = null,
     Object? userTeams = null,
-    Object? selectedTeam = freezed,
     Object? loading = null,
-    Object? error = freezed,
   }) {
     return _then(_$SearchTeamStateImpl(
       searchController: null == searchController
           ? _value.searchController
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      error: freezed == error ? _value.error : error,
+      selectedTeam: freezed == selectedTeam
+          ? _value.selectedTeam
+          : selectedTeam // ignore: cast_nullable_to_non_nullable
+              as TeamModel?,
       searchResults: null == searchResults
           ? _value._searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -155,15 +160,10 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
           ? _value._userTeams
           : userTeams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      selectedTeam: freezed == selectedTeam
-          ? _value.selectedTeam
-          : selectedTeam // ignore: cast_nullable_to_non_nullable
-              as TeamModel?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      error: freezed == error ? _value.error : error,
     ));
   }
 }
@@ -173,16 +173,20 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
 class _$SearchTeamStateImpl implements _SearchTeamState {
   const _$SearchTeamStateImpl(
       {required this.searchController,
+      this.error,
+      this.selectedTeam,
       final List<TeamModel> searchResults = const [],
       final List<TeamModel> userTeams = const [],
-      this.selectedTeam,
-      this.loading = false,
-      this.error})
+      this.loading = false})
       : _searchResults = searchResults,
         _userTeams = userTeams;
 
   @override
   final TextEditingController searchController;
+  @override
+  final Object? error;
+  @override
+  final TeamModel? selectedTeam;
   final List<TeamModel> _searchResults;
   @override
   @JsonKey()
@@ -202,16 +206,12 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
   }
 
   @override
-  final TeamModel? selectedTeam;
-  @override
   @JsonKey()
   final bool loading;
-  @override
-  final Object? error;
 
   @override
   String toString() {
-    return 'SearchTeamState(searchController: $searchController, searchResults: $searchResults, userTeams: $userTeams, selectedTeam: $selectedTeam, loading: $loading, error: $error)';
+    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, searchResults: $searchResults, userTeams: $userTeams, loading: $loading)';
   }
 
   @override
@@ -221,25 +221,25 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
             other is _$SearchTeamStateImpl &&
             (identical(other.searchController, searchController) ||
                 other.searchController == searchController) &&
+            const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.selectedTeam, selectedTeam) ||
+                other.selectedTeam == selectedTeam) &&
             const DeepCollectionEquality()
                 .equals(other._searchResults, _searchResults) &&
             const DeepCollectionEquality()
                 .equals(other._userTeams, _userTeams) &&
-            (identical(other.selectedTeam, selectedTeam) ||
-                other.selectedTeam == selectedTeam) &&
-            (identical(other.loading, loading) || other.loading == loading) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            (identical(other.loading, loading) || other.loading == loading));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       searchController,
+      const DeepCollectionEquality().hash(error),
+      selectedTeam,
       const DeepCollectionEquality().hash(_searchResults),
       const DeepCollectionEquality().hash(_userTeams),
-      selectedTeam,
-      loading,
-      const DeepCollectionEquality().hash(error));
+      loading);
 
   @JsonKey(ignore: true)
   @override
@@ -252,24 +252,24 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
 abstract class _SearchTeamState implements SearchTeamState {
   const factory _SearchTeamState(
       {required final TextEditingController searchController,
+      final Object? error,
+      final TeamModel? selectedTeam,
       final List<TeamModel> searchResults,
       final List<TeamModel> userTeams,
-      final TeamModel? selectedTeam,
-      final bool loading,
-      final Object? error}) = _$SearchTeamStateImpl;
+      final bool loading}) = _$SearchTeamStateImpl;
 
   @override
   TextEditingController get searchController;
+  @override
+  Object? get error;
+  @override
+  TeamModel? get selectedTeam;
   @override
   List<TeamModel> get searchResults;
   @override
   List<TeamModel> get userTeams;
   @override
-  TeamModel? get selectedTeam;
-  @override
   bool get loading;
-  @override
-  Object? get error;
   @override
   @JsonKey(ignore: true)
   _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>
