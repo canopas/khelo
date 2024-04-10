@@ -717,6 +717,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       },
     );
 
+    print("${updatedMatchTeams.map((e) => e.squad.map((e) => e.status))}");
+
     state =
         state.copyWith(match: state.match?.copyWith(teams: updatedMatchTeams));
   }
@@ -838,6 +840,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }) async {
     state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
 
+
     MatchPlayer? bowler;
     List<MatchPlayer>? batsMen;
     var battingPlayer = currentPlayers
@@ -856,7 +859,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         int batsManIndex = state.lastAssignedIndex + 1;
 
         if (statusUpdatedSquad.elementAt(index).index == null ||
-            statusUpdatedSquad.elementAt(index).index == 0) {
+            statusUpdatedSquad.elementAt(index).index == 0||
+            statusUpdatedSquad.elementAt(index).status == PlayerStatus.injured) {
           statusUpdatedSquad[index] = statusUpdatedSquad
               .elementAt(index)
               .copyWith(index: batsManIndex, status: PlayerStatus.playing);
@@ -869,17 +873,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       await _updateMatchPlayerStatus(battingPlayer);
     }
 
+
     state = state.copyWith(
         bowler: bowler ?? state.bowler,
         batsMans: batsMen != null
             ? batsMen.length == 1
-                ? [...?state.batsMans, batsMen.first]
+                ? [...? state.batsMans, batsMen.first]
                 : batsMen
             : state.batsMans);
 
-    if (!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId) ??
-        false)) {
-      _showStrikerSelectionDialog();
+    if(!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId)?? false)){
+      if(batsMen != null && batsMen.length == 1){
+        setOrSwitchStriker(batsMan: batsMen.first.player);
+        return;
+      }else{
+        _showStrikerSelectionDialog();
+      }
+
     }
   }
 }
