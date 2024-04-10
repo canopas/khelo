@@ -151,8 +151,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
             : state.otherInning?.team_id) ??
         "INVALID ID";
     final teamPlayers = state.match?.teams
-        .firstWhere((element) => element.team.id == teamId)
-        .squad;
+        .where((element) => element.team.id == teamId)
+        .firstOrNull
+        ?.squad;
 
     if (type == PlayerSelectionType.bowler) {
       return teamPlayers ?? [];

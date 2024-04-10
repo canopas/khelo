@@ -15,11 +15,11 @@ extension MatchModelString on MatchModel {
     final secondTeam =
         teams.firstWhere((element) => element.team.id != firstTeam.team.id);
 
-    if (firstTeam.run! > secondTeam.run!) {
+    if ((firstTeam.run ?? 0) > (secondTeam.run ?? 0)) {
       // first batting team won
       final teamName = firstTeam.team.name;
 
-      final runDifference = firstTeam.run! - secondTeam.run!;
+      final runDifference = (firstTeam.run ?? 0) - (secondTeam.run ?? 0);
 
       return (
         teamName: teamName,

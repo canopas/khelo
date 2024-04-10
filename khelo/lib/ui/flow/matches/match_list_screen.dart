@@ -151,8 +151,13 @@ class MatchListScreen extends ConsumerWidget {
             if (match.match_status == MatchStatus.yetToStart) {
               AppRoute.addMatch(matchId: match.id).push(context);
             } else {
-              AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                  .push(context);
+              if (match.toss_decision == null || match.toss_winner_id == null) {
+                AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                    .push(context);
+              } else {
+                AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                    .push(context);
+              }
             }
           },
           icon: Icon(

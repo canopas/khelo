@@ -41,10 +41,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         addMatchViewStateProvider.select((value) => value.pushTossDetailScreen),
         (previous, next) {
       if (next == true) {
-        AppRoute.addTossDetail(matchId: matchId ?? "INVALID ID")
+        AppRoute.addTossDetail(matchId: ref.read(addMatchViewStateProvider.notifier).matchId ?? "INVALID ID")
             .pushReplacement(context);
       } else if (next == false) {
-        AppRoute.scoreBoard(matchId: matchId ?? "INVALID ID")
+        AppRoute.scoreBoard(matchId: ref.read(addMatchViewStateProvider.notifier).matchId ?? "INVALID ID")
             .pushReplacement(context);
       }
     });
