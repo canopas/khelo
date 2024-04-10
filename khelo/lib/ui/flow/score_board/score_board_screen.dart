@@ -343,7 +343,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         actions: [_moreOptionButton(context, notifier, state)],
         automaticallyImplyLeading: false,
         body: Padding(
-          padding: context.mediaQueryPadding,
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: _body(context, notifier, state),
         ),
       ),

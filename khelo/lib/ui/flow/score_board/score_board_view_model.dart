@@ -717,8 +717,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       },
     );
 
-    print("${updatedMatchTeams.map((e) => e.squad.map((e) => e.status))}");
-
     state =
         state.copyWith(match: state.match?.copyWith(teams: updatedMatchTeams));
   }

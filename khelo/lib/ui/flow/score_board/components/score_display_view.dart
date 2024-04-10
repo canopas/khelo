@@ -18,6 +18,7 @@ class ScoreDisplayView extends ConsumerWidget {
     return Expanded(
       child: ListView(
         children: [
+            _teamName(context, state, true),
           _matchScoreView(context, state),
           const SizedBox(
             height: 24,
@@ -27,6 +28,13 @@ class ScoreDisplayView extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Widget _teamName(BuildContext context, ScoreBoardViewState state, bool batting){
+    final String? inningTeam =  state.match?.teams.firstWhere((element) => element.team.id == state.currentInning?.team_id).team.name;
+    final String? bowlingTeam = state.match?.teams.firstWhere((element) => element.team.id != state.currentInning?.team_id).team.name;
+    return Text((batting? inningTeam:bowlingTeam)?? "", style: AppTextStyle.header1.copyWith(color:
+    context.colorScheme.primary),);
   }
 
   Widget _matchScoreView(
@@ -223,6 +231,7 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _teamName(context, state, false),
           _bowlerNameView(
               context,
               state.bowler?.player.name ??
@@ -241,6 +250,7 @@ class ScoreDisplayView extends ConsumerWidget {
       TextSpan(
         children: [
           WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
               child: Icon(
             Icons.sports_baseball_outlined,
             color: context.colorScheme.surface,
