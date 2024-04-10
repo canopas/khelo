@@ -115,7 +115,9 @@ class ScoreDisplayView extends ConsumerWidget {
       final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
       final pendingBall = (pendingOver * 6) + (6 - state.ballCount);
       return Text(
-        context.l10n.score_board_need_run_text(requiredRun, pendingBall),
+        context.l10n.score_board_need_run_text(
+            requiredRun < 0 ? 0 : requiredRun,
+            pendingBall < 0 ? 0 : pendingBall),
         textAlign: TextAlign.center,
         style:
             AppTextStyle.subtitle1.copyWith(color: context.colorScheme.warning),

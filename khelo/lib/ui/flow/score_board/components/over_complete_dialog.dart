@@ -24,7 +24,7 @@ class OverCompleteDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(scoreBoardStateProvider);
+    final state = ref.watch(scoreBoardStateProvider);
 
     return AlertDialog(
       backgroundColor: context.colorScheme.containerLowOnSurface,

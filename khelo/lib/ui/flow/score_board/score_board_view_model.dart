@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
-import 'package:collection/collection.dart';
+
 part 'score_board_view_model.freezed.dart';
 
 final scoreBoardStateProvider = StateNotifierProvider.autoDispose<
@@ -410,7 +410,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final outPlayer = state.batsMans
         ?.where((element) => element.player.id == playerOutId)
         .firstOrNull;
-      print("OUT PLAYER: $outPlayer");
+
     final batsMans = state.batsMans?.toList();
     batsMans?.removeWhere((element) => element.player.id == playerOutId);
     state = state.copyWith(batsMans: batsMans);
@@ -581,7 +581,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   bool _isMatchTied() {
     // inning_complete and run == other_teams_run
     final isInningComplete = _isAllOut() || _isAllDeliveryDelivered();
-
     if (state.otherInning?.innings_status == InningStatus.yetToStart ||
         state.otherInning == null) {
       return false;
@@ -631,12 +630,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
           final updatedBatsManList = state.batsMans?.toList();
 
-          updatedBatsManList?.updateWhere(
+          final batsMen = updatedBatsManList?.updateWhere(
             where: (element) => element.player.id == newBatsMan.player.id,
             updated: (oldElement) => outPlayer,
           );
 
-          state = state.copyWith(batsMans: updatedBatsManList);
+          state = state.copyWith(batsMans: batsMen);
         }
       }
 
@@ -661,6 +660,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           strikerId: lastBall.wicket_type == null
               ? lastBall.batsman_id
               : state.strikerId);
+
+      await _updateInningAndTeamScore();
 
       if (!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId) ??
           false)) {
@@ -698,12 +699,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     );
     final matchTeams = state.match!.teams.toList();
 
-  final matches=  matchTeams.updateWhere(
+    final updatedMatchTeams = matchTeams.updateWhere(
       where: (element) => team.teamId == element.team.id,
       updated: (oldElement) {
         final teamSquadList = oldElement.squad.toList();
         final newSquadList = team.players;
-     final teams=   teamSquadList.updateWhere(
+        final updatedTeamSquad = teamSquadList.updateWhere(
           where: (element) =>
               newSquadList.map((e) => e.player.id).contains(element.player.id),
           updated: (oldElement) {
@@ -712,11 +713,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           },
         );
 
-        return oldElement.copyWith(squad: teams);
+        return oldElement.copyWith(squad: updatedTeamSquad);
       },
     );
 
-    state = state.copyWith(match: state.match?.copyWith(teams: matches));
+    state =
+        state.copyWith(match: state.match?.copyWith(teams: updatedMatchTeams));
   }
 
   Future<void> startNextOver() async {

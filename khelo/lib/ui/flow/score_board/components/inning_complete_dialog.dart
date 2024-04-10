@@ -10,7 +10,7 @@ import 'package:style/text/app_text_style.dart';
 class InningCompleteDialog extends ConsumerWidget {
   static Future<T?> show<T>(
     BuildContext context, {
-    required bool showUndoButton,
+    bool showUndoButton = true,
   }) {
     return showDialog(
       barrierDismissible: false,
@@ -29,7 +29,7 @@ class InningCompleteDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(scoreBoardStateProvider);
+    final state = ref.watch(scoreBoardStateProvider);
 
     return AlertDialog(
       backgroundColor: context.colorScheme.containerLowOnSurface,

@@ -87,11 +87,15 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
             ? _getFilteredList(state, type: PlayerSelectionType.bowler)
             : [];
 
-    final showCheckBox =
-        batsManList.any((element) => element.status == PlayerStatus.injured);
+    final showCheckBox = widget.playerSelectionType !=
+            PlayerSelectionType.bowler
+        ? batsManList.any((element) => element.status == PlayerStatus.injured)
+        : false;
 
     final injuredPlayerRemained =
-        batsManList.every((e) => e.status == PlayerStatus.injured);
+        widget.playerSelectionType != PlayerSelectionType.bowler
+            ? batsManList.every((e) => e.status == PlayerStatus.injured)
+            : false;
 
     return Stack(
       children: [
@@ -434,7 +438,6 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
       context.pop((
         selectedPlayer: null,
         contWithInjPlayer: isEnabled,
-        reviewResult: true,
       ));
     } else {
       final List<({List<MatchPlayer> players, String teamId})> selectedPlayer =
@@ -467,7 +470,6 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
       context.pop((
         selectedPlayer: selectedPlayer,
         contWithInjPlayer: isEnabled,
-        reviewResult: false
       ));
     }
   }

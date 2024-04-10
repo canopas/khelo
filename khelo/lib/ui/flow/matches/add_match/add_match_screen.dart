@@ -32,19 +32,19 @@ class AddMatchScreen extends ConsumerStatefulWidget {
 class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   late AddMatchViewNotifier notifier;
 
-  void _observePushTossDetailScreen(BuildContext context, WidgetRef ref) {
+  void _observePushTossDetailScreen(
+    BuildContext context,
+    WidgetRef ref,
+    String? matchId,
+  ) {
     ref.listen(
         addMatchViewStateProvider.select((value) => value.pushTossDetailScreen),
         (previous, next) {
       if (next == true) {
-        AppRoute.addTossDetail(
-                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
-                    "INVALID ID")
+        AppRoute.addTossDetail(matchId: matchId ?? "INVALID ID")
             .pushReplacement(context);
       } else if (next == false) {
-        AppRoute.scoreBoard(
-                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
-                    "INVALID ID")
+        AppRoute.scoreBoard(matchId: matchId ?? "INVALID ID")
             .pushReplacement(context);
       }
     });
@@ -71,7 +71,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     notifier = ref.watch(addMatchViewStateProvider.notifier);
     final state = ref.watch(addMatchViewStateProvider);
 
-    _observePushTossDetailScreen(context, ref);
+    _observePushTossDetailScreen(context, ref, notifier.matchId);
     _observePop(context, ref);
 
     return AppPage(
@@ -80,8 +80,12 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           : context.l10n.add_match_screen_title,
       actions: [
         if (widget.matchId != null)
-          _deleteMatchButton(context, notifier, state),
-        _scheduleMatchButton(context, notifier, state),
+          _deleteMatchButton(context, onDelete: notifier.deleteMatch),
+        _scheduleMatchButton(
+          context,
+          isSaveBtnEnable: state.isSaveBtnEnable,
+          onSchedule: () => notifier.addMatch(),
+        ),
       ],
       body: Material(
         color: Colors.transparent,
@@ -96,15 +100,15 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   }
 
   Widget _scheduleMatchButton(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
+    BuildContext context, {
+    required bool isSaveBtnEnable,
+    required Function() onSchedule,
+  }) {
     return IconButton(
-      onPressed: state.isSaveBtnEnable ? () => notifier.addMatch() : null,
+      onPressed: isSaveBtnEnable ? onSchedule : null,
       icon: Icon(
         Icons.alarm,
-        color: state.isSaveBtnEnable
+        color: isSaveBtnEnable
             ? context.colorScheme.primary
             : context.colorScheme.textDisabled,
       ),
@@ -112,14 +116,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   }
 
   Widget _deleteMatchButton(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
+    BuildContext context, {
+    required Function() onDelete,
+  }) {
     return IconButton(
       onPressed: () => _showDeleteAlert(
         context,
-        onDelete: () => notifier.deleteMatch(),
+        onDelete: onDelete,
       ),
       icon: const Icon(
         Icons.delete_outline,
