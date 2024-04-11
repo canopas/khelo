@@ -285,6 +285,22 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeEndMatchDialogue(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+                (value) => value.showEndMatchDialog), (previous, next) {
+      if (next != null) {
+        ConfirmActionDialog.show(
+          context,
+          title: context.l10n.score_board_end_match_title,
+          description: context.l10n.score_board_end_match_description_text,
+          primaryButtonText: context.l10n.common_okay_title,
+          onConfirmation:notifier.abandonMatch,
+        );
+      }
+    });
+  }
+
   void _observeInvalidUndoToast(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.invalidUndoToast),
@@ -334,6 +350,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observePop(context, ref);
     _observeShowPauseScoringDialog(context, ref);
     _observeShowAddPenaltyRunDialog(context, ref);
+    _observeEndMatchDialogue(context, ref);
     _observeInvalidUndoToast(context, ref);
 
     return PopScope(

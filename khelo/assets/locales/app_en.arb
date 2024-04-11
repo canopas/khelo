@@ -290,6 +290,7 @@
             }
         }
     },
+    "score_board_end_of_match_title": "End Match",
     "score_board_choose_fielder_title": "choose Fielder",
     "score_board_injured_tag_title": "Injured",
     "score_board_who_on_strike_title": "Who's on Strike?",
@@ -310,6 +311,11 @@
     "score_board_pause_title": "Pause",
     "score_board_more_options_title": "More Options",
     "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
+    "score_board_end_match_title": "End Match",
+
+    "score_board_end_match_description_text": "are you sure you want to end match?",
+
+
     "score_board_need_run_text": "Need {run} in {ball}",
     "@score_board_need_run_text": {
         "description": "Need {run} in {ball}",
@@ -347,6 +353,7 @@
     "match_status_yet_to_start_title": "Yet to start",
     "match_status_running_title": "Running",
     "match_status_finish_title": "Finish",
+    "match_status_abandoned_title": "Abandoned",
 
     "wicket_type_bowled_title": "Bowled",
     "wicket_type_caught_title": "Caught",

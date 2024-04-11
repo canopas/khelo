@@ -264,6 +264,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showPauseScoringDialog: DateTime.now());
       case MatchOption.penaltyRun:
         state = state.copyWith(showAddPenaltyRunDialog: DateTime.now());
+      case MatchOption.endMatch:
+        state = state.copyWith(showEndMatchDialog: DateTime.now());
       default:
         return;
     }
@@ -776,11 +778,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         showSelectPlayerSheet: DateTime.now());
   }
 
-  Future<void> endMatch() async {
+  Future<void> abandonMatch()async{
+    //TODO: implement abandon match
+    await _updateInningAndTeamScore();
+    state = state.copyWith(pop: true);
+  }
+
+  Future<void> endMatch({bool isComplete= true}) async {
+    List<MatchPlayer> batsMan = [];
     if (state.batsMans?.isNotEmpty ?? false) {
-      var batsMan = state.batsMans!
-          .map((e) => e.copyWith(status: PlayerStatus.played))
-          .toList();
+      if (isComplete) {
+        batsMan = state.batsMans!
+            .map((e) => e.copyWith(status: PlayerStatus.played))
+            .toList();
+      } else {
+        batsMan = state.batsMans!;
+      }
+
       await _updateMatchPlayerStatus((
         teamId: state.currentInning?.team_id ?? "INVALID ID",
         players: batsMan
@@ -805,6 +819,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _updateInningAndTeamScore();
     state = state.copyWith(pop: true);
   }
+
+
 
   void handlePenaltyRun(({int runs, String teamId}) penalty) {
     addBall(
@@ -838,7 +854,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }) async {
     state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
 
-
     MatchPlayer? bowler;
     List<MatchPlayer>? batsMen;
     var battingPlayer = currentPlayers
@@ -857,8 +872,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         int batsManIndex = state.lastAssignedIndex + 1;
 
         if (statusUpdatedSquad.elementAt(index).index == null ||
-            statusUpdatedSquad.elementAt(index).index == 0||
-            statusUpdatedSquad.elementAt(index).status == PlayerStatus.injured) {
+            statusUpdatedSquad.elementAt(index).index == 0 ||
+            statusUpdatedSquad.elementAt(index).status ==
+                PlayerStatus.injured) {
           statusUpdatedSquad[index] = statusUpdatedSquad
               .elementAt(index)
               .copyWith(index: batsManIndex, status: PlayerStatus.playing);
@@ -871,23 +887,22 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       await _updateMatchPlayerStatus(battingPlayer);
     }
 
-
     state = state.copyWith(
         bowler: bowler ?? state.bowler,
         batsMans: batsMen != null
             ? batsMen.length == 1
-                ? [...? state.batsMans, batsMen.first]
+                ? [...?state.batsMans, batsMen.first]
                 : batsMen
             : state.batsMans);
 
-    if(!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId)?? false)){
-      if(batsMen != null && batsMen.length == 1){
+    if (!(state.batsMans?.map((e) => e.player.id).contains(state.strikerId) ??
+        false)) {
+      if (batsMen != null && batsMen.length == 1) {
         setOrSwitchStriker(batsMan: batsMen.first.player);
         return;
-      }else{
+      } else {
         _showStrikerSelectionDialog();
       }
-
     }
   }
 }
@@ -920,6 +935,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showAddExtraDialogForFiveSeven,
     DateTime? showPauseScoringDialog,
     DateTime? showAddPenaltyRunDialog,
+    DateTime? showEndMatchDialog,
     DateTime? invalidUndoToast,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,
@@ -985,7 +1001,8 @@ enum MatchOption {
   changeStriker,
   penaltyRun,
   pauseScoring,
-  continueWithInjuredPlayer;
+  continueWithInjuredPlayer,
+  endMatch;
 
   String getTitle(BuildContext context) {
     switch (this) {
@@ -997,6 +1014,8 @@ enum MatchOption {
         return context.l10n.score_board_pause_scoring_title;
       case MatchOption.continueWithInjuredPlayer:
         return context.l10n.score_board_continue_with_injured_player_title;
+      case MatchOption.endMatch:
+        return context.l10n.score_board_end_of_match_title;
     }
   }
 }
