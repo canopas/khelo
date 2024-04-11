@@ -18,6 +18,10 @@ class ScoreDisplayView extends ConsumerWidget {
     return Expanded(
       child: ListView(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _teamName(context, state, true),
+          ),
           _matchScoreView(context, state),
           const SizedBox(
             height: 24,
@@ -26,6 +30,28 @@ class ScoreDisplayView extends ConsumerWidget {
           _bowlerAndBallDetailView(context, state),
         ],
       ),
+    );
+  }
+
+  Widget _teamName(
+      BuildContext context, ScoreBoardViewState state, bool batting) {
+    final String? battingTeam = state.match?.teams
+        .firstWhere(
+            (element) => element.team.id == state.currentInning?.team_id)
+        .team
+        .name;
+    final String? bowlingTeam = state.match?.teams
+        .firstWhere((element) => element.team.id == state.otherInning?.team_id)
+        .team
+        .name;
+
+    return Text(
+      (batting ? battingTeam : bowlingTeam) ?? "",
+      textAlign: TextAlign.center,
+      style: AppTextStyle.header1.copyWith(
+          color: batting
+              ? context.colorScheme.primary
+              : context.colorScheme.textInversePrimary),
     );
   }
 
@@ -223,6 +249,10 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _teamName(context, state, false),
+          const SizedBox(
+            height: 8,
+          ),
           _bowlerNameView(
               context,
               state.bowler?.player.name ??
@@ -241,10 +271,11 @@ class ScoreDisplayView extends ConsumerWidget {
       TextSpan(
         children: [
           WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
               child: Icon(
-            Icons.sports_baseball_outlined,
-            color: context.colorScheme.surface,
-          )),
+                Icons.sports_baseball_outlined,
+                color: context.colorScheme.surface,
+              )),
           TextSpan(
             text: ' $name',
             style: TextStyle(

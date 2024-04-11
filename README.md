@@ -13,7 +13,7 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
 
 ## Download App
 
-<img src="./cta/google play.png" width="200" ></img> <a href="https://apps.apple.com/us/app/khelo/id6480175424"><img src="./cta/app store.png" width="200"></img>
+<a href= "https://play.google.com/store/apps/details?id=com.canopas.khelo"><img src="./cta/google play.png" width="200" ></img> <a href="https://apps.apple.com/us/app/khelo/id6480175424"><img src="./cta/app store.png" width="200"></img>
 
 ## Screenshots
 <table>

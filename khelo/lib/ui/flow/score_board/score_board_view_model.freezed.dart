@@ -47,6 +47,7 @@ mixin _$ScoreBoardViewState {
       throw _privateConstructorUsedError;
   DateTime? get showPauseScoringDialog => throw _privateConstructorUsedError;
   DateTime? get showAddPenaltyRunDialog => throw _privateConstructorUsedError;
+  DateTime? get showEndMatchDialog => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
   List<BallScoreModel> get currentScoresList =>
       throw _privateConstructorUsedError;
@@ -98,6 +99,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showAddExtraDialogForFiveSeven,
       DateTime? showPauseScoringDialog,
       DateTime? showAddPenaltyRunDialog,
+      DateTime? showEndMatchDialog,
       DateTime? invalidUndoToast,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
@@ -154,6 +156,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showAddExtraDialogForFiveSeven = freezed,
     Object? showPauseScoringDialog = freezed,
     Object? showAddPenaltyRunDialog = freezed,
+    Object? showEndMatchDialog = freezed,
     Object? invalidUndoToast = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
@@ -264,6 +267,10 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       showAddPenaltyRunDialog: freezed == showAddPenaltyRunDialog
           ? _value.showAddPenaltyRunDialog
           : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showEndMatchDialog: freezed == showEndMatchDialog
+          ? _value.showEndMatchDialog
+          : showEndMatchDialog // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
@@ -395,6 +402,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showAddExtraDialogForFiveSeven,
       DateTime? showPauseScoringDialog,
       DateTime? showAddPenaltyRunDialog,
+      DateTime? showEndMatchDialog,
       DateTime? invalidUndoToast,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
@@ -453,6 +461,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showAddExtraDialogForFiveSeven = freezed,
     Object? showPauseScoringDialog = freezed,
     Object? showAddPenaltyRunDialog = freezed,
+    Object? showEndMatchDialog = freezed,
     Object? invalidUndoToast = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
@@ -564,6 +573,10 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.showAddPenaltyRunDialog
           : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      showEndMatchDialog: freezed == showEndMatchDialog
+          ? _value.showEndMatchDialog
+          : showEndMatchDialog // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
@@ -641,12 +654,13 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showAddExtraDialogForFiveSeven,
       this.showPauseScoringDialog,
       this.showAddPenaltyRunDialog,
+      this.showEndMatchDialog,
       this.invalidUndoToast,
       final List<BallScoreModel> currentScoresList = const [],
       final List<BallScoreModel> previousScoresList = const [],
       this.loading = false,
       this.pop = false,
-      this.continueWithInjuredPlayers = false,
+      this.continueWithInjuredPlayers = true,
       this.ballCount = 0,
       this.overCount = 1,
       this.totalRuns = 0,
@@ -715,6 +729,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   @override
   final DateTime? showAddPenaltyRunDialog;
   @override
+  final DateTime? showEndMatchDialog;
+  @override
   final DateTime? invalidUndoToast;
   final List<BallScoreModel> _currentScoresList;
   @override
@@ -763,7 +779,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -821,6 +837,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                     showAddExtraDialogForFiveSeven) &&
             (identical(other.showPauseScoringDialog, showPauseScoringDialog) || other.showPauseScoringDialog == showPauseScoringDialog) &&
             (identical(other.showAddPenaltyRunDialog, showAddPenaltyRunDialog) || other.showAddPenaltyRunDialog == showAddPenaltyRunDialog) &&
+            (identical(other.showEndMatchDialog, showEndMatchDialog) || other.showEndMatchDialog == showEndMatchDialog) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
@@ -862,6 +879,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showAddExtraDialogForFiveSeven,
         showPauseScoringDialog,
         showAddPenaltyRunDialog,
+        showEndMatchDialog,
         invalidUndoToast,
         const DeepCollectionEquality().hash(_currentScoresList),
         const DeepCollectionEquality().hash(_previousScoresList),
@@ -910,6 +928,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showAddExtraDialogForFiveSeven,
       final DateTime? showPauseScoringDialog,
       final DateTime? showAddPenaltyRunDialog,
+      final DateTime? showEndMatchDialog,
       final DateTime? invalidUndoToast,
       final List<BallScoreModel> currentScoresList,
       final List<BallScoreModel> previousScoresList,
@@ -972,6 +991,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   DateTime? get showPauseScoringDialog;
   @override
   DateTime? get showAddPenaltyRunDialog;
+  @override
+  DateTime? get showEndMatchDialog;
   @override
   DateTime? get invalidUndoToast;
   @override

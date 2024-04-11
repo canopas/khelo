@@ -165,7 +165,8 @@ enum PitchType {
 enum MatchStatus {
   yetToStart(1),
   running(2),
-  finish(3);
+  finish(3),
+  abandoned(4);
 
   final int value;
 

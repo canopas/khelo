@@ -16,7 +16,7 @@ class AddPenaltyRunDialog extends ConsumerStatefulWidget {
     BuildContext context,
   ) {
     return showDialog(
-      barrierDismissible: false,
+      barrierDismissible: true,
       context: context,
       builder: (context) {
         return const AddPenaltyRunDialog();
@@ -39,27 +39,31 @@ class _AddPenaltyRunDialogState extends ConsumerState<AddPenaltyRunDialog> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scoreBoardStateProvider);
-    return AlertDialog(
-      backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(
-        context.l10n.score_board_penalty_run_title,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textPrimary),
-      ),
-      content: _addPenaltyContent(context, state),
-      actionsAlignment: MainAxisAlignment.spaceAround,
-      actions: [
-        PrimaryButton(
-          context.l10n.common_okay_title,
-          enabled: isButtonEnable,
-          onPressed: () {
-            context.pop((
-              teamId: selectedTeamId,
-              runs: int.parse(runController.text),
-            ));
-          },
+    return Material(
+      type: MaterialType.transparency,
+      color: Colors.transparent,
+      child: AlertDialog.adaptive(
+        backgroundColor: context.colorScheme.containerLowOnSurface,
+        title: Text(
+          context.l10n.score_board_penalty_run_title,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
-      ],
+        content: _addPenaltyContent(context, state),
+        actionsAlignment: MainAxisAlignment.spaceAround,
+        actions: [
+          PrimaryButton(
+            context.l10n.common_okay_title,
+            enabled: isButtonEnable,
+            onPressed: () {
+              context.pop((
+                teamId: selectedTeamId,
+                runs: int.parse(runController.text),
+              ));
+            },
+          ),
+        ],
+      ),
     );
   }
 

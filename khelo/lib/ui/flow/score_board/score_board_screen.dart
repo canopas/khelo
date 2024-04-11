@@ -22,7 +22,6 @@ import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.d
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_dialog.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
-import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 
 import 'components/inning_complete_dialog.dart';
@@ -285,6 +284,22 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeEndMatchDialogue(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+                (value) => value.showEndMatchDialog), (previous, next) {
+      if (next != null) {
+        ConfirmActionDialog.show(
+          context,
+          title: context.l10n.score_board_end_match_title,
+          description: context.l10n.score_board_end_match_description_text,
+          primaryButtonText: context.l10n.common_okay_title,
+          onConfirmation:notifier.abandonMatch,
+        );
+      }
+    });
+  }
+
   void _observeInvalidUndoToast(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.invalidUndoToast),
@@ -334,6 +349,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observePop(context, ref);
     _observeShowPauseScoringDialog(context, ref);
     _observeShowAddPenaltyRunDialog(context, ref);
+    _observeEndMatchDialogue(context, ref);
     _observeInvalidUndoToast(context, ref);
 
     return PopScope(
@@ -343,7 +359,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         actions: [_moreOptionButton(context, notifier, state)],
         automaticallyImplyLeading: false,
         body: Padding(
-          padding: context.mediaQueryPadding,
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: _body(context, notifier, state),
         ),
       ),

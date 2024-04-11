@@ -149,6 +149,8 @@ extension MatchStatusString on MatchStatus {
         return context.l10n.match_status_running_title;
       case MatchStatus.finish:
         return context.l10n.match_status_finish_title;
+      case MatchStatus.abandoned:
+        return context.l10n.match_status_abandoned_title;
     }
   }
 
@@ -160,6 +162,8 @@ extension MatchStatusString on MatchStatus {
         return context.colorScheme.alert;
       case MatchStatus.finish:
         return context.colorScheme.positive;
+      case MatchStatus.abandoned:
+        return context.colorScheme.secondary;
     }
   }
 }
