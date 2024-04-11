@@ -778,13 +778,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         showSelectPlayerSheet: DateTime.now());
   }
 
-  Future<void> abandonMatch()async{
-    //TODO: implement abandon match
+  Future<void> abandonMatch() async {
     await _updateInningAndTeamScore();
     state = state.copyWith(pop: true);
   }
 
-  Future<void> endMatch({bool isComplete= true}) async {
+  Future<void> endMatch({bool isComplete = true}) async {
     List<MatchPlayer> batsMan = [];
     if (state.batsMans?.isNotEmpty ?? false) {
       if (isComplete) {
@@ -819,8 +818,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _updateInningAndTeamScore();
     state = state.copyWith(pop: true);
   }
-
-
 
   void handlePenaltyRun(({int runs, String teamId}) penalty) {
     addBall(

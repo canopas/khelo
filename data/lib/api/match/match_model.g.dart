@@ -102,6 +102,7 @@ const _$MatchStatusEnumMap = {
   MatchStatus.yetToStart: 1,
   MatchStatus.running: 2,
   MatchStatus.finish: 3,
+  MatchStatus.abandoned: 4,
 };
 
 const _$TossDecisionEnumMap = {

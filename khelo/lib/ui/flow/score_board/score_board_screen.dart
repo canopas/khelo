@@ -22,7 +22,6 @@ import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.d
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_dialog.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
-import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 
 import 'components/inning_complete_dialog.dart';
