@@ -41,10 +41,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         addMatchViewStateProvider.select((value) => value.pushTossDetailScreen),
         (previous, next) {
       if (next == true) {
-        AppRoute.addTossDetail(matchId: ref.read(addMatchViewStateProvider.notifier).matchId ?? "INVALID ID")
+        AppRoute.addTossDetail(
+                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
+                    "INVALID ID")
             .pushReplacement(context);
       } else if (next == false) {
-        AppRoute.scoreBoard(matchId: ref.read(addMatchViewStateProvider.notifier).matchId ?? "INVALID ID")
+        AppRoute.scoreBoard(
+                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
+                    "INVALID ID")
             .pushReplacement(context);
       }
     });
@@ -217,10 +221,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
       children: [
         OnTapScale(
           onTap: () async {
-            final team = await AppRoute.searchTeam(excludedIds: [
-              state.teamA?.id ?? "INVALID ID",
-              state.teamB?.id ?? "INVALID ID"
-            ]).push<TeamModel>(context);
+            final team = await AppRoute.searchTeam(
+              excludedIds: [
+                state.teamA?.id ?? "INVALID ID",
+                state.teamB?.id ?? "INVALID ID"
+              ],
+              onlyUserTeams: type == TeamType.a,
+            ).push<TeamModel>(context);
             if (team != null && context.mounted) {
               notifier.onTeamSelect(team, type);
             }

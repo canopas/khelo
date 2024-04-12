@@ -150,10 +150,11 @@ class AppRoute {
         builder: (_) => AddTeamScreen(editTeam: team),
       );
 
-  static AppRoute searchTeam({List<String>? excludedIds}) => AppRoute(
+  static AppRoute searchTeam({List<String>? excludedIds, required bool onlyUserTeams}) => AppRoute(
         pathSearchTeam,
         builder: (_) => SearchTeamScreen(
           excludedIds: excludedIds,
+          onlyUserTeams: onlyUserTeams,
         ),
       );
 

@@ -16,7 +16,7 @@ class BallScoreModel with _$BallScoreModel {
     required String bowler_id,
     required String batsman_id,
     required String non_striker_id,
-    int? runs_scored,
+    required int runs_scored,
     ExtrasType? extras_type,
     int? extras_awarded,
     WicketType? wicket_type,

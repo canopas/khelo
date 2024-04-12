@@ -27,7 +27,7 @@ mixin _$BallScoreModel {
   String get bowler_id => throw _privateConstructorUsedError;
   String get batsman_id => throw _privateConstructorUsedError;
   String get non_striker_id => throw _privateConstructorUsedError;
-  int? get runs_scored => throw _privateConstructorUsedError;
+  int get runs_scored => throw _privateConstructorUsedError;
   ExtrasType? get extras_type => throw _privateConstructorUsedError;
   int? get extras_awarded => throw _privateConstructorUsedError;
   WicketType? get wicket_type => throw _privateConstructorUsedError;
@@ -57,7 +57,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
       String bowler_id,
       String batsman_id,
       String non_striker_id,
-      int? runs_scored,
+      int runs_scored,
       ExtrasType? extras_type,
       int? extras_awarded,
       WicketType? wicket_type,
@@ -88,7 +88,7 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
     Object? bowler_id = null,
     Object? batsman_id = null,
     Object? non_striker_id = null,
-    Object? runs_scored = freezed,
+    Object? runs_scored = null,
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
     Object? wicket_type = freezed,
@@ -127,10 +127,10 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
           ? _value.non_striker_id
           : non_striker_id // ignore: cast_nullable_to_non_nullable
               as String,
-      runs_scored: freezed == runs_scored
+      runs_scored: null == runs_scored
           ? _value.runs_scored
           : runs_scored // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       extras_type: freezed == extras_type
           ? _value.extras_type
           : extras_type // ignore: cast_nullable_to_non_nullable
@@ -183,7 +183,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
       String bowler_id,
       String batsman_id,
       String non_striker_id,
-      int? runs_scored,
+      int runs_scored,
       ExtrasType? extras_type,
       int? extras_awarded,
       WicketType? wicket_type,
@@ -212,7 +212,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
     Object? bowler_id = null,
     Object? batsman_id = null,
     Object? non_striker_id = null,
-    Object? runs_scored = freezed,
+    Object? runs_scored = null,
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
     Object? wicket_type = freezed,
@@ -251,10 +251,10 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
           ? _value.non_striker_id
           : non_striker_id // ignore: cast_nullable_to_non_nullable
               as String,
-      runs_scored: freezed == runs_scored
+      runs_scored: null == runs_scored
           ? _value.runs_scored
           : runs_scored // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       extras_type: freezed == extras_type
           ? _value.extras_type
           : extras_type // ignore: cast_nullable_to_non_nullable
@@ -302,7 +302,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       required this.bowler_id,
       required this.batsman_id,
       required this.non_striker_id,
-      this.runs_scored,
+      required this.runs_scored,
       this.extras_type,
       this.extras_awarded,
       this.wicket_type,
@@ -330,7 +330,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   @override
   final String non_striker_id;
   @override
-  final int? runs_scored;
+  final int runs_scored;
   @override
   final ExtrasType? extras_type;
   @override
@@ -433,7 +433,7 @@ abstract class _BallScoreModel implements BallScoreModel {
       required final String bowler_id,
       required final String batsman_id,
       required final String non_striker_id,
-      final int? runs_scored,
+      required final int runs_scored,
       final ExtrasType? extras_type,
       final int? extras_awarded,
       final WicketType? wicket_type,
@@ -461,7 +461,7 @@ abstract class _BallScoreModel implements BallScoreModel {
   @override
   String get non_striker_id;
   @override
-  int? get runs_scored;
+  int get runs_scored;
   @override
   ExtrasType? get extras_type;
   @override

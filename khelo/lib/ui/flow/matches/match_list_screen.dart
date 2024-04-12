@@ -74,7 +74,7 @@ class MatchListScreen extends ConsumerWidget {
           },
           itemBuilder: (context, index) {
             final match = state.matches![index];
-            return _matchCell(context, match);
+            return _matchCell(context, match, state.currentUserId);
           },
         ),
       );
@@ -91,7 +91,7 @@ class MatchListScreen extends ConsumerWidget {
     }
   }
 
-  Widget _matchCell(BuildContext context, MatchModel match) {
+  Widget _matchCell(BuildContext context, MatchModel match, String? currentUserId,) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -103,7 +103,7 @@ class MatchListScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _matchOtherDetail(context, match),
+          _matchOtherDetail(context, match, currentUserId),
           _teamsAndStatusView(context, match),
           _winnerMessageText(context, match)
         ],
@@ -111,7 +111,7 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchOtherDetail(BuildContext context, MatchModel match) {
+  Widget _matchOtherDetail(BuildContext context, MatchModel match, String? currentUserId,) {
     return Row(
       children: [
         Expanded(
@@ -136,7 +136,7 @@ class MatchListScreen extends ConsumerWidget {
             ],
           ),
         ),
-        _matchEditOrResumeActionButton(context, match),
+        _matchEditOrResumeActionButton(context, match, currentUserId),
       ],
     );
   }
@@ -144,8 +144,9 @@ class MatchListScreen extends ConsumerWidget {
   Widget _matchEditOrResumeActionButton(
     BuildContext context,
     MatchModel match,
+  String? currentUserId,
   ) {
-    if (match.match_status != MatchStatus.finish) {
+    if (match.match_status != MatchStatus.finish && match.created_by == currentUserId) {
       return IconButton(
           onPressed: () {
             if (match.match_status == MatchStatus.yetToStart) {

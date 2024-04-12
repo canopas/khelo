@@ -1,6 +1,7 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,20 +13,28 @@ part 'add_match_view_model.freezed.dart';
 final addMatchViewStateProvider =
     StateNotifierProvider.autoDispose<AddMatchViewNotifier, AddMatchViewState>(
         (ref) {
-  return AddMatchViewNotifier(ref.read(matchServiceProvider));
+  final notifier = AddMatchViewNotifier(
+    ref.read(matchServiceProvider),
+    ref.read(currentUserPod)?.id,
+  );
+  ref.listen(currentUserPod, (previous, next) {
+    notifier.setUserId(next?.id);
+  });
+  return notifier;
 });
 
 class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   final MatchService _matchService;
   String? matchId;
 
-  AddMatchViewNotifier(this._matchService)
+  AddMatchViewNotifier(this._matchService, String? userId)
       : super(AddMatchViewState(
           totalOverController: TextEditingController(),
           overPerBowlerController: TextEditingController(),
           cityController: TextEditingController(),
           groundController: TextEditingController(),
           matchTime: DateTime.now(),
+          currentUserId: userId,
         ));
 
   void setData(String? matchId) {
@@ -33,6 +42,10 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     if (matchId != null) {
       getMatchById();
     }
+  }
+
+  void setUserId(String? userId) {
+    state = state.copyWith(currentUserId: userId);
   }
 
   Future<void> getMatchById() async {
@@ -160,6 +173,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           city: city,
           ground: ground,
           start_time: state.matchTime,
+          created_by: state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
           ball_type: state.ballType,
           pitch_type: state.pitchType,
           umpire_ids: umpireIds,
@@ -288,6 +302,7 @@ class AddMatchViewState with _$AddMatchViewState {
     required TextEditingController cityController,
     required TextEditingController groundController,
     Object? error,
+    String? currentUserId,
     MatchModel? match,
     TeamModel? teamA,
     TeamModel? teamB,

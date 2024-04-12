@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TeamListViewState {
   Object? get error => throw _privateConstructorUsedError;
   DateTime? get showFilterOptionSheet => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   List<TeamModel> get teams => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   TeamFilterOption get selectedFilter => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $TeamListViewStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       DateTime? showFilterOptionSheet,
+      String? currentUserId,
       List<TeamModel> teams,
       bool loading,
       TeamFilterOption selectedFilter});
@@ -56,6 +58,7 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
   $Res call({
     Object? error = freezed,
     Object? showFilterOptionSheet = freezed,
+    Object? currentUserId = freezed,
     Object? teams = null,
     Object? loading = null,
     Object? selectedFilter = null,
@@ -66,6 +69,10 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
           ? _value.showFilterOptionSheet
           : showFilterOptionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       teams: null == teams
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -93,6 +100,7 @@ abstract class _$$TeamListViewStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       DateTime? showFilterOptionSheet,
+      String? currentUserId,
       List<TeamModel> teams,
       bool loading,
       TeamFilterOption selectedFilter});
@@ -111,6 +119,7 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? showFilterOptionSheet = freezed,
+    Object? currentUserId = freezed,
     Object? teams = null,
     Object? loading = null,
     Object? selectedFilter = null,
@@ -121,6 +130,10 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
           ? _value.showFilterOptionSheet
           : showFilterOptionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       teams: null == teams
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -143,6 +156,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
   const _$TeamListViewStateImpl(
       {this.error,
       this.showFilterOptionSheet,
+      this.currentUserId,
       final List<TeamModel> teams = const [],
       this.loading = true,
       this.selectedFilter = TeamFilterOption.all})
@@ -152,6 +166,8 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
   final Object? error;
   @override
   final DateTime? showFilterOptionSheet;
+  @override
+  final String? currentUserId;
   final List<TeamModel> _teams;
   @override
   @JsonKey()
@@ -170,7 +186,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
 
   @override
   String toString() {
-    return 'TeamListViewState(error: $error, showFilterOptionSheet: $showFilterOptionSheet, teams: $teams, loading: $loading, selectedFilter: $selectedFilter)';
+    return 'TeamListViewState(error: $error, showFilterOptionSheet: $showFilterOptionSheet, currentUserId: $currentUserId, teams: $teams, loading: $loading, selectedFilter: $selectedFilter)';
   }
 
   @override
@@ -181,6 +197,8 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.showFilterOptionSheet, showFilterOptionSheet) ||
                 other.showFilterOptionSheet == showFilterOptionSheet) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.selectedFilter, selectedFilter) ||
@@ -192,6 +210,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       showFilterOptionSheet,
+      currentUserId,
       const DeepCollectionEquality().hash(_teams),
       loading,
       selectedFilter);
@@ -208,6 +227,7 @@ abstract class _TeamListViewState implements TeamListViewState {
   const factory _TeamListViewState(
       {final Object? error,
       final DateTime? showFilterOptionSheet,
+      final String? currentUserId,
       final List<TeamModel> teams,
       final bool loading,
       final TeamFilterOption selectedFilter}) = _$TeamListViewStateImpl;
@@ -216,6 +236,8 @@ abstract class _TeamListViewState implements TeamListViewState {
   Object? get error;
   @override
   DateTime? get showFilterOptionSheet;
+  @override
+  String? get currentUserId;
   @override
   List<TeamModel> get teams;
   @override

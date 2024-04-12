@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MatchListViewState {
   Object? get error => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   List<MatchModel>? get matches => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
@@ -31,7 +32,11 @@ abstract class $MatchListViewStateCopyWith<$Res> {
           MatchListViewState value, $Res Function(MatchListViewState) then) =
       _$MatchListViewStateCopyWithImpl<$Res, MatchListViewState>;
   @useResult
-  $Res call({Object? error, List<MatchModel>? matches, bool loading});
+  $Res call(
+      {Object? error,
+      String? currentUserId,
+      List<MatchModel>? matches,
+      bool loading});
 }
 
 /// @nodoc
@@ -48,11 +53,16 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? matches = freezed,
     Object? loading = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matches: freezed == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -73,7 +83,11 @@ abstract class _$$MatchListViewStateImplCopyWith<$Res>
       __$$MatchListViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, List<MatchModel>? matches, bool loading});
+  $Res call(
+      {Object? error,
+      String? currentUserId,
+      List<MatchModel>? matches,
+      bool loading});
 }
 
 /// @nodoc
@@ -88,11 +102,16 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? matches = freezed,
     Object? loading = null,
   }) {
     return _then(_$MatchListViewStateImpl(
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matches: freezed == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -109,11 +128,16 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
 
 class _$MatchListViewStateImpl implements _MatchListViewState {
   const _$MatchListViewStateImpl(
-      {this.error, final List<MatchModel>? matches, this.loading = false})
+      {this.error,
+      this.currentUserId,
+      final List<MatchModel>? matches,
+      this.loading = false})
       : _matches = matches;
 
   @override
   final Object? error;
+  @override
+  final String? currentUserId;
   final List<MatchModel>? _matches;
   @override
   List<MatchModel>? get matches {
@@ -130,7 +154,7 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
 
   @override
   String toString() {
-    return 'MatchListViewState(error: $error, matches: $matches, loading: $loading)';
+    return 'MatchListViewState(error: $error, currentUserId: $currentUserId, matches: $matches, loading: $loading)';
   }
 
   @override
@@ -139,6 +163,8 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
         (other.runtimeType == runtimeType &&
             other is _$MatchListViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             const DeepCollectionEquality().equals(other._matches, _matches) &&
             (identical(other.loading, loading) || other.loading == loading));
   }
@@ -147,6 +173,7 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      currentUserId,
       const DeepCollectionEquality().hash(_matches),
       loading);
 
@@ -161,11 +188,14 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
 abstract class _MatchListViewState implements MatchListViewState {
   const factory _MatchListViewState(
       {final Object? error,
+      final String? currentUserId,
       final List<MatchModel>? matches,
       final bool loading}) = _$MatchListViewStateImpl;
 
   @override
   Object? get error;
+  @override
+  String? get currentUserId;
   @override
   List<MatchModel>? get matches;
   @override

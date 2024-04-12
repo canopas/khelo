@@ -345,7 +345,7 @@ class _MatchDetailStatScreenState extends ConsumerState<MatchDetailStatScreen> {
         element.wicket_type != WicketType.retired);
 
     final runs = facedBalls?.fold(
-            0, (sum, element) => sum + (element.runs_scored ?? 0)) ??
+            0, (sum, element) => sum + element.runs_scored) ??
         0;
     final ballCount = facedBalls?.length ?? 0;
 
