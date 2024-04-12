@@ -26,6 +26,7 @@ mixin _$AddMatchViewState {
   TextEditingController get groundController =>
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   TeamModel? get teamA => throw _privateConstructorUsedError;
   TeamModel? get teamB => throw _privateConstructorUsedError;
@@ -68,6 +69,7 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       TextEditingController cityController,
       TextEditingController groundController,
       Object? error,
+      String? currentUserId,
       MatchModel? match,
       TeamModel? teamA,
       TeamModel? teamB,
@@ -116,6 +118,7 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? cityController = null,
     Object? groundController = null,
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? match = freezed,
     Object? teamA = freezed,
     Object? teamB = freezed,
@@ -162,6 +165,10 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           : groundController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -309,6 +316,7 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       TextEditingController cityController,
       TextEditingController groundController,
       Object? error,
+      String? currentUserId,
       MatchModel? match,
       TeamModel? teamA,
       TeamModel? teamB,
@@ -358,6 +366,7 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? cityController = null,
     Object? groundController = null,
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? match = freezed,
     Object? teamA = freezed,
     Object? teamB = freezed,
@@ -404,6 +413,10 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           : groundController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -510,6 +523,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       required this.cityController,
       required this.groundController,
       this.error,
+      this.currentUserId,
       this.match,
       this.teamA,
       this.teamB,
@@ -552,6 +566,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   final TextEditingController groundController;
   @override
   final Object? error;
+  @override
+  final String? currentUserId;
   @override
   final MatchModel? match;
   @override
@@ -661,7 +677,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
 
   @override
   String toString() {
-    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, isSaveBtnEnable: $isSaveBtnEnable, isStartBtnEnable: $isStartBtnEnable, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
+    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, currentUserId: $currentUserId, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, isSaveBtnEnable: $isSaveBtnEnable, isStartBtnEnable: $isStartBtnEnable, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
   }
 
   @override
@@ -681,6 +697,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
             (identical(other.groundController, groundController) ||
                 other.groundController == groundController) &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             (identical(other.match, match) || other.match == match) &&
             (identical(other.teamA, teamA) || other.teamA == teamA) &&
             (identical(other.teamB, teamB) || other.teamB == teamB) &&
@@ -732,6 +750,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         cityController,
         groundController,
         const DeepCollectionEquality().hash(error),
+        currentUserId,
         match,
         teamA,
         teamB,
@@ -773,6 +792,7 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       required final TextEditingController cityController,
       required final TextEditingController groundController,
       final Object? error,
+      final String? currentUserId,
       final MatchModel? match,
       final TeamModel? teamA,
       final TeamModel? teamB,
@@ -809,6 +829,8 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   TextEditingController get groundController;
   @override
   Object? get error;
+  @override
+  String? get currentUserId;
   @override
   MatchModel? get match;
   @override

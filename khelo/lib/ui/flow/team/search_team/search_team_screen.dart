@@ -15,8 +15,13 @@ import 'package:style/text/app_text_style.dart';
 
 class SearchTeamScreen extends ConsumerStatefulWidget {
   final List<String>? excludedIds;
+  final bool onlyUserTeams;
 
-  const SearchTeamScreen({super.key, required this.excludedIds});
+  const SearchTeamScreen({
+    super.key,
+    required this.excludedIds,
+    required this.onlyUserTeams,
+  });
 
   @override
   ConsumerState createState() => _SearchTeamScreenState();
@@ -29,7 +34,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(searchTeamViewStateProvider.notifier);
-    runPostFrame(() => notifier.setData(widget.excludedIds));
+    runPostFrame(
+        () => notifier.setData(widget.excludedIds, widget.onlyUserTeams));
   }
 
   @override

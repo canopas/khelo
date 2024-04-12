@@ -33,6 +33,7 @@ mixin _$MatchModel {
   DateTime get start_time => throw _privateConstructorUsedError;
   BallType get ball_type => throw _privateConstructorUsedError;
   PitchType get pitch_type => throw _privateConstructorUsedError;
+  String get created_by => throw _privateConstructorUsedError;
   List<UserModel>? get umpires => throw _privateConstructorUsedError;
   List<UserModel>? get scorers => throw _privateConstructorUsedError;
   List<UserModel>? get commentators => throw _privateConstructorUsedError;
@@ -68,6 +69,7 @@ abstract class $MatchModelCopyWith<$Res> {
       DateTime start_time,
       BallType ball_type,
       PitchType pitch_type,
+      String created_by,
       List<UserModel>? umpires,
       List<UserModel>? scorers,
       List<UserModel>? commentators,
@@ -106,6 +108,7 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? start_time = null,
     Object? ball_type = null,
     Object? pitch_type = null,
+    Object? created_by = null,
     Object? umpires = freezed,
     Object? scorers = freezed,
     Object? commentators = freezed,
@@ -168,6 +171,10 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.pitch_type
           : pitch_type // ignore: cast_nullable_to_non_nullable
               as PitchType,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
       umpires: freezed == umpires
           ? _value.umpires
           : umpires // ignore: cast_nullable_to_non_nullable
@@ -238,6 +245,7 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       DateTime start_time,
       BallType ball_type,
       PitchType pitch_type,
+      String created_by,
       List<UserModel>? umpires,
       List<UserModel>? scorers,
       List<UserModel>? commentators,
@@ -275,6 +283,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? start_time = null,
     Object? ball_type = null,
     Object? pitch_type = null,
+    Object? created_by = null,
     Object? umpires = freezed,
     Object? scorers = freezed,
     Object? commentators = freezed,
@@ -337,6 +346,10 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.pitch_type
           : pitch_type // ignore: cast_nullable_to_non_nullable
               as PitchType,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
       umpires: freezed == umpires
           ? _value._umpires
           : umpires // ignore: cast_nullable_to_non_nullable
@@ -390,6 +403,7 @@ class _$MatchModelImpl implements _MatchModel {
       required this.start_time,
       required this.ball_type,
       required this.pitch_type,
+      required this.created_by,
       final List<UserModel>? umpires,
       final List<UserModel>? scorers,
       final List<UserModel>? commentators,
@@ -465,6 +479,8 @@ class _$MatchModelImpl implements _MatchModel {
   final BallType ball_type;
   @override
   final PitchType pitch_type;
+  @override
+  final String created_by;
   final List<UserModel>? _umpires;
   @override
   List<UserModel>? get umpires {
@@ -508,7 +524,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
+    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
   }
 
   @override
@@ -538,6 +554,8 @@ class _$MatchModelImpl implements _MatchModel {
                 other.ball_type == ball_type) &&
             (identical(other.pitch_type, pitch_type) ||
                 other.pitch_type == pitch_type) &&
+            (identical(other.created_by, created_by) ||
+                other.created_by == created_by) &&
             const DeepCollectionEquality().equals(other._umpires, _umpires) &&
             const DeepCollectionEquality().equals(other._scorers, _scorers) &&
             const DeepCollectionEquality()
@@ -571,6 +589,7 @@ class _$MatchModelImpl implements _MatchModel {
         start_time,
         ball_type,
         pitch_type,
+        created_by,
         const DeepCollectionEquality().hash(_umpires),
         const DeepCollectionEquality().hash(_scorers),
         const DeepCollectionEquality().hash(_commentators),
@@ -610,6 +629,7 @@ abstract class _MatchModel implements MatchModel {
       required final DateTime start_time,
       required final BallType ball_type,
       required final PitchType pitch_type,
+      required final String created_by,
       final List<UserModel>? umpires,
       final List<UserModel>? scorers,
       final List<UserModel>? commentators,
@@ -648,6 +668,8 @@ abstract class _MatchModel implements MatchModel {
   BallType get ball_type;
   @override
   PitchType get pitch_type;
+  @override
+  String get created_by;
   @override
   List<UserModel>? get umpires;
   @override
@@ -1157,6 +1179,7 @@ mixin _$AddEditMatchRequest {
   DateTime get start_time => throw _privateConstructorUsedError;
   BallType get ball_type => throw _privateConstructorUsedError;
   PitchType get pitch_type => throw _privateConstructorUsedError;
+  String get created_by => throw _privateConstructorUsedError;
   List<String>? get umpire_ids => throw _privateConstructorUsedError;
   List<String>? get scorer_ids => throw _privateConstructorUsedError;
   List<String>? get commentator_ids => throw _privateConstructorUsedError;
@@ -1192,6 +1215,7 @@ abstract class $AddEditMatchRequestCopyWith<$Res> {
       DateTime start_time,
       BallType ball_type,
       PitchType pitch_type,
+      String created_by,
       List<String>? umpire_ids,
       List<String>? scorer_ids,
       List<String>? commentator_ids,
@@ -1228,6 +1252,7 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
     Object? start_time = null,
     Object? ball_type = null,
     Object? pitch_type = null,
+    Object? created_by = null,
     Object? umpire_ids = freezed,
     Object? scorer_ids = freezed,
     Object? commentator_ids = freezed,
@@ -1290,6 +1315,10 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
           ? _value.pitch_type
           : pitch_type // ignore: cast_nullable_to_non_nullable
               as PitchType,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
       umpire_ids: freezed == umpire_ids
           ? _value.umpire_ids
           : umpire_ids // ignore: cast_nullable_to_non_nullable
@@ -1348,6 +1377,7 @@ abstract class _$$AddEditMatchRequestImplCopyWith<$Res>
       DateTime start_time,
       BallType ball_type,
       PitchType pitch_type,
+      String created_by,
       List<String>? umpire_ids,
       List<String>? scorer_ids,
       List<String>? commentator_ids,
@@ -1382,6 +1412,7 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
     Object? start_time = null,
     Object? ball_type = null,
     Object? pitch_type = null,
+    Object? created_by = null,
     Object? umpire_ids = freezed,
     Object? scorer_ids = freezed,
     Object? commentator_ids = freezed,
@@ -1444,6 +1475,10 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
           ? _value.pitch_type
           : pitch_type // ignore: cast_nullable_to_non_nullable
               as PitchType,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
       umpire_ids: freezed == umpire_ids
           ? _value._umpire_ids
           : umpire_ids // ignore: cast_nullable_to_non_nullable
@@ -1497,6 +1532,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
       required this.start_time,
       required this.ball_type,
       required this.pitch_type,
+      required this.created_by,
       final List<String>? umpire_ids,
       final List<String>? scorer_ids,
       final List<String>? commentator_ids,
@@ -1575,6 +1611,8 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
   final BallType ball_type;
   @override
   final PitchType pitch_type;
+  @override
+  final String created_by;
   final List<String>? _umpire_ids;
   @override
   List<String>? get umpire_ids {
@@ -1618,7 +1656,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
 
   @override
   String toString() {
-    return 'AddEditMatchRequest(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
+    return 'AddEditMatchRequest(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
   }
 
   @override
@@ -1648,6 +1686,8 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
                 other.ball_type == ball_type) &&
             (identical(other.pitch_type, pitch_type) ||
                 other.pitch_type == pitch_type) &&
+            (identical(other.created_by, created_by) ||
+                other.created_by == created_by) &&
             const DeepCollectionEquality()
                 .equals(other._umpire_ids, _umpire_ids) &&
             const DeepCollectionEquality()
@@ -1684,6 +1724,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
         start_time,
         ball_type,
         pitch_type,
+        created_by,
         const DeepCollectionEquality().hash(_umpire_ids),
         const DeepCollectionEquality().hash(_scorer_ids),
         const DeepCollectionEquality().hash(_commentator_ids),
@@ -1724,6 +1765,7 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
       required final DateTime start_time,
       required final BallType ball_type,
       required final PitchType pitch_type,
+      required final String created_by,
       final List<String>? umpire_ids,
       final List<String>? scorer_ids,
       final List<String>? commentator_ids,
@@ -1762,6 +1804,8 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
   BallType get ball_type;
   @override
   PitchType get pitch_type;
+  @override
+  String get created_by;
   @override
   List<String>? get umpire_ids;
   @override

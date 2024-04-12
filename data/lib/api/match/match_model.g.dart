@@ -32,6 +32,7 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
       start_time: DateTime.parse(json['start_time'] as String),
       ball_type: $enumDecode(_$BallTypeEnumMap, json['ball_type']),
       pitch_type: $enumDecode(_$PitchTypeEnumMap, json['pitch_type']),
+      created_by: json['created_by'] as String,
       umpires: (json['umpires'] as List<dynamic>?)
           ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -66,6 +67,7 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'start_time': instance.start_time.toIso8601String(),
       'ball_type': _$BallTypeEnumMap[instance.ball_type]!,
       'pitch_type': _$PitchTypeEnumMap[instance.pitch_type]!,
+      'created_by': instance.created_by,
       'umpires': instance.umpires,
       'scorers': instance.scorers,
       'commentators': instance.commentators,
@@ -183,6 +185,7 @@ _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(
       start_time: DateTime.parse(json['start_time'] as String),
       ball_type: $enumDecode(_$BallTypeEnumMap, json['ball_type']),
       pitch_type: $enumDecode(_$PitchTypeEnumMap, json['pitch_type']),
+      created_by: json['created_by'] as String,
       umpire_ids: (json['umpire_ids'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -216,6 +219,7 @@ Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
       'start_time': instance.start_time.toIso8601String(),
       'ball_type': _$BallTypeEnumMap[instance.ball_type]!,
       'pitch_type': _$PitchTypeEnumMap[instance.pitch_type]!,
+      'created_by': instance.created_by,
       'umpire_ids': instance.umpire_ids,
       'scorer_ids': instance.scorer_ids,
       'commentator_ids': instance.commentator_ids,

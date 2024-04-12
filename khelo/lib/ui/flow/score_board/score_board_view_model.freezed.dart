@@ -646,7 +646,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       final List<BallScoreModel> previousScoresList = const [],
       this.loading = false,
       this.pop = false,
-      this.continueWithInjuredPlayers = false,
+      this.continueWithInjuredPlayers = true,
       this.ballCount = 0,
       this.overCount = 1,
       this.totalRuns = 0,

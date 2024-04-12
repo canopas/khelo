@@ -65,7 +65,12 @@ class TeamListScreen extends ConsumerWidget {
                     height: 16,
                   )
                 ],
-                _teamListCell(context, notifier, team),
+                _teamListCell(
+                  context,
+                  notifier,
+                  team,
+                  showMoreOptionButton: state.currentUserId == team.created_by,
+                ),
               ],
             );
           },
@@ -84,8 +89,9 @@ class TeamListScreen extends ConsumerWidget {
   Widget _teamListCell(
     BuildContext context,
     TeamListViewNotifier notifier,
-    TeamModel team,
-  ) {
+    TeamModel team, {
+    required bool showMoreOptionButton,
+  }) {
     return OnTapScale(
       onTap: () {
         AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
@@ -115,17 +121,19 @@ class TeamListScreen extends ConsumerWidget {
               ],
             ),
           ),
-          _moreActionButton(
-            context,
-            onSelect: (value) async {
-              if (value == context.l10n.team_list_add_members_title) {
-                await AppRoute.addTeamMember(team: team).push(context);
-              } else if (value == context.l10n.team_list_edit_team_title) {
-                await AppRoute.addTeam(team: team).push(context);
-              }
-              notifier.loadTeamList();
-            },
-          )
+          if (showMoreOptionButton) ...[
+            _moreActionButton(
+              context,
+              onSelect: (value) async {
+                if (value == context.l10n.team_list_add_members_title) {
+                  await AppRoute.addTeamMember(team: team).push(context);
+                } else if (value == context.l10n.team_list_edit_team_title) {
+                  await AppRoute.addTeam(team: team).push(context);
+                }
+                notifier.loadTeamList();
+              },
+            )
+          ]
         ],
       ),
     );

@@ -27,7 +27,8 @@ class TeamService {
   TeamService(this._currentUserId, this._firestore, this._userService);
 
   Future<String> updateTeam(AddTeamRequestModel team) async {
-    DocumentReference teamRef = _firestore.collection(_collectionName).doc(team.id);
+    DocumentReference teamRef =
+        _firestore.collection(_collectionName).doc(team.id);
     WriteBatch batch = _firestore.batch();
 
     batch.set(teamRef, team.toJson(), SetOptions(merge: true));
@@ -120,6 +121,38 @@ class TeamService {
     return teams;
   }
 
+  Future<List<TeamModel>> getUserOwnedTeams() async {
+    QuerySnapshot mainCollectionSnapshot = await _firestore
+        .collection(_collectionName)
+        .where('created_by', isEqualTo: _currentUserId)
+        .get();
+
+    List<TeamModel> teams = [];
+
+    for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
+      AddTeamRequestModel teamRequestModel =
+          AddTeamRequestModel.fromJson(mainDoc.data() as Map<String, dynamic>);
+
+      final member = (teamRequestModel.players?.isNotEmpty ?? false)
+          ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+          : null;
+
+      final team = TeamModel(
+          name: teamRequestModel.name,
+          name_lowercase: teamRequestModel.name_lowercase,
+          id: teamRequestModel.id,
+          city: teamRequestModel.city,
+          created_at: teamRequestModel.created_at,
+          created_by: teamRequestModel.created_by,
+          profile_img_url: teamRequestModel.profile_img_url,
+          players: member);
+
+      teams.add(team);
+    }
+
+    return teams;
+  }
+
   Future<void> deleteTeam(String teamId) async {
     await _firestore.collection(_collectionName).doc(teamId).delete();
   }
@@ -158,10 +191,30 @@ class TeamService {
             isLessThan: '${searchKey.caseAndSpaceInsensitive}z')
         .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return TeamModel.fromJson(data).copyWith(id: doc.id);
-    }).toList();
+    List<TeamModel> teams = [];
+
+    for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
+      AddTeamRequestModel teamRequestModel =
+          AddTeamRequestModel.fromJson(mainDoc.data() as Map<String, dynamic>);
+
+      final member = (teamRequestModel.players?.isNotEmpty ?? false)
+          ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+          : null;
+
+      final team = TeamModel(
+          name: teamRequestModel.name,
+          name_lowercase: teamRequestModel.name_lowercase,
+          id: teamRequestModel.id,
+          city: teamRequestModel.city,
+          created_at: teamRequestModel.created_at,
+          created_by: teamRequestModel.created_by,
+          profile_img_url: teamRequestModel.profile_img_url,
+          players: member);
+
+      teams.add(team);
+    }
+
+    return teams;
   }
 
   // Helper Method

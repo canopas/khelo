@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:data/api/team/team_model.dart';
+import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,20 +18,22 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   final TeamService _teamService;
   Timer? _debounce;
   List<String> excludedIds = [];
+  bool onlyUserTeams = false;
 
   SearchTeamViewNotifier(this._teamService)
       : super(SearchTeamState(searchController: TextEditingController())) {
     loadTeamList();
   }
 
-  void setData(List<String>? ids) {
+  void setData(List<String>? ids, bool userTeams) {
     excludedIds = ids ?? [];
+    onlyUserTeams = userTeams;
   }
 
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
     try {
-      final res = await _teamService.getUserRelatedTeams();
+      final res = await _teamService.getUserOwnedTeams();
 
       final filteredResult =
           res.where((element) => !excludedIds.contains(element.id)).toList();
@@ -43,10 +46,18 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   }
 
   Future<void> search(String searchKey) async {
-    final teams = await _teamService.searchTeam(searchKey);
-    final filteredResult =
-        teams.where((element) => !excludedIds.contains(element.id)).toList();
-    state = state.copyWith(searchResults: filteredResult);
+    if (onlyUserTeams) {
+      final filteredResult = state.userTeams
+          .where((element) => element.name.caseAndSpaceInsensitive
+              .startsWith(searchKey.caseAndSpaceInsensitive))
+          .toList();
+      state = state.copyWith(searchResults: filteredResult);
+    } else {
+      final teams = await _teamService.searchTeam(searchKey);
+      final filteredResult =
+          teams.where((element) => !excludedIds.contains(element.id)).toList();
+      state = state.copyWith(searchResults: filteredResult);
+    }
   }
 
   void onSearchChanged(String value) {

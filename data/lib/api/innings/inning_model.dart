@@ -32,10 +32,3 @@ enum InningStatus {
 
   const InningStatus(this.value);
 }
-
-// first inning --> TOSS WINNER TEAM--
-// first team score in whole match,
-// first team wicket taken in whole match,
-// inning status: if toss winner team is doing what they chose than first inning is running
-// inning status: if toss winner team is doing opposite from what they chose than second inning is running
-// if match complete then both inning complete

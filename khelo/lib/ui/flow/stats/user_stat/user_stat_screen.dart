@@ -68,7 +68,7 @@ class UserStatScreen extends ConsumerWidget {
   int _getTotalRunScored(UserStatViewState state) {
     return state.ballList
         .where((element) => element.batsman_id == state.currentUserId)
-        .fold(0, (sum, element) => sum + (element.runs_scored ?? 0));
+        .fold(0, (sum, element) => sum + element.runs_scored);
   }
 
   Widget _runScoredView(BuildContext context, String title, String count) {
@@ -143,7 +143,7 @@ class UserStatScreen extends ConsumerWidget {
               0,
               (sum, element) =>
                   sum +
-                  (element.runs_scored ?? 0) +
+                  element.runs_scored +
                   (element.extras_awarded ?? 0));
 
       return (
@@ -153,7 +153,7 @@ class UserStatScreen extends ConsumerWidget {
     } else {
       final runScored = state.ballList
           .where((element) => element.batsman_id == state.currentUserId)
-          .fold(0, (sum, element) => sum + (element.runs_scored ?? 0));
+          .fold(0, (sum, element) => sum + element.runs_scored);
 
       final dismissal = state.ballList
           .where((element) => element.player_out_id == state.currentUserId)
@@ -224,7 +224,7 @@ class UserStatScreen extends ConsumerWidget {
             0,
             (sum, element) =>
                 sum +
-                (element.runs_scored ?? 0) +
+                element.runs_scored +
                 (element.extras_awarded ?? 0));
     if (bowledBallCount == 0) {
       return 0.0;

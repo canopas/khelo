@@ -187,7 +187,7 @@ class OverCompleteDialog extends ConsumerWidget {
     int totalRuns = scoresList
         .where((element) => (element.extras_type == ExtrasType.noBall ||
             element.extras_type == null))
-        .fold(0, (sum, element) => sum + (element.runs_scored ?? 0));
+        .fold(0, (sum, element) => sum + element.runs_scored);
 
     final batsManFacedBall = scoresList
         .where((element) => (element.extras_type != ExtrasType.wide))
@@ -203,7 +203,7 @@ class OverCompleteDialog extends ConsumerWidget {
     int run = scoresList
         .where((element) => (element.extras_type == ExtrasType.noBall ||
             element.extras_type == null))
-        .fold(0, (sum, element) => sum + (element.runs_scored ?? 0));
+        .fold(0, (sum, element) => sum + element.runs_scored);
 
     final wicket = scoresList
         .where((element) => (element.wicket_type != null &&

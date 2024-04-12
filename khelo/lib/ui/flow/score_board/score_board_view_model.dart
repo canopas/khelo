@@ -656,7 +656,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               ? state.lastAssignedIndex - 1
               : state.lastAssignedIndex,
           totalRuns: state.totalRuns -
-              ((lastBall.extras_awarded ?? 0) + (lastBall.runs_scored ?? 0)),
+              ((lastBall.extras_awarded ?? 0) + lastBall.runs_scored),
           strikerId: lastBall.wicket_type == null
               ? lastBall.batsman_id
               : state.strikerId);
