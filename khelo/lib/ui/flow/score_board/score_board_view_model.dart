@@ -102,7 +102,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           ? null
           : await _ballScoreService.getBallScoreListByInningId(
               state.otherInning!.id ?? "INVALID ID");
-
+      currentScore.sort((a, b) => a.time.compareTo(b.time));
+      previousScore?.sort((a, b) => a.time.compareTo(b.time));
       state = state.copyWith(
           currentScoresList: currentScore,
           previousScoresList: previousScore ?? [],
@@ -292,12 +293,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.fiveOrSeven:
         state = state.copyWith(showAddExtraDialogForFiveSeven: DateTime.now());
       case ScoreButton.undo:
-        final lastBall = state.currentScoresList.lastWhere((ball) =>
-            ball.extras_type != ExtrasType.penaltyRun &&
-            ball.wicket_type != WicketType.timedOut &&
-            ball.wicket_type != WicketType.retired &&
-            ball.wicket_type != WicketType.retiredHurt);
-        if (lastBall.over_number != state.overCount) {
+        final lastBall = _getDeliveredLastBall();
+        if (lastBall == null || lastBall.over_number != state.overCount) {
           state = state.copyWith(invalidUndoToast: DateTime.now());
         } else {
           state =
@@ -595,7 +592,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   Future<void> undoLastBall() async {
     try {
       final lastBall = _getDeliveredLastBall();
-      if (lastBall.over_number != state.overCount) {
+      if (lastBall == null || lastBall.over_number != state.overCount) {
         return;
       }
       await _ballScoreService.deleteBall(lastBall.id ?? "INVALID ID");
@@ -674,13 +671,17 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  BallScoreModel _getDeliveredLastBall() {
+  BallScoreModel? _getDeliveredLastBall() {
     // last_ball that is delivered no matter legal or illegal, i.e exclude penalty-run, timed out, retired or retired hurt.
-    return state.currentScoresList.lastWhere((ball) =>
-        ball.extras_type != ExtrasType.penaltyRun &&
-        ball.wicket_type != WicketType.timedOut &&
-        ball.wicket_type != WicketType.retired &&
-        ball.wicket_type != WicketType.retiredHurt);
+    try {
+      return state.currentScoresList.lastWhere((ball) =>
+          ball.extras_type != ExtrasType.penaltyRun &&
+          ball.wicket_type != WicketType.timedOut &&
+          ball.wicket_type != WicketType.retired &&
+          ball.wicket_type != WicketType.retiredHurt);
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> _updateMatchPlayerStatus(

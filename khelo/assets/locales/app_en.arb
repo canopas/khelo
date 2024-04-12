@@ -312,6 +312,7 @@
     "score_board_more_options_title": "More Options",
     "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
     "score_board_end_match_title": "End Match",
+    "score_board_select_wicket_type_title": "Select Wicket Type",
     "score_board_end_match_description_text": "are you sure you want to end match?",
     "score_board_need_run_text": "Need {run} in {ball}",
     "@score_board_need_run_text": {

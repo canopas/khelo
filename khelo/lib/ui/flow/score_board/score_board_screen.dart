@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/confirm_action_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/is_boundary_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/more_option_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_dialog.dart';
@@ -137,13 +136,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showUndoBallConfirmationDialog), (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_undo_last_ball_title,
-          description: context.l10n.score_board_undo_last_ball_description_text,
-          primaryButtonText: context.l10n.score_board_undo_title,
-          onConfirmation: notifier.undoLastBall,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_undo_last_ball_title,
+            message: context.l10n.score_board_undo_last_ball_description_text,
+            confirmBtnText: context.l10n.score_board_undo_title,
+            onConfirm: notifier.undoLastBall);
       }
     });
   }
@@ -261,13 +258,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showPauseScoringDialog),
         (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_pause_scoring_title,
-          description: context.l10n.score_board_pause_scoring_description_text,
-          primaryButtonText: context.l10n.score_board_pause_title,
-          onConfirmation: notifier.onPauseScoring,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_pause_scoring_title,
+            message: context.l10n.score_board_pause_scoring_description_text,
+            confirmBtnText: context.l10n.score_board_pause_title,
+            onConfirm: notifier.onPauseScoring);
       }
     });
   }
@@ -286,16 +281,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   void _observeEndMatchDialogue(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select(
-                (value) => value.showEndMatchDialog), (previous, next) {
+        scoreBoardStateProvider.select((value) => value.showEndMatchDialog),
+        (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_end_match_title,
-          description: context.l10n.score_board_end_match_description_text,
-          primaryButtonText: context.l10n.common_okay_title,
-          onConfirmation:notifier.abandonMatch,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_end_match_title,
+            message: context.l10n.score_board_end_match_description_text,
+            confirmBtnText: context.l10n.common_okay_title,
+            onConfirm: notifier.abandonMatch);
       }
     });
   }
@@ -511,13 +504,17 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showBoundaryDialog(BuildContext context, int run) async {
-    final isBoundary = await IsBoundaryDialog.show<bool>(context);
-    if (context.mounted && isBoundary != null) {
-      notifier.addBall(
-          run: run,
-          isSix: (run == 6 && isBoundary),
-          isFour: (run == 4 && isBoundary));
-    }
+    showConfirmationDialog(
+      context,
+      title: context.l10n.score_board_boundary_text,
+      message: context.l10n.score_board_is_boundary_text,
+      isDestructiveAction: true,
+      confirmBtnText: context.l10n.common_yes_title,
+      cancelBtnText: context.l10n.common_no_title,
+      onConfirm: () =>
+          notifier.addBall(run: run, isSix: run == 6, isFour: run == 4),
+      onCancel: () => notifier.addBall(run: run),
+    );
   }
 
   Future<void> _showAddExtraDialog(

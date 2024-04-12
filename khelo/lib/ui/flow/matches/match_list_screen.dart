@@ -8,6 +8,7 @@ import 'package:khelo/domain/extensions/data_model_extensions/match_model_extens
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -91,27 +92,52 @@ class MatchListScreen extends ConsumerWidget {
     }
   }
 
-  Widget _matchCell(BuildContext context, MatchModel match, String? currentUserId,) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: context.colorScheme.outline),
-        borderRadius: BorderRadius.circular(20),
-        color: context.colorScheme.containerLow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _matchOtherDetail(context, match, currentUserId),
-          _teamsAndStatusView(context, match),
-          _winnerMessageText(context, match)
-        ],
+  Widget _matchCell(
+    BuildContext context,
+    MatchModel match,
+    String? currentUserId,
+  ) {
+    return OnTapScale(
+      onTap: () {
+        if (match.match_status == MatchStatus.yetToStart) {
+          AppRoute.addMatch(matchId: match.id).push(context);
+        } else {
+          if (match.toss_decision == null || match.toss_winner_id == null) {
+            AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                .push(context);
+          } else {
+            AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                .push(context);
+          }
+        }
+      },
+      enabled: match.match_status != MatchStatus.finish &&
+          match.created_by == currentUserId,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: context.colorScheme.outline),
+          borderRadius: BorderRadius.circular(20),
+          color: context.colorScheme.containerLow,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _matchOtherDetail(context, match, currentUserId),
+            _teamsAndStatusView(context, match),
+            _winnerMessageText(context, match)
+          ],
+        ),
       ),
     );
   }
 
-  Widget _matchOtherDetail(BuildContext context, MatchModel match, String? currentUserId,) {
+  Widget _matchOtherDetail(
+    BuildContext context,
+    MatchModel match,
+    String? currentUserId,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -144,29 +170,16 @@ class MatchListScreen extends ConsumerWidget {
   Widget _matchEditOrResumeActionButton(
     BuildContext context,
     MatchModel match,
-  String? currentUserId,
+    String? currentUserId,
   ) {
-    if (match.match_status != MatchStatus.finish && match.created_by == currentUserId) {
-      return IconButton(
-          onPressed: () {
-            if (match.match_status == MatchStatus.yetToStart) {
-              AppRoute.addMatch(matchId: match.id).push(context);
-            } else {
-              if (match.toss_decision == null || match.toss_winner_id == null) {
-                AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
-                    .push(context);
-              } else {
-                AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                    .push(context);
-              }
-            }
-          },
-          icon: Icon(
-            match.match_status == MatchStatus.yetToStart
-                ? Icons.edit
-                : Icons.play_arrow_sharp,
-            size: 30,
-          ));
+    if (match.match_status != MatchStatus.finish &&
+        match.created_by == currentUserId) {
+      return Icon(
+        match.match_status == MatchStatus.yetToStart
+            ? Icons.edit
+            : Icons.play_arrow_sharp,
+        size: 30,
+      );
     } else {
       return const SizedBox();
     }
