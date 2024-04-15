@@ -408,26 +408,32 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     bool isSecondInningRunning,
     bool injuredPlayerRemained,
   ) {
-    if (injuredPlayerRemained && !isEnabled) {
-      if (isSecondInningRunning) {
-        return context.l10n.score_board_end_match_title;
-      } else {
-        return context.l10n.score_board_end_inning_title;
-      }
+    if (injuredPlayerRemained && !isEnabled && widget.playerSelectionType != PlayerSelectionType.bowler) {
+      return isSecondInningRunning
+          ? context.l10n.score_board_end_match_title
+          : context.l10n.score_board_end_inning_title;
     } else {
       return context.l10n.score_board_select_title;
     }
   }
 
   bool _isStickyButtonEnable(bool injuredPlayerRemained) {
-    return widget.playerSelectionType == PlayerSelectionType.all
-        ? (batsMan1 != null && batsMan2 != null && bowler != null)
-        : widget.playerSelectionType == PlayerSelectionType.batsManAndBowler
-            ? (((injuredPlayerRemained && !isEnabled) || batsMan1 != null) &&
-                bowler != null)
-            : widget.playerSelectionType == PlayerSelectionType.batsMan
-                ? (injuredPlayerRemained && !isEnabled) || batsMan1 != null
-                : bowler != null;
+    if (injuredPlayerRemained &&
+        !isEnabled &&
+        widget.playerSelectionType != PlayerSelectionType.bowler) {
+      return true;
+    }
+
+    switch (widget.playerSelectionType) {
+      case PlayerSelectionType.bowler:
+        return bowler != null;
+      case PlayerSelectionType.batsMan:
+        return batsMan1 != null;
+      case PlayerSelectionType.all:
+        return batsMan1 != null && batsMan2 != null && bowler != null;
+      case PlayerSelectionType.batsManAndBowler:
+        return batsMan1 != null && bowler != null;
+    }
   }
 
   void _onSelectButton(

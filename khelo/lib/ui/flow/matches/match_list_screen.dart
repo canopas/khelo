@@ -254,6 +254,13 @@ class MatchListScreen extends ConsumerWidget {
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
     final winSummary = match.getWinnerSummary(context);
     if (match.match_status == MatchStatus.finish && winSummary != null) {
+      if (winSummary.teamName.isEmpty) {
+        return Text(
+          context.l10n.score_board_match_tied_text,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.primary),
+        );
+      }
       return WonByMessageText(
         teamName: winSummary.teamName,
         difference: winSummary.difference,

@@ -293,7 +293,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.fiveOrSeven:
         state = state.copyWith(showAddExtraDialogForFiveSeven: DateTime.now());
       case ScoreButton.undo:
-        final lastBall = _getDeliveredLastBall();
+        final lastBall = _getLastBallExceptPenaltyBall();
         if (lastBall == null || lastBall.over_number != state.overCount) {
           state = state.copyWith(invalidUndoToast: DateTime.now());
         } else {
@@ -591,7 +591,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   Future<void> undoLastBall() async {
     try {
-      final lastBall = _getDeliveredLastBall();
+      final lastBall = _getLastBallExceptPenaltyBall();
       if (lastBall == null || lastBall.over_number != state.overCount) {
         return;
       }
@@ -610,17 +610,19 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 element.player.id != lastBall.batsman_id &&
                 element.player.id != lastBall.non_striker_id)
             .firstOrNull;
-        if (newBatsMan != null && outPlayer != null) {
-          final updateList = [
-            outPlayer.copyWith(status: PlayerStatus.playing),
-            newBatsMan.copyWith(
+        if (outPlayer != null) {
+          List<MatchPlayer> updateList = [
+            outPlayer.copyWith(status: PlayerStatus.playing)
+          ];
+          if (newBatsMan != null) {
+            updateList.add(newBatsMan.copyWith(
                 status: newBatsMan.index == state.lastAssignedIndex
                     ? PlayerStatus.yetToPlay
                     : PlayerStatus.injured,
                 index: newBatsMan.index == state.lastAssignedIndex
                     ? null
-                    : newBatsMan.index)
-          ];
+                    : newBatsMan.index));
+          }
 
           await _updateMatchPlayerStatus((
             teamId: state.currentInning?.team_id ?? "INVALID_ID",
@@ -629,12 +631,21 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
           final updatedBatsManList = state.batsMans?.toList();
 
-          final batsMen = updatedBatsManList?.updateWhere(
-            where: (element) => element.player.id == newBatsMan.player.id,
-            updated: (oldElement) => outPlayer,
-          );
+          if (newBatsMan != null) {
+            final batsMen = updatedBatsManList?.updateWhere(
+              where: (element) => element.player.id == newBatsMan.player.id,
+              updated: (oldElement) => outPlayer,
+            );
 
-          state = state.copyWith(batsMans: batsMen);
+            state = state.copyWith(batsMans: batsMen);
+          } else {
+            updatedBatsManList?.removeWhere(
+              (element) => element.player.id == newBatsMan?.player.id,
+            );
+            updatedBatsManList?.add(outPlayer);
+
+            state = state.copyWith(batsMans: updatedBatsManList);
+          }
         }
       }
 
@@ -644,14 +655,18 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       state = state.copyWith(
           currentScoresList: updateList,
           ballCount: (lastBall.extras_type == ExtrasType.noBall ||
-                  lastBall.extras_type == ExtrasType.wide)
+                  lastBall.extras_type == ExtrasType.wide ||
+                  lastBall.wicket_type == WicketType.timedOut ||
+                  lastBall.wicket_type == WicketType.retiredHurt ||
+                  lastBall.wicket_type == WicketType.retired)
               ? state.ballCount
               : state.ballCount - 1,
           wicketCount: lastBall.wicket_type != null &&
                   lastBall.wicket_type != WicketType.retiredHurt
               ? state.wicketCount - 1
               : state.wicketCount,
-          lastAssignedIndex: lastBall.wicket_type != null
+          lastAssignedIndex: lastBall.wicket_type != null &&
+                  lastBall.wicket_type != WicketType.retiredHurt
               ? state.lastAssignedIndex - 1
               : state.lastAssignedIndex,
           totalRuns: state.totalRuns -
@@ -684,6 +699,16 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
+  BallScoreModel? _getLastBallExceptPenaltyBall() {
+    // last_ball excluding penalty-run
+    try {
+      return state.currentScoresList
+          .lastWhere((ball) => ball.extras_type != ExtrasType.penaltyRun);
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> _updateMatchPlayerStatus(
     ({String teamId, List<MatchPlayer> players}) team,
   ) async {
@@ -707,16 +732,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       updated: (oldElement) {
         final teamSquadList = oldElement.squad.toList();
         final newSquadList = team.players;
-        final updatedTeamSquad = teamSquadList.updateWhere(
-          where: (element) =>
-              newSquadList.map((e) => e.player.id).contains(element.player.id),
-          updated: (oldElement) {
-            return newSquadList.firstWhere(
-                (element) => element.player.id == oldElement.player.id);
-          },
-        );
-
-        return oldElement.copyWith(squad: updatedTeamSquad);
+        for (final player in newSquadList) {
+          final index = teamSquadList
+              .indexWhere((element) => player.player.id == element.player.id);
+          teamSquadList[index] = player;
+        }
+        return oldElement.copyWith(squad: teamSquadList);
       },
     );
 
@@ -835,15 +856,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     // func will be called only if injured player is remained and user disable that continue with injured player option
     state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
 
-    if (_isAllOut()) {
-      if (state.otherInning?.innings_status == InningStatus.finish) {
-        state = state.copyWith(showMatchCompleteDialog: DateTime.now());
-      } else {
-        state = state.copyWith(showInningCompleteDialog: DateTime.now());
-      }
+    if (state.otherInning?.innings_status == InningStatus.finish) {
+      state = state.copyWith(showMatchCompleteDialog: DateTime.now());
+    } else {
+      state = state.copyWith(showInningCompleteDialog: DateTime.now());
     }
-
-    _checkIfInningComplete();
   }
 
   Future<void> setPlayers({

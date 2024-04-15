@@ -312,22 +312,40 @@ class ScoreDisplayView extends ConsumerWidget {
   }
 
   Widget _ballView(BuildContext context, BallScoreModel ball) {
+    bool showCircle = ball.wicket_type != WicketType.retired &&
+        ball.wicket_type != WicketType.retiredHurt &&
+        ball.wicket_type != WicketType.timedOut;
     return Container(
       height: 50,
       width: 50,
       alignment: Alignment.center,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: context.colorScheme.containerLow,
-          border: Border.all(color: context.colorScheme.outline)),
-      child: Text(_getTextBasedOnBall(context, ball)),
+          shape: showCircle ? BoxShape.circle : BoxShape.rectangle,
+          color: _getBackGroundColorBasedOnBall(context, ball),
+          border: Border.all(
+              color: showCircle
+                  ? context.colorScheme.outline
+                  : Colors.transparent)),
+      child: Text(
+        _getTextBasedOnBall(context, ball),
+        style: AppTextStyle.subtitle1
+            .copyWith(color: context.colorScheme.textPrimary),
+      ),
     );
   }
 
   String _getTextBasedOnBall(BuildContext context, BallScoreModel ball) {
     if (ball.wicket_type != null) {
-      return context.l10n.score_board_wicket_short_text;
+      if (ball.wicket_type == WicketType.retired) {
+        return context.l10n.wicket_type_short_retired_title;
+      } else if (ball.wicket_type == WicketType.retiredHurt) {
+        return context.l10n.wicket_type_short_retired_hurt_title;
+      } else if (ball.wicket_type == WicketType.timedOut) {
+        return context.l10n.wicket_type_short_timed_out_title;
+      } else {
+        return context.l10n.score_board_wicket_short_text;
+      }
     } else if (ball.extras_type != null) {
       switch (ball.extras_type!) {
         case ExtrasType.wide:
@@ -349,6 +367,25 @@ class ScoreDisplayView extends ConsumerWidget {
       return "${ball.runs_scored}";
     } else {
       return "";
+    }
+  }
+
+  Color _getBackGroundColorBasedOnBall(
+      BuildContext context, BallScoreModel ball) {
+    if (ball.wicket_type != null) {
+      if (ball.wicket_type == WicketType.retired ||
+          ball.wicket_type == WicketType.retiredHurt ||
+          ball.wicket_type == WicketType.timedOut) {
+        return Colors.transparent;
+      } else {
+        return context.colorScheme.alert.withOpacity(0.5);
+      }
+    } else if (ball.is_six || ball.is_four) {
+      return context.colorScheme.primary;
+    } else if (ball.extras_type != null) {
+      return context.colorScheme.primary.withOpacity(0.5);
+    } else {
+      return context.colorScheme.containerLow;
     }
   }
 }
