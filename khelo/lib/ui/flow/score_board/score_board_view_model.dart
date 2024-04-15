@@ -456,7 +456,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           runs: state.otherInning?.total_runs);
 
       final teams = state.match?.teams.toList();
-      teams?.map((e) {
+      final updatedTeams = teams?.map((e) {
         if (e.team.id == state.currentInning?.team_id) {
           return e.copyWith(over: overCount, run: state.totalRuns);
         } else {
@@ -466,8 +466,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }).toList();
 
       state = state.copyWith(
-          match:
-              state.match?.copyWith(teams: teams ?? state.match?.teams ?? []),
+          match: state.match
+              ?.copyWith(teams: updatedTeams ?? state.match?.teams ?? []),
           currentInning: state.currentInning
               ?.copyWith(overs: overCount, total_runs: state.totalRuns),
           otherInning:
