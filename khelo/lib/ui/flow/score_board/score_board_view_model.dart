@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
 
 part 'score_board_view_model.freezed.dart';
 
@@ -135,19 +134,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         0;
 
     BallScoreModel? lastBall;
-
-    try {
-      lastBall = _getDeliveredLastBall();
-    } on StateError {
-      lastBall = null;
-    }
+    lastBall = _getLastBallExceptPenaltyBall();
 
     // last_ball is not over's last ball or if last_ball_of_over then is_illegal_delivery ? bowler_id : null
-    final bowlerId = lastBall?.ball_number != 6 ||
-            (lastBall?.ball_number == 6 &&
-                !(lastBall?.isLegalDelivery() ?? true))
-        ? lastBall?.bowler_id
-        : null;
+    final bowlerId = lastBall?.bowler_id;
     final bowler = bowlerId != null
         ? state.match!.teams
             .firstWhere(
@@ -157,8 +147,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
             .firstOrNull
         : null;
 
-    bool showSelectAllPlayerSheet =
-        bowler == null && (currentPlayingBatsMan.isEmpty);
     int inningOverCount = ((state.currentInning!.overs ?? 0) + 1).truncate();
 
     state = state.copyWith(
@@ -168,25 +156,35 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       overCount: inningOverCount,
       totalRuns: state.currentInning!.total_runs ?? 0,
       wicketCount: state.otherInning!.total_wickets ?? 0,
-      showSelectPlayerSheet: showSelectAllPlayerSheet ? DateTime.now() : null,
-      showSelectBowlerSheet: bowler == null &&
-              !showSelectAllPlayerSheet &&
-              currentPlayingBatsMan.length == 2
-          ? DateTime.now()
-          : null,
-      showSelectBowlerAndBatsManSheet: bowler == null &&
-              !showSelectAllPlayerSheet &&
-              currentPlayingBatsMan.length == 1
-          ? DateTime.now()
-          : null,
-      strikerId: currentPlayingBatsMan.firstOrNull?.player.id,
-      showSelectBatsManSheet: bowler != null &&
-              currentPlayingBatsMan.length == 1 &&
-              !showSelectAllPlayerSheet
-          ? DateTime.now()
-          : null,
       ballCount: lastBall?.ball_number ?? 0,
+      strikerId: currentPlayingBatsMan.firstOrNull?.player.id,
     );
+
+    if (lastBall != null) {
+      _checkIfInningComplete(wicket: lastBall.wicket_type);
+    } else {
+      bool showSelectAllPlayerSheet =
+          bowler == null && (currentPlayingBatsMan.isEmpty);
+
+      state = state.copyWith(
+        showSelectPlayerSheet: showSelectAllPlayerSheet ? DateTime.now() : null,
+        showSelectBowlerSheet: bowler == null &&
+                !showSelectAllPlayerSheet &&
+                currentPlayingBatsMan.length == 2
+            ? DateTime.now()
+            : null,
+        showSelectBowlerAndBatsManSheet: bowler == null &&
+                !showSelectAllPlayerSheet &&
+                currentPlayingBatsMan.length == 1
+            ? DateTime.now()
+            : null,
+        showSelectBatsManSheet: bowler != null &&
+                currentPlayingBatsMan.length == 1 &&
+                !showSelectAllPlayerSheet
+            ? DateTime.now()
+            : null,
+      );
+    }
   }
 
   Future<void> _createInnings() async {
@@ -683,19 +681,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
-    }
-  }
-
-  BallScoreModel? _getDeliveredLastBall() {
-    // last_ball that is delivered no matter legal or illegal, i.e exclude penalty-run, timed out, retired or retired hurt.
-    try {
-      return state.currentScoresList.lastWhere((ball) =>
-          ball.extras_type != ExtrasType.penaltyRun &&
-          ball.wicket_type != WicketType.timedOut &&
-          ball.wicket_type != WicketType.retired &&
-          ball.wicket_type != WicketType.retiredHurt);
-    } catch (e) {
-      return null;
     }
   }
 
