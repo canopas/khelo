@@ -173,7 +173,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           city: city,
           ground: ground,
           start_time: state.matchTime,
-          created_by: state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
+          created_by:
+              state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
           ball_type: state.ballType,
           pitch_type: state.pitchType,
           umpire_ids: umpireIds,
@@ -220,11 +221,25 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   }
 
   void onTeamSelect(TeamModel team, TeamType type) {
+    final matchPlayer = team.players
+        ?.take(11)
+        .map((e) => MatchPlayer(player: e, status: PlayerStatus.yetToPlay))
+        .toList();
+
+    final captainAndAdminId = matchPlayer?.firstOrNull?.player.id;
     switch (type) {
       case TeamType.a:
-        state = state.copyWith(teamA: team);
+        state = state.copyWith(
+            teamA: team,
+            squadA: matchPlayer,
+            teamACaptainId: captainAndAdminId,
+            teamAAdminId: captainAndAdminId);
       case TeamType.b:
-        state = state.copyWith(teamB: team);
+        state = state.copyWith(
+            teamB: team,
+            squadB: matchPlayer,
+            teamBCaptainId: captainAndAdminId,
+            teamBAdminId: captainAndAdminId);
     }
     onTextChange();
   }

@@ -16,7 +16,7 @@ class AddExtraDialog extends ConsumerStatefulWidget {
     bool isFiveSeven = false,
   }) {
     return showDialog(
-      barrierDismissible: false,
+      barrierDismissible: true,
       context: context,
       builder: (context) {
         return AddExtraDialog(

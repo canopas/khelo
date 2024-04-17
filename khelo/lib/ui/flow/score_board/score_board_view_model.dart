@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
 
 part 'score_board_view_model.freezed.dart';
 
@@ -102,7 +101,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           ? null
           : await _ballScoreService.getBallScoreListByInningId(
               state.otherInning!.id ?? "INVALID ID");
-
+      currentScore.sort((a, b) => a.time.compareTo(b.time));
+      previousScore?.sort((a, b) => a.time.compareTo(b.time));
       state = state.copyWith(
           currentScoresList: currentScore,
           previousScoresList: previousScore ?? [],
@@ -134,19 +134,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         0;
 
     BallScoreModel? lastBall;
-
-    try {
-      lastBall = _getDeliveredLastBall();
-    } on StateError {
-      lastBall = null;
-    }
+    lastBall = _getLastBallExceptPenaltyBall();
 
     // last_ball is not over's last ball or if last_ball_of_over then is_illegal_delivery ? bowler_id : null
-    final bowlerId = lastBall?.ball_number != 6 ||
-            (lastBall?.ball_number == 6 &&
-                !(lastBall?.isLegalDelivery() ?? true))
-        ? lastBall?.bowler_id
-        : null;
+    final bowlerId = lastBall?.bowler_id;
     final bowler = bowlerId != null
         ? state.match!.teams
             .firstWhere(
@@ -156,8 +147,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
             .firstOrNull
         : null;
 
-    bool showSelectAllPlayerSheet =
-        bowler == null && (currentPlayingBatsMan.isEmpty);
     int inningOverCount = ((state.currentInning!.overs ?? 0) + 1).truncate();
 
     state = state.copyWith(
@@ -167,25 +156,35 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       overCount: inningOverCount,
       totalRuns: state.currentInning!.total_runs ?? 0,
       wicketCount: state.otherInning!.total_wickets ?? 0,
-      showSelectPlayerSheet: showSelectAllPlayerSheet ? DateTime.now() : null,
-      showSelectBowlerSheet: bowler == null &&
-              !showSelectAllPlayerSheet &&
-              currentPlayingBatsMan.length == 2
-          ? DateTime.now()
-          : null,
-      showSelectBowlerAndBatsManSheet: bowler == null &&
-              !showSelectAllPlayerSheet &&
-              currentPlayingBatsMan.length == 1
-          ? DateTime.now()
-          : null,
-      strikerId: currentPlayingBatsMan.firstOrNull?.player.id,
-      showSelectBatsManSheet: bowler != null &&
-              currentPlayingBatsMan.length == 1 &&
-              !showSelectAllPlayerSheet
-          ? DateTime.now()
-          : null,
       ballCount: lastBall?.ball_number ?? 0,
+      strikerId: currentPlayingBatsMan.firstOrNull?.player.id,
     );
+
+    if (lastBall != null) {
+      _checkIfInningComplete(wicket: lastBall.wicket_type);
+    } else {
+      bool showSelectAllPlayerSheet =
+          bowler == null && (currentPlayingBatsMan.isEmpty);
+
+      state = state.copyWith(
+        showSelectPlayerSheet: showSelectAllPlayerSheet ? DateTime.now() : null,
+        showSelectBowlerSheet: bowler == null &&
+                !showSelectAllPlayerSheet &&
+                currentPlayingBatsMan.length == 2
+            ? DateTime.now()
+            : null,
+        showSelectBowlerAndBatsManSheet: bowler == null &&
+                !showSelectAllPlayerSheet &&
+                currentPlayingBatsMan.length == 1
+            ? DateTime.now()
+            : null,
+        showSelectBatsManSheet: bowler != null &&
+                currentPlayingBatsMan.length == 1 &&
+                !showSelectAllPlayerSheet
+            ? DateTime.now()
+            : null,
+      );
+    }
   }
 
   Future<void> _createInnings() async {
@@ -292,12 +291,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.fiveOrSeven:
         state = state.copyWith(showAddExtraDialogForFiveSeven: DateTime.now());
       case ScoreButton.undo:
-        final lastBall = state.currentScoresList.lastWhere((ball) =>
-            ball.extras_type != ExtrasType.penaltyRun &&
-            ball.wicket_type != WicketType.timedOut &&
-            ball.wicket_type != WicketType.retired &&
-            ball.wicket_type != WicketType.retiredHurt);
-        if (lastBall.over_number != state.overCount) {
+        final lastBall = _getLastBallExceptPenaltyBall();
+        if (lastBall == null || lastBall.over_number != state.overCount) {
           state = state.copyWith(invalidUndoToast: DateTime.now());
         } else {
           state =
@@ -459,7 +454,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           runs: state.otherInning?.total_runs);
 
       final teams = state.match?.teams.toList();
-      teams?.map((e) {
+      final updatedTeams = teams?.map((e) {
         if (e.team.id == state.currentInning?.team_id) {
           return e.copyWith(over: overCount, run: state.totalRuns);
         } else {
@@ -469,8 +464,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }).toList();
 
       state = state.copyWith(
-          match:
-              state.match?.copyWith(teams: teams ?? state.match?.teams ?? []),
+          match: state.match
+              ?.copyWith(teams: updatedTeams ?? state.match?.teams ?? []),
           currentInning: state.currentInning
               ?.copyWith(overs: overCount, total_runs: state.totalRuns),
           otherInning:
@@ -594,8 +589,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   Future<void> undoLastBall() async {
     try {
-      final lastBall = _getDeliveredLastBall();
-      if (lastBall.over_number != state.overCount) {
+      final lastBall = _getLastBallExceptPenaltyBall();
+      if (lastBall == null || lastBall.over_number != state.overCount) {
         return;
       }
       await _ballScoreService.deleteBall(lastBall.id ?? "INVALID ID");
@@ -613,17 +608,19 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 element.player.id != lastBall.batsman_id &&
                 element.player.id != lastBall.non_striker_id)
             .firstOrNull;
-        if (newBatsMan != null && outPlayer != null) {
-          final updateList = [
-            outPlayer.copyWith(status: PlayerStatus.playing),
-            newBatsMan.copyWith(
+        if (outPlayer != null) {
+          List<MatchPlayer> updateList = [
+            outPlayer.copyWith(status: PlayerStatus.playing)
+          ];
+          if (newBatsMan != null) {
+            updateList.add(newBatsMan.copyWith(
                 status: newBatsMan.index == state.lastAssignedIndex
                     ? PlayerStatus.yetToPlay
                     : PlayerStatus.injured,
                 index: newBatsMan.index == state.lastAssignedIndex
                     ? null
-                    : newBatsMan.index)
-          ];
+                    : newBatsMan.index));
+          }
 
           await _updateMatchPlayerStatus((
             teamId: state.currentInning?.team_id ?? "INVALID_ID",
@@ -632,12 +629,21 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
           final updatedBatsManList = state.batsMans?.toList();
 
-          final batsMen = updatedBatsManList?.updateWhere(
-            where: (element) => element.player.id == newBatsMan.player.id,
-            updated: (oldElement) => outPlayer,
-          );
+          if (newBatsMan != null) {
+            final batsMen = updatedBatsManList?.updateWhere(
+              where: (element) => element.player.id == newBatsMan.player.id,
+              updated: (oldElement) => outPlayer,
+            );
 
-          state = state.copyWith(batsMans: batsMen);
+            state = state.copyWith(batsMans: batsMen);
+          } else {
+            updatedBatsManList?.removeWhere(
+              (element) => element.player.id == newBatsMan?.player.id,
+            );
+            updatedBatsManList?.add(outPlayer);
+
+            state = state.copyWith(batsMans: updatedBatsManList);
+          }
         }
       }
 
@@ -647,14 +653,18 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       state = state.copyWith(
           currentScoresList: updateList,
           ballCount: (lastBall.extras_type == ExtrasType.noBall ||
-                  lastBall.extras_type == ExtrasType.wide)
+                  lastBall.extras_type == ExtrasType.wide ||
+                  lastBall.wicket_type == WicketType.timedOut ||
+                  lastBall.wicket_type == WicketType.retiredHurt ||
+                  lastBall.wicket_type == WicketType.retired)
               ? state.ballCount
               : state.ballCount - 1,
           wicketCount: lastBall.wicket_type != null &&
                   lastBall.wicket_type != WicketType.retiredHurt
               ? state.wicketCount - 1
               : state.wicketCount,
-          lastAssignedIndex: lastBall.wicket_type != null
+          lastAssignedIndex: lastBall.wicket_type != null &&
+                  lastBall.wicket_type != WicketType.retiredHurt
               ? state.lastAssignedIndex - 1
               : state.lastAssignedIndex,
           totalRuns: state.totalRuns -
@@ -674,13 +684,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  BallScoreModel _getDeliveredLastBall() {
-    // last_ball that is delivered no matter legal or illegal, i.e exclude penalty-run, timed out, retired or retired hurt.
-    return state.currentScoresList.lastWhere((ball) =>
-        ball.extras_type != ExtrasType.penaltyRun &&
-        ball.wicket_type != WicketType.timedOut &&
-        ball.wicket_type != WicketType.retired &&
-        ball.wicket_type != WicketType.retiredHurt);
+  BallScoreModel? _getLastBallExceptPenaltyBall() {
+    // last_ball excluding penalty-run
+    try {
+      return state.currentScoresList
+          .lastWhere((ball) => ball.extras_type != ExtrasType.penaltyRun);
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<void> _updateMatchPlayerStatus(
@@ -706,16 +717,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       updated: (oldElement) {
         final teamSquadList = oldElement.squad.toList();
         final newSquadList = team.players;
-        final updatedTeamSquad = teamSquadList.updateWhere(
-          where: (element) =>
-              newSquadList.map((e) => e.player.id).contains(element.player.id),
-          updated: (oldElement) {
-            return newSquadList.firstWhere(
-                (element) => element.player.id == oldElement.player.id);
-          },
-        );
-
-        return oldElement.copyWith(squad: updatedTeamSquad);
+        for (final player in newSquadList) {
+          final index = teamSquadList
+              .indexWhere((element) => player.player.id == element.player.id);
+          teamSquadList[index] = player;
+        }
+        return oldElement.copyWith(squad: teamSquadList);
       },
     );
 
@@ -834,15 +841,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     // func will be called only if injured player is remained and user disable that continue with injured player option
     state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
 
-    if (_isAllOut()) {
-      if (state.otherInning?.innings_status == InningStatus.finish) {
-        state = state.copyWith(showMatchCompleteDialog: DateTime.now());
-      } else {
-        state = state.copyWith(showInningCompleteDialog: DateTime.now());
-      }
+    if (state.otherInning?.innings_status == InningStatus.finish) {
+      state = state.copyWith(showMatchCompleteDialog: DateTime.now());
+    } else {
+      state = state.copyWith(showInningCompleteDialog: DateTime.now());
     }
-
-    _checkIfInningComplete();
   }
 
   Future<void> setPlayers({

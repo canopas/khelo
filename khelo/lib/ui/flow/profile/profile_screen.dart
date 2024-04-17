@@ -3,8 +3,8 @@ import 'package:data/api/user/user_models.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
@@ -34,12 +34,12 @@ class ProfileScreen extends ConsumerWidget {
       title: context.l10n.tab_profile_title,
       actions: [
         TextButton(
-            onPressed: () => _showSignOutAlert(
-                  context,
-                  onSignOut: () {
-                    notifier.onSignOutTap();
-                  },
-                ),
+            onPressed: () => showConfirmationDialog(context,
+                title: context.l10n.common_sign_out_title,
+                message: context.l10n.alert_confirm_default_message(
+                    context.l10n.common_sign_out_title.toLowerCase()),
+                confirmBtnText: context.l10n.common_sign_out_title,
+                onConfirm: notifier.onSignOutTap),
             child: Text(
               context.l10n.common_sign_out_title,
               style: AppTextStyle.button
@@ -151,40 +151,5 @@ class ProfileScreen extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
-  }
-
-  void _showSignOutAlert(
-    BuildContext context, {
-    required Function() onSignOut,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(context.l10n.common_sign_out_title),
-          content: Text(context.l10n.alert_confirm_default_message(
-              context.l10n.common_sign_out_title.toLowerCase())),
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onSignOut();
-              },
-              child: Text(
-                context.l10n.common_sign_out_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 }

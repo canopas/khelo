@@ -26,6 +26,8 @@ extension MatchModelString on MatchModel {
         difference: runDifference,
         wonByText: context.l10n.common_runs_dot_title,
       );
+    } else if ((firstTeam.run ?? 0) == (secondTeam.run ?? 0)) {
+      return (teamName: "", difference: 0, wonByText: "");
     } else {
       // second batting team won
       final teamName = secondTeam.team.name;

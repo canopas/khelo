@@ -15,7 +15,7 @@ class AddPenaltyRunDialog extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
     BuildContext context,
   ) {
-    return showDialog(
+    return showAdaptiveDialog(
       barrierDismissible: true,
       context: context,
       builder: (context) {
