@@ -15,7 +15,7 @@ class SelectWicketTypeSheet extends ConsumerStatefulWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      isDismissible: false,
+      isDismissible: true,
       enableDrag: false,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
@@ -51,17 +51,41 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
   }
 
   Widget _body(BuildContext context, ScoreBoardViewState state) {
-    return ListView(
-      shrinkWrap: true,
-      physics: const ScrollPhysics(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const SizedBox(height: 24),
-        _typeList(context, state),
-        const SizedBox(height: 40),
-        PrimaryButton(
-          context.l10n.common_okay_title,
-          onPressed: () => context.pop(selectedType),
-          enabled: selectedType != null,
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                context.l10n.score_board_select_wicket_type_title,
+                style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textPrimary, fontSize: 24),
+              ),
+              IconButton(
+                  onPressed: () {
+                    context.pop();
+                  },
+                  icon: const Icon(Icons.close)),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ListView(
+            shrinkWrap: true,
+            physics: const ScrollPhysics(),
+            children: [
+              _typeList(context, state),
+              const SizedBox(height: 40),
+              PrimaryButton(
+                context.l10n.common_okay_title,
+                onPressed: () => context.pop(selectedType),
+                enabled: selectedType != null,
+              ),
+            ],
+          ),
         ),
       ],
     );

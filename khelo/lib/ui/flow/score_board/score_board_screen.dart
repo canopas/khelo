@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/confirm_action_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/is_boundary_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/more_option_dialog.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_dialog.dart';
@@ -137,13 +136,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showUndoBallConfirmationDialog), (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_undo_last_ball_title,
-          description: context.l10n.score_board_undo_last_ball_description_text,
-          primaryButtonText: context.l10n.score_board_undo_title,
-          onConfirmation: notifier.undoLastBall,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_undo_last_ball_title,
+            message: context.l10n.score_board_undo_last_ball_description_text,
+            confirmBtnText: context.l10n.score_board_undo_title,
+            onConfirm: notifier.undoLastBall);
       }
     });
   }
@@ -261,13 +258,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showPauseScoringDialog),
         (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_pause_scoring_title,
-          description: context.l10n.score_board_pause_scoring_description_text,
-          primaryButtonText: context.l10n.score_board_pause_title,
-          onConfirmation: notifier.onPauseScoring,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_pause_scoring_title,
+            message: context.l10n.score_board_pause_scoring_description_text,
+            confirmBtnText: context.l10n.score_board_pause_title,
+            onConfirm: notifier.onPauseScoring);
       }
     });
   }
@@ -289,13 +284,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showEndMatchDialog),
         (previous, next) {
       if (next != null) {
-        ConfirmActionDialog.show(
-          context,
-          title: context.l10n.score_board_end_match_title,
-          description: context.l10n.score_board_end_match_description_text,
-          primaryButtonText: context.l10n.common_okay_title,
-          onConfirmation: notifier.abandonMatch,
-        );
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_end_match_title,
+            message: context.l10n.score_board_end_match_description_text,
+            confirmBtnText: context.l10n.common_okay_title,
+            onConfirm: notifier.abandonMatch);
       }
     });
   }
@@ -437,16 +430,13 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _onWicketTypeSelect(
-    BuildContext context,
-    WicketType type,
-  ) async {
+      BuildContext context, WicketType type) async {
     final outBatsMan = await StrikerSelectionDialog.show<UserModel>(
       context,
       isForStrikerSelection: false,
     );
 
     String? wicketTakerId;
-    int? run;
     if ((type == WicketType.caught ||
             type == WicketType.bowled ||
             type == WicketType.stumped ||
@@ -454,22 +444,23 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             type == WicketType.caughtBehind) &&
         context.mounted) {
       wicketTakerId = await SelectWicketTakerSheet.show<String>(context);
+    }
 
-      if (context.mounted) {
-        final runBeforeWicket = await AddExtraDialog.show<(int, bool, bool)>(
-            context,
-            isOnWicket: true);
-        run = runBeforeWicket?.$1;
-      }
+    int? extra;
+    if (type == WicketType.runOut && context.mounted) {
+      final runBeforeWicket = await AddExtraDialog.show<(int, bool, bool)>(
+          context,
+          isOnWicket: true);
+      extra = runBeforeWicket?.$1;
     }
 
     notifier.addBall(
-        run: run ?? 0,
-        extra: 0,
+        run: 0,
+        extra: extra,
         playerOutId: outBatsMan?.id,
         wicketTakerId: wicketTakerId,
         wicketType: type,
-        switchStrike: run != null ? run % 2 == 0 : false);
+        switchStrike: extra != null ? extra % 2 == 0 : false);
   }
 
   Future<void> _showStrikerSelectionDialog(BuildContext context) async {
@@ -513,13 +504,17 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showBoundaryDialog(BuildContext context, int run) async {
-    final isBoundary = await IsBoundaryDialog.show<bool>(context);
-    if (context.mounted && isBoundary != null) {
-      notifier.addBall(
-          run: run,
-          isSix: (run == 6 && isBoundary),
-          isFour: (run == 4 && isBoundary));
-    }
+    showConfirmationDialog(
+      context,
+      title: context.l10n.score_board_boundary_text,
+      message: context.l10n.score_board_is_boundary_text,
+      isDestructiveAction: true,
+      confirmBtnText: context.l10n.common_yes_title,
+      cancelBtnText: context.l10n.common_no_title,
+      onConfirm: () =>
+          notifier.addBall(run: run, isSix: run == 6, isFour: run == 4),
+      onCancel: () => notifier.addBall(run: run),
+    );
   }
 
   Future<void> _showAddExtraDialog(

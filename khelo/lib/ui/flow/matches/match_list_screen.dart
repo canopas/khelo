@@ -92,9 +92,27 @@ class MatchListScreen extends ConsumerWidget {
     }
   }
 
-  Widget _matchCell(BuildContext context, MatchModel match, String? currentUserId,) {
+  Widget _matchCell(
+    BuildContext context,
+    MatchModel match,
+    String? currentUserId,
+  ) {
     return OnTapScale(
-      onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID").push(context),
+      onTap: () {
+        if (match.match_status == MatchStatus.yetToStart) {
+          AppRoute.addMatch(matchId: match.id).push(context);
+        } else {
+          if (match.toss_decision == null || match.toss_winner_id == null) {
+            AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                .push(context);
+          } else {
+            AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                .push(context);
+          }
+        }
+      },
+      enabled: match.match_status != MatchStatus.finish &&
+          match.created_by == currentUserId,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -115,7 +133,11 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchOtherDetail(BuildContext context, MatchModel match, String? currentUserId,) {
+  Widget _matchOtherDetail(
+    BuildContext context,
+    MatchModel match,
+    String? currentUserId,
+  ) {
     return Row(
       children: [
         Expanded(
@@ -148,29 +170,16 @@ class MatchListScreen extends ConsumerWidget {
   Widget _matchEditOrResumeActionButton(
     BuildContext context,
     MatchModel match,
-  String? currentUserId,
+    String? currentUserId,
   ) {
-    if (match.match_status != MatchStatus.finish && match.created_by == currentUserId) {
-      return IconButton(
-          onPressed: () {
-            if (match.match_status == MatchStatus.yetToStart) {
-              AppRoute.addMatch(matchId: match.id).push(context);
-            } else {
-              if (match.toss_decision == null || match.toss_winner_id == null) {
-                AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
-                    .push(context);
-              } else {
-                AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                    .push(context);
-              }
-            }
-          },
-          icon: Icon(
-            match.match_status == MatchStatus.yetToStart
-                ? Icons.edit
-                : Icons.play_arrow_sharp,
-            size: 30,
-          ));
+    if (match.match_status != MatchStatus.finish &&
+        match.created_by == currentUserId) {
+      return Icon(
+        match.match_status == MatchStatus.yetToStart
+            ? Icons.edit
+            : Icons.play_arrow_sharp,
+        size: 30,
+      );
     } else {
       return const SizedBox();
     }
@@ -245,6 +254,13 @@ class MatchListScreen extends ConsumerWidget {
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
     final winSummary = match.getWinnerSummary(context);
     if (match.match_status == MatchStatus.finish && winSummary != null) {
+      if (winSummary.teamName.isEmpty) {
+        return Text(
+          context.l10n.score_board_match_tied_text,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.primary),
+        );
+      }
       return WonByMessageText(
         teamName: winSummary.teamName,
         difference: winSummary.difference,

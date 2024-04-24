@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -56,10 +57,12 @@ class EditProfileScreen extends ConsumerWidget {
         actions: [
           if (!isToCreateAccount) ...[
             IconButton(
-                onPressed: () => _showDeleteAlert(
-                      context,
-                      onDelete: () => notifier.onDeleteTap(),
-                    ),
+                onPressed: () => showConfirmationDialog(context,
+                    title: context.l10n.common_delete_title,
+                    message: context.l10n.alert_confirm_default_message(
+                        context.l10n.common_delete_title.toLowerCase()),
+                    confirmBtnText: context.l10n.common_delete_title,
+                    onConfirm: notifier.onDeleteTap),
                 icon: const Icon(Icons.delete_outline))
           ]
         ],
@@ -399,41 +402,6 @@ class EditProfileScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showDeleteAlert(
-    BuildContext context, {
-    required Function() onDelete,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(context.l10n.common_delete_title),
-          content: Text(context.l10n.alert_confirm_default_message(
-              context.l10n.common_delete_title.toLowerCase())),
-          actions: [
-            TextButton(
-              onPressed: () => context.pop(),
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onDelete();
-              },
-              child: Text(
-                context.l10n.common_delete_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 

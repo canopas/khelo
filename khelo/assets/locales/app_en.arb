@@ -198,7 +198,7 @@
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Bat",
   "add_toss_detail_bowl_text": "Bowl",
-  "score_board_run_sup_script_text": "{run, select, 1{extra} 2{{extra}²} 3{{extra}³} 4{{extra}⁴} 5{{extra}⁵} 6{{extra}⁶} 7{{extra}⁷} 8{{extra}⁸} 9{{extra}⁹} other{extra}}",
+  "score_board_run_sup_script_text": "{run, select, 1{{extra}} 2{{extra}²} 3{{extra}³} 4{{extra}⁴} 5{{extra}⁵} 6{{extra}⁶} 7{{extra}⁷} 8{{extra}⁸} 9{{extra}⁹} other{{extra}}}",
   "@score_board_run_sup_script_text": {
     "placeholders": {
       "run": {},
@@ -234,7 +234,7 @@
   "score_board_over_complete_title": "Over Complete",
   "score_board_inning_complete_title": "Inning Complete",
   "score_board_match_complete_title": "Match Complete",
-  "score_board_end_match_title": "End Match",
+  "score_board_match_tied_text": "The match has been tied",
   "score_board_start_next_inning_title": "Start Next Inning",
   "score_board_end_inning_title": "End Inning",
   "score_board_current_team_title": "Current Team",
@@ -246,7 +246,7 @@
   "score_board_select_player_title": "Select Player",
   "score_board_select_title": "select",
   "score_board_choose_batsman_title": "choose Batsman at position {pos}",
-  "@score_board_choose_bowler_for_over_title": {
+  "@score_board_choose_batsman_title": {
     "description": "choose Batsman at position {pos}",
     "placeholders": {
       "pos": {
@@ -286,6 +286,7 @@
   "score_board_more_options_title": "More Options",
   "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
   "score_board_end_match_title": "End Match",
+  "score_board_select_wicket_type_title": "Select Wicket Type",
   "score_board_end_match_description_text": "are you sure you want to end match?",
   "score_board_need_run_text": "Need {run} in {ball}",
   "@score_board_need_run_text": {
@@ -337,6 +338,9 @@
   "wicket_type_timed_out_title": "Timed Out",
   "wicket_type_retired_title": "Retired",
   "wicket_type_retired_hurt_title": "Retired Hurt",
+  "wicket_type_short_timed_out_title": "TO",
+  "wicket_type_short_retired_title": "RT",
+  "wicket_type_short_retired_hurt_title": "RTH",
   "my_stat_screen_title": "My Stats",
   "my_stat_stats_tab_title": "Stats",
   "my_stat_matches_tab_title": "Matches",
@@ -383,7 +387,6 @@
   },
   "match_stat_bat_avg_title": "\nBat-Avg",
   "match_stat_extra_awarded_title": " Extra awarded",
-
   "match_detail_screen_title": "Match Detail",
   "match_detail_commentary_tab_title": "Commentary",
   "match_detail_scorecard_tab_title": "Scorecard",
@@ -423,7 +426,6 @@
       }
     }
   },
-
   "my_game_teams_tab_title": "Teams",
   "my_game_matches_tab_title": "Matches"
 }

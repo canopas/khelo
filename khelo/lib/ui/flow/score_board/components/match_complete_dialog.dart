@@ -156,6 +156,13 @@ class MatchCompleteDialog extends ConsumerWidget {
         .copyWith(match_status: MatchStatus.finish)
         .getWinnerSummary(context);
     if (winSummary != null) {
+      if (winSummary.teamName.isEmpty) {
+        return Text(
+          context.l10n.score_board_match_tied_text,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.primary),
+        );
+      }
       return WonByMessageText(
         teamName: winSummary.teamName,
         difference: winSummary.difference,
