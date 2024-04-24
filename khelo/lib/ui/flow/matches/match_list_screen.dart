@@ -8,6 +8,7 @@ import 'package:khelo/domain/extensions/data_model_extensions/match_model_extens
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -92,21 +93,24 @@ class MatchListScreen extends ConsumerWidget {
   }
 
   Widget _matchCell(BuildContext context, MatchModel match, String? currentUserId,) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        border: Border.all(color: context.colorScheme.outline),
-        borderRadius: BorderRadius.circular(20),
-        color: context.colorScheme.containerLow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _matchOtherDetail(context, match, currentUserId),
-          _teamsAndStatusView(context, match),
-          _winnerMessageText(context, match)
-        ],
+    return OnTapScale(
+      onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID").push(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: context.colorScheme.outline),
+          borderRadius: BorderRadius.circular(20),
+          color: context.colorScheme.containerLow,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _matchOtherDetail(context, match, currentUserId),
+            _teamsAndStatusView(context, match),
+            _winnerMessageText(context, match)
+          ],
+        ),
       ),
     );
   }

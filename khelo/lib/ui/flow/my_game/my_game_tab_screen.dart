@@ -20,8 +20,8 @@ class MyGameTabScreen extends ConsumerStatefulWidget {
 
 class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
   final List<Widget> _tabs = [
-    const TeamListScreen(),
     const MatchListScreen(),
+    const TeamListScreen(),
   ];
 
   late PageController _controller;
@@ -79,7 +79,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
       child: Row(
         children: [
           _tabButton(
-            context.l10n.my_game_teams_tab_title,
+            context.l10n.my_game_matches_tab_title,
             _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
@@ -87,13 +87,13 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
           ),
           const SizedBox(width: 8),
           _tabButton(
-            context.l10n.my_game_matches_tab_title,
+            context.l10n.my_game_teams_tab_title,
             _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);
             },
           ),
-          if (_selectedTab == 0) ...[
+          if (_selectedTab == 1) ...[
             const Spacer(),
             IconButton(
                 onPressed: () {

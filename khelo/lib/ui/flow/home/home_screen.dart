@@ -6,7 +6,9 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -69,43 +71,47 @@ class HomeScreen extends ConsumerWidget {
   }
 
   Widget _matchCell(BuildContext context, MatchModel match) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        border: Border.all(color: context.colorScheme.outline),
-        borderRadius: BorderRadius.circular(20),
-        color: context.colorScheme.containerLow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(
-                    child: _teamNameView(
-                        context,
-                        match.teams.first,
-                        match.current_playing_team_id ==
-                            match.teams.first.team.id)),
-                VerticalDivider(
-                  color: context.colorScheme.outline,
-                  thickness: 2,
-                ),
-                Expanded(
-                    child: _teamNameView(
-                        context,
-                        match.teams.last,
-                        match.current_playing_team_id ==
-                            match.teams.last.team.id)),
-              ],
+    return OnTapScale(
+      onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
+          .push(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: context.colorScheme.outline),
+          borderRadius: BorderRadius.circular(20),
+          color: context.colorScheme.containerLow,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(
+                      child: _teamNameView(
+                          context,
+                          match.teams.first,
+                          match.current_playing_team_id ==
+                              match.teams.first.team.id)),
+                  VerticalDivider(
+                    color: context.colorScheme.outline,
+                    thickness: 2,
+                  ),
+                  Expanded(
+                      child: _teamNameView(
+                          context,
+                          match.teams.last,
+                          match.current_playing_team_id ==
+                              match.teams.last.team.id)),
+                ],
+              ),
             ),
-          ),
-          _matchDetailView(context, match),
-        ],
+            _matchDetailView(context, match),
+          ],
+        ),
       ),
     );
   }
@@ -180,7 +186,8 @@ class HomeScreen extends ConsumerWidget {
   Widget _emptyMatchView(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.all(16),
+      width: double.infinity,
+      margin: context.mediaQueryPadding + const EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: context.colorScheme.primary)),

@@ -26,8 +26,8 @@ class TeamDetailScreen extends ConsumerStatefulWidget {
 
 class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   final List<Widget> _tabs = [
-    const TeamDetailMemberContent(),
     const TeamDetailMatchContent(),
+    const TeamDetailMemberContent(),
     const TeamDetailStatContent(),
   ];
 
@@ -143,7 +143,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       child: Row(
         children: [
           _tabButton(
-            context.l10n.team_detail_member_tab_title,
+            context.l10n.team_detail_match_tab_title,
             _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
@@ -151,7 +151,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           ),
           const SizedBox(width: 8),
           _tabButton(
-            context.l10n.team_detail_match_tab_title,
+            context.l10n.team_detail_member_tab_title,
             _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);

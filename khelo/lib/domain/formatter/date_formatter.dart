@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 
-enum DateFormatType { dateAndTime, }
+enum DateFormatType { dateAndTime, date, time}
 
 extension DateFormatter on DateTime {
   String format(BuildContext context, DateFormatType type) {
@@ -12,6 +12,14 @@ extension DateFormatter on DateTime {
       case DateFormatType.dateAndTime:
         return DateFormat(
                 'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
+            .format(this);
+      case DateFormatType.date:
+        return DateFormat(
+            'EEE, MMM dd yyyy')
+            .format(this);
+      case DateFormatType.time:
+        return DateFormat(
+            context.is24HourFormat ? 'HH:mm' : 'hh:mm a')
             .format(this);
     }
   }

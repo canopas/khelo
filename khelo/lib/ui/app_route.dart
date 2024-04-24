@@ -10,6 +10,7 @@ import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_offici
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/power_play/power_play_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_screen.dart';
+import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_screen.dart';
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen.dart';
 import 'package:khelo/ui/flow/score_board/score_board_screen.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
@@ -36,6 +37,7 @@ class AppRoute {
   static const pathScoreBoard = '/score-board';
   static const pathTeamDetail = '/team-detail';
   static const pathMatchDetailStat = '/match-detail-stat';
+  static const pathMatchDetailTab = '/match-detail-tab';
 
   final String path;
   final String? name;
@@ -145,12 +147,21 @@ class AppRoute {
         ),
       );
 
+  static AppRoute matchDetailTab({required String matchId}) => AppRoute(
+        pathMatchDetailTab,
+        builder: (_) => MatchDetailTabScreen(
+          matchId: matchId,
+        ),
+      );
+
   static AppRoute addTeam({TeamModel? team}) => AppRoute(
         pathAddTeam,
         builder: (_) => AddTeamScreen(editTeam: team),
       );
 
-  static AppRoute searchTeam({List<String>? excludedIds, required bool onlyUserTeams}) => AppRoute(
+  static AppRoute searchTeam(
+          {List<String>? excludedIds, required bool onlyUserTeams}) =>
+      AppRoute(
         pathSearchTeam,
         builder: (_) => SearchTeamScreen(
           excludedIds: excludedIds,
@@ -250,6 +261,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathMatchDetailStat,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathMatchDetailTab,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

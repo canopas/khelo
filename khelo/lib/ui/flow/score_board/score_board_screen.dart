@@ -286,15 +286,15 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   void _observeEndMatchDialogue(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select(
-                (value) => value.showEndMatchDialog), (previous, next) {
+        scoreBoardStateProvider.select((value) => value.showEndMatchDialog),
+        (previous, next) {
       if (next != null) {
         ConfirmActionDialog.show(
           context,
           title: context.l10n.score_board_end_match_title,
           description: context.l10n.score_board_end_match_description_text,
           primaryButtonText: context.l10n.common_okay_title,
-          onConfirmation:notifier.abandonMatch,
+          onConfirmation: notifier.abandonMatch,
         );
       }
     });
@@ -437,13 +437,16 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _onWicketTypeSelect(
-      BuildContext context, WicketType type) async {
+    BuildContext context,
+    WicketType type,
+  ) async {
     final outBatsMan = await StrikerSelectionDialog.show<UserModel>(
       context,
       isForStrikerSelection: false,
     );
 
     String? wicketTakerId;
+    int? run;
     if ((type == WicketType.caught ||
             type == WicketType.bowled ||
             type == WicketType.stumped ||
@@ -451,23 +454,22 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             type == WicketType.caughtBehind) &&
         context.mounted) {
       wicketTakerId = await SelectWicketTakerSheet.show<String>(context);
-    }
 
-    int? extra;
-    if (type == WicketType.runOut && context.mounted) {
-      final runBeforeWicket = await AddExtraDialog.show<(int, bool, bool)>(
-          context,
-          isOnWicket: true);
-      extra = runBeforeWicket?.$1;
+      if (context.mounted) {
+        final runBeforeWicket = await AddExtraDialog.show<(int, bool, bool)>(
+            context,
+            isOnWicket: true);
+        run = runBeforeWicket?.$1;
+      }
     }
 
     notifier.addBall(
-        run: 0,
-        extra: extra,
+        run: run ?? 0,
+        extra: 0,
         playerOutId: outBatsMan?.id,
         wicketTakerId: wicketTakerId,
         wicketType: type,
-        switchStrike: extra != null ? extra % 2 == 0 : false);
+        switchStrike: run != null ? run % 2 == 0 : false);
   }
 
   Future<void> _showStrikerSelectionDialog(BuildContext context) async {
