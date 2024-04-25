@@ -3,6 +3,7 @@ import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
@@ -315,8 +316,8 @@ class BowlerSummary extends StatelessWidget {
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 if (isForBowlerIntro) ...[
-                  const TextSpan(
-                    text: " is back to attack.",
+                  TextSpan(
+                    text: context.l10n.match_commentary_back_to_attack_text,
                   ),
                 ]
               ])),

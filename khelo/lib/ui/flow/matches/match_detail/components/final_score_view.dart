@@ -2,6 +2,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:khelo/components/won_by_message_text.dart';
@@ -61,12 +62,12 @@ class FinalScoreView extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary)),
         const Spacer(),
         Text.rich(TextSpan(
-            text: "${team.run}-$wicket",
+            text: "${team.run ?? 0}-$wicket",
             style: AppTextStyle.header3
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
-                text: " ${team.over}",
+                text: " ${team.over ?? 0}",
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textSecondary),
               )
@@ -78,6 +79,19 @@ class FinalScoreView extends ConsumerWidget {
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
     final winSummary = match.getWinnerSummary(context);
     if (match.match_status == MatchStatus.finish && winSummary != null) {
+      if (winSummary.teamName.isEmpty) {
+        return Align(
+          alignment: Alignment.centerLeft,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              context.l10n.score_board_match_tied_text,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.primary),
+            ),
+          ),
+        );
+      }
       return Align(
         alignment: Alignment.centerLeft,
         child: Padding(

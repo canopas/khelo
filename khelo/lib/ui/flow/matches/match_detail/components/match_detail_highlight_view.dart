@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -62,13 +63,8 @@ class MatchDetailHighlightView extends ConsumerWidget {
     if (state.loading) {
       return const AppProgressIndicator();
     }
-    return _highlightList(context, notifier, state);
-  }
 
-  Widget _highlightList(BuildContext context,
-      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
     final teamName = _getTeamNameByInningId(state);
-    final highlight = _getHighlightsScore(state);
 
     return Padding(
       padding: context.mediaQueryPadding,
@@ -93,18 +89,37 @@ class MatchDetailHighlightView extends ConsumerWidget {
               ],
             ),
           ),
-          Expanded(
-              child: ListView.separated(
-            itemCount: highlight.length,
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-            separatorBuilder: (context, index) => const Divider(),
-            itemBuilder: (context, index) {
-              return CommentaryBallSummary(
-                  state: state, ball: highlight[index]);
-            },
-          )),
+          Expanded(child: _highlightList(context, notifier, state)),
         ],
       ),
+    );
+  }
+
+  Widget _highlightList(BuildContext context,
+      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
+    final highlight = _getHighlightsScore(state);
+
+    if (highlight.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            context.l10n.match_highlight_empty_highlight_text,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      itemCount: highlight.length,
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
+      separatorBuilder: (context, index) => const Divider(),
+      itemBuilder: (context, index) {
+        return CommentaryBallSummary(state: state, ball: highlight[index]);
+      },
     );
   }
 

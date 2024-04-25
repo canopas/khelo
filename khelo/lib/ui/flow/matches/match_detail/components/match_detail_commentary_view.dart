@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_over_overview.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
@@ -22,7 +23,21 @@ class MatchDetailCommentaryView extends ConsumerWidget {
 
   Widget _body(BuildContext context, MatchDetailTabState state) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
+    }
+
+    if (state.ballScores.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            context.l10n.match_commentary_empty_commentary_text,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      );
     }
 
     return ListView(
@@ -109,14 +124,15 @@ class MatchDetailCommentaryView extends ConsumerWidget {
                     .copyWith(color: context.colorScheme.primary),
                 children: [
                   TextSpan(
-                    text: " wraps up their innings, leaving ",
+                    text: context.l10n.match_commentary_end_inning_text_part_1,
                     style: AppTextStyle.subtitle1
                         .copyWith(color: context.colorScheme.textPrimary),
                   ),
                   TextSpan(
-                      text: "${(state.firstInning?.total_runs ?? 0) + 1} runs"),
+                      text: context.l10n.match_commentary_runs_text(
+                          (state.firstInning?.total_runs ?? 0) + 1)),
                   TextSpan(
-                    text: " for victory.",
+                    text: context.l10n.match_commentary_end_inning_text_part_2,
                     style: AppTextStyle.subtitle1
                         .copyWith(color: context.colorScheme.textPrimary),
                   ),

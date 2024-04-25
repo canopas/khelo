@@ -1,5 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -55,10 +56,10 @@ class BallScoreView extends StatelessWidget {
           ball.wicket_type == WicketType.timedOut ||
           ball.wicket_type == WicketType.retiredHurt) {
         final title = ball.wicket_type == WicketType.retiredHurt
-            ? "RTH"
+            ? context.l10n.wicket_type_short_retired_hurt_title
             : ball.wicket_type == WicketType.retired
-                ? "RT"
-                : "TO";
+                ? context.l10n.wicket_type_short_retired_title
+                : context.l10n.wicket_type_short_timed_out_title;
         return (
           title,
           Colors.transparent,
@@ -68,7 +69,7 @@ class BallScoreView extends StatelessWidget {
         );
       }
       return (
-        "W",
+        context.l10n.match_scorecard_wicket_short_text,
         context.colorScheme.alert,
         context.colorScheme.textInversePrimary
       );
@@ -80,7 +81,7 @@ class BallScoreView extends StatelessWidget {
             : ball.is_six
                 ? context.colorScheme.primary
                 : context.colorScheme.containerNormalOnSurface,
-        (ball.is_four || ball.is_four)
+        (ball.is_four || ball.is_six)
             ? context.colorScheme.textInversePrimary
             : context.colorScheme.secondary
       );

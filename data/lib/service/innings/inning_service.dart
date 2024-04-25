@@ -66,11 +66,17 @@ class InningsService {
         .where('match_id', isEqualTo: matchId)
         .snapshots()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-      List<InningModel> innings = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return InningModel.fromJson(data).copyWith(id: doc.id);
-      }).toList();
-      controller.add(innings);
+      try {
+        List<InningModel> innings = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return InningModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
+        controller.add(innings);
+      } catch (error) {
+        controller.addError(error);
+      }
+    }, onError: (error) {
+      controller.addError(error);
     });
 
     return controller.stream;

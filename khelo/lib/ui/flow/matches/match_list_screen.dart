@@ -99,20 +99,8 @@ class MatchListScreen extends ConsumerWidget {
   ) {
     return OnTapScale(
       onTap: () {
-        if (match.match_status == MatchStatus.yetToStart) {
-          AppRoute.addMatch(matchId: match.id).push(context);
-        } else {
-          if (match.toss_decision == null || match.toss_winner_id == null) {
-            AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
-                .push(context);
-          } else {
-            AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                .push(context);
-          }
-        }
+        AppRoute.matchDetailTab(matchId: match.id ?? "").push(context);
       },
-      enabled: match.match_status != MatchStatus.finish &&
-          match.created_by == currentUserId,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -174,11 +162,26 @@ class MatchListScreen extends ConsumerWidget {
   ) {
     if (match.match_status != MatchStatus.finish &&
         match.created_by == currentUserId) {
-      return Icon(
-        match.match_status == MatchStatus.yetToStart
-            ? Icons.edit
-            : Icons.play_arrow_sharp,
-        size: 30,
+      return OnTapScale(
+        onTap: () {
+          if (match.match_status == MatchStatus.yetToStart) {
+            AppRoute.addMatch(matchId: match.id).push(context);
+          } else {
+            if (match.toss_decision == null || match.toss_winner_id == null) {
+              AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                  .push(context);
+            } else {
+              AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                  .push(context);
+            }
+          }
+        },
+        child: Icon(
+          match.match_status == MatchStatus.yetToStart
+              ? Icons.edit
+              : Icons.play_arrow_sharp,
+          size: 30,
+        ),
       );
     } else {
       return const SizedBox();

@@ -139,7 +139,7 @@ class MatchDetailInfoView extends ConsumerWidget {
   }) {
     String playing = team.squad
         .map((e) =>
-            "${e.player.name}${team.captain_id == e.player.id ? "(c)" : ""}")
+            "${e.player.name}${team.captain_id == e.player.id ? context.l10n.match_info_captain_short_title : ""}")
         .join(", ");
     String? bench = team.team.players
         ?.where((element) =>

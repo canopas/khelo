@@ -3,6 +3,7 @@ import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -66,7 +67,11 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (players == null || players.isEmpty) {
       return children;
     }
-    children.add(_sectionTitleView(context, "Bench", isSemiTitle: false));
+    children.add(_sectionTitleView(
+      context,
+      context.l10n.match_squad_bench_text,
+      isSemiTitle: false,
+    ));
     for (final player in players) {
       children.add(_squadCellView(
         context,
@@ -119,7 +124,7 @@ class MatchDetailSquadView extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${player.name}${isCaptain ? "(C)" : ""}",
+                "${player.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
                 style: AppTextStyle.header4
                     .copyWith(color: context.colorScheme.textPrimary),
               ),

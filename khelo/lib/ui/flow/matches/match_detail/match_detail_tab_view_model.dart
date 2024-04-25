@@ -44,9 +44,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   void loadMatch() {
+    state = state.copyWith(loading: true);
     _matchService.getMatchStreamById(_matchId).listen(
       (match) {
-        state = state.copyWith(match: match, loading: false, error: null);
+        state = state.copyWith(match: match, error: null);
         if (!state.inningsQueryListenerSet) {
           loadInnings();
         }
@@ -83,7 +84,6 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
             firstInning: firstInning,
             secondInning: secondInning,
             highlightInningId: firstInning.id,
-            loading: false,
             error: null);
         if (!state.ballScoreQueryListenerSet) {
           loadBallScores();
@@ -214,13 +214,13 @@ enum HighlightFilterOption {
   String getString(BuildContext context) {
     switch (this) {
       case HighlightFilterOption.all:
-        return "All";
+        return context.l10n.match_highlight_filter_all_text;
       case HighlightFilterOption.fours:
-        return "Fours";
+        return context.l10n.match_highlight_filter_fours_text;
       case HighlightFilterOption.sixes:
-        return "Sixes";
+        return context.l10n.match_highlight_filter_sixes_text;
       case HighlightFilterOption.wickets:
-        return "Wickets";
+        return context.l10n.match_highlight_filter_wickets_text;
     }
   }
 }

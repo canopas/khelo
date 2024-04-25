@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
@@ -21,8 +22,22 @@ class MatchDetailOversView extends ConsumerWidget {
 
   Widget _body(BuildContext context, MatchDetailTabState state) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
+    if (state.ballScores.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            context.l10n.match_overs_empty_over_text,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      );
+    }
+
     return ListView(
       padding: context.mediaQueryPadding +
           const EdgeInsets.symmetric(horizontal: 16),
@@ -71,12 +86,12 @@ class MatchDetailOversView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Ov $overCount",
+              context.l10n.match_commentary_former_over_short_text(overCount),
               style: AppTextStyle.header4
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
             Text(
-              "$runs runs",
+              context.l10n.match_commentary_runs_text(runs),
               style: AppTextStyle.body2
                   .copyWith(color: context.colorScheme.textSecondary),
             ),
@@ -112,7 +127,6 @@ class MatchDetailOversView extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 8, top: 8, left: 4, right: 4),
       child: Text(
         title,
-        // textAlign: TextAlign.center,
         style: AppTextStyle.header1
             .copyWith(color: context.colorScheme.textSecondary),
       ),

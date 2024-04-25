@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/won_by_message_text.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
@@ -23,6 +24,20 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _body(BuildContext context, MatchDetailTabState state) {
     if (state.loading) {
       return const AppProgressIndicator();
+    }
+
+    if (state.ballScores.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            context.l10n.match_scorecard_empty_scorecard_text,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      );
     }
     return _scorecardView(context, state);
   }
@@ -91,7 +106,13 @@ class MatchDetailScorecardView extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _tableRow(context,
-            data: [], highlightRow: true, header: const Text("Fall of Wicket")),
+            data: [],
+            highlightRow: true,
+            header: Text(
+              context.l10n.match_scorecard_fall_of_wicket_text,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            )),
         const SizedBox(
           height: 4,
         ),
@@ -147,9 +168,16 @@ class MatchDetailScorecardView extends ConsumerWidget {
     } else {
       List<Widget> children = [];
       children.add(_tableRow(context,
-          data: ["Over", "Run"],
+          data: [
+            context.l10n.match_scorecard_over_text,
+            context.l10n.match_scorecard_run_text
+          ],
           highlightRow: true,
-          header: const Text("PowerPlay")));
+          header: Text(
+            context.l10n.match_scorecard_power_play_text,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          )));
       children.add(
         const SizedBox(
           height: 4,
@@ -160,7 +188,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
         index++;
         children.add(_tableRow(context,
             data: [(element.$1), "${element.$2}"],
-            header: Text("power play $index")));
+            header: Text(
+              context.l10n.power_play_text(index),
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            )));
       }
       return Column(
         children: children,
@@ -235,9 +267,25 @@ class MatchDetailScorecardView extends ConsumerWidget {
         _tableRow(context,
             highlightRow: true,
             data: isForBatting
-                ? ["R", "B", "4s", "6s", "SR"]
-                : ["O", "M", "R", "W", "NB", "WB", "ECO"],
-            header: Text(isForBatting ? "batter" : "Bowler")),
+                ? [
+                    context.l10n.match_scorecard_run_short_text,
+                    context.l10n.match_scorecard_ball_short_text,
+                    context.l10n.match_scorecard_fours_short_text,
+                    context.l10n.match_scorecard_sixes_short_text,
+                    context.l10n.match_scorecard_strike_rate_short_text
+                  ]
+                : [
+                    context.l10n.match_scorecard_over_short_text,
+                    context.l10n.match_scorecard_maiden_short_text,
+                    context.l10n.match_scorecard_run_short_text,
+                    context.l10n.match_scorecard_wicket_short_text,
+                    context.l10n.match_scorecard_no_ball_short_text,
+                    context.l10n.match_scorecard_wide_ball_short_text,
+                    context.l10n.match_scorecard_economy_short_text
+                  ],
+            header: Text(isForBatting
+                ? context.l10n.match_scorecard_batter_text
+                : context.l10n.match_scorecard_bowler_text)),
         const SizedBox(
           height: 4,
         ),
@@ -312,26 +360,24 @@ class MatchDetailScorecardView extends ConsumerWidget {
       final (run, ball, four, six, strikeRate) =
           _getBattingPerformance(state, inningId, player.player.id);
 
-      final wicketDetail =
+      final (bowler, fielder, wicketType) =
           _getWicketDetail(state, bowlingSquad, inningId, player.player.id);
 
       String wicketString = "";
-      if (wicketDetail == null) {
-        wicketString = "not out";
+      if (wicketType == null) {
+        wicketString = context.l10n.match_scorecard_not_out_text;
       } else {
-        if (wicketDetail.$2 == null) {
-          if (wicketDetail.$3 == WicketType.timedOut) {
-            wicketString = wicketDetail.$3?.getString(context) ?? "";
-          } else if (wicketDetail.$3 == WicketType.retired) {
-            wicketString = wicketDetail.$3?.getString(context) ?? "";
-          } else if (wicketDetail.$3 == WicketType.retiredHurt) {
-            wicketString = wicketDetail.$3?.getString(context) ?? "";
-          } else {
-            wicketString =
-                " ${wicketDetail.$3?.getString(context) ?? "b"} (${wicketDetail.$1})";
+        if (fielder == null) {
+          wicketString = wicketType.getString(context);
+
+          if (wicketType != WicketType.timedOut &&
+              wicketType != WicketType.retired &&
+              wicketType != WicketType.retiredHurt) {
+            wicketString += " ($bowler)";
           }
         } else {
-          wicketString = "b ${wicketDetail.$1} c ${wicketDetail.$2}";
+          wicketString = context.l10n
+              .match_scorecard_bowler_catcher_short_text(bowler ?? "", fielder);
         }
       }
       children.add(_tableRow(context,
@@ -363,9 +409,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
     final (bye, legBye, wide, noBall, penalty) =
         _getExtraCounts(state, inningId);
     children.add(_matchTotalView(context,
-        title: "Extra",
+        title: context.l10n.match_scorecard_extra_text,
         count: (bye + legBye + wide + noBall + penalty),
-        countDescription: "b $bye lb $legBye w $wide  nb $noBall p $penalty"));
+        countDescription: context.l10n.match_scorecard_extras_short_text(
+            bye, legBye, wide, noBall, penalty)));
 
     final inning = state.firstInning?.id == inningId
         ? state.firstInning
@@ -374,10 +421,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
         ? state.secondInning
         : state.firstInning;
     children.add(_matchTotalView(context,
-        title: "Total",
+        title: context.l10n.match_scorecard_total_text,
         count: inning?.total_runs ?? 0,
-        countDescription:
-            "${bowlingInning?.total_wickets} wicket ${inning?.overs ?? 0} over"));
+        countDescription: context.l10n.match_scorecard_wicket_over_text(
+            bowlingInning?.total_wickets ?? 0, inning?.overs ?? 0)));
 
     return children;
   }
@@ -484,7 +531,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     return (run, ball, fours, sixes, strikeRate);
   }
 
-  (String?, String?, WicketType?)? _getWicketDetail(
+  (String?, String?, WicketType?) _getWicketDetail(
     MatchDetailTabState state,
     List<MatchPlayer> bowlingSquad,
     String inningId,
@@ -498,7 +545,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
         )
         .firstOrNull;
     if (batScore == null) {
-      return null;
+      return (null, null, null);
     }
 
     final bowlerName = bowlingSquad
@@ -523,19 +570,19 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }) {
     List<Widget> children = [];
     for (final player in players) {
-      final (double, int, int, int, int, int, double)? bowlingStat =
+      final (over, maiden, runsConceded, wicket, noBall, wideBall, economy) =
           _getBowlingPerformance(state, inningId, player.player.id);
-      if (bowlingStat != null) {
+      if (over != null) {
         children.add(_tableRow(context,
             highlightColumnNumber: 3,
             data: [
-              bowlingStat.$1.toStringAsFixed(1),
-              bowlingStat.$2.toString(),
-              bowlingStat.$3.toString(),
-              bowlingStat.$4.toString(),
-              bowlingStat.$5.toString(),
-              bowlingStat.$6.toString(),
-              bowlingStat.$7.toStringAsFixed(1)
+              over.toStringAsFixed(1),
+              maiden.toString(),
+              runsConceded.toString(),
+              wicket.toString(),
+              noBall.toString(),
+              wideBall.toString(),
+              economy.toStringAsFixed(1)
             ],
             header: Text("${player.player.name}")));
       }
@@ -543,7 +590,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     return children;
   }
 
-  (double, int, int, int, int, int, double)? _getBowlingPerformance(
+  (double?, int, int, int, int, int, double) _getBowlingPerformance(
     MatchDetailTabState state,
     String inningId,
     String bowlerId,
@@ -558,7 +605,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
           element.wicket_type != WicketType.retired,
     );
     if (batScore.isEmpty) {
-      return null;
+      return (null, 0, 0, 0, 0, 0, 0);
     }
     int ball = 0;
     int maiden = 0;
@@ -567,18 +614,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     int noBall = 0;
     int wide = 0;
 
-    // over
-    // maiden
-    // run conceded
-    // wicket
-    // no ball
-    // wide ball
-    // economy
     for (var element in batScore) {
-      // if this ball is dot then only check for other
-      // this and last five ball has zero run, no extra, no wicket
-      // last ball check for maiden
-
       if (element.extras_type == ExtrasType.noBall) {
         final extra = (element.extras_awarded ?? 0) > 1
             ? (element.extras_awarded ?? 1) - 1
@@ -603,8 +639,18 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
     final winSummary = match.getWinnerSummary(context);
     if (match.match_status == MatchStatus.finish && winSummary != null) {
+      if (winSummary.teamName.isEmpty) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            context.l10n.score_board_match_tied_text,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.primary),
+          ),
+        );
+      }
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+        padding: const EdgeInsets.all(16),
         child: WonByMessageText(
           teamName: winSummary.teamName,
           difference: winSummary.difference,
@@ -629,7 +675,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           ),
           Text(
-            "${team.run} - $wicket (${team.over} Ov)",
+            "${team.run} - $wicket ${context.l10n.match_commentary_trailing_over_short_text(team.over ?? 0)}",
             style: AppTextStyle.subtitle1
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           )

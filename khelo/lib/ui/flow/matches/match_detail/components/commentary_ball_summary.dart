@@ -2,6 +2,7 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
@@ -57,7 +58,7 @@ class CommentaryBallSummary extends ConsumerWidget {
   ) {
     final (batsMan, bowler, fielder, outPlayer) = _getPlayerName(state, ball);
     final wicketTakerText = ball.wicket_type != null
-        ? " ${ball.wicket_type?.getString(context)}${fielder != null ? " by $fielder" : ""}!!"
+        ? " ${ball.wicket_type?.getString(context)}${fielder != null ? context.l10n.match_commentary_by_fielder_text(fielder) : ""}!!"
         : "";
     final (run, ballCount, fours, sixes) =
         _getBatsmanSummary(context, state, ball);
@@ -69,17 +70,21 @@ class CommentaryBallSummary extends ConsumerWidget {
       if (ball.wicket_type != WicketType.retired &&
           ball.wicket_type != WicketType.retiredHurt &&
           ball.wicket_type != WicketType.timedOut) {
-        batsManSummary += " b $bowler";
+        batsManSummary +=
+            context.l10n.match_commentary_b_bowler_text(bowler ?? "");
 
         if (fielder != null) {
-          batsManSummary += " c $fielder";
+          batsManSummary +=
+              context.l10n.match_commentary_c_fielder_text(fielder);
         }
       }
-      batsManSummary += " $run($ballCount) [4s-$fours 6s-$sixes]";
+      batsManSummary += context.l10n
+          .match_commentary_runs_fours_sixes_text(run, ballCount, fours, sixes);
     }
     return Text.rich(
       TextSpan(
-          text: "$bowler to $batsMan",
+          text: context.l10n
+              .match_commentary_bowler_to_batsman_text(bowler ?? "", batsMan),
           style: AppTextStyle.subtitle1
               .copyWith(color: context.colorScheme.textPrimary),
           children: [
@@ -183,18 +188,18 @@ class CommentaryBallSummary extends ConsumerWidget {
   String _getBallResult(BuildContext context, BallScoreModel ball) {
     if (ball.extras_type == null && ball.wicket_type == null) {
       if (ball.runs_scored == 4 && ball.is_four) {
-        return "FOUR";
+        return context.l10n.match_commentary_four_text;
       } else if (ball.runs_scored == 6 && ball.is_six) {
-        return "SIX";
+        return context.l10n.match_commentary_six_text;
       } else {
-        return "${ball.runs_scored != 0 ? ball.runs_scored : "no"} Run";
+        return context.l10n.match_commentary_runs_text(ball.runs_scored);
       }
     } else if (ball.extras_type != null &&
         ball.extras_type != ExtrasType.penaltyRun) {
       final totalRuns = (ball.extras_awarded ?? 0) + ball.runs_scored;
       return "${ball.extras_type!.getString(context)}${totalRuns > 1 ? "$totalRuns" : ""}";
     } else if (ball.wicket_type != null) {
-      return "OUT,";
+      return context.l10n.match_commentary_out_text;
     } else {
       return "--";
     }

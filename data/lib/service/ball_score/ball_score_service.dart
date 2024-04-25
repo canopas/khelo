@@ -62,12 +62,18 @@ class BallScoreService {
         .where('inning_id', whereIn: inningIds)
         .snapshots()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-      List<BallScoreModel> ballScores = snapshot.docs.map((doc) {
-        final data = doc.data();
-        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-      }).toList();
+      try {
+        List<BallScoreModel> ballScores = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
 
-      controller.add(ballScores);
+        controller.add(ballScores);
+      } catch (error) {
+        controller.addError(error);
+      }
+    }, onError: (error) {
+      controller.addError(error);
     });
 
     return controller.stream;
