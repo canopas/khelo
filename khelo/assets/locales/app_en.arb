@@ -537,36 +537,6 @@
   "my_stat_stats_catches_title": "Catches",
   "my_stat_stats_run_out_title": " Run out",
   "my_stat_stats_stumping_title": " Stumping",
-  "match_stat_screen_title": "Match Stat",
-  "match_stat_in_over_text": " (in {count} Over)",
-  "@match_stat_in_over_text": {
-    "description": " (in {count} Over)",
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
-  },
-  "match_stat_fours_title": "\nFours",
-  "match_stat_sixes_title": "\nSixes",
-  "match_stat_played_squad_title": "Played Squad",
-  "match_stat_count_player_text": "({count} player)",
-  "@match_stat_count_player_text": {
-    "description": "({count} player)",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "match_stat_count_wickets_text": "{count, plural, =0{{count} Wickets} =1{{count} Wicket} other{{count} Wickets}}",
-  "@match_stat_count_wickets_text": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "match_stat_bat_avg_title": "\nBat-Avg",
-  "match_stat_extra_awarded_title": " Extra awarded",
   "@_PROFILE": {
   },
   "tab_profile_title": "profile",

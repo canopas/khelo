@@ -55,7 +55,7 @@ class UserMatchListScreen extends ConsumerWidget {
   Widget _matchListCell(BuildContext context, MatchModel match) {
     return OnTapScale(
       onTap: () {
-        AppRoute.matchDetailStat(matchId: match.id ?? "INVALID ID")
+        AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
             .push(context);
       },
       child: Container(
