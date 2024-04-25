@@ -64,9 +64,11 @@ class MatchDetailOversView extends ConsumerWidget {
 
       children.add(_overCellView(context, over));
     }
-    children.add(
-      _teamNameTitleView(context, state, inningId),
-    );
+    if(oversList.isNotEmpty){
+      children.add(
+        _teamNameTitleView(context, state, inningId),
+      );
+    }
 
     return children;
   }

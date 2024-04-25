@@ -353,6 +353,7 @@
   "match_scorecard_bowler_text": "Bowler",
   "match_scorecard_not_out_text": "Not out",
   "match_scorecard_bowler_catcher_short_text": "b {bowler} c {fielder}",
+  "match_scorecard_did_not_bat_text": "Did not bat",
   "@match_scorecard_bowler_catcher_short_text": {
     "description": "b {bowler} c {fielder}",
     "placeholders": {
@@ -414,7 +415,7 @@
   "match_highlight_filter_sixes_text": "Sixes",
   "match_highlight_filter_wickets_text": "Wickets",
   "match_highlight_empty_highlight_text": "No highlights to show here",
-  "match_overs_empty_over_text": "Overs will be shown here as soon as the match starts.",
+  "match_overs_empty_over_text": "Overs will be shown here as soon as the match starts",
   "@_SCOREBOARD": {
   },
   "score_board_screen_title": "Score Board",

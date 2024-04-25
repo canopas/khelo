@@ -98,13 +98,15 @@ class _MoreOptionDialogState extends State<MoreOptionDialog> {
         }
       },
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            option.getTitle(context),
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+          Flexible(
+            child: Text(
+              option.getTitle(context),
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+            ),
           ),
-          const Spacer(),
           option == MatchOption.continueWithInjuredPlayer
               ? Icon(
                   isEnabled ? Icons.check_box : Icons.check_box_outline_blank)

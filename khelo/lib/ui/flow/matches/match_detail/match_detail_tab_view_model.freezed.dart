@@ -20,7 +20,7 @@ mixin _$MatchDetailTabState {
   MatchModel? get match => throw _privateConstructorUsedError;
   InningModel? get firstInning => throw _privateConstructorUsedError;
   InningModel? get secondInning => throw _privateConstructorUsedError;
-  String? get highlightInningId => throw _privateConstructorUsedError;
+  String? get highlightTeamId => throw _privateConstructorUsedError;
   DateTime? get showTeamSelectionSheet => throw _privateConstructorUsedError;
   DateTime? get showHighlightOptionSelectionSheet =>
       throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $MatchDetailTabStateCopyWith<$Res> {
       MatchModel? match,
       InningModel? firstInning,
       InningModel? secondInning,
-      String? highlightInningId,
+      String? highlightTeamId,
       DateTime? showTeamSelectionSheet,
       DateTime? showHighlightOptionSelectionSheet,
       List<BallScoreModel> ballScores,
@@ -78,7 +78,7 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
     Object? match = freezed,
     Object? firstInning = freezed,
     Object? secondInning = freezed,
-    Object? highlightInningId = freezed,
+    Object? highlightTeamId = freezed,
     Object? showTeamSelectionSheet = freezed,
     Object? showHighlightOptionSelectionSheet = freezed,
     Object? ballScores = null,
@@ -101,9 +101,9 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
           ? _value.secondInning
           : secondInning // ignore: cast_nullable_to_non_nullable
               as InningModel?,
-      highlightInningId: freezed == highlightInningId
-          ? _value.highlightInningId
-          : highlightInningId // ignore: cast_nullable_to_non_nullable
+      highlightTeamId: freezed == highlightTeamId
+          ? _value.highlightTeamId
+          : highlightTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
       showTeamSelectionSheet: freezed == showTeamSelectionSheet
           ? _value.showTeamSelectionSheet
@@ -187,7 +187,7 @@ abstract class _$$MatchDetailTabStateImplCopyWith<$Res>
       MatchModel? match,
       InningModel? firstInning,
       InningModel? secondInning,
-      String? highlightInningId,
+      String? highlightTeamId,
       DateTime? showTeamSelectionSheet,
       DateTime? showHighlightOptionSelectionSheet,
       List<BallScoreModel> ballScores,
@@ -219,7 +219,7 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
     Object? match = freezed,
     Object? firstInning = freezed,
     Object? secondInning = freezed,
-    Object? highlightInningId = freezed,
+    Object? highlightTeamId = freezed,
     Object? showTeamSelectionSheet = freezed,
     Object? showHighlightOptionSelectionSheet = freezed,
     Object? ballScores = null,
@@ -242,9 +242,9 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
           ? _value.secondInning
           : secondInning // ignore: cast_nullable_to_non_nullable
               as InningModel?,
-      highlightInningId: freezed == highlightInningId
-          ? _value.highlightInningId
-          : highlightInningId // ignore: cast_nullable_to_non_nullable
+      highlightTeamId: freezed == highlightTeamId
+          ? _value.highlightTeamId
+          : highlightTeamId // ignore: cast_nullable_to_non_nullable
               as String?,
       showTeamSelectionSheet: freezed == showTeamSelectionSheet
           ? _value.showTeamSelectionSheet
@@ -287,7 +287,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       this.match,
       this.firstInning,
       this.secondInning,
-      this.highlightInningId,
+      this.highlightTeamId,
       this.showTeamSelectionSheet,
       this.showHighlightOptionSelectionSheet,
       final List<BallScoreModel> ballScores = const [],
@@ -306,7 +306,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
   @override
   final InningModel? secondInning;
   @override
-  final String? highlightInningId;
+  final String? highlightTeamId;
   @override
   final DateTime? showTeamSelectionSheet;
   @override
@@ -335,7 +335,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
 
   @override
   String toString() {
-    return 'MatchDetailTabState(error: $error, match: $match, firstInning: $firstInning, secondInning: $secondInning, highlightInningId: $highlightInningId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, ballScores: $ballScores, loading: $loading, inningsQueryListenerSet: $inningsQueryListenerSet, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, highlightFilterOption: $highlightFilterOption)';
+    return 'MatchDetailTabState(error: $error, match: $match, firstInning: $firstInning, secondInning: $secondInning, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, ballScores: $ballScores, loading: $loading, inningsQueryListenerSet: $inningsQueryListenerSet, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, highlightFilterOption: $highlightFilterOption)';
   }
 
   @override
@@ -349,8 +349,8 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
                 other.firstInning == firstInning) &&
             (identical(other.secondInning, secondInning) ||
                 other.secondInning == secondInning) &&
-            (identical(other.highlightInningId, highlightInningId) ||
-                other.highlightInningId == highlightInningId) &&
+            (identical(other.highlightTeamId, highlightTeamId) ||
+                other.highlightTeamId == highlightTeamId) &&
             (identical(other.showTeamSelectionSheet, showTeamSelectionSheet) ||
                 other.showTeamSelectionSheet == showTeamSelectionSheet) &&
             (identical(other.showHighlightOptionSelectionSheet,
@@ -377,7 +377,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       match,
       firstInning,
       secondInning,
-      highlightInningId,
+      highlightTeamId,
       showTeamSelectionSheet,
       showHighlightOptionSelectionSheet,
       const DeepCollectionEquality().hash(_ballScores),
@@ -400,7 +400,7 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
           final MatchModel? match,
           final InningModel? firstInning,
           final InningModel? secondInning,
-          final String? highlightInningId,
+          final String? highlightTeamId,
           final DateTime? showTeamSelectionSheet,
           final DateTime? showHighlightOptionSelectionSheet,
           final List<BallScoreModel> ballScores,
@@ -419,7 +419,7 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
   @override
   InningModel? get secondInning;
   @override
-  String? get highlightInningId;
+  String? get highlightTeamId;
   @override
   DateTime? get showTeamSelectionSheet;
   @override

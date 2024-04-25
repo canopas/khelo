@@ -356,7 +356,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
         players.where((element) => element.index != null).toList();
     filteredPlayer.sort((a, b) => a.index?.compareTo(b.index ?? 0) ?? 0);
     List<Widget> children = [];
-    for (final player in players) {
+    for (final player in filteredPlayer) {
       final (run, ball, four, six, strikeRate) =
           _getBattingPerformance(state, inningId, player.player.id);
 
@@ -426,7 +426,35 @@ class MatchDetailScorecardView extends ConsumerWidget {
         countDescription: context.l10n.match_scorecard_wicket_over_text(
             bowlingInning?.total_wickets ?? 0, inning?.overs ?? 0)));
 
+    String yetToPlayPlayers = players
+        .where((element) => element.index == null)
+        .map((e) => e.player.name)
+        .join(", ");
+    if (yetToPlayPlayers.isNotEmpty) {
+      children.add(_didNotBatView(context, yetToPlayPlayers));
+    }
+
     return children;
+  }
+
+  Widget _didNotBatView(BuildContext context, String players) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+            context.l10n.match_scorecard_did_not_bat_text,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          )),
+          Expanded(
+              child: Text(players,
+                  style: AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textPrimary))),
+        ],
+      ),
+    );
   }
 
   (int, int, int, int, int) _getExtraCounts(
@@ -528,7 +556,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     }
 
     final strikeRate = (run / ball) * 100;
-    return (run, ball, fours, sixes, strikeRate);
+    return (run, ball, fours, sixes, strikeRate.isNaN ? 0 : strikeRate);
   }
 
   (String?, String?, WicketType?) _getWicketDetail(
@@ -633,7 +661,15 @@ class MatchDetailScorecardView extends ConsumerWidget {
     }
     final over = ball / 6;
     final economy = run / over;
-    return (over, maiden, run, wicket, noBall, wide, economy);
+    return (
+      over,
+      maiden,
+      run,
+      wicket,
+      noBall,
+      wide,
+      economy.isNaN ? 0 : economy
+    );
   }
 
   Widget _winnerMessageText(BuildContext context, MatchModel match) {

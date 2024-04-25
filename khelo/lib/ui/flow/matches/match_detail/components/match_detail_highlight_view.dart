@@ -124,12 +124,8 @@ class MatchDetailHighlightView extends ConsumerWidget {
   }
 
   String _getTeamNameByInningId(MatchDetailTabState state) {
-    final teamId = state.firstInning?.id == state.highlightInningId
-        ? state.firstInning?.team_id
-        : state.secondInning?.team_id;
-
     final teamName = state.match?.teams
-        .where((element) => element.team.id == teamId)
+        .where((element) => element.team.id == state.highlightTeamId)
         .firstOrNull
         ?.team
         .name;
@@ -146,10 +142,13 @@ class MatchDetailHighlightView extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
+            Expanded(
+              child: Text(
+                title,
+                style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textPrimary,
+                    overflow: TextOverflow.ellipsis),
+              ),
             ),
             Icon(
               Icons.expand_more_sharp,
@@ -162,30 +161,31 @@ class MatchDetailHighlightView extends ConsumerWidget {
   }
 
   List<BallScoreModel> _getHighlightsScore(MatchDetailTabState state) {
+    final inningId = state.firstInning?.team_id == state.highlightTeamId
+        ? state.firstInning?.id
+        : state.secondInning?.id;
     switch (state.highlightFilterOption) {
       case HighlightFilterOption.all:
         return state.ballScores
             .where((element) =>
-                element.inning_id == state.highlightInningId &&
+                element.inning_id == inningId &&
                 (element.wicket_type != null ||
                     element.is_four ||
                     element.is_six))
             .toList();
       case HighlightFilterOption.fours:
         return state.ballScores
-            .where((element) =>
-                element.inning_id == state.highlightInningId && element.is_four)
+            .where(
+                (element) => element.inning_id == inningId && element.is_four)
             .toList();
       case HighlightFilterOption.sixes:
         return state.ballScores
-            .where((element) =>
-                element.inning_id == state.highlightInningId && element.is_six)
+            .where((element) => element.inning_id == inningId && element.is_six)
             .toList();
       case HighlightFilterOption.wickets:
         return state.ballScores
             .where((element) =>
-                element.inning_id == state.highlightInningId &&
-                element.wicket_type != null)
+                element.inning_id == inningId && element.wicket_type != null)
             .toList();
     }
   }

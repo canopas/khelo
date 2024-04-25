@@ -47,7 +47,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     state = state.copyWith(loading: true);
     _matchService.getMatchStreamById(_matchId).listen(
       (match) {
-        state = state.copyWith(match: match, error: null);
+        state = state.copyWith(
+            match: match,
+            highlightTeamId: match.teams.first.team.id,
+            error: null);
         if (!state.inningsQueryListenerSet) {
           loadInnings();
         }
@@ -64,7 +67,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     if (state.match == null) {
       return;
     }
-
+    if (state.match?.match_status == MatchStatus.yetToStart) {
+      state = state.copyWith(loading: false);
+      return;
+    }
     state = state.copyWith(inningsQueryListenerSet: true);
     _inningService.getInningsStreamByMatchId(matchId: _matchId).listen(
       (innings) {
@@ -81,10 +87,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
                 element.team_id != state.match?.toss_winner_id));
 
         state = state.copyWith(
-            firstInning: firstInning,
-            secondInning: secondInning,
-            highlightInningId: firstInning.id,
-            error: null);
+            firstInning: firstInning, secondInning: secondInning, error: null);
         if (!state.ballScoreQueryListenerSet) {
           loadBallScores();
         }
@@ -136,10 +139,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   onHighlightTeamSelection(String teamId) {
-    final inningId = state.firstInning?.team_id == teamId
-        ? state.firstInning?.id
-        : state.secondInning?.id;
-    state = state.copyWith(highlightInningId: inningId);
+    state = state.copyWith(highlightTeamId: teamId);
   }
 }
 
@@ -150,7 +150,7 @@ class MatchDetailTabState with _$MatchDetailTabState {
     MatchModel? match,
     InningModel? firstInning,
     InningModel? secondInning,
-    String? highlightInningId,
+    String? highlightTeamId,
     DateTime? showTeamSelectionSheet,
     DateTime? showHighlightOptionSelectionSheet,
     @Default([]) List<BallScoreModel> ballScores,
