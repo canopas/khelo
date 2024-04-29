@@ -1,9 +1,7 @@
 {
   "app_title": "Khelo",
-  "tab_home_title": "home",
-  "tab_my_cricket_title": "my cricket",
-  "tab_stats_title": "stats",
-  "tab_profile_title": "profile",
+  "@_COMMON": {
+  },
   "common_none_title": "None",
   "common_anonymous_title": "Anonymous",
   "common_delete_title": "Delete",
@@ -17,10 +15,10 @@
   "common_next_title": "Next",
   "common_yes_title": "Yes",
   "common_no_title": "No",
+  "common_not_specified_title": "Not Specified",
   "common_runs_dot_title": " Runs.",
   "common_wickets_dot_title": " Wickets.",
   "common_wicket_taken_title": " Wicket taken",
-  "common_not_specified_title": "Not Specified",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -43,6 +41,8 @@
       }
     }
   },
+  "@_ONBOARDING": {
+  },
   "intro_sign_in_btn_text": "Sign in",
   "intro_get_start_text": "Getting started with us",
   "intro_description_text": "get started with Khelo, create your team, start the match, score your match, get your stats and much more.\nEmbark on a journey beyond imagination, where every move is a new adventure!\nPlay. Thrive. Conquer.",
@@ -53,46 +53,17 @@
   "otp_verification_enter_otp_text": "Enter OTP you received",
   "otp_verification_resend_code_text": "Resend Code",
   "otp_verification_incorrect_otp_error_text": "*Please enter correct OTP",
-  "edit_profile_screen_title": "Edit profile",
-  "edit_profile_select_birth_date_placeholder": "Select your date of birth",
-  "edit_profile_name_placeholder": "NAME",
-  "edit_profile_email_placeholder": "EMAIL",
-  "edit_profile_location_placeholder": "LOCATION",
-  "edit_profile_dob_placeholder": "DOB",
-  "edit_profile_gender_placeholder": "GENDER",
-  "edit_profile_player_role_placeholder": "PLAYER ROLE",
-  "edit_profile_batting_style_placeholder": "BATTING STYLE",
-  "edit_profile_bowling_style_placeholder": "BOWLING STYLE",
-  "edit_profile_gender_male_title": "Male",
-  "edit_profile_gender_female_title": "Female",
-  "edit_profile_gender_other_title": "Other",
-  "edit_profile_save_title": "SAVE",
+  "@_HOME": {
+  },
+  "tab_home_title": "home",
   "home_screen_title": "Home",
   "home_screen_no_matches_title": "No matches are running currently",
   "home_screen_no_matches_description_text": "Running matches will be shown here, Stay tuned for some intense matches.",
-  "image_picker_choose_option_title": "Choose an option.",
-  "image_picker_crop_image_title": "Crop Image",
-  "batting_style_right_hand_bat_title": "Right hand bat",
-  "batting_style_left_hand_bat_title": "Left hand bat",
-  "bowling_style_right_arm_fast_title": "Right arm fast",
-  "bowling_style_right_arm_medium_title": "Right arm medium",
-  "bowling_style_left_arm_fast_title": "Left arm fast",
-  "bowling_style_left_arm_medium_title": "Left arm medium",
-  "bowling_style_slow_left_arm_orthodox_title": "Slow left arm orthodox",
-  "bowling_style_slow_left_arm_chinaman_title": "Slow left arm chinaman",
-  "bowling_style_right_arm_off_break_title": "Right arm off break",
-  "bowling_style_right_arm_leg_break_title": "Right arm leg break",
-  "player_role_top_order_batter_title": "Top order batter",
-  "player_role_middle_order_batter_title": "Middle order batter",
-  "player_role_wicket_keeper_batter_title": "Wicket keeper batter",
-  "player_role_wicket_keeper_title": "Wicket keeper",
-  "player_role_bowler_title": "Bowler",
-  "player_role_all_rounder_title": "All rounder",
-  "player_role_lower_order_batter_title": "Lower order batter",
-  "player_role_opening_batter_title": "Opening batter",
-  "profile_complete_your_profile_title": "Complete Your Profile",
-  "profile_complete_profile_description_title": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
-  "profile_complete_profile_btn_title": "Complete Profile",
+  "@_MY_CRICKET": {
+  },
+  "my_game_teams_tab_title": "Teams",
+  "my_game_matches_tab_title": "Matches",
+  "tab_my_cricket_title": "my cricket",
   "my_cricket_screen_title": "My Cricket",
   "add_team_screen_title": "Add Team",
   "add_team_add_as_member_description_text": "Add me as a team member",
@@ -198,6 +169,256 @@
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Bat",
   "add_toss_detail_bowl_text": "Bowl",
+  "team_detail_screen_title": "Team Detail",
+  "team_detail_member_tab_title": "Member",
+  "team_detail_empty_member_title": "No team member are added to the team.",
+  "team_detail_match_tab_title": "Match",
+  "team_detail_empty_match_title": "Team hasn't compete with opponent till now.",
+  "team_detail_stat_tab_title": "Stat",
+  "team_detail_empty_stat_title": "Team's analysis will be shown here based on it's previous matches.",
+  "team_detail_won_title": "Won",
+  "team_detail_lost_title": "Lost",
+  "team_detail_tied_title": "Tied",
+  "team_detail_runs_made_title": "Runs Made",
+  "team_detail_wickets_taken_title": "Wickets Taken",
+  "team_detail_batting_average_title": "\nBatting Average",
+  "team_detail_bowling_average_title": "\nBowling Average",
+  "team_detail_highest_runs_title": "Highest Runs",
+  "team_detail_lowest_runs_title": "Lowest Runs",
+  "team_detail_run_rate_title": "Run Rate",
+  "team_detail_match_played_title": "\nMatch played",
+  "team_detail_matches_played_title": "\nMatches played",
+  "team_detail_overs_title": "Overs:",
+  "match_status_yet_to_start_title": "Yet to start",
+  "match_status_running_title": "Running",
+  "match_status_finish_title": "Finish",
+  "match_status_abandoned_title": "Abandoned",
+  "wicket_type_bowled_title": "Bowled",
+  "wicket_type_caught_title": "Caught",
+  "wicket_type_caught_behind_title": "Caught Behind",
+  "wicket_type_caught_bowled_title": "Caught And Bowled",
+  "wicket_type_leg_before_wicket_title": "Leg Before Wicket",
+  "wicket_type_stumped_title": "Stumped",
+  "wicket_type_run_out_title": "Run Out",
+  "wicket_type_hit_wicket_title": "Hit Wicket",
+  "wicket_type_hit_ball_twice_title": "Hit Ball Twice",
+  "wicket_type_handled_ball_title": "Handled Ball",
+  "wicket_type_obstructing_field_title": "Obstructing the Field",
+  "wicket_type_timed_out_title": "Timed Out",
+  "wicket_type_retired_title": "Retired",
+  "wicket_type_retired_hurt_title": "Retired Hurt",
+  "wicket_type_short_timed_out_title": "TO",
+  "wicket_type_short_retired_title": "RT",
+  "wicket_type_short_retired_hurt_title": "RTH",
+  "my_stat_screen_title": "My Stats",
+  "my_stat_stats_tab_title": "Stats",
+  "match_detail_screen_title": "Match Detail",
+  "match_detail_commentary_tab_title": "Commentary",
+  "match_detail_scorecard_tab_title": "Scorecard",
+  "match_detail_squad_tab_title": "Squad",
+  "match_detail_match_info_tab_title": "Match Info",
+  "match_detail_highlight_tab_title": "Highlight",
+  "match_detail_overs_tab_title": "Overs",
+  "match_info_match_title": "Match:",
+  "match_info_date_title": "Date:",
+  "match_info_toss_title": "Toss:",
+  "match_info_time_title": "Time:",
+  "match_info_umpire_title": "Umpire:",
+  "match_info_referee_title": "Referee:",
+  "match_info_squad_title": "{name} Squad:",
+  "@match_info_squad_title": {
+    "description": "{name} Squad:",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "match_info_playing_title": "Playing:",
+  "match_info_bench_title": "Bench:",
+  "match_info_venue_title": "Venue",
+  "match_info_ground_title": "Ground:",
+  "match_info_city_title": "City:",
+  "match_info_captain_short_title": "(c)",
+  "match_info_toss_detail_text": "{name} won the toss and opt to {decision}",
+  "@match_info_toss_detail_text": {
+    "description": "{name} won the toss and opt to {decision}",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "decision": {
+        "type": "String"
+      }
+    }
+  },
+  "match_commentary_bowler_to_batsman_text": "{bowler} to {batsman}",
+  "@match_commentary_bowler_to_batsman_text": {
+    "description": "{bowler} to {batsman}",
+    "placeholders": {
+      "bowler": {
+        "type": "String"
+      },
+      "batsman": {
+        "type": "String"
+      }
+    }
+  },
+  "match_commentary_b_bowler_text": " b {bowler}",
+  "@match_commentary_b_bowler_text": {
+    "description": " b {bowler}",
+    "placeholders": {
+      "bowler": {
+        "type": "String"
+      }
+    }
+  },
+  "match_commentary_c_fielder_text": " c {fielder}",
+  "@match_commentary_c_fielder_text": {
+    "description": " c {fielder}",
+    "placeholders": {
+      "fielder": {
+        "type": "String"
+      }
+    }
+  },
+  "match_commentary_by_fielder_text": " by {fielder}",
+  "@match_commentary_by_fielder_text": {
+    "description": " by {fielder}",
+    "placeholders": {
+      "fielder": {
+        "type": "String"
+      }
+    }
+  },
+  "match_commentary_runs_fours_sixes_text": " {run}({ballCount}) [4s-{fours} 6s-{sixes}]",
+  "@match_commentary_runs_fours_sixes_text": {
+    "description": " {run}({ballCount}) [4s-{fours} 6s-{sixes}]",
+    "placeholders": {
+      "run": {
+        "type": "int"
+      },
+      "ballCount": {
+        "type": "int"
+      },
+      "fours": {
+        "type": "int"
+      },
+      "sixes": {
+        "type": "int"
+      }
+    }
+  },
+  "match_commentary_runs_text": "{run, plural, =0{no runs} =1{{run} run} other{{run} runs}}",
+  "@match_commentary_runs_text": {
+    "description": "{run, plural, =0{no} =1{{run} run} other{{run} runs}}",
+    "placeholders": {
+      "run": {
+        "type": "int"
+      }
+    }
+  },
+  "match_commentary_former_over_short_text": "Ov {over}",
+  "@match_commentary_former_over_short_text": {
+    "description": "Ov {over}",
+    "placeholders": {
+      "over": {
+        "type": "int"
+      }
+    }
+  },
+  "match_commentary_four_text": "Four",
+  "match_commentary_six_text": "Six",
+  "match_commentary_out_text": "OUT,",
+  "match_commentary_back_to_attack_text": " is back to attack",
+  "match_commentary_end_inning_text_part_1": " wraps up their innings, leaving ",
+  "match_commentary_end_inning_text_part_2": " for victory.",
+  "match_commentary_empty_commentary_text": "Commentary will be shown here as soon as the match starts.",
+  "match_scorecard_fall_of_wicket_text": "Fall of Wicket",
+  "match_scorecard_over_text": "Over",
+  "match_scorecard_run_text": "Run",
+  "match_scorecard_power_play_text": "PowerPlay",
+  "match_scorecard_run_short_text": "R",
+  "match_scorecard_ball_short_text": "B",
+  "match_scorecard_fours_short_text": "4s",
+  "match_scorecard_sixes_short_text": "6s",
+  "match_scorecard_strike_rate_short_text": "SR",
+  "match_scorecard_over_short_text": "O",
+  "match_scorecard_maiden_short_text": "M",
+  "match_scorecard_wicket_short_text": "W",
+  "match_scorecard_no_ball_short_text": "NB",
+  "match_scorecard_wide_ball_short_text": "WB",
+  "match_scorecard_economy_short_text": "ECO",
+  "match_scorecard_batter_text": "Batter",
+  "match_scorecard_bowler_text": "Bowler",
+  "match_scorecard_not_out_text": "Not out",
+  "match_scorecard_bowler_catcher_short_text": "b {bowler} c {fielder}",
+  "match_scorecard_did_not_bat_text": "Did not bat",
+  "@match_scorecard_bowler_catcher_short_text": {
+    "description": "b {bowler} c {fielder}",
+    "placeholders": {
+      "bowler": {
+        "type": "String"
+      },
+      "fielder": {
+        "type": "String"
+      }
+    }
+  },
+  "match_scorecard_extra_text": "Extra",
+  "match_scorecard_total_text": "Total",
+  "match_scorecard_empty_scorecard_text": "Scorecard will appear once the match starts",
+  "match_scorecard_extras_short_text": "b {bye} lb {legBye} w {wide}  nb {noBall} p {penalty}",
+  "@match_scorecard_extras_short_text": {
+    "description": "b {bye} lb {legBye} w {wide}  nb {noBall} p {penalty}",
+    "placeholders": {
+      "bye": {
+        "type": "int"
+      },
+      "legBye": {
+        "type": "int"
+      },
+      "wide": {
+        "type": "int"
+      },
+      "noBall": {
+        "type": "int"
+      },
+      "penalty": {
+        "type": "int"
+      }
+    }
+  },
+  "match_scorecard_wicket_over_text": "{wicket, plural, =0{no wickets} =1{{wicket} wicket} other{{wicket} wickets}} {over} over",
+  "@match_scorecard_wicket_over_text": {
+    "placeholders": {
+      "wicket": {
+        "type": "int"
+      },
+      "over": {
+        "type": "double"
+      }
+    }
+  },
+  "match_commentary_trailing_over_short_text": "({over} Ov)",
+  "@match_commentary_trailing_over_short_text": {
+    "description": "({over} Ov)",
+    "placeholders": {
+      "over": {
+        "type": "double"
+      }
+    }
+  },
+  "match_squad_bench_text": "Bench",
+  "match_highlight_filter_all_text": "All",
+  "match_highlight_filter_fours_text": "Fours",
+  "match_highlight_filter_sixes_text": "Sixes",
+  "match_highlight_filter_wickets_text": "Wickets",
+  "match_highlight_empty_highlight_text": "No highlights to show here",
+  "match_overs_empty_over_text": "Overs will be shown here as soon as the match starts",
+  "@_SCOREBOARD": {
+  },
+  "score_board_screen_title": "Score Board",
   "score_board_run_sup_script_text": "{run, select, 1{{extra}} 2{{extra}²} 3{{extra}³} 4{{extra}⁴} 5{{extra}⁵} 6{{extra}⁶} 7{{extra}⁷} 8{{extra}⁸} 9{{extra}⁹} other{{extra}}}",
   "@score_board_run_sup_script_text": {
     "placeholders": {
@@ -205,7 +426,6 @@
       "extra": {}
     }
   },
-  "score_board_screen_title": "Score Board",
   "score_board_wicket_short_text": "W",
   "score_board_no_ball_short_text": "NB",
   "score_board_wide_ball_short_text": "WB",
@@ -300,50 +520,9 @@
       }
     }
   },
-  "team_detail_screen_title": "Team Detail",
-  "team_detail_member_tab_title": "Member",
-  "team_detail_empty_member_title": "No team member are added to the team.",
-  "team_detail_match_tab_title": "Match",
-  "team_detail_empty_match_title": "Team hasn't compete with opponent till now.",
-  "team_detail_stat_tab_title": "Stat",
-  "team_detail_empty_stat_title": "Team's analysis will be shown here based on it's previous matches.",
-  "team_detail_won_title": "Won",
-  "team_detail_lost_title": "Lost",
-  "team_detail_tied_title": "Tied",
-  "team_detail_runs_made_title": "Runs Made",
-  "team_detail_wickets_taken_title": "Wickets Taken",
-  "team_detail_batting_average_title": "\nBatting Average",
-  "team_detail_bowling_average_title": "\nBowling Average",
-  "team_detail_highest_runs_title": "Highest Runs",
-  "team_detail_lowest_runs_title": "Lowest Runs",
-  "team_detail_run_rate_title": "Run Rate",
-  "team_detail_match_played_title": "\nMatch played",
-  "team_detail_matches_played_title": "\nMatches played",
-  "team_detail_overs_title": "Overs:",
-  "match_status_yet_to_start_title": "Yet to start",
-  "match_status_running_title": "Running",
-  "match_status_finish_title": "Finish",
-  "match_status_abandoned_title": "Abandoned",
-  "wicket_type_bowled_title": "Bowled",
-  "wicket_type_caught_title": "Caught",
-  "wicket_type_caught_behind_title": "Caught Behind",
-  "wicket_type_caught_bowled_title": "Caught And Bowled",
-  "wicket_type_leg_before_wicket_title": "Leg Before Wicket",
-  "wicket_type_stumped_title": "Stumped",
-  "wicket_type_run_out_title": "Run Out",
-  "wicket_type_hit_wicket_title": "Hit Wicket",
-  "wicket_type_hit_ball_twice_title": "Hit Ball Twice",
-  "wicket_type_handled_ball_title": "Handled Ball",
-  "wicket_type_obstructing_field_title": "Obstructing the Field",
-  "wicket_type_timed_out_title": "Timed Out",
-  "wicket_type_retired_title": "Retired",
-  "wicket_type_retired_hurt_title": "Retired Hurt",
-  "wicket_type_short_timed_out_title": "TO",
-  "wicket_type_short_retired_title": "RT",
-  "wicket_type_short_retired_hurt_title": "RTH",
-
-  "my_stat_screen_title": "My Stats",
-  "my_stat_stats_tab_title": "Stats",
+  "@_STATS": {
+  },
+  "tab_stats_title": "stats",
   "my_stat_matches_tab_title": "Matches",
   "my_stat_stats_batting_statics_title": "Batting Statistics",
   "my_stat_stats_run_scored_title": "Run scored",
@@ -358,36 +537,44 @@
   "my_stat_stats_catches_title": "Catches",
   "my_stat_stats_run_out_title": " Run out",
   "my_stat_stats_stumping_title": " Stumping",
-  "match_stat_screen_title": "Match Stat",
-  "match_stat_in_over_text": " (in {count} Over)",
-  "@match_stat_in_over_text": {
-    "description": " (in {count} Over)",
-    "placeholders": {
-      "count": {
-        "type": "String"
-      }
-    }
+  "@_PROFILE": {
   },
-  "match_stat_fours_title": "\nFours",
-  "match_stat_sixes_title": "\nSixes",
-  "match_stat_played_squad_title": "Played Squad",
-  "match_stat_count_player_text": "({count} player)",
-  "@match_stat_count_player_text": {
-    "description": "({count} player)",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "match_stat_count_wickets_text": "{count, plural, =0{{count} Wickets} =1{{count} Wicket} other{{count} Wickets}}",
-  "@match_stat_count_wickets_text": {
-    "placeholders": {
-      "count": {}
-    }
-  },
-  "match_stat_bat_avg_title": "\nBat-Avg",
-  "match_stat_extra_awarded_title": " Extra awarded",
-  "my_game_teams_tab_title": "Teams",
-  "my_game_matches_tab_title": "Matches"
+  "tab_profile_title": "profile",
+  "edit_profile_screen_title": "Edit profile",
+  "edit_profile_select_birth_date_placeholder": "Select your date of birth",
+  "edit_profile_name_placeholder": "NAME",
+  "edit_profile_email_placeholder": "EMAIL",
+  "edit_profile_location_placeholder": "LOCATION",
+  "edit_profile_dob_placeholder": "DOB",
+  "edit_profile_gender_placeholder": "GENDER",
+  "edit_profile_player_role_placeholder": "PLAYER ROLE",
+  "edit_profile_batting_style_placeholder": "BATTING STYLE",
+  "edit_profile_bowling_style_placeholder": "BOWLING STYLE",
+  "edit_profile_gender_male_title": "Male",
+  "edit_profile_gender_female_title": "Female",
+  "edit_profile_gender_other_title": "Other",
+  "edit_profile_save_title": "SAVE",
+  "profile_complete_profile_btn_title": "Complete Profile",
+  "profile_complete_your_profile_title": "Complete Your Profile",
+  "profile_complete_profile_description_title": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
+  "image_picker_choose_option_title": "Choose an option.",
+  "image_picker_crop_image_title": "Crop Image",
+  "batting_style_right_hand_bat_title": "Right hand bat",
+  "batting_style_left_hand_bat_title": "Left hand bat",
+  "bowling_style_right_arm_fast_title": "Right arm fast",
+  "bowling_style_right_arm_medium_title": "Right arm medium",
+  "bowling_style_left_arm_fast_title": "Left arm fast",
+  "bowling_style_left_arm_medium_title": "Left arm medium",
+  "bowling_style_slow_left_arm_orthodox_title": "Slow left arm orthodox",
+  "bowling_style_slow_left_arm_chinaman_title": "Slow left arm chinaman",
+  "bowling_style_right_arm_off_break_title": "Right arm off break",
+  "bowling_style_right_arm_leg_break_title": "Right arm leg break",
+  "player_role_top_order_batter_title": "Top order batter",
+  "player_role_middle_order_batter_title": "Middle order batter",
+  "player_role_wicket_keeper_batter_title": "Wicket keeper batter",
+  "player_role_wicket_keeper_title": "Wicket keeper",
+  "player_role_bowler_title": "Bowler",
+  "player_role_all_rounder_title": "All rounder",
+  "player_role_lower_order_batter_title": "Lower order batter",
+  "player_role_opening_batter_title": "Opening batter"
 }

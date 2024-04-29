@@ -184,9 +184,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           toss_winner_id: state.match?.toss_winner_id,
           referee_id: refereeId,
           current_playing_team_id: state.match?.current_playing_team_id,
-          match_status: startMatch
-              ? state.match?.match_status ?? MatchStatus.running
-              : MatchStatus.yetToStart);
+          match_status:
+              startMatch ? MatchStatus.running : MatchStatus.yetToStart);
 
       matchId = await _matchService.updateMatch(match);
 

@@ -203,6 +203,23 @@ extension WicketTypeString on WicketType {
   }
 }
 
+extension ExtrasTypeString on ExtrasType {
+  String getString(BuildContext context) {
+    switch (this) {
+      case ExtrasType.wide:
+        return context.l10n.score_board_wide_ball_short_text;
+      case ExtrasType.noBall:
+        return context.l10n.score_board_no_ball_short_text;
+      case ExtrasType.penaltyRun:
+        return context.l10n.score_board_penalty_run_title;
+      case ExtrasType.bye:
+        return context.l10n.score_board_bye_short_text;
+      case ExtrasType.legBye:
+        return context.l10n.score_board_leg_bye_short_text;
+    }
+  }
+}
+
 extension TeamFilterOptionString on TeamFilterOption {
   String getString(BuildContext context) {
     switch (this) {

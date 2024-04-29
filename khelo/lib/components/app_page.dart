@@ -7,6 +7,7 @@ import 'package:style/text/app_text_style.dart';
 class AppPage extends StatelessWidget {
   final String? title;
   final Widget? titleWidget;
+  final TabBar? tabBar;
   final List<Widget>? actions;
   final Widget? leading;
   final Widget? floatingActionButton;
@@ -17,6 +18,7 @@ class AppPage extends StatelessWidget {
     super.key,
     this.title,
     this.titleWidget,
+    this.tabBar,
     this.actions,
     this.leading,
     this.body,
@@ -58,7 +60,15 @@ class AppPage extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
-            body ?? const SizedBox(),
+            Column(
+              children: [
+                Material(
+                  type: MaterialType.transparency,
+                  child: tabBar,
+                ),
+                Flexible(child: body ?? const SizedBox()),
+              ],
+            ),
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16, bottom: 16),

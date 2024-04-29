@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -48,6 +50,33 @@ class BallScoreService {
       final data = doc.data();
       return BallScoreModel.fromJson(data).copyWith(id: doc.id);
     }).toList();
+  }
+
+  Stream<List<BallScoreModel>> getBallScoresStreamByInningIds(
+      List<String> inningIds) {
+    StreamController<List<BallScoreModel>> controller =
+        StreamController<List<BallScoreModel>>();
+
+    _firestore
+        .collection(_collectionName)
+        .where('inning_id', whereIn: inningIds)
+        .snapshots()
+        .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+      try {
+        List<BallScoreModel> ballScores = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
+
+        controller.add(ballScores);
+      } catch (error) {
+        controller.addError(error);
+      }
+    }, onError: (error) {
+      controller.addError(error);
+    });
+
+    return controller.stream;
   }
 
   Future<List<BallScoreModel>> getCurrentUserRelatedBalls() async {

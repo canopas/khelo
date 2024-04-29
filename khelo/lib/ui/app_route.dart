@@ -10,11 +10,11 @@ import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_offici
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/power_play/power_play_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_screen.dart';
+import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_screen.dart';
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen.dart';
 import 'package:khelo/ui/flow/score_board/score_board_screen.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
-import 'package:khelo/ui/flow/stats/user_match/match_detail_stat/match_detail_stat_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
@@ -35,7 +35,7 @@ class AppRoute {
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
   static const pathTeamDetail = '/team-detail';
-  static const pathMatchDetailStat = '/match-detail-stat';
+  static const pathMatchDetailTab = '/match-detail-tab';
 
   final String path;
   final String? name;
@@ -138,9 +138,9 @@ class AppRoute {
         ),
       );
 
-  static AppRoute matchDetailStat({required String matchId}) => AppRoute(
-        pathMatchDetailStat,
-        builder: (_) => MatchDetailStatScreen(
+  static AppRoute matchDetailTab({required String matchId}) => AppRoute(
+        pathMatchDetailTab,
+        builder: (_) => MatchDetailTabScreen(
           matchId: matchId,
         ),
       );
@@ -150,7 +150,9 @@ class AppRoute {
         builder: (_) => AddTeamScreen(editTeam: team),
       );
 
-  static AppRoute searchTeam({List<String>? excludedIds, required bool onlyUserTeams}) => AppRoute(
+  static AppRoute searchTeam(
+          {List<String>? excludedIds, required bool onlyUserTeams}) =>
+      AppRoute(
         pathSearchTeam,
         builder: (_) => SearchTeamScreen(
           excludedIds: excludedIds,
@@ -249,7 +251,7 @@ class AppRoute {
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(
-      path: pathMatchDetailStat,
+      path: pathMatchDetailTab,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

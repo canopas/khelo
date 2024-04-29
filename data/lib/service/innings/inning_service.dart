@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +53,33 @@ class InningsService {
       final data = doc.data();
       return InningModel.fromJson(data).copyWith(id: doc.id);
     }).toList();
+  }
+
+  Stream<List<InningModel>> getInningsStreamByMatchId({
+    required String matchId,
+  }) {
+    StreamController<List<InningModel>> controller =
+        StreamController<List<InningModel>>();
+
+    _firestore
+        .collection(_collectionName)
+        .where('match_id', isEqualTo: matchId)
+        .snapshots()
+        .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+      try {
+        List<InningModel> innings = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return InningModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
+        controller.add(innings);
+      } catch (error) {
+        controller.addError(error);
+      }
+    }, onError: (error) {
+      controller.addError(error);
+    });
+
+    return controller.stream;
   }
 
   Future<void> updateInningScoreDetail({
