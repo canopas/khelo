@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AddTossDetailState {
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   TossDecision? get tossWinnerDecision => throw _privateConstructorUsedError;
   String? get tossWinnerTeamId => throw _privateConstructorUsedError;
@@ -38,6 +39,7 @@ abstract class $AddTossDetailStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       MatchModel? match,
       TossDecision? tossWinnerDecision,
       String? tossWinnerTeamId,
@@ -63,6 +65,7 @@ class _$AddTossDetailStateCopyWithImpl<$Res, $Val extends AddTossDetailState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? match = freezed,
     Object? tossWinnerDecision = freezed,
     Object? tossWinnerTeamId = freezed,
@@ -73,6 +76,7 @@ class _$AddTossDetailStateCopyWithImpl<$Res, $Val extends AddTossDetailState>
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -127,6 +131,7 @@ abstract class _$$AddTossDetailStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       MatchModel? match,
       TossDecision? tossWinnerDecision,
       String? tossWinnerTeamId,
@@ -151,6 +156,7 @@ class __$$AddTossDetailStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? match = freezed,
     Object? tossWinnerDecision = freezed,
     Object? tossWinnerTeamId = freezed,
@@ -161,6 +167,7 @@ class __$$AddTossDetailStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$AddTossDetailStateImpl(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -198,6 +205,7 @@ class __$$AddTossDetailStateImplCopyWithImpl<$Res>
 class _$AddTossDetailStateImpl implements _AddTossDetailState {
   const _$AddTossDetailStateImpl(
       {this.error,
+      this.actionError,
       this.match,
       this.tossWinnerDecision,
       this.tossWinnerTeamId,
@@ -208,6 +216,8 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
 
   @override
   final Object? error;
+  @override
+  final Object? actionError;
   @override
   final MatchModel? match;
   @override
@@ -228,7 +238,7 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
 
   @override
   String toString() {
-    return 'AddTossDetailState(error: $error, match: $match, tossWinnerDecision: $tossWinnerDecision, tossWinnerTeamId: $tossWinnerTeamId, pushScoreBoard: $pushScoreBoard, loading: $loading, isButtonEnable: $isButtonEnable, isTossDetailUpdateInProgress: $isTossDetailUpdateInProgress)';
+    return 'AddTossDetailState(error: $error, actionError: $actionError, match: $match, tossWinnerDecision: $tossWinnerDecision, tossWinnerTeamId: $tossWinnerTeamId, pushScoreBoard: $pushScoreBoard, loading: $loading, isButtonEnable: $isButtonEnable, isTossDetailUpdateInProgress: $isTossDetailUpdateInProgress)';
   }
 
   @override
@@ -237,6 +247,8 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
         (other.runtimeType == runtimeType &&
             other is _$AddTossDetailStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.match, match) || other.match == match) &&
             (identical(other.tossWinnerDecision, tossWinnerDecision) ||
                 other.tossWinnerDecision == tossWinnerDecision) &&
@@ -257,6 +269,7 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(actionError),
       match,
       tossWinnerDecision,
       tossWinnerTeamId,
@@ -276,6 +289,7 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
 abstract class _AddTossDetailState implements AddTossDetailState {
   const factory _AddTossDetailState(
       {final Object? error,
+      final Object? actionError,
       final MatchModel? match,
       final TossDecision? tossWinnerDecision,
       final String? tossWinnerTeamId,
@@ -286,6 +300,8 @@ abstract class _AddTossDetailState implements AddTossDetailState {
 
   @override
   Object? get error;
+  @override
+  Object? get actionError;
   @override
   MatchModel? get match;
   @override

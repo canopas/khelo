@@ -61,7 +61,6 @@ class AddMatchOfficialsViewNotifier
 @freezed
 class AddMatchOfficialsState with _$AddMatchOfficialsState {
   const factory AddMatchOfficialsState({
-    Object? error,
     @Default([]) List<Officials> officials,
   }) = _AddMatchOfficialsState;
 }

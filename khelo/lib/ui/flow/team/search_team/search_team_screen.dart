@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -94,7 +95,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         type: MaterialType.transparency,
         child: TextField(
           controller: state.searchController,
-          onChanged: notifier.onSearchChanged,
+          onChanged: (value) => notifier.onSearchChanged(),
           decoration: InputDecoration(
             hintText: context.l10n.search_team_search_placeholder_title,
             contentPadding: const EdgeInsets.all(16),
@@ -110,6 +111,13 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               color: context.colorScheme.textDisabled,
               size: 24,
             ),
+            suffix: state.searchInProgress
+                ? const AppProgressIndicator(
+                    radius: 8,
+                  )
+                : const SizedBox(
+                    height: 16,
+                  ),
           ),
           onTapOutside: (event) {
             FocusManager.instance.primaryFocus?.unfocus();
@@ -149,6 +157,14 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     if (state.loading) {
       return const AppProgressIndicator();
     }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.onSearchChanged,
+      );
+    }
+
     return ListView(
       children: [
         for (final team in state.searchResults) ...[

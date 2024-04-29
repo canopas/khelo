@@ -2,11 +2,13 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
 class MatchDetailSquadView extends ConsumerWidget {
@@ -15,6 +17,23 @@ class MatchDetailSquadView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
+    return _body(context, state);
+  }
+
+  _body(BuildContext context, MatchDetailTabState state){
+    if (state.loading) {
+      return const Center(child: AppProgressIndicator());
+    }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () {
+          // do something
+        },
+      );
+    }
+
     return ListView(
         padding: context.mediaQueryPadding,
         children: _buildTeamList(context, state));

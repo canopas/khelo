@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AddMatchOfficialsState {
-  Object? get error => throw _privateConstructorUsedError;
   List<Officials> get officials => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -30,7 +29,7 @@ abstract class $AddMatchOfficialsStateCopyWith<$Res> {
           $Res Function(AddMatchOfficialsState) then) =
       _$AddMatchOfficialsStateCopyWithImpl<$Res, AddMatchOfficialsState>;
   @useResult
-  $Res call({Object? error, List<Officials> officials});
+  $Res call({List<Officials> officials});
 }
 
 /// @nodoc
@@ -47,11 +46,9 @@ class _$AddMatchOfficialsStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? officials = null,
   }) {
     return _then(_value.copyWith(
-      error: freezed == error ? _value.error : error,
       officials: null == officials
           ? _value.officials
           : officials // ignore: cast_nullable_to_non_nullable
@@ -69,7 +66,7 @@ abstract class _$$AddMatchOfficialsStateImplCopyWith<$Res>
       __$$AddMatchOfficialsStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, List<Officials> officials});
+  $Res call({List<Officials> officials});
 }
 
 /// @nodoc
@@ -85,11 +82,9 @@ class __$$AddMatchOfficialsStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? officials = null,
   }) {
     return _then(_$AddMatchOfficialsStateImpl(
-      error: freezed == error ? _value.error : error,
       officials: null == officials
           ? _value._officials
           : officials // ignore: cast_nullable_to_non_nullable
@@ -102,11 +97,9 @@ class __$$AddMatchOfficialsStateImplCopyWithImpl<$Res>
 
 class _$AddMatchOfficialsStateImpl implements _AddMatchOfficialsState {
   const _$AddMatchOfficialsStateImpl(
-      {this.error, final List<Officials> officials = const []})
+      {final List<Officials> officials = const []})
       : _officials = officials;
 
-  @override
-  final Object? error;
   final List<Officials> _officials;
   @override
   @JsonKey()
@@ -118,7 +111,7 @@ class _$AddMatchOfficialsStateImpl implements _AddMatchOfficialsState {
 
   @override
   String toString() {
-    return 'AddMatchOfficialsState(error: $error, officials: $officials)';
+    return 'AddMatchOfficialsState(officials: $officials)';
   }
 
   @override
@@ -126,16 +119,13 @@ class _$AddMatchOfficialsStateImpl implements _AddMatchOfficialsState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddMatchOfficialsStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other._officials, _officials));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(_officials));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_officials));
 
   @JsonKey(ignore: true)
   @override
@@ -146,12 +136,9 @@ class _$AddMatchOfficialsStateImpl implements _AddMatchOfficialsState {
 }
 
 abstract class _AddMatchOfficialsState implements AddMatchOfficialsState {
-  const factory _AddMatchOfficialsState(
-      {final Object? error,
-      final List<Officials> officials}) = _$AddMatchOfficialsStateImpl;
+  const factory _AddMatchOfficialsState({final List<Officials> officials}) =
+      _$AddMatchOfficialsStateImpl;
 
-  @override
-  Object? get error;
   @override
   List<Officials> get officials;
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -25,6 +26,16 @@ class MatchDetailInfoView extends ConsumerWidget {
     if (state.loading) {
       return const AppProgressIndicator();
     }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () {
+          // do something
+        },
+      );
+    }
+
     return ListView(
       padding:
           context.mediaQueryPadding + const EdgeInsets.symmetric(horizontal: 8),

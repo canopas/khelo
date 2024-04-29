@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -66,6 +67,13 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         child: AppProgressIndicator(),
       );
     }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.loadTeamById,
+      );
+    }
+
     return Padding(
       padding: context.mediaQueryPadding,
       child: Column(

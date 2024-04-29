@@ -46,19 +46,18 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
   }
 
   void changeCountryCode(code) {
-    state = state.copyWith(code: code, error: null);
+    state = state.copyWith(code: code);
   }
 
   void onPhoneChange(String phone) {
     state = state.copyWith(
-      error: null,
       phone: phone.trim(),
       enableBtn: phone.length > 3,
     );
   }
 
   Future<void> verifyPhoneNumber() async {
-    state = state.copyWith(verifying: true, error: null);
+    state = state.copyWith(verifying: true, actionError: null);
     try {
       _authService.verifyPhoneNumber(
           phoneNumber: state.code.dialCode + state.phone,
@@ -66,14 +65,14 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             state = state.copyWith(verifying: false, signInSuccess: true);
           },
           onVerificationFailed: (error) {
-            state = state.copyWith(verifying: false, error: error);
+            state = state.copyWith(verifying: false, actionError: error);
           },
           onCodeSent: (verificationId, _) {
             state = state.copyWith(
                 verificationId: verificationId, verifying: false);
           });
     } catch (e) {
-      state = state.copyWith(verifying: false, error: e);
+      state = state.copyWith(verifying: false, actionError: e);
       debugPrint(
           "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $e");
     }
@@ -84,7 +83,7 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
 class SignInWithPhoneState with _$SignInWithPhoneState {
   const factory SignInWithPhoneState({
     required CountryCode code,
-    Object? error,
+    Object? actionError,
     String? verificationId,
     @Default(false) bool verifying,
     @Default(false) bool signInSuccess,

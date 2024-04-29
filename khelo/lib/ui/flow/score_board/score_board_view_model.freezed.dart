@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ScoreBoardViewState {
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   InningModel? get currentInning => throw _privateConstructorUsedError;
   InningModel? get otherInning => throw _privateConstructorUsedError;
@@ -75,6 +76,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       MatchModel? match,
       InningModel? currentInning,
       InningModel? otherInning,
@@ -132,6 +134,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? match = freezed,
     Object? currentInning = freezed,
     Object? otherInning = freezed,
@@ -171,6 +174,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -378,6 +382,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       MatchModel? match,
       InningModel? currentInning,
       InningModel? otherInning,
@@ -437,6 +442,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? match = freezed,
     Object? currentInning = freezed,
     Object? otherInning = freezed,
@@ -476,6 +482,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$ScoreBoardViewStateImpl(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -630,6 +637,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
 class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   const _$ScoreBoardViewStateImpl(
       {this.error,
+      this.actionError,
       this.match,
       this.currentInning,
       this.otherInning,
@@ -672,6 +680,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   final Object? error;
+  @override
+  final Object? actionError;
   @override
   final MatchModel? match;
   @override
@@ -779,7 +789,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -788,6 +798,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         (other.runtimeType == runtimeType &&
             other is _$ScoreBoardViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.match, match) || other.match == match) &&
             (identical(other.currentInning, currentInning) ||
                 other.currentInning == currentInning) &&
@@ -855,6 +867,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   int get hashCode => Object.hashAll([
         runtimeType,
         const DeepCollectionEquality().hash(error),
+        const DeepCollectionEquality().hash(actionError),
         match,
         currentInning,
         otherInning,
@@ -904,6 +917,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   const factory _ScoreBoardViewState(
       {final Object? error,
+      final Object? actionError,
       final MatchModel? match,
       final InningModel? currentInning,
       final InningModel? otherInning,
@@ -943,6 +957,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
 
   @override
   Object? get error;
+  @override
+  Object? get actionError;
   @override
   MatchModel? get match;
   @override

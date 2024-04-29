@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
@@ -24,6 +25,16 @@ class MatchDetailOversView extends ConsumerWidget {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () {
+          // do something
+        },
+      );
+    }
+
     if (state.ballScores.isEmpty) {
       return Center(
         child: Padding(

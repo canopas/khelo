@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/sign_in/sign_in_with_phone/sign_in_with_phone_view_model.dart';
@@ -17,6 +18,15 @@ class SignInWithPhoneScreen extends ConsumerWidget {
   SignInWithPhoneScreen({super.key});
 
   final TextEditingController _phoneController = TextEditingController();
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(signInWithPhoneStateProvider.select((value) => value.actionError),
+            (previous, next) {
+          if (next != null) {
+            showErrorSnackBar(context: context, error: next);
+          }
+        });
+  }
 
   void _observeOtp({required BuildContext context, required WidgetRef ref}) {
     ref.listen(
@@ -58,6 +68,7 @@ class SignInWithPhoneScreen extends ConsumerWidget {
       signInWithPhoneStateProvider.select((value) => value.enableBtn),
     );
 
+    _observeActionError(context, ref);
     _observeOtp(context: context, ref: ref);
     _observeSignInSuccess(context: context, ref: ref);
 

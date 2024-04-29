@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -36,6 +38,15 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     runPostFrame(() => notifier.setData(widget.matchId));
   }
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTossDetailStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   void _observePushScoreBoard() {
     ref.listen(
         addTossDetailStateProvider.select((value) => value.pushScoreBoard),
@@ -52,6 +63,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     notifier = ref.watch(addTossDetailStateProvider.notifier);
     final state = ref.watch(addTossDetailStateProvider);
 
+    _observeActionError(context, ref);
     _observePushScoreBoard();
     return AppPage(
       title: context.l10n.add_toss_detail_screen_title,
@@ -62,6 +74,12 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
   Widget _body(AddTossDetailViewNotifier notifier, AddTossDetailState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
+    }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.getMatchById,
+      );
     }
 
     return Stack(

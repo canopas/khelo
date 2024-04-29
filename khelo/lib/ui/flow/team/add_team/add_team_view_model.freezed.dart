@@ -20,6 +20,7 @@ mixin _$AddTeamState {
       throw _privateConstructorUsedError;
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   bool? get isNameAvailable => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
@@ -47,6 +48,7 @@ abstract class $AddTeamStateCopyWith<$Res> {
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
+      Object? actionError,
       String? imageUrl,
       bool? isNameAvailable,
       TeamModel? team,
@@ -80,6 +82,7 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
+    Object? actionError = freezed,
     Object? imageUrl = freezed,
     Object? isNameAvailable = freezed,
     Object? team = freezed,
@@ -102,6 +105,7 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -201,6 +205,7 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
+      Object? actionError,
       String? imageUrl,
       bool? isNameAvailable,
       TeamModel? team,
@@ -235,6 +240,7 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
+    Object? actionError = freezed,
     Object? imageUrl = freezed,
     Object? isNameAvailable = freezed,
     Object? team = freezed,
@@ -257,6 +263,7 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -315,6 +322,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
   const _$AddTeamStateImpl(
       {required this.nameController,
       required this.locationController,
+      this.actionError,
       this.imageUrl,
       this.isNameAvailable,
       this.team,
@@ -333,6 +341,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
   final TextEditingController nameController;
   @override
   final TextEditingController locationController;
+  @override
+  final Object? actionError;
   @override
   final String? imageUrl;
   @override
@@ -372,7 +382,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
 
   @override
   String toString() {
-    return 'AddTeamState(nameController: $nameController, locationController: $locationController, imageUrl: $imageUrl, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
+    return 'AddTeamState(nameController: $nameController, locationController: $locationController, actionError: $actionError, imageUrl: $imageUrl, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
   }
 
   @override
@@ -384,6 +394,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
                 other.nameController == nameController) &&
             (identical(other.locationController, locationController) ||
                 other.locationController == locationController) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.isNameAvailable, isNameAvailable) ||
@@ -414,6 +426,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
       runtimeType,
       nameController,
       locationController,
+      const DeepCollectionEquality().hash(actionError),
       imageUrl,
       isNameAvailable,
       team,
@@ -438,6 +451,7 @@ abstract class _AddTeamState implements AddTeamState {
   const factory _AddTeamState(
       {required final TextEditingController nameController,
       required final TextEditingController locationController,
+      final Object? actionError,
       final String? imageUrl,
       final bool? isNameAvailable,
       final TeamModel? team,
@@ -455,6 +469,8 @@ abstract class _AddTeamState implements AddTeamState {
   TextEditingController get nameController;
   @override
   TextEditingController get locationController;
+  @override
+  Object? get actionError;
   @override
   String? get imageUrl;
   @override

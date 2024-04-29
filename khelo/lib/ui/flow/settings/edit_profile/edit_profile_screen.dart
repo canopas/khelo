@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -26,6 +27,15 @@ class EditProfileScreen extends ConsumerWidget {
 
   final double profileViewHeight = 130;
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(editProfileStateProvider.select((value) => value.actionError),
+            (previous, next) {
+          if (next != null) {
+            showErrorSnackBar(context: context, error: next);
+          }
+        });
+  }
+
   void _observeIsSaved(BuildContext context, WidgetRef ref) {
     ref.listen(editProfileStateProvider.select((state) => state.isSaved),
         (previous, next) {
@@ -44,6 +54,7 @@ class EditProfileScreen extends ConsumerWidget {
     final notifier = ref.watch(editProfileStateProvider.notifier);
     final state = ref.watch(editProfileStateProvider);
 
+    _observeActionError(context, ref);
     _observeIsSaved(context, ref);
 
     return PopScope(

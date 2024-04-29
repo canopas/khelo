@@ -26,6 +26,7 @@ mixin _$AddMatchViewState {
   TextEditingController get groundController =>
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   TeamModel? get teamA => throw _privateConstructorUsedError;
@@ -45,8 +46,8 @@ mixin _$AddMatchViewState {
   BallType get ballType => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get isPowerPlayButtonEnable => throw _privateConstructorUsedError;
-  bool get isSaveBtnEnable => throw _privateConstructorUsedError;
-  bool get isStartBtnEnable => throw _privateConstructorUsedError;
+  AddMatchErrorType? get saveBtnError => throw _privateConstructorUsedError;
+  AddMatchErrorType? get startBtnError => throw _privateConstructorUsedError;
   bool get isAddMatchInProgress => throw _privateConstructorUsedError;
   bool? get pushTossDetailScreen => throw _privateConstructorUsedError;
   bool? get pop => throw _privateConstructorUsedError;
@@ -69,6 +70,7 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       TextEditingController cityController,
       TextEditingController groundController,
       Object? error,
+      Object? actionError,
       String? currentUserId,
       MatchModel? match,
       TeamModel? teamA,
@@ -88,8 +90,8 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       BallType ballType,
       bool loading,
       bool isPowerPlayButtonEnable,
-      bool isSaveBtnEnable,
-      bool isStartBtnEnable,
+      AddMatchErrorType? saveBtnError,
+      AddMatchErrorType? startBtnError,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
       bool? pop});
@@ -118,6 +120,7 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? cityController = null,
     Object? groundController = null,
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? currentUserId = freezed,
     Object? match = freezed,
     Object? teamA = freezed,
@@ -137,8 +140,8 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? ballType = null,
     Object? loading = null,
     Object? isPowerPlayButtonEnable = null,
-    Object? isSaveBtnEnable = null,
-    Object? isStartBtnEnable = null,
+    Object? saveBtnError = freezed,
+    Object? startBtnError = freezed,
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
     Object? pop = freezed,
@@ -165,6 +168,7 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           : groundController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       currentUserId: freezed == currentUserId
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
@@ -241,14 +245,14 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           ? _value.isPowerPlayButtonEnable
           : isPowerPlayButtonEnable // ignore: cast_nullable_to_non_nullable
               as bool,
-      isSaveBtnEnable: null == isSaveBtnEnable
-          ? _value.isSaveBtnEnable
-          : isSaveBtnEnable // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isStartBtnEnable: null == isStartBtnEnable
-          ? _value.isStartBtnEnable
-          : isStartBtnEnable // ignore: cast_nullable_to_non_nullable
-              as bool,
+      saveBtnError: freezed == saveBtnError
+          ? _value.saveBtnError
+          : saveBtnError // ignore: cast_nullable_to_non_nullable
+              as AddMatchErrorType?,
+      startBtnError: freezed == startBtnError
+          ? _value.startBtnError
+          : startBtnError // ignore: cast_nullable_to_non_nullable
+              as AddMatchErrorType?,
       isAddMatchInProgress: null == isAddMatchInProgress
           ? _value.isAddMatchInProgress
           : isAddMatchInProgress // ignore: cast_nullable_to_non_nullable
@@ -316,6 +320,7 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       TextEditingController cityController,
       TextEditingController groundController,
       Object? error,
+      Object? actionError,
       String? currentUserId,
       MatchModel? match,
       TeamModel? teamA,
@@ -335,8 +340,8 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       BallType ballType,
       bool loading,
       bool isPowerPlayButtonEnable,
-      bool isSaveBtnEnable,
-      bool isStartBtnEnable,
+      AddMatchErrorType? saveBtnError,
+      AddMatchErrorType? startBtnError,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
       bool? pop});
@@ -366,6 +371,7 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? cityController = null,
     Object? groundController = null,
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? currentUserId = freezed,
     Object? match = freezed,
     Object? teamA = freezed,
@@ -385,8 +391,8 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? ballType = null,
     Object? loading = null,
     Object? isPowerPlayButtonEnable = null,
-    Object? isSaveBtnEnable = null,
-    Object? isStartBtnEnable = null,
+    Object? saveBtnError = freezed,
+    Object? startBtnError = freezed,
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
     Object? pop = freezed,
@@ -413,6 +419,7 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           : groundController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       currentUserId: freezed == currentUserId
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
@@ -489,14 +496,14 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           ? _value.isPowerPlayButtonEnable
           : isPowerPlayButtonEnable // ignore: cast_nullable_to_non_nullable
               as bool,
-      isSaveBtnEnable: null == isSaveBtnEnable
-          ? _value.isSaveBtnEnable
-          : isSaveBtnEnable // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isStartBtnEnable: null == isStartBtnEnable
-          ? _value.isStartBtnEnable
-          : isStartBtnEnable // ignore: cast_nullable_to_non_nullable
-              as bool,
+      saveBtnError: freezed == saveBtnError
+          ? _value.saveBtnError
+          : saveBtnError // ignore: cast_nullable_to_non_nullable
+              as AddMatchErrorType?,
+      startBtnError: freezed == startBtnError
+          ? _value.startBtnError
+          : startBtnError // ignore: cast_nullable_to_non_nullable
+              as AddMatchErrorType?,
       isAddMatchInProgress: null == isAddMatchInProgress
           ? _value.isAddMatchInProgress
           : isAddMatchInProgress // ignore: cast_nullable_to_non_nullable
@@ -523,6 +530,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       required this.cityController,
       required this.groundController,
       this.error,
+      this.actionError,
       this.currentUserId,
       this.match,
       this.teamA,
@@ -542,8 +550,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       this.ballType = BallType.leather,
       this.loading = false,
       this.isPowerPlayButtonEnable = false,
-      this.isSaveBtnEnable = false,
-      this.isStartBtnEnable = false,
+      this.saveBtnError,
+      this.startBtnError,
       this.isAddMatchInProgress = false,
       this.pushTossDetailScreen = null,
       this.pop = null})
@@ -566,6 +574,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   final TextEditingController groundController;
   @override
   final Object? error;
+  @override
+  final Object? actionError;
   @override
   final String? currentUserId;
   @override
@@ -660,11 +670,9 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   @JsonKey()
   final bool isPowerPlayButtonEnable;
   @override
-  @JsonKey()
-  final bool isSaveBtnEnable;
+  final AddMatchErrorType? saveBtnError;
   @override
-  @JsonKey()
-  final bool isStartBtnEnable;
+  final AddMatchErrorType? startBtnError;
   @override
   @JsonKey()
   final bool isAddMatchInProgress;
@@ -677,7 +685,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
 
   @override
   String toString() {
-    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, currentUserId: $currentUserId, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, isSaveBtnEnable: $isSaveBtnEnable, isStartBtnEnable: $isStartBtnEnable, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
+    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, actionError: $actionError, currentUserId: $currentUserId, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, saveBtnError: $saveBtnError, startBtnError: $startBtnError, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
   }
 
   @override
@@ -697,6 +705,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
             (identical(other.groundController, groundController) ||
                 other.groundController == groundController) &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.currentUserId, currentUserId) ||
                 other.currentUserId == currentUserId) &&
             (identical(other.match, match) || other.match == match) &&
@@ -730,10 +740,10 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
             (identical(
                     other.isPowerPlayButtonEnable, isPowerPlayButtonEnable) ||
                 other.isPowerPlayButtonEnable == isPowerPlayButtonEnable) &&
-            (identical(other.isSaveBtnEnable, isSaveBtnEnable) ||
-                other.isSaveBtnEnable == isSaveBtnEnable) &&
-            (identical(other.isStartBtnEnable, isStartBtnEnable) ||
-                other.isStartBtnEnable == isStartBtnEnable) &&
+            (identical(other.saveBtnError, saveBtnError) ||
+                other.saveBtnError == saveBtnError) &&
+            (identical(other.startBtnError, startBtnError) ||
+                other.startBtnError == startBtnError) &&
             (identical(other.isAddMatchInProgress, isAddMatchInProgress) ||
                 other.isAddMatchInProgress == isAddMatchInProgress) &&
             (identical(other.pushTossDetailScreen, pushTossDetailScreen) ||
@@ -750,6 +760,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         cityController,
         groundController,
         const DeepCollectionEquality().hash(error),
+        const DeepCollectionEquality().hash(actionError),
         currentUserId,
         match,
         teamA,
@@ -769,8 +780,8 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         ballType,
         loading,
         isPowerPlayButtonEnable,
-        isSaveBtnEnable,
-        isStartBtnEnable,
+        saveBtnError,
+        startBtnError,
         isAddMatchInProgress,
         pushTossDetailScreen,
         pop
@@ -792,6 +803,7 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       required final TextEditingController cityController,
       required final TextEditingController groundController,
       final Object? error,
+      final Object? actionError,
       final String? currentUserId,
       final MatchModel? match,
       final TeamModel? teamA,
@@ -811,8 +823,8 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       final BallType ballType,
       final bool loading,
       final bool isPowerPlayButtonEnable,
-      final bool isSaveBtnEnable,
-      final bool isStartBtnEnable,
+      final AddMatchErrorType? saveBtnError,
+      final AddMatchErrorType? startBtnError,
       final bool isAddMatchInProgress,
       final bool? pushTossDetailScreen,
       final bool? pop}) = _$AddMatchViewStateImpl;
@@ -829,6 +841,8 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   TextEditingController get groundController;
   @override
   Object? get error;
+  @override
+  Object? get actionError;
   @override
   String? get currentUserId;
   @override
@@ -868,9 +882,9 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   @override
   bool get isPowerPlayButtonEnable;
   @override
-  bool get isSaveBtnEnable;
+  AddMatchErrorType? get saveBtnError;
   @override
-  bool get isStartBtnEnable;
+  AddMatchErrorType? get startBtnError;
   @override
   bool get isAddMatchInProgress;
   @override

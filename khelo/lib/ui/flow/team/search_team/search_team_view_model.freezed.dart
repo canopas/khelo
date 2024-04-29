@@ -23,6 +23,7 @@ mixin _$SearchTeamState {
   List<TeamModel> get searchResults => throw _privateConstructorUsedError;
   List<TeamModel> get userTeams => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  bool get searchInProgress => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SearchTeamStateCopyWith<SearchTeamState> get copyWith =>
@@ -41,7 +42,8 @@ abstract class $SearchTeamStateCopyWith<$Res> {
       TeamModel? selectedTeam,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
-      bool loading});
+      bool loading,
+      bool searchInProgress});
 
   $TeamModelCopyWith<$Res>? get selectedTeam;
 }
@@ -65,6 +67,7 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
     Object? searchResults = null,
     Object? userTeams = null,
     Object? loading = null,
+    Object? searchInProgress = null,
   }) {
     return _then(_value.copyWith(
       searchController: null == searchController
@@ -87,6 +90,10 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      searchInProgress: null == searchInProgress
+          ? _value.searchInProgress
+          : searchInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -118,7 +125,8 @@ abstract class _$$SearchTeamStateImplCopyWith<$Res>
       TeamModel? selectedTeam,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
-      bool loading});
+      bool loading,
+      bool searchInProgress});
 
   @override
   $TeamModelCopyWith<$Res>? get selectedTeam;
@@ -141,6 +149,7 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
     Object? searchResults = null,
     Object? userTeams = null,
     Object? loading = null,
+    Object? searchInProgress = null,
   }) {
     return _then(_$SearchTeamStateImpl(
       searchController: null == searchController
@@ -164,6 +173,10 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      searchInProgress: null == searchInProgress
+          ? _value.searchInProgress
+          : searchInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -177,7 +190,8 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       this.selectedTeam,
       final List<TeamModel> searchResults = const [],
       final List<TeamModel> userTeams = const [],
-      this.loading = false})
+      this.loading = false,
+      this.searchInProgress = false})
       : _searchResults = searchResults,
         _userTeams = userTeams;
 
@@ -208,10 +222,13 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
   @override
   @JsonKey()
   final bool loading;
+  @override
+  @JsonKey()
+  final bool searchInProgress;
 
   @override
   String toString() {
-    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, searchResults: $searchResults, userTeams: $userTeams, loading: $loading)';
+    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, searchResults: $searchResults, userTeams: $userTeams, loading: $loading, searchInProgress: $searchInProgress)';
   }
 
   @override
@@ -228,7 +245,9 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
                 .equals(other._searchResults, _searchResults) &&
             const DeepCollectionEquality()
                 .equals(other._userTeams, _userTeams) &&
-            (identical(other.loading, loading) || other.loading == loading));
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.searchInProgress, searchInProgress) ||
+                other.searchInProgress == searchInProgress));
   }
 
   @override
@@ -239,7 +258,8 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       selectedTeam,
       const DeepCollectionEquality().hash(_searchResults),
       const DeepCollectionEquality().hash(_userTeams),
-      loading);
+      loading,
+      searchInProgress);
 
   @JsonKey(ignore: true)
   @override
@@ -256,7 +276,8 @@ abstract class _SearchTeamState implements SearchTeamState {
       final TeamModel? selectedTeam,
       final List<TeamModel> searchResults,
       final List<TeamModel> userTeams,
-      final bool loading}) = _$SearchTeamStateImpl;
+      final bool loading,
+      final bool searchInProgress}) = _$SearchTeamStateImpl;
 
   @override
   TextEditingController get searchController;
@@ -270,6 +291,8 @@ abstract class _SearchTeamState implements SearchTeamState {
   List<TeamModel> get userTeams;
   @override
   bool get loading;
+  @override
+  bool get searchInProgress;
   @override
   @JsonKey(ignore: true)
   _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>

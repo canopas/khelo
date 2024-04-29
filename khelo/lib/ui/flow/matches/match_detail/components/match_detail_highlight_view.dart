@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
@@ -62,6 +63,15 @@ class MatchDetailHighlightView extends ConsumerWidget {
   ) {
     if (state.loading) {
       return const AppProgressIndicator();
+    }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () {
+          // do something
+        },
+      );
     }
 
     final teamName = _getTeamNameByInningId(state);

@@ -416,6 +416,6 @@ class TeamDetailStatContent extends ConsumerWidget {
 
     double runRate = totalRuns / totalOvers;
 
-    return runRate;
+    return runRate.isNaN ? 0 : runRate;
   }
 }

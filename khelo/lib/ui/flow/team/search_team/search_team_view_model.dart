@@ -38,29 +38,43 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
       final filteredResult =
           res.where((element) => !excludedIds.contains(element.id)).toList();
 
-      state = state.copyWith(userTeams: filteredResult, loading: false);
+      state = state.copyWith(
+          userTeams: filteredResult, loading: false, error: null);
     } catch (e) {
-      state = state.copyWith(loading: false);
+      state = state.copyWith(loading: false, error: e);
       debugPrint("SearchTeamViewNotifier: error while loading team list -> $e");
     }
   }
 
   Future<void> search(String searchKey) async {
-    if (onlyUserTeams) {
-      final filteredResult = state.userTeams
-          .where((element) => element.name.caseAndSpaceInsensitive
-              .startsWith(searchKey.caseAndSpaceInsensitive))
-          .toList();
-      state = state.copyWith(searchResults: filteredResult);
-    } else {
-      final teams = await _teamService.searchTeam(searchKey);
-      final filteredResult =
-          teams.where((element) => !excludedIds.contains(element.id)).toList();
-      state = state.copyWith(searchResults: filteredResult);
+    try {
+      state = state.copyWith(searchInProgress: true);
+      if (onlyUserTeams) {
+        final filteredResult = state.userTeams
+            .where((element) => element.name.caseAndSpaceInsensitive
+                .startsWith(searchKey.caseAndSpaceInsensitive))
+            .toList();
+        state = state.copyWith(
+            searchResults: filteredResult,
+            error: null,
+            searchInProgress: false);
+      } else {
+        final teams = await _teamService.searchTeam(searchKey);
+        final filteredResult = teams
+            .where((element) => !excludedIds.contains(element.id))
+            .toList();
+        state = state.copyWith(
+            searchResults: filteredResult,
+            error: null,
+            searchInProgress: false);
+      }
+    } catch (e) {
+      state = state.copyWith(searchInProgress: false, error: e);
+      debugPrint("SearchTeamViewNotifier: error while search team -> $e");
     }
   }
 
-  void onSearchChanged(String value) {
+  void onSearchChanged() {
     if (_debounce != null && _debounce!.isActive) {
       _debounce!.cancel();
     }
@@ -92,5 +106,6 @@ class SearchTeamState with _$SearchTeamState {
     @Default([]) List<TeamModel> searchResults,
     @Default([]) List<TeamModel> userTeams,
     @Default(false) bool loading,
+    @Default(false) bool searchInProgress,
   }) = _SearchTeamState;
 }

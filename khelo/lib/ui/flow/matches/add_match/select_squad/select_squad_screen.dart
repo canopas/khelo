@@ -94,7 +94,9 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
         _sectionTitle(
           context,
           context.l10n.select_squad_playing_squad_title,
-          subtitle: context.l10n.select_squad_least_require_text,
+          subtitle: !state.isDoneBtnEnable
+              ? context.l10n.select_squad_least_require_text
+              : null,
         ),
         if (state.squad.isEmpty) ...[
           _emptyList(context.l10n.select_squad_empty_squad_text)
@@ -168,8 +170,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           ),
           Text(
             subtitle,
-            style: AppTextStyle.button
-                .copyWith(color: context.colorScheme.textDisabled),
+            style:
+                AppTextStyle.button.copyWith(color: context.colorScheme.alert),
           ),
         ],
         const SizedBox(

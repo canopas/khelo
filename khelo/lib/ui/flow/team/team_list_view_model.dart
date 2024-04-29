@@ -39,7 +39,7 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
           await _teamService.getUserRelatedTeams(option: state.selectedFilter);
       state = state.copyWith(teams: res, loading: false);
     } catch (e) {
-      state = state.copyWith(loading: false);
+      state = state.copyWith(loading: false, error: e);
       debugPrint("TeamListViewNotifier: error while loading team list -> $e");
     }
   }

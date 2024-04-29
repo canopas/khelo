@@ -62,7 +62,7 @@ class PhoneVerificationViewNotifier
 
   Future<void> resendCode({required String phone}) async {
     try {
-      state = state.copyWith(showErrorVerificationCodeText: false);
+      state = state.copyWith(showErrorVerificationCodeText: false, actionError: null);
       updateResendCodeTimerDuration();
       _authService.verifyPhoneNumber(
         phoneNumber: phone,
@@ -71,13 +71,14 @@ class PhoneVerificationViewNotifier
               state.copyWith(verifying: false, isVerificationComplete: true);
         },
         onVerificationFailed: (error) {
-          state = state.copyWith(error: error);
+          state = state.copyWith(actionError: error);
         },
         onCodeSent: (verificationId, _) {
           state = state.copyWith(verificationId: verificationId);
         },
       );
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in resend otp -> $e");
     }
   }
@@ -85,7 +86,7 @@ class PhoneVerificationViewNotifier
   Future<void> verifyOTP() async {
     if (state.verificationId == null) return;
     state =
-        state.copyWith(verifying: true, showErrorVerificationCodeText: false);
+        state.copyWith(verifying: true, showErrorVerificationCodeText: false, actionError: null);
     try {
       await _authService.verifyOTP(state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
@@ -95,12 +96,12 @@ class PhoneVerificationViewNotifier
             verifying: false, showErrorVerificationCodeText: true);
       } else {
         //network-request-failed
-        state = state.copyWith(verifying: false, error: e);
+        state = state.copyWith(verifying: false, actionError: e);
       }
       debugPrint(
           "PhoneVerificationViewNotifier: error in FirebaseAuthException: verifyOTP -> $e");
     } catch (e) {
-      state = state.copyWith(verifying: false, error: e);
+      state = state.copyWith(verifying: false, actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");
     }
   }
@@ -115,7 +116,7 @@ class PhoneVerificationViewNotifier
 @freezed
 class PhoneVerificationState with _$PhoneVerificationState {
   const factory PhoneVerificationState({
-    Object? error,
+    Object? actionError,
     String? verificationId,
     @Default(false) bool verifying,
     @Default(false) bool enableVerify,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
@@ -15,6 +16,15 @@ import 'package:style/text/app_text_style.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(profileStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
 
   void _observeUserSession(BuildContext context, WidgetRef ref) {
     ref.listen(hasUserSession, (previous, next) {
@@ -29,6 +39,7 @@ class ProfileScreen extends ConsumerWidget {
     final notifier = ref.watch(profileStateProvider.notifier);
     final state = ref.watch(profileStateProvider);
 
+    _observeActionError(context, ref);
     _observeUserSession(context, ref);
     return AppPage(
       title: context.l10n.tab_profile_title,

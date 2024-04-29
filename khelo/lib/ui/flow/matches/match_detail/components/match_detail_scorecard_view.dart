@@ -3,6 +3,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
@@ -24,6 +25,15 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _body(BuildContext context, MatchDetailTabState state) {
     if (state.loading) {
       return const AppProgressIndicator();
+    }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () {
+          // do something
+        },
+      );
     }
 
     if (state.ballScores.isEmpty) {

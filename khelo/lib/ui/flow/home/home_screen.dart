@@ -2,6 +2,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -20,19 +21,27 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(homeViewStateProvider);
+    final notifier = ref.watch(homeViewStateProvider.notifier);
 
     return AppPage(
       title: context.l10n.home_screen_title,
-      body: _body(context, state),
+      body: _body(context, notifier, state),
     );
   }
 
   Widget _body(
     BuildContext context,
+    HomeViewNotifier notifier,
     HomeViewState state,
   ) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
+    }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.loadMatches,
+      );
     }
 
     if (state.matches.isNotEmpty) {

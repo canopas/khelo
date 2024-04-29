@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -13,9 +14,17 @@ class UserStatScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(userStatViewStateProvider);
+    final notifier = ref.watch(userStatViewStateProvider.notifier);
 
     if (state.loading) {
       return const AppProgressIndicator();
+    }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.getUserRelatedBalls,
+      );
     }
 
     return _body(context, state);

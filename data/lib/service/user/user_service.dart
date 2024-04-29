@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,65 +24,93 @@ class UserService {
       this._currentUser, this._currentUserJsonController, this._firestore);
 
   Future<void> getUser(String id) async {
-    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
-    DocumentSnapshot snapshot = await userRef.get();
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-    var userModel = UserModel.fromJson(userData);
-    _currentUserJsonController.state = userModel.toJsonString();
+    try {
+      DocumentReference userRef =
+          _firestore.collection(_collectionName).doc(id);
+      DocumentSnapshot snapshot = await userRef.get();
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      var userModel = UserModel.fromJson(userData);
+      _currentUserJsonController.state = userModel.toJsonString();
+    } catch (error) {
+      throw AppError.fromError(error);
+    }
   }
 
   Future<void> updateUser(UserModel user) async {
-    DocumentReference userRef =
-        _firestore.collection(_collectionName).doc(user.id);
+    try {
+      DocumentReference userRef =
+          _firestore.collection(_collectionName).doc(user.id);
 
-    await userRef.set(user.toJson(), SetOptions(merge: true));
+      await userRef.set(user.toJson(), SetOptions(merge: true));
 
-    _currentUserJsonController.state = user.toJsonString();
+      _currentUserJsonController.state = user.toJsonString();
+    } catch (error) {
+      throw AppError.fromError(error);
+    }
   }
 
   Future<void> deleteUser() async {
-    await _firestore.collection(_collectionName).doc(_currentUser?.id).delete();
-    _currentUserJsonController.state = null;
+    try {
+      await _firestore
+          .collection(_collectionName)
+          .doc(_currentUser?.id)
+          .delete();
+      _currentUserJsonController.state = null;
+    } catch (error) {
+      throw AppError.fromError(error);
+    }
   }
 
   Future<UserModel> getUserById(String id) async {
-    DocumentReference userRef = _firestore.collection(_collectionName).doc(id);
-    DocumentSnapshot snapshot = await userRef.get();
-    Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-    var userModel = UserModel.fromJson(userData);
-    return userModel;
+    try {
+      DocumentReference userRef =
+          _firestore.collection(_collectionName).doc(id);
+      DocumentSnapshot snapshot = await userRef.get();
+      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
+      var userModel = UserModel.fromJson(userData);
+      return userModel;
+    } catch (error) {
+      throw AppError.fromError(error);
+    }
   }
 
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
     List<UserModel> users = [];
+    try {
+      for (final tenIds in ids.chunked(10)) {
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection(_collectionName)
+            .where('id', whereIn: tenIds)
+            .get();
 
-    for (final tenIds in ids.chunked(10)) {
-      QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(_collectionName)
-          .where('id', whereIn: tenIds)
-          .get();
+        users.addAll(snapshot.docs.map((doc) {
+          final data = doc.data();
+          return UserModel.fromJson(data).copyWith(id: doc.id);
+        }).toList());
+      }
 
-      users.addAll(snapshot.docs.map((doc) {
-        final data = doc.data();
-        return UserModel.fromJson(data).copyWith(id: doc.id);
-      }).toList());
+      return users;
+    } catch (error) {
+      throw AppError.fromError(error);
     }
-
-    return users;
   }
 
   Future<List<UserModel>> searchUser(String searchKey) async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection(_collectionName)
-        .where('name_lowercase',
-            isGreaterThanOrEqualTo: searchKey.toLowerCase())
-        .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z')
-        .get();
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection(_collectionName)
+          .where('name_lowercase',
+              isGreaterThanOrEqualTo: searchKey.toLowerCase())
+          .where('name_lowercase', isLessThan: '${searchKey.toLowerCase()}z')
+          .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return UserModel.fromJson(data).copyWith(id: doc.id);
-    }).toList();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return UserModel.fromJson(data).copyWith(id: doc.id);
+      }).toList();
+    } catch (error) {
+      throw AppError.fromError(error);
+    }
   }
 
   void signOutUser() {

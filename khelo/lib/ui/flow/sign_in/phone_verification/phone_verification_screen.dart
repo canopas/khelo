@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/enter_otp_view.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/resend_code_view.dart';
@@ -44,6 +45,16 @@ class _PhoneVerificationScreenState
     super.initState();
   }
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        phoneVerificationStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   void _observeVerificationComplete() {
     ref.listen(
         phoneVerificationStateProvider
@@ -57,6 +68,8 @@ class _PhoneVerificationScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(phoneVerificationStateProvider);
+
+    _observeActionError(context, ref);
     _observeVerificationComplete();
 
     return AppPage(

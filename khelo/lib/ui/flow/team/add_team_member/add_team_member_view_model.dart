@@ -26,11 +26,16 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
       : super(AddTeamMemberState(searchController: TextEditingController()));
 
   Future<void> search(String searchKey) async {
-    final users = await _userService.searchUser(searchKey);
-    state = state.copyWith(searchedUsers: users);
+    try {
+      final users = await _userService.searchUser(searchKey);
+      state = state.copyWith(searchedUsers: users, error: null);
+    } catch (e) {
+      state = state.copyWith(error: e);
+      debugPrint("AddTeamMemberViewNotifier: error while search players -> $e");
+    }
   }
 
-  void onSearchChanged(String value) {
+  void onSearchChanged() {
     if (_debounce != null && _debounce!.isActive) {
       _debounce!.cancel();
     }
@@ -57,7 +62,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
       return;
     }
 
-    state = state.copyWith(isAddInProgress: true);
+    state = state.copyWith(isAddInProgress: true, actionError: null);
     try {
       await _teamService.addPlayersToTeam(
         id,
@@ -65,7 +70,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
       );
       state = state.copyWith(isAddInProgress: false, isAdded: true);
     } catch (e) {
-      state = state.copyWith(isAddInProgress: false);
+      state = state.copyWith(isAddInProgress: false, actionError: e);
       debugPrint(
           "AddTeamMemberViewNotifier: error while adding players to team -> $e");
     }
@@ -83,6 +88,7 @@ class AddTeamMemberState with _$AddTeamMemberState {
   const factory AddTeamMemberState({
     required TextEditingController searchController,
     Object? error,
+    Object? actionError,
     @Default([]) List<UserModel> searchedUsers,
     @Default([]) List<UserModel> selectedUsers,
     @Default(false) bool isAdded,

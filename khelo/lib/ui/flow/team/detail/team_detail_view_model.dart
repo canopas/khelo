@@ -40,7 +40,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
       state = state.copyWith(team: team, loading: false);
       loadTeamMatches();
     } catch (e) {
-      state = state.copyWith(loading: false);
+      state = state.copyWith(loading: false, error: e);
       debugPrint(
           "TeamDetailViewNotifier: error while loading team by id -> $e");
     }

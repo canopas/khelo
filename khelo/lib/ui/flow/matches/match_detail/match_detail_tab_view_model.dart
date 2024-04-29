@@ -56,7 +56,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         }
       },
       onError: (e, stack) {
-        state = state.copyWith(error: e, loading: false);
+        state = state.copyWith(error: state.match == null ? e : null, loading: false);
         debugPrint(
             "MatchDetailTabViewNotifier: error while load match -> $e. \n stack -> $stack");
       },
