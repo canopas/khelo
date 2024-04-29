@@ -243,78 +243,7 @@ class MatchService {
           ));
         }
 
-        controller.add(matches);
-      } catch (error) {
-        controller.addError(AppError.fromError(error));
-      }
-    }, onError: (error) {
-      controller.addError(AppError.fromError(error));
-    });
-
-    return controller.stream;
-  }
-
-  Stream<MatchModel> getMatchStreamById(String id) {
-    StreamController<MatchModel> controller = StreamController<MatchModel>();
-    StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? subscription;
-    subscription = _firestore
-        .collection(_collectionName)
-        .doc(id)
-        .snapshots()
-        .listen((DocumentSnapshot<Map<String, dynamic>> snapshot) async {
-      if (snapshot.exists) {
-        try {
-          AddEditMatchRequest match = AddEditMatchRequest.fromJson(
-              snapshot.data() as Map<String, dynamic>);
-
-          List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          List<UserModel>? umpires =
-              await getUserListFromUserIds(match.umpire_ids);
-          List<UserModel>? commentators =
-              await getUserListFromUserIds(match.commentator_ids);
-          List<UserModel>? scorers =
-              await getUserListFromUserIds(match.scorer_ids);
-
-          UserModel? referee;
-          if (match.referee_id != null) {
-            referee = await _userService.getUserById(match.referee_id!);
-          }
-
-          var matchModel = MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            city: match.city,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            commentators: commentators,
-            referee: referee,
-            scorers: scorers,
-            umpires: umpires,
-            power_play_overs1: match.power_play_overs1 ?? [],
-            power_play_overs2: match.power_play_overs2 ?? [],
-            power_play_overs3: match.power_play_overs3 ?? [],
-            toss_decision: match.toss_decision,
-            toss_winner_id: match.toss_winner_id,
-            current_playing_team_id: match.current_playing_team_id,
-          );
-
-          controller.add(matchModel);
-        } catch (error) {
-          controller.addError(AppError.fromError(error));
-        }
-      } else {
-        controller.close();
-        subscription?.cancel();
-      }
-    }, onError: (error) {
-      controller.addError(AppError.fromError(error));
+      controller.add(matches);
     });
 
     return controller.stream;

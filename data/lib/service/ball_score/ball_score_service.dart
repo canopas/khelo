@@ -87,6 +87,33 @@ class BallScoreService {
     return controller.stream;
   }
 
+  Stream<List<BallScoreModel>> getBallScoresStreamByInningIds(
+      List<String> inningIds) {
+    StreamController<List<BallScoreModel>> controller =
+        StreamController<List<BallScoreModel>>();
+
+    _firestore
+        .collection(_collectionName)
+        .where('inning_id', whereIn: inningIds)
+        .snapshots()
+        .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
+      try {
+        List<BallScoreModel> ballScores = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
+
+        controller.add(ballScores);
+      } catch (error) {
+        controller.addError(error);
+      }
+    }, onError: (error) {
+      controller.addError(error);
+    });
+
+    return controller.stream;
+  }
+
   Future<List<BallScoreModel>> getCurrentUserRelatedBalls() async {
     if (_currentUserId == null) {
       return [];
