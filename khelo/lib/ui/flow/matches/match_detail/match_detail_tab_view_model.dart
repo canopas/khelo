@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
@@ -31,6 +33,9 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late String _matchId;
+  late StreamSubscription matchStreamSubscription;
+  late StreamSubscription inningStreamSubscription;
+  late StreamSubscription ballScoreStreamSubscription;
 
   MatchDetailTabViewNotifier(
     this._matchService,
@@ -45,7 +50,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 
   void loadMatch() {
     state = state.copyWith(loading: true);
-    _matchService.getMatchStreamById(_matchId).listen(
+    matchStreamSubscription = _matchService.getMatchStreamById(_matchId).listen(
       (match) {
         state = state.copyWith(
             match: match,
@@ -72,7 +77,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       return;
     }
     state = state.copyWith(inningsQueryListenerSet: true);
-    _inningService.getInningsStreamByMatchId(matchId: _matchId).listen(
+    inningStreamSubscription = _inningService.getInningsStreamByMatchId(matchId: _matchId).listen(
       (innings) {
         final firstInning = innings.firstWhere((element) =>
             (state.match?.toss_decision == TossDecision.bat &&
@@ -106,7 +111,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
-    _ballScoreService.getBallScoresStreamByInningIds([
+    ballScoreStreamSubscription = _ballScoreService.getBallScoresStreamByInningIds([
       state.firstInning?.id ?? "INVALID ID",
       state.secondInning?.id ?? "INVALID ID"
     ]).listen(
@@ -140,6 +145,18 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 
   onHighlightTeamSelection(String teamId) {
     state = state.copyWith(highlightTeamId: teamId);
+  }
+
+  _cancelStreamSubscription() async {
+    await matchStreamSubscription.cancel();
+    await inningStreamSubscription.cancel();
+    await ballScoreStreamSubscription.cancel();
+  }
+
+  @override
+  void dispose() {
+    _cancelStreamSubscription();
+    super.dispose();
   }
 }
 
