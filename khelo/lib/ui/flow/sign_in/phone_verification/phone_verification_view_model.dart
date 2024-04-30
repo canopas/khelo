@@ -20,6 +20,7 @@ class PhoneVerificationViewNotifier
   final AuthService _authService;
   late Timer timer;
   late String phoneNumber;
+  late String countryCode;
 
   bool firstAutoVerificationComplete = false;
 
@@ -56,9 +57,11 @@ class PhoneVerificationViewNotifier
   void updateVerificationIdAndPhone({
     required String verificationId,
     required String phone,
+    required String code,
   }) {
     state = state.copyWith(verificationId: verificationId);
     phoneNumber = phone;
+    countryCode = code;
   }
 
   Future<void> resendCode({required String countryCode, required String phone}) async {
@@ -90,7 +93,7 @@ class PhoneVerificationViewNotifier
     state =
         state.copyWith(verifying: true, showErrorVerificationCodeText: false, actionError: null);
     try {
-      await _authService.verifyOTP("+91",phoneNumber,state.verificationId!, state.otp);
+      await _authService.verifyOTP(countryCode, phoneNumber, state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
     } on AppError catch (e) {
       if (e.l10nCode == AppErrorL10nCodes.invalidVerificationCode) {

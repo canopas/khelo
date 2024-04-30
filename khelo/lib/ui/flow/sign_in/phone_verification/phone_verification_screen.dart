@@ -42,6 +42,7 @@ class _PhoneVerificationScreenState
       () => notifier.updateVerificationIdAndPhone(
         verificationId: widget.verificationId,
         phone: widget.phoneNumber,
+        code: widget.countryCode,
       ),
     );
     super.initState();
@@ -113,7 +114,9 @@ class _PhoneVerificationScreenState
               const SizedBox(
                 height: 16,
               ),
-              PhoneVerificationResendCodeView(countryCode: widget.countryCode, phoneNumber: widget.phoneNumber),
+              PhoneVerificationResendCodeView(
+                  countryCode: widget.countryCode,
+                  phoneNumber: widget.phoneNumber),
             ],
           ),
         );

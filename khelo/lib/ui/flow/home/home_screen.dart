@@ -64,7 +64,7 @@ class HomeScreen extends ConsumerWidget {
       itemCount: state.matches.length,
       itemBuilder: (context, index) {
         return _matchCell(
-            context, state.matches[(index % state.matches.length).toInt()]);
+            context, state.matches[index]);
       },
     );
   }

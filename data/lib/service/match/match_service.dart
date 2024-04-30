@@ -221,26 +221,29 @@ class MatchService {
         for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
           Map<String, dynamic> mainDocData =
               mainDoc.data() as Map<String, dynamic>;
-          AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+          if (mainDocData['match_status'] == 2) {
+            AddEditMatchRequest match =
+                AddEditMatchRequest.fromJson(mainDocData);
 
-          List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          matches.add(MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            city: match.city,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            toss_winner_id: match.toss_winner_id,
-            toss_decision: match.toss_decision,
-            current_playing_team_id: match.current_playing_team_id,
-          ));
+            List<MatchTeamModel> teams = await getTeamsList(match.teams);
+            matches.add(MatchModel(
+              id: match.id,
+              teams: teams,
+              match_type: match.match_type,
+              number_of_over: match.number_of_over,
+              over_per_bowler: match.over_per_bowler,
+              city: match.city,
+              ground: match.ground,
+              start_time: match.start_time,
+              created_by: match.created_by,
+              ball_type: match.ball_type,
+              pitch_type: match.pitch_type,
+              match_status: match.match_status,
+              toss_winner_id: match.toss_winner_id,
+              toss_decision: match.toss_decision,
+              current_playing_team_id: match.current_playing_team_id,
+            ));
+          }
         }
         controller.add(matches);
       } catch (error, stack) {
@@ -306,14 +309,14 @@ class MatchService {
 
           controller.add(matchModel);
         } catch (error, stack) {
-          controller.addError(AppError.fromError(error,stack));
+          controller.addError(AppError.fromError(error, stack));
         }
       } else {
         controller.close();
         subscription?.cancel();
       }
     }, onError: (error, stack) {
-      controller.addError(AppError.fromError(error,stack));
+      controller.addError(AppError.fromError(error, stack));
     });
 
     return controller.stream;
