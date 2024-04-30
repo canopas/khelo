@@ -9,12 +9,21 @@ extension StringExtension on String? {
 
     switch (formatType) {
       case StringFormats.obscurePhoneNumber:
-        if (this!.length < 13) {
-          return _missing;
+        final splitString = this!.split(" ");
+        if (splitString.length == 1) {
+          if (this!.length < 13) {
+            return _missing;
+          }
+          return context.l10n.common_obscure_phone_number_text(
+              this!.substring(0, 3), this!.substring(this!.length - 2));
+        } else {
+          final countryCode = splitString.first;
+          final lastTwoDigit = splitString
+              .elementAt(1)
+              .substring(splitString.elementAt(1).length - 2);
+          return context.l10n
+              .common_obscure_phone_number_text(countryCode, lastTwoDigit);
         }
-        return context.l10n.common_obscure_phone_number_text(
-            this!.substring(0, 3),
-            this!.substring(this!.length - 2));
     }
   }
 }

@@ -11,6 +11,8 @@ extension AppErrorExtensions on Object {
           return context.l10n.error_no_internet;
         case AppErrorL10nCodes.somethingWentWrongError:
           return context.l10n.error_something_went_wrong;
+        case AppErrorL10nCodes.invalidPhoneNumber:
+          return context.l10n.sign_in_invalid_phone_number_text;
         default:
           return (this as AppError).message ??
               context.l10n.error_something_went_wrong;

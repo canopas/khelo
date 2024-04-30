@@ -68,8 +68,9 @@ class MatchDetailHighlightView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          // do something
+        onRetryTap: () async {
+          await notifier.cancelStreamSubscription();
+          notifier.loadMatch();
         },
       );
     }

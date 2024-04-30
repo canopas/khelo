@@ -20,12 +20,13 @@ class SignInWithPhoneScreen extends ConsumerWidget {
   final TextEditingController _phoneController = TextEditingController();
 
   void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(signInWithPhoneStateProvider.select((value) => value.actionError),
-            (previous, next) {
-          if (next != null) {
-            showErrorSnackBar(context: context, error: next);
-          }
-        });
+    ref.listen(
+        signInWithPhoneStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
   }
 
   void _observeOtp({required BuildContext context, required WidgetRef ref}) {
@@ -35,7 +36,8 @@ class SignInWithPhoneScreen extends ConsumerWidget {
         if (current != null) {
           final state = ref.watch(signInWithPhoneStateProvider);
           final bool? success = await AppRoute.verifyOTP(
-            phoneNumber: state.code.dialCode + state.phone,
+            countryCode: state.code.dialCode,
+            phoneNumber: state.phone,
             verificationId: current,
           ).push<bool>(context);
           if (success != null && success && context.mounted) {
@@ -73,32 +75,34 @@ class SignInWithPhoneScreen extends ConsumerWidget {
     _observeSignInSuccess(context: context, ref: ref);
 
     return AppPage(
-      body: Builder(builder: (context) {
-        return Padding(
-          padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: ListView(
-            children: [
-              Text(
-                context.l10n.sign_in_enter_your_phone_number_text,
-                style: AppTextStyle.header1
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              _phoneInputField(
-                  context: context,
-                  enable: true,
-                  loading: loading,
-                  notifier: notifier),
-              PrimaryButton(
-                context.l10n.sign_in_get_otp_btn_text,
-                enabled: enable,
-                progress: loading,
-                onPressed: () => notifier.verifyPhoneNumber(),
-              ),
-            ],
-          ),
-        );
-      }),
+      body: Builder(
+        builder: (context) {
+          return Padding(
+            padding: context.mediaQueryPadding +
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: ListView(
+              children: [
+                Text(
+                  context.l10n.sign_in_enter_your_phone_number_text,
+                  style: AppTextStyle.header1
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                _phoneInputField(
+                    context: context,
+                    enable: true,
+                    loading: loading,
+                    notifier: notifier),
+                PrimaryButton(
+                  context.l10n.sign_in_get_otp_btn_text,
+                  enabled: enable,
+                  progress: loading,
+                  onPressed: notifier.verifyPhoneNumber,
+                ),
+              ],
+            ),
+          );
+        }
+      ),
     );
   }
 

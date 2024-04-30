@@ -17,10 +17,12 @@ class MatchDetailSquadView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
-    return _body(context, state);
+    final notifier = ref.watch(matchDetailTabStateProvider.notifier);
+    return _body(context, notifier, state);
   }
 
-  _body(BuildContext context, MatchDetailTabState state){
+  _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -28,8 +30,9 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          // do something
+        onRetryTap: () async {
+          await notifier.cancelStreamSubscription();
+          notifier.loadMatch();
         },
       );
     }

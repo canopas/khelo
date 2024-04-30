@@ -1,3 +1,5 @@
+import 'package:data/errors/app_error.dart';
+import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,77 +19,108 @@ class AuthService {
   Stream<User?> get user => _auth.authStateChanges();
 
   Future<void> verifyPhoneNumber({
+    required String countryCode,
     required String phoneNumber,
     Function(String, int?)? onCodeSent,
     Function(PhoneAuthCredential, UserCredential)? onVerificationCompleted,
-    Function(FirebaseAuthException)? onVerificationFailed,
+    Function(AppError)? onVerificationFailed,
     Function(String)? onCodeAutoRetrievalTimeout,
   }) async {
-    await _auth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (phoneAuthCredential) async {
-        final userCredential =
-            await _auth.signInWithCredential(phoneAuthCredential);
-        _onVerificationSuccess(userCredential);
-        onVerificationCompleted != null
-            ? onVerificationCompleted(phoneAuthCredential, userCredential)
-            : null;
-      },
-      verificationFailed: (FirebaseAuthException e) =>
-          onVerificationFailed != null ? onVerificationFailed(e) : null,
-      codeSent: (String verificationId, int? resendToken) =>
-          onCodeSent != null ? onCodeSent(verificationId, resendToken) : null,
-      codeAutoRetrievalTimeout: (verificationId) =>
-          onCodeAutoRetrievalTimeout != null
-              ? onCodeAutoRetrievalTimeout(verificationId)
-              : null,
-    );
+    try {
+      await _auth.verifyPhoneNumber(
+        phoneNumber: countryCode + phoneNumber,
+        verificationCompleted: (phoneAuthCredential) async {
+          final userCredential =
+              await _auth.signInWithCredential(phoneAuthCredential);
+          _onVerificationSuccess(countryCode, phoneNumber, userCredential);
+          onVerificationCompleted != null
+              ? onVerificationCompleted(phoneAuthCredential, userCredential)
+              : null;
+        },
+        verificationFailed: (FirebaseAuthException e) =>
+            onVerificationFailed != null
+                ? onVerificationFailed(AppError.fromError(e, e.stackTrace))
+                : null,
+        codeSent: (String verificationId, int? resendToken) =>
+            onCodeSent != null ? onCodeSent(verificationId, resendToken) : null,
+        codeAutoRetrievalTimeout: (verificationId) =>
+            onCodeAutoRetrievalTimeout != null
+                ? onCodeAutoRetrievalTimeout(verificationId)
+                : null,
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
-  Future<void> verifyOTP(String verificationId, String otp) async {
-    final credential = PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: otp,
-    );
+  Future<void> verifyOTP(String countryCode, String phoneNumber,
+      String verificationId, String otp) async {
+    try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otp,
+      );
 
-    final userCredential = await _auth.signInWithCredential(credential);
-    await _onVerificationSuccess(userCredential);
+      final userCredential = await _auth.signInWithCredential(credential);
+      await _onVerificationSuccess(countryCode, phoneNumber, userCredential);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
-  Future<void> _onVerificationSuccess(UserCredential credential) async {
-    if (credential.additionalUserInfo?.isNewUser ?? false) {
-      if (_auth.currentUser == null) {
-        return;
+  Future<void> _onVerificationSuccess(
+      String countryCode, String phoneNumber, UserCredential credential) async {
+    try {
+      if (credential.additionalUserInfo?.isNewUser ?? false) {
+        if (_auth.currentUser == null) {
+          return;
+        }
+        final phone = "$countryCode ${phoneNumber.caseAndSpaceInsensitive}";
+        UserModel user = UserModel(
+            id: _auth.currentUser!.uid,
+            phone: phone,
+            created_at: DateTime.now());
+        await _userService.updateUser(user);
+      } else {
+        final uid = credential.user?.uid;
+        if (uid == null) {
+          return;
+        }
+        await _userService.getUser(uid);
       }
-      UserModel user = UserModel(
-          id: _auth.currentUser!.uid,
-          phone: _auth.currentUser!.phoneNumber,
-          created_at: DateTime.now());
-      await _userService.updateUser(user);
-    } else {
-      final uid = credential.user?.uid;
-      if (uid == null) {
-        return;
-      }
-      await _userService.getUser(uid);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
   Future<void> reauthenticateAndDeleteAccount() async {
-    final providerData = _auth.currentUser?.providerData.first;
-    if (PhoneAuthProvider().providerId == providerData?.providerId) {
-      await _auth.currentUser?.reauthenticateWithProvider(PhoneAuthProvider());
-      deleteAccount();
+    try {
+      final providerData = _auth.currentUser?.providerData.first;
+      if (PhoneAuthProvider().providerId == providerData?.providerId) {
+        await _auth.currentUser
+            ?.reauthenticateWithProvider(PhoneAuthProvider());
+        deleteAccount();
+      }
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
-    _userService.signOutUser();
+    try {
+      await _auth.signOut();
+      _userService.signOutUser();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<void> deleteAccount() async {
-    await _auth.currentUser?.delete();
-    await _userService.deleteUser();
+    try {
+      await _auth.currentUser?.delete();
+      await _userService.deleteUser();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 }

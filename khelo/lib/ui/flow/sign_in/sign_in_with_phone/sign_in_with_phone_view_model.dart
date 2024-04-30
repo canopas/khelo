@@ -60,12 +60,15 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
     state = state.copyWith(verifying: true, actionError: null);
     try {
       _authService.verifyPhoneNumber(
-          phoneNumber: state.code.dialCode + state.phone,
+          countryCode: state.code.dialCode,
+          phoneNumber: state.phone,
           onVerificationCompleted: (phoneCredential, _) {
             state = state.copyWith(verifying: false, signInSuccess: true);
           },
           onVerificationFailed: (error) {
             state = state.copyWith(verifying: false, actionError: error);
+            debugPrint(
+                "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
           },
           onCodeSent: (verificationId, _) {
             state = state.copyWith(

@@ -41,8 +41,8 @@ class TeamService {
       }
       await batch.commit();
       return newTeamId;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -71,8 +71,8 @@ class TeamService {
           players: member);
 
       return team;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -129,8 +129,8 @@ class TeamService {
       }
 
       return teams;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -165,16 +165,16 @@ class TeamService {
       }
 
       return teams;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
   Future<void> deleteTeam(String teamId) async {
     try {
       await _firestore.collection(_collectionName).doc(teamId).delete();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -185,8 +185,8 @@ class TeamService {
 
       await teamRef.set(
           {'players': FieldValue.arrayUnion(players)}, SetOptions(merge: true));
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -197,8 +197,8 @@ class TeamService {
           _firestore.collection(_collectionName).doc(teamId);
 
       await teamRef.update({'players': FieldValue.arrayRemove(playerIds)});
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -210,8 +210,8 @@ class TeamService {
           .get();
 
       return teamSnap.docs.isEmpty;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -249,8 +249,8 @@ class TeamService {
       }
 
       return teams;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -259,8 +259,8 @@ class TeamService {
     try {
       final userList = await _userService.getUsersByIds(users);
       return userList;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 }

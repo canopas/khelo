@@ -38,8 +38,8 @@ class BallScoreService {
 
       await batch.commit();
       return newScoreId;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -55,8 +55,8 @@ class BallScoreService {
         final data = doc.data();
         return BallScoreModel.fromJson(data).copyWith(id: doc.id);
       }).toList();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -77,11 +77,11 @@ class BallScoreService {
         }).toList();
 
         controller.add(ballScores);
-      } catch (error) {
-        controller.addError(AppError.fromError(error));
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
       }
-    }, onError: (error) {
-      controller.addError(AppError.fromError(error));
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
     });
 
     return controller.stream;
@@ -105,16 +105,16 @@ class BallScoreService {
         final data = doc.data();
         return BallScoreModel.fromJson(data).copyWith(id: doc.id);
       }).toList();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
   Future<void> deleteBall(String ballId) async {
     try {
       await _firestore.collection(_collectionName).doc(ballId).delete();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 }

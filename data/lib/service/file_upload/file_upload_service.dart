@@ -30,8 +30,8 @@ class FileUploadService {
             .putFile(file);
         var downloadUrl = await snapshot.ref.getDownloadURL();
         return downloadUrl;
-      } catch (error) {
-        throw AppError.fromError(error);
+      } catch (error, stack) {
+        throw AppError.fromError(error, stack);
       }
     } else {
       throw Exception("uploadProfileImage: file doesn't exist.");
@@ -41,8 +41,8 @@ class FileUploadService {
   Future<void> deleteUploadedImage(String imgUrl) async {
     try {
       await _firebaseStorage.refFromURL(imgUrl).delete();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 }

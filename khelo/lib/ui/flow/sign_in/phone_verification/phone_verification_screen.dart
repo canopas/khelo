@@ -15,11 +15,13 @@ import 'package:style/text/app_text_style.dart';
 import '../../../../domain/extensions/widget_extension.dart';
 
 class PhoneVerificationScreen extends ConsumerStatefulWidget {
+  final String countryCode;
   final String phoneNumber;
   final String verificationId;
 
   const PhoneVerificationScreen({
     super.key,
+    required this.countryCode,
     required this.phoneNumber,
     required this.verificationId,
   });
@@ -111,7 +113,7 @@ class _PhoneVerificationScreenState
               const SizedBox(
                 height: 16,
               ),
-              PhoneVerificationResendCodeView(phoneNumber: widget.phoneNumber),
+              PhoneVerificationResendCodeView(countryCode: widget.countryCode, phoneNumber: widget.phoneNumber),
             ],
           ),
         );

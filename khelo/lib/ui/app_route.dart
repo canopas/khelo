@@ -201,10 +201,14 @@ class AppRoute {
       );
 
   static AppRoute verifyOTP(
-          {required String verificationId, required String phoneNumber}) =>
+          {required String countryCode,
+          required String verificationId,
+          required String phoneNumber}) =>
       AppRoute(pathPhoneNumberVerification,
           builder: (_) => PhoneVerificationScreen(
-              phoneNumber: phoneNumber, verificationId: verificationId));
+              countryCode: countryCode,
+              phoneNumber: phoneNumber,
+              verificationId: verificationId));
 
   static AppRoute editProfile({bool isToCreateAccount = false}) => AppRoute(
       pathEditProfile,

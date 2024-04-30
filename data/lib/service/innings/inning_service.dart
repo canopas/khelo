@@ -32,8 +32,8 @@ class InningsService {
 
       await batch.commit();
       return newInningId;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -45,8 +45,8 @@ class InningsService {
       Map<String, dynamic> inningData = snapshot.data() as Map<String, dynamic>;
       var inningModel = InningModel.fromJson(inningData);
       return inningModel;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -62,8 +62,8 @@ class InningsService {
         final data = doc.data();
         return InningModel.fromJson(data).copyWith(id: doc.id);
       }).toList();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -84,11 +84,11 @@ class InningsService {
           return InningModel.fromJson(data).copyWith(id: doc.id);
         }).toList();
         controller.add(innings);
-      } catch (error) {
-        controller.addError(AppError.fromError(error));
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
       }
-    }, onError: (error) {
-      controller.addError(AppError.fromError(error));
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
     });
 
     return controller.stream;
@@ -119,8 +119,8 @@ class InningsService {
       }
 
       await batch.commit();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -132,8 +132,8 @@ class InningsService {
       DocumentReference batInningRef =
           _firestore.collection(_collectionName).doc(inningId);
       await batInningRef.update({'innings_status': status.value});
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 }

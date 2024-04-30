@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:data/errors/app_error.dart';
+import 'package:data/errors/app_error_l10n_codes.dart';
 import 'package:data/service/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -60,11 +61,12 @@ class PhoneVerificationViewNotifier
     phoneNumber = phone;
   }
 
-  Future<void> resendCode({required String phone}) async {
+  Future<void> resendCode({required String countryCode, required String phone}) async {
     try {
       state = state.copyWith(showErrorVerificationCodeText: false, actionError: null);
       updateResendCodeTimerDuration();
       _authService.verifyPhoneNumber(
+        countryCode: countryCode,
         phoneNumber: phone,
         onVerificationCompleted: (phoneCredential, _) {
           state =
@@ -88,18 +90,17 @@ class PhoneVerificationViewNotifier
     state =
         state.copyWith(verifying: true, showErrorVerificationCodeText: false, actionError: null);
     try {
-      await _authService.verifyOTP(state.verificationId!, state.otp);
+      await _authService.verifyOTP("+91",phoneNumber,state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "invalid-verification-code") {
+    } on AppError catch (e) {
+      if (e.l10nCode == AppErrorL10nCodes.invalidVerificationCode) {
         state = state.copyWith(
             verifying: false, showErrorVerificationCodeText: true);
       } else {
-        //network-request-failed
         state = state.copyWith(verifying: false, actionError: e);
       }
       debugPrint(
-          "PhoneVerificationViewNotifier: error in FirebaseAuthException: verifyOTP -> $e");
+          "PhoneVerificationViewNotifier: error in AppError: verifyOTP -> $e");
     } catch (e) {
       state = state.copyWith(verifying: false, actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");

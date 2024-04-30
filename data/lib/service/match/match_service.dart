@@ -71,8 +71,8 @@ class MatchService {
       }
 
       return matches;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -114,8 +114,8 @@ class MatchService {
       }
 
       return matches;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -161,8 +161,8 @@ class MatchService {
       }
 
       return matches;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -202,8 +202,8 @@ class MatchService {
       }
 
       return matches;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -243,11 +243,11 @@ class MatchService {
           ));
         }
         controller.add(matches);
-      } catch (error) {
-        throw AppError.fromError(error);
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
       }
-    }, onError: (error) {
-      controller.addError(error);
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
     });
 
     return controller.stream;
@@ -305,15 +305,15 @@ class MatchService {
           );
 
           controller.add(matchModel);
-        } catch (error) {
-          controller.addError(error);
+        } catch (error, stack) {
+          controller.addError(AppError.fromError(error,stack));
         }
       } else {
         controller.close();
         subscription?.cancel();
       }
-    }, onError: (error) {
-      controller.addError(error);
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error,stack));
     });
 
     return controller.stream;
@@ -365,8 +365,8 @@ class MatchService {
       );
 
       return matchModel;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -400,8 +400,8 @@ class MatchService {
 
       await batch.commit();
       return newMatchId;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -417,8 +417,8 @@ class MatchService {
       };
 
       await matchRef.update(tossDetails);
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -432,8 +432,8 @@ class MatchService {
       };
 
       await matchRef.update(matchStatus);
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -472,8 +472,8 @@ class MatchService {
 
         transaction.update(matchRef, {'teams': existingTeams});
       });
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -483,8 +483,8 @@ class MatchService {
           _firestore.collection(_collectionName).doc(matchId);
 
       await matchRef.update({'current_playing_team_id': teamId});
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -523,16 +523,16 @@ class MatchService {
 
         transaction.update(matchRef, {'teams': existingTeams});
       });
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
   Future<void> deleteMatch(String matchId) async {
     try {
       await _firestore.collection(_collectionName).doc(matchId).delete();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -544,8 +544,8 @@ class MatchService {
     try {
       List<UserModel> users = await _userService.getUsersByIds(userIds);
       return users;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -569,8 +569,8 @@ class MatchService {
       });
 
       return teams;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -593,8 +593,8 @@ class MatchService {
       }).toList();
 
       return squad;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 }

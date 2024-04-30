@@ -31,8 +31,8 @@ class UserService {
       Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
       var userModel = UserModel.fromJson(userData);
       _currentUserJsonController.state = userModel.toJsonString();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -44,8 +44,8 @@ class UserService {
       await userRef.set(user.toJson(), SetOptions(merge: true));
 
       _currentUserJsonController.state = user.toJsonString();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -56,8 +56,8 @@ class UserService {
           .doc(_currentUser?.id)
           .delete();
       _currentUserJsonController.state = null;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -69,8 +69,8 @@ class UserService {
       Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
       var userModel = UserModel.fromJson(userData);
       return userModel;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -90,8 +90,8 @@ class UserService {
       }
 
       return users;
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 
@@ -108,8 +108,8 @@ class UserService {
         final data = doc.data();
         return UserModel.fromJson(data).copyWith(id: doc.id);
       }).toList();
-    } catch (error) {
-      throw AppError.fromError(error);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
   }
 

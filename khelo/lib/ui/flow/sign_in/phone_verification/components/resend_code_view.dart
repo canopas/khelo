@@ -8,10 +8,12 @@ import '../../../../../domain/extensions/context_extensions.dart';
 import '../phone_verification_view_model.dart';
 
 class PhoneVerificationResendCodeView extends ConsumerWidget {
+  final String countryCode;
   final String phoneNumber;
 
   const PhoneVerificationResendCodeView({
     super.key,
+    required this.countryCode,
     required this.phoneNumber,
   });
 
@@ -32,7 +34,8 @@ class PhoneVerificationResendCodeView extends ConsumerWidget {
         OnTapScale(
           enabled: activeResendCodeBtn,
           onTap: () async {
-            await notifier.resendCode(phone: phoneNumber);
+            await notifier.resendCode(
+                countryCode: countryCode, phone: phoneNumber);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

@@ -17,11 +17,13 @@ class MatchDetailOversView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
+    final notifier = ref.watch(matchDetailTabStateProvider.notifier);
 
-    return _body(context, state);
+    return _body(context, notifier, state);
   }
 
-  Widget _body(BuildContext context, MatchDetailTabState state) {
+  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -29,8 +31,9 @@ class MatchDetailOversView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          // do something
+        onRetryTap: () async {
+          await notifier.cancelStreamSubscription();
+          notifier.loadMatch();
         },
       );
     }
@@ -75,7 +78,7 @@ class MatchDetailOversView extends ConsumerWidget {
 
       children.add(_overCellView(context, over));
     }
-    if(oversList.isNotEmpty){
+    if (oversList.isNotEmpty) {
       children.add(
         _teamNameTitleView(context, state, inningId),
       );
