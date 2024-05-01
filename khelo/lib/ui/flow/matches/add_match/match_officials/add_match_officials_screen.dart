@@ -7,7 +7,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/flow/matches/add_match/match_officials/components/search_user_screen.dart';
+import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_screen.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';

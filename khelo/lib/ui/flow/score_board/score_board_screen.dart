@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -36,6 +37,15 @@ class ScoreBoardScreen extends ConsumerStatefulWidget {
 
 class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   late ScoreBoardViewNotifier notifier;
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(scoreBoardStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
 
   void _observeShowSelectBatsManSheet(
     BuildContext context,
@@ -319,6 +329,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     notifier = ref.watch(scoreBoardStateProvider.notifier);
     final state = ref.watch(scoreBoardStateProvider);
 
+    _observeActionError(context, ref);
     _observeShowSelectBatsManSheet(
         context, ref, state.continueWithInjuredPlayers);
     _observeShowSelectBowlerSheet(
@@ -387,6 +398,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   ) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
+    }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.getMatchById,
+      );
     }
 
     return Column(

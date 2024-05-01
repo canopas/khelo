@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
@@ -16,14 +17,27 @@ class MatchDetailOversView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
+    final notifier = ref.watch(matchDetailTabStateProvider.notifier);
 
-    return _body(context, state);
+    return _body(context, notifier, state);
   }
 
-  Widget _body(BuildContext context, MatchDetailTabState state) {
+  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () async {
+          await notifier.cancelStreamSubscription();
+          notifier.loadMatch();
+        },
+      );
+    }
+
     if (state.ballScores.isEmpty) {
       return Center(
         child: Padding(
@@ -64,7 +78,7 @@ class MatchDetailOversView extends ConsumerWidget {
 
       children.add(_overCellView(context, over));
     }
-    if(oversList.isNotEmpty){
+    if (oversList.isNotEmpty) {
       children.add(
         _teamNameTitleView(context, state, inningId),
       );

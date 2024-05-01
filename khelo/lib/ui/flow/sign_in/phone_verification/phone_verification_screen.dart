@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/enter_otp_view.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/resend_code_view.dart';
@@ -14,11 +15,13 @@ import 'package:style/text/app_text_style.dart';
 import '../../../../domain/extensions/widget_extension.dart';
 
 class PhoneVerificationScreen extends ConsumerStatefulWidget {
+  final String countryCode;
   final String phoneNumber;
   final String verificationId;
 
   const PhoneVerificationScreen({
     super.key,
+    required this.countryCode,
     required this.phoneNumber,
     required this.verificationId,
   });
@@ -39,9 +42,20 @@ class _PhoneVerificationScreenState
       () => notifier.updateVerificationIdAndPhone(
         verificationId: widget.verificationId,
         phone: widget.phoneNumber,
+        code: widget.countryCode,
       ),
     );
     super.initState();
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        phoneVerificationStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
   }
 
   void _observeVerificationComplete() {
@@ -57,6 +71,8 @@ class _PhoneVerificationScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(phoneVerificationStateProvider);
+
+    _observeActionError(context, ref);
     _observeVerificationComplete();
 
     return AppPage(
@@ -98,7 +114,9 @@ class _PhoneVerificationScreenState
               const SizedBox(
                 height: 16,
               ),
-              PhoneVerificationResendCodeView(phoneNumber: widget.phoneNumber),
+              PhoneVerificationResendCodeView(
+                  countryCode: widget.countryCode,
+                  phoneNumber: widget.phoneNumber),
             ],
           ),
         );

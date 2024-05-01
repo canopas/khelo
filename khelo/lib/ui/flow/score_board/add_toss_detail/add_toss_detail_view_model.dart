@@ -30,7 +30,7 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
     state = state.copyWith(loading: true);
     try {
       final match = await _matchService.getMatchById(matchId!);
-      state = state.copyWith(match: match, loading: false);
+      state = state.copyWith(match: match, loading: false, error: null);
     } catch (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -60,7 +60,8 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
         state.tossWinnerDecision == null) {
       return;
     }
-    state = state.copyWith(isTossDetailUpdateInProgress: true);
+    state =
+        state.copyWith(isTossDetailUpdateInProgress: true, actionError: null);
     try {
       await _matchService.updateTossDetails(
         state.match!.id!,
@@ -70,7 +71,8 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
       state = state.copyWith(
           isTossDetailUpdateInProgress: false, pushScoreBoard: true);
     } catch (e) {
-      state = state.copyWith(isTossDetailUpdateInProgress: false);
+      state =
+          state.copyWith(isTossDetailUpdateInProgress: false, actionError: e);
       debugPrint(
           "AddTossDetailViewNotifier: error while update toss detail -> $e");
     }
@@ -81,6 +83,7 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
 class AddTossDetailState with _$AddTossDetailState {
   const factory AddTossDetailState({
     Object? error,
+    Object? actionError,
     MatchModel? match,
     TossDecision? tossWinnerDecision,
     String? tossWinnerTeamId,

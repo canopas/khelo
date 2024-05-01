@@ -57,18 +57,19 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
             highlightTeamId: match.teams.first.team.id,
             error: null);
         if (!state.inningsQueryListenerSet) {
-          loadInnings();
+          _loadInnings();
         }
       },
       onError: (e, stack) {
-        state = state.copyWith(error: e, loading: false);
+        state = state.copyWith(
+            error: state.match == null ? e : null, loading: false);
         debugPrint(
             "MatchDetailTabViewNotifier: error while load match -> $e. \n stack -> $stack");
       },
     );
   }
 
-  void loadInnings() {
+  void _loadInnings() {
     if (state.match == null) {
       return;
     }
@@ -95,7 +96,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         state = state.copyWith(
             firstInning: firstInning, secondInning: secondInning, error: null);
         if (!state.ballScoreQueryListenerSet) {
-          loadBallScores();
+          _loadBallScores();
         }
       },
       onError: (e, stack) {
@@ -106,7 +107,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     );
   }
 
-  void loadBallScores() {
+  void _loadBallScores() {
     if (state.firstInning == null || state.secondInning == null) {
       return;
     }
@@ -149,7 +150,9 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     state = state.copyWith(highlightTeamId: teamId);
   }
 
-  _cancelStreamSubscription() async {
+  cancelStreamSubscription() async {
+    state = state.copyWith(
+        inningsQueryListenerSet: false, ballScoreQueryListenerSet: false);
     await matchStreamSubscription.cancel();
     await inningStreamSubscription.cancel();
     await ballScoreStreamSubscription.cancel();
@@ -157,7 +160,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    cancelStreamSubscription();
     super.dispose();
   }
 }

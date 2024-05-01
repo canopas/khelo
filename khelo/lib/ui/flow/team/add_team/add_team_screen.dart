@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/image_picker_sheet.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -42,6 +43,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     runPostFrame(() => notifier.setData(editTeam: widget.editTeam));
   }
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTeamStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   void _observeTeam(BuildContext context, WidgetRef ref) {
     ref.listen(
       addTeamStateProvider.select((value) => value.team),
@@ -69,6 +79,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     notifier = ref.watch(addTeamStateProvider.notifier);
     final state = ref.watch(addTeamStateProvider);
 
+    _observeActionError(context, ref);
     _observeTeam(context, ref);
     _observePop(context, ref);
 

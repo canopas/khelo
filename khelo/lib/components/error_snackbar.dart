@@ -1,6 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:khelo/domain/extensions/app_error_extension.dart';
+
+void showErrorSnackBar({
+  required BuildContext context,
+  required Object error,
+  SnackBarLength length = SnackBarLength.short,
+}) {
+  final message = error.l10nMessage(context);
+  showSnackBar(
+    context,
+    message,
+    length: length,
+  );
+}
 
 void showSnackBar(
   BuildContext context,

@@ -1,6 +1,7 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -22,6 +23,7 @@ class MatchListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchListStateProvider);
+    final notifier = ref.watch(matchListStateProvider.notifier);
 
     return Column(
       children: [
@@ -29,7 +31,7 @@ class MatchListScreen extends ConsumerWidget {
         const SizedBox(
           height: 24,
         ),
-        _matchList(context, state),
+        _matchList(context, notifier, state),
       ],
     );
   }
@@ -56,12 +58,22 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchList(BuildContext context, MatchListViewState state) {
+  Widget _matchList(
+    BuildContext context,
+    MatchListViewNotifier notifier,
+    MatchListViewState state,
+  ) {
     if (state.loading) {
       return const Expanded(
         child: Center(
           child: AppProgressIndicator(),
         ),
+      );
+    }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.loadMatches,
       );
     }
 

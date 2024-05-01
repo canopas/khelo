@@ -45,7 +45,7 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
         debugPrint("TeamListViewNotifier: error while loading team list -> $e");
       });
     } catch (e) {
-      state = state.copyWith(loading: false); // TODO: handle error with merge
+      state = state.copyWith(loading: false, error: e);
       debugPrint("TeamListViewNotifier: error while loading team list -> $e");
     }
   }

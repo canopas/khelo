@@ -24,6 +24,7 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
         team: team,
         squad: squad,
         isDoneBtnEnable: squad.length >= 2,
+        isOkayBtnEnable: captainId != null && adminId != null,
         captainId: captainId,
         adminId: adminId);
   }
@@ -63,7 +64,6 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
 @freezed
 class SelectSquadViewState with _$SelectSquadViewState {
   const factory SelectSquadViewState({
-    Object? error,
     TeamModel? team,
     String? captainId,
     String? adminId,

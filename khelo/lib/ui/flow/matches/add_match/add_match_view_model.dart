@@ -41,6 +41,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     this.matchId = matchId;
     if (matchId != null) {
       getMatchById();
+    } else {
+      onTextChange();
     }
   }
 
@@ -101,7 +103,6 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
                   ...commentator,
                   ...scorer,
                 ],
-          isStartBtnEnable: true,
           loading: false);
     } catch (e) {
       state = state.copyWith(error: e, loading: false);
@@ -111,6 +112,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
   Future<void> addMatch({bool startMatch = false}) async {
     try {
+      state = state.copyWith(actionError: null);
+
       final totalOvers = state.totalOverController.text.trim();
       final overPerBowler = state.overPerBowlerController.text.trim();
       final city = state.cityController.text.trim();
@@ -195,6 +198,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
               startMatch ? state.match?.toss_winner_id == null : null,
           pop: !startMatch);
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("AddMatchViewNotifier: error while adding match -> $e");
     }
   }
@@ -269,20 +273,25 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     final city = state.cityController.text.trim();
     final ground = state.groundController.text.trim();
 
-    final isBtnEnable = totalOvers.isNotEmpty &&
-        overPerBowler.isNotEmpty &&
-        city.isNotEmpty &&
-        ground.isNotEmpty &&
-        state.teamA != null &&
-        state.teamB != null &&
-        (state.squadA?.length ?? 0) >= 2 &&
-        (state.squadB?.length ?? 0) >= 2;
+    AddMatchErrorType? error;
+    final overCount = int.tryParse(totalOvers);
+
+    if (city.isEmpty || ground.isEmpty || overPerBowler.isEmpty) {
+      error = AddMatchErrorType.emptyFields;
+    } else if ((overCount ?? 0) < 1) {
+      error = AddMatchErrorType.invalidOverCount;
+    } else if (state.teamA == null || state.teamB == null) {
+      error = AddMatchErrorType.unSelectedTeam;
+    } else if ((state.squadA?.length ?? 0) < 2 ||
+        (state.squadB?.length ?? 0) < 2) {
+      error = AddMatchErrorType.invalidSquad;
+    }
 
     state = state.copyWith(
         isPowerPlayButtonEnable:
             totalOvers.isNotEmpty && (int.tryParse(totalOvers) ?? 0) > 0,
-        isSaveBtnEnable: isBtnEnable,
-        isStartBtnEnable: isBtnEnable);
+        saveBtnError: error,
+        startBtnError: error);
   }
 
   void onPowerPlayChange(List<List<int>> powerPlay) {
@@ -298,10 +307,12 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     if (matchId == null) {
       return;
     }
+    state = state.copyWith(actionError: null);
     try {
       await _matchService.deleteMatch(matchId!);
       state = state.copyWith(pop: true);
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("AddMatchViewNotifier: error while delete Match -> $e");
     }
   }
@@ -316,6 +327,7 @@ class AddMatchViewState with _$AddMatchViewState {
     required TextEditingController cityController,
     required TextEditingController groundController,
     Object? error,
+    Object? actionError,
     String? currentUserId,
     MatchModel? match,
     TeamModel? teamA,
@@ -335,8 +347,8 @@ class AddMatchViewState with _$AddMatchViewState {
     @Default(BallType.leather) BallType ballType,
     @Default(false) bool loading,
     @Default(false) bool isPowerPlayButtonEnable,
-    @Default(false) bool isSaveBtnEnable,
-    @Default(false) bool isStartBtnEnable,
+    AddMatchErrorType? saveBtnError,
+    AddMatchErrorType? startBtnError,
     @Default(false) bool isAddMatchInProgress,
     @Default(null) bool? pushTossDetailScreen,
     @Default(null) bool? pop,
@@ -353,6 +365,26 @@ enum TeamType {
         return context.l10n.add_match_team_a_title;
       case TeamType.b:
         return context.l10n.add_match_team_b_title;
+    }
+  }
+}
+
+enum AddMatchErrorType {
+  invalidOverCount,
+  emptyFields,
+  unSelectedTeam,
+  invalidSquad;
+
+  String getString(BuildContext context) {
+    switch (this) {
+      case AddMatchErrorType.invalidOverCount:
+        return context.l10n.add_match_invalid_over_count_error;
+      case AddMatchErrorType.emptyFields:
+        return context.l10n.add_match_empty_fields_error;
+      case AddMatchErrorType.unSelectedTeam:
+        return context.l10n.add_match_unselected_team_error;
+      case AddMatchErrorType.invalidSquad:
+        return context.l10n.add_match_invalid_squad_error;
     }
   }
 }

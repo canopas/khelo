@@ -10,14 +10,19 @@ const _bufferTimeMillis = Duration(milliseconds: 300);
 enum AppProgressIndicatorSize { small, normal }
 
 class AppProgressIndicator extends StatefulWidget {
-  final AppProgressIndicatorSize size;
+  final double? radius;
+  final AppProgressIndicatorSize? size;
   final Color? color;
 
   const AppProgressIndicator({
-    super.key,
-    this.size = AppProgressIndicatorSize.normal,
+    Key? key,
+    this.radius,
+    AppProgressIndicatorSize? size,
     this.color,
-  });
+  })  : assert(radius == null || size == null,
+            "Cannot provide both a radius and a size."),
+        size = radius == null ? size ?? AppProgressIndicatorSize.normal : null,
+        super(key: key);
 
   @override
   State<AppProgressIndicator> createState() => _AppProgressIndicatorState();
@@ -46,7 +51,8 @@ class _AppProgressIndicatorState extends State<AppProgressIndicator> {
   }
 
   Widget _indicator() {
-    final radius = widget.size == AppProgressIndicatorSize.small ? 10.0 : 16.0;
+    final radius = widget.radius ??
+        (widget.size == AppProgressIndicatorSize.small ? 10.0 : 16.0);
 
     if (Platform.isIOS) {
       return CupertinoActivityIndicator(

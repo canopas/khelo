@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:data/api/user/user_models.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
@@ -62,7 +61,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
   Future<void> onImageSelect(String imagePath) async {
     try {
-      state = state.copyWith(isImageUploading: true);
+      state = state.copyWith(isImageUploading: true, actionError: null);
       final imageUrl = await _fileUploadService.uploadProfileImage(
           imagePath, ImageUploadType.team);
       final prevUrl = state.imageUrl;
@@ -73,7 +72,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       state = state.copyWith(imageUrl: imageUrl, isImageUploading: false);
       onValueChange();
     } catch (e) {
-      state = state.copyWith(isImageUploading: false);
+      state = state.copyWith(isImageUploading: false, actionError: e);
       debugPrint("AddTeamViewNotifier: error while image upload -> $e");
     }
   }
@@ -87,7 +86,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
   Future<void> onAddBtnTap() async {
     try {
-      state = state.copyWith(isAddInProgress: true);
+      state = state.copyWith(isAddInProgress: true, actionError: null);
       final String? previousImageUrl;
       if (state.editTeam?.profile_img_url != null &&
           state.imageUrl != state.editTeam?.profile_img_url) {
@@ -150,7 +149,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         state = state.copyWith(isAddInProgress: false, team: teamModel);
       }
     } catch (e) {
-      state = state.copyWith(isAddInProgress: false);
+      state = state.copyWith(isAddInProgress: false, actionError: e);
       debugPrint("AddTeamViewNotifier: error while adding team detail -> $e");
     }
   }
@@ -210,7 +209,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     if (state.editTeam == null) {
       return;
     }
-
+    state = state.copyWith(actionError: null);
     try {
       String? teamProfileImageUrl;
       String? currentImageUrl;
@@ -236,6 +235,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         await deleteUnusedImage(currentImageUrl);
       } // do not merge above both if-conditions in if-else or any other control-flow, at a time both variable may have non-null value
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("AddTeamViewNotifier: error while delete team -> $e");
     }
   }
@@ -252,6 +252,7 @@ class AddTeamState with _$AddTeamState {
   const factory AddTeamState({
     required TextEditingController nameController,
     required TextEditingController locationController,
+    Object? actionError,
     String? imageUrl,
     bool? isNameAvailable,
     TeamModel? team,
