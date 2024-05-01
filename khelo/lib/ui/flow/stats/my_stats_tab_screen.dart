@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/stats/my_stats_tab_view_model.dart';
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_screen.dart';
+import 'package:khelo/ui/flow/stats/user_match/user_match_list_view_model.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
+import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -24,7 +27,8 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
 
   late PageController _controller;
 
-  late MyStatsTabViewNotifier notifier;
+  late UserMatchListViewNotifier _userMatchListNotifier;
+  late UserStatViewNotifier _userStatNotifier;
 
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
@@ -33,7 +37,14 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(myStatsTabStateProvider.notifier);
+    _userMatchListNotifier = ref.read(userMatchListStateProvider.notifier);
+    _userStatNotifier = ref.read(userStatViewStateProvider.notifier);
+
+    runPostFrame(() {
+      _userMatchListNotifier.loadUserMatches();
+      _userStatNotifier.getUserRelatedBalls();
+    });
+
     _controller = PageController(
       initialPage: ref.read(myStatsTabStateProvider).selectedTab,
     );
@@ -41,18 +52,21 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(myStatsTabStateProvider.notifier);
+    final notifier = ref.watch(myStatsTabStateProvider.notifier);
+    _userMatchListNotifier = ref.watch(userMatchListStateProvider.notifier);
+    _userStatNotifier = ref.watch(userStatViewStateProvider.notifier);
+
     return AppPage(
       title: context.l10n.my_stat_screen_title,
       body: Builder(
         builder: (context) {
-          return _content(context, ref);
+          return _content(context, notifier);
         },
       ),
     );
   }
 
-  Widget _content(BuildContext context, WidgetRef ref) {
+  Widget _content(BuildContext context, MyStatsTabViewNotifier notifier) {
     return SafeArea(
       child: Column(
         children: [

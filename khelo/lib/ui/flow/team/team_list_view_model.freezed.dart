@@ -20,6 +20,7 @@ mixin _$TeamListViewState {
   DateTime? get showFilterOptionSheet => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
   List<TeamModel> get teams => throw _privateConstructorUsedError;
+  List<TeamModel> get filteredTeams => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   TeamFilterOption get selectedFilter => throw _privateConstructorUsedError;
 
@@ -39,6 +40,7 @@ abstract class $TeamListViewStateCopyWith<$Res> {
       DateTime? showFilterOptionSheet,
       String? currentUserId,
       List<TeamModel> teams,
+      List<TeamModel> filteredTeams,
       bool loading,
       TeamFilterOption selectedFilter});
 }
@@ -60,6 +62,7 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
     Object? showFilterOptionSheet = freezed,
     Object? currentUserId = freezed,
     Object? teams = null,
+    Object? filteredTeams = null,
     Object? loading = null,
     Object? selectedFilter = null,
   }) {
@@ -76,6 +79,10 @@ class _$TeamListViewStateCopyWithImpl<$Res, $Val extends TeamListViewState>
       teams: null == teams
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
+              as List<TeamModel>,
+      filteredTeams: null == filteredTeams
+          ? _value.filteredTeams
+          : filteredTeams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
       loading: null == loading
           ? _value.loading
@@ -102,6 +109,7 @@ abstract class _$$TeamListViewStateImplCopyWith<$Res>
       DateTime? showFilterOptionSheet,
       String? currentUserId,
       List<TeamModel> teams,
+      List<TeamModel> filteredTeams,
       bool loading,
       TeamFilterOption selectedFilter});
 }
@@ -121,6 +129,7 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
     Object? showFilterOptionSheet = freezed,
     Object? currentUserId = freezed,
     Object? teams = null,
+    Object? filteredTeams = null,
     Object? loading = null,
     Object? selectedFilter = null,
   }) {
@@ -137,6 +146,10 @@ class __$$TeamListViewStateImplCopyWithImpl<$Res>
       teams: null == teams
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
+              as List<TeamModel>,
+      filteredTeams: null == filteredTeams
+          ? _value._filteredTeams
+          : filteredTeams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
       loading: null == loading
           ? _value.loading
@@ -158,9 +171,11 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
       this.showFilterOptionSheet,
       this.currentUserId,
       final List<TeamModel> teams = const [],
+      final List<TeamModel> filteredTeams = const [],
       this.loading = true,
       this.selectedFilter = TeamFilterOption.all})
-      : _teams = teams;
+      : _teams = teams,
+        _filteredTeams = filteredTeams;
 
   @override
   final Object? error;
@@ -177,6 +192,15 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
     return EqualUnmodifiableListView(_teams);
   }
 
+  final List<TeamModel> _filteredTeams;
+  @override
+  @JsonKey()
+  List<TeamModel> get filteredTeams {
+    if (_filteredTeams is EqualUnmodifiableListView) return _filteredTeams;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_filteredTeams);
+  }
+
   @override
   @JsonKey()
   final bool loading;
@@ -186,7 +210,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
 
   @override
   String toString() {
-    return 'TeamListViewState(error: $error, showFilterOptionSheet: $showFilterOptionSheet, currentUserId: $currentUserId, teams: $teams, loading: $loading, selectedFilter: $selectedFilter)';
+    return 'TeamListViewState(error: $error, showFilterOptionSheet: $showFilterOptionSheet, currentUserId: $currentUserId, teams: $teams, filteredTeams: $filteredTeams, loading: $loading, selectedFilter: $selectedFilter)';
   }
 
   @override
@@ -200,6 +224,8 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
             (identical(other.currentUserId, currentUserId) ||
                 other.currentUserId == currentUserId) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
+            const DeepCollectionEquality()
+                .equals(other._filteredTeams, _filteredTeams) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.selectedFilter, selectedFilter) ||
                 other.selectedFilter == selectedFilter));
@@ -212,6 +238,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
       showFilterOptionSheet,
       currentUserId,
       const DeepCollectionEquality().hash(_teams),
+      const DeepCollectionEquality().hash(_filteredTeams),
       loading,
       selectedFilter);
 
@@ -229,6 +256,7 @@ abstract class _TeamListViewState implements TeamListViewState {
       final DateTime? showFilterOptionSheet,
       final String? currentUserId,
       final List<TeamModel> teams,
+      final List<TeamModel> filteredTeams,
       final bool loading,
       final TeamFilterOption selectedFilter}) = _$TeamListViewStateImpl;
 
@@ -240,6 +268,8 @@ abstract class _TeamListViewState implements TeamListViewState {
   String? get currentUserId;
   @override
   List<TeamModel> get teams;
+  @override
+  List<TeamModel> get filteredTeams;
   @override
   bool get loading;
   @override

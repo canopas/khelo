@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
@@ -67,45 +69,31 @@ class TeamService {
     return team;
   }
 
-  Future<List<TeamModel>> getUserRelatedTeams({
-    TeamFilterOption option = TeamFilterOption.all,
-  }) async {
-    QuerySnapshot mainCollectionSnapshot;
-
-    switch (option) {
-      case TeamFilterOption.all:
-        mainCollectionSnapshot = await _firestore
-            .collection(_collectionName)
-            .where(
-              Filter.or(
-                Filter('created_by', isEqualTo: _currentUserId),
-                Filter('players', arrayContains: _currentUserId),
-              ),
-            )
-            .get();
-      case TeamFilterOption.createdByMe:
-        mainCollectionSnapshot = await _firestore
-            .collection(_collectionName)
-            .where('created_by', isEqualTo: _currentUserId)
-            .get();
-      case TeamFilterOption.memberMe:
-        mainCollectionSnapshot = await _firestore
-            .collection(_collectionName)
-            .where('players', arrayContains: _currentUserId)
-            .get();
+  Stream<List<TeamModel>> getUserRelatedTeams() {
+    if (_currentUserId == null) {
+      return Stream.value([]);
     }
 
-    List<TeamModel> teams = [];
+    return _firestore
+        .collection(_collectionName)
+        .where(
+          Filter.or(
+            Filter('created_by', isEqualTo: _currentUserId),
+            Filter('players', arrayContains: _currentUserId),
+          ),
+        )
+        .snapshots()
+        .asyncMap((snapshot) async {
+      List<TeamModel> teams = [];
+      for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
+        AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
+            mainDoc.data() as Map<String, dynamic>);
 
-    for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
-      AddTeamRequestModel teamRequestModel =
-          AddTeamRequestModel.fromJson(mainDoc.data() as Map<String, dynamic>);
+        final member = (teamRequestModel.players?.isNotEmpty ?? false)
+            ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+            : null;
 
-      final member = (teamRequestModel.players?.isNotEmpty ?? false)
-          ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
-          : null;
-
-      final team = TeamModel(
+        final team = TeamModel(
           name: teamRequestModel.name,
           name_lowercase: teamRequestModel.name_lowercase,
           id: teamRequestModel.id,
@@ -113,12 +101,15 @@ class TeamService {
           created_at: teamRequestModel.created_at,
           created_by: teamRequestModel.created_by,
           profile_img_url: teamRequestModel.profile_img_url,
-          players: member);
+          players: member,
+        );
 
-      teams.add(team);
-    }
-
-    return teams;
+        teams.add(team);
+      }
+      return teams;
+    }).handleError((error) {
+      throw error; // TODO: error handling with merge
+    });
   }
 
   Future<List<TeamModel>> getUserOwnedTeams() async {
@@ -222,10 +213,4 @@ class TeamService {
     final userList = await _userService.getUsersByIds(users);
     return userList;
   }
-}
-
-enum TeamFilterOption {
-  all,
-  createdByMe,
-  memberMe;
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,22 +16,33 @@ final userMatchListStateProvider = StateNotifierProvider.autoDispose<
 
 class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
   final MatchService _matchService;
+  late StreamSubscription _matchesStreamSubscription;
 
   UserMatchListViewNotifier(this._matchService)
-      : super(const UserMatchListState()) {
-    loadUserMatches();
-  }
+      : super(const UserMatchListState());
 
   Future<void> loadUserMatches() async {
     state = state.copyWith(loading: true);
     try {
-      final matches = await _matchService.getCurrentUserPlayedMatches();
-      state = state.copyWith(matches: matches, loading: false);
+      _matchesStreamSubscription =
+          _matchService.getCurrentUserPlayedMatches().listen((matches) {
+        state = state.copyWith(matches: matches, loading: false);
+      }, onError: (e) {
+        state = state.copyWith(error: e, loading: false); // TODO: handle error with merge
+        debugPrint(
+            "UserMatchListViewNotifier: error while loading user matches -> $e");
+      });
     } catch (e) {
-      state = state.copyWith(error: e, loading: false);
+      state = state.copyWith(error: e, loading: false); // TODO: handle error with merge
       debugPrint(
           "UserMatchListViewNotifier: error while loading user matches -> $e");
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _matchesStreamSubscription.cancel();
+    super.dispose();
   }
 }
 

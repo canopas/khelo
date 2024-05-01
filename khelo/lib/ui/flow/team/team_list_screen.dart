@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
@@ -48,10 +47,12 @@ class TeamListScreen extends ConsumerWidget {
     return Stack(
       children: [
         ListView.separated(
+          itemCount: state.filteredTeams.length,
           padding: context.mediaQueryPadding +
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemBuilder: (context, index) {
-            final team = state.teams[index];
+            final team = state.filteredTeams[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,12 +73,6 @@ class TeamListScreen extends ConsumerWidget {
                   showMoreOptionButton: state.currentUserId == team.created_by,
                 ),
               ],
-            );
-          },
-          itemCount: state.teams.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
             );
           },
         ),

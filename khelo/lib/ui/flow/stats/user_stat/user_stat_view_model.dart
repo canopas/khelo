@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -22,11 +23,10 @@ final userStatViewStateProvider =
 
 class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
   final BallScoreService _ballScoreService;
+  late StreamSubscription _ballScoreStreamSubscription;
 
   UserStatViewNotifier(this._ballScoreService, String? userId)
-      : super(UserStatViewState(currentUserId: userId)) {
-    getUserRelatedBalls();
-  }
+      : super(UserStatViewState(currentUserId: userId));
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
@@ -35,13 +35,31 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
   Future<void> getUserRelatedBalls() async {
     state = state.copyWith(loading: true);
     try {
-      final ballScores = await _ballScoreService.getCurrentUserRelatedBalls();
-      state = state.copyWith(ballList: ballScores, loading: false);
+      _ballScoreStreamSubscription =
+          _ballScoreService.getCurrentUserRelatedBalls().listen((ballScores) {
+        state = state.copyWith(ballList: ballScores, loading: false);
+      }, onError: (e) {
+        state = state.copyWith(
+            error: e, loading: false); // TODO: handle error with merge
+        debugPrint(
+            "UserStatViewNotifier: error while getting user related balls -> $e");
+      });
     } catch (e) {
-      state = state.copyWith(error: e, loading: false);
+      state = state.copyWith(
+          error: e, loading: false); // TODO: handle error with merge
       debugPrint(
           "UserStatViewNotifier: error while getting user related balls -> $e");
     }
+  }
+
+  _cancelStreamSubscription() {
+    _ballScoreStreamSubscription.cancel();
+  }
+
+  @override
+  void dispose() {
+    _cancelStreamSubscription();
+    super.dispose();
   }
 }
 

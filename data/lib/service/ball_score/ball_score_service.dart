@@ -79,23 +79,38 @@ class BallScoreService {
     return controller.stream;
   }
 
-  Future<List<BallScoreModel>> getCurrentUserRelatedBalls() async {
+  Stream<List<BallScoreModel>> getCurrentUserRelatedBalls() {
     if (_currentUserId == null) {
-      return [];
+      return Stream.value([]);
     }
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection(_collectionName)
-        .where(Filter.or(
-            Filter("bowler_id", isEqualTo: _currentUserId),
-            Filter("batsman_id", isEqualTo: _currentUserId),
-            Filter("wicket_taker_id", isEqualTo: _currentUserId),
-            Filter("player_out_id", isEqualTo: _currentUserId)))
-        .get();
+    StreamController<List<BallScoreModel>> controller =
+        StreamController<List<BallScoreModel>>();
+    try {
+      _firestore
+          .collection(_collectionName)
+          .where(Filter.or(
+              Filter("bowler_id", isEqualTo: _currentUserId),
+              Filter("batsman_id", isEqualTo: _currentUserId),
+              Filter("wicket_taker_id", isEqualTo: _currentUserId),
+              Filter("player_out_id", isEqualTo: _currentUserId)))
+          .snapshots()
+          .listen((snapshot) {
+        try {
+          final ballList = snapshot.docs.map((doc) {
+            final data = doc.data();
+            return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+          }).toList();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-    }).toList();
+          controller.add(ballList);
+        } catch (error) {
+          controller.addError(error);
+        }
+      });
+    } catch (error) {
+      controller.addError(error);
+    }
+
+    return controller.stream;
   }
 
   Future<void> deleteBall(String ballId) async {

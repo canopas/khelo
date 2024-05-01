@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -21,13 +22,12 @@ final matchListStateProvider = StateNotifierProvider.autoDispose<
 
 class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   final MatchService _matchService;
+  late StreamSubscription _matchesStreamSubscription;
 
   MatchListViewNotifier(this._matchService, String? userId)
       : super(MatchListViewState(
           currentUserId: userId,
-        )) {
-    loadMatches();
-  }
+        ));
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
@@ -36,13 +36,29 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   Future<void> loadMatches() async {
     state = state.copyWith(loading: true);
     try {
-      final matches = await _matchService.getCurrentUserRelatedMatches();
-      state = state.copyWith(matches: matches, loading: false);
+      _matchesStreamSubscription =
+          _matchService.getCurrentUserRelatedMatches().listen((matches) {
+        state = state.copyWith(matches: matches, loading: false);
+      }, onError: (e) {
+        state = state.copyWith(loading: false, error: e);
+        debugPrint(
+            "MatchListViewNotifier: error while load matches -> $e"); // TODO: handle error with merge
+      });
     } catch (e, stack) {
       state = state.copyWith(loading: false, error: e);
       debugPrint(
-          "MatchListViewNotifier: error while load matches -> $e ,\nstack: $stack");
+          "MatchListViewNotifier: error while load matches -> $e ,\nstack: $stack"); // TODO: handle error with merge
     }
+  }
+
+  _cancelStreamSubscription() async {
+    await _matchesStreamSubscription.cancel();
+  }
+
+  @override
+  void dispose() {
+    _cancelStreamSubscription();
+    super.dispose();
   }
 }
 

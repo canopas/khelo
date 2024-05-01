@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/match_list_screen.dart';
+import 'package:khelo/ui/flow/matches/match_list_view_model.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
@@ -26,7 +28,8 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
 
   late PageController _controller;
 
-  late MyGameTabViewNotifier notifier;
+  late MatchListViewNotifier _matchListNotifier;
+  late TeamListViewNotifier _teamListNotifier;
 
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
@@ -35,25 +38,35 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(myGameTabViewStateProvider.notifier);
+    _matchListNotifier = ref.read(matchListStateProvider.notifier);
+    _teamListNotifier = ref.read(teamListViewStateProvider.notifier);
+
     _controller = PageController(
       initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
     );
+
+    runPostFrame(() {
+      _matchListNotifier.loadMatches();
+      _teamListNotifier.loadTeamList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(myGameTabViewStateProvider.notifier);
+    final notifier = ref.watch(myGameTabViewStateProvider.notifier);
+    _matchListNotifier = ref.watch(matchListStateProvider.notifier);
+    _teamListNotifier = ref.watch(teamListViewStateProvider.notifier);
+
     return AppPage(
       body: Builder(
         builder: (context) {
-          return _content(context, ref);
+          return _content(context, notifier);
         },
       ),
     );
   }
 
-  Widget _content(BuildContext context, WidgetRef ref) {
+  Widget _content(BuildContext context, MyGameTabViewNotifier notifier) {
     return SafeArea(
       child: Column(
         children: [
