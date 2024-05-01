@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -31,6 +33,15 @@ class AddMatchScreen extends ConsumerStatefulWidget {
 
 class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   late AddMatchViewNotifier notifier;
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addMatchViewStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
 
   void _observePushTossDetailScreen(
     BuildContext context,
@@ -75,6 +86,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     notifier = ref.watch(addMatchViewStateProvider.notifier);
     final state = ref.watch(addMatchViewStateProvider);
 
+    _observeActionError(context, ref);
     _observePushTossDetailScreen(context, ref, notifier.matchId);
     _observePop(context, ref);
 
@@ -87,7 +99,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           _deleteMatchButton(context, onDelete: notifier.deleteMatch),
         _scheduleMatchButton(
           context,
-          isSaveBtnEnable: state.isSaveBtnEnable,
+          saveBtnError: state.saveBtnError,
           onSchedule: () => notifier.addMatch(),
         ),
       ],
@@ -105,14 +117,19 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
 
   Widget _scheduleMatchButton(
     BuildContext context, {
-    required bool isSaveBtnEnable,
+    AddMatchErrorType? saveBtnError,
     required Function() onSchedule,
   }) {
     return IconButton(
-      onPressed: isSaveBtnEnable ? onSchedule : null,
+      onPressed: () => saveBtnError == null
+          ? onSchedule()
+          : showErrorSnackBar(
+              context: context,
+              error: saveBtnError.getString(context),
+            ),
       icon: Icon(
         Icons.alarm,
-        color: isSaveBtnEnable
+        color: saveBtnError == null
             ? context.colorScheme.primary
             : context.colorScheme.textDisabled,
       ),
@@ -142,6 +159,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.getMatchById,
+      );
+    }
+
     return ListView(
       padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
       children: [
@@ -195,17 +219,22 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _selectTeamCell(context, notifier, state, TeamType.a),
-          Text(
-            context.l10n.add_match_versus_short_title,
-            style: AppTextStyle.header1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          _selectTeamCell(context, notifier, state, TeamType.b),
-        ],
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _selectTeamCell(context, notifier, state, TeamType.a),
+            Center(
+              child: Text(
+                context.l10n.add_match_versus_short_title,
+                style: AppTextStyle.header1
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+            ),
+            _selectTeamCell(context, notifier, state, TeamType.b),
+          ],
+        ),
       ),
     );
   }
@@ -217,70 +246,85 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     TeamType type,
   ) {
     final TeamModel? team = type == TeamType.a ? state.teamA : state.teamB;
-    return Column(
-      children: [
-        OnTapScale(
-          onTap: () async {
-            final team = await AppRoute.searchTeam(
-              excludedIds: [
-                state.teamA?.id ?? "INVALID ID",
-                state.teamB?.id ?? "INVALID ID"
-              ],
-              onlyUserTeams: type == TeamType.a,
-            ).push<TeamModel>(context);
-            if (team != null && context.mounted) {
-              notifier.onTeamSelect(team, type);
-            }
-          },
-          child: Container(
-            height: 120,
-            width: 120,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: context.colorScheme.containerLowOnSurface,
-                shape: BoxShape.circle,
-                image: (team != null && team.profile_img_url != null)
-                    ? DecorationImage(
-                        image:
-                            CachedNetworkImageProvider(team.profile_img_url!),
-                        fit: BoxFit.cover)
-                    : null,
-                border: Border.all(
-                    width: 2,
-                    color: context.colorScheme.containerNormalOnSurface)),
-            child: (team == null)
-                ? Text(
-                    type.getString(context),
-                    style: AppTextStyle.header1
-                        .copyWith(color: context.colorScheme.textDisabled),
-                  )
-                : (team.profile_img_url == null)
-                    ? Text(
-                        team.name[0].toUpperCase(),
-                        style: AppTextStyle.header1.copyWith(
-                            color: context.colorScheme.textDisabled,
-                            fontSize: 45),
-                      )
-                    : null,
-          ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        if (team != null) ...[
-          Text(
-            team.name,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.header4
-                .copyWith(color: context.colorScheme.textSecondary),
-            maxLines: 2,
+    final validSquad = team == null
+        ? true
+        : type == TeamType.a
+            ? (state.squadA?.length ?? 0) >= 2 &&
+                state.teamAAdminId != null &&
+                state.teamACaptainId != null
+            : (state.squadB?.length ?? 0) >= 2 &&
+                state.teamBAdminId != null &&
+                state.teamBCaptainId != null;
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          OnTapScale(
+            onTap: () async {
+              final team = await AppRoute.searchTeam(
+                excludedIds: [
+                  state.teamA?.id ?? "INVALID ID",
+                  state.teamB?.id ?? "INVALID ID"
+                ],
+                onlyUserTeams: type == TeamType.a,
+              ).push<TeamModel>(context);
+              if (team != null && context.mounted) {
+                notifier.onTeamSelect(team, type);
+              }
+            },
+            child: Container(
+              height: 120,
+              width: 120,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: context.colorScheme.containerLowOnSurface,
+                  shape: BoxShape.circle,
+                  image: (team != null && team.profile_img_url != null)
+                      ? DecorationImage(
+                          image:
+                              CachedNetworkImageProvider(team.profile_img_url!),
+                          fit: BoxFit.cover)
+                      : null,
+                  border: Border.all(
+                      width: 2,
+                      color: validSquad
+                          ? context.colorScheme.containerNormalOnSurface
+                          : context.colorScheme.alert)),
+              child: (team == null)
+                  ? Text(
+                      type.getString(context),
+                      style: AppTextStyle.header1
+                          .copyWith(color: context.colorScheme.textDisabled),
+                    )
+                  : (team.profile_img_url == null)
+                      ? Text(
+                          team.name[0].toUpperCase(),
+                          style: AppTextStyle.header1.copyWith(
+                              color: context.colorScheme.textDisabled,
+                              fontSize: 45),
+                        )
+                      : null,
+            ),
           ),
           const SizedBox(
-            height: 4,
+            height: 16,
           ),
-          _selectSquadButton(context, notifier, state, team, type),
+          if (team != null) ...[
+            Text(
+              team.name,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.header4
+                  .copyWith(color: context.colorScheme.textSecondary),
+              maxLines: 2,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            _selectSquadButton(
+                context, notifier, state, team, type, validSquad),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -290,6 +334,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     AddMatchViewState state,
     TeamModel team,
     TeamType type,
+    bool isValidSquad,
   ) {
     return OnTapScale(
         onTap: () async {
@@ -308,8 +353,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         },
         child: Text(
           context.l10n.add_match_select_squad_title,
-          style:
-              AppTextStyle.button.copyWith(color: context.colorScheme.primary),
+          style: AppTextStyle.button.copyWith(
+              color: isValidSquad
+                  ? context.colorScheme.primary
+                  : context.colorScheme.alert),
         ));
   }
 
@@ -483,17 +530,22 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: OnTapScale(
           onTap: () async {
-            final res = await AppRoute.powerPlay(
-                    totalOvers: int.parse(state.totalOverController.text),
-                    firstPowerPlay: state.firstPowerPlay,
-                    secondPowerPlay: state.secondPowerPlay,
-                    thirdPowerPlay: state.thirdPowerPlay)
-                .push<List<List<int>>>(context);
-            if (res != null && context.mounted) {
-              notifier.onPowerPlayChange(res);
+            if (state.isPowerPlayButtonEnable) {
+              final res = await AppRoute.powerPlay(
+                      totalOvers: int.parse(state.totalOverController.text),
+                      firstPowerPlay: state.firstPowerPlay,
+                      secondPowerPlay: state.secondPowerPlay,
+                      thirdPowerPlay: state.thirdPowerPlay)
+                  .push<List<List<int>>>(context);
+              if (res != null && context.mounted) {
+                notifier.onPowerPlayChange(res);
+              }
+            } else {
+              showErrorSnackBar(
+                  context: context,
+                  error: AddMatchErrorType.invalidOverCount.getString(context));
             }
           },
-          enabled: state.isPowerPlayButtonEnable,
           child: Text(
             context.l10n.add_match_power_play_overs_title,
             textAlign: TextAlign.center,
@@ -721,9 +773,12 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     return BottomStickyOverlay(
       child: PrimaryButton(
         context.l10n.add_match_start_match_title,
-        enabled: state.isStartBtnEnable,
         progress: state.isAddMatchInProgress,
-        onPressed: () => notifier.addMatch(startMatch: true),
+        onPressed: () => state.startBtnError != null
+            ? showErrorSnackBar(
+                context: context,
+                error: state.startBtnError!.getString(context))
+            : notifier.addMatch(startMatch: true),
       ),
     );
   }

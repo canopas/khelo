@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:data/errors/app_error.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -19,23 +19,31 @@ class FileUploadService {
   ) async {
     var file = File(imagePath);
     if (await file.exists()) {
-      String fileExtension = path.extension(file.path);
-      DateTime currentDate = DateTime.now();
-      String imgName =
-          "IMG_${currentDate.year}${currentDate.month}${currentDate.day}${currentDate.hour}${currentDate.minute}${currentDate.second}${currentDate.millisecond}$fileExtension";
-      var snapshot = await _firebaseStorage
-          .ref()
-          .child('${type.value}/$imgName')
-          .putFile(file);
-      var downloadUrl = await snapshot.ref.getDownloadURL();
-      return downloadUrl;
+      try {
+        String fileExtension = path.extension(file.path);
+        DateTime currentDate = DateTime.now();
+        String imgName =
+            "IMG_${currentDate.year}${currentDate.month}${currentDate.day}${currentDate.hour}${currentDate.minute}${currentDate.second}${currentDate.millisecond}$fileExtension";
+        var snapshot = await _firebaseStorage
+            .ref()
+            .child('${type.value}/$imgName')
+            .putFile(file);
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+        return downloadUrl;
+      } catch (error, stack) {
+        throw AppError.fromError(error, stack);
+      }
     } else {
       throw Exception("uploadProfileImage: file doesn't exist.");
     }
   }
 
   Future<void> deleteUploadedImage(String imgUrl) async {
-    await _firebaseStorage.refFromURL(imgUrl).delete();
+    try {
+      await _firebaseStorage.refFromURL(imgUrl).delete();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 }
 

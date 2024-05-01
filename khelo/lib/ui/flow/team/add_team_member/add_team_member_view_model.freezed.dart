@@ -19,6 +19,7 @@ mixin _$AddTeamMemberState {
   TextEditingController get searchController =>
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   List<UserModel> get searchedUsers => throw _privateConstructorUsedError;
   List<UserModel> get selectedUsers => throw _privateConstructorUsedError;
   bool get isAdded => throw _privateConstructorUsedError;
@@ -38,6 +39,7 @@ abstract class $AddTeamMemberStateCopyWith<$Res> {
   $Res call(
       {TextEditingController searchController,
       Object? error,
+      Object? actionError,
       List<UserModel> searchedUsers,
       List<UserModel> selectedUsers,
       bool isAdded,
@@ -59,6 +61,7 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? searchedUsers = null,
     Object? selectedUsers = null,
     Object? isAdded = null,
@@ -70,6 +73,7 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       searchedUsers: null == searchedUsers
           ? _value.searchedUsers
           : searchedUsers // ignore: cast_nullable_to_non_nullable
@@ -101,6 +105,7 @@ abstract class _$$AddTeamMemberStateImplCopyWith<$Res>
   $Res call(
       {TextEditingController searchController,
       Object? error,
+      Object? actionError,
       List<UserModel> searchedUsers,
       List<UserModel> selectedUsers,
       bool isAdded,
@@ -120,6 +125,7 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? searchedUsers = null,
     Object? selectedUsers = null,
     Object? isAdded = null,
@@ -131,6 +137,7 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       searchedUsers: null == searchedUsers
           ? _value._searchedUsers
           : searchedUsers // ignore: cast_nullable_to_non_nullable
@@ -157,6 +164,7 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
   const _$AddTeamMemberStateImpl(
       {required this.searchController,
       this.error,
+      this.actionError,
       final List<UserModel> searchedUsers = const [],
       final List<UserModel> selectedUsers = const [],
       this.isAdded = false,
@@ -168,6 +176,8 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
   final TextEditingController searchController;
   @override
   final Object? error;
+  @override
+  final Object? actionError;
   final List<UserModel> _searchedUsers;
   @override
   @JsonKey()
@@ -195,7 +205,7 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
 
   @override
   String toString() {
-    return 'AddTeamMemberState(searchController: $searchController, error: $error, searchedUsers: $searchedUsers, selectedUsers: $selectedUsers, isAdded: $isAdded, isAddInProgress: $isAddInProgress)';
+    return 'AddTeamMemberState(searchController: $searchController, error: $error, actionError: $actionError, searchedUsers: $searchedUsers, selectedUsers: $selectedUsers, isAdded: $isAdded, isAddInProgress: $isAddInProgress)';
   }
 
   @override
@@ -206,6 +216,8 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
             (identical(other.searchController, searchController) ||
                 other.searchController == searchController) &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             const DeepCollectionEquality()
                 .equals(other._searchedUsers, _searchedUsers) &&
             const DeepCollectionEquality()
@@ -220,6 +232,7 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
       runtimeType,
       searchController,
       const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(actionError),
       const DeepCollectionEquality().hash(_searchedUsers),
       const DeepCollectionEquality().hash(_selectedUsers),
       isAdded,
@@ -237,6 +250,7 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
   const factory _AddTeamMemberState(
       {required final TextEditingController searchController,
       final Object? error,
+      final Object? actionError,
       final List<UserModel> searchedUsers,
       final List<UserModel> selectedUsers,
       final bool isAdded,
@@ -246,6 +260,8 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
   TextEditingController get searchController;
   @override
   Object? get error;
+  @override
+  Object? get actionError;
   @override
   List<UserModel> get searchedUsers;
   @override

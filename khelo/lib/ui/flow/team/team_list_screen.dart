@@ -1,6 +1,7 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -43,6 +44,12 @@ class TeamListScreen extends ConsumerWidget {
   ) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
+    }
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.loadTeamList,
+      );
     }
 
     return Stack(

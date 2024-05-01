@@ -23,11 +23,17 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
       : super(SearchUserViewState(searchController: TextEditingController()));
 
   Future<void> search(String searchKey) async {
-    final users = await _userService.searchUser(searchKey);
-    state = state.copyWith(searchedUsers: users);
+    try {
+      state = state.copyWith(error: null);
+      final users = await _userService.searchUser(searchKey);
+      state = state.copyWith(searchedUsers: users);
+    } catch (e) {
+      state = state.copyWith(error: e);
+      debugPrint("SearchUserViewNotifier: error while search user -> $e");
+    }
   }
 
-  void onSearchChanged(String value) {
+  void onSearchChanged() {
     if (_debounce != null && _debounce!.isActive) {
       _debounce!.cancel();
     }

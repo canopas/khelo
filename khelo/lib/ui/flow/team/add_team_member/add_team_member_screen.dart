@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -21,6 +23,15 @@ class AddTeamMemberScreen extends ConsumerWidget {
 
   const AddTeamMemberScreen({super.key, required this.team});
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTeamMemberStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   void _observeIsAdded(
       BuildContext context, WidgetRef ref, AddTeamMemberState state) {
     ref.listen(addTeamMemberStateProvider.select((value) => value.isAdded),
@@ -36,6 +47,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
     final notifier = ref.watch(addTeamMemberStateProvider.notifier);
     final state = ref.watch(addTeamMemberStateProvider);
 
+    _observeActionError(context, ref);
     _observeIsAdded(context, ref, state);
     return AppPage(
       title: context.l10n.add_team_member_screen_title,
@@ -62,36 +74,48 @@ class AddTeamMemberScreen extends ConsumerWidget {
           child: Column(
             children: [
               _searchTextField(context, notifier, state),
-              Expanded(
-                child: state.searchedUsers.isEmpty
-                    ? Center(
-                        child: Text(
-                          context.l10n.add_team_member_search_hint_text,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.subtitle1.copyWith(
-                              color: context.colorScheme.textDisabled,
-                              fontSize: 20),
-                        ),
-                      )
-                    : ListView.separated(
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(
-                            height: 16,
-                          );
-                        },
-                        itemCount: state.searchedUsers.length,
-                        itemBuilder: (context, index) {
-                          UserModel user = state.searchedUsers[index];
-                          return _userProfileCell(
-                              context, notifier, state, user);
-                        },
-                      ),
-              ),
+              _body(context, notifier, state),
               _selectedPlayerList(context, notifier, state),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _body(
+    BuildContext context,
+    AddTeamMemberViewNotifier notifier,
+    AddTeamMemberState state,
+  ) {
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.onSearchChanged,
+      );
+    }
+    return Expanded(
+      child: state.searchedUsers.isEmpty
+          ? Center(
+              child: Text(
+                context.l10n.add_team_member_search_hint_text,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textDisabled, fontSize: 20),
+              ),
+            )
+          : ListView.separated(
+              separatorBuilder: (context, index) {
+                return const SizedBox(
+                  height: 16,
+                );
+              },
+              itemCount: state.searchedUsers.length,
+              itemBuilder: (context, index) {
+                UserModel user = state.searchedUsers[index];
+                return _userProfileCell(context, notifier, state, user);
+              },
+            ),
     );
   }
 
@@ -106,7 +130,7 @@ class AddTeamMemberScreen extends ConsumerWidget {
         type: MaterialType.transparency,
         child: TextField(
           controller: state.searchController,
-          onChanged: notifier.onSearchChanged,
+          onChanged: (value) => notifier.onSearchChanged(),
           decoration: InputDecoration(
             hintText: context.l10n.add_team_member_search_placeholder_text,
             contentPadding: const EdgeInsets.all(16),

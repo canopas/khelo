@@ -29,9 +29,11 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
   }
 
   void onSignOutTap() {
+    state = state.copyWith(actionError: null);
     try {
       _authService.signOut();
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("ProfileViewNotifier: error while sign Out -> $e");
     }
   }
@@ -40,6 +42,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
 @freezed
 class ProfileState with _$ProfileState {
   const factory ProfileState({
+    Object? actionError,
     UserModel? currentUser,
   }) = _ProfileState;
 }

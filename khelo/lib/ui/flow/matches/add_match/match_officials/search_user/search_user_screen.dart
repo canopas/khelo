@@ -2,11 +2,12 @@ import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/string_formatter.dart';
-import 'package:khelo/ui/flow/matches/add_match/match_officials/components/search_user_view_model.dart';
+import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -38,7 +39,14 @@ class SearchUserBottomSheet extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: SizedBox(
         height: context.mediaQuerySize.height * 0.8,
-        child: _body(context, notifier, state),
+        child: Column(
+          children: [
+            _searchTextField(context, notifier, state),
+            Expanded(
+              child: _body(context, notifier, state),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -48,34 +56,34 @@ class SearchUserBottomSheet extends ConsumerWidget {
     SearchUserViewNotifier notifier,
     SearchUserViewState state,
   ) {
-    return Column(
-      children: [
-        _searchTextField(context, notifier, state),
-        Expanded(
-          child: state.searchedUsers.isEmpty
-              ? Center(
-                  child: Text(
-                    context.l10n.search_user_empty_text,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyle.subtitle1.copyWith(
-                      color: context.colorScheme.textDisabled,
-                      fontSize: 20,
-                    ),
-                  ),
-                )
-              : ListView.separated(
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 16);
-                  },
-                  itemCount: state.searchedUsers.length,
-                  itemBuilder: (context, index) {
-                    UserModel user = state.searchedUsers[index];
-                    return _userProfileCell(context, notifier, state, user);
-                  },
-                ),
-        ),
-      ],
-    );
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.onSearchChanged,
+      );
+    }
+
+    return state.searchedUsers.isEmpty
+        ? Center(
+            child: Text(
+              context.l10n.search_user_empty_text,
+              textAlign: TextAlign.center,
+              style: AppTextStyle.subtitle1.copyWith(
+                color: context.colorScheme.textDisabled,
+                fontSize: 20,
+              ),
+            ),
+          )
+        : ListView.separated(
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 16);
+            },
+            itemCount: state.searchedUsers.length,
+            itemBuilder: (context, index) {
+              UserModel user = state.searchedUsers[index];
+              return _userProfileCell(context, notifier, state, user);
+            },
+          );
   }
 
   Widget _searchTextField(
@@ -89,7 +97,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
         type: MaterialType.transparency,
         child: TextField(
           controller: state.searchController,
-          onChanged: notifier.onSearchChanged,
+          onChanged: (value) => notifier.onSearchChanged(),
           decoration: InputDecoration(
             hintText: context.l10n.search_user_hint_title,
             contentPadding: const EdgeInsets.all(16),

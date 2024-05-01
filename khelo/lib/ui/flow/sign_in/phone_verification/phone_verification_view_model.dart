@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:data/errors/app_error.dart';
+import 'package:data/errors/app_error_l10n_codes.dart';
 import 'package:data/service/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -19,6 +20,7 @@ class PhoneVerificationViewNotifier
   final AuthService _authService;
   late Timer timer;
   late String phoneNumber;
+  late String countryCode;
 
   bool firstAutoVerificationComplete = false;
 
@@ -55,29 +57,33 @@ class PhoneVerificationViewNotifier
   void updateVerificationIdAndPhone({
     required String verificationId,
     required String phone,
+    required String code,
   }) {
     state = state.copyWith(verificationId: verificationId);
     phoneNumber = phone;
+    countryCode = code;
   }
 
-  Future<void> resendCode({required String phone}) async {
+  Future<void> resendCode({required String countryCode, required String phone}) async {
     try {
-      state = state.copyWith(showErrorVerificationCodeText: false);
+      state = state.copyWith(showErrorVerificationCodeText: false, actionError: null);
       updateResendCodeTimerDuration();
       _authService.verifyPhoneNumber(
+        countryCode: countryCode,
         phoneNumber: phone,
         onVerificationCompleted: (phoneCredential, _) {
           state =
               state.copyWith(verifying: false, isVerificationComplete: true);
         },
         onVerificationFailed: (error) {
-          state = state.copyWith(error: error);
+          state = state.copyWith(actionError: error);
         },
         onCodeSent: (verificationId, _) {
           state = state.copyWith(verificationId: verificationId);
         },
       );
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in resend otp -> $e");
     }
   }
@@ -85,22 +91,21 @@ class PhoneVerificationViewNotifier
   Future<void> verifyOTP() async {
     if (state.verificationId == null) return;
     state =
-        state.copyWith(verifying: true, showErrorVerificationCodeText: false);
+        state.copyWith(verifying: true, showErrorVerificationCodeText: false, actionError: null);
     try {
-      await _authService.verifyOTP(state.verificationId!, state.otp);
+      await _authService.verifyOTP(countryCode, phoneNumber, state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "invalid-verification-code") {
+    } on AppError catch (e) {
+      if (e.l10nCode == AppErrorL10nCodes.invalidVerificationCode) {
         state = state.copyWith(
             verifying: false, showErrorVerificationCodeText: true);
       } else {
-        //network-request-failed
-        state = state.copyWith(verifying: false, error: e);
+        state = state.copyWith(verifying: false, actionError: e);
       }
       debugPrint(
-          "PhoneVerificationViewNotifier: error in FirebaseAuthException: verifyOTP -> $e");
+          "PhoneVerificationViewNotifier: error in AppError: verifyOTP -> $e");
     } catch (e) {
-      state = state.copyWith(verifying: false, error: e);
+      state = state.copyWith(verifying: false, actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");
     }
   }
@@ -115,7 +120,7 @@ class PhoneVerificationViewNotifier
 @freezed
 class PhoneVerificationState with _$PhoneVerificationState {
   const factory PhoneVerificationState({
-    Object? error,
+    Object? actionError,
     String? verificationId,
     @Default(false) bool verifying,
     @Default(false) bool enableVerify,

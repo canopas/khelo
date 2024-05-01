@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$PhoneVerificationState {
-  Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   String? get verificationId => throw _privateConstructorUsedError;
   bool get verifying => throw _privateConstructorUsedError;
   bool get enableVerify => throw _privateConstructorUsedError;
@@ -37,7 +37,7 @@ abstract class $PhoneVerificationStateCopyWith<$Res> {
       _$PhoneVerificationStateCopyWithImpl<$Res, PhoneVerificationState>;
   @useResult
   $Res call(
-      {Object? error,
+      {Object? actionError,
       String? verificationId,
       bool verifying,
       bool enableVerify,
@@ -61,7 +61,7 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
+    Object? actionError = freezed,
     Object? verificationId = freezed,
     Object? verifying = null,
     Object? enableVerify = null,
@@ -71,7 +71,7 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
     Object? activeResendDuration = null,
   }) {
     return _then(_value.copyWith(
-      error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       verificationId: freezed == verificationId
           ? _value.verificationId
           : verificationId // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ abstract class _$$PhoneVerificationStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Object? error,
+      {Object? actionError,
       String? verificationId,
       bool verifying,
       bool enableVerify,
@@ -137,7 +137,7 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
+    Object? actionError = freezed,
     Object? verificationId = freezed,
     Object? verifying = null,
     Object? enableVerify = null,
@@ -147,7 +147,7 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
     Object? activeResendDuration = null,
   }) {
     return _then(_$PhoneVerificationStateImpl(
-      error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       verificationId: freezed == verificationId
           ? _value.verificationId
           : verificationId // ignore: cast_nullable_to_non_nullable
@@ -184,7 +184,7 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
 
 class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
   const _$PhoneVerificationStateImpl(
-      {this.error,
+      {this.actionError,
       this.verificationId,
       this.verifying = false,
       this.enableVerify = false,
@@ -194,7 +194,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
       this.activeResendDuration = const Duration(seconds: 30)});
 
   @override
-  final Object? error;
+  final Object? actionError;
   @override
   final String? verificationId;
   @override
@@ -218,7 +218,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
 
   @override
   String toString() {
-    return 'PhoneVerificationState(error: $error, verificationId: $verificationId, verifying: $verifying, enableVerify: $enableVerify, isVerificationComplete: $isVerificationComplete, showErrorVerificationCodeText: $showErrorVerificationCodeText, otp: $otp, activeResendDuration: $activeResendDuration)';
+    return 'PhoneVerificationState(actionError: $actionError, verificationId: $verificationId, verifying: $verifying, enableVerify: $enableVerify, isVerificationComplete: $isVerificationComplete, showErrorVerificationCodeText: $showErrorVerificationCodeText, otp: $otp, activeResendDuration: $activeResendDuration)';
   }
 
   @override
@@ -226,7 +226,8 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhoneVerificationStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.verificationId, verificationId) ||
                 other.verificationId == verificationId) &&
             (identical(other.verifying, verifying) ||
@@ -247,7 +248,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(actionError),
       verificationId,
       verifying,
       enableVerify,
@@ -266,7 +267,7 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
 
 abstract class _PhoneVerificationState implements PhoneVerificationState {
   const factory _PhoneVerificationState(
-      {final Object? error,
+      {final Object? actionError,
       final String? verificationId,
       final bool verifying,
       final bool enableVerify,
@@ -276,7 +277,7 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
       final Duration activeResendDuration}) = _$PhoneVerificationStateImpl;
 
   @override
-  Object? get error;
+  Object? get actionError;
   @override
   String? get verificationId;
   @override

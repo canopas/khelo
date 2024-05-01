@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/sign_in/sign_in_with_phone/sign_in_with_phone_view_model.dart';
@@ -18,6 +19,16 @@ class SignInWithPhoneScreen extends ConsumerWidget {
 
   final TextEditingController _phoneController = TextEditingController();
 
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        signInWithPhoneStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   void _observeOtp({required BuildContext context, required WidgetRef ref}) {
     ref.listen(
       signInWithPhoneStateProvider.select((value) => value.verificationId),
@@ -25,7 +36,8 @@ class SignInWithPhoneScreen extends ConsumerWidget {
         if (current != null) {
           final state = ref.watch(signInWithPhoneStateProvider);
           final bool? success = await AppRoute.verifyOTP(
-            phoneNumber: state.code.dialCode + state.phone,
+            countryCode: state.code.dialCode,
+            phoneNumber: state.phone,
             verificationId: current,
           ).push<bool>(context);
           if (success != null && success && context.mounted) {
@@ -58,36 +70,39 @@ class SignInWithPhoneScreen extends ConsumerWidget {
       signInWithPhoneStateProvider.select((value) => value.enableBtn),
     );
 
+    _observeActionError(context, ref);
     _observeOtp(context: context, ref: ref);
     _observeSignInSuccess(context: context, ref: ref);
 
     return AppPage(
-      body: Builder(builder: (context) {
-        return Padding(
-          padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: ListView(
-            children: [
-              Text(
-                context.l10n.sign_in_enter_your_phone_number_text,
-                style: AppTextStyle.header1
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              _phoneInputField(
-                  context: context,
-                  enable: true,
-                  loading: loading,
-                  notifier: notifier),
-              PrimaryButton(
-                context.l10n.sign_in_get_otp_btn_text,
-                enabled: enable,
-                progress: loading,
-                onPressed: () => notifier.verifyPhoneNumber(),
-              ),
-            ],
-          ),
-        );
-      }),
+      body: Builder(
+        builder: (context) {
+          return Padding(
+            padding: context.mediaQueryPadding +
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: ListView(
+              children: [
+                Text(
+                  context.l10n.sign_in_enter_your_phone_number_text,
+                  style: AppTextStyle.header1
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                _phoneInputField(
+                    context: context,
+                    enable: true,
+                    loading: loading,
+                    notifier: notifier),
+                PrimaryButton(
+                  context.l10n.sign_in_get_otp_btn_text,
+                  enabled: enable,
+                  progress: loading,
+                  onPressed: notifier.verifyPhoneNumber,
+                ),
+              ],
+            ),
+          );
+        }
+      ),
     );
   }
 

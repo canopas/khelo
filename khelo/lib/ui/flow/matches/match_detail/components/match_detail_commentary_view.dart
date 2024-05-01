@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_over_overview.dart';
@@ -18,12 +19,25 @@ class MatchDetailCommentaryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
-    return _body(context, state);
+    final notifier = ref.watch(matchDetailTabStateProvider.notifier);
+
+    return _body(context, notifier,state);
   }
 
-  Widget _body(BuildContext context, MatchDetailTabState state) {
+  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
+    }
+
+    if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: () async {
+          await notifier.cancelStreamSubscription();
+          notifier.loadMatch();
+        },
+      );
     }
 
     if (state.ballScores.isEmpty) {

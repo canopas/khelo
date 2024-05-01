@@ -84,7 +84,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
   Future<void> onImageChange(String path) async {
     try {
-      state = state.copyWith(isImageUploading: true);
+      state = state.copyWith(isImageUploading: true, actionError: null);
       final imageUrl = await fileUploadService.uploadProfileImage(
         path,
         ImageUploadType.user,
@@ -97,7 +97,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       state = state.copyWith(imageUrl: imageUrl, isImageUploading: false);
       onValueChange();
     } catch (e) {
-      state = state.copyWith(isImageUploading: false);
+      state = state.copyWith(isImageUploading: false, actionError: e);
       debugPrint("EditProfileViewNotifier: error while image upload -> $e");
     }
   }
@@ -113,7 +113,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
     if (state.currentUser == null) {
       return;
     }
-
+    state = state.copyWith(actionError: null);
     try {
       state = state.copyWith(isSaveInProgress: true);
       final String? previousImageUrl;
@@ -150,7 +150,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       }
       state = state.copyWith(isSaveInProgress: false, isSaved: true);
     } catch (e) {
-      state = state.copyWith(isSaveInProgress: false);
+      state = state.copyWith(isSaveInProgress: false, actionError: e);
       debugPrint(
           "EditProfileViewNotifier: error while edit profile details -> $e");
     }
@@ -158,6 +158,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
 
   Future<void> onDeleteTap() async {
     try {
+      state = state.copyWith(actionError: null);
       String? userProfileImageUrl;
       String? currentImageUrl;
       if (state.imageUrl != null) {
@@ -185,6 +186,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
         await _reauthenticateAndDelete();
       }
     } catch (e) {
+      state = state.copyWith(actionError: e);
       debugPrint("EditProfileViewNotifier: error while delete account -> $e");
     }
   }
@@ -242,6 +244,7 @@ class EditProfileState with _$EditProfileState {
     required TextEditingController nameController,
     required TextEditingController emailController,
     required TextEditingController locationController,
+    Object? actionError,
     UserModel? currentUser,
     @Default(null) String? imageUrl,
     @Default(null) UserGender? gender,

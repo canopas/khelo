@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/errors/app_error.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,32 +24,40 @@ class BallScoreService {
   BallScoreService(this._firestore, this._currentUserId);
 
   Future<String> updateBallScore(BallScoreModel score) async {
-    DocumentReference scoreRef =
-        _firestore.collection(_collectionName).doc(score.id);
-    WriteBatch batch = _firestore.batch();
+    try {
+      DocumentReference scoreRef =
+          _firestore.collection(_collectionName).doc(score.id);
+      WriteBatch batch = _firestore.batch();
 
-    batch.set(scoreRef, score.toJson(), SetOptions(merge: true));
-    String newScoreId = scoreRef.id;
+      batch.set(scoreRef, score.toJson(), SetOptions(merge: true));
+      String newScoreId = scoreRef.id;
 
-    if (score.id == null) {
-      batch.update(scoreRef, {'id': newScoreId});
+      if (score.id == null) {
+        batch.update(scoreRef, {'id': newScoreId});
+      }
+
+      await batch.commit();
+      return newScoreId;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
     }
-
-    await batch.commit();
-    return newScoreId;
   }
 
   Future<List<BallScoreModel>> getBallScoreListByInningId(
       String inningId) async {
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection(_collectionName)
-        .where('inning_id', isEqualTo: inningId)
-        .get();
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection(_collectionName)
+          .where('inning_id', isEqualTo: inningId)
+          .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-    }).toList();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+      }).toList();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Stream<List<BallScoreModel>> getBallScoresStreamByInningIds(
@@ -69,11 +77,11 @@ class BallScoreService {
         }).toList();
 
         controller.add(ballScores);
-      } catch (error) {
-        controller.addError(error);
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
       }
-    }, onError: (error) {
-      controller.addError(error);
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
     });
 
     return controller.stream;
@@ -83,22 +91,30 @@ class BallScoreService {
     if (_currentUserId == null) {
       return [];
     }
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-        .collection(_collectionName)
-        .where(Filter.or(
-            Filter("bowler_id", isEqualTo: _currentUserId),
-            Filter("batsman_id", isEqualTo: _currentUserId),
-            Filter("wicket_taker_id", isEqualTo: _currentUserId),
-            Filter("player_out_id", isEqualTo: _currentUserId)))
-        .get();
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection(_collectionName)
+          .where(Filter.or(
+              Filter("bowler_id", isEqualTo: _currentUserId),
+              Filter("batsman_id", isEqualTo: _currentUserId),
+              Filter("wicket_taker_id", isEqualTo: _currentUserId),
+              Filter("player_out_id", isEqualTo: _currentUserId)))
+          .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-    }).toList();
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+      }).toList();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<void> deleteBall(String ballId) async {
-    await _firestore.collection(_collectionName).doc(ballId).delete();
+    try {
+      await _firestore.collection(_collectionName).doc(ballId).delete();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 }

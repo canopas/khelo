@@ -23,6 +23,7 @@ mixin _$EditProfileState {
       throw _privateConstructorUsedError;
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   UserGender? get gender => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $EditProfileStateCopyWith<$Res> {
       TextEditingController nameController,
       TextEditingController emailController,
       TextEditingController locationController,
+      Object? actionError,
       UserModel? currentUser,
       String? imageUrl,
       UserGender? gender,
@@ -81,6 +83,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? nameController = null,
     Object? emailController = null,
     Object? locationController = null,
+    Object? actionError = freezed,
     Object? currentUser = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
@@ -109,6 +112,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       currentUser: freezed == currentUser
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
@@ -178,6 +182,7 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       TextEditingController nameController,
       TextEditingController emailController,
       TextEditingController locationController,
+      Object? actionError,
       UserModel? currentUser,
       String? imageUrl,
       UserGender? gender,
@@ -208,6 +213,7 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? nameController = null,
     Object? emailController = null,
     Object? locationController = null,
+    Object? actionError = freezed,
     Object? currentUser = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
@@ -236,6 +242,7 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       currentUser: freezed == currentUser
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
@@ -288,6 +295,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       required this.nameController,
       required this.emailController,
       required this.locationController,
+      this.actionError,
       this.currentUser,
       this.imageUrl = null,
       this.gender = null,
@@ -307,6 +315,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
   final TextEditingController emailController;
   @override
   final TextEditingController locationController;
+  @override
+  final Object? actionError;
   @override
   final UserModel? currentUser;
   @override
@@ -339,7 +349,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
 
   @override
   String toString() {
-    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, currentUser: $currentUser, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
+    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, actionError: $actionError, currentUser: $currentUser, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
   }
 
   @override
@@ -354,6 +364,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 other.emailController == emailController) &&
             (identical(other.locationController, locationController) ||
                 other.locationController == locationController) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.currentUser, currentUser) ||
                 other.currentUser == currentUser) &&
             (identical(other.imageUrl, imageUrl) ||
@@ -381,6 +393,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       nameController,
       emailController,
       locationController,
+      const DeepCollectionEquality().hash(actionError),
       currentUser,
       imageUrl,
       gender,
@@ -406,6 +419,7 @@ abstract class _EditProfileState implements EditProfileState {
       required final TextEditingController nameController,
       required final TextEditingController emailController,
       required final TextEditingController locationController,
+      final Object? actionError,
       final UserModel? currentUser,
       final String? imageUrl,
       final UserGender? gender,
@@ -425,6 +439,8 @@ abstract class _EditProfileState implements EditProfileState {
   TextEditingController get emailController;
   @override
   TextEditingController get locationController;
+  @override
+  Object? get actionError;
   @override
   UserModel? get currentUser;
   @override
