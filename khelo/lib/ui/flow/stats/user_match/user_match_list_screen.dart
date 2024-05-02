@@ -30,7 +30,10 @@ class UserMatchListScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadUserMatches,
+        onRetryTap: () {
+          notifier.cancelStreamSubscription();
+          notifier.loadUserMatches();
+        },
       );
     }
 

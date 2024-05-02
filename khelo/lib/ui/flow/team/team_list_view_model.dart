@@ -38,10 +38,10 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     try {
       _teamsStreamSubscription =
           _teamService.getUserRelatedTeams().listen((teams) {
-        state = state.copyWith(teams: teams, loading: false);
+        state = state.copyWith(teams: teams, loading: false, error: null);
         _filterTeamList();
       }, onError: (e) {
-        state = state.copyWith(loading: false); // TODO: handle error with merge
+        state = state.copyWith(loading: false, error: e);
         debugPrint("TeamListViewNotifier: error while loading team list -> $e");
       });
     } catch (e) {
@@ -84,13 +84,13 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     state = state.copyWith(showFilterOptionSheet: DateTime.now());
   }
 
-  _cancelStreamSubscription() {
+  cancelStreamSubscription() {
     _teamsStreamSubscription.cancel();
   }
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    cancelStreamSubscription();
     super.dispose();
   }
 }

@@ -86,9 +86,11 @@ class InningsService {
         controller.add(innings);
       } catch (error, stack) {
         controller.addError(AppError.fromError(error, stack));
+        controller.close();
       }
     }, onError: (error, stack) {
       controller.addError(AppError.fromError(error, stack));
+      controller.close();
     });
 
     return controller.stream;

@@ -38,26 +38,26 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     try {
       _matchesStreamSubscription =
           _matchService.getCurrentUserRelatedMatches().listen((matches) {
-        state = state.copyWith(matches: matches, loading: false);
+        state = state.copyWith(matches: matches, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(loading: false, error: e);
         debugPrint(
-            "MatchListViewNotifier: error while load matches -> $e"); // TODO: handle error with merge
+            "MatchListViewNotifier: error while load matches -> $e");
       });
-    } catch (e, stack) {
+    } catch (e) {
       state = state.copyWith(loading: false, error: e);
       debugPrint(
           "MatchListViewNotifier: error while load matches -> $e");
     }
   }
 
-  _cancelStreamSubscription() async {
+  cancelStreamSubscription() async {
     await _matchesStreamSubscription.cancel();
   }
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    cancelStreamSubscription();
     super.dispose();
   }
 }

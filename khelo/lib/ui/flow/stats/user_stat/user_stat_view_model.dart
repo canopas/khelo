@@ -37,28 +37,26 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     try {
       _ballScoreStreamSubscription =
           _ballScoreService.getCurrentUserRelatedBalls().listen((ballScores) {
-        state = state.copyWith(ballList: ballScores, loading: false);
+        state = state.copyWith(ballList: ballScores, loading: false, error: null);
       }, onError: (e) {
-        state = state.copyWith(
-            error: e, loading: false); // TODO: handle error with merge
+        state = state.copyWith(error: e, loading: false);
         debugPrint(
             "UserStatViewNotifier: error while getting user related balls -> $e");
       });
     } catch (e) {
-      state = state.copyWith(
-          error: e, loading: false); // TODO: handle error with merge
+      state = state.copyWith(error: e, loading: false);
       debugPrint(
           "UserStatViewNotifier: error while getting user related balls -> $e");
     }
   }
 
-  _cancelStreamSubscription() {
+  cancelStreamSubscription() {
     _ballScoreStreamSubscription.cancel();
   }
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    cancelStreamSubscription();
     super.dispose();
   }
 }

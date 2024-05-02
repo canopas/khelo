@@ -26,22 +26,26 @@ class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
     try {
       _matchesStreamSubscription =
           _matchService.getCurrentUserPlayedMatches().listen((matches) {
-        state = state.copyWith(matches: matches, loading: false);
+        state = state.copyWith(matches: matches, loading: false, error: null);
       }, onError: (e) {
-        state = state.copyWith(error: e, loading: false); // TODO: handle error with merge
+        state = state.copyWith(error: e, loading: false);
         debugPrint(
             "UserMatchListViewNotifier: error while loading user matches -> $e");
       });
     } catch (e) {
-      state = state.copyWith(error: e, loading: false); // TODO: handle error with merge
+      state = state.copyWith(error: e, loading: false);
       debugPrint(
           "UserMatchListViewNotifier: error while loading user matches -> $e");
     }
   }
 
+  cancelStreamSubscription() async {
+    await _matchesStreamSubscription.cancel();
+  }
+
   @override
   Future<void> dispose() async {
-    await _matchesStreamSubscription.cancel();
+    cancelStreamSubscription();
     super.dispose();
   }
 }

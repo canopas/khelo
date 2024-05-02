@@ -47,7 +47,10 @@ class TeamListScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadTeamList,
+        onRetryTap: () {
+          notifier.cancelStreamSubscription();
+          notifier.loadTeamList();
+        },
       );
     }
 

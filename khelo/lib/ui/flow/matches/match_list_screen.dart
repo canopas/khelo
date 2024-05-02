@@ -58,11 +58,9 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchList(
-    BuildContext context,
-    MatchListViewNotifier notifier,
-    MatchListViewState state,
-  ) {
+  Widget _matchList(BuildContext context,
+      MatchListViewNotifier notifier,
+      MatchListViewState state,) {
     if (state.loading) {
       return const Expanded(
         child: Center(
@@ -73,7 +71,9 @@ class MatchListScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadMatches,
+        onRetryTap: () {
+          notifier.cancelStreamSubscription();
+          notifier.loadMatches();},
       );
     }
 
@@ -104,11 +104,9 @@ class MatchListScreen extends ConsumerWidget {
     }
   }
 
-  Widget _matchCell(
-    BuildContext context,
-    MatchModel match,
-    String? currentUserId,
-  ) {
+  Widget _matchCell(BuildContext context,
+      MatchModel match,
+      String? currentUserId,) {
     return OnTapScale(
       onTap: () {
         AppRoute.matchDetailTab(matchId: match.id ?? "").push(context);
@@ -133,11 +131,9 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchOtherDetail(
-    BuildContext context,
-    MatchModel match,
-    String? currentUserId,
-  ) {
+  Widget _matchOtherDetail(BuildContext context,
+      MatchModel match,
+      String? currentUserId,) {
     return Row(
       children: [
         Expanded(
@@ -167,11 +163,9 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _matchEditOrResumeActionButton(
-    BuildContext context,
-    MatchModel match,
-    String? currentUserId,
-  ) {
+  Widget _matchEditOrResumeActionButton(BuildContext context,
+      MatchModel match,
+      String? currentUserId,) {
     if (match.match_status != MatchStatus.finish &&
         match.created_by == currentUserId) {
       return OnTapScale(
@@ -213,8 +207,8 @@ class MatchListScreen extends ConsumerWidget {
               wicket: match.teams.last.wicket ?? 0,
               totalOvers: match.number_of_over,
               isRunning:
-                  match.current_playing_team_id == match.teams.first.team.id &&
-                      match.match_status == MatchStatus.running,
+              match.current_playing_team_id == match.teams.first.team.id &&
+                  match.match_status == MatchStatus.running,
             ),
             _teamNameView(
               context,
@@ -222,8 +216,8 @@ class MatchListScreen extends ConsumerWidget {
               wicket: match.teams.first.wicket ?? 0,
               totalOvers: match.number_of_over,
               isRunning:
-                  match.current_playing_team_id == match.teams.last.team.id &&
-                      match.match_status == MatchStatus.running,
+              match.current_playing_team_id == match.teams.last.team.id &&
+                  match.match_status == MatchStatus.running,
             ),
           ],
         ),
@@ -232,8 +226,7 @@ class MatchListScreen extends ConsumerWidget {
     );
   }
 
-  Widget _teamNameView(
-    BuildContext context, {
+  Widget _teamNameView(BuildContext context, {
     required MatchTeamModel team,
     required int wicket,
     required int totalOvers,
@@ -247,22 +240,22 @@ class MatchListScreen extends ConsumerWidget {
                 : context.colorScheme.textPrimary),
         children: isRunning
             ? [
-                TextSpan(
-                  text: " - ",
-                  style: AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textSecondary),
-                ),
-                TextSpan(
-                  text: "${team.run}/$wicket",
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                TextSpan(
-                  text: " (${team.over ?? 0}/$totalOvers)",
-                  style: AppTextStyle.body2
-                      .copyWith(color: context.colorScheme.textSecondary),
-                ),
-              ]
+          TextSpan(
+            text: " - ",
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+          TextSpan(
+            text: "${team.run}/$wicket",
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          TextSpan(
+            text: " (${team.over ?? 0}/$totalOvers)",
+            style: AppTextStyle.body2
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+        ]
             : List.empty()));
   }
 

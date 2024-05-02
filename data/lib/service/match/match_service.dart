@@ -82,48 +82,48 @@ class MatchService {
     }
 
     StreamController<List<MatchModel>> controller =
-    StreamController<List<MatchModel>>();
+        StreamController<List<MatchModel>>();
 
     _firestore.collection(_collectionName).snapshots().listen(
-            (QuerySnapshot<Map<String, dynamic>> snapshot) async {
-          List<MatchModel> matches = [];
-          try {
-            for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
-              Map<String, dynamic> mainDocData =
+        (QuerySnapshot<Map<String, dynamic>> snapshot) async {
+      List<MatchModel> matches = [];
+      try {
+        for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
+          Map<String, dynamic> mainDocData =
               mainDoc.data() as Map<String, dynamic>;
-              AddEditMatchRequest match =
-              AddEditMatchRequest.fromJson(mainDocData);
-              if (match.teams
-                  .map((e) =>
-                  e.squad.map((e) => e.id).contains(_currentUserId))
+          AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+          if (match.teams
+                  .map((e) => e.squad.map((e) => e.id).contains(_currentUserId))
                   .contains(true) &&
-                  match.match_status == MatchStatus.finish) {
-                List<MatchTeamModel> teams = await getTeamsList(match.teams);
-                matches.add(MatchModel(
-                  id: match.id,
-                  teams: teams,
-                  match_type: match.match_type,
-                  number_of_over: match.number_of_over,
-                  over_per_bowler: match.over_per_bowler,
-                  city: match.city,
-                  ground: match.ground,
-                  start_time: match.start_time,
-                  created_by: match.created_by,
-                  ball_type: match.ball_type,
-                  pitch_type: match.pitch_type,
-                  match_status: match.match_status,
-                  toss_winner_id: match.toss_winner_id,
-                  toss_decision: match.toss_decision,
-                  current_playing_team_id: match.current_playing_team_id,
-                ));
-              }
-            }
-            controller.add(matches);
-          } catch (error, stack) {
-            controller.addError(AppError.fromError(error, stack)); // TODO: handle error with merge, AppError.fromError(error,stack)
+              match.match_status == MatchStatus.finish) {
+            List<MatchTeamModel> teams = await getTeamsList(match.teams);
+            matches.add(MatchModel(
+              id: match.id,
+              teams: teams,
+              match_type: match.match_type,
+              number_of_over: match.number_of_over,
+              over_per_bowler: match.over_per_bowler,
+              city: match.city,
+              ground: match.ground,
+              start_time: match.start_time,
+              created_by: match.created_by,
+              ball_type: match.ball_type,
+              pitch_type: match.pitch_type,
+              match_status: match.match_status,
+              toss_winner_id: match.toss_winner_id,
+              toss_decision: match.toss_decision,
+              current_playing_team_id: match.current_playing_team_id,
+            ));
           }
-        }, onError: (error, stack) {
-      controller.addError(AppError.fromError(error, stack)); // TODO: handle error with merge, AppError.fromError(error,stack)
+        }
+        controller.add(matches);
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
+        controller.close();
+      }
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
+      controller.close();
     });
 
     return controller.stream;
@@ -173,12 +173,12 @@ class MatchService {
         }
         controller.add(matches);
       } catch (error, stack) {
-        controller.addError(
-            AppError.fromError(error, stack)); // TODO: handle error with merge, AppError.fromError(error,stack)
+        controller.addError(AppError.fromError(error, stack));
+        controller.close();
       }
-    }, onError: (error,stack) {
-      controller.addError(
-          AppError.fromError(error, stack)); // TODO: handle error with merge, AppError.fromError(error,stack)
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
+      controller.close();
     });
 
     return controller.stream;
@@ -266,9 +266,11 @@ class MatchService {
         controller.add(matches);
       } catch (error, stack) {
         controller.addError(AppError.fromError(error, stack));
+        controller.close();
       }
     }, onError: (error, stack) {
       controller.addError(AppError.fromError(error, stack));
+      controller.close();
     });
 
     return controller.stream;
@@ -328,6 +330,8 @@ class MatchService {
           controller.add(matchModel);
         } catch (error, stack) {
           controller.addError(AppError.fromError(error, stack));
+          controller.close();
+          subscription?.cancel();
         }
       } else {
         controller.close();
@@ -335,6 +339,8 @@ class MatchService {
       }
     }, onError: (error, stack) {
       controller.addError(AppError.fromError(error, stack));
+      controller.close();
+      subscription?.cancel();
     });
 
     return controller.stream;

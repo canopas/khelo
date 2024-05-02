@@ -82,7 +82,7 @@ class TeamService {
       return Stream.value([]);
     }
 
-    _firestore
+    return _firestore
         .collection(_collectionName)
         .where(
           Filter.or(
@@ -116,7 +116,7 @@ class TeamService {
       }
       return teams;
     }).handleError((error, stack) {
-      throw AppError.fromError(error, stack); // TODO: error handling with merge
+      throw AppError.fromError(error, stack);
     });
   }
 

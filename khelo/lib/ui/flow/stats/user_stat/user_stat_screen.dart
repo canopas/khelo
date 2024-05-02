@@ -23,7 +23,10 @@ class UserStatScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.getUserRelatedBalls,
+        onRetryTap: () {
+          notifier.cancelStreamSubscription();
+          notifier.getUserRelatedBalls();
+        },
       );
     }
 
@@ -151,9 +154,7 @@ class UserStatScreen extends ConsumerWidget {
           .fold(
               0,
               (sum, element) =>
-                  sum +
-                  element.runs_scored +
-                  (element.extras_awarded ?? 0));
+                  sum + element.runs_scored + (element.extras_awarded ?? 0));
 
       return (
         _calculateBowlingAverage(runsConceded, wicketTaken),
@@ -232,9 +233,7 @@ class UserStatScreen extends ConsumerWidget {
         .fold(
             0,
             (sum, element) =>
-                sum +
-                element.runs_scored +
-                (element.extras_awarded ?? 0));
+                sum + element.runs_scored + (element.extras_awarded ?? 0));
     if (bowledBallCount == 0) {
       return 0.0;
     }
