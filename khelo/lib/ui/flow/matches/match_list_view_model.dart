@@ -8,8 +8,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'match_list_view_model.freezed.dart';
 
-final matchListStateProvider = StateNotifierProvider.autoDispose<
-    MatchListViewNotifier, MatchListViewState>((ref) {
+final matchListStateProvider =
+    StateNotifierProvider<MatchListViewNotifier, MatchListViewState>((ref) {
   final notifier = MatchListViewNotifier(
     ref.read(matchServiceProvider),
     ref.read(currentUserPod)?.id,
@@ -27,7 +27,9 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   MatchListViewNotifier(this._matchService, String? userId)
       : super(MatchListViewState(
           currentUserId: userId,
-        ));
+        )) {
+    loadMatches();
+  }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
@@ -41,13 +43,11 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
         state = state.copyWith(matches: matches, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(loading: false, error: e);
-        debugPrint(
-            "MatchListViewNotifier: error while load matches -> $e");
+        debugPrint("MatchListViewNotifier: error while load matches -> $e");
       });
     } catch (e) {
       state = state.copyWith(loading: false, error: e);
-      debugPrint(
-          "MatchListViewNotifier: error while load matches -> $e");
+      debugPrint("MatchListViewNotifier: error while load matches -> $e");
     }
   }
 

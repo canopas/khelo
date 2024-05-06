@@ -16,13 +16,41 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class UserMatchListScreen extends ConsumerWidget {
+class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _UserMatchListScreenState();
+}
+
+class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late UserMatchListViewNotifier notifier;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     final state = ref.watch(userMatchListStateProvider);
-    final notifier = ref.watch(userMatchListStateProvider.notifier);
+    notifier = ref.watch(userMatchListStateProvider.notifier);
 
     if (state.loading) {
       return const AppProgressIndicator();

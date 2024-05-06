@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,12 +8,13 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'home_view_model.freezed.dart';
 
 final homeViewStateProvider =
-    StateNotifierProvider.autoDispose<HomeViewNotifier, HomeViewState>(
+    StateNotifierProvider<HomeViewNotifier, HomeViewState>(
   (ref) => HomeViewNotifier(ref.read(matchServiceProvider)),
 );
 
 class HomeViewNotifier extends StateNotifier<HomeViewState> {
   final MatchService _matchService;
+  late StreamSubscription _streamSubscription;
 
   HomeViewNotifier(this._matchService) : super(const HomeViewState()) {
     loadMatches();
@@ -21,7 +23,7 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
   void loadMatches() async {
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    _matchService.getRunningMatches().listen(
+    _streamSubscription = _matchService.getRunningMatches().listen(
       (matches) {
         state = state.copyWith(matches: matches, loading: false, error: null);
       },
@@ -30,6 +32,16 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
         debugPrint("HomeViewNotifier: error while load matches -> $e");
       },
     );
+  }
+
+  _cancelStreamSubscription() async {
+    await _streamSubscription.cancel();
+  }
+
+  @override
+  void dispose() {
+    _cancelStreamSubscription();
+    super.dispose();
   }
 }
 

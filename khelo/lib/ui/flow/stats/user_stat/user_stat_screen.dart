@@ -8,13 +8,40 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class UserStatScreen extends ConsumerWidget {
+class UserStatScreen extends ConsumerStatefulWidget {
   const UserStatScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _UserStatScreenState();
+}
+
+class _UserStatScreenState extends ConsumerState<UserStatScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late UserStatViewNotifier notifier;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     final state = ref.watch(userStatViewStateProvider);
-    final notifier = ref.watch(userStatViewStateProvider.notifier);
+    notifier = ref.watch(userStatViewStateProvider.notifier);
 
     if (state.loading) {
       return const AppProgressIndicator();

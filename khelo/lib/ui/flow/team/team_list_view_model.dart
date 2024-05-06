@@ -10,7 +10,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 part 'team_list_view_model.freezed.dart';
 
 final teamListViewStateProvider =
-    StateNotifierProvider.autoDispose<TeamListViewNotifier, TeamListViewState>(
+    StateNotifierProvider<TeamListViewNotifier, TeamListViewState>(
         (ref) {
   final notifier = TeamListViewNotifier(
     ref.read(teamServiceProvider),
@@ -27,7 +27,9 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   late StreamSubscription _teamsStreamSubscription;
 
   TeamListViewNotifier(this._teamService, String? userId)
-      : super(TeamListViewState(currentUserId: userId));
+      : super(TeamListViewState(currentUserId: userId)) {
+    loadTeamList();
+  }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);

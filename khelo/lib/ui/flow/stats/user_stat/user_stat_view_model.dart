@@ -9,8 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_stat_view_model.freezed.dart';
 
 final userStatViewStateProvider =
-    StateNotifierProvider.autoDispose<UserStatViewNotifier, UserStatViewState>(
-        (ref) {
+    StateNotifierProvider<UserStatViewNotifier, UserStatViewState>((ref) {
   final notifier = UserStatViewNotifier(
     ref.read(ballScoreServiceProvider),
     ref.read(currentUserPod)?.id,
@@ -26,7 +25,9 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
   late StreamSubscription _ballScoreStreamSubscription;
 
   UserStatViewNotifier(this._ballScoreService, String? userId)
-      : super(UserStatViewState(currentUserId: userId));
+      : super(UserStatViewState(currentUserId: userId)) {
+    getUserRelatedBalls();
+  }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
@@ -37,7 +38,8 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     try {
       _ballScoreStreamSubscription =
           _ballScoreService.getCurrentUserRelatedBalls().listen((ballScores) {
-        state = state.copyWith(ballList: ballScores, loading: false, error: null);
+        state =
+            state.copyWith(ballList: ballScores, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(error: e, loading: false);
         debugPrint(

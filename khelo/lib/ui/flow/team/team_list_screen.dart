@@ -13,8 +13,34 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class TeamListScreen extends ConsumerWidget {
+class TeamListScreen extends ConsumerStatefulWidget {
   const TeamListScreen({super.key});
+
+  @override
+  ConsumerState createState() => _TeamListScreenState();
+}
+
+class _TeamListScreenState extends ConsumerState<TeamListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late TeamListViewNotifier notifier;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
 
   void _observeShowFilterOptionSheet(
     BuildContext context,
@@ -28,8 +54,9 @@ class TeamListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(teamListViewStateProvider.notifier);
+  Widget build(BuildContext context) {
+    super.build(context);
+    notifier = ref.watch(teamListViewStateProvider.notifier);
     final state = ref.watch(teamListViewStateProvider);
 
     _observeShowFilterOptionSheet(context, ref);
@@ -135,7 +162,6 @@ class TeamListScreen extends ConsumerWidget {
                 } else if (value == context.l10n.team_list_edit_team_title) {
                   await AppRoute.addTeam(team: team).push(context);
                 }
-                notifier.loadTeamList();
               },
             )
           ]
@@ -182,7 +208,6 @@ class TeamListScreen extends ConsumerWidget {
           backgroundColor: context.colorScheme.primary,
           onTap: () async {
             await AppRoute.addTeam().push(context);
-            notifier.loadTeamList();
           },
           icon: Icon(
             Icons.add_rounded,

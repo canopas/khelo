@@ -15,13 +15,40 @@ import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/page_views/expandable_page_view.dart';
 import 'package:style/text/app_text_style.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late HomeViewNotifier notifier;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     final state = ref.watch(homeViewStateProvider);
-    final notifier = ref.watch(homeViewStateProvider.notifier);
+    notifier = ref.watch(homeViewStateProvider.notifier);
 
     return AppPage(
       title: context.l10n.home_screen_title,
@@ -63,8 +90,7 @@ class HomeScreen extends ConsumerWidget {
     return ExpandablePageView(
       itemCount: state.matches.length,
       itemBuilder: (context, index) {
-        return _matchCell(
-            context, state.matches[index]);
+        return _matchCell(context, state.matches[index]);
       },
     );
   }

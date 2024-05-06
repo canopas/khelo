@@ -7,7 +7,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_match_list_view_model.freezed.dart';
 
-final userMatchListStateProvider = StateNotifierProvider.autoDispose<
+final userMatchListStateProvider = StateNotifierProvider<
     UserMatchListViewNotifier, UserMatchListState>((ref) {
   return UserMatchListViewNotifier(
     ref.read(matchServiceProvider),
@@ -19,7 +19,9 @@ class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
   late StreamSubscription _matchesStreamSubscription;
 
   UserMatchListViewNotifier(this._matchService)
-      : super(const UserMatchListState());
+      : super(const UserMatchListState()){
+    loadUserMatches();
+  }
 
   Future<void> loadUserMatches() async {
     state = state.copyWith(loading: true);

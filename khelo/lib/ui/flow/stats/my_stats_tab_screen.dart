@@ -2,12 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/stats/my_stats_tab_view_model.dart';
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_screen.dart';
-import 'package:khelo/ui/flow/stats/user_match/user_match_list_view_model.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
-import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -19,7 +16,8 @@ class MyStatsTabScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _MyStatsTabScreenState();
 }
 
-class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
+class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final List<Widget> _tabs = [
     const UserMatchListScreen(),
     const UserStatScreen(),
@@ -27,23 +25,17 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
 
   late PageController _controller;
 
-  late UserMatchListViewNotifier _userMatchListNotifier;
-  late UserStatViewNotifier _userStatNotifier;
-
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
-    _userMatchListNotifier = ref.read(userMatchListStateProvider.notifier);
-    _userStatNotifier = ref.read(userStatViewStateProvider.notifier);
-
-    runPostFrame(() {
-      _userMatchListNotifier.loadUserMatches();
-      _userStatNotifier.getUserRelatedBalls();
-    });
+    WidgetsBinding.instance.addObserver(this);
 
     _controller = PageController(
       initialPage: ref.read(myStatsTabStateProvider).selectedTab,
@@ -51,10 +43,18 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      _controller.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final notifier = ref.watch(myStatsTabStateProvider.notifier);
-    _userMatchListNotifier = ref.watch(userMatchListStateProvider.notifier);
-    _userStatNotifier = ref.watch(userStatViewStateProvider.notifier);
 
     return AppPage(
       title: context.l10n.my_stat_screen_title,
