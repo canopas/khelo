@@ -29,8 +29,9 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
 
+  bool _wantKeepAlive = true;
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -44,7 +45,15 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
       // deallocate resources
       _controller.dispose();
       WidgetsBinding.instance.removeObserver(this);

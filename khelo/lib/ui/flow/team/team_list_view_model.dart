@@ -10,8 +10,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 part 'team_list_view_model.freezed.dart';
 
 final teamListViewStateProvider =
-    StateNotifierProvider<TeamListViewNotifier, TeamListViewState>(
-        (ref) {
+    StateNotifierProvider<TeamListViewNotifier, TeamListViewState>((ref) {
   final notifier = TeamListViewNotifier(
     ref.read(teamServiceProvider),
     ref.read(currentUserPod)?.id,
@@ -28,14 +27,14 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
 
   TeamListViewNotifier(this._teamService, String? userId)
       : super(TeamListViewState(currentUserId: userId)) {
-    loadTeamList();
+    _loadTeamList();
   }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
   }
 
-  Future<void> loadTeamList() async {
+  Future<void> _loadTeamList() async {
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
       _teamsStreamSubscription =
@@ -86,13 +85,18 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     state = state.copyWith(showFilterOptionSheet: DateTime.now());
   }
 
-  cancelStreamSubscription() {
+  _cancelStreamSubscription() {
     _teamsStreamSubscription.cancel();
+  }
+
+  onResume() {
+    _cancelStreamSubscription();
+    _loadTeamList();
   }
 
   @override
   void dispose() {
-    cancelStreamSubscription();
+    _cancelStreamSubscription();
     super.dispose();
   }
 }

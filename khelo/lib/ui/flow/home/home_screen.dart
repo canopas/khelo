@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -25,9 +26,10 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late HomeViewNotifier notifier;
+  bool _wantKeepAlive = true;
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -37,7 +39,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -52,7 +62,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     return AppPage(
       title: context.l10n.home_screen_title,
-      body: _body(context, notifier, state),
+      body: ResumeDetector(
+        onResume: notifier.onResume,
+        child: _body(context, notifier, state),
+      ),
     );
   }
 
@@ -67,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadMatches,
+        onRetryTap: notifier.onResume,
       );
     }
 

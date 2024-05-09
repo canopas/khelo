@@ -26,14 +26,14 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
 
   UserStatViewNotifier(this._ballScoreService, String? userId)
       : super(UserStatViewState(currentUserId: userId)) {
-    getUserRelatedBalls();
+    _getUserRelatedBalls();
   }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
   }
 
-  Future<void> getUserRelatedBalls() async {
+  Future<void> _getUserRelatedBalls() async {
     state = state.copyWith(loading: true);
     try {
       _ballScoreStreamSubscription =
@@ -52,13 +52,18 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     }
   }
 
-  cancelStreamSubscription() {
+  _cancelStreamSubscription() {
     _ballScoreStreamSubscription.cancel();
+  }
+
+  onResume() {
+    _cancelStreamSubscription();
+    _getUserRelatedBalls();
   }
 
   @override
   void dispose() {
-    cancelStreamSubscription();
+    _cancelStreamSubscription();
     super.dispose();
   }
 }

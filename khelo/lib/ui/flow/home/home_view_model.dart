@@ -17,10 +17,10 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
   late StreamSubscription _streamSubscription;
 
   HomeViewNotifier(this._matchService) : super(const HomeViewState()) {
-    loadMatches();
+    _loadMatches();
   }
 
-  void loadMatches() async {
+  void _loadMatches() async {
     state = state.copyWith(loading: state.matches.isEmpty);
 
     _streamSubscription = _matchService.getRunningMatches().listen(
@@ -36,6 +36,11 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
 
   _cancelStreamSubscription() async {
     await _streamSubscription.cancel();
+  }
+
+  onResume() {
+    _cancelStreamSubscription();
+    _loadMatches();
   }
 
   @override

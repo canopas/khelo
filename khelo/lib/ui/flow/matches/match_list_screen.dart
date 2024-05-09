@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_status_tag.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
@@ -27,9 +28,10 @@ class MatchListScreen extends ConsumerStatefulWidget {
 class _MatchListScreenState extends ConsumerState<MatchListScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late MatchListViewNotifier notifier;
+  bool _wantKeepAlive = true;
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -39,7 +41,15 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -52,14 +62,17 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
     final state = ref.watch(matchListStateProvider);
     notifier = ref.watch(matchListStateProvider.notifier);
 
-    return Column(
-      children: [
-        _topStartMatchView(context),
-        const SizedBox(
-          height: 24,
-        ),
-        _matchList(context, notifier, state),
-      ],
+    return ResumeDetector(
+      onResume: notifier.onResume,
+      child: Column(
+        children: [
+          _topStartMatchView(context),
+          const SizedBox(
+            height: 24,
+          ),
+          _matchList(context, notifier, state),
+        ],
+      ),
     );
   }
 
@@ -100,10 +113,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          notifier.cancelStreamSubscription();
-          notifier.loadMatches();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 

@@ -2,6 +2,7 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -18,9 +19,10 @@ class UserStatScreen extends ConsumerStatefulWidget {
 class _UserStatScreenState extends ConsumerState<UserStatScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late UserStatViewNotifier notifier;
+  bool _wantKeepAlive = true;
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -30,7 +32,15 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -43,6 +53,14 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     final state = ref.watch(userStatViewStateProvider);
     notifier = ref.watch(userStatViewStateProvider.notifier);
 
+    return ResumeDetector(
+      onResume: notifier.onResume,
+      child: _body(context, notifier, state),
+    );
+  }
+
+  Widget _body(BuildContext context, UserStatViewNotifier notifier,
+      UserStatViewState state) {
     if (state.loading) {
       return const AppProgressIndicator();
     }
@@ -50,17 +68,10 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          notifier.cancelStreamSubscription();
-          notifier.getUserRelatedBalls();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 
-    return _body(context, state);
-  }
-
-  Widget _body(BuildContext context, UserStatViewState state) {
     return ListView(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 50),
       children: [

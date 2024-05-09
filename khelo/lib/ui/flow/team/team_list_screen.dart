@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
@@ -23,9 +24,10 @@ class TeamListScreen extends ConsumerStatefulWidget {
 class _TeamListScreenState extends ConsumerState<TeamListScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late TeamListViewNotifier notifier;
+  bool _wantKeepAlive = true;
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -35,7 +37,15 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -60,7 +70,9 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     final state = ref.watch(teamListViewStateProvider);
 
     _observeShowFilterOptionSheet(context, ref);
-    return _teamList(context, notifier, state);
+    return ResumeDetector(
+        onResume: notifier.onResume,
+        child: _teamList(context, notifier, state));
   }
 
   Widget _teamList(
@@ -74,10 +86,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          notifier.cancelStreamSubscription();
-          notifier.loadTeamList();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 

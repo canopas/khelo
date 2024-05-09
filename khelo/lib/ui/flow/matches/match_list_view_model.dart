@@ -28,14 +28,14 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
       : super(MatchListViewState(
           currentUserId: userId,
         )) {
-    loadMatches();
+    _loadMatches();
   }
 
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
   }
 
-  Future<void> loadMatches() async {
+  Future<void> _loadMatches() async {
     state = state.copyWith(loading: true);
     try {
       _matchesStreamSubscription =
@@ -51,13 +51,18 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     }
   }
 
-  cancelStreamSubscription() async {
+  _cancelStreamSubscription() async {
     await _matchesStreamSubscription.cancel();
+  }
+
+  onResume(){
+    _cancelStreamSubscription();
+    _loadMatches();
   }
 
   @override
   void dispose() {
-    cancelStreamSubscription();
+    _cancelStreamSubscription();
     super.dispose();
   }
 }
