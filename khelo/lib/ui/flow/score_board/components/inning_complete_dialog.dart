@@ -74,7 +74,7 @@ class InningCompleteDialog extends ConsumerWidget {
             _subTitleText(
               context,
               title: "${context.l10n.score_board_runs_title}:",
-              subTitle: state.totalRuns.toString(),
+              subTitle: (state.currentInning?.total_runs ?? "").toString(),
             ),
             const SizedBox(
               width: 16,
@@ -82,7 +82,7 @@ class InningCompleteDialog extends ConsumerWidget {
             _subTitleText(
               context,
               title: "${context.l10n.score_board_wickets_text}:",
-              subTitle: state.wicketCount.toString(),
+              subTitle: (state.otherInning?.total_wickets ?? "").toString(),
             )
           ],
         ),
@@ -108,7 +108,7 @@ class InningCompleteDialog extends ConsumerWidget {
   }
 
   String _getOverCount(ScoreBoardViewState state) {
-    return state.currentInning?.overs?.toString() ??
+    return state.currentInning?.overs.toString() ??
         "${state.overCount - 1}.${state.ballCount}";
   }
 

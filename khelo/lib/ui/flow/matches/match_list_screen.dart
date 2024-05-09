@@ -210,7 +210,7 @@ class MatchListScreen extends ConsumerWidget {
             _teamNameView(
               context,
               team: match.teams.first,
-              wicket: match.teams.last.wicket ?? 0,
+              wicket: match.teams.last.wicket,
               totalOvers: match.number_of_over,
               isRunning:
                   match.current_playing_team_id == match.teams.first.team.id &&
@@ -219,7 +219,7 @@ class MatchListScreen extends ConsumerWidget {
             _teamNameView(
               context,
               team: match.teams.last,
-              wicket: match.teams.first.wicket ?? 0,
+              wicket: match.teams.first.wicket,
               totalOvers: match.number_of_over,
               isRunning:
                   match.current_playing_team_id == match.teams.last.team.id &&
@@ -258,7 +258,7 @@ class MatchListScreen extends ConsumerWidget {
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 TextSpan(
-                  text: " (${team.over ?? 0}/$totalOvers)",
+                  text: " (${team.over}/$totalOvers)",
                   style: AppTextStyle.body2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),

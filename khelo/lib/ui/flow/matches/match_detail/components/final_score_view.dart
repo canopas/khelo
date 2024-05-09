@@ -31,8 +31,7 @@ class FinalScoreView extends ConsumerWidget {
     for (final team in state.match!.teams) {
       final wicketCount = state.match!.teams
               .firstWhere((element) => element.team.id != team.team.id)
-              .wicket ??
-          0;
+              .wicket;
 
       children.add(_teamScore(context, team, wicketCount));
       children.add(const SizedBox(height: 8));
@@ -62,12 +61,12 @@ class FinalScoreView extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary)),
         const Spacer(),
         Text.rich(TextSpan(
-            text: "${team.run ?? 0}-$wicket",
+            text: "${team.run}-$wicket",
             style: AppTextStyle.header3
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
-                text: " ${team.over ?? 0}",
+                text: " ${team.over}",
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textSecondary),
               )

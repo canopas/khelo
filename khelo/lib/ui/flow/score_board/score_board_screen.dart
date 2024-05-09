@@ -402,7 +402,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.getMatchById,
+        onRetryTap: () {
+          notifier.cancelStreamSubscription();
+          notifier.loadMatch();
+        },
       );
     }
 
@@ -476,14 +479,13 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         extra: extra,
         playerOutId: outBatsMan?.id,
         wicketTakerId: wicketTakerId,
-        wicketType: type,
-        switchStrike: extra != null ? extra % 2 == 0 : false);
+        wicketType: type);
   }
 
   Future<void> _showStrikerSelectionDialog(BuildContext context) async {
     final striker = await StrikerSelectionDialog.show<UserModel>(context);
     if (striker != null && context.mounted) {
-      notifier.setOrSwitchStriker(batsMan: striker);
+      notifier.setOrSwitchStriker(batsManId: striker.id);
     }
   }
 

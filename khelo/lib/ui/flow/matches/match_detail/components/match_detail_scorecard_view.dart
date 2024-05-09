@@ -723,7 +723,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           ),
           Text(
-            "${team.run} - $wicket ${context.l10n.match_commentary_trailing_over_short_text(team.over ?? 0)}",
+            "${team.run} - $wicket ${context.l10n.match_commentary_trailing_over_short_text(team.over)}",
             style: AppTextStyle.subtitle1
                 .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
           )

@@ -55,19 +55,27 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
   }
 
   Future<void> onNextButtonTap() async {
+    final currentPlayingTeamId = state.tossWinnerDecision == TossDecision.bat
+        ? state.tossWinnerTeamId
+        : state.match!.teams
+            .where((element) => element.team.id != state.tossWinnerTeamId)
+            .firstOrNull
+            ?.team
+            .id;
     if (state.match?.id == null ||
         state.tossWinnerTeamId == null ||
-        state.tossWinnerDecision == null) {
+        state.tossWinnerDecision == null ||
+        currentPlayingTeamId == null) {
       return;
     }
     state =
         state.copyWith(isTossDetailUpdateInProgress: true, actionError: null);
     try {
       await _matchService.updateTossDetails(
-        state.match!.id!,
-        state.tossWinnerTeamId!,
-        state.tossWinnerDecision!,
-      );
+          state.match!.id!,
+          state.tossWinnerTeamId!,
+          state.tossWinnerDecision!,
+          currentPlayingTeamId);
       state = state.copyWith(
           isTossDetailUpdateInProgress: false, pushScoreBoard: true);
     } catch (e) {

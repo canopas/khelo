@@ -40,8 +40,7 @@ class MatchDetailInfoView extends ConsumerWidget {
     }
 
     return ListView(
-      padding:
-          context.mediaQueryPadding + const EdgeInsets.symmetric(horizontal: 8),
+      padding: context.mediaQueryPadding,
       children: [
         _sectionTitle(context, context.l10n.match_detail_match_info_tab_title),
         _matchTitleView(context, state.match!),
@@ -51,6 +50,7 @@ class MatchDetailInfoView extends ConsumerWidget {
         for (final team in state.match?.teams ?? []) ...[
           _teamPlayerView(context, team: team)
         ],
+        const SizedBox(height: 16),
         _sectionTitle(context, context.l10n.match_info_venue_title),
         _dataRowView(context,
             title: context.l10n.match_info_ground_title,
@@ -65,8 +65,7 @@ class MatchDetailInfoView extends ConsumerWidget {
   Widget _sectionTitle(BuildContext context, String title) {
     return Container(
       color: context.colorScheme.containerNormalOnSurface,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
         title,
         style: AppTextStyle.subtitle1
@@ -81,7 +80,7 @@ class MatchDetailInfoView extends ConsumerWidget {
     String? subtitle,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -88,7 +88,7 @@ class HomeScreen extends ConsumerWidget {
             _teamScore(
               context,
               match.teams.first,
-              match.teams.elementAt(1).wicket ?? 0,
+              match.teams.elementAt(1).wicket,
               match.current_playing_team_id == match.teams.first.team.id,
             ),
             const SizedBox(
@@ -97,7 +97,7 @@ class HomeScreen extends ConsumerWidget {
             _teamScore(
                 context,
                 match.teams.elementAt(1),
-                match.teams.first.wicket ?? 0,
+                match.teams.first.wicket,
                 match.current_playing_team_id ==
                     match.teams.elementAt(1).team.id),
             const SizedBox(
@@ -134,12 +134,12 @@ class HomeScreen extends ConsumerWidget {
                       : context.colorScheme.textPrimary)),
         ),
         Text.rich(TextSpan(
-            text: "${team.run ?? 0}-$wicket",
+            text: "${team.run}-$wicket",
             style: AppTextStyle.header3
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
-                text: " ${team.over ?? 0}",
+                text: " ${team.over}",
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textSecondary),
               )

@@ -143,9 +143,9 @@ class TeamDetailStatContent extends ConsumerWidget {
       final secondTeam = match.teams
           .firstWhere((element) => element.team.id != firstTeam.team.id);
 
-      if (firstTeam.run! == secondTeam.run!) {
+      if (firstTeam.run == secondTeam.run) {
         tie += 1;
-      } else if (firstTeam.run! > secondTeam.run!) {
+      } else if (firstTeam.run > secondTeam.run) {
         if (firstTeam.team.id == state.team?.id) {
           win += 1;
         } else {
@@ -228,8 +228,8 @@ class TeamDetailStatContent extends ConsumerWidget {
       final team = match.teams
           .firstWhere((element) => element.team.id == state.team?.id);
 
-      runs += (team.run ?? 0);
-      wicket += (team.wicket ?? 0);
+      runs += team.run;
+      wicket += team.wicket;
     }
 
     return (runs, wicket);
@@ -295,8 +295,8 @@ class TeamDetailStatContent extends ConsumerWidget {
       final opponentTeam = match.teams
           .firstWhere((element) => element.team.id != state.team?.id);
 
-      totalTeamRuns += team.run ?? 0;
-      totalTeamOuts += opponentTeam.wicket ?? 0;
+      totalTeamRuns += team.run;
+      totalTeamOuts += opponentTeam.wicket;
     }
 
     if (totalTeamOuts > 0) {
@@ -323,8 +323,8 @@ class TeamDetailStatContent extends ConsumerWidget {
       final opponentTeam = match.teams
           .firstWhere((element) => element.team.id != state.team?.id);
 
-      totalTeamRunsConceded += opponentTeam.run ?? 0;
-      totalTeamWicketsTaken += team.wicket ?? 0;
+      totalTeamRunsConceded += opponentTeam.run;
+      totalTeamWicketsTaken += team.wicket;
     }
 
     if (totalTeamWicketsTaken > 0) {
@@ -363,18 +363,18 @@ class TeamDetailStatContent extends ConsumerWidget {
     final firstTeam = completedMatches.first.teams
         .firstWhere((element) => element.team.id == state.team?.id);
 
-    var highest = firstTeam.run ?? 0;
-    var lowest = firstTeam.run ?? 0;
+    var highest = firstTeam.run;
+    var lowest = firstTeam.run;
 
     for (final match in completedMatches) {
       final team = match.teams
           .firstWhere((element) => element.team.id == state.team?.id);
 
-      if ((team.run ?? 0) > highest) {
-        highest = team.run ?? 0;
+      if (team.run > highest) {
+        highest = team.run;
       }
-      if ((team.run ?? 0) < lowest) {
-        lowest = team.run ?? 0;
+      if (team.run < lowest) {
+        lowest = team.run;
       }
     }
 
@@ -407,8 +407,8 @@ class TeamDetailStatContent extends ConsumerWidget {
     for (var match in matches) {
       final team = match.teams
           .firstWhere((element) => element.team.id == state.team?.id);
-      int runs = team.run ?? 0;
-      double overs = team.over ?? 0;
+      int runs = team.run;
+      double overs = team.over;
 
       totalRuns += runs;
       totalOvers += overs;
