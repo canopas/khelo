@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
@@ -16,28 +17,73 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class UserMatchListScreen extends ConsumerWidget {
+class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(userMatchListStateProvider);
-    final notifier = ref.watch(userMatchListStateProvider.notifier);
+  ConsumerState createState() => _UserMatchListScreenState();
+}
 
+class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late UserMatchListViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    final state = ref.watch(userMatchListStateProvider);
+    notifier = ref.watch(userMatchListStateProvider.notifier);
+
+    return ResumeDetector(
+      onResume: notifier.onResume,
+      child: _body(context, notifier, state),
+    );
+  }
+
+  Widget _body(
+    BuildContext context,
+    UserMatchListViewNotifier notifier,
+    UserMatchListState state,
+  ) {
     if (state.loading) {
       return const AppProgressIndicator();
     }
+
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadUserMatches,
+        onRetryTap: notifier.onResume,
       );
     }
 
-    return _body(context, state);
-  }
-
-  Widget _body(BuildContext context, UserMatchListState state) {
     if (state.matches.isNotEmpty) {
       return ListView.separated(
           padding: const EdgeInsets.only(bottom: 50, top: 24),

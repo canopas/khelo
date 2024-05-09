@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +18,8 @@ class MainScreen extends ConsumerStatefulWidget {
   ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends ConsumerState<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   static final List<Widget> _widgets = <Widget>[
     const HomeScreen(),
     const MyGameTabScreen(),
@@ -29,9 +29,38 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   final _materialPageController = PageController();
   final _cupertinoTabController = CupertinoTabController();
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      _materialPageController.dispose();
+      _cupertinoTabController.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (Platform.isIOS) {
       return _cupertinoTabs(context);
     }

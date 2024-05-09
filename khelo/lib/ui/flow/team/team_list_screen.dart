@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
@@ -14,8 +14,43 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class TeamListScreen extends ConsumerWidget {
+class TeamListScreen extends ConsumerStatefulWidget {
   const TeamListScreen({super.key});
+
+  @override
+  ConsumerState createState() => _TeamListScreenState();
+}
+
+class _TeamListScreenState extends ConsumerState<TeamListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late TeamListViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
 
   void _observeShowFilterOptionSheet(
     BuildContext context,
@@ -29,12 +64,15 @@ class TeamListScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(teamListViewStateProvider.notifier);
+  Widget build(BuildContext context) {
+    super.build(context);
+    notifier = ref.watch(teamListViewStateProvider.notifier);
     final state = ref.watch(teamListViewStateProvider);
 
     _observeShowFilterOptionSheet(context, ref);
-    return _teamList(context, notifier, state);
+    return ResumeDetector(
+        onResume: notifier.onResume,
+        child: _teamList(context, notifier, state));
   }
 
   Widget _teamList(
@@ -48,17 +86,19 @@ class TeamListScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadTeamList,
+        onRetryTap: notifier.onResume,
       );
     }
 
     return Stack(
       children: [
         ListView.separated(
+          itemCount: state.filteredTeams.length,
           padding: context.mediaQueryPadding +
               const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
           itemBuilder: (context, index) {
-            final team = state.teams[index];
+            final team = state.filteredTeams[index];
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -79,12 +119,6 @@ class TeamListScreen extends ConsumerWidget {
                   showMoreOptionButton: state.currentUserId == team.created_by,
                 ),
               ],
-            );
-          },
-          itemCount: state.teams.length,
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
             );
           },
         ),
@@ -137,7 +171,6 @@ class TeamListScreen extends ConsumerWidget {
                 } else if (value == context.l10n.team_list_edit_team_title) {
                   await AppRoute.addTeam(team: team).push(context);
                 }
-                notifier.loadTeamList();
               },
             )
           ]
@@ -184,7 +217,6 @@ class TeamListScreen extends ConsumerWidget {
           backgroundColor: context.colorScheme.primary,
           onTap: () async {
             await AppRoute.addTeam().push(context);
-            notifier.loadTeamList();
           },
           icon: Icon(
             Icons.add_rounded,

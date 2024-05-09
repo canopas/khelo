@@ -1,8 +1,6 @@
-import 'package:data/service/team/team_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';

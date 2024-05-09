@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
@@ -76,38 +77,23 @@ class TeamService {
     }
   }
 
-  Future<List<TeamModel>> getUserRelatedTeams({
-    TeamFilterOption option = TeamFilterOption.all,
-  }) async {
-    try {
-      QuerySnapshot mainCollectionSnapshot;
+  Stream<List<TeamModel>> getUserRelatedTeams() {
+    if (_currentUserId == null) {
+      return Stream.value([]);
+    }
 
-      switch (option) {
-        case TeamFilterOption.all:
-          mainCollectionSnapshot = await _firestore
-              .collection(_collectionName)
-              .where(
-                Filter.or(
-                  Filter('created_by', isEqualTo: _currentUserId),
-                  Filter('players', arrayContains: _currentUserId),
-                ),
-              )
-              .get();
-        case TeamFilterOption.createdByMe:
-          mainCollectionSnapshot = await _firestore
-              .collection(_collectionName)
-              .where('created_by', isEqualTo: _currentUserId)
-              .get();
-        case TeamFilterOption.memberMe:
-          mainCollectionSnapshot = await _firestore
-              .collection(_collectionName)
-              .where('players', arrayContains: _currentUserId)
-              .get();
-      }
-
+    return _firestore
+        .collection(_collectionName)
+        .where(
+          Filter.or(
+            Filter('created_by', isEqualTo: _currentUserId),
+            Filter('players', arrayContains: _currentUserId),
+          ),
+        )
+        .snapshots()
+        .asyncMap((snapshot) async {
       List<TeamModel> teams = [];
-
-      for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
+      for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
         AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
             mainDoc.data() as Map<String, dynamic>);
 
@@ -116,22 +102,22 @@ class TeamService {
             : null;
 
         final team = TeamModel(
-            name: teamRequestModel.name,
-            name_lowercase: teamRequestModel.name_lowercase,
-            id: teamRequestModel.id,
-            city: teamRequestModel.city,
-            created_at: teamRequestModel.created_at,
-            created_by: teamRequestModel.created_by,
-            profile_img_url: teamRequestModel.profile_img_url,
-            players: member);
+          name: teamRequestModel.name,
+          name_lowercase: teamRequestModel.name_lowercase,
+          id: teamRequestModel.id,
+          city: teamRequestModel.city,
+          created_at: teamRequestModel.created_at,
+          created_by: teamRequestModel.created_by,
+          profile_img_url: teamRequestModel.profile_img_url,
+          players: member,
+        );
 
         teams.add(team);
       }
-
       return teams;
-    } catch (error, stack) {
+    }).handleError((error, stack) {
       throw AppError.fromError(error, stack);
-    }
+    });
   }
 
   Future<List<TeamModel>> getUserOwnedTeams() async {
@@ -263,10 +249,4 @@ class TeamService {
       throw AppError.fromError(error, stack);
     }
   }
-}
-
-enum TeamFilterOption {
-  all,
-  createdByMe,
-  memberMe;
 }
