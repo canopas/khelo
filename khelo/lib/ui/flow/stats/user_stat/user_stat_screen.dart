@@ -2,20 +2,65 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-class UserStatScreen extends ConsumerWidget {
+class UserStatScreen extends ConsumerStatefulWidget {
   const UserStatScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(userStatViewStateProvider);
-    final notifier = ref.watch(userStatViewStateProvider.notifier);
+  ConsumerState createState() => _UserStatScreenState();
+}
 
+class _UserStatScreenState extends ConsumerState<UserStatScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late UserStatViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final state = ref.watch(userStatViewStateProvider);
+    notifier = ref.watch(userStatViewStateProvider.notifier);
+
+    return ResumeDetector(
+      onResume: notifier.onResume,
+      child: _body(context, notifier, state),
+    );
+  }
+
+  Widget _body(BuildContext context, UserStatViewNotifier notifier,
+      UserStatViewState state) {
     if (state.loading) {
       return const AppProgressIndicator();
     }
@@ -23,14 +68,10 @@ class UserStatScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.getUserRelatedBalls,
+        onRetryTap: notifier.onResume,
       );
     }
 
-    return _body(context, state);
-  }
-
-  Widget _body(BuildContext context, UserStatViewState state) {
     return ListView(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 50),
       children: [
@@ -151,9 +192,7 @@ class UserStatScreen extends ConsumerWidget {
           .fold(
               0,
               (sum, element) =>
-                  sum +
-                  element.runs_scored +
-                  (element.extras_awarded ?? 0));
+                  sum + element.runs_scored + (element.extras_awarded ?? 0));
 
       return (
         _calculateBowlingAverage(runsConceded, wicketTaken),
@@ -232,9 +271,7 @@ class UserStatScreen extends ConsumerWidget {
         .fold(
             0,
             (sum, element) =>
-                sum +
-                element.runs_scored +
-                (element.extras_awarded ?? 0));
+                sum + element.runs_scored + (element.extras_awarded ?? 0));
     if (bowledBallCount == 0) {
       return 0.0;
     }

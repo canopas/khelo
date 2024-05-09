@@ -105,35 +105,48 @@ Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
         controller.add(changes);
       } catch (error, stack) {
         controller.addError(AppError.fromError(error, stack));
+        controller.close();
       }
     }, onError: (error, stack) {
       controller.addError(AppError.fromError(error, stack));
+      controller.close();
     });
 
     return controller.stream;
   }
 
-  Future<List<BallScoreModel>> getCurrentUserRelatedBalls() async {
+  Stream<List<BallScoreModel>> getCurrentUserRelatedBalls() {
     if (_currentUserId == null) {
-      return [];
+      return Stream.value([]);
     }
-    try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(FireStoreConst.ballScoresCollection)
-          .where(Filter.or(
-              Filter(FireStoreConst.bowlerId, isEqualTo: _currentUserId),
-              Filter(FireStoreConst.batsmanId, isEqualTo: _currentUserId),
-              Filter(FireStoreConst.wicketTakerId, isEqualTo: _currentUserId),
-              Filter(FireStoreConst.playerOutId, isEqualTo: _currentUserId)))
-          .get();
+    StreamController<List<BallScoreModel>> controller =
+        StreamController<List<BallScoreModel>>();
+    _firestore
+        .collection(FireStoreConst.ballScoresCollection)
+        .where(Filter.or(
+            Filter(FireStoreConst.bowlerId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.batsmanId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.wicketTakerId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.playerOutId, isEqualTo: _currentUserId)))
+        .snapshots()
+        .listen((snapshot) {
+      try {
+        final ballList = snapshot.docs.map((doc) {
+          final data = doc.data();
+          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+        }).toList();
 
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-      }).toList();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
+        controller.add(ballList);
+      } catch (error, stack) {
+        controller.addError(AppError.fromError(error, stack));
+        controller.close();
+      }
+    }, onError: (error, stack) {
+      controller.addError(AppError.fromError(error, stack));
+      controller.close();
+    });
+
+    return controller.stream;
   }
 
   Future<void> deleteBallAndUpdateTeamDetails({

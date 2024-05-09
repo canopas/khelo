@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -15,17 +16,56 @@ import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/page_views/expandable_page_view.dart';
 import 'package:style/text/app_text_style.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  late HomeViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     final state = ref.watch(homeViewStateProvider);
-    final notifier = ref.watch(homeViewStateProvider.notifier);
+    notifier = ref.watch(homeViewStateProvider.notifier);
 
     return AppPage(
       title: context.l10n.home_screen_title,
-      body: _body(context, notifier, state),
+      body: ResumeDetector(
+        onResume: notifier.onResume,
+        child: _body(context, notifier, state),
+      ),
     );
   }
 
@@ -40,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadMatches,
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -63,8 +103,7 @@ class HomeScreen extends ConsumerWidget {
     return ExpandablePageView(
       itemCount: state.matches.length,
       itemBuilder: (context, index) {
-        return _matchCell(
-            context, state.matches[index]);
+        return _matchCell(context, state.matches[index]);
       },
     );
   }
