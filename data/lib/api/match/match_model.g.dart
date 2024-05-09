@@ -117,9 +117,9 @@ _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map<String, dynamic> json) =>
       team: TeamModel.fromJson(json['team'] as Map<String, dynamic>),
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
-      over: (json['over'] as num?)?.toDouble(),
-      run: json['run'] as int?,
-      wicket: json['wicket'] as int?,
+      over: (json['over'] as num?)?.toDouble() ?? 0,
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
       squad: (json['squad'] as List<dynamic>?)
               ?.map((e) => MatchPlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -237,9 +237,9 @@ _$AddMatchTeamRequestImpl _$$AddMatchTeamRequestImplFromJson(
       team_id: json['team_id'] as String,
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
-      over: (json['over'] as num?)?.toDouble(),
-      run: json['run'] as int?,
-      wicket: json['wicket'] as int?,
+      over: (json['over'] as num?)?.toDouble() ?? 0,
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
       squad: (json['squad'] as List<dynamic>?)
               ?.map(
                   (e) => MatchPlayerRequest.fromJson(e as Map<String, dynamic>))
