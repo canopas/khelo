@@ -402,10 +402,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () {
-          notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 

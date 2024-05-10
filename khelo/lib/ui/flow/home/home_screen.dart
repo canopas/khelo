@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -62,10 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     return AppPage(
       title: context.l10n.home_screen_title,
-      body: ResumeDetector(
-        onResume: notifier.onResume,
-        child: _body(context, notifier, state),
-      ),
+      body: _body(context, notifier, state),
     );
   }
 

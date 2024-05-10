@@ -132,7 +132,6 @@ class MatchService {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
-
     StreamController<List<MatchModel>> controller =
         StreamController<List<MatchModel>>();
 

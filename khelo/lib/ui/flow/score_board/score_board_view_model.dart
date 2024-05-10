@@ -40,10 +40,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void setData(String matchId) {
     this.matchId = matchId;
-    loadMatch();
+    _loadMatch();
   }
 
-  void loadMatch() {
+  void _loadMatch() {
     if (matchId == null) {
       return;
     }
@@ -52,7 +52,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       _matchStreamSubscription =
           _matchService.getMatchStreamById(matchId!).listen(
         (match) {
-
           state = state.copyWith(match: match, error: null);
           if (!state.inningsQueryListenerSet) {
             _loadInnings();
@@ -952,15 +951,20 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     _configureStrikerId();
   }
 
-  cancelStreamSubscription() async {
+  _cancelStreamSubscription() async {
     await _matchStreamSubscription.cancel();
     await _inningStreamSubscription.cancel();
     await _ballScoreStreamSubscription.cancel();
   }
 
+  onResume() {
+    _cancelStreamSubscription();
+    _loadMatch();
+  }
+
   @override
   Future<void> dispose() async {
-    await cancelStreamSubscription();
+    await _cancelStreamSubscription();
     super.dispose();
   }
 }

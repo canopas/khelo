@@ -40,8 +40,6 @@ dependencies:
     path: ../data
 
   shared_preferences: ^2.0.18
-  uuid: ^4.4.0
-  visibility_detector: ^0.4.0+2
 
   # UI
   cupertino_icons: ^1.0.2

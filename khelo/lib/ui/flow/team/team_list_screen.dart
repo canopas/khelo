@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
@@ -70,9 +69,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     final state = ref.watch(teamListViewStateProvider);
 
     _observeShowFilterOptionSheet(context, ref);
-    return ResumeDetector(
-        onResume: notifier.onResume,
-        child: _teamList(context, notifier, state));
+    return _teamList(context, notifier, state);
   }
 
   Widget _teamList(
