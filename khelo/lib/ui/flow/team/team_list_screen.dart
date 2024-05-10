@@ -69,10 +69,10 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     final state = ref.watch(teamListViewStateProvider);
 
     _observeShowFilterOptionSheet(context, ref);
-    return _teamList(context, notifier, state);
+    return _body(context, notifier, state);
   }
 
-  Widget _teamList(
+  Widget _body(
     BuildContext context,
     TeamListViewNotifier notifier,
     TeamListViewState state,
@@ -89,38 +89,60 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
     return Stack(
       children: [
-        ListView.separated(
-          itemCount: state.filteredTeams.length,
-          padding: context.mediaQueryPadding +
-              const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemBuilder: (context, index) {
-            final team = state.filteredTeams[index];
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (index == 0) ...[
-                  Text(
-                    state.selectedFilter.getString(context),
-                    style: AppTextStyle.subtitle1.copyWith(
-                        color: context.colorScheme.textPrimary, fontSize: 20),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  )
-                ],
-                _teamListCell(
-                  context,
-                  notifier,
-                  team,
-                  showMoreOptionButton: state.currentUserId == team.created_by,
-                ),
-              ],
-            );
-          },
-        ),
+        _teamList(context, notifier, state),
         _floatingAddButton(context, notifier),
       ],
+    );
+  }
+
+  Widget _teamList(
+    BuildContext context,
+    TeamListViewNotifier notifier,
+    TeamListViewState state,
+  ) {
+    if (state.filteredTeams.isEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Text(
+            context.l10n.team_list_empty_list_description,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      itemCount: state.filteredTeams.length,
+      padding: context.mediaQueryPadding +
+          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        final team = state.filteredTeams[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (index == 0) ...[
+              Text(
+                state.selectedFilter.getString(context),
+                style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textPrimary, fontSize: 20),
+              ),
+              const SizedBox(
+                height: 16,
+              )
+            ],
+            _teamListCell(
+              context,
+              notifier,
+              team,
+              showMoreOptionButton: state.currentUserId == team.created_by,
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -158,7 +158,10 @@ class TeamService {
 
   Future<void> deleteTeam(String teamId) async {
     try {
-      await _firestore.collection(FireStoreConst.teamsCollection).doc(teamId).delete();
+      await _firestore
+          .collection(FireStoreConst.teamsCollection)
+          .doc(teamId)
+          .delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -170,7 +173,8 @@ class TeamService {
           _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
 
       await teamRef.set(
-          {FireStoreConst.players: FieldValue.arrayUnion(players)}, SetOptions(merge: true));
+          {FireStoreConst.players: FieldValue.arrayUnion(players)},
+          SetOptions(merge: true));
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -182,7 +186,8 @@ class TeamService {
       DocumentReference teamRef =
           _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
 
-      await teamRef.update({FireStoreConst.players: FieldValue.arrayRemove(playerIds)});
+      await teamRef
+          .update({FireStoreConst.players: FieldValue.arrayRemove(playerIds)});
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -192,7 +197,8 @@ class TeamService {
     try {
       QuerySnapshot teamSnap = await _firestore
           .collection(FireStoreConst.teamsCollection)
-          .where(FireStoreConst.nameLowercase, isEqualTo: teamName.caseAndSpaceInsensitive)
+          .where(FireStoreConst.nameLowercase,
+              isEqualTo: teamName.caseAndSpaceInsensitive)
           .get();
 
       return teamSnap.docs.isEmpty;
