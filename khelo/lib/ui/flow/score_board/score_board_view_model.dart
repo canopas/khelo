@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/errors/app_error.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'score_board_view_model.freezed.dart';
 
@@ -28,7 +30,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late StreamSubscription _matchStreamSubscription;
-  late StreamSubscription _inningStreamSubscription;
   late StreamSubscription _ballScoreStreamSubscription;
   String? matchId;
 
@@ -40,34 +41,158 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void setData(String matchId) {
     this.matchId = matchId;
-    _loadMatch();
+    _loadMatchesAndInning();
   }
 
-  void _loadMatch() {
-    if (matchId == null) {
+  void _loadMatchesAndInning() {
+    state = state.copyWith(loading: true);
+    final matchInningStream = Rx.combineLatest2(
+      _matchService.getMatchStreamById(matchId!),
+      _inningService.getInningsStreamByMatchId(matchId: matchId!),
+      (match, innings) => {'match': match, 'innings': innings},
+    ).asyncMap((data) async {
+      try {
+        MatchModel match = data['match'] as MatchModel;
+        List<InningModel> innings = data['innings'] as List<InningModel>;
+        final previousMatch = state.match;
+        final isMatchUpdated = state.match != match;
+        state = state.copyWith(match: match, error: null);
+        if (innings.isEmpty) {
+          await _createInnings();
+        } else {
+          final inningFirst = innings
+              .where(
+                  (element) => element.innings_status == InningStatus.running)
+              .firstOrNull;
+
+          final inningSecond = innings
+              .where(
+                  (element) => element.innings_status != InningStatus.running)
+              .firstOrNull;
+          if (inningFirst != state.currentInning ||
+              inningSecond != state.otherInning) {
+            state = state.copyWith(
+                currentInning: inningFirst,
+                otherInning: inningSecond,
+                error: null);
+          }
+        }
+
+        if (isMatchUpdated) {
+          final previousIsMatchUpdatedState = state.isMatchUpdated;
+          _configureCurrentBatsmen();
+          if (!previousIsMatchUpdatedState || previousMatch == null) {
+            // return stream only if first time loading or change occur due to add or undo
+            return Stream.value(match);
+          } else {
+            return const Stream.empty();
+          }
+        } else {
+          return const Stream.empty();
+        }
+      } catch (e) {
+        return Stream.error(AppError.fromError(e));
+      }
+    });
+    _matchStreamSubscription = matchInningStream.listen((matchStream) {
+      if (!state.ballScoreQueryListenerSet) {
+        _loadBallScore(matchStream);
+      }
+    }, onError: (e) {
+      state = state.copyWith(error: AppError.fromError(e), loading: false);
+      debugPrint(
+          "ScoreBoardViewNotifier: error while loading match and inning -> $e");
+    });
+  }
+
+  void _loadBallScore(Stream<dynamic> matchStream) {
+    final currentInningId = state.currentInning?.id;
+    final otherInningId = state.otherInning?.id;
+    if (currentInningId == null || otherInningId == null) {
       return;
     }
     try {
-      state = state.copyWith(loading: true);
-      _matchStreamSubscription =
-          _matchService.getMatchStreamById(matchId!).listen(
-        (match) {
-          state = state.copyWith(match: match, error: null);
-          if (!state.inningsQueryListenerSet) {
-            _loadInnings();
+      state = state.copyWith(ballScoreQueryListenerSet: true);
+      final ballScoreStream = Rx.combineLatest2(
+        matchStream,
+        _loadBallScoresStream(currentInningId, otherInningId),
+        (match, scores) {
+          List<BallScoreModel> currentScoreList =
+              state.currentScoresList.toList();
+          List<BallScoreModel> previousScoreList =
+              state.currentScoresList.toList();
+
+          for (var score in scores) {
+            if (score.type == DocumentChangeType.added) {
+              if (score.ballScore.inning_id == state.currentInning?.id &&
+                  !currentScoreList
+                      .map((e) => e.id)
+                      .contains(score.ballScore.id)) {
+                currentScoreList.add(score.ballScore);
+              } else if (score.ballScore.inning_id == state.otherInning?.id &&
+                  !previousScoreList
+                      .map((e) => e.id)
+                      .contains(score.ballScore.id)) {
+                previousScoreList.add(score.ballScore);
+              }
+            } else if (score.type == DocumentChangeType.removed) {
+              if (score.ballScore.inning_id == state.currentInning?.id &&
+                  currentScoreList
+                      .map((e) => e.id)
+                      .contains(score.ballScore.id)) {
+                currentScoreList
+                    .removeWhere((element) => element.id == score.ballScore.id);
+              } else if (score.ballScore.inning_id == state.otherInning?.id &&
+                  previousScoreList
+                      .map((e) => e.id)
+                      .contains(score.ballScore.id)) {
+                previousScoreList
+                    .removeWhere((element) => element.id == score.ballScore.id);
+              }
+            }
           }
-          _configureCurrentBatsmen();
-        },
-        onError: (e, stack) {
-          state = state.copyWith(error: e, loading: false);
-          debugPrint(
-              "ScoreBoardViewNotifier: error while load match -> $e. \n stack -> $stack");
+
+          currentScoreList.sort(
+            (a, b) => a.time.compareTo(b.time),
+          );
+
+          previousScoreList.sort(
+            (a, b) => a.time.compareTo(b.time),
+          );
+          state = state.copyWith(
+              currentScoresList: currentScoreList,
+              previousScoresList: previousScoreList,
+              ballScoreQueryListenerSet: true,
+              loading: false,
+              error: null);
+          return scores;
         },
       );
-    } catch (e, stack) {
+
+      _ballScoreStreamSubscription = ballScoreStream.listen((scores) {
+        if (state.isMatchUpdated) {
+          _configureScoringDetails(
+              isAfterUndo: scores.length == 1 &&
+                  scores.elementAt(0).type == DocumentChangeType.removed);
+        }
+      }, onError: (e) {
+        state = state.copyWith(error: e, loading: false);
+        debugPrint(
+            "ScoreBoardViewNotifier: error while loading ball score -> $e");
+      });
+    } catch (e) {
+      state = state.copyWith(error: AppError.fromError(e), loading: false);
       debugPrint(
-          "ScoreBoardViewNotifier: error while load match -> $e. \n stack -> $stack");
+          "ScoreBoardViewNotifier: error while loading ball score -> $e");
     }
+  }
+
+  Stream<List<BallScoreChange>> _loadBallScoresStream(
+    String currentInningId,
+    String otherInningId,
+  ) {
+    return _ballScoreService
+        .getBallScoresStreamByInningIds([currentInningId, otherInningId]);
   }
 
   void _configureCurrentBatsmen() {
@@ -91,114 +216,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     state = state.copyWith(
       batsMans: currentPlayingBatsMan,
       lastAssignedIndex: lastPlayerIndex,
+      isMatchUpdated: true,
     );
-  }
-
-  void _loadInnings() {
-    if (state.match == null || matchId == null) {
-      return;
-    }
-    try {
-      state = state.copyWith(inningsQueryListenerSet: true);
-
-      _inningStreamSubscription =
-          _inningService.getInningsStreamByMatchId(matchId: matchId!).listen(
-        (innings) async {
-          if (innings.isEmpty) {
-            await _createInnings();
-            return;
-          }
-
-          final inningFirst = innings
-              .where(
-                  (element) => element.innings_status == InningStatus.running)
-              .firstOrNull;
-
-          final inningSecond = innings
-              .where(
-                  (element) => element.innings_status != InningStatus.running)
-              .firstOrNull;
-          state = state.copyWith(
-              currentInning: inningFirst, otherInning: inningSecond);
-          if (!state.ballScoreQueryListenerSet) {
-            _loadBallScores();
-          }
-        },
-        onError: (e, stack) {
-          state = state.copyWith(error: e, loading: false);
-          debugPrint(
-              "ScoreBoardViewNotifier: error while load innings -> $e. \n stack -> $stack");
-        },
-      );
-    } catch (e, stack) {
-      debugPrint(
-          "ScoreBoardViewNotifier: error while load innings -> $e. \n stack -> $stack");
-    }
-  }
-
-  void _loadBallScores() {
-    if (state.currentInning == null ||
-        state.currentInning?.id == null ||
-        state.otherInning == null ||
-        state.otherInning?.id == null) {
-      return;
-    }
-    try {
-      state = state.copyWith(ballScoreQueryListenerSet: true);
-      _ballScoreStreamSubscription = _ballScoreService
-          .getBallScoresStreamByInningIds(
-              [state.currentInning!.id!, state.otherInning!.id!]).listen(
-        (scores) {
-          List<BallScoreModel> currentScoreList =
-              state.currentScoresList.toList();
-          List<BallScoreModel> previousScoreList =
-              state.currentScoresList.toList();
-
-          for (var score in scores) {
-            if (score.type == DocumentChangeType.added) {
-              if (score.ballScore.inning_id == state.currentInning?.id) {
-                currentScoreList.add(score.ballScore);
-              } else {
-                previousScoreList.add(score.ballScore);
-              }
-            } else if (score.type == DocumentChangeType.removed) {
-              if (score.ballScore.inning_id == state.currentInning?.id) {
-                currentScoreList
-                    .removeWhere((element) => element.id == score.ballScore.id);
-              } else {
-                previousScoreList
-                    .removeWhere((element) => element.id == score.ballScore.id);
-              }
-            }
-          }
-
-          currentScoreList.sort(
-            (a, b) => a.time.compareTo(b.time),
-          );
-
-          previousScoreList.sort(
-            (a, b) => a.time.compareTo(b.time),
-          );
-          state = state.copyWith(
-              currentScoresList: currentScoreList,
-              previousScoresList: previousScoreList,
-              loading: false,
-              error: null);
-
-          _configureScoringDetails(
-              isAfterUndo: scores.length == 1 &&
-                  scores.elementAt(0).type == DocumentChangeType.removed);
-        },
-        onError: (e, stack) {
-          state = state.copyWith(error: e, loading: false);
-          debugPrint(
-              "ScoreBoardViewNotifier: error while load ball scores -> $e. \n stack -> $stack");
-        },
-      );
-    } catch (e, stack) {
-      debugPrint(
-          "ScoreBoardViewNotifier: error while load ball scores -> $e. \n stack -> $stack");
-    }
   }
 
   void _configureScoringDetails({required bool isAfterUndo}) {
@@ -476,7 +495,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }
 
       final updatedPlayer = _getUpdatedOutPlayerStatus(wicketType, playerOutId);
-
+      state = state.copyWith(isMatchUpdated: false);
       await _ballScoreService.addBallScoreAndUpdateTeamDetails(
         score: ball,
         matchId: matchId,
@@ -490,7 +509,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         updatedPlayer: updatedPlayer,
       );
     } catch (e, stack) {
-      state = state.copyWith(actionError: e);
+      state = state.copyWith(actionError: e, isMatchUpdated: true);
       debugPrint(
           "ScoreBoardViewNotifier: error while adding ball -> $e, stack -> $stack");
     }
@@ -683,7 +702,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }
 
       final updatedPlayers = _getUndoPlayerStatus(lastBall);
-
+      state = state.copyWith(isMatchUpdated: false);
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
           ballId: lastBall.id!,
           matchId: matchId,
@@ -696,7 +715,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           totalWicketTaken: wicketCount,
           updatedPlayer: updatedPlayers);
     } catch (e) {
-      state = state.copyWith(actionError: e);
+      state = state.copyWith(actionError: e, isMatchUpdated: true);
       debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
     }
   }
@@ -953,13 +972,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   _cancelStreamSubscription() async {
     await _matchStreamSubscription.cancel();
-    await _inningStreamSubscription.cancel();
     await _ballScoreStreamSubscription.cancel();
   }
 
   onResume() {
     _cancelStreamSubscription();
-    _loadMatch();
+    _loadMatchesAndInning();
   }
 
   @override
@@ -1005,8 +1023,8 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     @Default(false) bool loading,
     @Default(false) bool pop,
     @Default(true) bool continueWithInjuredPlayers,
-    @Default(false) bool inningsQueryListenerSet,
     @Default(false) bool ballScoreQueryListenerSet,
+    @Default(true) bool isMatchUpdated,
     @Default(0) int ballCount,
     @Default(1) int overCount,
     @Default(0) int lastAssignedIndex,

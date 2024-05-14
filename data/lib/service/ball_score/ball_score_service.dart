@@ -83,7 +83,7 @@ class BallScoreService {
     }
   }
 
-Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
+  Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
       List<String> inningIds) {
     StreamController<List<BallScoreChange>> controller =
         StreamController<List<BallScoreChange>>();
