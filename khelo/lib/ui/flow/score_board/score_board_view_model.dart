@@ -50,8 +50,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String currentInningId,
     String otherInningId,
   ) {
-    return _ballScoreService
-        .getBallScoresStreamByInningIds([currentInningId, otherInningId]);
+    return _ballScoreService.getBallScoresStreamByInningIds(
+        [currentInningId, otherInningId]).handleError((e) {
+      throw AppError.fromError(e);
+    });
   }
 
   void _loadMatchesAndInning() {
@@ -109,21 +111,21 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           _matchStreamController.add(matchStream);
         }
       }, onError: (e) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while loading match and inning -> $e");
         _matchStreamController.addError(e);
         state = state.copyWith(
             error: AppError.fromError(e),
             loading: false,
             isActionInProgress: false);
-        debugPrint(
-            "ScoreBoardViewNotifier: error while loading match and inning -> $e");
       });
     } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while loading match and inning -> $e");
       state = state.copyWith(
           error: AppError.fromError(e),
           loading: false,
           isActionInProgress: false);
-      debugPrint(
-          "ScoreBoardViewNotifier: error while loading match and inning -> $e");
     }
   }
 
@@ -198,20 +200,20 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                   scores.elementAt(0).type == DocumentChangeType.removed);
         }
       }, onError: (e) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while loading ball score -> $e");
         state = state.copyWith(
             error: AppError.fromError(e),
             loading: false,
             isActionInProgress: false);
-        debugPrint(
-            "ScoreBoardViewNotifier: error while loading ball score -> $e");
       });
     } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while loading ball score -> $e");
       state = state.copyWith(
           error: AppError.fromError(e),
           loading: false,
           isActionInProgress: false);
-      debugPrint(
-          "ScoreBoardViewNotifier: error while loading ball score -> $e");
     }
   }
 
@@ -370,8 +372,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               ? InningStatus.yetToStart
               : InningStatus.running);
     } catch (e) {
-      state = state.copyWith(error: e, loading: false);
       debugPrint("ScoreBoardViewNotifier: error while create innings -> $e");
+      state = state.copyWith(error: e, loading: false);
     }
   }
 
@@ -533,10 +535,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         updatedPlayer: updatedPlayer,
       );
     } catch (e) {
+      debugPrint("ScoreBoardViewNotifier: error while adding ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
-      debugPrint(
-          "ScoreBoardViewNotifier: error while adding ball -> $e");
     }
   }
 
@@ -741,9 +742,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           totalWicketTaken: wicketCount,
           updatedPlayer: updatedPlayers);
     } catch (e) {
+      debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
-      debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
     }
   }
 
@@ -898,8 +899,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       await _matchService.updateMatchStatus(matchId, MatchStatus.abandoned);
       state = state.copyWith(pop: true, isActionInProgress: false);
     } catch (e) {
-      state = state.copyWith(actionError: e, isActionInProgress: false);
       debugPrint("ScoreBoardViewNotifier: error while abandon match -> $e");
+      state = state.copyWith(actionError: e, isActionInProgress: false);
     }
   }
 
@@ -933,8 +934,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       state = state.copyWith(pop: true, isActionInProgress: false);
     } catch (e) {
-      state = state.copyWith(actionError: e, isActionInProgress: false);
       debugPrint("ScoreBoardViewNotifier: error while end match -> $e");
+      state = state.copyWith(actionError: e, isActionInProgress: false);
     }
   }
 
