@@ -31,6 +31,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final BallScoreService _ballScoreService;
   late StreamSubscription _matchStreamSubscription;
   late StreamSubscription _ballScoreStreamSubscription;
+  final StreamController<MatchModel> _matchStreamController =
+      StreamController<MatchModel>();
   String? matchId;
 
   ScoreBoardViewNotifier(
@@ -44,6 +46,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     _loadMatchesAndInning();
   }
 
+  Stream<List<BallScoreChange>> _loadBallScoresStream(
+    String currentInningId,
+    String otherInningId,
+  ) {
+    return _ballScoreService
+        .getBallScoresStreamByInningIds([currentInningId, otherInningId]);
+  }
+
   void _loadMatchesAndInning() {
     state = state.copyWith(loading: true);
     final matchInningStream = Rx.combineLatest2(
@@ -55,7 +65,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         MatchModel match = data['match'] as MatchModel;
         List<InningModel> innings = data['innings'] as List<InningModel>;
         final previousMatch = state.match;
-        final isMatchUpdated = state.match != match;
+        final isMatchChanged = state.match != match;
         state = state.copyWith(match: match, error: null);
         if (innings.isEmpty) {
           await _createInnings();
@@ -78,34 +88,32 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           }
         }
 
-        if (isMatchUpdated) {
+        if (isMatchChanged) {
           final previousIsMatchUpdatedState = state.isMatchUpdated;
           _configureCurrentBatsmen();
           if (!previousIsMatchUpdatedState || previousMatch == null) {
-            // return stream only if first time loading or change occur due to add or undo
-            return Stream.value(match);
-          } else {
-            return const Stream.empty();
+            // return match only if first time loading or change occur due to add or undo
+            return match;
           }
-        } else {
-          return const Stream.empty();
         }
       } catch (e) {
-        return Stream.error(AppError.fromError(e));
+        throw AppError.fromError(e);
       }
     });
     _matchStreamSubscription = matchInningStream.listen((matchStream) {
       if (!state.ballScoreQueryListenerSet) {
-        _loadBallScore(matchStream);
+        _loadBallScore();
       }
+      _matchStreamController.add(matchStream as MatchModel);
     }, onError: (e) {
+      _matchStreamController.addError(e);
       state = state.copyWith(error: AppError.fromError(e), loading: false);
       debugPrint(
           "ScoreBoardViewNotifier: error while loading match and inning -> $e");
     });
   }
 
-  void _loadBallScore(Stream<dynamic> matchStream) {
+  void _loadBallScore() {
     final currentInningId = state.currentInning?.id;
     final otherInningId = state.otherInning?.id;
     if (currentInningId == null || otherInningId == null) {
@@ -114,7 +122,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     try {
       state = state.copyWith(ballScoreQueryListenerSet: true);
       final ballScoreStream = Rx.combineLatest2(
-        matchStream,
+        _matchStreamController.stream,
         _loadBallScoresStream(currentInningId, otherInningId),
         (match, scores) {
           List<BallScoreModel> currentScoreList =
@@ -176,7 +184,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                   scores.elementAt(0).type == DocumentChangeType.removed);
         }
       }, onError: (e) {
-        state = state.copyWith(error: e, loading: false);
+        state = state.copyWith(error: AppError.fromError(e), loading: false);
         debugPrint(
             "ScoreBoardViewNotifier: error while loading ball score -> $e");
       });
@@ -185,14 +193,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       debugPrint(
           "ScoreBoardViewNotifier: error while loading ball score -> $e");
     }
-  }
-
-  Stream<List<BallScoreChange>> _loadBallScoresStream(
-    String currentInningId,
-    String otherInningId,
-  ) {
-    return _ballScoreService
-        .getBallScoresStreamByInningIds([currentInningId, otherInningId]);
   }
 
   void _configureCurrentBatsmen() {
@@ -973,6 +973,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   _cancelStreamSubscription() async {
     await _matchStreamSubscription.cancel();
     await _ballScoreStreamSubscription.cancel();
+    await _matchStreamController.close();
   }
 
   onResume() {

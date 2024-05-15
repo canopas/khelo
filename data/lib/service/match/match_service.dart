@@ -549,7 +549,7 @@ class MatchService {
         }
 
         existingTeams[battingTeamIndex][FireStoreConst.run] = totalRun;
-        if (runs != null) {
+        if (over != null) {
           existingTeams[battingTeamIndex][FireStoreConst.over] = over;
         }
         existingTeams[bowlingTeamIndex][FireStoreConst.wicket] = wicket;
