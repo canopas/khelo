@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:data/errors/app_error.dart';
+import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as path;
@@ -48,8 +49,8 @@ class FileUploadService {
 }
 
 enum ImageUploadType {
-  user('UserProfileImages'),
-  team('TeamProfileImages');
+  user(FireStoreConst.userProfileImagesFolder),
+  team(FireStoreConst.teamProfileImagesFolder);
 
   const ImageUploadType(this.value);
 

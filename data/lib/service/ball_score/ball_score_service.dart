@@ -2,12 +2,19 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/errors/app_error.dart';
+import 'package:data/service/innings/inning_service.dart';
+import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../api/match/match_model.dart';
 
 final ballScoreServiceProvider = Provider((ref) {
   final service = BallScoreService(
     FirebaseFirestore.instance,
+    ref.read(matchServiceProvider),
+    ref.read(inningServiceProvider),
     ref.read(currentUserPod)?.id,
   );
 
@@ -17,66 +24,85 @@ final ballScoreServiceProvider = Provider((ref) {
 
 class BallScoreService {
   final FirebaseFirestore _firestore;
+  final MatchService _matchService;
+  final InningsService _inningsService;
   String? _currentUserId;
 
-  final String _collectionName = 'ball_scores';
+  BallScoreService(this._firestore, this._matchService, this._inningsService,
+      this._currentUserId);
 
-  BallScoreService(this._firestore, this._currentUserId);
-
-  Future<String> updateBallScore(BallScoreModel score) async {
+  Future<void> addBallScoreAndUpdateTeamDetails({
+    required BallScoreModel score,
+    required String matchId,
+    required String battingTeamId,
+    required String battingTeamInningId,
+    required int totalRuns,
+    required String bowlingTeamId,
+    required String bowlingTeamInningId,
+    required int totalWicketTaken,
+    int? totalBowlingTeamRuns,
+    MatchPlayerRequest? updatedPlayer,
+  }) async {
     try {
       DocumentReference scoreRef =
-          _firestore.collection(_collectionName).doc(score.id);
-      WriteBatch batch = _firestore.batch();
+          _firestore.collection(FireStoreConst.ballScoresCollection).doc();
+      await _firestore.runTransaction(maxAttempts: 1, (transaction) async {
+        final overCount =
+            double.parse("${score.over_number - 1}.${score.ball_number}");
 
-      batch.set(scoreRef, score.toJson(), SetOptions(merge: true));
-      String newScoreId = scoreRef.id;
+        // update matchTeamScore and squad(if needed)
+        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
+            matchId: matchId,
+            battingTeamId: battingTeamId,
+            totalRun: totalRuns,
+            over: overCount,
+            bowlingTeamId: bowlingTeamId,
+            wicket: totalWicketTaken,
+            runs: totalBowlingTeamRuns,
+            updatedMatchPlayer: updatedPlayer != null ? [updatedPlayer] : null);
+        // update innings score detail
+        _inningsService.updateInningScoreDetailViaTransaction(transaction,
+            battingTeamInningId: battingTeamInningId,
+            over: overCount,
+            totalRun: totalRuns,
+            bowlingTeamInningId: bowlingTeamInningId,
+            wicketCount: totalWicketTaken,
+            runs: totalBowlingTeamRuns);
 
-      if (score.id == null) {
-        batch.update(scoreRef, {'id': newScoreId});
-      }
-
-      await batch.commit();
-      return newScoreId;
+        // add ball
+        transaction.set(
+          scoreRef,
+          score.copyWith(id: scoreRef.id).toJson(),
+          SetOptions(merge: true),
+        );
+      }).catchError((error, stack) {
+        throw AppError.fromError(error, stack);
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
 
-  Future<List<BallScoreModel>> getBallScoreListByInningId(
-      String inningId) async {
-    try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(_collectionName)
-          .where('inning_id', isEqualTo: inningId)
-          .get();
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-      }).toList();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Stream<List<BallScoreModel>> getBallScoresStreamByInningIds(
+  Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
       List<String> inningIds) {
-    StreamController<List<BallScoreModel>> controller =
-        StreamController<List<BallScoreModel>>();
+    StreamController<List<BallScoreChange>> controller =
+        StreamController<List<BallScoreChange>>();
 
     _firestore
-        .collection(_collectionName)
-        .where('inning_id', whereIn: inningIds)
+        .collection(FireStoreConst.ballScoresCollection)
+        .where(FireStoreConst.inningId, whereIn: inningIds)
         .snapshots()
         .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
       try {
-        List<BallScoreModel> ballScores = snapshot.docs.map((doc) {
-          final data = doc.data();
-          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-        }).toList();
-
-        controller.add(ballScores);
+        List<BallScoreChange> changes = [];
+        for (var doc in snapshot.docChanges) {
+          final data = doc.doc.data();
+          if (data != null) {
+            changes
+                .add(BallScoreChange(doc.type, BallScoreModel.fromJson(data)));
+          }
+        }
+        controller.add(changes);
       } catch (error, stack) {
         controller.addError(AppError.fromError(error, stack));
         controller.close();
@@ -96,12 +122,12 @@ class BallScoreService {
     StreamController<List<BallScoreModel>> controller =
         StreamController<List<BallScoreModel>>();
     _firestore
-        .collection(_collectionName)
+        .collection(FireStoreConst.ballScoresCollection)
         .where(Filter.or(
-            Filter("bowler_id", isEqualTo: _currentUserId),
-            Filter("batsman_id", isEqualTo: _currentUserId),
-            Filter("wicket_taker_id", isEqualTo: _currentUserId),
-            Filter("player_out_id", isEqualTo: _currentUserId)))
+            Filter(FireStoreConst.bowlerId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.batsmanId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.wicketTakerId, isEqualTo: _currentUserId),
+            Filter(FireStoreConst.playerOutId, isEqualTo: _currentUserId)))
         .snapshots()
         .listen((snapshot) {
       try {
@@ -123,11 +149,56 @@ class BallScoreService {
     return controller.stream;
   }
 
-  Future<void> deleteBall(String ballId) async {
+  Future<void> deleteBallAndUpdateTeamDetails({
+    required String ballId,
+    required String matchId,
+    required String battingTeamId,
+    required String battingTeamInningId,
+    required int totalRuns,
+    required String bowlingTeamId,
+    required String bowlingTeamInningId,
+    required int totalWicketTaken,
+    double? overCount,
+    int? totalBowlingTeamRuns,
+    List<MatchPlayerRequest>? updatedPlayer,
+  }) async {
     try {
-      await _firestore.collection(_collectionName).doc(ballId).delete();
+      _firestore.runTransaction((transaction) async {
+        // update matchTeamScore and squad(if needed)
+        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
+            matchId: matchId,
+            battingTeamId: battingTeamId,
+            totalRun: totalRuns,
+            over: overCount,
+            bowlingTeamId: bowlingTeamId,
+            wicket: totalWicketTaken,
+            runs: totalBowlingTeamRuns,
+            updatedMatchPlayer: updatedPlayer);
+
+        // update innings score detail
+        _inningsService.updateInningScoreDetailViaTransaction(transaction,
+            battingTeamInningId: battingTeamInningId,
+            over: overCount,
+            totalRun: totalRuns,
+            bowlingTeamInningId: bowlingTeamInningId,
+            wicketCount: totalWicketTaken,
+            runs: totalBowlingTeamRuns);
+
+        // delete ball
+        final docRef = _firestore
+            .collection(FireStoreConst.ballScoresCollection)
+            .doc(ballId);
+        transaction.delete(docRef);
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
+}
+
+class BallScoreChange {
+  final DocumentChangeType type;
+  final BallScoreModel ballScore;
+
+  BallScoreChange(this.type, this.ballScore);
 }

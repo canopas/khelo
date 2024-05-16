@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
@@ -119,7 +120,15 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       state.secondInning?.id ?? "INVALID ID"
     ]).listen(
       (scores) {
-        final sortedList = scores;
+        List<BallScoreModel> sortedList = state.ballScores.toList();
+        for (final score in scores) {
+          if (score.type == DocumentChangeType.added) {
+            sortedList.add(score.ballScore);
+          } else if (score.type == DocumentChangeType.removed) {
+            sortedList
+                .removeWhere((element) => element.id == score.ballScore.id);
+          }
+        }
         sortedList.sort(
           (a, b) => a.time.compareTo(b.time),
         );

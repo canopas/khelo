@@ -45,9 +45,9 @@ class MatchTeamModel with _$MatchTeamModel {
     required TeamModel team,
     String? captain_id,
     String? admin_id,
-    double? over,
-    int? run,
-    int? wicket,
+    @Default(0) double over,
+    @Default(0) int run,
+    @Default(0) int wicket,
     @Default([]) List<MatchPlayer> squad,
   }) = _MatchTeamModel;
 
@@ -104,9 +104,9 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
     required String team_id,
     String? captain_id,
     String? admin_id,
-    double? over,
-    int? run,
-    int? wicket,
+    @Default(0)  double over,
+    @Default(0) int run,
+    @Default(0) int wicket,
     @Default([]) List<MatchPlayerRequest> squad,
   }) = _AddMatchTeamRequest;
 

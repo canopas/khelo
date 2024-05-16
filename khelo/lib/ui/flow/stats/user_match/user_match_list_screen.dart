@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
@@ -62,10 +61,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
     final state = ref.watch(userMatchListStateProvider);
     notifier = ref.watch(userMatchListStateProvider.notifier);
 
-    return ResumeDetector(
-      onResume: notifier.onResume,
-      child: _body(context, notifier, state),
-    );
+    return _body(context, notifier, state);
   }
 
   Widget _body(

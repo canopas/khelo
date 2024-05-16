@@ -701,9 +701,9 @@ mixin _$MatchTeamModel {
   TeamModel get team => throw _privateConstructorUsedError;
   String? get captain_id => throw _privateConstructorUsedError;
   String? get admin_id => throw _privateConstructorUsedError;
-  double? get over => throw _privateConstructorUsedError;
-  int? get run => throw _privateConstructorUsedError;
-  int? get wicket => throw _privateConstructorUsedError;
+  double get over => throw _privateConstructorUsedError;
+  int get run => throw _privateConstructorUsedError;
+  int get wicket => throw _privateConstructorUsedError;
   List<MatchPlayer> get squad => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -722,9 +722,9 @@ abstract class $MatchTeamModelCopyWith<$Res> {
       {TeamModel team,
       String? captain_id,
       String? admin_id,
-      double? over,
-      int? run,
-      int? wicket,
+      double over,
+      int run,
+      int wicket,
       List<MatchPlayer> squad});
 
   $TeamModelCopyWith<$Res> get team;
@@ -746,9 +746,9 @@ class _$MatchTeamModelCopyWithImpl<$Res, $Val extends MatchTeamModel>
     Object? team = null,
     Object? captain_id = freezed,
     Object? admin_id = freezed,
-    Object? over = freezed,
-    Object? run = freezed,
-    Object? wicket = freezed,
+    Object? over = null,
+    Object? run = null,
+    Object? wicket = null,
     Object? squad = null,
   }) {
     return _then(_value.copyWith(
@@ -764,18 +764,18 @@ class _$MatchTeamModelCopyWithImpl<$Res, $Val extends MatchTeamModel>
           ? _value.admin_id
           : admin_id // ignore: cast_nullable_to_non_nullable
               as String?,
-      over: freezed == over
+      over: null == over
           ? _value.over
           : over // ignore: cast_nullable_to_non_nullable
-              as double?,
-      run: freezed == run
+              as double,
+      run: null == run
           ? _value.run
           : run // ignore: cast_nullable_to_non_nullable
-              as int?,
-      wicket: freezed == wicket
+              as int,
+      wicket: null == wicket
           ? _value.wicket
           : wicket // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       squad: null == squad
           ? _value.squad
           : squad // ignore: cast_nullable_to_non_nullable
@@ -804,9 +804,9 @@ abstract class _$$MatchTeamModelImplCopyWith<$Res>
       {TeamModel team,
       String? captain_id,
       String? admin_id,
-      double? over,
-      int? run,
-      int? wicket,
+      double over,
+      int run,
+      int wicket,
       List<MatchPlayer> squad});
 
   @override
@@ -827,9 +827,9 @@ class __$$MatchTeamModelImplCopyWithImpl<$Res>
     Object? team = null,
     Object? captain_id = freezed,
     Object? admin_id = freezed,
-    Object? over = freezed,
-    Object? run = freezed,
-    Object? wicket = freezed,
+    Object? over = null,
+    Object? run = null,
+    Object? wicket = null,
     Object? squad = null,
   }) {
     return _then(_$MatchTeamModelImpl(
@@ -845,18 +845,18 @@ class __$$MatchTeamModelImplCopyWithImpl<$Res>
           ? _value.admin_id
           : admin_id // ignore: cast_nullable_to_non_nullable
               as String?,
-      over: freezed == over
+      over: null == over
           ? _value.over
           : over // ignore: cast_nullable_to_non_nullable
-              as double?,
-      run: freezed == run
+              as double,
+      run: null == run
           ? _value.run
           : run // ignore: cast_nullable_to_non_nullable
-              as int?,
-      wicket: freezed == wicket
+              as int,
+      wicket: null == wicket
           ? _value.wicket
           : wicket // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       squad: null == squad
           ? _value._squad
           : squad // ignore: cast_nullable_to_non_nullable
@@ -872,9 +872,9 @@ class _$MatchTeamModelImpl implements _MatchTeamModel {
       {required this.team,
       this.captain_id,
       this.admin_id,
-      this.over,
-      this.run,
-      this.wicket,
+      this.over = 0,
+      this.run = 0,
+      this.wicket = 0,
       final List<MatchPlayer> squad = const []})
       : _squad = squad;
 
@@ -888,11 +888,14 @@ class _$MatchTeamModelImpl implements _MatchTeamModel {
   @override
   final String? admin_id;
   @override
-  final double? over;
+  @JsonKey()
+  final double over;
   @override
-  final int? run;
+  @JsonKey()
+  final int run;
   @override
-  final int? wicket;
+  @JsonKey()
+  final int wicket;
   final List<MatchPlayer> _squad;
   @override
   @JsonKey()
@@ -948,9 +951,9 @@ abstract class _MatchTeamModel implements MatchTeamModel {
       {required final TeamModel team,
       final String? captain_id,
       final String? admin_id,
-      final double? over,
-      final int? run,
-      final int? wicket,
+      final double over,
+      final int run,
+      final int wicket,
       final List<MatchPlayer> squad}) = _$MatchTeamModelImpl;
 
   factory _MatchTeamModel.fromJson(Map<String, dynamic> json) =
@@ -963,11 +966,11 @@ abstract class _MatchTeamModel implements MatchTeamModel {
   @override
   String? get admin_id;
   @override
-  double? get over;
+  double get over;
   @override
-  int? get run;
+  int get run;
   @override
-  int? get wicket;
+  int get wicket;
   @override
   List<MatchPlayer> get squad;
   @override
@@ -1837,9 +1840,9 @@ mixin _$AddMatchTeamRequest {
   String get team_id => throw _privateConstructorUsedError;
   String? get captain_id => throw _privateConstructorUsedError;
   String? get admin_id => throw _privateConstructorUsedError;
-  double? get over => throw _privateConstructorUsedError;
-  int? get run => throw _privateConstructorUsedError;
-  int? get wicket => throw _privateConstructorUsedError;
+  double get over => throw _privateConstructorUsedError;
+  int get run => throw _privateConstructorUsedError;
+  int get wicket => throw _privateConstructorUsedError;
   List<MatchPlayerRequest> get squad => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1858,9 +1861,9 @@ abstract class $AddMatchTeamRequestCopyWith<$Res> {
       {String team_id,
       String? captain_id,
       String? admin_id,
-      double? over,
-      int? run,
-      int? wicket,
+      double over,
+      int run,
+      int wicket,
       List<MatchPlayerRequest> squad});
 }
 
@@ -1880,9 +1883,9 @@ class _$AddMatchTeamRequestCopyWithImpl<$Res, $Val extends AddMatchTeamRequest>
     Object? team_id = null,
     Object? captain_id = freezed,
     Object? admin_id = freezed,
-    Object? over = freezed,
-    Object? run = freezed,
-    Object? wicket = freezed,
+    Object? over = null,
+    Object? run = null,
+    Object? wicket = null,
     Object? squad = null,
   }) {
     return _then(_value.copyWith(
@@ -1898,18 +1901,18 @@ class _$AddMatchTeamRequestCopyWithImpl<$Res, $Val extends AddMatchTeamRequest>
           ? _value.admin_id
           : admin_id // ignore: cast_nullable_to_non_nullable
               as String?,
-      over: freezed == over
+      over: null == over
           ? _value.over
           : over // ignore: cast_nullable_to_non_nullable
-              as double?,
-      run: freezed == run
+              as double,
+      run: null == run
           ? _value.run
           : run // ignore: cast_nullable_to_non_nullable
-              as int?,
-      wicket: freezed == wicket
+              as int,
+      wicket: null == wicket
           ? _value.wicket
           : wicket // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       squad: null == squad
           ? _value.squad
           : squad // ignore: cast_nullable_to_non_nullable
@@ -1930,9 +1933,9 @@ abstract class _$$AddMatchTeamRequestImplCopyWith<$Res>
       {String team_id,
       String? captain_id,
       String? admin_id,
-      double? over,
-      int? run,
-      int? wicket,
+      double over,
+      int run,
+      int wicket,
       List<MatchPlayerRequest> squad});
 }
 
@@ -1950,9 +1953,9 @@ class __$$AddMatchTeamRequestImplCopyWithImpl<$Res>
     Object? team_id = null,
     Object? captain_id = freezed,
     Object? admin_id = freezed,
-    Object? over = freezed,
-    Object? run = freezed,
-    Object? wicket = freezed,
+    Object? over = null,
+    Object? run = null,
+    Object? wicket = null,
     Object? squad = null,
   }) {
     return _then(_$AddMatchTeamRequestImpl(
@@ -1968,18 +1971,18 @@ class __$$AddMatchTeamRequestImplCopyWithImpl<$Res>
           ? _value.admin_id
           : admin_id // ignore: cast_nullable_to_non_nullable
               as String?,
-      over: freezed == over
+      over: null == over
           ? _value.over
           : over // ignore: cast_nullable_to_non_nullable
-              as double?,
-      run: freezed == run
+              as double,
+      run: null == run
           ? _value.run
           : run // ignore: cast_nullable_to_non_nullable
-              as int?,
-      wicket: freezed == wicket
+              as int,
+      wicket: null == wicket
           ? _value.wicket
           : wicket // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       squad: null == squad
           ? _value._squad
           : squad // ignore: cast_nullable_to_non_nullable
@@ -1995,9 +1998,9 @@ class _$AddMatchTeamRequestImpl implements _AddMatchTeamRequest {
       {required this.team_id,
       this.captain_id,
       this.admin_id,
-      this.over,
-      this.run,
-      this.wicket,
+      this.over = 0,
+      this.run = 0,
+      this.wicket = 0,
       final List<MatchPlayerRequest> squad = const []})
       : _squad = squad;
 
@@ -2011,11 +2014,14 @@ class _$AddMatchTeamRequestImpl implements _AddMatchTeamRequest {
   @override
   final String? admin_id;
   @override
-  final double? over;
+  @JsonKey()
+  final double over;
   @override
-  final int? run;
+  @JsonKey()
+  final int run;
   @override
-  final int? wicket;
+  @JsonKey()
+  final int wicket;
   final List<MatchPlayerRequest> _squad;
   @override
   @JsonKey()
@@ -2071,9 +2077,9 @@ abstract class _AddMatchTeamRequest implements AddMatchTeamRequest {
       {required final String team_id,
       final String? captain_id,
       final String? admin_id,
-      final double? over,
-      final int? run,
-      final int? wicket,
+      final double over,
+      final int run,
+      final int wicket,
       final List<MatchPlayerRequest> squad}) = _$AddMatchTeamRequestImpl;
 
   factory _AddMatchTeamRequest.fromJson(Map<String, dynamic> json) =
@@ -2086,11 +2092,11 @@ abstract class _AddMatchTeamRequest implements AddMatchTeamRequest {
   @override
   String? get admin_id;
   @override
-  double? get over;
+  double get over;
   @override
-  int? get run;
+  int get run;
   @override
-  int? get wicket;
+  int get wicket;
   @override
   List<MatchPlayerRequest> get squad;
   @override

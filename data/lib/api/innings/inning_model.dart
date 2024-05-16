@@ -12,9 +12,9 @@ class InningModel with _$InningModel {
     String? id,
     required String match_id,
     required String team_id,
-    double? overs,
-    int? total_runs,
-    int? total_wickets,
+    @Default(0) double overs,
+    @Default(0) int total_runs,
+    @Default(0) int total_wickets,
     InningStatus? innings_status,
   }) = _InningModel;
 

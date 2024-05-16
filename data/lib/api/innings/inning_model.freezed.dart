@@ -23,9 +23,9 @@ mixin _$InningModel {
   String? get id => throw _privateConstructorUsedError;
   String get match_id => throw _privateConstructorUsedError;
   String get team_id => throw _privateConstructorUsedError;
-  double? get overs => throw _privateConstructorUsedError;
-  int? get total_runs => throw _privateConstructorUsedError;
-  int? get total_wickets => throw _privateConstructorUsedError;
+  double get overs => throw _privateConstructorUsedError;
+  int get total_runs => throw _privateConstructorUsedError;
+  int get total_wickets => throw _privateConstructorUsedError;
   InningStatus? get innings_status => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,9 +44,9 @@ abstract class $InningModelCopyWith<$Res> {
       {String? id,
       String match_id,
       String team_id,
-      double? overs,
-      int? total_runs,
-      int? total_wickets,
+      double overs,
+      int total_runs,
+      int total_wickets,
       InningStatus? innings_status});
 }
 
@@ -66,9 +66,9 @@ class _$InningModelCopyWithImpl<$Res, $Val extends InningModel>
     Object? id = freezed,
     Object? match_id = null,
     Object? team_id = null,
-    Object? overs = freezed,
-    Object? total_runs = freezed,
-    Object? total_wickets = freezed,
+    Object? overs = null,
+    Object? total_runs = null,
+    Object? total_wickets = null,
     Object? innings_status = freezed,
   }) {
     return _then(_value.copyWith(
@@ -84,18 +84,18 @@ class _$InningModelCopyWithImpl<$Res, $Val extends InningModel>
           ? _value.team_id
           : team_id // ignore: cast_nullable_to_non_nullable
               as String,
-      overs: freezed == overs
+      overs: null == overs
           ? _value.overs
           : overs // ignore: cast_nullable_to_non_nullable
-              as double?,
-      total_runs: freezed == total_runs
+              as double,
+      total_runs: null == total_runs
           ? _value.total_runs
           : total_runs // ignore: cast_nullable_to_non_nullable
-              as int?,
-      total_wickets: freezed == total_wickets
+              as int,
+      total_wickets: null == total_wickets
           ? _value.total_wickets
           : total_wickets // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       innings_status: freezed == innings_status
           ? _value.innings_status
           : innings_status // ignore: cast_nullable_to_non_nullable
@@ -116,9 +116,9 @@ abstract class _$$InningModelImplCopyWith<$Res>
       {String? id,
       String match_id,
       String team_id,
-      double? overs,
-      int? total_runs,
-      int? total_wickets,
+      double overs,
+      int total_runs,
+      int total_wickets,
       InningStatus? innings_status});
 }
 
@@ -136,9 +136,9 @@ class __$$InningModelImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? match_id = null,
     Object? team_id = null,
-    Object? overs = freezed,
-    Object? total_runs = freezed,
-    Object? total_wickets = freezed,
+    Object? overs = null,
+    Object? total_runs = null,
+    Object? total_wickets = null,
     Object? innings_status = freezed,
   }) {
     return _then(_$InningModelImpl(
@@ -154,18 +154,18 @@ class __$$InningModelImplCopyWithImpl<$Res>
           ? _value.team_id
           : team_id // ignore: cast_nullable_to_non_nullable
               as String,
-      overs: freezed == overs
+      overs: null == overs
           ? _value.overs
           : overs // ignore: cast_nullable_to_non_nullable
-              as double?,
-      total_runs: freezed == total_runs
+              as double,
+      total_runs: null == total_runs
           ? _value.total_runs
           : total_runs // ignore: cast_nullable_to_non_nullable
-              as int?,
-      total_wickets: freezed == total_wickets
+              as int,
+      total_wickets: null == total_wickets
           ? _value.total_wickets
           : total_wickets // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       innings_status: freezed == innings_status
           ? _value.innings_status
           : innings_status // ignore: cast_nullable_to_non_nullable
@@ -181,9 +181,9 @@ class _$InningModelImpl implements _InningModel {
       {this.id,
       required this.match_id,
       required this.team_id,
-      this.overs,
-      this.total_runs,
-      this.total_wickets,
+      this.overs = 0,
+      this.total_runs = 0,
+      this.total_wickets = 0,
       this.innings_status});
 
   factory _$InningModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -196,11 +196,14 @@ class _$InningModelImpl implements _InningModel {
   @override
   final String team_id;
   @override
-  final double? overs;
+  @JsonKey()
+  final double overs;
   @override
-  final int? total_runs;
+  @JsonKey()
+  final int total_runs;
   @override
-  final int? total_wickets;
+  @JsonKey()
+  final int total_wickets;
   @override
   final InningStatus? innings_status;
 
@@ -251,9 +254,9 @@ abstract class _InningModel implements InningModel {
       {final String? id,
       required final String match_id,
       required final String team_id,
-      final double? overs,
-      final int? total_runs,
-      final int? total_wickets,
+      final double overs,
+      final int total_runs,
+      final int total_wickets,
       final InningStatus? innings_status}) = _$InningModelImpl;
 
   factory _InningModel.fromJson(Map<String, dynamic> json) =
@@ -266,11 +269,11 @@ abstract class _InningModel implements InningModel {
   @override
   String get team_id;
   @override
-  double? get overs;
+  double get overs;
   @override
-  int? get total_runs;
+  int get total_runs;
   @override
-  int? get total_wickets;
+  int get total_wickets;
   @override
   InningStatus? get innings_status;
   @override

@@ -36,13 +36,14 @@ class ScoreDisplayView extends ConsumerWidget {
   Widget _teamName(
       BuildContext context, ScoreBoardViewState state, bool batting) {
     final String? battingTeam = state.match?.teams
-        .firstWhere(
-            (element) => element.team.id == state.currentInning?.team_id)
-        .team
+        .where((element) => element.team.id == state.currentInning?.team_id)
+        .firstOrNull
+        ?.team
         .name;
     final String? bowlingTeam = state.match?.teams
-        .firstWhere((element) => element.team.id == state.otherInning?.team_id)
-        .team
+        .where((element) => element.team.id == state.otherInning?.team_id)
+        .firstOrNull
+        ?.team
         .name;
 
     return Text(
@@ -74,7 +75,8 @@ class ScoreDisplayView extends ConsumerWidget {
                 TextSpan(
                   children: [
                     TextSpan(
-                      text: '${state.totalRuns}/${state.wicketCount}',
+                      text:
+                          '${state.currentInning?.total_runs ?? 0}/${state.otherInning?.total_wickets ?? 0}',
                       style: AppTextStyle.subtitle1.copyWith(
                           color: context.colorScheme.textPrimary, fontSize: 39),
                     ),

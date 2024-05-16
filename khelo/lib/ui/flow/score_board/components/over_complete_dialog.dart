@@ -144,7 +144,8 @@ class OverCompleteDialog extends ConsumerWidget {
             .copyWith(color: context.colorScheme.textPrimary, fontSize: 22),
         children: [
           TextSpan(
-            text: " ${state.totalRuns}/${state.wicketCount}",
+            text:
+                " ${state.currentInning!.total_runs}/${state.otherInning!.total_wickets}",
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textSecondary),
           ),

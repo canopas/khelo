@@ -2,7 +2,6 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -53,10 +52,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     final state = ref.watch(userStatViewStateProvider);
     notifier = ref.watch(userStatViewStateProvider.notifier);
 
-    return ResumeDetector(
-      onResume: notifier.onResume,
-      child: _body(context, notifier, state),
-    );
+    return _body(context, notifier, state);
   }
 
   Widget _body(BuildContext context, UserStatViewNotifier notifier,

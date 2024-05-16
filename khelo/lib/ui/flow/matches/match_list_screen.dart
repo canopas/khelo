@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_status_tag.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
@@ -62,17 +61,14 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
     final state = ref.watch(matchListStateProvider);
     notifier = ref.watch(matchListStateProvider.notifier);
 
-    return ResumeDetector(
-      onResume: notifier.onResume,
-      child: Column(
-        children: [
-          _topStartMatchView(context),
-          const SizedBox(
-            height: 24,
-          ),
-          _matchList(context, notifier, state),
-        ],
-      ),
+    return Column(
+      children: [
+        _topStartMatchView(context),
+        const SizedBox(
+          height: 24,
+        ),
+        _matchList(context, notifier, state),
+      ],
     );
   }
 
@@ -250,7 +246,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
             _teamNameView(
               context,
               team: match.teams.first,
-              wicket: match.teams.last.wicket ?? 0,
+              wicket: match.teams.last.wicket,
               totalOvers: match.number_of_over,
               isRunning:
                   match.current_playing_team_id == match.teams.first.team.id &&
@@ -259,7 +255,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
             _teamNameView(
               context,
               team: match.teams.last,
-              wicket: match.teams.first.wicket ?? 0,
+              wicket: match.teams.first.wicket,
               totalOvers: match.number_of_over,
               isRunning:
                   match.current_playing_team_id == match.teams.last.team.id &&
@@ -298,7 +294,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 TextSpan(
-                  text: " (${team.over ?? 0}/$totalOvers)",
+                  text: " (${team.over}/$totalOvers)",
                   style: AppTextStyle.body2
                       .copyWith(color: context.colorScheme.textSecondary),
                 ),

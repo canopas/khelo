@@ -12,7 +12,7 @@ part of 'score_board_view_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ScoreBoardViewState {
@@ -57,10 +57,11 @@ mixin _$ScoreBoardViewState {
   bool get loading => throw _privateConstructorUsedError;
   bool get pop => throw _privateConstructorUsedError;
   bool get continueWithInjuredPlayers => throw _privateConstructorUsedError;
+  bool get ballScoreQueryListenerSet => throw _privateConstructorUsedError;
+  bool get isMatchUpdated => throw _privateConstructorUsedError;
+  bool get isActionInProgress => throw _privateConstructorUsedError;
   int get ballCount => throw _privateConstructorUsedError;
   int get overCount => throw _privateConstructorUsedError;
-  int get totalRuns => throw _privateConstructorUsedError;
-  int get wicketCount => throw _privateConstructorUsedError;
   int get lastAssignedIndex => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -108,10 +109,11 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       bool loading,
       bool pop,
       bool continueWithInjuredPlayers,
+      bool ballScoreQueryListenerSet,
+      bool isMatchUpdated,
+      bool isActionInProgress,
       int ballCount,
       int overCount,
-      int totalRuns,
-      int wicketCount,
       int lastAssignedIndex});
 
   $MatchModelCopyWith<$Res>? get match;
@@ -166,10 +168,11 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? loading = null,
     Object? pop = null,
     Object? continueWithInjuredPlayers = null,
+    Object? ballScoreQueryListenerSet = null,
+    Object? isMatchUpdated = null,
+    Object? isActionInProgress = null,
     Object? ballCount = null,
     Object? overCount = null,
-    Object? totalRuns = null,
-    Object? wicketCount = null,
     Object? lastAssignedIndex = null,
   }) {
     return _then(_value.copyWith(
@@ -300,6 +303,18 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.continueWithInjuredPlayers
           : continueWithInjuredPlayers // ignore: cast_nullable_to_non_nullable
               as bool,
+      ballScoreQueryListenerSet: null == ballScoreQueryListenerSet
+          ? _value.ballScoreQueryListenerSet
+          : ballScoreQueryListenerSet // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMatchUpdated: null == isMatchUpdated
+          ? _value.isMatchUpdated
+          : isMatchUpdated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isActionInProgress: null == isActionInProgress
+          ? _value.isActionInProgress
+          : isActionInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
       ballCount: null == ballCount
           ? _value.ballCount
           : ballCount // ignore: cast_nullable_to_non_nullable
@@ -307,14 +322,6 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       overCount: null == overCount
           ? _value.overCount
           : overCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalRuns: null == totalRuns
-          ? _value.totalRuns
-          : totalRuns // ignore: cast_nullable_to_non_nullable
-              as int,
-      wicketCount: null == wicketCount
-          ? _value.wicketCount
-          : wicketCount // ignore: cast_nullable_to_non_nullable
               as int,
       lastAssignedIndex: null == lastAssignedIndex
           ? _value.lastAssignedIndex
@@ -414,10 +421,11 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       bool loading,
       bool pop,
       bool continueWithInjuredPlayers,
+      bool ballScoreQueryListenerSet,
+      bool isMatchUpdated,
+      bool isActionInProgress,
       int ballCount,
       int overCount,
-      int totalRuns,
-      int wicketCount,
       int lastAssignedIndex});
 
   @override
@@ -474,10 +482,11 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? loading = null,
     Object? pop = null,
     Object? continueWithInjuredPlayers = null,
+    Object? ballScoreQueryListenerSet = null,
+    Object? isMatchUpdated = null,
+    Object? isActionInProgress = null,
     Object? ballCount = null,
     Object? overCount = null,
-    Object? totalRuns = null,
-    Object? wicketCount = null,
     Object? lastAssignedIndex = null,
   }) {
     return _then(_$ScoreBoardViewStateImpl(
@@ -608,6 +617,18 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.continueWithInjuredPlayers
           : continueWithInjuredPlayers // ignore: cast_nullable_to_non_nullable
               as bool,
+      ballScoreQueryListenerSet: null == ballScoreQueryListenerSet
+          ? _value.ballScoreQueryListenerSet
+          : ballScoreQueryListenerSet // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isMatchUpdated: null == isMatchUpdated
+          ? _value.isMatchUpdated
+          : isMatchUpdated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isActionInProgress: null == isActionInProgress
+          ? _value.isActionInProgress
+          : isActionInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
       ballCount: null == ballCount
           ? _value.ballCount
           : ballCount // ignore: cast_nullable_to_non_nullable
@@ -615,14 +636,6 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
       overCount: null == overCount
           ? _value.overCount
           : overCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      totalRuns: null == totalRuns
-          ? _value.totalRuns
-          : totalRuns // ignore: cast_nullable_to_non_nullable
-              as int,
-      wicketCount: null == wicketCount
-          ? _value.wicketCount
-          : wicketCount // ignore: cast_nullable_to_non_nullable
               as int,
       lastAssignedIndex: null == lastAssignedIndex
           ? _value.lastAssignedIndex
@@ -669,10 +682,11 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.loading = false,
       this.pop = false,
       this.continueWithInjuredPlayers = true,
+      this.ballScoreQueryListenerSet = false,
+      this.isMatchUpdated = true,
+      this.isActionInProgress = false,
       this.ballCount = 0,
       this.overCount = 1,
-      this.totalRuns = 0,
-      this.wicketCount = 0,
       this.lastAssignedIndex = 0})
       : _batsMans = batsMans,
         _currentScoresList = currentScoresList,
@@ -773,23 +787,26 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final bool continueWithInjuredPlayers;
   @override
   @JsonKey()
+  final bool ballScoreQueryListenerSet;
+  @override
+  @JsonKey()
+  final bool isMatchUpdated;
+  @override
+  @JsonKey()
+  final bool isActionInProgress;
+  @override
+  @JsonKey()
   final int ballCount;
   @override
   @JsonKey()
   final int overCount;
   @override
   @JsonKey()
-  final int totalRuns;
-  @override
-  @JsonKey()
-  final int wicketCount;
-  @override
-  @JsonKey()
   final int lastAssignedIndex;
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballCount: $ballCount, overCount: $overCount, totalRuns: $totalRuns, wicketCount: $wicketCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -856,10 +873,11 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.pop, pop) || other.pop == pop) &&
             (identical(other.continueWithInjuredPlayers, continueWithInjuredPlayers) || other.continueWithInjuredPlayers == continueWithInjuredPlayers) &&
+            (identical(other.ballScoreQueryListenerSet, ballScoreQueryListenerSet) || other.ballScoreQueryListenerSet == ballScoreQueryListenerSet) &&
+            (identical(other.isMatchUpdated, isMatchUpdated) || other.isMatchUpdated == isMatchUpdated) &&
+            (identical(other.isActionInProgress, isActionInProgress) || other.isActionInProgress == isActionInProgress) &&
             (identical(other.ballCount, ballCount) || other.ballCount == ballCount) &&
             (identical(other.overCount, overCount) || other.overCount == overCount) &&
-            (identical(other.totalRuns, totalRuns) || other.totalRuns == totalRuns) &&
-            (identical(other.wicketCount, wicketCount) || other.wicketCount == wicketCount) &&
             (identical(other.lastAssignedIndex, lastAssignedIndex) || other.lastAssignedIndex == lastAssignedIndex));
   }
 
@@ -899,10 +917,11 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         loading,
         pop,
         continueWithInjuredPlayers,
+        ballScoreQueryListenerSet,
+        isMatchUpdated,
+        isActionInProgress,
         ballCount,
         overCount,
-        totalRuns,
-        wicketCount,
         lastAssignedIndex
       ]);
 
@@ -949,10 +968,11 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final bool loading,
       final bool pop,
       final bool continueWithInjuredPlayers,
+      final bool ballScoreQueryListenerSet,
+      final bool isMatchUpdated,
+      final bool isActionInProgress,
       final int ballCount,
       final int overCount,
-      final int totalRuns,
-      final int wicketCount,
       final int lastAssignedIndex}) = _$ScoreBoardViewStateImpl;
 
   @override
@@ -1022,13 +1042,15 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   @override
   bool get continueWithInjuredPlayers;
   @override
+  bool get ballScoreQueryListenerSet;
+  @override
+  bool get isMatchUpdated;
+  @override
+  bool get isActionInProgress;
+  @override
   int get ballCount;
   @override
   int get overCount;
-  @override
-  int get totalRuns;
-  @override
-  int get wicketCount;
   @override
   int get lastAssignedIndex;
   @override

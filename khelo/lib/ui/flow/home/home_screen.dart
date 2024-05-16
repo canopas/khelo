@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:khelo/components/resume_detector.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -62,10 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
 
     return AppPage(
       title: context.l10n.home_screen_title,
-      body: ResumeDetector(
-        onResume: notifier.onResume,
-        child: _body(context, notifier, state),
-      ),
+      body: _body(context, notifier, state),
     );
   }
 
@@ -127,7 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             _teamScore(
               context,
               match.teams.first,
-              match.teams.elementAt(1).wicket ?? 0,
+              match.teams.elementAt(1).wicket,
               match.current_playing_team_id == match.teams.first.team.id,
             ),
             const SizedBox(
@@ -136,7 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             _teamScore(
                 context,
                 match.teams.elementAt(1),
-                match.teams.first.wicket ?? 0,
+                match.teams.first.wicket,
                 match.current_playing_team_id ==
                     match.teams.elementAt(1).team.id),
             const SizedBox(
@@ -173,12 +169,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                       : context.colorScheme.textPrimary)),
         ),
         Text.rich(TextSpan(
-            text: "${team.run ?? 0}-$wicket",
+            text: "${team.run}-$wicket",
             style: AppTextStyle.header3
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
-                text: " ${team.over ?? 0}",
+                text: " ${team.over}",
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textSecondary),
               )
