@@ -2,24 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>92999931839-ce0lph9volhmsmdr4iuh9u5vt7ic060a.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.92999931839-ce0lph9volhmsmdr4iuh9u5vt7ic060a</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>92999931839-8ia6o7l4pahhjjtdgnp1aoenp7583haf.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAkdjFi8wkE4vf69Wqa45juwLxPEREIOD0</string>
+	<string>AIzaSyAX5G6C-tF9ysTM9Bkd--J5XCaeytfDYfA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>92999931839</string>
+	<string>753506519474</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.khelo</string>
 	<key>PROJECT_ID</key>
-	<string>khelo-dev-8040e</string>
+	<string>khelo-9b4b8</string>
 	<key>STORAGE_BUCKET</key>
-	<string>khelo-dev-8040e.appspot.com</string>
+	<string>khelo-9b4b8.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:92999931839:ios:06a5606f88805af9ac330a</string>
-	<key>DATABASE_URL</key>
-	<string>https://khelo-dev-8040e-default-rtdb.firebaseio.com</string>
+	<string>1:753506519474:ios:52c0aa7b2242a6921e7cab</string>
 </dict>
 </plist>

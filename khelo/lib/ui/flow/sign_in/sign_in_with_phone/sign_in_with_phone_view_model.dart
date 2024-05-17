@@ -20,6 +20,7 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
   SignInWithPhoneViewNotifier(this._authService, this.deviceService)
       : super(
           SignInWithPhoneState(
+            phoneController: TextEditingController(),
             code: CountryCode.getCountryCodeByAlpha2(
               countryAlpha2Code:
                   WidgetsBinding.instance.platformDispatcher.locale.countryCode,
@@ -85,6 +86,7 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
 @freezed
 class SignInWithPhoneState with _$SignInWithPhoneState {
   const factory SignInWithPhoneState({
+    required TextEditingController phoneController,
     required CountryCode code,
     Object? actionError,
     String? verificationId,
