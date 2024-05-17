@@ -247,7 +247,7 @@ class ScoreDisplayView extends ConsumerWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      color: context.colorScheme.secondaryVariant,
+      color: context.colorScheme.containerNormal,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

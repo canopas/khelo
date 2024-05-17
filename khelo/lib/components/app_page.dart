@@ -98,6 +98,6 @@ class AppPage extends StatelessWidget {
         title ?? '',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontFamily: AppTextStyle.interFontFamily),
+        style: const TextStyle(fontFamily: AppTextStyle.poppinsFontFamily),
       );
 }

@@ -73,7 +73,7 @@ class MatchCompleteDialog extends ConsumerWidget {
           children: [
             TableRow(
               decoration: BoxDecoration(
-                color: context.colorScheme.secondaryVariant,
+                color: context.colorScheme.containerNormalOnSurface,
               ),
               children: [
                 Text(context.l10n.score_board_team_title,
