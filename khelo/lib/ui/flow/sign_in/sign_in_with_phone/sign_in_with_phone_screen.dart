@@ -15,9 +15,7 @@ import 'package:style/text/app_text_style.dart';
 import 'components/sign_in_with_phone_country_picker.dart';
 
 class SignInWithPhoneScreen extends ConsumerWidget {
-  SignInWithPhoneScreen({super.key});
-
-  final TextEditingController _phoneController = TextEditingController();
+  const SignInWithPhoneScreen({super.key});
 
   void _observeActionError(BuildContext context, WidgetRef ref) {
     ref.listen(
@@ -63,20 +61,16 @@ class SignInWithPhoneScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(signInWithPhoneStateProvider.notifier);
-    final loading = ref.watch(
-      signInWithPhoneStateProvider.select((value) => value.verifying),
-    );
-    final enable = ref.watch(
-      signInWithPhoneStateProvider.select((value) => value.enableBtn),
-    );
+    final state = ref.watch(signInWithPhoneStateProvider);
 
     _observeActionError(context, ref);
     _observeOtp(context: context, ref: ref);
     _observeSignInSuccess(context: context, ref: ref);
 
     return AppPage(
-      body: Builder(
-        builder: (context) {
+      body: PopScope(
+        canPop: false,
+        child: Builder(builder: (context) {
           return Padding(
             padding: context.mediaQueryPadding +
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -87,39 +81,35 @@ class SignInWithPhoneScreen extends ConsumerWidget {
                   style: AppTextStyle.header1
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
-                _phoneInputField(
-                    context: context,
-                    enable: true,
-                    loading: loading,
-                    notifier: notifier),
+                _phoneInputField(context, notifier, state),
                 PrimaryButton(
                   context.l10n.sign_in_get_otp_btn_text,
-                  enabled: enable,
-                  progress: loading,
+                  enabled: state.enableBtn && !state.verifying,
+                  progress: state.verifying,
                   onPressed: notifier.verifyPhoneNumber,
                 ),
               ],
             ),
           );
-        }
+        }),
       ),
     );
   }
 
-  Widget _phoneInputField({
-    required BuildContext context,
-    required bool enable,
-    required bool loading,
-    required SignInWithPhoneViewNotifier notifier,
-  }) {
+  Widget _phoneInputField(
+    BuildContext context,
+    SignInWithPhoneViewNotifier notifier,
+    SignInWithPhoneState state,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: CupertinoTextField(
-        controller: _phoneController,
+        controller: state.phoneController,
         onChanged: (phone) => notifier.onPhoneChange(phone),
         keyboardType: TextInputType.phone,
+        autofocus: true,
         onSubmitted: (value) {
-          if (!loading && enable) notifier.verifyPhoneNumber();
+          if (!state.verifying && state.enableBtn) notifier.verifyPhoneNumber();
         },
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),

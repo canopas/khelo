@@ -16,6 +16,8 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SignInWithPhoneState {
+  TextEditingController get phoneController =>
+      throw _privateConstructorUsedError;
   CountryCode get code => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
   String? get verificationId => throw _privateConstructorUsedError;
@@ -36,7 +38,8 @@ abstract class $SignInWithPhoneStateCopyWith<$Res> {
       _$SignInWithPhoneStateCopyWithImpl<$Res, SignInWithPhoneState>;
   @useResult
   $Res call(
-      {CountryCode code,
+      {TextEditingController phoneController,
+      CountryCode code,
       Object? actionError,
       String? verificationId,
       bool verifying,
@@ -59,6 +62,7 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? phoneController = null,
     Object? code = null,
     Object? actionError = freezed,
     Object? verificationId = freezed,
@@ -68,6 +72,10 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
     Object? phone = null,
   }) {
     return _then(_value.copyWith(
+      phoneController: null == phoneController
+          ? _value.phoneController
+          : phoneController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -106,7 +114,8 @@ abstract class _$$SignInWithPhoneStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {CountryCode code,
+      {TextEditingController phoneController,
+      CountryCode code,
       Object? actionError,
       String? verificationId,
       bool verifying,
@@ -126,6 +135,7 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? phoneController = null,
     Object? code = null,
     Object? actionError = freezed,
     Object? verificationId = freezed,
@@ -135,6 +145,10 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
     Object? phone = null,
   }) {
     return _then(_$SignInWithPhoneStateImpl(
+      phoneController: null == phoneController
+          ? _value.phoneController
+          : phoneController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -168,7 +182,8 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
 
 class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
   const _$SignInWithPhoneStateImpl(
-      {required this.code,
+      {required this.phoneController,
+      required this.code,
       this.actionError,
       this.verificationId,
       this.verifying = false,
@@ -176,6 +191,8 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
       this.enableBtn = false,
       this.phone = ''});
 
+  @override
+  final TextEditingController phoneController;
   @override
   final CountryCode code;
   @override
@@ -197,7 +214,7 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
 
   @override
   String toString() {
-    return 'SignInWithPhoneState(code: $code, actionError: $actionError, verificationId: $verificationId, verifying: $verifying, signInSuccess: $signInSuccess, enableBtn: $enableBtn, phone: $phone)';
+    return 'SignInWithPhoneState(phoneController: $phoneController, code: $code, actionError: $actionError, verificationId: $verificationId, verifying: $verifying, signInSuccess: $signInSuccess, enableBtn: $enableBtn, phone: $phone)';
   }
 
   @override
@@ -205,6 +222,8 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SignInWithPhoneStateImpl &&
+            (identical(other.phoneController, phoneController) ||
+                other.phoneController == phoneController) &&
             (identical(other.code, code) || other.code == code) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
@@ -222,6 +241,7 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      phoneController,
       code,
       const DeepCollectionEquality().hash(actionError),
       verificationId,
@@ -241,7 +261,8 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
 
 abstract class _SignInWithPhoneState implements SignInWithPhoneState {
   const factory _SignInWithPhoneState(
-      {required final CountryCode code,
+      {required final TextEditingController phoneController,
+      required final CountryCode code,
       final Object? actionError,
       final String? verificationId,
       final bool verifying,
@@ -249,6 +270,8 @@ abstract class _SignInWithPhoneState implements SignInWithPhoneState {
       final bool enableBtn,
       final String phone}) = _$SignInWithPhoneStateImpl;
 
+  @override
+  TextEditingController get phoneController;
   @override
   CountryCode get code;
   @override

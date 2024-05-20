@@ -29,14 +29,20 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-92999931839-ios-f166ae55796f68ceac330a</string>
+				<string>app-1-753506519474-ios-8cd38557e090c0b51e7cab</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Capture a new profile image using your device's camera for a personalized and up-to-date appearance.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Select a profile image from your device's gallery to showcase your preferred photo in moments of your choice.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -56,11 +62,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-    <string>Capture a new profile image using your device's camera for a personalized and up-to-date appearance.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Select a profile image from your device's gallery to showcase your preferred photo in moments of your choice.</string>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
 </dict>
 </plist>

@@ -45,6 +45,12 @@ class AppError implements Exception {
             message: error.message,
             l10nCode: AppErrorL10nCodes.invalidVerificationCode,
             stackTrace: error.stackTrace);
+      case errorTooManyRequest:
+        return AppError(
+            statusCode: error.code,
+            message: error.message,
+            l10nCode: AppErrorL10nCodes.tooManyRequests,
+            stackTrace: error.stackTrace);
       case errorInvalidPhoneNumber:
         return AppError(
             statusCode: error.code,
