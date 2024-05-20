@@ -13,7 +13,7 @@ class ScoreBoardButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        color: context.colorScheme.secondaryVariant,
+        color: context.colorScheme.containerNormal,
         child: Row(
           children: [
             Expanded(

@@ -33,19 +33,12 @@ flutter:
   # https://flutter.dev/assets-and-images/#resolution-aware
 
   fonts:
-    - family: Inter
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/inter_regular.ttf
-        - asset: assets/fonts/inter_light.ttf
-          weight: 300
-        - asset: assets/fonts/inter_medium.ttf
+        - asset: assets/fonts/poppins_regular.ttf
+        - asset: assets/fonts/poppins_medium.ttf
           weight: 500
-        - asset: assets/fonts/inter_semi_bold.ttf
+        - asset: assets/fonts/poppins_semi_bold.ttf
           weight: 600
-        - asset: assets/fonts/inter_bold.ttf
+        - asset: assets/fonts/poppins_bold.ttf
           weight: 700
-        - asset: assets/fonts/inter_italic.ttf
-          style: italic
-        - asset: assets/fonts/inter_black_italic.ttf
-          weight: 900
-          style: italic
