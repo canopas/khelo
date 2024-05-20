@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:style/page_views/expandable_page_view.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -93,21 +94,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   ) {
     return Column(
       children: [
-        SizedBox(
-          height: 184,
-          child: state.matches.length == 1
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: _matchCell(context, state.matches.first),
-                )
-              : PageView.builder(
-                  controller: _controller,
-                  itemCount: state.matches.length,
-                  itemBuilder: (context, index) {
-                    return _matchCell(context, state.matches[index]);
-                  },
-                ),
-        ),
+        state.matches.length == 1
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: _matchCell(context, state.matches.first),
+              )
+            : ExpandablePageView(
+                controller: _controller,
+                itemCount: state.matches.length,
+                itemBuilder: (context, index) {
+                  return _matchCell(context, state.matches[index]);
+                },
+              ),
         const SizedBox(height: 16),
         if (state.matches.length >= 2) ...[
           SmoothPageIndicator(
@@ -142,7 +140,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _matchDetailView(context, match),
-            const SizedBox(height: 40),
+            const SizedBox(height: 24),
             _teamScore(
               context,
               match.teams.first,
@@ -176,7 +174,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ImageAvatar(
           initial: team.team.name[0].toUpperCase(),
           imageUrl: team.team.profile_img_url,
-          size: 35,
+          size: 32,
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -186,7 +184,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               style: AppTextStyle.subtitle1.copyWith(
                   color: isCurrentlyPlaying
                       ? context.colorScheme.primary
-                      : context.colorScheme.textPrimary)),
+                      : context.colorScheme.textSecondary)),
         ),
         Text.rich(TextSpan(
             text: "${team.run}-$wicket",
