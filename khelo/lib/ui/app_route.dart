@@ -115,7 +115,7 @@ class AppRoute {
       AppRoute("/intro", builder: (_) => const IntroScreen());
 
   static AppRoute get phoneLogin =>
-      AppRoute("/phone-login", builder: (_) => SignInWithPhoneScreen());
+      AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
 
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,

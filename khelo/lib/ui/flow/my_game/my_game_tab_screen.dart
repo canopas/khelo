@@ -65,6 +65,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     final notifier = ref.watch(myGameTabViewStateProvider.notifier);
 
     return AppPage(
