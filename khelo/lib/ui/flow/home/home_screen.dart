@@ -91,38 +91,42 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     BuildContext context,
     HomeViewState state,
   ) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 164,
-          child: state.matches.length == 1
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: _matchCell(context, state.matches.first),
-                )
-              : PageView.builder(
-                  controller: _controller,
-                  itemBuilder: (context, index) {
-                    return _matchCell(
-                        context, state.matches[index % state.matches.length]);
-                  },
-                ),
-        ),
-        const SizedBox(height: 16),
-        if (state.matches.length >= 2) ...[
-          SmoothPageIndicator(
-            controller: _controller,
-            count: state.matches.length,
-            effect: ExpandingDotsEffect(
-              expansionFactor: 2,
-              dotHeight: 8,
-              dotWidth: 8,
-              dotColor: context.colorScheme.containerHigh,
-              activeDotColor: context.colorScheme.secondary,
-            ),
-          )
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 164,
+            child: state.matches.length == 1
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: _matchCell(context, state.matches.first),
+                  )
+                : PageView.builder(
+                    padEnds: false,
+                    controller: _controller,
+                    itemCount: state.matches.length,
+                    itemBuilder: (context, index) {
+                      return _matchCell(context, state.matches[index]);
+                    },
+                  ),
+          ),
+          const SizedBox(height: 16),
+          if (state.matches.length >= 2) ...[
+            SmoothPageIndicator(
+              controller: _controller,
+              count: state.matches.length,
+              effect: ExpandingDotsEffect(
+                expansionFactor: 2,
+                dotHeight: 8,
+                dotWidth: 8,
+                dotColor: context.colorScheme.containerHigh,
+                activeDotColor: context.colorScheme.secondary,
+              ),
+            )
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -222,9 +226,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             color: context.colorScheme.textPrimary,
           ),
         ),
-        Text(match.ground,
+        Flexible(
+          child: Text(
+            match.ground,
             style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary)),
+                .copyWith(color: context.colorScheme.textPrimary),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
