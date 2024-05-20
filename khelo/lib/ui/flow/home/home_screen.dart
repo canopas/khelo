@@ -5,14 +5,13 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/page_views/expandable_page_view.dart';
 import 'package:style/text/app_text_style.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -24,6 +23,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  final _controller = PageController(keepPage: true, viewportFraction: 0.9);
   late HomeViewNotifier notifier;
   bool _wantKeepAlive = true;
 
@@ -81,12 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     }
 
     if (state.matches.isNotEmpty) {
-      return ListView(
-        padding: context.mediaQueryPadding,
-        children: [
-          _matchCardSlider(context, state),
-        ],
-      );
+      return _matchCardSlider(context, state);
     } else {
       return _emptyMatchView(context);
     }
@@ -96,11 +91,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     BuildContext context,
     HomeViewState state,
   ) {
-    return ExpandablePageView(
-      itemCount: state.matches.length,
-      itemBuilder: (context, index) {
-        return _matchCell(context, state.matches[index]);
-      },
+    return Column(
+      children: [
+        SizedBox(
+          height: 184,
+          child: state.matches.length == 1
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: _matchCell(context, state.matches.first),
+                )
+              : PageView.builder(
+                  controller: _controller,
+                  itemCount: state.matches.length,
+                  itemBuilder: (context, index) {
+                    return _matchCell(context, state.matches[index]);
+                  },
+                ),
+        ),
+        const SizedBox(height: 16),
+        if (state.matches.length >= 2) ...[
+          SmoothPageIndicator(
+            controller: _controller,
+            count: state.matches.length,
+            effect: ExpandingDotsEffect(
+              expansionFactor: 2,
+              dotHeight: 8,
+              dotWidth: 8,
+              dotColor: context.colorScheme.containerHigh,
+              activeDotColor: context.colorScheme.secondary,
+            ),
+          )
+        ],
+      ],
     );
   }
 
@@ -109,26 +131,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
           .push(context),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(20),
-          color: context.colorScheme.containerLow,
+          border: Border.all(color: context.colorScheme.secondary),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            _matchDetailView(context, match),
+            const SizedBox(height: 40),
             _teamScore(
               context,
               match.teams.first,
               match.teams.elementAt(1).wicket,
               match.current_playing_team_id == match.teams.first.team.id,
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
             _teamScore(
                 context,
                 match.teams.elementAt(1),
@@ -138,7 +159,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             const SizedBox(
               height: 8,
             ),
-            _matchDetailView(context, match),
           ],
         ),
       ),
@@ -170,12 +190,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ),
         Text.rich(TextSpan(
             text: "${team.run}-$wicket",
-            style: AppTextStyle.header3
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
                 text: " ${team.over}",
-                style: AppTextStyle.subtitle2
+                style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.textSecondary),
               )
             ]))
@@ -187,19 +207,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     BuildContext context,
     MatchModel match,
   ) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Divider(
-          color: context.colorScheme.outline,
-          thickness: 2,
-        ),
-        Text(
-          "${match.ground} - ${match.match_type.getString(context)} - ${context.l10n.match_list_overs_title(match.number_of_over)}",
-          style: AppTextStyle.subtitle2
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
         Text(match.start_time.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.subtitle2
+            style: AppTextStyle.body2
+                .copyWith(color: context.colorScheme.textPrimary)),
+        Container(
+          height: 5,
+          width: 5,
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: context.colorScheme.textPrimary,
+          ),
+        ),
+        Text(match.ground,
+            style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textPrimary)),
       ],
     );
