@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:style/page_views/expandable_page_view.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -94,18 +93,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   ) {
     return Column(
       children: [
-        state.matches.length == 1
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: _matchCell(context, state.matches.first),
-              )
-            : ExpandablePageView(
-                controller: _controller,
-                itemCount: state.matches.length,
-                itemBuilder: (context, index) {
-                  return _matchCell(context, state.matches[index]);
-                },
-              ),
+        SizedBox(
+          height: 164,
+          child: state.matches.length == 1
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: _matchCell(context, state.matches.first),
+                )
+              : PageView.builder(
+                  controller: _controller,
+                  itemBuilder: (context, index) {
+                    return _matchCell(
+                        context, state.matches[index % state.matches.length]);
+                  },
+                ),
+        ),
         const SizedBox(height: 16),
         if (state.matches.length >= 2) ...[
           SmoothPageIndicator(
