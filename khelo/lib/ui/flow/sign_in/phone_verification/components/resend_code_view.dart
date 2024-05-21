@@ -41,13 +41,8 @@ class PhoneVerificationResendCodeView extends ConsumerWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               context.l10n.otp_verification_resend_code_text,
-              style: AppTextStyle.body2.copyWith(
-                color: activeResendCodeBtn
-                    ? context.colorScheme.primary
-                    : Color.alphaBlend(
-                        context.colorScheme.primary.withOpacity(0.5),
-                        context.colorScheme.surface,
-                      ),
+              style: AppTextStyle.caption.copyWith(
+                color: context.colorScheme.info,
               ),
             ),
           ),
@@ -57,7 +52,7 @@ class PhoneVerificationResendCodeView extends ConsumerWidget {
           visible: !activeResendCodeBtn,
           child: Text(
             '00 : ${duration.inSeconds.toString().padLeft(2, '0')}',
-            style: AppTextStyle.body2.copyWith(
+            style: AppTextStyle.caption.copyWith(
               color: context.colorScheme.textPrimary,
             ),
           ),

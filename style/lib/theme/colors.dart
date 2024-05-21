@@ -4,11 +4,18 @@ import '../text/app_text_style.dart';
 
 const primaryColor = Color(0xFF01579B);
 
+const primaryVariantLightColor = Color(0xFFEDF5FB);
+const primaryVariantDarkColor = Color(0x6601579B);
+
 const secondaryColor = Color(0xFFF57F17);
 
-const containerHighColor = Color(0x1401345D);
-const containerNormalColor = Color(0x0F01345D);
-const containerLowColor = Color(0x0A01345D);
+const containerHighLightColor = Color(0x1401345D);
+const containerNormalLightColor = Color(0x0F01345D);
+const containerLowLightColor = Color(0x0A01345D);
+
+const containerHighDarkColor = Color(0x14D1E1ED);
+const containerNormalDarkColor = Color(0x0FD1E1ED);
+const containerLowDarkColor = Color(0x0AD1E1ED);
 
 const textPrimaryLightColor = Color(0xDE000000);
 const textSecondaryLightColor = Color(0x99000000);
@@ -45,7 +52,7 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
   scaffoldBackgroundColor: surfaceLightColor,
   appBarTheme: _materialLightTheme.appBarTheme.copyWith(
     backgroundColor: surfaceLightColor,
-    surfaceTintColor: containerLowColor,
+    surfaceTintColor: containerLowLightColor,
     titleTextStyle: _materialLightTheme.appBarTheme.titleTextStyle?.copyWith(
       fontFamily: AppTextStyle.poppinsFontFamily,
       package: 'style',
@@ -67,7 +74,7 @@ final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
   scaffoldBackgroundColor: surfaceDarkColor,
   appBarTheme: _materialDarkTheme.appBarTheme.copyWith(
     backgroundColor: surfaceDarkColor,
-    surfaceTintColor: containerLowColor,
+    surfaceTintColor: containerLowDarkColor,
     titleTextStyle: _materialDarkTheme.appBarTheme.titleTextStyle?.copyWith(
       fontFamily: AppTextStyle.poppinsFontFamily,
       package: 'style',
@@ -77,6 +84,7 @@ final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
 
 class AppColorScheme {
   final Color primary;
+  final Color primaryVariant;
   final Color secondary;
   final Color surface;
   final Color outline;
@@ -92,6 +100,7 @@ class AppColorScheme {
   final Color positive;
   final Color alert;
   final Color warning;
+  final Color info;
   final Color onPrimary;
   final Color onPrimaryVariant;
   final Color onSecondary;
@@ -100,6 +109,7 @@ class AppColorScheme {
 
   AppColorScheme({
     required this.primary,
+    required this.primaryVariant,
     required this.secondary,
     required this.surface,
     required this.outline,
@@ -115,6 +125,7 @@ class AppColorScheme {
     required this.positive,
     required this.alert,
     required this.warning,
+    required this.info,
     required this.onPrimary,
     required this.onPrimaryVariant,
     required this.onSecondary,
@@ -128,10 +139,14 @@ class AppColorScheme {
   Color get containerHighOnSurface => Color.alphaBlend(containerHigh, surface);
 
   Color get containerLowOnSurface => Color.alphaBlend(containerLow, surface);
+
+  Color get primaryVariantOnSurface =>
+      Color.alphaBlend(primaryVariant, surface);
 }
 
 final appColorSchemeLight = AppColorScheme(
   primary: primaryColor,
+  primaryVariant: primaryVariantLightColor,
   secondary: secondaryColor,
   surface: surfaceLightColor,
   outline: outlineColor,
@@ -141,12 +156,13 @@ final appColorSchemeLight = AppColorScheme(
   textInversePrimary: textPrimaryDarkColor,
   textInverseSecondary: textSecondaryDarkColor,
   textInverseDisabled: textDisabledDarkColor,
-  containerHigh: containerHighColor,
-  containerNormal: containerNormalColor,
-  containerLow: containerLowColor,
+  containerHigh: containerHighLightColor,
+  containerNormal: containerNormalLightColor,
+  containerLow: containerLowLightColor,
   positive: awarenessPositiveColor,
   alert: awarenessAlertColor,
   warning: awarenessWarningColor,
+  info: awarenessInfoColor,
   onPrimary: textPrimaryDarkColor,
   onPrimaryVariant: textPrimaryLightColor,
   onSecondary: textSecondaryDarkColor,
@@ -156,6 +172,7 @@ final appColorSchemeLight = AppColorScheme(
 
 final appColorSchemeDark = AppColorScheme(
   primary: primaryColor,
+  primaryVariant: primaryVariantDarkColor,
   secondary: secondaryColor,
   surface: surfaceDarkColor,
   outline: outlineColor,
@@ -165,12 +182,13 @@ final appColorSchemeDark = AppColorScheme(
   textInversePrimary: textPrimaryLightColor,
   textInverseSecondary: textSecondaryLightColor,
   textInverseDisabled: textDisabledLightColor,
-  containerHigh: containerHighColor,
-  containerNormal: containerNormalColor,
-  containerLow: containerLowColor,
+  containerHigh: containerHighDarkColor,
+  containerNormal: containerNormalDarkColor,
+  containerLow: containerLowDarkColor,
   positive: awarenessPositiveColor,
   alert: awarenessAlertColor,
   warning: awarenessWarningColor,
+  info: awarenessInfoColor,
   onPrimary: textPrimaryDarkColor,
   onPrimaryVariant: textPrimaryLightColor,
   onSecondary: textSecondaryDarkColor,
