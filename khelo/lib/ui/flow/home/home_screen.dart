@@ -96,7 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       child: Column(
         children: [
           SizedBox(
-            height: 164,
+            height: 187,
             child: state.matches.length == 1
                 ? Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
