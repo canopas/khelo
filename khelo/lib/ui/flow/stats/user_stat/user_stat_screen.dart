@@ -1,5 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -15,48 +16,24 @@ class UserStatScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _UserStatScreenState();
 }
 
-class _UserStatScreenState extends ConsumerState<UserStatScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _UserStatScreenState extends ConsumerState<UserStatScreen> {
   late UserStatViewNotifier notifier;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
-      // deallocate resources
-      notifier.dispose();
-      WidgetsBinding.instance.removeObserver(this);
-    }
+    notifier = ref.read(userStatViewStateProvider.notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final state = ref.watch(userStatViewStateProvider);
-    notifier = ref.watch(userStatViewStateProvider.notifier);
-
-    return _body(context, notifier, state);
+    return Builder(builder: (context) {
+      return _body(context);
+    });
   }
 
-  Widget _body(BuildContext context, UserStatViewNotifier notifier,
-      UserStatViewState state) {
+  Widget _body(BuildContext context) {
+    final state = ref.watch(userStatViewStateProvider);
     if (state.loading) {
       return const AppProgressIndicator();
     }
@@ -69,45 +46,63 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     }
 
     return ListView(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 50),
+      padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
       children: [
+        _sectionTitle(
+            context, context.l10n.my_stat_stats_batting_statics_title),
         _battingStats(context, state),
-        _bowlingStats(context, state),
-        _fieldingStats(context, state),
       ],
     );
   }
 
   Widget _sectionTitle(BuildContext context, String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 24),
-        Text(
-          title,
-          style: AppTextStyle.header4
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-        const SizedBox(height: 16),
-      ],
-    );
+    return Text(title,
+        style: AppTextStyle.header4
+            .copyWith(color: context.colorScheme.textPrimary));
   }
 
   Widget _battingStats(BuildContext context, UserStatViewState state) {
     final totalRuns = _getTotalRunScored(state);
+    final (average, rate) = _getAverageAndStrikeRate(state, false);
+    final ballFaced = state.ballList
+        .where((element) =>
+            element.batsman_id == state.currentUserId &&
+            (element.extras_type == null ||
+                element.extras_type == ExtrasType.legBye ||
+                element.extras_type == ExtrasType.bye))
+        .length;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_batting_statics_title),
-        _runScoredView(context, context.l10n.my_stat_stats_run_scored_title,
-            totalRuns.toString()),
-        const SizedBox(height: 16),
-        _averageAndStrikeRateView(context, state, false),
-        const SizedBox(height: 16),
-        _ballFacedView(context, state),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(top: 16),
+      decoration: BoxDecoration(
+          border: Border.all(color: context.colorScheme.outline),
+          borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _mainStatisticView(
+            context,
+            title: context.l10n.my_stat_stats_run_scored_title,
+            count: totalRuns.toString(),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _subStatisticView(context,
+                  title: context.l10n.my_stat_stats_batting_title,
+                  count: average.toString()),
+              _subStatisticView(context,
+                  title: context.l10n.my_stat_stats_strike_rate_title,
+                  count: '${rate.toStringAsFixed(2)}%'),
+              _subStatisticView(context,
+                  title: context.l10n.my_stat_stats_ball_faced_title,
+                  count: ballFaced.toString()),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -117,23 +112,59 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
         .fold(0, (sum, element) => sum + element.runs_scored);
   }
 
-  Widget _runScoredView(BuildContext context, String title, String count) {
-    return Center(
-      child: Text.rich(
-        TextSpan(
-            text: count,
-            style: AppTextStyle.header1
-                .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: "\n$title",
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]),
-        textAlign: TextAlign.center,
-      ),
-    );
+  Widget _mainStatisticView(
+    BuildContext context, {
+    required String title,
+    required String count,
+  }) {
+    return Container(
+        width: context.mediaQuerySize.width,
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              count,
+              style: AppTextStyle.header1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            Text(
+              title,
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.textSecondary),
+            ),
+          ],
+        ));
+  }
+
+  Widget _subStatisticView(
+    BuildContext context, {
+    required String title,
+    required String count,
+  }) {
+    return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              count,
+              style: AppTextStyle.header1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            Text(
+              title,
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.textSecondary),
+            ),
+          ],
+        ));
   }
 
   Widget _averageAndStrikeRateView(
@@ -320,22 +351,22 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     );
   }
 
-  Widget _bowlingStats(BuildContext context, UserStatViewState state) {
-    final wickets = _calculateWicketsTaken(state);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_bowling_statics_title),
-        _runScoredView(context, context.l10n.common_wicket_taken_title,
-            wickets.toString()),
-        const SizedBox(height: 16),
-        _averageAndStrikeRateView(context, state, true),
-        const SizedBox(height: 16),
-        _economyRate(context, state)
-      ],
-    );
-  }
+  // Widget _bowlingStats(BuildContext context, UserStatViewState state) {
+  //   final wickets = _calculateWicketsTaken(state);
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       _sectionTitle(
+  //           context, context.l10n.my_stat_stats_bowling_statics_title),
+  //       _runScoredView(context, context.l10n.common_wicket_taken_title,
+  //           wickets.toString()),
+  //       const SizedBox(height: 16),
+  //       _averageAndStrikeRateView(context, state, true),
+  //       const SizedBox(height: 16),
+  //       _economyRate(context, state)
+  //     ],
+  //   );
+  // }
 
   int _calculateWicketsTaken(UserStatViewState state) {
     final wickets = state.ballList
@@ -363,20 +394,20 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     );
   }
 
-  Widget _fieldingStats(BuildContext context, UserStatViewState state) {
-    final catches = _calculateCatches(state);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_fielding_statics_title),
-        _runScoredView(context, context.l10n.my_stat_stats_catches_title,
-            catches.toString()),
-        const SizedBox(height: 16),
-        _runOutAndStumpingView(context, state)
-      ],
-    );
-  }
+  // Widget _fieldingStats(BuildContext context, UserStatViewState state) {
+  //   final catches = _calculateCatches(state);
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       _sectionTitle(
+  //           context, context.l10n.my_stat_stats_fielding_statics_title),
+  //       _runScoredView(context, context.l10n.my_stat_stats_catches_title,
+  //           catches.toString()),
+  //       const SizedBox(height: 16),
+  //       _runOutAndStumpingView(context, state)
+  //     ],
+  //   );
+  // }
 
   int _calculateCatches(UserStatViewState state) {
     final catchCounts = state.ballList

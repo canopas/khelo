@@ -16,66 +16,40 @@ class MyStatsTabScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _MyStatsTabScreenState();
 }
 
-class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen> {
   final List<Widget> _tabs = [
     const UserMatchListScreen(),
     const UserStatScreen(),
   ];
 
   late PageController _controller;
+  late MyStatsTabViewNotifier notifier;
 
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
 
-  bool _wantKeepAlive = true;
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
-
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
+    notifier = ref.read(myStatsTabStateProvider.notifier);
     _controller = PageController(
-      initialPage: ref.read(myStatsTabStateProvider).selectedTab,
+      initialPage: ref.read(myStatsTabStateProvider).initialTab,
     );
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
-      // deallocate resources
-      _controller.dispose();
-      WidgetsBinding.instance.removeObserver(this);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-    final notifier = ref.watch(myStatsTabStateProvider.notifier);
-
     return AppPage(
-      title: context.l10n.my_stat_screen_title,
       body: Builder(
         builder: (context) {
-          return _content(context, notifier);
+          return _content(context);
         },
       ),
     );
   }
 
-  Widget _content(BuildContext context, MyStatsTabViewNotifier notifier) {
+  Widget _content(BuildContext context) {
     return SafeArea(
       child: Column(
         children: [

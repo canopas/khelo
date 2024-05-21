@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MyStatsTabState {
-  int get selectedTab => throw _privateConstructorUsedError;
+  int get initialTab => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MyStatsTabStateCopyWith<MyStatsTabState> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $MyStatsTabStateCopyWith<$Res> {
           MyStatsTabState value, $Res Function(MyStatsTabState) then) =
       _$MyStatsTabStateCopyWithImpl<$Res, MyStatsTabState>;
   @useResult
-  $Res call({int selectedTab});
+  $Res call({int initialTab});
 }
 
 /// @nodoc
@@ -45,12 +45,12 @@ class _$MyStatsTabStateCopyWithImpl<$Res, $Val extends MyStatsTabState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectedTab = null,
+    Object? initialTab = null,
   }) {
     return _then(_value.copyWith(
-      selectedTab: null == selectedTab
-          ? _value.selectedTab
-          : selectedTab // ignore: cast_nullable_to_non_nullable
+      initialTab: null == initialTab
+          ? _value.initialTab
+          : initialTab // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -64,7 +64,7 @@ abstract class _$$MyStatsTabStateImplCopyWith<$Res>
       __$$MyStatsTabStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int selectedTab});
+  $Res call({int initialTab});
 }
 
 /// @nodoc
@@ -78,12 +78,12 @@ class __$$MyStatsTabStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? selectedTab = null,
+    Object? initialTab = null,
   }) {
     return _then(_$MyStatsTabStateImpl(
-      selectedTab: null == selectedTab
-          ? _value.selectedTab
-          : selectedTab // ignore: cast_nullable_to_non_nullable
+      initialTab: null == initialTab
+          ? _value.initialTab
+          : initialTab // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -92,15 +92,14 @@ class __$$MyStatsTabStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MyStatsTabStateImpl implements _MyStatsTabState {
-  const _$MyStatsTabStateImpl({this.selectedTab = 0});
+  const _$MyStatsTabStateImpl({required this.initialTab});
 
   @override
-  @JsonKey()
-  final int selectedTab;
+  final int initialTab;
 
   @override
   String toString() {
-    return 'MyStatsTabState(selectedTab: $selectedTab)';
+    return 'MyStatsTabState(initialTab: $initialTab)';
   }
 
   @override
@@ -108,12 +107,12 @@ class _$MyStatsTabStateImpl implements _MyStatsTabState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MyStatsTabStateImpl &&
-            (identical(other.selectedTab, selectedTab) ||
-                other.selectedTab == selectedTab));
+            (identical(other.initialTab, initialTab) ||
+                other.initialTab == initialTab));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, selectedTab);
+  int get hashCode => Object.hash(runtimeType, initialTab);
 
   @JsonKey(ignore: true)
   @override
@@ -124,11 +123,11 @@ class _$MyStatsTabStateImpl implements _MyStatsTabState {
 }
 
 abstract class _MyStatsTabState implements MyStatsTabState {
-  const factory _MyStatsTabState({final int selectedTab}) =
+  const factory _MyStatsTabState({required final int initialTab}) =
       _$MyStatsTabStateImpl;
 
   @override
-  int get selectedTab;
+  int get initialTab;
   @override
   @JsonKey(ignore: true)
   _$$MyStatsTabStateImplCopyWith<_$MyStatsTabStateImpl> get copyWith =>
