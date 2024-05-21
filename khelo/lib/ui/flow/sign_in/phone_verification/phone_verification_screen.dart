@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
+import 'package:khelo/components/intro_gradient_background.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/enter_otp_view.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/components/resend_code_view.dart';
@@ -77,64 +79,73 @@ class _PhoneVerificationScreenState
 
     return PopScope(
       canPop: false,
-      child: AppPage(
-        body: Builder(builder: (context) {
-          return Padding(
-            padding: context.mediaQueryPadding +
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: ListView(
-              children: [
-                Text(
-                  context.l10n.otp_verification_enter_otp_text,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.header1
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    context.l10n.otp_verification_description,
-                    style: AppTextStyle.subtitle2
-                        .copyWith(color: context.colorScheme.textDisabled),
-                    textAlign: TextAlign.center,
+      child: IntroGradientBackground(
+        child: AppPage(
+          backgroundColor: Colors.transparent,
+          body: Builder(builder: (context) {
+            return Padding(
+              padding: context.mediaQueryPadding +
+                  const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Text(
+                        context.l10n.otp_verification_enter_otp_text,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.header1
+                            .copyWith(color: context.colorScheme.textPrimary),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          context.l10n.otp_verification_description,
+                          style: AppTextStyle.body1.copyWith(
+                              color: context.colorScheme.textSecondary),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _phoneNumberView(context),
+                      const EnterOTPView(
+                        count: 6,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      if (state.showErrorVerificationCodeText) ...[
+                        Text(
+                            context
+                                .l10n.otp_verification_incorrect_otp_error_text,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.body2
+                                .copyWith(color: context.colorScheme.alert)),
+                      ],
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      PrimaryButton(
+                        enabled: state.enableVerify,
+                        progress: state.verifying,
+                        context.l10n.otp_verification_verify_otp_text,
+                        onPressed: () => notifier.verifyOTP(),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      PhoneVerificationResendCodeView(
+                          countryCode: widget.countryCode,
+                          phoneNumber: widget.phoneNumber),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 16),
-                _phoneNumberView(context),
-                const EnterOTPView(
-                  count: 6,
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                if (state.showErrorVerificationCodeText) ...[
-                  Text(context.l10n.otp_verification_incorrect_otp_error_text,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.body2
-                          .copyWith(color: context.colorScheme.alert)),
-                ],
-                const SizedBox(
-                  height: 24,
-                ),
-                PrimaryButton(
-                  enabled: state.enableVerify,
-                  progress: state.verifying,
-                  context.l10n.otp_verification_verify_otp_text,
-                  onPressed: () => notifier.verifyOTP(),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                PhoneVerificationResendCodeView(
-                    countryCode: widget.countryCode,
-                    phoneNumber: widget.phoneNumber),
-              ],
-            ),
-          );
-        }),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

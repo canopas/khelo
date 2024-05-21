@@ -13,6 +13,7 @@ class AppPage extends StatelessWidget {
   final Widget? floatingActionButton;
   final Widget? body;
   final bool automaticallyImplyLeading;
+  final Color? backgroundColor;
 
   const AppPage({
     super.key,
@@ -24,6 +25,7 @@ class AppPage extends StatelessWidget {
     this.body,
     this.automaticallyImplyLeading = true,
     this.floatingActionButton,
+    this.backgroundColor,
   });
 
   @override
@@ -36,6 +38,7 @@ class AppPage extends StatelessWidget {
   }
 
   Widget _cupertino(BuildContext context) => CupertinoPageScaffold(
+        backgroundColor: backgroundColor,
         navigationBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null
@@ -80,6 +83,7 @@ class AppPage extends StatelessWidget {
       );
 
   Widget _material() => Scaffold(
+        backgroundColor: backgroundColor,
         appBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null
