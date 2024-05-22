@@ -483,3 +483,355 @@ abstract class _BallScoreModel implements BallScoreModel {
   _$$BallScoreModelImplCopyWith<_$BallScoreModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$UserStat {
+  int get run_scored => throw _privateConstructorUsedError;
+  double get batting_average => throw _privateConstructorUsedError;
+  double get batting_strike_rate => throw _privateConstructorUsedError;
+  int get ball_faced => throw _privateConstructorUsedError;
+  int get wicket_taken => throw _privateConstructorUsedError;
+  double get bowling_average => throw _privateConstructorUsedError;
+  double get bowling_strike_rate => throw _privateConstructorUsedError;
+  double get economy_rate => throw _privateConstructorUsedError;
+  int get catches => throw _privateConstructorUsedError;
+  int get run_out => throw _privateConstructorUsedError;
+  int get stumping => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $UserStatCopyWith<UserStat> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UserStatCopyWith<$Res> {
+  factory $UserStatCopyWith(UserStat value, $Res Function(UserStat) then) =
+      _$UserStatCopyWithImpl<$Res, UserStat>;
+  @useResult
+  $Res call(
+      {int run_scored,
+      double batting_average,
+      double batting_strike_rate,
+      int ball_faced,
+      int wicket_taken,
+      double bowling_average,
+      double bowling_strike_rate,
+      double economy_rate,
+      int catches,
+      int run_out,
+      int stumping});
+}
+
+/// @nodoc
+class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
+    implements $UserStatCopyWith<$Res> {
+  _$UserStatCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? run_scored = null,
+    Object? batting_average = null,
+    Object? batting_strike_rate = null,
+    Object? ball_faced = null,
+    Object? wicket_taken = null,
+    Object? bowling_average = null,
+    Object? bowling_strike_rate = null,
+    Object? economy_rate = null,
+    Object? catches = null,
+    Object? run_out = null,
+    Object? stumping = null,
+  }) {
+    return _then(_value.copyWith(
+      run_scored: null == run_scored
+          ? _value.run_scored
+          : run_scored // ignore: cast_nullable_to_non_nullable
+              as int,
+      batting_average: null == batting_average
+          ? _value.batting_average
+          : batting_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      batting_strike_rate: null == batting_strike_rate
+          ? _value.batting_strike_rate
+          : batting_strike_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      ball_faced: null == ball_faced
+          ? _value.ball_faced
+          : ball_faced // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket_taken: null == wicket_taken
+          ? _value.wicket_taken
+          : wicket_taken // ignore: cast_nullable_to_non_nullable
+              as int,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_strike_rate: null == bowling_strike_rate
+          ? _value.bowling_strike_rate
+          : bowling_strike_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      economy_rate: null == economy_rate
+          ? _value.economy_rate
+          : economy_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      catches: null == catches
+          ? _value.catches
+          : catches // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_out: null == run_out
+          ? _value.run_out
+          : run_out // ignore: cast_nullable_to_non_nullable
+              as int,
+      stumping: null == stumping
+          ? _value.stumping
+          : stumping // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$UserStatImplCopyWith<$Res>
+    implements $UserStatCopyWith<$Res> {
+  factory _$$UserStatImplCopyWith(
+          _$UserStatImpl value, $Res Function(_$UserStatImpl) then) =
+      __$$UserStatImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int run_scored,
+      double batting_average,
+      double batting_strike_rate,
+      int ball_faced,
+      int wicket_taken,
+      double bowling_average,
+      double bowling_strike_rate,
+      double economy_rate,
+      int catches,
+      int run_out,
+      int stumping});
+}
+
+/// @nodoc
+class __$$UserStatImplCopyWithImpl<$Res>
+    extends _$UserStatCopyWithImpl<$Res, _$UserStatImpl>
+    implements _$$UserStatImplCopyWith<$Res> {
+  __$$UserStatImplCopyWithImpl(
+      _$UserStatImpl _value, $Res Function(_$UserStatImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? run_scored = null,
+    Object? batting_average = null,
+    Object? batting_strike_rate = null,
+    Object? ball_faced = null,
+    Object? wicket_taken = null,
+    Object? bowling_average = null,
+    Object? bowling_strike_rate = null,
+    Object? economy_rate = null,
+    Object? catches = null,
+    Object? run_out = null,
+    Object? stumping = null,
+  }) {
+    return _then(_$UserStatImpl(
+      run_scored: null == run_scored
+          ? _value.run_scored
+          : run_scored // ignore: cast_nullable_to_non_nullable
+              as int,
+      batting_average: null == batting_average
+          ? _value.batting_average
+          : batting_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      batting_strike_rate: null == batting_strike_rate
+          ? _value.batting_strike_rate
+          : batting_strike_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      ball_faced: null == ball_faced
+          ? _value.ball_faced
+          : ball_faced // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket_taken: null == wicket_taken
+          ? _value.wicket_taken
+          : wicket_taken // ignore: cast_nullable_to_non_nullable
+              as int,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_strike_rate: null == bowling_strike_rate
+          ? _value.bowling_strike_rate
+          : bowling_strike_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      economy_rate: null == economy_rate
+          ? _value.economy_rate
+          : economy_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+      catches: null == catches
+          ? _value.catches
+          : catches // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_out: null == run_out
+          ? _value.run_out
+          : run_out // ignore: cast_nullable_to_non_nullable
+              as int,
+      stumping: null == stumping
+          ? _value.stumping
+          : stumping // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$UserStatImpl implements _UserStat {
+  const _$UserStatImpl(
+      {this.run_scored = 0,
+      this.batting_average = 0.0,
+      this.batting_strike_rate = 0.0,
+      this.ball_faced = 0,
+      this.wicket_taken = 0,
+      this.bowling_average = 0.0,
+      this.bowling_strike_rate = 0.0,
+      this.economy_rate = 0.0,
+      this.catches = 0,
+      this.run_out = 0,
+      this.stumping = 0});
+
+  @override
+  @JsonKey()
+  final int run_scored;
+  @override
+  @JsonKey()
+  final double batting_average;
+  @override
+  @JsonKey()
+  final double batting_strike_rate;
+  @override
+  @JsonKey()
+  final int ball_faced;
+  @override
+  @JsonKey()
+  final int wicket_taken;
+  @override
+  @JsonKey()
+  final double bowling_average;
+  @override
+  @JsonKey()
+  final double bowling_strike_rate;
+  @override
+  @JsonKey()
+  final double economy_rate;
+  @override
+  @JsonKey()
+  final int catches;
+  @override
+  @JsonKey()
+  final int run_out;
+  @override
+  @JsonKey()
+  final int stumping;
+
+  @override
+  String toString() {
+    return 'UserStat(run_scored: $run_scored, batting_average: $batting_average, batting_strike_rate: $batting_strike_rate, ball_faced: $ball_faced, wicket_taken: $wicket_taken, bowling_average: $bowling_average, bowling_strike_rate: $bowling_strike_rate, economy_rate: $economy_rate, catches: $catches, run_out: $run_out, stumping: $stumping)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UserStatImpl &&
+            (identical(other.run_scored, run_scored) ||
+                other.run_scored == run_scored) &&
+            (identical(other.batting_average, batting_average) ||
+                other.batting_average == batting_average) &&
+            (identical(other.batting_strike_rate, batting_strike_rate) ||
+                other.batting_strike_rate == batting_strike_rate) &&
+            (identical(other.ball_faced, ball_faced) ||
+                other.ball_faced == ball_faced) &&
+            (identical(other.wicket_taken, wicket_taken) ||
+                other.wicket_taken == wicket_taken) &&
+            (identical(other.bowling_average, bowling_average) ||
+                other.bowling_average == bowling_average) &&
+            (identical(other.bowling_strike_rate, bowling_strike_rate) ||
+                other.bowling_strike_rate == bowling_strike_rate) &&
+            (identical(other.economy_rate, economy_rate) ||
+                other.economy_rate == economy_rate) &&
+            (identical(other.catches, catches) || other.catches == catches) &&
+            (identical(other.run_out, run_out) || other.run_out == run_out) &&
+            (identical(other.stumping, stumping) ||
+                other.stumping == stumping));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      run_scored,
+      batting_average,
+      batting_strike_rate,
+      ball_faced,
+      wicket_taken,
+      bowling_average,
+      bowling_strike_rate,
+      economy_rate,
+      catches,
+      run_out,
+      stumping);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
+      __$$UserStatImplCopyWithImpl<_$UserStatImpl>(this, _$identity);
+}
+
+abstract class _UserStat implements UserStat {
+  const factory _UserStat(
+      {final int run_scored,
+      final double batting_average,
+      final double batting_strike_rate,
+      final int ball_faced,
+      final int wicket_taken,
+      final double bowling_average,
+      final double bowling_strike_rate,
+      final double economy_rate,
+      final int catches,
+      final int run_out,
+      final int stumping}) = _$UserStatImpl;
+
+  @override
+  int get run_scored;
+  @override
+  double get batting_average;
+  @override
+  double get batting_strike_rate;
+  @override
+  int get ball_faced;
+  @override
+  int get wicket_taken;
+  @override
+  double get bowling_average;
+  @override
+  double get bowling_strike_rate;
+  @override
+  double get economy_rate;
+  @override
+  int get catches;
+  @override
+  int get run_out;
+  @override
+  int get stumping;
+  @override
+  @JsonKey(ignore: true)
+  _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

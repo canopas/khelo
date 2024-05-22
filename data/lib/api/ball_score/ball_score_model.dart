@@ -65,3 +65,20 @@ enum WicketType {
 
   const WicketType(this.value);
 }
+
+@freezed
+class UserStat with _$UserStat {
+  const factory UserStat({
+    @Default(0) int run_scored,
+    @Default(0.0) double batting_average,
+    @Default(0.0) double batting_strike_rate,
+    @Default(0) int ball_faced,
+    @Default(0) int wicket_taken,
+    @Default(0.0) double bowling_average,
+    @Default(0.0) double bowling_strike_rate,
+    @Default(0.0) double economy_rate,
+    @Default(0) int catches,
+    @Default(0) int run_out,
+    @Default(0) int stumping,
+  }) = _UserStat;
+}
