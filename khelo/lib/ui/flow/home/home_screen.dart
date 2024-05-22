@@ -211,31 +211,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     BuildContext context,
     MatchModel match,
   ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(match.start_time.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary)),
-        Container(
-          height: 5,
-          width: 5,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: context.colorScheme.textPrimary,
-          ),
-        ),
-        Flexible(
-          child: Text(
-            match.ground,
+    return Text.rich(
+        overflow: TextOverflow.ellipsis,
+        TextSpan(
+            text: match.start_time.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textPrimary),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ],
-    );
+            children: [
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Container(
+                    height: 5,
+                    width: 5,
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: context.colorScheme.textPrimary,
+                    ),
+                  )),
+              TextSpan(text: match.ground)
+            ]));
   }
 
   Widget _emptyMatchView(BuildContext context) {
