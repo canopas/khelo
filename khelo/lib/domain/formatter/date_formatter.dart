@@ -11,7 +11,7 @@ extension DateFormatter on DateTime {
     switch (type) {
       case DateFormatType.dateAndTime:
         return DateFormat(
-                'EEE, MMM dd yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
+                'EEE, dd MMM yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
             .format(this);
       case DateFormatType.date:
         return DateFormat(
