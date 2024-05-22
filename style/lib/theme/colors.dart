@@ -41,6 +41,11 @@ final ThemeData _materialDarkTheme = ThemeData.dark(useMaterial3: true);
 final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
   primaryColor: primaryColor,
   dividerColor: outlineColor,
+  datePickerTheme: _materialLightTheme.datePickerTheme.copyWith(
+    backgroundColor: surfaceLightColor,
+    headerForegroundColor: textPrimaryLightColor,
+    dividerColor: outlineColor,
+  ),
   colorScheme: _materialLightTheme.colorScheme.copyWith(
     primary: primaryColor,
     secondary: secondaryColor,
@@ -63,6 +68,11 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
 final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
   primaryColor: primaryColor,
   dividerColor: outlineColor,
+  datePickerTheme: _materialDarkTheme.datePickerTheme.copyWith(
+    backgroundColor: surfaceDarkColor,
+    headerForegroundColor: textPrimaryDarkColor,
+    dividerColor: outlineColor,
+  ),
   colorScheme: _materialDarkTheme.colorScheme.copyWith(
     primary: primaryColor,
     secondary: secondaryColor,

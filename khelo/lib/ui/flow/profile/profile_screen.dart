@@ -54,7 +54,7 @@ class ProfileScreen extends ConsumerWidget {
             child: Text(
               context.l10n.common_sign_out_title,
               style: AppTextStyle.button
-                  .copyWith(color: context.colorScheme.primary),
+                  .copyWith(color: context.colorScheme.alert),
             ))
       ],
       body: Builder(
@@ -83,29 +83,29 @@ class ProfileScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-            border: Border.all(color: context.colorScheme.containerHigh),
-            borderRadius: BorderRadius.circular(12)),
+            color: context.colorScheme.containerNormal,
+            borderRadius: BorderRadius.circular(16)),
         child: Row(
           children: [
             Container(
-              height: 90,
-              width: 90,
+              height: 80,
+              width: 80,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: context.colorScheme.containerLow,
-                  shape: BoxShape.circle,
-                  image: state.currentUser?.profile_img_url != null
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(
-                              state.currentUser!.profile_img_url!),
-                          fit: BoxFit.cover)
-                      : null,
-                  border: Border.all(color: context.colorScheme.containerHigh)),
+                color: context.colorScheme.containerHigh,
+                shape: BoxShape.circle,
+                image: state.currentUser?.profile_img_url != null
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(
+                            state.currentUser!.profile_img_url!),
+                        fit: BoxFit.cover)
+                    : null,
+              ),
               child: state.currentUser?.profile_img_url == null
                   ? Text(state.currentUser?.nameInitial ?? '?',
-                      style: AppTextStyle.header1.copyWith(
-                        color: context.colorScheme.secondary,
-                        fontSize: 40,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.header2.copyWith(
+                        color: context.colorScheme.textPrimary,
                       ))
                   : null,
             ),
@@ -115,7 +115,7 @@ class ProfileScreen extends ConsumerWidget {
             Expanded(
               child: Text(
                 state.currentUser?.name ?? context.l10n.common_anonymous_title,
-                style: AppTextStyle.header3
+                style: AppTextStyle.subtitle1
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
             )
@@ -130,28 +130,29 @@ class ProfileScreen extends ConsumerWidget {
         currentUser.batting_style == null ||
         currentUser.bowling_style == null) {
       return Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-            border: Border.all(color: context.colorScheme.containerHigh),
-            borderRadius: BorderRadius.circular(12)),
+            border: Border.all(color: context.colorScheme.outline),
+            borderRadius: BorderRadius.circular(16)),
         child: Column(
           children: [
             Text(
               context.l10n.profile_complete_your_profile_title,
-              style: AppTextStyle.header1
+              textAlign: TextAlign.center,
+              style: AppTextStyle.header4
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
             const SizedBox(
-              height: 8,
+              height: 16,
             ),
             Text(
-              context.l10n.profile_complete_profile_description_title,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textSecondary),
+              context.l10n.profile_complete_profile_description,
               textAlign: TextAlign.center,
+              style: AppTextStyle.body1
+                  .copyWith(color: context.colorScheme.textSecondary),
             ),
             const SizedBox(
-              height: 24,
+              height: 16,
             ),
             PrimaryButton(
                 onPressed: () => AppRoute.editProfile().push(context),

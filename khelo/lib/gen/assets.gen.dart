@@ -19,6 +19,9 @@ class $AssetsImagesGen {
   AssetGenImage get icBatsman =>
       const AssetGenImage('assets/images/ic_batsman.png');
 
+  /// File path: assets/images/ic_bin.svg
+  String get icBin => 'assets/images/ic_bin.svg';
+
   /// File path: assets/images/ic_bowler.png
   AssetGenImage get icBowler =>
       const AssetGenImage('assets/images/ic_bowler.png');
@@ -26,6 +29,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_camera.png
   AssetGenImage get icCamera =>
       const AssetGenImage('assets/images/ic_camera.png');
+
+  /// File path: assets/images/ic_check.svg
+  String get icCheck => 'assets/images/ic_check.svg';
+
+  /// File path: assets/images/ic_edit.svg
+  String get icEdit => 'assets/images/ic_edit.svg';
 
   /// File path: assets/images/ic_gallery.png
   AssetGenImage get icGallery =>
@@ -46,6 +55,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_other_official.png
   AssetGenImage get icOtherOfficial =>
       const AssetGenImage('assets/images/ic_other_official.png');
+
+  /// File path: assets/images/ic_profile.svg
+  String get icProfile => 'assets/images/ic_profile.svg';
+
+  /// File path: assets/images/ic_profile_thin.svg
+  String get icProfileThin => 'assets/images/ic_profile_thin.svg';
 
   /// File path: assets/images/ic_scorer.png
   AssetGenImage get icScorer =>
@@ -73,13 +88,18 @@ class $AssetsImagesGen {
   List<dynamic> get values => [
         icArrowDown,
         icBatsman,
+        icBin,
         icBowler,
         icCamera,
+        icCheck,
+        icEdit,
         icGallery,
         icLeatherBall,
         icMicroPhone,
         icOtherBall,
         icOtherOfficial,
+        icProfile,
+        icProfileThin,
         icScorer,
         icStreamer,
         icTennisBall,
