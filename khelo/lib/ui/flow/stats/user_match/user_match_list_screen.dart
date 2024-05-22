@@ -104,15 +104,16 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen> {
 
   Widget _matchTimeAndGroundView(MatchModel match) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Expanded(
+      Flexible(
         flex: 2,
         child: Text(
             match.start_time.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textPrimary)),
       ),
-      Expanded(
+      Flexible(
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Icon(
               Icons.location_on_outlined,
