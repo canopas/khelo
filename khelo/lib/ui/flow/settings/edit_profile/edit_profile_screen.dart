@@ -29,11 +29,11 @@ class EditProfileScreen extends ConsumerWidget {
 
   void _observeActionError(BuildContext context, WidgetRef ref) {
     ref.listen(editProfileStateProvider.select((value) => value.actionError),
-            (previous, next) {
-          if (next != null) {
-            showErrorSnackBar(context: context, error: next);
-          }
-        });
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
   }
 
   void _observeIsSaved(BuildContext context, WidgetRef ref) {

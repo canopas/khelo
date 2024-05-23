@@ -1,6 +1,7 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/won_by_message_text.dart';
@@ -13,6 +14,8 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../../gen/assets.gen.dart';
 
 class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
@@ -52,11 +55,12 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen> {
 
     if (state.matches.isNotEmpty) {
       return ListView.separated(
-          padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
-          itemBuilder: (context, index) =>
-              _matchListCell(context, state.matches.elementAt(index)),
-          separatorBuilder: (context, index) => const SizedBox(height: 16),
-          itemCount: state.matches.length);
+        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+        itemCount: state.matches.length,
+        itemBuilder: (context, index) =>
+            _matchListCell(context, state.matches.elementAt(index)),
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+      );
     } else {
       return Center(
         child: Text(
@@ -115,12 +119,16 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(
-              Icons.location_on_outlined,
-              size: 16,
-              color: context.colorScheme.textDisabled,
+            SvgPicture.asset(
+              Assets.images.icLocation,
+              height: 20,
+              width: 20,
+              colorFilter: ColorFilter.mode(
+                context.colorScheme.textSecondary,
+                BlendMode.srcATop,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 4),
             Flexible(
               child: Text(
                 match.ground,

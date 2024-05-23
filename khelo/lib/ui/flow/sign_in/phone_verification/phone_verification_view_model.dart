@@ -64,9 +64,11 @@ class PhoneVerificationViewNotifier
     countryCode = code;
   }
 
-  Future<void> resendCode({required String countryCode, required String phone}) async {
+  Future<void> resendCode(
+      {required String countryCode, required String phone}) async {
     try {
-      state = state.copyWith(showErrorVerificationCodeText: false, actionError: null);
+      state = state.copyWith(
+          showErrorVerificationCodeText: false, actionError: null);
       updateResendCodeTimerDuration();
       _authService.verifyPhoneNumber(
         countryCode: countryCode,
@@ -90,10 +92,13 @@ class PhoneVerificationViewNotifier
 
   Future<void> verifyOTP() async {
     if (state.verificationId == null) return;
-    state =
-        state.copyWith(verifying: true, showErrorVerificationCodeText: false, actionError: null);
+    state = state.copyWith(
+        verifying: true,
+        showErrorVerificationCodeText: false,
+        actionError: null);
     try {
-      await _authService.verifyOTP(countryCode, phoneNumber, state.verificationId!, state.otp);
+      await _authService.verifyOTP(
+          countryCode, phoneNumber, state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
     } on AppError catch (e) {
       if (e.l10nCode == AppErrorL10nCodes.invalidVerificationCode) {

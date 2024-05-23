@@ -35,6 +35,9 @@ class $AssetsImagesGen {
   AssetGenImage get icLeatherBall =>
       const AssetGenImage('assets/images/ic_leather_ball.png');
 
+  /// File path: assets/images/ic_location.svg
+  String get icLocation => 'assets/images/ic_location.svg';
+
   /// File path: assets/images/ic_micro_phone.png
   AssetGenImage get icMicroPhone =>
       const AssetGenImage('assets/images/ic_micro_phone.png');
@@ -77,6 +80,7 @@ class $AssetsImagesGen {
         icCamera,
         icGallery,
         icLeatherBall,
+        icLocation,
         icMicroPhone,
         icOtherBall,
         icOtherOfficial,

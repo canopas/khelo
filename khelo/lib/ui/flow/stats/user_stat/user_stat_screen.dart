@@ -62,7 +62,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen> {
   }
 
   Widget _battingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return Container();
+    if (userStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -99,7 +99,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen> {
   }
 
   Widget _bowlingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return Container();
+    if (userStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -136,7 +136,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen> {
   }
 
   Widget _fieldingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return Container();
+    if (userStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),

@@ -19,18 +19,18 @@ class ErrorScreen extends StatelessWidget {
   }
 
   Widget _noInternetConnectionScreen(BuildContext context) => PlaceHolderScreen(
-    image: const SizedBox(),
-    title: context.l10n.no_internet_error_title,
-    message: context.l10n.no_internet_error_description,
-    onActionBtnTap: onRetryTap,
-    actionBtnTitle: context.l10n.common_retry_title,
-  );
+        image: const SizedBox(),
+        title: context.l10n.no_internet_error_title,
+        message: context.l10n.no_internet_error_description,
+        onActionBtnTap: onRetryTap,
+        actionBtnTitle: context.l10n.common_retry_title,
+      );
 
   Widget _errorScreen(BuildContext context) => PlaceHolderScreen(
-    image: const SizedBox(),
-    title: context.l10n.something_went_wrong_error_title,
-    message: context.l10n.something_went_wrong_error_description,
-    onActionBtnTap: onRetryTap,
-    actionBtnTitle: context.l10n.common_retry_title,
-  );
+        image: const SizedBox(),
+        title: context.l10n.something_went_wrong_error_title,
+        message: context.l10n.something_went_wrong_error_description,
+        onActionBtnTap: onRetryTap,
+        actionBtnTitle: context.l10n.common_retry_title,
+      );
 }
