@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
+import 'package:khelo/components/profile_image_avatar.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -19,7 +19,6 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/theme/colors.dart';
@@ -64,10 +63,8 @@ class EditProfileScreen extends ConsumerWidget {
     _observeIsSaved(context, ref);
 
     return PopScope(
-      canPop: !state.isButtonEnable,
-      onPopInvoked: (didPop) {
-        notifier.onBackBtnPressed();
-        context.pop();
+      onPopInvoked: (didPop) async {
+        await notifier.onBackBtnPressed();
       },
       child: AppPage(
         title: context.l10n.edit_profile_screen_title,
@@ -100,7 +97,18 @@ class EditProfileScreen extends ConsumerWidget {
                       const EdgeInsets.all(16.0) +
                       BottomStickyOverlay.padding,
                   children: [
-                    _profileImageView(context, notifier, state),
+                    ProfileImageAvatar(
+                        size: profileViewHeight,
+                        placeHolderImage: Assets.images.icProfileThin,
+                        imageUrl: state.imageUrl,
+                        isLoading: state.isImageUploading,
+                        onEditButtonTap: () async {
+                          final imagePath = await ImagePickerSheet.show<String>(
+                              context, true);
+                          if (imagePath != null) {
+                            notifier.onImageChange(imagePath);
+                          }
+                        }),
                     const SizedBox(height: 24),
                     _userContactDetailsView(context, notifier, state),
                     const SizedBox(height: 24),
@@ -114,100 +122,6 @@ class EditProfileScreen extends ConsumerWidget {
               ],
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _profileImageView(
-    BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-  ) {
-    return Center(
-      child: SizedBox(
-        height: profileViewHeight,
-        width: profileViewHeight,
-        child: Stack(
-          children: [
-            _roundedImageView(context, state),
-            _editImageButton(context, onTap: () async {
-              final imagePath =
-                  await ImagePickerSheet.show<String>(context, true);
-              if (imagePath != null) {
-                notifier.onImageChange(imagePath);
-              }
-            })
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _roundedImageView(BuildContext context, EditProfileState state) {
-    return Container(
-      height: profileViewHeight,
-      width: profileViewHeight,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: state.imageUrl != null && !state.isImageUploading
-              ? DecorationImage(
-                  image: CachedNetworkImageProvider(state.imageUrl!),
-                  fit: BoxFit.cover)
-              : null,
-          color: context.colorScheme.primary),
-      child: _imagePlaceHolder(context, state),
-    );
-  }
-
-  Widget? _imagePlaceHolder(BuildContext context, EditProfileState state) {
-    return state.imageUrl == null && !state.isImageUploading
-        ? SvgPicture.asset(
-            Assets.images.icProfileThin,
-            height: profileViewHeight / 2,
-            width: profileViewHeight / 2,
-            colorFilter: ColorFilter.mode(
-              context.colorScheme.textInversePrimary,
-              BlendMode.srcATop,
-            ),
-          )
-        : state.isImageUploading
-            ? AppProgressIndicator(
-                color: context.colorScheme.surface,
-              )
-            : null;
-  }
-
-  Widget _editImageButton(
-    BuildContext context, {
-    required Function() onTap,
-  }) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: OnTapScale(
-        onTap: onTap,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: 32,
-              width: 32,
-              decoration: BoxDecoration(
-                  color: context.colorScheme.surface,
-                  border: Border.all(color: context.colorScheme.textPrimary),
-                  shape: BoxShape.circle),
-            ),
-            SvgPicture.asset(
-              Assets.images.icEdit,
-              height: 18,
-              width: 18,
-              colorFilter: ColorFilter.mode(
-                context.colorScheme.textPrimary,
-                BlendMode.srcATop,
-              ),
-            )
-          ],
         ),
       ),
     );
