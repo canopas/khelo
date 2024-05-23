@@ -12,10 +12,12 @@ class AppTextField extends StatelessWidget {
   final int? minLines;
   final int? maxLength;
   final TextStyle? style;
+  final Color? backgroundColor;
   final bool expands;
   final bool enabled;
   final BorderRadius? borderRadius;
   final AppTextFieldBorderType borderType;
+  final BorderColor? borderColor;
   final double borderWidth;
   final TextInputAction? textInputAction;
   final String? hintText;
@@ -40,10 +42,12 @@ class AppTextField extends StatelessWidget {
     this.minLines,
     this.maxLength,
     this.style,
+    this.backgroundColor,
     this.expands = false,
     this.enabled = true,
     this.onChanged,
     this.borderType = AppTextFieldBorderType.underline,
+    this.borderColor,
     this.borderWidth = 1,
     this.textInputAction,
     this.borderRadius,
@@ -84,51 +88,54 @@ class AppTextField extends StatelessWidget {
   }
 
   Widget _textField(BuildContext context) => Material(
-        color: Colors.transparent,
-        child: TextField(
-          controller: controller,
-          onChanged: onChanged,
-          enabled: enabled,
-          maxLines: maxLines,
-          minLines: minLines,
-          inputFormatters: inputFormatters,
-          expands: expands,
-          textInputAction: textInputAction,
-          autofocus: autoFocus,
-          keyboardType: keyboardType,
-          focusNode: focusNode,
-          textAlign: textAlign,
-          style: style ??
-              AppTextStyle.subtitle2.copyWith(
-                color: context.colorScheme.textPrimary,
-              ),
-          onTapOutside: onTapOutside ??
-              (event) {
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-          buildCounter: (context,
-                  {required currentLength,
-                  required isFocused,
-                  required maxLength}) =>
-              const SizedBox(),
-          maxLength: maxLength,
-          decoration: InputDecoration(
-            isDense: isDense,
-            isCollapsed: isCollapsed,
-            hintText: hintText,
-            hintStyle: hintStyle,
-            focusedBorder: _border(context, true),
-            enabledBorder: _border(context, false),
-            contentPadding: contentPadding ??
-                (borderType == AppTextFieldBorderType.outline
-                    ? const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      )
-                    : null),
+    color: Colors.transparent,
+    borderRadius: borderRadius,
+    child: TextField(
+      controller: controller,
+      onChanged: onChanged,
+      enabled: enabled,
+      maxLines: maxLines,
+      minLines: minLines,
+      inputFormatters: inputFormatters,
+      expands: expands,
+      textInputAction: textInputAction,
+      autofocus: autoFocus,
+      keyboardType: keyboardType,
+      focusNode: focusNode,
+      textAlign: textAlign,
+      style: style ??
+          AppTextStyle.subtitle2.copyWith(
+            color: context.colorScheme.textPrimary,
           ),
-        ),
-      );
+      onTapOutside: onTapOutside ??
+              (event) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+      buildCounter: (context,
+          {required currentLength,
+            required isFocused,
+            required maxLength}) =>
+      const SizedBox(),
+      maxLength: maxLength,
+      decoration: InputDecoration(
+        isDense: isDense,
+        isCollapsed: isCollapsed,
+        hintText: hintText,
+        hintStyle: hintStyle,
+        fillColor: backgroundColor,
+        filled: backgroundColor != null,
+        focusedBorder: _border(context, true),
+        enabledBorder: _border(context, false),
+        contentPadding: contentPadding ??
+            (borderType == AppTextFieldBorderType.outline
+                ? const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            )
+                : null),
+      ),
+    ),
+  );
 
   InputBorder _border(BuildContext context, bool focused) {
     switch (borderType) {
@@ -141,8 +148,8 @@ class AppTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: focused
-                ? context.colorScheme.primary
-                : context.colorScheme.outline,
+                ? borderColor?.focusColor ?? context.colorScheme.primary
+                : borderColor?.unFocusColor ?? context.colorScheme.outline,
             width: borderWidth,
           ),
         );
@@ -150,8 +157,8 @@ class AppTextField extends StatelessWidget {
         return UnderlineInputBorder(
           borderSide: BorderSide(
             color: focused
-                ? context.colorScheme.primary
-                : context.colorScheme.outline,
+                ? borderColor?.focusColor ?? context.colorScheme.primary
+                : borderColor?.unFocusColor ?? context.colorScheme.outline,
             width: borderWidth,
           ),
         );
@@ -163,4 +170,11 @@ enum AppTextFieldBorderType {
   none,
   outline,
   underline,
+}
+
+class BorderColor {
+  Color? focusColor;
+  Color? unFocusColor;
+
+  BorderColor(this.focusColor, this.unFocusColor);
 }

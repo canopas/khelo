@@ -55,8 +55,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     onValueChange();
   }
 
-  void onAddMeCheckBoxTap() {
-    state = state.copyWith(isAddMeCheckBoxEnable: !state.isAddMeCheckBoxEnable);
+  void onAddMeCheckBoxTap(bool isAddMeCheckBoxEnable) {
+    state = state.copyWith(isAddMeCheckBoxEnable: isAddMeCheckBoxEnable);
   }
 
   Future<void> onImageSelect(String imagePath) async {
