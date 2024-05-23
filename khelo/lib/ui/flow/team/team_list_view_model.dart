@@ -10,7 +10,8 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 part 'team_list_view_model.freezed.dart';
 
 final teamListViewStateProvider =
-    StateNotifierProvider<TeamListViewNotifier, TeamListViewState>((ref) {
+    StateNotifierProvider.autoDispose<TeamListViewNotifier, TeamListViewState>(
+        (ref) {
   final notifier = TeamListViewNotifier(
     ref.read(teamServiceProvider),
     ref.read(currentUserPod)?.id,
@@ -52,26 +53,23 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   }
 
   void _filterTeamList() {
-    List<TeamModel> list = [];
-    switch (state.selectedFilter) {
-      case TeamFilterOption.createdByMe:
-        list = state.teams
-            .where((element) => element.created_by == state.currentUserId)
-            .toList();
-      case TeamFilterOption.memberMe:
-        list = state.teams
-            .where((element) =>
-                element.created_by == state.currentUserId ||
-                (element.players
-                        ?.map((e) => e.id)
-                        .contains(state.currentUserId) ??
-                    false))
-            .toList();
-      default:
-        list = state.teams;
+    List<TeamModel> filteredTeams;
+
+    if (state.selectedFilter == TeamFilterOption.createdByMe) {
+      filteredTeams = state.teams
+          .where((team) => team.created_by == state.currentUserId)
+          .toList();
+    } else if (state.selectedFilter == TeamFilterOption.memberMe) {
+      filteredTeams = state.teams
+          .where((team) => (team.players
+                  ?.any((player) => player.id == state.currentUserId) ??
+              false))
+          .toList();
+    } else {
+      filteredTeams = state.teams;
     }
 
-    state = state.copyWith(filteredTeams: list);
+    state = state.copyWith(filteredTeams: filteredTeams);
   }
 
   void onFilterOptionSelect(TeamFilterOption filter) {
@@ -92,12 +90,6 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   onResume() {
     _cancelStreamSubscription();
     _loadTeamList();
-  }
-
-  @override
-  void dispose() {
-    _cancelStreamSubscription();
-    super.dispose();
   }
 }
 

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -8,8 +7,11 @@ import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../app_route.dart';
 
 class MyGameTabScreen extends ConsumerStatefulWidget {
   const MyGameTabScreen({super.key});
@@ -18,56 +20,30 @@ class MyGameTabScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _MyGameTabScreenState();
 }
 
-class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
   final List<Widget> _tabs = [
     const MatchListScreen(),
     const TeamListScreen(),
   ];
 
   late PageController _controller;
+  late MyGameTabViewNotifier notifier;
 
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-
+    notifier = ref.read(myGameTabViewStateProvider.notifier);
     _controller = PageController(
-      initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
+      initialPage: ref.read(myGameTabViewStateProvider).initialTab,
     );
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
-      // deallocate resources
-      _controller.dispose();
-      WidgetsBinding.instance.removeObserver(this);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    final notifier = ref.watch(myGameTabViewStateProvider.notifier);
-
     return AppPage(
       body: Builder(
         builder: (context) {
@@ -119,13 +95,26 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
           ),
           if (_selectedTab == 1) ...[
             const Spacer(),
-            IconButton(
-                onPressed: () {
-                  ref
-                      .read(teamListViewStateProvider.notifier)
-                      .onFilterButtonTap();
-                },
-                icon: const Icon(CupertinoIcons.slider_horizontal_3))
+            actionButton(
+              context,
+              onPressed: () => ref
+                  .read(teamListViewStateProvider.notifier)
+                  .onFilterButtonTap(),
+              icon: Icon(
+                CupertinoIcons.slider_horizontal_3,
+                color: context.colorScheme.textPrimary,
+                size: 24,
+              ),
+            ),
+            actionButton(
+              context,
+              onPressed: () => AppRoute.addTeam().push(context),
+              icon: Icon(
+                CupertinoIcons.add,
+                color: context.colorScheme.textPrimary,
+                size: 24,
+              ),
+            )
           ]
         ],
       ),

@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
+import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -8,7 +12,7 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/large_icon_button.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -20,36 +24,8 @@ class TeamListScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _TeamListScreenState();
 }
 
-class _TeamListScreenState extends ConsumerState<TeamListScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _TeamListScreenState extends ConsumerState<TeamListScreen> {
   late TeamListViewNotifier notifier;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
-      // deallocate resources
-      notifier.dispose();
-      WidgetsBinding.instance.removeObserver(this);
-    }
-  }
 
   void _observeShowFilterOptionSheet(
     BuildContext context,
@@ -58,25 +34,30 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     ref.listen(
         teamListViewStateProvider
             .select((value) => value.showFilterOptionSheet), (previous, next) {
-      SelectFilterOptionSheet.show(context);
+      if (next != null) {
+        SelectFilterOptionSheet.show(context);
+      }
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    notifier = ref.watch(teamListViewStateProvider.notifier);
-    final state = ref.watch(teamListViewStateProvider);
-
-    _observeShowFilterOptionSheet(context, ref);
-    return _body(context, notifier, state);
+  void initState() {
+    super.initState();
+    notifier = ref.read(teamListViewStateProvider.notifier);
   }
 
-  Widget _body(
-    BuildContext context,
-    TeamListViewNotifier notifier,
-    TeamListViewState state,
-  ) {
+  @override
+  Widget build(BuildContext context) {
+    _observeShowFilterOptionSheet(context, ref);
+    return AppPage(
+      body: Builder(builder: (context) {
+        return _body(context);
+      }),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    final state = ref.watch(teamListViewStateProvider);
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -87,17 +68,11 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
       );
     }
 
-    return Stack(
-      children: [
-        _teamList(context, notifier, state),
-        _floatingAddButton(context, notifier),
-      ],
-    );
+    return _teamList(context, state);
   }
 
   Widget _teamList(
     BuildContext context,
-    TeamListViewNotifier notifier,
     TeamListViewState state,
   ) {
     if (state.filteredTeams.isEmpty) {
@@ -116,133 +91,77 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
     return ListView.separated(
       itemCount: state.filteredTeams.length,
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      padding: const EdgeInsets.all(16),
+      separatorBuilder: (context, index) =>
+          Divider(color: context.colorScheme.outline),
       itemBuilder: (context, index) {
         final team = state.filteredTeams[index];
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (index == 0) ...[
-              Text(
-                state.selectedFilter.getString(context),
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary, fontSize: 20),
-              ),
-              const SizedBox(
-                height: 16,
-              )
-            ],
-            _teamListCell(
-              context,
-              notifier,
-              team,
-              showMoreOptionButton: state.currentUserId == team.created_by,
-            ),
-          ],
+        return _teamListCell(
+          context,
+          team: team,
+          showMoreOptionButton: state.currentUserId == team.created_by,
         );
       },
     );
   }
 
   Widget _teamListCell(
-    BuildContext context,
-    TeamListViewNotifier notifier,
-    TeamModel team, {
+    BuildContext context, {
+    required TeamModel team,
     required bool showMoreOptionButton,
   }) {
     return OnTapScale(
       onTap: () {
         AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
       },
-      child: Row(
-        children: [
-          ImageAvatar(
-            initial: team.name[0].toUpperCase(),
-            imageUrl: team.profile_img_url,
-            size: 50,
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  team.name,
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                Text(team.city ?? context.l10n.common_not_specified_title,
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: ImageAvatar(
+          initial: team.name[0].toUpperCase(),
+          imageUrl: team.profile_img_url,
+          size: 40,
+        ),
+        title: Text(
+          team.name,
+          style: AppTextStyle.subtitle2
+              .copyWith(color: context.colorScheme.textPrimary),
+        ),
+        subtitle: team.players != null
+            ? Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(
+                    context.l10n.team_list_players_count(team.players!.length),
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textSecondary)),
-              ],
-            ),
-          ),
-          if (showMoreOptionButton) ...[
-            _moreActionButton(
-              context,
-              onSelect: (value) async {
-                if (value == context.l10n.team_list_add_members_title) {
-                  await AppRoute.addTeamMember(team: team).push(context);
-                } else if (value == context.l10n.team_list_edit_team_title) {
-                  await AppRoute.addTeam(team: team).push(context);
-                }
-              },
-            )
-          ]
-        ],
+              )
+            : null,
+        trailing: showMoreOptionButton
+            ? actionButton(context,
+                onPressed: () => _moreActionButton(context, team),
+                icon: Icon(
+                  Platform.isIOS
+                      ? Icons.more_horiz_rounded
+                      : Icons.more_vert_rounded,
+                  color: context.colorScheme.textPrimary,
+                ))
+            : null,
       ),
     );
   }
 
-  Widget _moreActionButton(
-    BuildContext context, {
-    required Function(String) onSelect,
-  }) {
-    return PopupMenuButton<String>(
-      color: context.colorScheme.containerNormalOnSurface,
-      iconColor: context.colorScheme.textPrimary,
-      onSelected: (value) => onSelect(value),
-      itemBuilder: (BuildContext context) {
-        return {
-          context.l10n.team_list_add_members_title,
-          context.l10n.team_list_edit_team_title
-        }.map((String choice) {
-          return PopupMenuItem<String>(
-            value: choice,
-            child: Text(
-              choice,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          );
-        }).toList();
-      },
-    );
-  }
-
-  Widget _floatingAddButton(
+  void _moreActionButton(
     BuildContext context,
-    TeamListViewNotifier notifier,
-  ) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
-        child: LargeIconButton(
-          backgroundColor: context.colorScheme.primary,
-          onTap: () async {
-            await AppRoute.addTeam().push(context);
-          },
-          icon: Icon(
-            Icons.add_rounded,
-            color: context.colorScheme.onPrimary,
-          ),
-        ),
+    TeamModel team,
+  ) async {
+    return await showActionBottomSheet(context: context, items: [
+      BottomSheetAction(
+        title: context.l10n.team_list_add_members_title,
+        onTap: () => AppRoute.addTeamMember(team: team).push(context),
       ),
-    );
+      BottomSheetAction(
+        title: context.l10n.team_list_edit_team_title,
+        onTap: () => AppRoute.addTeam(team: team).push(context),
+      ),
+    ]);
   }
 }
