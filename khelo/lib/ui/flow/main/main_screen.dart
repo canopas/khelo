@@ -126,7 +126,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
         TabItem(
           tabIcon: const Icon(Icons.person_outlined),
           tabActiveIcon: const Icon(Icons.person),
-          tabLabel: context.l10n.tab_profile_title,
+          tabLabel: context.l10n.tab_profile_title.toLowerCase(),
           route: '',
           onTap: () {
             _materialPageController.jumpToPage(3);
