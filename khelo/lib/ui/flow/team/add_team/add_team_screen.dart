@@ -1,13 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/user/user_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_picker_sheet.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -18,6 +23,8 @@ import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
+
+import '../../../../components/image_avatar.dart';
 
 class AddTeamScreen extends ConsumerStatefulWidget {
   final TeamModel? editTeam;
@@ -79,7 +86,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     _observePop(context, ref);
 
     return AppPage(
-      title: context.l10n.add_team_screen_title,
+      title: widget.editTeam != null
+          ? context.l10n.edit_team_screen_title
+          : context.l10n.add_team_screen_title,
       automaticallyImplyLeading: false,
       leading: actionButton(
         context,
@@ -129,22 +138,46 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               onChanged: (p0) => notifier.onValueChange(),
               hintText: context.l10n.add_team_location_text,
             ),
-            Consumer(builder: (context, ref, child) {
-              return CheckboxListTile(
-                value: ref.watch(addTeamStateProvider).isAddMeCheckBoxEnable,
-                contentPadding: EdgeInsets.zero,
-                enabled: true,
-                splashRadius: 0.0,
-                controlAffinity: ListTileControlAffinity.leading,
-                title:
-                    Text(context.l10n.add_team_add_as_member_description_text),
-                onChanged: (value) {
-                  if (value != null) {
-                    notifier.onAddMeCheckBoxTap(value);
-                  }
-                },
-              );
-            })
+            if (widget.editTeam == null) ...[
+              ListTileTheme(
+                horizontalTitleGap: 8.0,
+                child: CheckboxListTile(
+                  value: state.isAddMeCheckBoxEnable,
+                  contentPadding: EdgeInsets.zero,
+                  controlAffinity: ListTileControlAffinity.leading,
+                  title: Text(
+                      context.l10n.add_team_add_as_member_description_text),
+                  onChanged: (value) {
+                    if (value != null) {
+                      notifier.onAddMeCheckBoxTap(value);
+                    }
+                  },
+                ),
+              ),
+            ] else ...[
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text(context.l10n.add_team_players_text,
+                      style: AppTextStyle.header4
+                          .copyWith(color: context.colorScheme.textPrimary)),
+                  actionButton(
+                    context,
+                    onPressed: () =>
+                        AppRoute.addTeamMember(team: widget.editTeam!)
+                            .push(context),
+                    icon: Icon(
+                      CupertinoIcons.add,
+                      color: context.colorScheme.textPrimary,
+                      size: 20,
+                    ),
+                  )
+                ],
+              ),
+              ...?widget.editTeam!.players?.map(
+                (player) => _playerProfileCell(context, player: player),
+              ),
+            ],
           ],
         ),
         _stickyButton(context, state)
@@ -232,6 +265,52 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _playerProfileCell(BuildContext context, {required UserModel player}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          ImageAvatar(
+            initial: player.name ?? '',
+            imageUrl: player.profile_img_url,
+            size: 40,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  player.name ?? '',
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                Text(
+                    player.player_role != null
+                        ? player.player_role!.getString(context)
+                        : context.l10n.common_not_specified_title,
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textSecondary)),
+                if (player.phone != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    player.phone
+                        .format(context, StringFormats.obscurePhoneNumber),
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textSecondary),
+                  ),
+                ],
+              ],
+            ),
+          ),
+          actionButton(context,
+              onPressed: () => notifier.onRemoveUserFromTeam(player),
+              icon: const Icon(Icons.close))
+        ],
       ),
     );
   }
