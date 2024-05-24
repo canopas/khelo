@@ -26,6 +26,9 @@ class $AssetsImagesGen {
   AssetGenImage get icBowler =>
       const AssetGenImage('assets/images/ic_bowler.png');
 
+  /// File path: assets/images/ic_calendar.svg
+  String get icCalendar => 'assets/images/ic_calendar.svg';
+
   /// File path: assets/images/ic_camera.png
   AssetGenImage get icCamera =>
       const AssetGenImage('assets/images/ic_camera.png');
@@ -36,25 +39,27 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_edit.svg
   String get icEdit => 'assets/images/ic_edit.svg';
 
+  /// File path: assets/images/ic_close.svg
+  String get icClose => 'assets/images/ic_close.svg';
+
+  /// File path: assets/images/ic_commentator.svg
+  String get icCommentator => 'assets/images/ic_commentator.svg';
+
   /// File path: assets/images/ic_gallery.png
   AssetGenImage get icGallery =>
       const AssetGenImage('assets/images/ic_gallery.png');
 
-  /// File path: assets/images/ic_leather_ball.png
-  AssetGenImage get icLeatherBall =>
-      const AssetGenImage('assets/images/ic_leather_ball.png');
+  /// File path: assets/images/ic_minus.svg
+  String get icMinus => 'assets/images/ic_minus.svg';
 
-  /// File path: assets/images/ic_micro_phone.png
-  AssetGenImage get icMicroPhone =>
-      const AssetGenImage('assets/images/ic_micro_phone.png');
+  /// File path: assets/images/ic_plus.svg
+  String get icPlus => 'assets/images/ic_plus.svg';
 
-  /// File path: assets/images/ic_other_ball.png
-  AssetGenImage get icOtherBall =>
-      const AssetGenImage('assets/images/ic_other_ball.png');
+  /// File path: assets/images/ic_referee.svg
+  String get icReferee => 'assets/images/ic_referee.svg';
 
-  /// File path: assets/images/ic_other_official.png
-  AssetGenImage get icOtherOfficial =>
-      const AssetGenImage('assets/images/ic_other_official.png');
+  /// File path: assets/images/ic_scorer.svg
+  String get icScorer => 'assets/images/ic_scorer.svg';
 
   /// File path: assets/images/ic_profile.svg
   String get icProfile => 'assets/images/ic_profile.svg';
@@ -62,21 +67,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_profile_thin.svg
   String get icProfileThin => 'assets/images/ic_profile_thin.svg';
 
-  /// File path: assets/images/ic_scorer.png
-  AssetGenImage get icScorer =>
-      const AssetGenImage('assets/images/ic_scorer.png');
+  /// File path: assets/images/ic_search.svg
+  String get icSearch => 'assets/images/ic_search.svg';
 
-  /// File path: assets/images/ic_streamer.png
-  AssetGenImage get icStreamer =>
-      const AssetGenImage('assets/images/ic_streamer.png');
+  /// File path: assets/images/ic_time.svg
+  String get icTime => 'assets/images/ic_time.svg';
 
-  /// File path: assets/images/ic_tennis_ball.png
-  AssetGenImage get icTennisBall =>
-      const AssetGenImage('assets/images/ic_tennis_ball.png');
-
-  /// File path: assets/images/ic_umpire.png
-  AssetGenImage get icUmpire =>
-      const AssetGenImage('assets/images/ic_umpire.png');
+  /// File path: assets/images/ic_umpire.svg
+  String get icUmpire => 'assets/images/ic_umpire.svg';
 
   /// File path: assets/images/intro_cricket_dark.svg
   String get introCricketDark => 'assets/images/intro_cricket_dark.svg';
@@ -84,28 +82,42 @@ class $AssetsImagesGen {
   /// File path: assets/images/intro_cricket_light.svg
   String get introCricketLight => 'assets/images/intro_cricket_light.svg';
 
+  /// File path: assets/images/leather_ball.svg
+  String get leatherBall => 'assets/images/leather_ball.svg';
+
+  /// File path: assets/images/other_ball.svg
+  String get otherBall => 'assets/images/other_ball.svg';
+
+  /// File path: assets/images/tennis_ball.svg
+  String get tennisBall => 'assets/images/tennis_ball.svg';
+
   /// List of all assets
   List<dynamic> get values => [
         icArrowDown,
         icBatsman,
         icBin,
         icBowler,
+        icCalendar,
         icCamera,
         icCheck,
         icEdit,
+        icClose,
+        icCommentator,
         icGallery,
-        icLeatherBall,
-        icMicroPhone,
-        icOtherBall,
-        icOtherOfficial,
+        icMinus,
+        icPlus,
+        icReferee,
         icProfile,
         icProfileThin,
         icScorer,
-        icStreamer,
-        icTennisBall,
+        icSearch,
+        icTime,
         icUmpire,
         introCricketDark,
-        introCricketLight
+        introCricketLight,
+        leatherBall,
+        otherBall,
+        tennisBall
       ];
 }
 

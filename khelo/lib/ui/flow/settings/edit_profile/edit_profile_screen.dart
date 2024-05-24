@@ -167,7 +167,8 @@ class EditProfileScreen extends ConsumerWidget {
       borderRadius: BorderRadius.circular(12),
       borderType: AppTextFieldBorderType.outline,
       backgroundColor: context.colorScheme.containerLow,
-      borderColor: BorderColor(Colors.transparent, Colors.transparent),
+      borderColor: BorderColor(
+          focusColor: Colors.transparent, unFocusColor: Colors.transparent),
       hintText: placeholderText,
       hintStyle: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textDisabled),

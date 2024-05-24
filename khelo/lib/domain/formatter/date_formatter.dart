@@ -14,7 +14,7 @@ extension DateFormatter on DateTime {
                 'EEE, dd MMM yyyy ${context.is24HourFormat ? 'HH:mm' : 'hh:mm a'}')
             .format(this);
       case DateFormatType.date:
-        return DateFormat('EEE, MMM dd yyyy').format(this);
+        return DateFormat('EEE, dd MMM yyyy').format(this);
       case DateFormatType.time:
         return DateFormat(context.is24HourFormat ? 'HH:mm' : 'hh:mm a')
             .format(this);

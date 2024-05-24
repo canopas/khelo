@@ -3,17 +3,18 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
-import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/domain/formatter/string_formatter.dart';
+import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/select_admin_and_captain_dialog.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -54,7 +55,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     return AppPage(
       title: context.l10n.select_squad_screen_title,
       actions: [
-        IconButton(
+        actionButton(context,
             onPressed: state.isDoneBtnEnable
                 ? () async {
                     var result = await SelectAdminAndCaptainDialog.show<
@@ -66,11 +67,13 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                     }
                   }
                 : null,
-            icon: Icon(
-              Icons.check,
-              color: state.isDoneBtnEnable
-                  ? context.colorScheme.primary
-                  : context.colorScheme.textDisabled,
+            icon: SvgPicture.asset(
+              Assets.images.icCheck,
+              colorFilter: ColorFilter.mode(
+                  state.isDoneBtnEnable
+                      ? context.colorScheme.primary
+                      : context.colorScheme.textDisabled,
+                  BlendMode.srcIn),
             )),
       ],
       body: ListView(
@@ -102,7 +105,20 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           _emptyList(context.l10n.select_squad_empty_squad_text)
         ] else ...[
           for (final member in state.squad) ...[
-            _userProfileCell(context, notifier, member: member, isRemove: true)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: UserDetailCell(
+                user: member.player,
+                trailing: _trailingButton(
+                  context,
+                  notifier,
+                  member: member,
+                  isRemove: true,
+                ),
+                onTap: () => UserDetailSheet.show(context, member.player),
+              ),
+            ),
+            const SizedBox(height: 8),
           ],
         ],
       ],
@@ -114,19 +130,32 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     SelectSquadViewNotifier notifier,
     SelectSquadViewState state,
   ) {
+    final memberList = getFilteredList(state);
+
     return Wrap(
       children: [
-        _sectionTitle(context, context.l10n.select_squad_rest_of_team_title),
+        if (memberList.isNotEmpty ||
+            (state.team?.players?.isEmpty ?? true)) ...[
+          _sectionTitle(context, context.l10n.select_squad_rest_of_team_title),
+        ],
         if (state.team?.players?.isEmpty ?? true) ...[
           _emptyList(context.l10n.select_squad_empty_team_member_text)
         ] else ...[
-          for (final member in getFilteredList(state)) ...[
-            _userProfileCell(
-              context,
-              notifier,
-              member: MatchPlayer(player: member),
-              isRemove: false,
-            )
+          for (final member in memberList) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: UserDetailCell(
+                user: member,
+                trailing: _trailingButton(
+                  context,
+                  notifier,
+                  member: MatchPlayer(player: member),
+                  isRemove: false,
+                ),
+                onTap: () => UserDetailSheet.show(context, member),
+              ),
+            ),
+            const SizedBox(height: 8),
           ],
         ],
       ],
@@ -138,8 +167,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textSecondary),
+        style: AppTextStyle.subtitle3
+            .copyWith(color: context.colorScheme.textDisabled),
       ),
     );
   }
@@ -161,8 +190,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
         ),
         Text(
           title,
-          style: AppTextStyle.header1
-              .copyWith(color: context.colorScheme.textSecondary),
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
         if (subtitle != null) ...[
           const SizedBox(
@@ -170,8 +199,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
           ),
           Text(
             subtitle,
-            style:
-                AppTextStyle.button.copyWith(color: context.colorScheme.alert),
+            style: AppTextStyle.body2
+                .copyWith(color: context.colorScheme.textDisabled),
           ),
         ],
         const SizedBox(
@@ -181,86 +210,25 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     );
   }
 
-  Widget _userProfileCell(
-    BuildContext context,
-    SelectSquadViewNotifier notifier, {
-    required MatchPlayer member,
-    required bool isRemove,
-  }) {
-    return GestureDetector(
-        onTap: () {
-          UserDetailSheet.show(context, member.player);
-        },
-        child: Row(
-          children: [
-            ImageAvatar(
-              initial: member.player.nameInitial,
-              imageUrl: member.player.profile_img_url,
-              size: 50,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    member.player.name ?? context.l10n.common_anonymous_title,
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                  Text(
-                      member.player.player_role != null
-                          ? member.player.player_role!.getString(context)
-                          : context.l10n.common_not_specified_title,
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary)),
-                  if (member.player.phone != null) ...[
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Text(
-                      member.player.phone
-                          .format(context, StringFormats.obscurePhoneNumber),
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            _trailingButton(
-              context,
-              notifier,
-              member: member,
-              isRemove: isRemove,
-            )
-          ],
-        ));
-  }
-
   Widget _trailingButton(
     BuildContext context,
     SelectSquadViewNotifier notifier, {
     required MatchPlayer member,
     required bool isRemove,
   }) {
-    if (isRemove) {
-      return IconButton(
-          onPressed: () => notifier.removeFromSquad(member.player),
-          icon: const Icon(Icons.close));
-    } else {
-      return OnTapScale(
-        onTap: () => notifier.addToSquad(member),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          decoration: BoxDecoration(
-              color: context.colorScheme.containerLow,
-              borderRadius: BorderRadius.circular(20)),
-          child: Text(context.l10n.common_add_title.toUpperCase()),
-        ),
-      );
-    }
+    return OnTapScale(
+        onTap: () => isRemove
+            ? notifier.removeFromSquad(member.player)
+            : notifier.addToSquad(member),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: SvgPicture.asset(
+            isRemove ? Assets.images.icClose : Assets.images.icPlus,
+            height: 16,
+            width: 16,
+            colorFilter: ColorFilter.mode(
+                context.colorScheme.textDisabled, BlendMode.srcATop),
+          ),
+        ));
   }
 }

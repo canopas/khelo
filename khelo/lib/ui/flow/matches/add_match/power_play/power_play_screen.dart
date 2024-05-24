@@ -32,7 +32,7 @@ class PowerPlayScreen extends ConsumerStatefulWidget {
 class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
   late PowerPlayViewNotifier notifier;
 
-  final double widgetWidth = 50;
+  final double widgetWidth = 48;
   final double padding = 16.0;
   final double spacingBetweenElements = 8.0;
 
@@ -106,22 +106,24 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
           children: [
             Text(
               title,
-              style: AppTextStyle.header1
-                  .copyWith(color: context.colorScheme.textSecondary),
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
             ),
-            TextButton(
-                onPressed: isEnable ? () => onResetTap() : null,
-                child: Text(
-                  context.l10n.common_reset_title,
-                  style: AppTextStyle.header4.copyWith(
-                      color: isEnable
-                          ? context.colorScheme.primary
-                          : context.colorScheme.textDisabled),
-                )),
+            OnTapScale(
+              onTap: onResetTap,
+              enabled: isEnable,
+              child: Text(
+                context.l10n.common_reset_title,
+                style: AppTextStyle.subtitle3.copyWith(
+                    color: isEnable
+                        ? context.colorScheme.secondary
+                        : context.colorScheme.textDisabled),
+              ),
+            ),
           ],
         ),
         const SizedBox(
-          height: 16,
+          height: 24,
         ),
       ],
     );
@@ -141,7 +143,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
         _sectionTitle(
           context: context,
           title: type.getTitle(context),
-          isEnable: true,
+          isEnable: _isResetEnabled(state, type),
           onResetTap: () => notifier.onResetButtonTap(type),
         ),
         for (int i = 0;
@@ -173,6 +175,12 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
         ],
       ],
     );
+  }
+
+  bool _isResetEnabled(PowerPlayViewState state, PowerPlayType type) {
+    return (type == PowerPlayType.one && state.firstPowerPlay.isNotEmpty) ||
+        (type == PowerPlayType.two && state.secondPowerPlay.isNotEmpty) ||
+        (type == PowerPlayType.three && state.thirdPowerPlay.isNotEmpty);
   }
 
   Widget _gridCellView({
@@ -210,15 +218,16 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
                   ? isSelected
                       ? context.colorScheme.primary
                       : context.colorScheme.containerLowOnSurface
-                  : context.colorScheme.surface,
-              border: Border.all(
-                  color: context.colorScheme.containerNormalOnSurface),
+                  : Colors.transparent,
+              border: Border.all(color: context.colorScheme.outline),
               shape: BoxShape.circle),
           child: Text(
             "$cellNumber",
-            style: AppTextStyle.subtitle1.copyWith(
+            style: AppTextStyle.body2.copyWith(
                 color: isEnabled
-                    ? context.colorScheme.textPrimary
+                    ? isSelected
+                        ? context.colorScheme.onPrimary
+                        : context.colorScheme.textPrimary
                     : context.colorScheme.textDisabled),
           )),
     );
