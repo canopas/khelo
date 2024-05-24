@@ -1,22 +1,28 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
+import 'package:khelo/components/profile_image_avatar.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/indicator/progress_indicator.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/theme/colors.dart';
 
 import '../../../../components/image_picker_sheet.dart';
 
@@ -25,7 +31,7 @@ class EditProfileScreen extends ConsumerWidget {
 
   const EditProfileScreen({super.key, required this.isToCreateAccount});
 
-  final double profileViewHeight = 130;
+  final double profileViewHeight = 128;
 
   void _observeActionError(BuildContext context, WidgetRef ref) {
     ref.listen(editProfileStateProvider.select((value) => value.actionError),
@@ -58,297 +64,310 @@ class EditProfileScreen extends ConsumerWidget {
     _observeIsSaved(context, ref);
 
     return PopScope(
-      canPop: !state.isButtonEnable,
-      onPopInvoked: (didPop) {
-        notifier.onBackBtnPressed();
-        context.pop();
+      onPopInvoked: (didPop) async {
+        await notifier.onBackBtnPressed();
       },
       child: AppPage(
         title: context.l10n.edit_profile_screen_title,
         actions: [
           if (!isToCreateAccount) ...[
-            IconButton(
+            actionButton(context,
                 onPressed: () => showConfirmationDialog(context,
                     title: context.l10n.common_delete_title,
                     message: context.l10n.alert_confirm_default_message(
                         context.l10n.common_delete_title.toLowerCase()),
                     confirmBtnText: context.l10n.common_delete_title,
                     onConfirm: notifier.onDeleteTap),
-                icon: const Icon(Icons.delete_outline))
+                icon: SvgPicture.asset(
+                  Assets.images.icBin,
+                  height: 24,
+                  width: 24,
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                      context.colorScheme.primary, BlendMode.srcATop),
+                )),
           ]
         ],
-        body: Material(
-          color: Colors.transparent,
-          child: Builder(
-            builder: (context) {
-              return Stack(
-                children: [
-                  ListView(
-                    padding: context.mediaQueryPadding +
-                        const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 16.0) +
-                        BottomStickyOverlay.padding,
-                    children: [
-                      _profileImageView(context, notifier, state),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      _textInputField(
-                          context,
-                          notifier,
-                          state,
-                          context.l10n.edit_profile_name_placeholder,
-                          state.nameController),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      _textInputField(
-                          context,
-                          notifier,
-                          state,
-                          context.l10n.edit_profile_email_placeholder,
-                          state.emailController),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      _textInputField(
-                          context,
-                          notifier,
-                          state,
-                          context.l10n.edit_profile_location_placeholder,
-                          state.locationController),
-                      _sectionTitle(
-                          context, context.l10n.edit_profile_dob_placeholder),
-                      OnTapScale(
-                        onTap: () => _selectDate(context, notifier, state),
-                        child: Text.rich(TextSpan(children: [
-                          WidgetSpan(
-                              child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(Icons.cake_rounded,
-                                color: context.colorScheme.textPrimary),
-                          )),
-                          TextSpan(
-                              text: DateFormat.yMMMMd().format(state.dob),
-                              style: AppTextStyle.subtitle1.copyWith(
-                                  color: context.colorScheme.textSecondary)),
-                        ])),
-                      ),
-                      _sectionTitle(context,
-                          context.l10n.edit_profile_gender_placeholder),
-                      _genderOptionView(context, notifier, state),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        children: [
-                          DropdownButton(
-                              alignment: Alignment.center,
-                              value: state.playerRole,
-                              dropdownColor:
-                                  context.colorScheme.containerLowOnSurface,
-                              isExpanded: false,
-                              hint: Text(
-                                  context.l10n
-                                      .edit_profile_player_role_placeholder,
-                                  style: AppTextStyle.header4.copyWith(
-                                      color: context.colorScheme.textDisabled)),
-                              items: PlayerRole.values.map((PlayerRole items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(
-                                    items.getString(context),
-                                    style: AppTextStyle.body1.copyWith(
-                                        color: context.colorScheme.textPrimary),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (PlayerRole? newValue) {
-                                if (newValue != null &&
-                                    newValue != state.playerRole) {
-                                  notifier.onPlayerRoleChange(newValue);
-                                }
-                              }),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          DropdownButton(
-                              value: state.battingStyle,
-                              dropdownColor:
-                                  context.colorScheme.containerLowOnSurface,
-                              hint: Text(
-                                  context.l10n
-                                      .edit_profile_batting_style_placeholder,
-                                  style: AppTextStyle.header4.copyWith(
-                                      color: context.colorScheme.textDisabled)),
-                              items:
-                                  BattingStyle.values.map((BattingStyle items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(
-                                    items.getString(context),
-                                    style: AppTextStyle.body1.copyWith(
-                                        color: context.colorScheme.textPrimary),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (BattingStyle? newValue) {
-                                if (newValue != null &&
-                                    newValue != state.battingStyle) {
-                                  notifier.onBattingStyleChange(newValue);
-                                }
-                              }),
-                          DropdownButton(
-                              value: state.bowlingStyle,
-                              dropdownColor:
-                                  context.colorScheme.containerLowOnSurface,
-                              hint: Text(
-                                  context.l10n
-                                      .edit_profile_bowling_style_placeholder,
-                                  style: AppTextStyle.header4.copyWith(
-                                      color: context.colorScheme.textDisabled)),
-                              items:
-                                  BowlingStyle.values.map((BowlingStyle items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(
-                                    items.getString(context),
-                                    style: AppTextStyle.body1.copyWith(
-                                        color: context.colorScheme.textPrimary),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (BowlingStyle? newValue) {
-                                if (newValue != null &&
-                                    newValue != state.bowlingStyle) {
-                                  notifier.onBowlingStyleChange(newValue);
-                                }
-                              })
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                    ],
-                  ),
-                  _stickyButton(context, notifier, state)
-                ],
-              );
-            },
-          ),
+        body: Builder(
+          builder: (context) {
+            return Stack(
+              children: [
+                ListView(
+                  padding: context.mediaQueryPadding +
+                      const EdgeInsets.all(16.0) +
+                      BottomStickyOverlay.padding,
+                  children: [
+                    ProfileImageAvatar(
+                        size: profileViewHeight,
+                        placeHolderImage: Assets.images.icProfileThin,
+                        imageUrl: state.imageUrl,
+                        isLoading: state.isImageUploading,
+                        onEditButtonTap: () async {
+                          final imagePath = await ImagePickerSheet.show<String>(
+                              context, true);
+                          if (imagePath != null) {
+                            notifier.onImageChange(imagePath);
+                          }
+                        }),
+                    const SizedBox(height: 24),
+                    _userContactDetailsView(context, notifier, state),
+                    const SizedBox(height: 24),
+                    _userPersonalDetailsView(context, notifier, state),
+                    const SizedBox(height: 24),
+                    _userPlayStyleView(context, notifier, state),
+                    const SizedBox(height: 24),
+                  ],
+                ),
+                _stickyButton(context, notifier, state)
+              ],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _profileImageView(
+  Widget _userContactDetailsView(
     BuildContext context,
     EditProfileViewNotifier notifier,
     EditProfileState state,
   ) {
-    return Center(
-      child: SizedBox(
-        height: profileViewHeight,
-        width: profileViewHeight,
-        child: Stack(
-          children: [
-            Container(
-              height: profileViewHeight,
-              width: profileViewHeight,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: state.imageUrl != null && !state.isImageUploading
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(state.imageUrl!),
-                          fit: BoxFit.cover)
-                      : null,
-                  color: context.colorScheme.primary),
-              child: state.imageUrl == null && !state.isImageUploading
-                  ? Icon(
-                      Icons.person,
-                      size: profileViewHeight / 2,
-                      color: context.colorScheme.textSecondary,
-                    )
-                  : state.isImageUploading
-                      ? AppProgressIndicator(
-                          color: context.colorScheme.surface,
-                        )
-                      : null,
-            ),
-            OnTapScale(
-              onTap: () async {
-                final imagePath =
-                    await ImagePickerSheet.show<String>(context, true);
-                if (imagePath != null) {
-                  notifier.onImageChange(imagePath);
-                }
-              },
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  height: profileViewHeight / 3,
-                  width: profileViewHeight / 3,
-                  decoration: BoxDecoration(
-                      color: context.colorScheme.surface,
-                      border:
-                          Border.all(color: context.colorScheme.textSecondary),
-                      shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.edit,
-                    size: profileViewHeight / 5,
-                    color: context.colorScheme.textSecondary,
-                  ),
-                ),
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        _textInputField(context, notifier,
+            placeholderText: context.l10n.edit_profile_name_placeholder,
+            controller: state.nameController),
+        const SizedBox(
+          height: 8,
         ),
-      ),
+        _textInputField(context, notifier,
+            placeholderText: context.l10n.edit_profile_email_placeholder,
+            controller: state.emailController),
+        const SizedBox(
+          height: 8,
+        ),
+        _textInputField(context, notifier,
+            placeholderText: context.l10n.edit_profile_location_placeholder,
+            controller: state.locationController),
+      ],
     );
   }
 
   Widget _textInputField(
     BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-    String label,
-    TextEditingController controller,
-  ) {
-    return TextField(
+    EditProfileViewNotifier notifier, {
+    required String placeholderText,
+    required TextEditingController controller,
+  }) {
+    return AppTextField(
       controller: controller,
       onChanged: (value) => notifier.onValueChange(),
-      style:
-          AppTextStyle.header4.copyWith(color: context.colorScheme.textPrimary),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: AppTextStyle.header4
-            .copyWith(color: context.colorScheme.textDisabled),
-        border: const OutlineInputBorder(),
-      ),
+      style: AppTextStyle.subtitle3
+          .copyWith(color: context.colorScheme.textPrimary),
+      borderRadius: BorderRadius.circular(12),
+      borderType: AppTextFieldBorderType.outline,
+      backgroundColor: context.colorScheme.containerLow,
+      borderColor: BorderColor(Colors.transparent, Colors.transparent),
+      hintText: placeholderText,
+      hintStyle: AppTextStyle.subtitle3
+          .copyWith(color: context.colorScheme.textDisabled),
     );
   }
 
-  Widget _sectionTitle(BuildContext context, String title) {
+  Widget _userPersonalDetailsView(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+  ) {
+    return Row(
+      children: [
+        Expanded(
+          child: _selectionDropDownButton(
+            context,
+            headerText: context.l10n.edit_profile_dob_placeholder,
+            title: state.dob.format(context, DateFormatType.shortDate),
+            placeholder: context.l10n.edit_profile_dob_placeholder,
+            onTap: () => _selectDate(context, notifier, state),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: _selectionDropDownButton(
+            context,
+            headerText: context.l10n.edit_profile_gender_placeholder,
+            title: state.gender?.getString(context),
+            placeholder: context.l10n.edit_profile_gender_placeholder,
+            showTrailingIcon: false,
+            onTap: () {
+              showActionBottomSheet(
+                  context: context,
+                  items: [UserGender.male, UserGender.female, UserGender.other]
+                      .map((gender) => BottomSheetAction(
+                            title: gender.getString(context),
+                            child: showCheckMark(
+                              context,
+                              showCheck: state.gender == gender,
+                            ),
+                            onTap: () {
+                              context.pop();
+                              notifier.onGenderSelect(gender: gender);
+                            },
+                          ))
+                      .toList());
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _userPlayStyleView(
+    BuildContext context,
+    EditProfileViewNotifier notifier,
+    EditProfileState state,
+  ) {
+    return Column(
+      children: [
+        _selectionDropDownButton(
+          context,
+          title: state.playerRole?.getString(context),
+          placeholder: context.l10n.edit_profile_player_role_placeholder,
+          onTap: () {
+            showActionBottomSheet(
+                context: context,
+                items: PlayerRole.values
+                    .map((role) => BottomSheetAction(
+                          title: role.getString(context),
+                          child: showCheckMark(
+                            context,
+                            showCheck: state.playerRole == role,
+                          ),
+                          onTap: () {
+                            context.pop();
+                            notifier.onPlayerRoleChange(role);
+                          },
+                        ))
+                    .toList());
+          },
+        ),
+        const SizedBox(height: 24),
+        _selectionDropDownButton(
+          context,
+          title: state.battingStyle?.getString(context),
+          placeholder: context.l10n.edit_profile_batting_style_placeholder,
+          onTap: () {
+            showActionBottomSheet(
+                context: context,
+                items: BattingStyle.values
+                    .map((style) => BottomSheetAction(
+                          title: style.getString(context),
+                          child: showCheckMark(
+                            context,
+                            showCheck: state.battingStyle == style,
+                          ),
+                          onTap: () {
+                            context.pop();
+                            notifier.onBattingStyleChange(style);
+                          },
+                        ))
+                    .toList());
+          },
+        ),
+        const SizedBox(height: 24),
+        _selectionDropDownButton(
+          context,
+          title: state.bowlingStyle?.getString(context),
+          placeholder: context.l10n.edit_profile_bowling_style_placeholder,
+          onTap: () {
+            showActionBottomSheet(
+                context: context,
+                items: BowlingStyle.values
+                    .map((style) => BottomSheetAction(
+                          title: style.getString(context),
+                          child: showCheckMark(
+                            context,
+                            showCheck: state.bowlingStyle == style,
+                          ),
+                          onTap: () {
+                            context.pop();
+                            notifier.onBowlingStyleChange(style);
+                          },
+                        ))
+                    .toList());
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget? showCheckMark(
+    BuildContext context, {
+    required bool showCheck,
+  }) {
+    return showCheck
+        ? SvgPicture.asset(
+            Assets.images.icCheck,
+            height: 24,
+            width: 24,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.primary,
+              BlendMode.srcATop,
+            ),
+          )
+        : null;
+  }
+
+  Widget _selectionDropDownButton(
+    BuildContext context, {
+    String? headerText,
+    String? title,
+    required String placeholder,
+    bool showTrailingIcon = true,
+    required Function() onTap,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 16,
-        ),
-        Text(
-          title,
-          style: AppTextStyle.body2
-              .copyWith(color: context.colorScheme.textSecondary),
-        ),
-        const SizedBox(
-          height: 8,
+        if (headerText != null) ...[
+          Text(
+            headerText,
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textDisabled),
+          ),
+          const SizedBox(height: 4),
+        ],
+        OnTapScale(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: context.colorScheme.outline)),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    title ?? placeholder,
+                    style: AppTextStyle.subtitle3.copyWith(
+                        color: title != null
+                            ? context.colorScheme.textPrimary
+                            : context.colorScheme.textSecondary),
+                  ),
+                ),
+                if (showTrailingIcon) ...[
+                  SvgPicture.asset(
+                    Assets.images.icArrowDown,
+                    height: 18,
+                    width: 18,
+                    colorFilter: ColorFilter.mode(
+                      context.colorScheme.textPrimary,
+                      BlendMode.srcATop,
+                    ),
+                  )
+                ]
+              ],
+            ),
+          ),
         ),
       ],
     );
@@ -360,60 +379,23 @@ class EditProfileScreen extends ConsumerWidget {
     EditProfileState state,
   ) async {
     final DateTime? picked = await showDatePicker(
-        context: context,
-        helpText: context.l10n.edit_profile_select_birth_date_placeholder,
-        initialDate: state.dob,
-        firstDate: DateTime(1920),
-        lastDate: DateTime.now());
+      context: context,
+      helpText: context.l10n.edit_profile_select_birth_date_placeholder,
+      initialDate: state.dob,
+      firstDate: DateTime(1920),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: context.brightness == Brightness.dark
+              ? materialThemeDataDark
+              : materialThemeDataLight,
+          child: child!,
+        );
+      },
+    );
     if (picked != null && picked != state.dob) {
       notifier.onDateSelect(selectedDate: picked);
     }
-  }
-
-  Widget _genderOptionView(
-    BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _radioBtnCell(context, notifier, state, UserGender.male),
-        _radioBtnCell(context, notifier, state, UserGender.female),
-        _radioBtnCell(context, notifier, state, UserGender.other),
-      ],
-    );
-  }
-
-  Widget _radioBtnCell(
-    BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-    UserGender gender,
-  ) {
-    return OnTapScale(
-      onTap: () => notifier.onGenderSelect(gender: gender),
-      child: Wrap(
-        direction: Axis.horizontal,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Radio(
-              value: gender,
-              groupValue: state.gender,
-              activeColor: context.colorScheme.primary,
-              onChanged: <UserGender>(value) {
-                if (value != null) {
-                  notifier.onGenderSelect(gender: value);
-                }
-              }),
-          Text(
-            gender.getString(context),
-            style: AppTextStyle.button.copyWith(
-                color: context.colorScheme.textSecondary, fontSize: 16),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _stickyButton(
