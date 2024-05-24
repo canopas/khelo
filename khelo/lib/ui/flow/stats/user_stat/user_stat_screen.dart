@@ -17,17 +17,41 @@ class UserStatScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _UserStatScreenState();
 }
 
-class _UserStatScreenState extends ConsumerState<UserStatScreen> {
+class _UserStatScreenState extends ConsumerState<UserStatScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late UserStatViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     notifier = ref.read(userStatViewStateProvider.notifier);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Builder(builder: (context) => _body(context));
   }
 

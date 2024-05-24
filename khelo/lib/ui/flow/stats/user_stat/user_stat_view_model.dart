@@ -9,8 +9,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'user_stat_view_model.freezed.dart';
 
 final userStatViewStateProvider =
-    StateNotifierProvider.autoDispose<UserStatViewNotifier, UserStatViewState>(
-        (ref) {
+    StateNotifierProvider<UserStatViewNotifier, UserStatViewState>((ref) {
   final notifier = UserStatViewNotifier(
     ref.read(ballScoreServiceProvider),
     ref.read(currentUserPod)?.id,

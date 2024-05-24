@@ -24,17 +24,41 @@ class UserMatchListScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _UserMatchListScreenState();
 }
 
-class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen> {
+class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late UserMatchListViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     notifier = ref.read(userMatchListStateProvider.notifier);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Builder(builder: (context) {
       return _body(context);
     });
