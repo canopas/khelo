@@ -136,8 +136,8 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
         flex: 2,
         child: Text(
             match.start_time.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary)),
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textDisabled)),
       ),
       Flexible(
         child: Row(
@@ -156,8 +156,8 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
             Flexible(
               child: Text(
                 match.ground,
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.textPrimary),
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -182,7 +182,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
             child: Text(match.team.name,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
-                style: AppTextStyle.subtitle1
+                style: AppTextStyle.subtitle3
                     .copyWith(color: context.colorScheme.textPrimary)),
           ),
           Text.rich(TextSpan(

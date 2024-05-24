@@ -66,27 +66,34 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
         onRetryTap: notifier.onResume,
       );
     }
+    if (state.userStat == null) return const SizedBox();
 
     return ListView(
       padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
       children: [
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_batting_statics_title),
-        _battingStats(context, state.userStat),
+        if (state.userStat?.battingStat != null) ...[
+          _sectionTitle(
+              context, context.l10n.my_stat_stats_batting_statics_title),
+          _battingStats(context, state.userStat?.battingStat),
+        ],
         const SizedBox(height: 40),
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_bowling_statics_title),
-        _bowlingStats(context, state.userStat),
+        if (state.userStat?.bowlingStat != null) ...[
+          _sectionTitle(
+              context, context.l10n.my_stat_stats_bowling_statics_title),
+          _bowlingStats(context, state.userStat?.bowlingStat),
+        ],
         const SizedBox(height: 40),
-        _sectionTitle(
-            context, context.l10n.my_stat_stats_fielding_statics_title),
-        _fieldingStats(context, state.userStat),
+        if (state.userStat?.fieldingStat != null) ...[
+          _sectionTitle(
+              context, context.l10n.my_stat_stats_fielding_statics_title),
+          _fieldingStats(context, state.userStat?.fieldingStat),
+        ],
       ],
     );
   }
 
-  Widget _battingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return const SizedBox();
+  Widget _battingStats(BuildContext context, BattingStat? battingStat) {
+    if (battingStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -100,7 +107,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
           _mainStatisticView(
             context,
             title: context.l10n.my_stat_stats_run_scored_title,
-            count: userStat.run_scored.toString(),
+            count: battingStat.runScored.toString(),
           ),
           const SizedBox(height: 16),
           Row(
@@ -108,13 +115,13 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             children: [
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_batting_title,
-                  count: userStat.batting_average.toString()),
+                  count: battingStat.average.toString()),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_strike_rate_title,
-                  count: '${userStat.batting_strike_rate.toStringAsFixed(2)}%'),
+                  count: '${battingStat.strikeRate.toStringAsFixed(2)}%'),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_ball_faced_title,
-                  count: userStat.ball_faced.toString()),
+                  count: battingStat.ballFaced.toString()),
             ],
           ),
         ],
@@ -122,8 +129,8 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     );
   }
 
-  Widget _bowlingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return const SizedBox();
+  Widget _bowlingStats(BuildContext context, BowlingStat? bowlingStat) {
+    if (bowlingStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -137,7 +144,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
           _mainStatisticView(
             context,
             title: context.l10n.common_wicket_taken_title,
-            count: userStat.wicket_taken.toString(),
+            count: bowlingStat.wicketTaken.toString(),
           ),
           const SizedBox(height: 16),
           Row(
@@ -145,13 +152,13 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             children: [
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_bowling_title,
-                  count: userStat.bowling_average.toString()),
+                  count: bowlingStat.average.toString()),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_strike_rate_title,
-                  count: '${userStat.bowling_strike_rate.toStringAsFixed(2)}%'),
+                  count: '${bowlingStat.strikeRate.toStringAsFixed(2)}%'),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_economy_rate_title,
-                  count: userStat.economy_rate.toStringAsFixed(2)),
+                  count: bowlingStat.economyRate.toStringAsFixed(2)),
             ],
           ),
         ],
@@ -159,8 +166,8 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     );
   }
 
-  Widget _fieldingStats(BuildContext context, UserStat? userStat) {
-    if (userStat == null) return const SizedBox();
+  Widget _fieldingStats(BuildContext context, FieldingStat? fieldingStat) {
+    if (fieldingStat == null) return const SizedBox();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -173,13 +180,13 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
         children: [
           _subStatisticView(context,
               title: context.l10n.my_stat_stats_catches_title,
-              count: userStat.catches.toString()),
+              count: fieldingStat.catches.toString()),
           _subStatisticView(context,
               title: context.l10n.my_stat_stats_run_out_title,
-              count: userStat.run_out.toString()),
+              count: fieldingStat.runOut.toString()),
           _subStatisticView(context,
               title: context.l10n.my_stat_stats_stumping_title,
-              count: userStat.stumping.toString()),
+              count: fieldingStat.stumping.toString()),
         ],
       ),
     );
