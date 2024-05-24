@@ -1,13 +1,12 @@
 import 'package:data/api/match/match_model.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_view_model.dart';
@@ -15,6 +14,8 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../../gen/assets.gen.dart';
 
 class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
@@ -34,6 +35,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    notifier = ref.read(userMatchListStateProvider.notifier);
     super.initState();
   }
 
@@ -57,18 +59,13 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    final state = ref.watch(userMatchListStateProvider);
-    notifier = ref.watch(userMatchListStateProvider.notifier);
-
-    return _body(context, notifier, state);
+    return Builder(builder: (context) {
+      return _body(context);
+    });
   }
 
-  Widget _body(
-    BuildContext context,
-    UserMatchListViewNotifier notifier,
-    UserMatchListState state,
-  ) {
+  Widget _body(BuildContext context) {
+    final state = ref.watch(userMatchListStateProvider);
     if (state.loading) {
       return const AppProgressIndicator();
     }
@@ -82,16 +79,12 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
 
     if (state.matches.isNotEmpty) {
       return ListView.separated(
-          padding: const EdgeInsets.only(bottom: 50, top: 24),
-          itemBuilder: (context, index) {
-            return _matchListCell(context, state.matches.elementAt(index));
-          },
-          separatorBuilder: (context, index) {
-            return const SizedBox(
-              height: 16,
-            );
-          },
-          itemCount: state.matches.length);
+        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+        itemCount: state.matches.length,
+        itemBuilder: (context, index) =>
+            _matchListCell(context, state.matches.elementAt(index)),
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+      );
     } else {
       return Center(
         child: Text(
@@ -110,41 +103,26 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
             .push(context);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(20),
-          color: context.colorScheme.containerLow,
+          border: Border.all(color: context.colorScheme.secondary),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Expanded(child: _teamNameView(context, match.teams.first.team)),
-                Text(
-                  context.l10n.add_match_versus_short_title,
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.primary),
-                ),
-                Expanded(child: _teamNameView(context, match.teams.last.team)),
-              ],
+            _matchTimeAndGroundView(match),
+            const SizedBox(height: 16),
+            ...match.teams.map(
+              (e) => _teamView(context, e),
             ),
-            Divider(color: context.colorScheme.outline),
-            Text(
-              "${match.match_type.getString(context)} - ${context.l10n.match_list_overs_title(match.number_of_over)}",
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Divider(
+                color: context.colorScheme.outline,
+                height: 1,
+              ),
             ),
-            Text(match.ground,
-                style: AppTextStyle.subtitle2
-                    .copyWith(color: context.colorScheme.textPrimary)),
-            Text(match.start_time.format(context, DateFormatType.dateAndTime),
-                style: AppTextStyle.subtitle2
-                    .copyWith(color: context.colorScheme.textPrimary)),
-            Divider(color: context.colorScheme.outline),
             _winnerMessageText(context, match)
           ],
         ),
@@ -152,24 +130,74 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
     );
   }
 
-  Widget _teamNameView(BuildContext context, TeamModel team) {
-    return Column(
-      children: [
-        ImageAvatar(
-          initial: team.name[0].toUpperCase(),
-          imageUrl: team.profile_img_url,
-          size: 50,
+  Widget _matchTimeAndGroundView(MatchModel match) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Flexible(
+        flex: 2,
+        child: Text(
+            match.start_time.format(context, DateFormatType.dateAndTime),
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textDisabled)),
+      ),
+      Flexible(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SvgPicture.asset(
+              Assets.images.icLocation,
+              height: 20,
+              width: 20,
+              colorFilter: ColorFilter.mode(
+                context.colorScheme.textSecondary,
+                BlendMode.srcATop,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                match.ground,
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 4,
-        ),
-        Text(
-          team.name,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          maxLines: 3,
-        ),
-      ],
+      ),
+    ]);
+  }
+
+  Widget _teamView(BuildContext context, MatchTeamModel match) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        children: [
+          ImageAvatar(
+            initial: match.team.name[0].toUpperCase(),
+            imageUrl: match.team.profile_img_url,
+            size: 32,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(match.team.name,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: AppTextStyle.subtitle3
+                    .copyWith(color: context.colorScheme.textPrimary)),
+          ),
+          Text.rich(TextSpan(
+              text: "${match.run}-${match.wicket}",
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
+              children: [
+                TextSpan(
+                  text: " ${match.over}",
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.textSecondary),
+                )
+              ]))
+        ],
+      ),
     );
   }
 
@@ -180,7 +208,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
         return Text(
           context.l10n.score_board_match_tied_text,
           style: AppTextStyle.subtitle1
-              .copyWith(color: context.colorScheme.primary),
+              .copyWith(color: context.colorScheme.textPrimary),
         );
       }
       return WonByMessageText(

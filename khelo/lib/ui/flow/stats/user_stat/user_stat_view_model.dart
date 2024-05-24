@@ -38,8 +38,8 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     try {
       _ballScoreStreamSubscription =
           _ballScoreService.getCurrentUserRelatedBalls().listen((ballScores) {
-        state =
-            state.copyWith(ballList: ballScores, loading: false, error: null);
+        final userStat = _calculateUserStats(ballScores);
+        state = state.copyWith(userStat: userStat, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(error: e, loading: false);
         debugPrint(
@@ -50,6 +50,134 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
       debugPrint(
           "UserStatViewNotifier: error while getting user related balls -> $e");
     }
+  }
+
+  UserStat _calculateUserStats(List<BallScoreModel> ballList) {
+    final runScored = ballList
+        .where((element) => element.batsman_id == state.currentUserId)
+        .fold(0, (sum, element) => sum + element.runs_scored);
+    final batingStat =
+        _calculateBatingStats(ballList: ballList, runScored: runScored);
+
+    final bowlingStat = _calculateBowlingStats(ballList);
+
+    final fieldingStat = _calculateFieldingStats(ballList);
+
+    return UserStat(
+      battingStat: batingStat,
+      bowlingStat: bowlingStat,
+      fieldingStat: fieldingStat,
+    );
+  }
+
+  BattingStat _calculateBatingStats({
+    required List<BallScoreModel> ballList,
+    required int runScored,
+  }) {
+    final dismissal = ballList
+        .where((element) => element.player_out_id == state.currentUserId)
+        .length;
+
+    final ballFaced = ballList
+        .where((element) =>
+            element.batsman_id == state.currentUserId &&
+            (element.extras_type == null ||
+                element.extras_type == ExtrasType.legBye ||
+                element.extras_type == ExtrasType.bye))
+        .length;
+
+    final average = dismissal == 0 ? 0.0 : runScored / dismissal;
+
+    final strikeRate = ballFaced == 0 ? 0.0 : (runScored / ballFaced) * 100.0;
+
+    return BattingStat(
+      average: average,
+      strikeRate: strikeRate,
+      ballFaced: ballFaced,
+      runScored: runScored,
+    );
+  }
+
+  BowlingStat _calculateBowlingStats(List<BallScoreModel> ballList) {
+    final deliveries =
+        ballList.where((element) => element.bowler_id == state.currentUserId);
+
+    final wicketTaken = deliveries
+        .where((element) =>
+            element.wicket_type != null &&
+            (element.wicket_type == WicketType.retired ||
+                element.wicket_type == WicketType.retiredHurt ||
+                element.wicket_type == WicketType.timedOut))
+        .length;
+
+    final bowledBallCount = deliveries
+        .where((element) =>
+            element.wicket_type != WicketType.retired &&
+            element.wicket_type != WicketType.retiredHurt &&
+            element.wicket_type != WicketType.timedOut &&
+            element.extras_type != ExtrasType.penaltyRun)
+        .length;
+
+    final bowledBallCountForEconomyRate = deliveries
+        .where((element) =>
+            (element.extras_type == null ||
+                element.extras_type == ExtrasType.legBye ||
+                element.extras_type == ExtrasType.bye) &&
+            element.wicket_type != WicketType.retired &&
+            element.wicket_type != WicketType.retiredHurt &&
+            element.wicket_type != WicketType.timedOut &&
+            element.extras_type != ExtrasType.penaltyRun)
+        .length;
+
+    final runsConceded = deliveries
+        .where((element) => element.extras_type != ExtrasType.penaltyRun)
+        .fold(
+            0,
+            (sum, element) =>
+                sum + element.runs_scored + (element.extras_awarded ?? 0));
+
+    final average = wicketTaken == 0 ? 0.0 : runsConceded / wicketTaken;
+
+    final strikeRate = wicketTaken == 0 ? 0.0 : bowledBallCount / wicketTaken;
+
+    final economyRate = bowledBallCountForEconomyRate == 0
+        ? 0.0
+        : (runsConceded / bowledBallCountForEconomyRate) * 6;
+
+    return BowlingStat(
+      average: average,
+      strikeRate: strikeRate,
+      wicketTaken: wicketTaken,
+      economyRate: economyRate,
+    );
+  }
+
+  FieldingStat _calculateFieldingStats(List<BallScoreModel> ballList) {
+    final catches = ballList
+        .where((element) =>
+            element.wicket_taker_id == state.currentUserId &&
+            (element.wicket_type == WicketType.caught ||
+                element.wicket_type == WicketType.caughtBehind ||
+                element.wicket_type == WicketType.caughtAndBowled))
+        .length;
+
+    final runOut = ballList
+        .where((element) =>
+            element.wicket_taker_id == state.currentUserId &&
+            element.wicket_type == WicketType.runOut)
+        .length;
+
+    final stumping = ballList
+        .where((element) =>
+            element.wicket_taker_id == state.currentUserId &&
+            element.wicket_type == WicketType.stumped)
+        .length;
+
+    return FieldingStat(
+      catches: catches,
+      runOut: runOut,
+      stumping: stumping,
+    );
   }
 
   _cancelStreamSubscription() {
@@ -73,7 +201,7 @@ class UserStatViewState with _$UserStatViewState {
   const factory UserStatViewState({
     Object? error,
     String? currentUserId,
-    @Default([]) List<BallScoreModel> ballList,
+    UserStat? userStat,
     @Default(false) bool loading,
   }) = _UserStatViewState;
 }

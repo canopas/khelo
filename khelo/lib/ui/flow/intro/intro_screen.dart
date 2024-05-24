@@ -51,7 +51,8 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                     ),
                     PrimaryButton(
                       context.l10n.intro_register_btn_text,
-                      onPressed: () => AppRoute.phoneLogin.pushReplacement(context),
+                      onPressed: () =>
+                          AppRoute.phoneLogin.pushReplacement(context),
                     ),
                   ],
                 ),
