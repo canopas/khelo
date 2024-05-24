@@ -16,6 +16,7 @@ import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -70,22 +71,21 @@ class EditProfileScreen extends ConsumerWidget {
         title: context.l10n.edit_profile_screen_title,
         actions: [
           if (!isToCreateAccount) ...[
-            OnTapScale(
-              onTap: () => showConfirmationDialog(context,
-                  title: context.l10n.common_delete_title,
-                  message: context.l10n.alert_confirm_default_message(
-                      context.l10n.common_delete_title.toLowerCase()),
-                  confirmBtnText: context.l10n.common_delete_title,
-                  onConfirm: notifier.onDeleteTap),
-              child: SvgPicture.asset(
-                Assets.images.icBin,
-                height: 24,
-                width: 24,
-                fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(
-                    context.colorScheme.primary, BlendMode.srcATop),
-              ),
-            )
+            actionButton(context,
+                onPressed: () => showConfirmationDialog(context,
+                    title: context.l10n.common_delete_title,
+                    message: context.l10n.alert_confirm_default_message(
+                        context.l10n.common_delete_title.toLowerCase()),
+                    confirmBtnText: context.l10n.common_delete_title,
+                    onConfirm: notifier.onDeleteTap),
+                icon: SvgPicture.asset(
+                  Assets.images.icBin,
+                  height: 24,
+                  width: 24,
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                      context.colorScheme.primary, BlendMode.srcATop),
+                )),
           ]
         ],
         body: Builder(
