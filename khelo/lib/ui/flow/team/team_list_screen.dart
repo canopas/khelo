@@ -8,7 +8,6 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/large_icon_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -87,12 +86,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
       );
     }
 
-    return Stack(
-      children: [
-        _teamList(context, notifier, state),
-        _floatingAddButton(context, notifier),
-      ],
-    );
+    return _teamList(context, notifier, state);
   }
 
   Widget _teamList(
@@ -221,28 +215,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
           );
         }).toList();
       },
-    );
-  }
-
-  Widget _floatingAddButton(
-    BuildContext context,
-    TeamListViewNotifier notifier,
-  ) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 16.0, bottom: 16.0),
-        child: LargeIconButton(
-          backgroundColor: context.colorScheme.primary,
-          onTap: () async {
-            await AppRoute.addTeam().push(context);
-          },
-          icon: Icon(
-            Icons.add_rounded,
-            color: context.colorScheme.onPrimary,
-          ),
-        ),
-      ),
     );
   }
 }
