@@ -20,10 +20,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
     final notifier = ref.watch(matchDetailTabStateProvider.notifier);
-    return _body(context, notifier,state);
+    return _body(context, notifier, state);
   }
 
-  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
+  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const AppProgressIndicator();
     }

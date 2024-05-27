@@ -30,6 +30,7 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
       : _controller.initialPage;
 
   bool _wantKeepAlive = true;
+
   @override
   bool get wantKeepAlive => _wantKeepAlive;
 
@@ -37,7 +38,6 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
     _controller = PageController(
       initialPage: ref.read(myStatsTabStateProvider).selectedTab,
     );
@@ -62,11 +62,9 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final notifier = ref.watch(myStatsTabStateProvider.notifier);
-
+    super.build(context);
     return AppPage(
-      title: context.l10n.my_stat_screen_title,
       body: Builder(
         builder: (context) {
           return _content(context, notifier);

@@ -17,26 +17,29 @@ Future<T?> showActionBottomSheet<T>({
       ),
     ),
     useRootNavigator: useRootNavigator,
+    isScrollControlled: true,
     context: context,
-    builder: (context) => Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(16),
+    builder: (context) => SingleChildScrollView(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(16),
+          ),
+          color: context.colorScheme.surface,
         ),
-        color: context.colorScheme.surface,
-      ),
-      padding: EdgeInsets.only(
-        bottom: context.mediaQueryPadding.bottom,
-      ),
-      child: ColumnBuilder.separated(
-        separatorBuilder: (index) => Divider(
-          height: 0,
-          thickness: 1,
-          color: context.colorScheme.outline,
+        padding: EdgeInsets.only(
+          bottom: context.mediaQueryPadding.bottom,
         ),
-        itemBuilder: (index) => items[index],
-        itemCount: items.length,
-        mainAxisSize: MainAxisSize.min,
+        child: ColumnBuilder.separated(
+          separatorBuilder: (index) => Divider(
+            height: 0,
+            thickness: 1,
+            color: context.colorScheme.outline,
+          ),
+          itemBuilder: (index) => items[index],
+          itemCount: items.length,
+          mainAxisSize: MainAxisSize.min,
+        ),
       ),
     ),
   );
@@ -70,12 +73,13 @@ class BottomSheetAction extends StatelessWidget {
               visible: icon != null,
               child: const SizedBox(width: 20),
             ),
-            Text(
-              title,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
+            Expanded(
+              child: Text(
+                title,
+                style: AppTextStyle.body1
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
             ),
-            const Spacer(),
             Visibility(
               visible: child != null,
               child: child ?? const SizedBox(),
