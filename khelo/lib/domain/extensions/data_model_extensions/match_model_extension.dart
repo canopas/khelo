@@ -19,7 +19,7 @@ extension MatchModelString on MatchModel {
       // first batting team won
       final teamName = firstTeam.team.name;
 
-      final runDifference = firstTeam.run  - secondTeam.run;
+      final runDifference = firstTeam.run - secondTeam.run;
 
       return (
         teamName: teamName,
@@ -32,8 +32,7 @@ extension MatchModelString on MatchModel {
       // second batting team won
       final teamName = secondTeam.team.name;
 
-      final wicketDifference =
-          secondTeam.squad.length - firstTeam.wicket;
+      final wicketDifference = secondTeam.squad.length - firstTeam.wicket;
 
       return (
         teamName: teamName,

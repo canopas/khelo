@@ -55,7 +55,7 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     await _matchesStreamSubscription.cancel();
   }
 
-  onResume(){
+  onResume() {
     _cancelStreamSubscription();
     _loadMatches();
   }

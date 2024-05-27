@@ -46,6 +46,9 @@ class $AssetsImagesGen {
   AssetGenImage get icGallery =>
       const AssetGenImage('assets/images/ic_gallery.png');
 
+  /// File path: assets/images/ic_location.svg
+  String get icLocation => 'assets/images/ic_location.svg';
+
   /// File path: assets/images/ic_profile.svg
   String get icProfile => 'assets/images/ic_profile.svg';
 
@@ -94,6 +97,7 @@ class $AssetsImagesGen {
         icCommentator,
         icEdit,
         icGallery,
+        icLocation,
         icProfile,
         icProfileThin,
         icReferee,

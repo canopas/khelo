@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UserStatViewState {
   Object? get error => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
-  List<BallScoreModel> get ballList => throw _privateConstructorUsedError;
+  UserStat? get userStat => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -33,10 +33,9 @@ abstract class $UserStatViewStateCopyWith<$Res> {
       _$UserStatViewStateCopyWithImpl<$Res, UserStatViewState>;
   @useResult
   $Res call(
-      {Object? error,
-      String? currentUserId,
-      List<BallScoreModel> ballList,
-      bool loading});
+      {Object? error, String? currentUserId, UserStat? userStat, bool loading});
+
+  $UserStatCopyWith<$Res>? get userStat;
 }
 
 /// @nodoc
@@ -54,7 +53,7 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
   $Res call({
     Object? error = freezed,
     Object? currentUserId = freezed,
-    Object? ballList = null,
+    Object? userStat = freezed,
     Object? loading = null,
   }) {
     return _then(_value.copyWith(
@@ -63,15 +62,27 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      ballList: null == ballList
-          ? _value.ballList
-          : ballList // ignore: cast_nullable_to_non_nullable
-              as List<BallScoreModel>,
+      userStat: freezed == userStat
+          ? _value.userStat
+          : userStat // ignore: cast_nullable_to_non_nullable
+              as UserStat?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserStatCopyWith<$Res>? get userStat {
+    if (_value.userStat == null) {
+      return null;
+    }
+
+    return $UserStatCopyWith<$Res>(_value.userStat!, (value) {
+      return _then(_value.copyWith(userStat: value) as $Val);
+    });
   }
 }
 
@@ -84,10 +95,10 @@ abstract class _$$UserStatViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Object? error,
-      String? currentUserId,
-      List<BallScoreModel> ballList,
-      bool loading});
+      {Object? error, String? currentUserId, UserStat? userStat, bool loading});
+
+  @override
+  $UserStatCopyWith<$Res>? get userStat;
 }
 
 /// @nodoc
@@ -103,7 +114,7 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? currentUserId = freezed,
-    Object? ballList = null,
+    Object? userStat = freezed,
     Object? loading = null,
   }) {
     return _then(_$UserStatViewStateImpl(
@@ -112,10 +123,10 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      ballList: null == ballList
-          ? _value._ballList
-          : ballList // ignore: cast_nullable_to_non_nullable
-              as List<BallScoreModel>,
+      userStat: freezed == userStat
+          ? _value.userStat
+          : userStat // ignore: cast_nullable_to_non_nullable
+              as UserStat?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -128,32 +139,21 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
 
 class _$UserStatViewStateImpl implements _UserStatViewState {
   const _$UserStatViewStateImpl(
-      {this.error,
-      this.currentUserId,
-      final List<BallScoreModel> ballList = const [],
-      this.loading = false})
-      : _ballList = ballList;
+      {this.error, this.currentUserId, this.userStat, this.loading = false});
 
   @override
   final Object? error;
   @override
   final String? currentUserId;
-  final List<BallScoreModel> _ballList;
   @override
-  @JsonKey()
-  List<BallScoreModel> get ballList {
-    if (_ballList is EqualUnmodifiableListView) return _ballList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_ballList);
-  }
-
+  final UserStat? userStat;
   @override
   @JsonKey()
   final bool loading;
 
   @override
   String toString() {
-    return 'UserStatViewState(error: $error, currentUserId: $currentUserId, ballList: $ballList, loading: $loading)';
+    return 'UserStatViewState(error: $error, currentUserId: $currentUserId, userStat: $userStat, loading: $loading)';
   }
 
   @override
@@ -164,7 +164,8 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.currentUserId, currentUserId) ||
                 other.currentUserId == currentUserId) &&
-            const DeepCollectionEquality().equals(other._ballList, _ballList) &&
+            (identical(other.userStat, userStat) ||
+                other.userStat == userStat) &&
             (identical(other.loading, loading) || other.loading == loading));
   }
 
@@ -173,7 +174,7 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       currentUserId,
-      const DeepCollectionEquality().hash(_ballList),
+      userStat,
       loading);
 
   @JsonKey(ignore: true)
@@ -188,7 +189,7 @@ abstract class _UserStatViewState implements UserStatViewState {
   const factory _UserStatViewState(
       {final Object? error,
       final String? currentUserId,
-      final List<BallScoreModel> ballList,
+      final UserStat? userStat,
       final bool loading}) = _$UserStatViewStateImpl;
 
   @override
@@ -196,7 +197,7 @@ abstract class _UserStatViewState implements UserStatViewState {
   @override
   String? get currentUserId;
   @override
-  List<BallScoreModel> get ballList;
+  UserStat? get userStat;
   @override
   bool get loading;
   @override

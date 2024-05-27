@@ -30,8 +30,8 @@ class FinalScoreView extends ConsumerWidget {
     children.add(const SizedBox(height: 16));
     for (final team in state.match!.teams) {
       final wicketCount = state.match!.teams
-              .firstWhere((element) => element.team.id != team.team.id)
-              .wicket;
+          .firstWhere((element) => element.team.id != team.team.id)
+          .wicket;
 
       children.add(_teamScore(context, team, wicketCount));
       children.add(const SizedBox(height: 8));

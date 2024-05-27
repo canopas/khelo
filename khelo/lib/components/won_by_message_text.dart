@@ -19,8 +19,8 @@ class WonByMessageText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(TextSpan(
         text: teamName,
-        style:
-            AppTextStyle.header4.copyWith(color: context.colorScheme.primary),
+        style: AppTextStyle.subtitle2
+            .copyWith(color: context.colorScheme.textPrimary),
         children: [
           TextSpan(
               text: context.l10n.score_board_won_by_title,

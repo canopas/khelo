@@ -27,8 +27,8 @@ class BallScoreModel with _$BallScoreModel {
     required DateTime time,
   }) = _BallScoreModel;
 
-  factory BallScoreModel.fromJson(Map<String, dynamic> json) => _$BallScoreModelFromJson(json);
-
+  factory BallScoreModel.fromJson(Map<String, dynamic> json) =>
+      _$BallScoreModelFromJson(json);
 }
 
 @JsonEnum(valueField: "value")
@@ -64,4 +64,42 @@ enum WicketType {
   final int value;
 
   const WicketType(this.value);
+}
+
+@freezed
+class UserStat with _$UserStat {
+  const factory UserStat({
+    BattingStat? battingStat,
+    BowlingStat? bowlingStat,
+    FieldingStat? fieldingStat,
+  }) = _UserStat;
+}
+
+@freezed
+class BattingStat with _$BattingStat {
+  const factory BattingStat({
+    @Default(0) int runScored,
+    @Default(0.0) double average,
+    @Default(0.0) double strikeRate,
+    @Default(0) int ballFaced,
+  }) = _BattingStat;
+}
+
+@freezed
+class BowlingStat with _$BowlingStat {
+  const factory BowlingStat({
+    @Default(0) int wicketTaken,
+    @Default(0.0) double average,
+    @Default(0.0) double strikeRate,
+    @Default(0.0) double economyRate,
+  }) = _BowlingStat;
+}
+
+@freezed
+class FieldingStat with _$FieldingStat {
+  const factory FieldingStat({
+    @Default(0) int catches,
+    @Default(0) int runOut,
+    @Default(0) int stumping,
+  }) = _FieldingStat;
 }
