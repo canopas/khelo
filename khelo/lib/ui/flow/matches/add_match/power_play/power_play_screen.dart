@@ -57,35 +57,37 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
 
     return AppPage(
       title: context.l10n.power_play_screen_title,
-      body: Stack(
-        children: [
-          Padding(
-            padding: context.mediaQueryPadding +
-                EdgeInsets.symmetric(horizontal: padding) +
-                BottomStickyOverlay.padding,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (final type in PowerPlayType.values) ...[
-                    _overGridView(
-                      context: context,
-                      notifier: notifier,
-                      state: state,
-                      type: type,
-                      maxOversInRow: maxOversInRow,
-                      approxCellWidth: approxCellWidth,
+      body: Builder(builder: (context) {
+        return Stack(
+          children: [
+            Padding(
+              padding: context.mediaQueryPadding +
+                  EdgeInsets.symmetric(horizontal: padding) +
+                  BottomStickyOverlay.padding,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    for (final type in PowerPlayType.values) ...[
+                      _overGridView(
+                        context: context,
+                        notifier: notifier,
+                        state: state,
+                        type: type,
+                        maxOversInRow: maxOversInRow,
+                        approxCellWidth: approxCellWidth,
+                      ),
+                    ],
+                    const SizedBox(
+                      height: 50,
                     ),
                   ],
-                  const SizedBox(
-                    height: 50,
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-          _stickyButton(context, state)
-        ],
-      ),
+            _stickyButton(context, state)
+          ],
+        );
+      }),
     );
   }
 

@@ -112,12 +112,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           onSchedule: () => notifier.addMatch(),
         ),
       ],
-      body: Stack(
-        children: [
-          _body(context, notifier, state),
-          _stickyButton(context, notifier, state),
-        ],
-      ),
+      body: Builder(builder: (context) {
+        return Stack(
+          children: [
+            _body(context, notifier, state),
+            _stickyButton(context, notifier, state),
+          ],
+        );
+      }),
     );
   }
 
@@ -178,7 +180,9 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     }
 
     return ListView(
-      padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+      padding: context.mediaQueryPadding +
+          BottomStickyOverlay.padding +
+          const EdgeInsets.symmetric(vertical: 24),
       children: [
         TeamSelectionView(notifier: notifier, state: state),
         const SizedBox(
@@ -214,9 +218,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         BallSelectionView(notifier: notifier, state: state),
         PitchSelectionView(notifier: notifier, state: state),
         MatchOfficialSelectionView(notifier: notifier, state: state),
-        const SizedBox(
-          height: 24,
-        ),
       ],
     );
   }

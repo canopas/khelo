@@ -44,23 +44,25 @@ class _AddMatchOfficialsScreenState
 
     return AppPage(
       title: context.l10n.add_match_officials_screen_title,
-      body: Stack(
-        children: [
-          ListView(
-            padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
-            children: [
-              for (final type in MatchOfficials.values) ...[
-                _sectionTitle(context, type.getTitle(context)),
-                _officialList(context, notifier, state, type),
+      body: Builder(builder: (context) {
+        return Stack(
+          children: [
+            ListView(
+              padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+              children: [
+                for (final type in MatchOfficials.values) ...[
+                  _sectionTitle(context, type.getTitle(context)),
+                  _officialList(context, notifier, state, type),
+                ],
+                const SizedBox(
+                  height: 40,
+                )
               ],
-              const SizedBox(
-                height: 40,
-              )
-            ],
-          ),
-          _stickyButton(context, state)
-        ],
-      ),
+            ),
+            _stickyButton(context, state)
+          ],
+        );
+      }),
     );
   }
 
