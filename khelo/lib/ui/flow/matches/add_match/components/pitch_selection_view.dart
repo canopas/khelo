@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -21,32 +20,27 @@ class PitchSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionTitle(title: context.l10n.add_match_pitch_type_title),
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 16,
-                ),
-                for (final value in PitchType.values) ...[
-                  _capsuleCell(
-                    context: context,
-                    title: value.getString(context),
-                    isSelected: state.pitchType == value,
-                    onTap: () =>
-                        notifier.onPitchTypeSelection(value),
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                ],
-              ],
-            )),
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionTitle(title: context.l10n.add_match_pitch_type_title),
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(left: 16, right: 8),
+              child: Row(
+                children: PitchType.values
+                    .map((type) => _capsuleCell(
+                          context: context,
+                          title: type.getString(context),
+                          isSelected: state.pitchType == type,
+                          onTap: () => notifier.onPitchTypeSelection(type),
+                        ))
+                    .toList(),
+              )),
+        ],
+      ),
     );
   }
 
@@ -56,22 +50,26 @@ class PitchSelectionView extends StatelessWidget {
     required bool isSelected,
     required Function() onTap,
   }) {
-    return OnTapScale(
-      onTap: () => onTap(),
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: isSelected
-                ? context.colorScheme.primary
-                : context.colorScheme.containerLowOnSurface,
-            borderRadius: BorderRadius.circular(30)),
-        child: Text(
-          title,
-          style: AppTextStyle.body2.copyWith(
-              color: isSelected
-                  ? context.colorScheme.onPrimary
-                  : context.colorScheme.textDisabled),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: OnTapScale(
+        onTap: () => onTap(),
+        child: Chip(
+          label: Text(
+            title,
+            style: AppTextStyle.body2.copyWith(
+                color: isSelected
+                    ? context.colorScheme.onPrimary
+                    : context.colorScheme.textDisabled),
+          ),
+          backgroundColor: isSelected
+              ? context.colorScheme.primary
+              : context.colorScheme.containerLowOnSurface,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          side: const BorderSide(color: Colors.transparent),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
       ),
     );

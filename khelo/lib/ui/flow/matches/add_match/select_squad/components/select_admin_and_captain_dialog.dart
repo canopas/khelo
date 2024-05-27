@@ -131,7 +131,7 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? context.colorScheme.primary
-                : context.colorScheme.containerLowOnSurface,
+                : context.colorScheme.containerLow,
             shape: BoxShape.circle,
           ),
           child: Text(

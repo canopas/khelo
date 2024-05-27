@@ -23,6 +23,7 @@ class UserDetailCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Row(
         children: [
@@ -31,9 +32,7 @@ class UserDetailCell extends StatelessWidget {
             imageUrl: user.profile_img_url,
             size: 40,
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

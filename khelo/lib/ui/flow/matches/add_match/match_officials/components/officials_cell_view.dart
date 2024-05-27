@@ -1,10 +1,7 @@
 import 'package:data/api/user/user_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/components/image_avatar.dart';
-import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -98,14 +95,10 @@ class OfficialsCellView extends StatelessWidget {
                 border: Border.all(color: context.colorScheme.textPrimary),
                 shape: BoxShape.circle),
           ),
-          SvgPicture.asset(
-            Assets.images.icClose,
-            height: 16,
-            width: 16,
-            colorFilter: ColorFilter.mode(
-              context.colorScheme.textPrimary,
-              BlendMode.srcATop,
-            ),
+          Icon(
+            Icons.close,
+            size: 16,
+            color: context.colorScheme.textPrimary,
           ),
         ],
       ),

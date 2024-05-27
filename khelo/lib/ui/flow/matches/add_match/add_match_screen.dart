@@ -30,7 +30,7 @@ import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:style/theme/colors.dart';
-import 'package:style/widgets/drop_down_selection_button.dart';
+import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 class AddMatchScreen extends ConsumerStatefulWidget {
   final String? matchId;
@@ -93,7 +93,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(addMatchViewStateProvider.notifier);
     final state = ref.watch(addMatchViewStateProvider);
 
     _observeActionError(context, ref);
@@ -113,14 +112,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           onSchedule: () => notifier.addMatch(),
         ),
       ],
-      body: Material(
-        color: Colors.transparent,
-        child: Stack(
-          children: [
-            _body(context, notifier, state),
-            _stickyButton(context, notifier, state),
-          ],
-        ),
+      body: Stack(
+        children: [
+          _body(context, notifier, state),
+          _stickyButton(context, notifier, state),
+        ],
       ),
     );
   }
@@ -195,9 +191,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
               state,
               notifier.onMatchTypeSelection,
             )),
-        const SizedBox(
-          height: 24,
-        ),
         OverDetailView(notifier: notifier, state: state),
         const SizedBox(
           height: 16,
@@ -352,25 +345,23 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           child: Row(
             children: [
               Expanded(
-                child: DropDownSelectionButton(
-                    buttonText:
-                        state.matchTime.format(context, DateFormatType.date),
+                child: AdaptiveOutlinedTile(
+                    title: state.matchTime.format(context, DateFormatType.date),
                     headerImage: Assets.images.icCalendar,
                     headerText: context.l10n.add_match_date_title,
-                    buttonPlaceHolder: context.l10n.add_match_date_title,
-                    onButtonTap: () {
+                    placeholder: context.l10n.add_match_date_title,
+                    onTap: () {
                       _selectDate(context, notifier, state);
                     }),
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: DropDownSelectionButton(
-                    buttonText:
-                        state.matchTime.format(context, DateFormatType.time),
+                child: AdaptiveOutlinedTile(
+                    title: state.matchTime.format(context, DateFormatType.time),
                     headerImage: Assets.images.icTime,
                     headerText: context.l10n.add_match_time_title,
-                    buttonPlaceHolder: context.l10n.add_match_time_title,
-                    onButtonTap: () {
+                    placeholder: context.l10n.add_match_time_title,
+                    onTap: () {
                       _selectTime(context, notifier, state);
                     }),
               ),

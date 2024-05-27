@@ -36,36 +36,27 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_check.svg
   String get icCheck => 'assets/images/ic_check.svg';
 
-  /// File path: assets/images/ic_edit.svg
-  String get icEdit => 'assets/images/ic_edit.svg';
-
-  /// File path: assets/images/ic_close.svg
-  String get icClose => 'assets/images/ic_close.svg';
-
   /// File path: assets/images/ic_commentator.svg
   String get icCommentator => 'assets/images/ic_commentator.svg';
+
+  /// File path: assets/images/ic_edit.svg
+  String get icEdit => 'assets/images/ic_edit.svg';
 
   /// File path: assets/images/ic_gallery.png
   AssetGenImage get icGallery =>
       const AssetGenImage('assets/images/ic_gallery.png');
-
-  /// File path: assets/images/ic_minus.svg
-  String get icMinus => 'assets/images/ic_minus.svg';
-
-  /// File path: assets/images/ic_plus.svg
-  String get icPlus => 'assets/images/ic_plus.svg';
-
-  /// File path: assets/images/ic_referee.svg
-  String get icReferee => 'assets/images/ic_referee.svg';
-
-  /// File path: assets/images/ic_scorer.svg
-  String get icScorer => 'assets/images/ic_scorer.svg';
 
   /// File path: assets/images/ic_profile.svg
   String get icProfile => 'assets/images/ic_profile.svg';
 
   /// File path: assets/images/ic_profile_thin.svg
   String get icProfileThin => 'assets/images/ic_profile_thin.svg';
+
+  /// File path: assets/images/ic_referee.svg
+  String get icReferee => 'assets/images/ic_referee.svg';
+
+  /// File path: assets/images/ic_scorer.svg
+  String get icScorer => 'assets/images/ic_scorer.svg';
 
   /// File path: assets/images/ic_search.svg
   String get icSearch => 'assets/images/ic_search.svg';
@@ -100,15 +91,12 @@ class $AssetsImagesGen {
         icCalendar,
         icCamera,
         icCheck,
-        icEdit,
-        icClose,
         icCommentator,
+        icEdit,
         icGallery,
-        icMinus,
-        icPlus,
-        icReferee,
         icProfile,
         icProfileThin,
+        icReferee,
         icScorer,
         icSearch,
         icTime,

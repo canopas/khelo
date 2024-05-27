@@ -217,7 +217,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
               color: isEnabled
                   ? isSelected
                       ? context.colorScheme.primary
-                      : context.colorScheme.containerLowOnSurface
+                      : context.colorScheme.containerLow
                   : Colors.transparent,
               border: Border.all(color: context.colorScheme.outline),
               shape: BoxShape.circle),

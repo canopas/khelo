@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -201,15 +199,12 @@ class OverDetailView extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
             color: context.colorScheme.surface, shape: BoxShape.circle),
-        child: SvgPicture.asset(
-          isPlus ? Assets.images.icPlus : Assets.images.icMinus,
-          height: 18,
-          width: 18,
-          colorFilter: ColorFilter.mode(
-              isEnabled
-                  ? context.colorScheme.textPrimary
-                  : context.colorScheme.textDisabled,
-              BlendMode.srcIn),
+        child: Icon(
+          isPlus ? Icons.add : Icons.remove,
+          size: 18,
+          color: isEnabled
+              ? context.colorScheme.textPrimary
+              : context.colorScheme.textDisabled,
         ),
       ),
     );

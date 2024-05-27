@@ -222,12 +222,10 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
             : notifier.addToSquad(member),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: SvgPicture.asset(
-            isRemove ? Assets.images.icClose : Assets.images.icPlus,
-            height: 16,
-            width: 16,
-            colorFilter: ColorFilter.mode(
-                context.colorScheme.textDisabled, BlendMode.srcATop),
+          child: Icon(
+            isRemove ? Icons.close : Icons.add,
+            size: 16,
+            color: context.colorScheme.textDisabled,
           ),
         ));
   }

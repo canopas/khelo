@@ -26,7 +26,7 @@ class TeamSelectionView extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
           decoration: BoxDecoration(
-              color: context.colorScheme.containerLowOnSurface,
+              color: context.colorScheme.containerLow,
               borderRadius: BorderRadius.circular(16)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -92,7 +92,7 @@ class TeamSelectionView extends StatelessWidget {
                         ? Colors.transparent
                         : context.colorScheme.alert),
                 color: validSquad
-                    ? context.colorScheme.containerHighOnSurface
+                    ? context.colorScheme.containerHigh
                     : context.colorScheme.alert.withOpacity(0.2),
                 shape: BoxShape.circle,
                 image: (team != null && team.profile_img_url != null)

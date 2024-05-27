@@ -58,6 +58,9 @@ class BallSelectionView extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         margin: const EdgeInsets.only(right: 16),
+        constraints: const BoxConstraints(
+          minWidth: 121.0,
+        ),
         decoration: BoxDecoration(
           border: Border.all(color: context.colorScheme.outline),
           borderRadius: BorderRadius.circular(16),

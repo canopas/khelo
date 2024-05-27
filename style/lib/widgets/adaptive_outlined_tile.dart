@@ -4,22 +4,22 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class DropDownSelectionButton extends StatelessWidget {
+class AdaptiveOutlinedTile extends StatelessWidget {
   final String? headerText;
   final String? headerImage;
-  final String? buttonText;
-  final String buttonPlaceHolder;
+  final String? title;
+  final String placeholder;
   final bool showTrailingIcon;
-  final Function()? onButtonTap;
+  final Function()? onTap;
 
-  const DropDownSelectionButton({
+  const AdaptiveOutlinedTile({
     super.key,
     this.headerText,
     this.headerImage,
-    this.buttonText,
-    required this.buttonPlaceHolder,
+    this.title,
+    required this.placeholder,
     this.showTrailingIcon = false,
-    this.onButtonTap,
+    this.onTap,
   });
 
   @override
@@ -50,7 +50,7 @@ class DropDownSelectionButton extends StatelessWidget {
           const SizedBox(height: 4),
         ],
         OnTapScale(
-          onTap: onButtonTap,
+          onTap: onTap,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -60,9 +60,9 @@ class DropDownSelectionButton extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    buttonText ?? buttonPlaceHolder,
+                    title ?? placeholder,
                     style: AppTextStyle.subtitle3.copyWith(
-                        color: buttonText != null
+                        color: title != null
                             ? context.colorScheme.textPrimary
                             : context.colorScheme.textSecondary),
                   ),
