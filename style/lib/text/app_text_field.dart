@@ -15,6 +15,7 @@ class AppTextField extends StatelessWidget {
   final Color? backgroundColor;
   final bool expands;
   final bool enabled;
+  final Widget? suffixIcon;
   final BorderRadius? borderRadius;
   final AppTextFieldBorderType borderType;
   final BorderColor? borderColor;
@@ -45,6 +46,7 @@ class AppTextField extends StatelessWidget {
     this.backgroundColor,
     this.expands = false,
     this.enabled = true,
+    this.suffixIcon,
     this.onChanged,
     this.borderType = AppTextFieldBorderType.underline,
     this.borderColor,
@@ -123,6 +125,7 @@ class AppTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: hintStyle,
             fillColor: backgroundColor,
+            suffixIcon: suffixIcon,
             filled: backgroundColor != null,
             focusedBorder: _border(context, true),
             enabledBorder: _border(context, false),

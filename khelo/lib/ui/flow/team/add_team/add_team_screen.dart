@@ -3,8 +3,9 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
@@ -25,6 +26,7 @@ import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 
 import '../../../../components/image_avatar.dart';
+import '../../../../gen/assets.gen.dart';
 
 class AddTeamScreen extends ConsumerStatefulWidget {
   final TeamModel? editTeam;
@@ -97,8 +99,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           context.pop();
         },
         icon: Icon(
-          Icons.close,
-          color: context.colorScheme.primary,
+          Icons.arrow_back,
+          color: context.colorScheme.textPrimary,
         ),
       ),
       actions: [
@@ -108,9 +110,13 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             onPressed: () {
               _showDeleteAlert(context, onDelete: notifier.onTeamDelete);
             },
-            icon: Icon(
-              Icons.delete_outline,
-              color: context.colorScheme.primary,
+            icon: SvgPicture.asset(
+              Assets.images.icBin,
+              height: 24,
+              width: 24,
+              fit: BoxFit.contain,
+              colorFilter: ColorFilter.mode(
+                  context.colorScheme.alert, BlendMode.srcATop),
             ),
           ),
         ],
@@ -120,68 +126,107 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
   }
 
   Widget _body(BuildContext context, AddTeamState state) {
-    return Stack(
-      children: [
-        ListView(
-          padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
-          children: [
-            _profileImageView(context, state),
-            const SizedBox(height: 40),
-            _textInputField(
-                controller: state.nameController,
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          ListView(
+            padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
+            children: [
+              _profileImageView(context, state),
+              const SizedBox(height: 40),
+              Consumer(builder: (context, ref, child) {
+                final nameState = ref.watch(addTeamStateProvider);
+                return _textInputField(
+                    onChanged: (value) {
+                      notifier.onNameTextChanged();
+                    },
+                    controller: nameState.nameController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
+                    ],
+                    suffixIcon: nameState.checkingForAvailability
+                        ? const AppProgressIndicator(
+                            size: AppProgressIndicatorSize.small,
+                          )
+                        : nameState.isNameAvailable != null
+                            ? nameState.isNameAvailable!
+                                ? Icon(
+                                    Icons.check,
+                                    color: context.colorScheme.positive,
+                                  )
+                                : Icon(
+                                    Icons.close,
+                                    color: context.colorScheme.alert,
+                                  )
+                            : null,
+                    hintText:
+                        context.l10n.add_team_enter_team_name_placeholder_text);
+              }),
+              const SizedBox(height: 8),
+              _textInputField(
+                controller: state.locationController,
                 onChanged: (p0) => notifier.onValueChange(),
-                hintText:
-                    context.l10n.add_team_enter_team_name_placeholder_text),
-            const SizedBox(height: 8),
-            _textInputField(
-              controller: state.locationController,
-              onChanged: (p0) => notifier.onValueChange(),
-              hintText: context.l10n.add_team_location_text,
-            ),
-            if (widget.editTeam == null) ...[
-              ListTileTheme(
-                horizontalTitleGap: 8.0,
-                child: CheckboxListTile(
-                  value: state.isAddMeCheckBoxEnable,
-                  contentPadding: EdgeInsets.zero,
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: Text(
-                      context.l10n.add_team_add_as_member_description_text),
-                  onChanged: (value) {
-                    if (value != null) {
-                      notifier.onAddMeCheckBoxTap(value);
-                    }
-                  },
+                hintText: context.l10n.add_team_location_text,
+              ),
+              if (widget.editTeam == null) ...[
+                ListTileTheme(
+                  horizontalTitleGap: 8.0,
+                  child: CheckboxListTile(
+                    value: state.isAddMeCheckBoxEnable,
+                    contentPadding: EdgeInsets.zero,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: Text(
+                        context.l10n.add_team_add_as_member_description_text),
+                    onChanged: (value) {
+                      if (value != null) {
+                        notifier.onAddMeCheckBoxTap(value);
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ] else ...[
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Text(context.l10n.add_team_players_text,
-                      style: AppTextStyle.header4
-                          .copyWith(color: context.colorScheme.textPrimary)),
-                  actionButton(
-                    context,
-                    onPressed: () =>
-                        AppRoute.addTeamMember(team: widget.editTeam!)
-                            .push(context),
-                    icon: Icon(
-                      CupertinoIcons.add,
-                      color: context.colorScheme.textPrimary,
-                      size: 20,
+              ] else ...[
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Text(context.l10n.add_team_players_text,
+                        style: AppTextStyle.header4
+                            .copyWith(color: context.colorScheme.textPrimary)),
+                    actionButton(
+                      context,
+                      onPressed: () =>
+                          AppRoute.addTeamMember(team: widget.editTeam!)
+                              .push(context),
+                      icon: Icon(
+                        CupertinoIcons.add,
+                        color: context.colorScheme.textPrimary,
+                        size: 20,
+                      ),
+                    )
+                  ],
+                ),
+                if (state.teamMembers.isEmpty) ...[
+                  AspectRatio(
+                    aspectRatio: 1.2,
+                    child: Center(
+                      child: Text(
+                        context.l10n.add_team_add_hint_text,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.subtitle1
+                            .copyWith(color: context.colorScheme.textPrimary),
+                      ),
                     ),
-                  )
+                  ),
                 ],
-              ),
-              ...?widget.editTeam!.players?.map(
-                (player) => _playerProfileCell(context, player: player),
-              ),
+                ...state.teamMembers.map(
+                  (player) => _playerProfileCell(context, player: player),
+                ),
+              ],
             ],
-          ],
-        ),
-        _stickyButton(context, state)
-      ],
+          ),
+          _stickyButton(context, state)
+        ],
+      ),
     );
   }
 
@@ -189,11 +234,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     required TextEditingController controller,
     required String hintText,
     required Function(String)? onChanged,
+    List<TextInputFormatter>? inputFormatters,
+    Widget? suffixIcon,
   }) {
     return AppTextField(
       controller: controller,
       hintText: hintText,
       onChanged: onChanged,
+      inputFormatters: inputFormatters,
+      suffixIcon: suffixIcon,
       style: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textPrimary),
       borderRadius: BorderRadius.circular(12),

@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
-import 'package:khelo/ui/flow/team/components/select_filter_option_sheet.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
@@ -35,7 +35,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen> {
         teamListViewStateProvider
             .select((value) => value.showFilterOptionSheet), (previous, next) {
       if (next != null) {
-        SelectFilterOptionSheet.show(context);
+        _filterActionSheet(context);
       }
     });
   }
@@ -156,12 +156,36 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen> {
     return await showActionBottomSheet(context: context, items: [
       BottomSheetAction(
         title: context.l10n.team_list_add_members_title,
-        onTap: () => AppRoute.addTeamMember(team: team).push(context),
+        onTap: () {
+          context.pop();
+          AppRoute.addTeamMember(team: team).push(context);
+        },
       ),
       BottomSheetAction(
         title: context.l10n.team_list_edit_team_title,
-        onTap: () => AppRoute.addTeam(team: team).push(context),
+        onTap: () {
+          context.pop();
+          AppRoute.addTeam(team: team).push(context);
+        },
       ),
     ]);
+  }
+
+  void _filterActionSheet(BuildContext context) async {
+    return showActionBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        showDragHandle: true,
+        items: TeamFilterOption.values
+            .map(
+              (option) => BottomSheetAction(
+                title: option.getString(context),
+                onTap: () {
+                  context.pop();
+                  notifier.onFilterOptionSelect(option);
+                },
+              ),
+            )
+            .toList());
   }
 }

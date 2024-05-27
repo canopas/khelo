@@ -51,7 +51,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     if (state.editTeam == null) {
       return;
     }
-    state = state.copyWith(teamMembers: [...state.teamMembers, ...players]);
+    state = state.copyWith(
+        teamMembers: {...state.teamMembers, ...players}.toList());
     onValueChange();
   }
 
