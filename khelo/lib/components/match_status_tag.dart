@@ -23,7 +23,7 @@ class MatchStatusTag extends StatelessWidget {
       onTap: onTap,
       enabled: onTap != null,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
           color: status.getColor(context),
           borderRadius: BorderRadius.circular(30),

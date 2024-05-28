@@ -57,15 +57,15 @@ class MatchDetailCell extends StatelessWidget {
             Row(
               children: [
                 Expanded(child: _winnerMessageText(context)),
-                showStatusTag
-                    ? MatchStatusTag(
-                        status: match.match_status,
-                        onTap: showActionButtons &&
-                                match.match_status != MatchStatus.finish
-                            ? onActionTap
-                            : null,
-                      )
-                    : const SizedBox(),
+                if (showStatusTag) ...[
+                  MatchStatusTag(
+                    status: match.match_status,
+                    onTap: showActionButtons &&
+                            match.match_status != MatchStatus.finish
+                        ? onActionTap
+                        : null,
+                  )
+                ],
               ],
             )
           ],
