@@ -1,14 +1,15 @@
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
-import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/flow/matches/add_match/match_officials/components/officials_cell_view.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_screen.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -43,25 +44,25 @@ class _AddMatchOfficialsScreenState
 
     return AppPage(
       title: context.l10n.add_match_officials_screen_title,
-      body: Stack(
-        children: [
-          ListView(
-            padding: context.mediaQueryPadding +
-                const EdgeInsets.symmetric(horizontal: 16) +
-                BottomStickyOverlay.padding,
-            children: [
-              for (final type in MatchOfficials.values) ...[
-                _sectionTitle(context, type.getTitle(context)),
-                _officialList(context, notifier, state, type),
+      body: Builder(builder: (context) {
+        return Stack(
+          children: [
+            ListView(
+              padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+              children: [
+                for (final type in MatchOfficials.values) ...[
+                  _sectionTitle(context, type.getTitle(context)),
+                  _officialList(context, notifier, state, type),
+                ],
+                const SizedBox(
+                  height: 40,
+                )
               ],
-              const SizedBox(
-                height: 40,
-              )
-            ],
-          ),
-          _stickyButton(context, state)
-        ],
-      ),
+            ),
+            _stickyButton(context, state)
+          ],
+        );
+      }),
     );
   }
 
@@ -86,11 +87,8 @@ class _AddMatchOfficialsScreenState
           ),
           Text(
             title,
-            style: AppTextStyle.header1
-                .copyWith(color: context.colorScheme.textSecondary),
-          ),
-          const SizedBox(
-            height: 16,
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary),
           ),
         ],
       ),
@@ -105,17 +103,13 @@ class _AddMatchOfficialsScreenState
   ) {
     final users = _getFilteredUser(state, type);
     return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
           for (int i = 0; i < type.count; i++) ...[
-            if (i != 0)
-              const SizedBox(
-                width: 16,
-              ),
-            _officialsCell(
-              context: context,
-              image: type.getImagePath(),
+            OfficialsCellView(
+              type: type,
               user: users.elementAtOrNull(i),
               onCardTap: () async {
                 final existingUser = users.elementAtOrNull(i);
@@ -138,58 +132,6 @@ class _AddMatchOfficialsScreenState
             ),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _officialsCell({
-    required BuildContext context,
-    required String image,
-    UserModel? user,
-    required Function() onCardTap,
-    required Function() onRemoveTap,
-  }) {
-    return OnTapScale(
-      onTap: () => onCardTap(),
-      child: Container(
-        height: 180,
-        width: 150,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-            color: context.colorScheme.containerLowOnSurface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-                color: context.colorScheme.containerNormalOnSurface)),
-        child: user == null
-            ? Image.asset(
-                image,
-                fit: BoxFit.contain,
-                color: context.colorScheme.textDisabled,
-              )
-            : Column(
-                children: [
-                  ImageAvatar(
-                    initial: user.nameInitial,
-                    imageUrl: user.profile_img_url,
-                    size: 90,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    user.name ?? "",
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textSecondary),
-                    maxLines: 2,
-                  ),
-                  const SizedBox(height: 8),
-                  OnTapScale(
-                      onTap: () => onRemoveTap(),
-                      child: Text(
-                        context.l10n.common_remove_title,
-                        style: AppTextStyle.button
-                            .copyWith(color: context.colorScheme.alert),
-                      )),
-                ],
-              ),
       ),
     );
   }

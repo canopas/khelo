@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 Widget actionButton(
   BuildContext context, {
-  required void Function() onPressed,
+  void Function()? onPressed,
   required Widget icon,
   EdgeInsets padding = EdgeInsets.zero,
 }) {
