@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TeamDetailState {
   Object? get error => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   List<MatchModel>? get matches => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
@@ -36,6 +37,7 @@ abstract class $TeamDetailStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       TeamModel? team,
+      String? currentUserId,
       List<MatchModel>? matches,
       int selectedTab,
       bool loading});
@@ -58,6 +60,7 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
   $Res call({
     Object? error = freezed,
     Object? team = freezed,
+    Object? currentUserId = freezed,
     Object? matches = freezed,
     Object? selectedTab = null,
     Object? loading = null,
@@ -68,6 +71,10 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matches: freezed == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -107,6 +114,7 @@ abstract class _$$TeamDetailStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       TeamModel? team,
+      String? currentUserId,
       List<MatchModel>? matches,
       int selectedTab,
       bool loading});
@@ -128,6 +136,7 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? team = freezed,
+    Object? currentUserId = freezed,
     Object? matches = freezed,
     Object? selectedTab = null,
     Object? loading = null,
@@ -138,6 +147,10 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matches: freezed == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -160,6 +173,7 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
   const _$TeamDetailStateImpl(
       {this.error,
       this.team,
+      this.currentUserId,
       final List<MatchModel>? matches,
       this.selectedTab = 0,
       this.loading = false})
@@ -169,6 +183,8 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
   final Object? error;
   @override
   final TeamModel? team;
+  @override
+  final String? currentUserId;
   final List<MatchModel>? _matches;
   @override
   List<MatchModel>? get matches {
@@ -188,7 +204,7 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
 
   @override
   String toString() {
-    return 'TeamDetailState(error: $error, team: $team, matches: $matches, selectedTab: $selectedTab, loading: $loading)';
+    return 'TeamDetailState(error: $error, team: $team, currentUserId: $currentUserId, matches: $matches, selectedTab: $selectedTab, loading: $loading)';
   }
 
   @override
@@ -198,6 +214,8 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
             other is _$TeamDetailStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.team, team) || other.team == team) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             const DeepCollectionEquality().equals(other._matches, _matches) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab) &&
@@ -209,6 +227,7 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       team,
+      currentUserId,
       const DeepCollectionEquality().hash(_matches),
       selectedTab,
       loading);
@@ -225,6 +244,7 @@ abstract class _TeamDetailState implements TeamDetailState {
   const factory _TeamDetailState(
       {final Object? error,
       final TeamModel? team,
+      final String? currentUserId,
       final List<MatchModel>? matches,
       final int selectedTab,
       final bool loading}) = _$TeamDetailStateImpl;
@@ -233,6 +253,8 @@ abstract class _TeamDetailState implements TeamDetailState {
   Object? get error;
   @override
   TeamModel? get team;
+  @override
+  String? get currentUserId;
   @override
   List<MatchModel>? get matches;
   @override
