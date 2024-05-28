@@ -361,57 +361,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     );
   }
 
-  // Widget _userProfileCell(
-  //   BuildContext context,
-  //   AddTeamViewNotifier notifier,
-  //   AddTeamState state,
-  //   UserModel user,
-  // ) {
-  //   return Row(
-  //     children: [
-  //       ImageAvatar(
-  //         initial: user.nameInitial,
-  //         imageUrl: user.profile_img_url,
-  //         size: 50,
-  //       ),
-  //       const SizedBox(
-  //         width: 8,
-  //       ),
-  //       Expanded(
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               user.name ?? context.l10n.common_anonymous_title,
-  //               style: AppTextStyle.header4
-  //                   .copyWith(color: context.colorScheme.textPrimary),
-  //             ),
-  //             Text(
-  //                 user.player_role != null
-  //                     ? user.player_role!.getString(context)
-  //                     : context.l10n.common_not_specified_title,
-  //                 style: AppTextStyle.subtitle2
-  //                     .copyWith(color: context.colorScheme.textSecondary)),
-  //             if (user.phone != null) ...[
-  //               const SizedBox(
-  //                 height: 2,
-  //               ),
-  //               Text(
-  //                 user.phone.format(context, StringFormats.obscurePhoneNumber),
-  //                 style: AppTextStyle.subtitle2
-  //                     .copyWith(color: context.colorScheme.textSecondary),
-  //               ),
-  //             ],
-  //           ],
-  //         ),
-  //       ),
-  //       IconButton(
-  //           onPressed: () => notifier.onRemoveUserFromTeam(user),
-  //           icon: const Icon(Icons.close)),
-  //     ],
-  //   );
-  // }
-
   Widget _stickyButton(BuildContext context, AddTeamState state) {
     return BottomStickyOverlay(
       child: PrimaryButton(

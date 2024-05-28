@@ -53,19 +53,22 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
 
   void _filterTeamList() {
     List<TeamModel> filteredTeams;
-
-    if (state.selectedFilter == TeamFilterOption.createdByMe) {
-      filteredTeams = state.teams
-          .where((team) => team.created_by == state.currentUserId)
-          .toList();
-    } else if (state.selectedFilter == TeamFilterOption.memberMe) {
-      filteredTeams = state.teams
-          .where((team) => (team.players
-                  ?.any((player) => player.id == state.currentUserId) ??
-              false))
-          .toList();
-    } else {
-      filteredTeams = state.teams;
+    switch (state.selectedFilter) {
+      case TeamFilterOption.createdByMe:
+        filteredTeams = state.teams
+            .where((element) => element.created_by == state.currentUserId)
+            .toList();
+      case TeamFilterOption.memberMe:
+        filteredTeams = state.teams
+            .where((element) =>
+                element.created_by == state.currentUserId ||
+                (element.players
+                        ?.map((e) => e.id)
+                        .contains(state.currentUserId) ??
+                    false))
+            .toList();
+      default:
+        filteredTeams = state.teams;
     }
 
     state = state.copyWith(filteredTeams: filteredTeams);
