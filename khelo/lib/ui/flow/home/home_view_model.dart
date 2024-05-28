@@ -8,7 +8,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'home_view_model.freezed.dart';
 
 final homeViewStateProvider =
-    StateNotifierProvider<HomeViewNotifier, HomeViewState>(
+    StateNotifierProvider.autoDispose<HomeViewNotifier, HomeViewState>(
   (ref) => HomeViewNotifier(ref.read(matchServiceProvider)),
 );
 
@@ -34,18 +34,14 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     );
   }
 
-  _cancelStreamSubscription() async {
-    await _streamSubscription.cancel();
-  }
-
   onResume() {
-    _cancelStreamSubscription();
+    _streamSubscription.cancel();
     _loadMatches();
   }
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    _streamSubscription.cancel();
     super.dispose();
   }
 }

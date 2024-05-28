@@ -21,43 +21,19 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final _controller = PageController(keepPage: true, viewportFraction: 0.9);
   late HomeViewNotifier notifier;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
-      // deallocate resources
-      notifier.dispose();
-      WidgetsBinding.instance.removeObserver(this);
-    }
+    notifier = ref.read(homeViewStateProvider.notifier);
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     final state = ref.watch(homeViewStateProvider);
-    notifier = ref.watch(homeViewStateProvider.notifier);
 
     return AppPage(
       title: context.l10n.home_screen_title,
