@@ -1,6 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,13 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_picker_sheet.dart';
+import 'package:khelo/components/profile_image_avatar.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -24,8 +21,8 @@ import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
+import 'package:style/theme/colors.dart';
 
-import '../../../../components/image_avatar.dart';
 import '../../../../gen/assets.gen.dart';
 
 class AddTeamScreen extends ConsumerStatefulWidget {
@@ -132,7 +129,19 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           ListView(
             padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
             children: [
-              _profileImageView(context, state),
+              ProfileImageAvatar(
+                size: profileViewHeight,
+                placeHolderImage: Assets.images.icGroup,
+                isLoading: state.isImageUploading,
+                imageUrl: state.imageUrl,
+                onEditButtonTap: () async {
+                  final imagePath =
+                      await ImagePickerSheet.show<String>(context, true);
+                  if (imagePath != null) {
+                    notifier.onImageSelect(imagePath);
+                  }
+                },
+              ),
               const SizedBox(height: 40),
               _textInputField(
                   onChanged: (value) {
@@ -143,9 +152,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
                   ],
                   suffixIcon: state.checkingForAvailability
-                      ? const AppProgressIndicator(
-                          size: AppProgressIndicatorSize.small,
-                        )
+                      ? const UnconstrainedBox(
+                          child: AppProgressIndicator(
+                              size: AppProgressIndicatorSize.small))
                       : state.isNameAvailable != null
                           ? state.isNameAvailable!
                               ? Icon(
@@ -166,19 +175,33 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                 hintText: context.l10n.add_team_location_text,
               ),
               if (widget.editTeam == null) ...[
-                ListTileTheme(
-                  horizontalTitleGap: 8.0,
-                  child: CheckboxListTile(
-                    value: state.isAddMeCheckBoxEnable,
-                    contentPadding: EdgeInsets.zero,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: Text(
-                        context.l10n.add_team_add_as_member_description_text),
-                    onChanged: (value) {
-                      if (value != null) {
-                        notifier.onAddMeCheckBoxTap(value);
-                      }
-                    },
+                Material(
+                  type: MaterialType.transparency,
+                  child: Theme(
+                    data: context.brightness == Brightness.dark
+                        ? materialThemeDataDark.copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            splashFactory: NoSplash.splashFactory)
+                        : materialThemeDataLight.copyWith(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            splashFactory: NoSplash.splashFactory),
+                    child: ListTileTheme(
+                      horizontalTitleGap: 0.0,
+                      child: CheckboxListTile(
+                        value: state.isAddMeCheckBoxEnable,
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(context
+                            .l10n.add_team_add_as_member_description_text),
+                        onChanged: (value) {
+                          if (value != null) {
+                            notifier.onAddMeCheckBoxTap(value);
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
               ] else ...[
@@ -215,7 +238,16 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   ),
                 ],
                 ...state.teamMembers.map(
-                  (player) => _playerProfileCell(context, player: player),
+                  (player) => Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: UserDetailCell(
+                      user: player,
+                      trailing: actionButton(context,
+                          onPressed: () =>
+                              notifier.onRemoveUserFromTeam(player),
+                          icon: const Icon(Icons.close)),
+                    ),
+                  ),
                 ),
               ],
             ],
@@ -246,118 +278,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       backgroundColor: context.colorScheme.containerLow,
       borderColor: BorderColor(
           focusColor: Colors.transparent, unFocusColor: Colors.transparent),
-    );
-  }
-
-  Widget _profileImageView(
-    BuildContext context,
-    AddTeamState state,
-  ) {
-    return Center(
-      child: SizedBox(
-        height: profileViewHeight,
-        width: profileViewHeight,
-        child: Stack(
-          children: [
-            Container(
-              height: profileViewHeight,
-              width: profileViewHeight,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: state.imageUrl != null && !state.isImageUploading
-                      ? DecorationImage(
-                          image: CachedNetworkImageProvider(state.imageUrl!),
-                          fit: BoxFit.cover)
-                      : null,
-                  color: context.colorScheme.primary),
-              child: state.imageUrl == null && !state.isImageUploading
-                  ? Icon(
-                      Icons.sports_cricket,
-                      size: profileViewHeight / 2,
-                      color: context.colorScheme.textSecondary,
-                    )
-                  : state.isImageUploading
-                      ? AppProgressIndicator(
-                          color: context.colorScheme.surface,
-                        )
-                      : null,
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: OnTapScale(
-                onTap: () async {
-                  final imagePath =
-                      await ImagePickerSheet.show<String>(context, true);
-                  if (imagePath != null) {
-                    notifier.onImageSelect(imagePath);
-                  }
-                },
-                child: Container(
-                  height: profileViewHeight / 3,
-                  width: profileViewHeight / 3,
-                  decoration: BoxDecoration(
-                      color: context.colorScheme.surface,
-                      border:
-                          Border.all(color: context.colorScheme.textSecondary),
-                      shape: BoxShape.circle),
-                  child: Icon(
-                    Icons.edit,
-                    size: profileViewHeight / 5,
-                    color: context.colorScheme.textSecondary,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _playerProfileCell(BuildContext context, {required UserModel player}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          ImageAvatar(
-            initial: player.name ?? '',
-            imageUrl: player.profile_img_url,
-            size: 40,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  player.name ?? '',
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                Text(
-                    player.player_role != null
-                        ? player.player_role!.getString(context)
-                        : context.l10n.common_not_specified_title,
-                    style: AppTextStyle.caption
-                        .copyWith(color: context.colorScheme.textSecondary)),
-                if (player.phone != null) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    player.phone
-                        .format(context, StringFormats.obscurePhoneNumber),
-                    style: AppTextStyle.caption
-                        .copyWith(color: context.colorScheme.textSecondary),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          actionButton(context,
-              onPressed: () => notifier.onRemoveUserFromTeam(player),
-              icon: const Icon(Icons.close))
-        ],
-      ),
     );
   }
 
