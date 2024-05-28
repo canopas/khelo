@@ -1,17 +1,17 @@
 import 'package:data/api/user/user_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 
 class SearchUserBottomSheet extends ConsumerWidget {
@@ -36,7 +36,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
     final state = ref.watch(searchUserStateProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SizedBox(
         height: context.mediaQuerySize.height * 0.8,
         child: Column(
@@ -64,24 +64,36 @@ class SearchUserBottomSheet extends ConsumerWidget {
     }
 
     return state.searchedUsers.isEmpty
-        ? Center(
-            child: Text(
-              context.l10n.search_user_empty_text,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.subtitle1.copyWith(
-                color: context.colorScheme.textDisabled,
-                fontSize: 20,
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Center(
+              child: Text(
+                context.l10n.search_user_empty_text,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.subtitle3.copyWith(
+                  color: context.colorScheme.textDisabled,
+                ),
               ),
             ),
-          )
+        )
         : ListView.separated(
             separatorBuilder: (context, index) {
-              return const SizedBox(height: 16);
+              return Divider(
+                color: context.colorScheme.outline,
+                height: 32,
+              );
             },
             itemCount: state.searchedUsers.length,
             itemBuilder: (context, index) {
               UserModel user = state.searchedUsers[index];
-              return _userProfileCell(context, notifier, state, user);
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: UserDetailCell(
+                  user: user,
+                  trailing: _addButton(context, user),
+                  onTap: () => UserDetailSheet.show(context, user),
+                ),
+              );
             },
           );
   }
@@ -92,107 +104,55 @@ class SearchUserBottomSheet extends ConsumerWidget {
     SearchUserViewState state,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Material(
-        type: MaterialType.transparency,
-        child: TextField(
-          controller: state.searchController,
-          onChanged: (value) => notifier.onSearchChanged(),
-          decoration: InputDecoration(
-            hintText: context.l10n.search_user_hint_title,
-            contentPadding: const EdgeInsets.all(16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              borderSide: BorderSide.none,
-            ),
-            filled: true,
-            fillColor: context.colorScheme.containerLow,
-            hintStyle: TextStyle(color: context.colorScheme.textDisabled),
-            prefixIcon: Icon(
-              Icons.search,
-              color: context.colorScheme.textDisabled,
-              size: 24,
-            ),
-          ),
-          onTapOutside: (event) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          style: AppTextStyle.body2.copyWith(
-            color: context.colorScheme.textPrimary,
-          ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: AppTextField(
+        controller: state.searchController,
+        hintText: context.l10n.search_user_hint_title,
+        hintStyle: AppTextStyle.subtitle3
+            .copyWith(color: context.colorScheme.textDisabled),
+        style: AppTextStyle.subtitle3
+            .copyWith(color: context.colorScheme.textPrimary),
+        borderRadius: BorderRadius.circular(30),
+        borderType: AppTextFieldBorderType.outline,
+        backgroundColor: context.colorScheme.containerLowOnSurface,
+        borderColor: BorderColor(
+          focusColor: Colors.transparent,
+          unFocusColor: Colors.transparent,
         ),
+        prefixIcon: Icon(
+          CupertinoIcons.search,
+          color: context.colorScheme.textDisabled,
+        ),
+        onChanged: (value) => notifier.onSearchChanged(),
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
       ),
     );
   }
 
-  Widget _userProfileCell(
-    BuildContext context,
-    SearchUserViewNotifier notifier,
-    SearchUserViewState state,
-    UserModel user,
-  ) {
-    return GestureDetector(
-        onTap: () => UserDetailSheet.show(context, user),
-        child: Row(
-          children: [
-            ImageAvatar(
-              initial: user.nameInitial,
-              imageUrl: user.profile_img_url,
-              size: 50,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.name ?? context.l10n.common_anonymous_title,
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                  Text(
-                      user.player_role != null
-                          ? user.player_role!.getString(context)
-                          : context.l10n.common_not_specified_title,
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary)),
-                  if (user.phone != null) ...[
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    Text(
-                      user.phone
-                          .format(context, StringFormats.obscurePhoneNumber),
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            OnTapScale(
-              onTap: () async {
-                if (user.phone != null) {
-                  final res = await VerifyAddTeamMemberDialog.show(context,
-                      phoneNumber:
-                          user.phone!.substring(user.phone!.length - 5));
-                  if (res != null && res && context.mounted) {
-                    context.pop(user);
-                  }
-                }
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                    color: context.colorScheme.containerLow,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Text(context.l10n.common_add_title.toUpperCase()),
-              ),
-            ),
-          ],
-        ));
+  Widget _addButton(BuildContext context, UserModel user) {
+    return OnTapScale(
+      onTap: () async {
+        if (user.phone != null) {
+          final res = await VerifyAddTeamMemberDialog.show(context,
+              phoneNumber: user.phone!.substring(user.phone!.length - 5));
+          if (res != null && res && context.mounted) {
+            context.pop(user);
+          }
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            borderRadius: BorderRadius.circular(30)),
+        child: Text(
+          context.l10n.common_add_title,
+          style: AppTextStyle.body2
+              .copyWith(color: context.colorScheme.textDisabled),
+        ),
+      ),
+    );
   }
 }

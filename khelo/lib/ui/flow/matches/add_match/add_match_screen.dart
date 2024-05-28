@@ -1,9 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
@@ -11,16 +11,26 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_view_model.dart';
-import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/ball_selection_view.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/match_official_selection_view.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/over_detail_view.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/pitch_selection_view.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/section_title.dart';
+import 'package:khelo/ui/flow/matches/add_match/components/team_selection_view.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:style/theme/colors.dart';
+import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 class AddMatchScreen extends ConsumerStatefulWidget {
   final String? matchId;
@@ -83,7 +93,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(addMatchViewStateProvider.notifier);
     final state = ref.watch(addMatchViewStateProvider);
 
     _observeActionError(context, ref);
@@ -103,15 +112,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           onSchedule: () => notifier.addMatch(),
         ),
       ],
-      body: Material(
-        color: Colors.transparent,
-        child: Stack(
+      body: Builder(builder: (context) {
+        return Stack(
           children: [
             _body(context, notifier, state),
             _stickyButton(context, notifier, state),
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -120,7 +128,8 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     AddMatchErrorType? saveBtnError,
     required Function() onSchedule,
   }) {
-    return IconButton(
+    return actionButton(
+      context,
       onPressed: () => saveBtnError == null
           ? onSchedule()
           : showErrorSnackBar(
@@ -140,15 +149,19 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     BuildContext context, {
     required Function() onDelete,
   }) {
-    return IconButton(
-      onPressed: () => _showDeleteAlert(
-        context,
-        onDelete: onDelete,
-      ),
-      icon: const Icon(
-        Icons.delete_outline,
-      ),
-    );
+    return actionButton(context,
+        onPressed: () => _showDeleteAlert(
+              context,
+              onDelete: onDelete,
+            ),
+        icon: SvgPicture.asset(
+          Assets.images.icBin,
+          height: 24,
+          width: 24,
+          fit: BoxFit.contain,
+          colorFilter:
+              ColorFilter.mode(context.colorScheme.primary, BlendMode.srcATop),
+        ));
   }
 
   Widget _body(
@@ -167,33 +180,24 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     }
 
     return ListView(
-      padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+      padding: context.mediaQueryPadding +
+          BottomStickyOverlay.padding +
+          const EdgeInsets.symmetric(vertical: 24),
       children: [
-        _selectTeam(context, notifier, state),
+        TeamSelectionView(notifier: notifier, state: state),
         const SizedBox(
           height: 24,
         ),
-        const Divider(),
-        _capsuleOptionList(context, notifier, state, false),
+        SectionTitle(
+            title: context.l10n.add_match_match_type_title,
+            trailing: _matchTypeButton(
+              context,
+              state,
+              notifier.onMatchTypeSelection,
+            )),
+        OverDetailView(notifier: notifier, state: state),
         const SizedBox(
-          height: 24,
-        ),
-        _overDetail(context, notifier, state),
-        const SizedBox(
-          height: 24,
-        ),
-        _powerPlayButton(context, notifier, state),
-        const SizedBox(
-          height: 24,
-        ),
-        _inputField(
-          context: context,
-          controller: state.cityController,
-          hintText: context.l10n.add_match_city_title,
-          onChange: () => notifier.onTextChange(),
-        ),
-        const SizedBox(
-          height: 24,
+          height: 16,
         ),
         _inputField(
           context: context,
@@ -201,217 +205,80 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           hintText: context.l10n.add_match_ground_title,
           onChange: () => notifier.onTextChange(),
         ),
-        _matchDateTime(context, notifier, state),
-        _ballTypeList(context, notifier, state),
-        _capsuleOptionList(context, notifier, state, true),
-        _matchOfficialsList(context, notifier, state),
         const SizedBox(
-          height: 24,
+          height: 16,
         ),
+        _inputField(
+          context: context,
+          controller: state.cityController,
+          hintText: context.l10n.add_match_city_title,
+          onChange: () => notifier.onTextChange(),
+        ),
+        _matchScheduleView(context, notifier, state),
+        BallSelectionView(notifier: notifier, state: state),
+        PitchSelectionView(notifier: notifier, state: state),
+        MatchOfficialSelectionView(notifier: notifier, state: state),
       ],
     );
   }
 
-  Widget _selectTeam(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _selectTeamCell(context, notifier, state, TeamType.a),
-            Center(
-              child: Text(
-                context.l10n.add_match_versus_short_title,
-                style: AppTextStyle.header1
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-            ),
-            _selectTeamCell(context, notifier, state, TeamType.b),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _selectTeamCell(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-    TeamType type,
-  ) {
-    final TeamModel? team = type == TeamType.a ? state.teamA : state.teamB;
-    final validSquad = team == null
-        ? true
-        : type == TeamType.a
-            ? (state.squadA?.length ?? 0) >= 2 &&
-                state.teamAAdminId != null &&
-                state.teamACaptainId != null
-            : (state.squadB?.length ?? 0) >= 2 &&
-                state.teamBAdminId != null &&
-                state.teamBCaptainId != null;
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          OnTapScale(
-            onTap: () async {
-              final team = await AppRoute.searchTeam(
-                excludedIds: [
-                  state.teamA?.id ?? "INVALID ID",
-                  state.teamB?.id ?? "INVALID ID"
-                ],
-                onlyUserTeams: type == TeamType.a,
-              ).push<TeamModel>(context);
-              if (team != null && context.mounted) {
-                notifier.onTeamSelect(team, type);
-              }
-            },
-            child: Container(
-              height: 120,
-              width: 120,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: context.colorScheme.containerLowOnSurface,
-                  shape: BoxShape.circle,
-                  image: (team != null && team.profile_img_url != null)
-                      ? DecorationImage(
-                          image:
-                              CachedNetworkImageProvider(team.profile_img_url!),
-                          fit: BoxFit.cover)
-                      : null,
-                  border: Border.all(
-                      width: 2,
-                      color: validSquad
-                          ? context.colorScheme.containerNormalOnSurface
-                          : context.colorScheme.alert)),
-              child: (team == null)
-                  ? Text(
-                      type.getString(context),
-                      style: AppTextStyle.header1
-                          .copyWith(color: context.colorScheme.textDisabled),
-                    )
-                  : (team.profile_img_url == null)
-                      ? Text(
-                          team.name[0].toUpperCase(),
-                          style: AppTextStyle.header1.copyWith(
-                              color: context.colorScheme.textDisabled,
-                              fontSize: 45),
-                        )
-                      : null,
-            ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          if (team != null) ...[
-            Text(
-              team.name,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.header4
-                  .copyWith(color: context.colorScheme.textSecondary),
-              maxLines: 2,
-            ),
-            const SizedBox(
-              height: 4,
-            ),
-            _selectSquadButton(
-                context, notifier, state, team, type, validSquad),
-          ],
-        ],
-      ),
-    );
-  }
-
-  Widget _selectSquadButton(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-    TeamModel team,
-    TeamType type,
-    bool isValidSquad,
-  ) {
-    return OnTapScale(
-        onTap: () async {
-          final squad = await AppRoute.selectSquad(
-            team: team,
-            squad: type == TeamType.a ? state.squadA : state.squadB,
-            captainId: type == TeamType.a
-                ? state.teamACaptainId
-                : state.teamBCaptainId,
-            adminId:
-                type == TeamType.a ? state.teamAAdminId : state.teamBAdminId,
-          ).push<Map<String, dynamic>>(context);
-          if (squad != null && context.mounted) {
-            notifier.onSquadSelect(type, squad);
-          }
-        },
-        child: Text(
-          context.l10n.add_match_select_squad_title,
-          style: AppTextStyle.button.copyWith(
-              color: isValidSquad
-                  ? context.colorScheme.primary
-                  : context.colorScheme.alert),
-        ));
-  }
-
-  Widget _sectionTitle(BuildContext context, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
+  Widget? showCheckMark(
+    BuildContext context, {
+    required bool showCheck,
+  }) {
+    return showCheck
+        ? SvgPicture.asset(
+            Assets.images.icCheck,
             height: 24,
-          ),
-          Text(
-            title,
-            style: AppTextStyle.header1
-                .copyWith(color: context.colorScheme.textSecondary),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-        ],
-      ),
-    );
+            width: 24,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.primary,
+              BlendMode.srcATop,
+            ),
+          )
+        : null;
   }
 
-  Widget _matchDateTime(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(context, context.l10n.add_match_match_schedule_title),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: OnTapScale(
-            onTap: () => _selectDateTime(context, notifier, state),
-            child: Text.rich(TextSpan(children: [
-              WidgetSpan(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Icon(Icons.calendar_today,
-                      color: context.colorScheme.textPrimary),
-                ),
-              ),
-              TextSpan(
-                  text: state.matchTime
-                      .format(context, DateFormatType.dateAndTime),
-                  style: AppTextStyle.subtitle1.copyWith(
-                      color: context.colorScheme.textSecondary, fontSize: 22)),
-            ])),
-          ),
+  Widget _matchTypeButton(BuildContext context, AddMatchViewState state,
+      Function(MatchType) onTap) {
+    return OnTapScale(
+      onTap: () {
+        showActionBottomSheet(
+            context: context,
+            items: MatchType.values
+                .map((type) => BottomSheetAction(
+                      title: type.getString(context),
+                      child: showCheckMark(
+                        context,
+                        showCheck: state.matchType == type,
+                      ),
+                      onTap: () {
+                        context.pop();
+                        onTap(type);
+                      },
+                    ))
+                .toList());
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: context.colorScheme.primary,
+          borderRadius: BorderRadius.circular(30),
         ),
-      ],
+        child: Row(children: [
+          Text(state.matchType.getString(context),
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.onPrimary)),
+          const SizedBox(width: 8),
+          SvgPicture.asset(
+            Assets.images.icArrowDown,
+            height: 18,
+            width: 18,
+            colorFilter: ColorFilter.mode(
+                context.colorScheme.onPrimary, BlendMode.srcATop),
+          )
+        ]),
+      ),
     );
   }
 
@@ -424,343 +291,25 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: TextField(
+      child: AppTextField(
         controller: controller,
-        onChanged: (value) => onChange(),
+        borderRadius: BorderRadius.circular(12),
+        borderType: AppTextFieldBorderType.outline,
+        hintText: hintText,
+        hintStyle: AppTextStyle.subtitle3
+            .copyWith(color: context.colorScheme.textDisabled),
+        style: AppTextStyle.subtitle3
+            .copyWith(color: context.colorScheme.textPrimary),
+        borderColor: BorderColor(
+          focusColor: context.colorScheme.outline,
+          unFocusColor: context.colorScheme.outline,
+        ),
         inputFormatters: allowNumberOnly
             ? [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ]
             : null,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textPrimary, fontSize: 16),
-        decoration: InputDecoration(
-            hintStyle: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textDisabled),
-            hintText: hintText,
-            border: const OutlineInputBorder()),
-      ),
-    );
-  }
-
-  Widget _capsuleOptionList(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-    bool isForPitchType,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(
-            context,
-            isForPitchType
-                ? context.l10n.add_match_pitch_type_title
-                : context.l10n.add_match_match_type_title),
-        SizedBox(
-          height: 45,
-          child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  for (final value in (isForPitchType)
-                      ? PitchType.values
-                      : MatchType.values) ...[
-                    _capsuleCell(
-                      context: context,
-                      title: (isForPitchType)
-                          ? (value as PitchType).getString(context)
-                          : (value as MatchType).getString(context),
-                      isSelected: (isForPitchType)
-                          ? state.pitchType == value
-                          : state.matchType == value,
-                      onTap: () => (isForPitchType)
-                          ? notifier.onPitchTypeSelection(value as PitchType)
-                          : notifier.onMatchTypeSelection(value as MatchType),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                  ],
-                ],
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget _capsuleCell({
-    required BuildContext context,
-    required String title,
-    required bool isSelected,
-    required Function() onTap,
-  }) {
-    return OnTapScale(
-      onTap: () => onTap(),
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            border: isSelected
-                ? null
-                : Border.all(
-                    color: context.colorScheme.containerNormalOnSurface),
-            color: isSelected
-                ? context.colorScheme.primary
-                : context.colorScheme.containerLowOnSurface,
-            borderRadius: BorderRadius.circular(40)),
-        child: Text(
-          title,
-          style: AppTextStyle.button
-              .copyWith(color: context.colorScheme.textSecondary, fontSize: 20),
-        ),
-      ),
-    );
-  }
-
-  Widget _powerPlayButton(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: OnTapScale(
-          onTap: () async {
-            if (state.isPowerPlayButtonEnable) {
-              final res = await AppRoute.powerPlay(
-                      totalOvers: int.parse(state.totalOverController.text),
-                      firstPowerPlay: state.firstPowerPlay,
-                      secondPowerPlay: state.secondPowerPlay,
-                      thirdPowerPlay: state.thirdPowerPlay)
-                  .push<List<List<int>>>(context);
-              if (res != null && context.mounted) {
-                notifier.onPowerPlayChange(res);
-              }
-            } else {
-              showErrorSnackBar(
-                  context: context,
-                  error: AddMatchErrorType.invalidOverCount.getString(context));
-            }
-          },
-          child: Text(
-            context.l10n.add_match_power_play_overs_title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1.copyWith(
-                color: state.isPowerPlayButtonEnable
-                    ? context.colorScheme.primary
-                    : context.colorScheme.textDisabled),
-          )),
-    );
-  }
-
-  Widget _ballTypeList(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(context, context.l10n.add_match_ball_type_title),
-        SizedBox(
-          height: 90,
-          child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  for (final type in BallType.values) ...[
-                    _ballTypeCell(
-                      context: context,
-                      title: type.getString(context),
-                      image: _getBallTypeImage(context, type),
-                      isSelected: state.ballType == type,
-                      onTap: () => notifier.onBallTypeSelection(type),
-                    ),
-                    const SizedBox(
-                      width: 16,
-                    ),
-                  ],
-                ],
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget _ballTypeCell({
-    required BuildContext context,
-    required String title,
-    required String image,
-    required bool isSelected,
-    required Function() onTap,
-  }) {
-    return OnTapScale(
-      onTap: () => onTap(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Container(
-                  height: 65,
-                  width: 65,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    border: isSelected
-                        ? null
-                        : Border.all(
-                            color:
-                                context.colorScheme.containerNormalOnSurface),
-                    shape: BoxShape.circle,
-                    image: DecorationImage(image: AssetImage(image)),
-                    color: isSelected
-                        ? context.colorScheme.primary
-                        : context.colorScheme.containerLowOnSurface,
-                  ),
-                ),
-                isSelected
-                    ? Container(
-                        height: 65,
-                        width: 65,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.black38,
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          size: 38,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const SizedBox(),
-              ],
-            ),
-          ),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _matchOfficialsList(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _sectionTitle(context, context.l10n.add_match_match_officials_title),
-        SizedBox(
-          height: 120,
-          child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  _matchOfficialsCell(
-                    context: context,
-                    notifier: notifier,
-                    state: state,
-                    title: context.l10n.add_match_officials_umpires_title,
-                    image: "assets/images/ic_umpire.png",
-                  ),
-                  _matchOfficialsCell(
-                    context: context,
-                    notifier: notifier,
-                    state: state,
-                    title: context.l10n.add_match_officials_scorers_title,
-                    image: "assets/images/ic_scorer.png",
-                  ),
-                  _matchOfficialsCell(
-                    context: context,
-                    notifier: notifier,
-                    state: state,
-                    title:
-                        context.l10n.add_match_officials_live_streamers_title,
-                    image: "assets/images/ic_streamer.png",
-                  ),
-                  _matchOfficialsCell(
-                    context: context,
-                    notifier: notifier,
-                    state: state,
-                    title: context.l10n.add_match_officials_others_title,
-                    image: "assets/images/ic_other_official.png",
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                ],
-              )),
-        ),
-      ],
-    );
-  }
-
-  Widget _matchOfficialsCell({
-    required BuildContext context,
-    required AddMatchViewNotifier notifier,
-    required AddMatchViewState state,
-    required String title,
-    required String image,
-  }) {
-    return OnTapScale(
-      onTap: () async {
-        final officials =
-            await AppRoute.addMatchOfficials(officials: state.officials)
-                .push<List<Officials>>(context);
-        if (officials != null && context.mounted) {
-          notifier.setOfficials(officials);
-        }
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Container(
-              height: 110,
-              width: 110,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color: context.colorScheme.containerNormalOnSurface),
-                shape: BoxShape.circle,
-                color: context.colorScheme.containerLowOnSurface,
-              ),
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.colorScheme.textDisabled,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textSecondary),
-          )
-        ],
+        onChanged: (value) => onChange(),
       ),
     );
   }
@@ -783,7 +332,48 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  Future<void> _selectDateTime(
+  Widget _matchScheduleView(
+    BuildContext context,
+    AddMatchViewNotifier notifier,
+    AddMatchViewState state,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionTitle(title: context.l10n.add_match_match_schedule_title),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: AdaptiveOutlinedTile(
+                    title: state.matchTime.format(context, DateFormatType.date),
+                    headerImage: Assets.images.icCalendar,
+                    headerText: context.l10n.add_match_date_title,
+                    placeholder: context.l10n.add_match_date_title,
+                    onTap: () {
+                      _selectDate(context, notifier, state);
+                    }),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: AdaptiveOutlinedTile(
+                    title: state.matchTime.format(context, DateFormatType.time),
+                    headerImage: Assets.images.icTime,
+                    headerText: context.l10n.add_match_time_title,
+                    placeholder: context.l10n.add_match_time_title,
+                    onTap: () {
+                      _selectTime(context, notifier, state);
+                    }),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _selectDate(
     BuildContext context,
     AddMatchViewNotifier notifier,
     AddMatchViewState state,
@@ -793,65 +383,59 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
       initialDate: state.matchTime,
       firstDate: DateTime(1965),
       lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: context.brightness == Brightness.dark
+              ? materialThemeDataDark
+              : materialThemeDataLight,
+          child: child!,
+        );
+      },
     ).then((selectedDate) {
       if (selectedDate != null) {
-        showTimePicker(
-          context: context,
-          initialTime: TimeOfDay.now(),
-        ).then((selectedTime) {
-          if (selectedTime != null) {
-            DateTime selectedDateTime = DateTime(
-              selectedDate.year,
-              selectedDate.month,
-              selectedDate.day,
-              selectedTime.hour,
-              selectedTime.minute,
-            );
-            notifier.onDateSelect(selectedDate: selectedDateTime);
-          }
-        });
+        DateTime selectedDateTime = DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          state.matchTime.hour,
+          state.matchTime.minute,
+        );
+        notifier.onDateSelect(selectedDate: selectedDateTime);
       }
     });
   }
 
-  String _getBallTypeImage(BuildContext context, BallType type) {
-    switch (type) {
-      case BallType.leather:
-        return "assets/images/ic_leather_ball.png";
-      case BallType.tennis:
-        return "assets/images/ic_tennis_ball.png";
-      case BallType.other:
-        return "assets/images/ic_other_ball.png";
-    }
-  }
-
-  Widget _overDetail(
+  Future<void> _selectTime(
     BuildContext context,
     AddMatchViewNotifier notifier,
     AddMatchViewState state,
-  ) {
-    return Row(
-      children: [
-        Expanded(
-          child: _inputField(
-            context: context,
-            controller: state.totalOverController,
-            hintText: context.l10n.add_match_no_of_over_title,
-            allowNumberOnly: true,
-            onChange: () => notifier.onTextChange(),
-          ),
-        ),
-        Expanded(
-          child: _inputField(
-            context: context,
-            controller: state.overPerBowlerController,
-            hintText: context.l10n.add_match_over_per_bowler_title,
-            allowNumberOnly: true,
-            onChange: () => notifier.onTextChange(),
-          ),
-        ),
-      ],
-    );
+  ) async {
+    showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+        hour: state.matchTime.hour,
+        minute: state.matchTime.minute,
+      ),
+      builder: (context, child) {
+        return Theme(
+          data: context.brightness == Brightness.dark
+              ? materialThemeDataDark
+              : materialThemeDataLight,
+          child: child!,
+        );
+      },
+    ).then((selectedTime) {
+      if (selectedTime != null) {
+        DateTime selectedDateTime = DateTime(
+          state.matchTime.year,
+          state.matchTime.month,
+          state.matchTime.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
+        notifier.onDateSelect(selectedDate: selectedDateTime);
+      }
+    });
   }
 
   void _showDeleteAlert(
