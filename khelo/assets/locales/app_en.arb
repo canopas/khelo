@@ -100,9 +100,9 @@
   "match_list_start_match_text": "Start a Match?",
   "match_list_start_title": "Start",
   "match_list_no_match_yet_title": "No Matches Yet",
-  "match_list_overs_title": "{overs} Overs",
+  "match_list_overs_title": "{overs, plural, =0{{overs} overs} =1{{overs} over} other{{overs} overs}}",
   "@match_list_overs_title": {
-    "description": "{overs} Overs",
+    "description": "overs, plural, =0{{overs} overs} =1{{overs} over} other{{overs} overs}}",
     "placeholders": {
       "overs": {
         "type": "int"
