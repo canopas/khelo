@@ -24,8 +24,36 @@ class TeamListScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _TeamListScreenState();
 }
 
-class _TeamListScreenState extends ConsumerState<TeamListScreen> {
+class _TeamListScreenState extends ConsumerState<TeamListScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   late TeamListViewNotifier notifier;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      notifier.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
 
   void _observeShowFilterOptionSheet(
     BuildContext context,
@@ -41,14 +69,11 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    notifier = ref.read(teamListViewStateProvider.notifier);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    super.build(context);
+    notifier = ref.watch(teamListViewStateProvider.notifier);
     _observeShowFilterOptionSheet(context, ref);
+
     return AppPage(
       body: Builder(builder: (context) {
         return _body(context);
@@ -130,7 +155,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen> {
             ? Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                    context.l10n.team_list_players_count(team.players!.length),
+                    '${team.players!.length} ${context.l10n.add_team_players_text}',
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textSecondary)),
               )

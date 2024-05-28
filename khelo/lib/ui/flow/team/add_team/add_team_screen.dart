@@ -81,8 +81,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(addTeamStateProvider);
-
     _observeActionError(context, ref);
     _observeTeam(context, ref);
     _observePop(context, ref);
@@ -104,7 +102,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         ),
       ),
       actions: [
-        if (state.editTeam != null) ...[
+        if (widget.editTeam != null) ...[
           actionButton(
             context,
             onPressed: () {
@@ -121,11 +119,12 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           ),
         ],
       ],
-      body: _body(context, state),
+      body: _body(context),
     );
   }
 
-  Widget _body(BuildContext context, AddTeamState state) {
+  Widget _body(BuildContext context) {
+    final state = ref.watch(addTeamStateProvider);
     return Material(
       color: Colors.transparent,
       child: Stack(
@@ -135,34 +134,31 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             children: [
               _profileImageView(context, state),
               const SizedBox(height: 40),
-              Consumer(builder: (context, ref, child) {
-                final nameState = ref.watch(addTeamStateProvider);
-                return _textInputField(
-                    onChanged: (value) {
-                      notifier.onNameTextChanged();
-                    },
-                    controller: nameState.nameController,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
-                    ],
-                    suffixIcon: nameState.checkingForAvailability
-                        ? const AppProgressIndicator(
-                            size: AppProgressIndicatorSize.small,
-                          )
-                        : nameState.isNameAvailable != null
-                            ? nameState.isNameAvailable!
-                                ? Icon(
-                                    Icons.check,
-                                    color: context.colorScheme.positive,
-                                  )
-                                : Icon(
-                                    Icons.close,
-                                    color: context.colorScheme.alert,
-                                  )
-                            : null,
-                    hintText:
-                        context.l10n.add_team_enter_team_name_placeholder_text);
-              }),
+              _textInputField(
+                  onChanged: (value) {
+                    notifier.onNameTextChanged();
+                  },
+                  controller: state.nameController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
+                  ],
+                  suffixIcon: state.checkingForAvailability
+                      ? const AppProgressIndicator(
+                          size: AppProgressIndicatorSize.small,
+                        )
+                      : state.isNameAvailable != null
+                          ? state.isNameAvailable!
+                              ? Icon(
+                                  Icons.check,
+                                  color: context.colorScheme.positive,
+                                )
+                              : Icon(
+                                  Icons.close,
+                                  color: context.colorScheme.alert,
+                                )
+                          : null,
+                  hintText:
+                      context.l10n.add_team_enter_team_name_placeholder_text),
               const SizedBox(height: 8),
               _textInputField(
                 controller: state.locationController,

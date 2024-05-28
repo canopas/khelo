@@ -10,8 +10,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 part 'team_list_view_model.freezed.dart';
 
 final teamListViewStateProvider =
-    StateNotifierProvider.autoDispose<TeamListViewNotifier, TeamListViewState>(
-        (ref) {
+    StateNotifierProvider<TeamListViewNotifier, TeamListViewState>((ref) {
   final notifier = TeamListViewNotifier(
     ref.read(teamServiceProvider),
     ref.read(currentUserPod)?.id,

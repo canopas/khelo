@@ -20,7 +20,8 @@ class MyGameTabScreen extends ConsumerStatefulWidget {
   ConsumerState createState() => _MyGameTabScreenState();
 }
 
-class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
+class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final List<Widget> _tabs = [
     const MatchListScreen(),
     const TeamListScreen(),
@@ -32,18 +33,43 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen> {
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
+  bool _wantKeepAlive = true;
+
+  @override
+  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(myGameTabViewStateProvider.notifier);
+    WidgetsBinding.instance.addObserver(this);
+
     _controller = PageController(
-      initialPage: ref.read(myGameTabViewStateProvider).initialTab,
+      initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
     );
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      setState(() {
+        _wantKeepAlive = false;
+      });
+    } else if (state == AppLifecycleState.resumed) {
+      setState(() {
+        _wantKeepAlive = true;
+      });
+    } else if (state == AppLifecycleState.detached) {
+      // deallocate resources
+      _controller.dispose();
+      WidgetsBinding.instance.removeObserver(this);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    final notifier = ref.watch(myGameTabViewStateProvider.notifier);
     return AppPage(
       body: Builder(
         builder: (context) {

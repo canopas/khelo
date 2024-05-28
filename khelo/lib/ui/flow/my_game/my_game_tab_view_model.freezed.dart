@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MyGameTabState {
-  int get initialTab => throw _privateConstructorUsedError;
+  int get selectedTab => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MyGameTabStateCopyWith<MyGameTabState> get copyWith =>
@@ -29,7 +29,7 @@ abstract class $MyGameTabStateCopyWith<$Res> {
           MyGameTabState value, $Res Function(MyGameTabState) then) =
       _$MyGameTabStateCopyWithImpl<$Res, MyGameTabState>;
   @useResult
-  $Res call({int initialTab});
+  $Res call({int selectedTab});
 }
 
 /// @nodoc
@@ -45,12 +45,12 @@ class _$MyGameTabStateCopyWithImpl<$Res, $Val extends MyGameTabState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? initialTab = null,
+    Object? selectedTab = null,
   }) {
     return _then(_value.copyWith(
-      initialTab: null == initialTab
-          ? _value.initialTab
-          : initialTab // ignore: cast_nullable_to_non_nullable
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -64,7 +64,7 @@ abstract class _$$MyGameTabStateImplCopyWith<$Res>
       __$$MyGameTabStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int initialTab});
+  $Res call({int selectedTab});
 }
 
 /// @nodoc
@@ -78,12 +78,12 @@ class __$$MyGameTabStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? initialTab = null,
+    Object? selectedTab = null,
   }) {
     return _then(_$MyGameTabStateImpl(
-      initialTab: null == initialTab
-          ? _value.initialTab
-          : initialTab // ignore: cast_nullable_to_non_nullable
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -92,14 +92,15 @@ class __$$MyGameTabStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MyGameTabStateImpl implements _MyGameTabState {
-  const _$MyGameTabStateImpl({required this.initialTab});
+  const _$MyGameTabStateImpl({this.selectedTab = 0});
 
   @override
-  final int initialTab;
+  @JsonKey()
+  final int selectedTab;
 
   @override
   String toString() {
-    return 'MyGameTabState(initialTab: $initialTab)';
+    return 'MyGameTabState(selectedTab: $selectedTab)';
   }
 
   @override
@@ -107,12 +108,12 @@ class _$MyGameTabStateImpl implements _MyGameTabState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MyGameTabStateImpl &&
-            (identical(other.initialTab, initialTab) ||
-                other.initialTab == initialTab));
+            (identical(other.selectedTab, selectedTab) ||
+                other.selectedTab == selectedTab));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, initialTab);
+  int get hashCode => Object.hash(runtimeType, selectedTab);
 
   @JsonKey(ignore: true)
   @override
@@ -123,11 +124,10 @@ class _$MyGameTabStateImpl implements _MyGameTabState {
 }
 
 abstract class _MyGameTabState implements MyGameTabState {
-  const factory _MyGameTabState({required final int initialTab}) =
-      _$MyGameTabStateImpl;
+  const factory _MyGameTabState({final int selectedTab}) = _$MyGameTabStateImpl;
 
   @override
-  int get initialTab;
+  int get selectedTab;
   @override
   @JsonKey(ignore: true)
   _$$MyGameTabStateImplCopyWith<_$MyGameTabStateImpl> get copyWith =>
