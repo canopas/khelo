@@ -11,8 +11,6 @@ import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-import '../../app_route.dart';
-
 class MyGameTabScreen extends ConsumerStatefulWidget {
   const MyGameTabScreen({super.key});
 
@@ -132,15 +130,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                 size: 24,
               ),
             ),
-            actionButton(
-              context,
-              onPressed: () => AppRoute.addTeam().push(context),
-              icon: Icon(
-                CupertinoIcons.add,
-                color: context.colorScheme.textPrimary,
-                size: 24,
-              ),
-            )
           ]
         ],
       ),
