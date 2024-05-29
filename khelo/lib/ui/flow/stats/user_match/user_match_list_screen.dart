@@ -9,7 +9,6 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
-
 class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
 
@@ -60,7 +59,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
   Widget _body(BuildContext context) {
     final state = ref.watch(userMatchListStateProvider);
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {

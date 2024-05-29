@@ -8,6 +8,7 @@ Future<T?> showActionBottomSheet<T>({
   required BuildContext context,
   required List<BottomSheetAction> items,
   bool useRootNavigator = true,
+  bool? showDragHandle,
 }) async {
   return await showModalBottomSheet<T>(
     backgroundColor: context.colorScheme.surface,
@@ -18,6 +19,7 @@ Future<T?> showActionBottomSheet<T>({
     ),
     useRootNavigator: useRootNavigator,
     isScrollControlled: true,
+    showDragHandle: showDragHandle,
     context: context,
     builder: (context) => SingleChildScrollView(
       child: Container(

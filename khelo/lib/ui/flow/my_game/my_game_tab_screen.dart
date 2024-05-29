@@ -126,16 +126,15 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
           ),
           if (_selectedTab == 1) ...[
             const Spacer(),
-            actionButton(context, onPressed: () {
-              ref.read(teamListViewStateProvider.notifier).onFilterButtonTap();
-            }, icon: const Icon(CupertinoIcons.slider_horizontal_3)),
-            actionButton(context, onPressed: () {
-              AppRoute.addTeam().push(context);
-            },
-                icon: Icon(
-                  Icons.add,
-                  color: context.colorScheme.primary,
-                )),
+            actionButton(context,
+                onPressed: () => ref
+                    .read(teamListViewStateProvider.notifier)
+                    .onFilterButtonTap(),
+                icon: Icon(CupertinoIcons.slider_horizontal_3,
+                    color: context.colorScheme.primary)),
+            actionButton(context,
+                onPressed: () => AppRoute.addTeam().push(context),
+                icon: Icon(Icons.add, color: context.colorScheme.primary)),
           ]
         ],
       ),
