@@ -9,7 +9,7 @@ import 'package:style/indicator/progress_indicator.dart';
 class ProfileImageAvatar extends StatelessWidget {
   final double size;
   final String? imageUrl;
-  final String placeHolderImage;
+  final String? placeHolderImage;
   final bool isLoading;
   final Function() onEditButtonTap;
 
@@ -17,7 +17,7 @@ class ProfileImageAvatar extends StatelessWidget {
     super.key,
     required this.size,
     this.imageUrl,
-    required this.placeHolderImage,
+    this.placeHolderImage,
     required this.isLoading,
     required this.onEditButtonTap,
   });
@@ -58,7 +58,7 @@ class ProfileImageAvatar extends StatelessWidget {
   Widget? _imagePlaceHolder(BuildContext context) {
     return imageUrl == null && !isLoading
         ? SvgPicture.asset(
-            Assets.images.icProfileThin,
+            placeHolderImage ?? Assets.images.icProfileThin,
             height: size / 2,
             width: size / 2,
             colorFilter: ColorFilter.mode(

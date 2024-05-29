@@ -60,13 +60,11 @@ class _AppProgressIndicatorState extends State<AppProgressIndicator> {
         radius: radius,
       );
     } else {
-      return Center(
-        child: SizedBox(
-          width: radius * 1.8,
-          height: radius * 1.8,
-          child: CircularProgressIndicator(
-            color: widget.color ?? context.colorScheme.primary,
-          ),
+      return SizedBox(
+        width: radius * 1.8,
+        height: radius * 1.8,
+        child: CircularProgressIndicator(
+          color: widget.color ?? context.colorScheme.primary,
         ),
       );
     }
