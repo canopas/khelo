@@ -24,16 +24,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_bat_selected.svg
   String get icBatSelected => 'assets/images/ic_bat_selected.svg';
 
-  /// File path: assets/images/ic_batsman.png
-  AssetGenImage get icBatsman =>
-      const AssetGenImage('assets/images/ic_batsman.png');
-
   /// File path: assets/images/ic_bin.svg
   String get icBin => 'assets/images/ic_bin.svg';
-
-  /// File path: assets/images/ic_bowler.png
-  AssetGenImage get icBowler =>
-      const AssetGenImage('assets/images/ic_bowler.png');
 
   /// File path: assets/images/ic_camera.png
   AssetGenImage get icCamera =>
@@ -102,9 +94,7 @@ class $AssetsImagesGen {
         bowler,
         icArrowDown,
         icBatSelected,
-        icBatsman,
         icBin,
-        icBowler,
         icCamera,
         icCheck,
         icEdit,
