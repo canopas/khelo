@@ -74,23 +74,21 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _teamProfileView(context, state),
-          const SizedBox(height: 16),
-          _tabView(context),
-          _content(context),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _teamProfileView(context, state),
+        const SizedBox(height: 16),
+        _tabView(context),
+        _content(context),
+      ],
     );
   }
 
   Widget _teamProfileView(BuildContext context, TeamDetailState state) {
     return Container(
       padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: context.colorScheme.containerNormal,
         borderRadius: BorderRadius.circular(16),
@@ -127,39 +125,44 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   }
 
   Widget _tabView(BuildContext context) {
-    return Row(
-      children: [
-        _tabButton(
-          context.l10n.team_detail_match_tab_title,
-          _selectedTab == 0,
-          onTap: () {
-            _controller.jumpToPage(0);
-          },
-        ),
-        const SizedBox(width: 8),
-        _tabButton(
-          context.l10n.team_detail_member_tab_title,
-          _selectedTab == 1,
-          onTap: () {
-            _controller.jumpToPage(1);
-          },
-        ),
-        const SizedBox(width: 8),
-        _tabButton(
-          context.l10n.team_detail_stat_tab_title,
-          _selectedTab == 2,
-          onTap: () {
-            _controller.jumpToPage(2);
-          },
-        ),
-        const Spacer(),
-        actionButton(context,
-            onPressed: () => AppRoute.addMatch,
-            icon: Icon(
-              Icons.add,
-              color: context.colorScheme.textPrimary,
-            )),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        children: [
+          _tabButton(
+            context.l10n.team_detail_match_tab_title,
+            _selectedTab == 0,
+            onTap: () {
+              _controller.jumpToPage(0);
+            },
+          ),
+          const SizedBox(width: 8),
+          _tabButton(
+            context.l10n.team_detail_member_tab_title,
+            _selectedTab == 1,
+            onTap: () {
+              _controller.jumpToPage(1);
+            },
+          ),
+          const SizedBox(width: 8),
+          _tabButton(
+            context.l10n.team_detail_stat_tab_title,
+            _selectedTab == 2,
+            onTap: () {
+              _controller.jumpToPage(2);
+            },
+          ),
+          if (_selectedTab == 0) ...[
+            const Spacer(),
+            actionButton(context,
+                onPressed: () => AppRoute.addMatch,
+                icon: Icon(
+                  Icons.add,
+                  color: context.colorScheme.textPrimary,
+                )),
+          ],
+        ],
+      ),
     );
   }
 

@@ -2277,3 +2277,475 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   _$$MatchPlayerRequestImplCopyWith<_$MatchPlayerRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$MatchResult {
+  int get win => throw _privateConstructorUsedError;
+  int get tie => throw _privateConstructorUsedError;
+  int get lost => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $MatchResultCopyWith<MatchResult> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MatchResultCopyWith<$Res> {
+  factory $MatchResultCopyWith(
+          MatchResult value, $Res Function(MatchResult) then) =
+      _$MatchResultCopyWithImpl<$Res, MatchResult>;
+  @useResult
+  $Res call({int win, int tie, int lost});
+}
+
+/// @nodoc
+class _$MatchResultCopyWithImpl<$Res, $Val extends MatchResult>
+    implements $MatchResultCopyWith<$Res> {
+  _$MatchResultCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? win = null,
+    Object? tie = null,
+    Object? lost = null,
+  }) {
+    return _then(_value.copyWith(
+      win: null == win
+          ? _value.win
+          : win // ignore: cast_nullable_to_non_nullable
+              as int,
+      tie: null == tie
+          ? _value.tie
+          : tie // ignore: cast_nullable_to_non_nullable
+              as int,
+      lost: null == lost
+          ? _value.lost
+          : lost // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MatchResultImplCopyWith<$Res>
+    implements $MatchResultCopyWith<$Res> {
+  factory _$$MatchResultImplCopyWith(
+          _$MatchResultImpl value, $Res Function(_$MatchResultImpl) then) =
+      __$$MatchResultImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int win, int tie, int lost});
+}
+
+/// @nodoc
+class __$$MatchResultImplCopyWithImpl<$Res>
+    extends _$MatchResultCopyWithImpl<$Res, _$MatchResultImpl>
+    implements _$$MatchResultImplCopyWith<$Res> {
+  __$$MatchResultImplCopyWithImpl(
+      _$MatchResultImpl _value, $Res Function(_$MatchResultImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? win = null,
+    Object? tie = null,
+    Object? lost = null,
+  }) {
+    return _then(_$MatchResultImpl(
+      win: null == win
+          ? _value.win
+          : win // ignore: cast_nullable_to_non_nullable
+              as int,
+      tie: null == tie
+          ? _value.tie
+          : tie // ignore: cast_nullable_to_non_nullable
+              as int,
+      lost: null == lost
+          ? _value.lost
+          : lost // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MatchResultImpl implements _MatchResult {
+  const _$MatchResultImpl({this.win = 0, this.tie = 0, this.lost = 0});
+
+  @override
+  @JsonKey()
+  final int win;
+  @override
+  @JsonKey()
+  final int tie;
+  @override
+  @JsonKey()
+  final int lost;
+
+  @override
+  String toString() {
+    return 'MatchResult(win: $win, tie: $tie, lost: $lost)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MatchResultImpl &&
+            (identical(other.win, win) || other.win == win) &&
+            (identical(other.tie, tie) || other.tie == tie) &&
+            (identical(other.lost, lost) || other.lost == lost));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, win, tie, lost);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MatchResultImplCopyWith<_$MatchResultImpl> get copyWith =>
+      __$$MatchResultImplCopyWithImpl<_$MatchResultImpl>(this, _$identity);
+}
+
+abstract class _MatchResult implements MatchResult {
+  const factory _MatchResult({final int win, final int tie, final int lost}) =
+      _$MatchResultImpl;
+
+  @override
+  int get win;
+  @override
+  int get tie;
+  @override
+  int get lost;
+  @override
+  @JsonKey(ignore: true)
+  _$$MatchResultImplCopyWith<_$MatchResultImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$MatchStats {
+  int get played => throw _privateConstructorUsedError;
+  MatchResult get matchResult => throw _privateConstructorUsedError;
+  int get runs => throw _privateConstructorUsedError;
+  int get wickets => throw _privateConstructorUsedError;
+  double get bating_average => throw _privateConstructorUsedError;
+  double get bowling_average => throw _privateConstructorUsedError;
+  int get highest_runs => throw _privateConstructorUsedError;
+  int get lowest_runts => throw _privateConstructorUsedError;
+  double get run_rate => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $MatchStatsCopyWith<MatchStats> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MatchStatsCopyWith<$Res> {
+  factory $MatchStatsCopyWith(
+          MatchStats value, $Res Function(MatchStats) then) =
+      _$MatchStatsCopyWithImpl<$Res, MatchStats>;
+  @useResult
+  $Res call(
+      {int played,
+      MatchResult matchResult,
+      int runs,
+      int wickets,
+      double bating_average,
+      double bowling_average,
+      int highest_runs,
+      int lowest_runts,
+      double run_rate});
+
+  $MatchResultCopyWith<$Res> get matchResult;
+}
+
+/// @nodoc
+class _$MatchStatsCopyWithImpl<$Res, $Val extends MatchStats>
+    implements $MatchStatsCopyWith<$Res> {
+  _$MatchStatsCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? played = null,
+    Object? matchResult = null,
+    Object? runs = null,
+    Object? wickets = null,
+    Object? bating_average = null,
+    Object? bowling_average = null,
+    Object? highest_runs = null,
+    Object? lowest_runts = null,
+    Object? run_rate = null,
+  }) {
+    return _then(_value.copyWith(
+      played: null == played
+          ? _value.played
+          : played // ignore: cast_nullable_to_non_nullable
+              as int,
+      matchResult: null == matchResult
+          ? _value.matchResult
+          : matchResult // ignore: cast_nullable_to_non_nullable
+              as MatchResult,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      wickets: null == wickets
+          ? _value.wickets
+          : wickets // ignore: cast_nullable_to_non_nullable
+              as int,
+      bating_average: null == bating_average
+          ? _value.bating_average
+          : bating_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      highest_runs: null == highest_runs
+          ? _value.highest_runs
+          : highest_runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      lowest_runts: null == lowest_runts
+          ? _value.lowest_runts
+          : lowest_runts // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_rate: null == run_rate
+          ? _value.run_rate
+          : run_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MatchResultCopyWith<$Res> get matchResult {
+    return $MatchResultCopyWith<$Res>(_value.matchResult, (value) {
+      return _then(_value.copyWith(matchResult: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$MatchStatsImplCopyWith<$Res>
+    implements $MatchStatsCopyWith<$Res> {
+  factory _$$MatchStatsImplCopyWith(
+          _$MatchStatsImpl value, $Res Function(_$MatchStatsImpl) then) =
+      __$$MatchStatsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int played,
+      MatchResult matchResult,
+      int runs,
+      int wickets,
+      double bating_average,
+      double bowling_average,
+      int highest_runs,
+      int lowest_runts,
+      double run_rate});
+
+  @override
+  $MatchResultCopyWith<$Res> get matchResult;
+}
+
+/// @nodoc
+class __$$MatchStatsImplCopyWithImpl<$Res>
+    extends _$MatchStatsCopyWithImpl<$Res, _$MatchStatsImpl>
+    implements _$$MatchStatsImplCopyWith<$Res> {
+  __$$MatchStatsImplCopyWithImpl(
+      _$MatchStatsImpl _value, $Res Function(_$MatchStatsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? played = null,
+    Object? matchResult = null,
+    Object? runs = null,
+    Object? wickets = null,
+    Object? bating_average = null,
+    Object? bowling_average = null,
+    Object? highest_runs = null,
+    Object? lowest_runts = null,
+    Object? run_rate = null,
+  }) {
+    return _then(_$MatchStatsImpl(
+      played: null == played
+          ? _value.played
+          : played // ignore: cast_nullable_to_non_nullable
+              as int,
+      matchResult: null == matchResult
+          ? _value.matchResult
+          : matchResult // ignore: cast_nullable_to_non_nullable
+              as MatchResult,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      wickets: null == wickets
+          ? _value.wickets
+          : wickets // ignore: cast_nullable_to_non_nullable
+              as int,
+      bating_average: null == bating_average
+          ? _value.bating_average
+          : bating_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      highest_runs: null == highest_runs
+          ? _value.highest_runs
+          : highest_runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      lowest_runts: null == lowest_runts
+          ? _value.lowest_runts
+          : lowest_runts // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_rate: null == run_rate
+          ? _value.run_rate
+          : run_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$MatchStatsImpl implements _MatchStats {
+  const _$MatchStatsImpl(
+      {this.played = 0,
+      this.matchResult = const MatchResult(),
+      this.runs = 0,
+      this.wickets = 0,
+      this.bating_average = 0.0,
+      this.bowling_average = 0.0,
+      this.highest_runs = 0,
+      this.lowest_runts = 0,
+      this.run_rate = 0.0});
+
+  @override
+  @JsonKey()
+  final int played;
+  @override
+  @JsonKey()
+  final MatchResult matchResult;
+  @override
+  @JsonKey()
+  final int runs;
+  @override
+  @JsonKey()
+  final int wickets;
+  @override
+  @JsonKey()
+  final double bating_average;
+  @override
+  @JsonKey()
+  final double bowling_average;
+  @override
+  @JsonKey()
+  final int highest_runs;
+  @override
+  @JsonKey()
+  final int lowest_runts;
+  @override
+  @JsonKey()
+  final double run_rate;
+
+  @override
+  String toString() {
+    return 'MatchStats(played: $played, matchResult: $matchResult, runs: $runs, wickets: $wickets, bating_average: $bating_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runts: $lowest_runts, run_rate: $run_rate)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MatchStatsImpl &&
+            (identical(other.played, played) || other.played == played) &&
+            (identical(other.matchResult, matchResult) ||
+                other.matchResult == matchResult) &&
+            (identical(other.runs, runs) || other.runs == runs) &&
+            (identical(other.wickets, wickets) || other.wickets == wickets) &&
+            (identical(other.bating_average, bating_average) ||
+                other.bating_average == bating_average) &&
+            (identical(other.bowling_average, bowling_average) ||
+                other.bowling_average == bowling_average) &&
+            (identical(other.highest_runs, highest_runs) ||
+                other.highest_runs == highest_runs) &&
+            (identical(other.lowest_runts, lowest_runts) ||
+                other.lowest_runts == lowest_runts) &&
+            (identical(other.run_rate, run_rate) ||
+                other.run_rate == run_rate));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      played,
+      matchResult,
+      runs,
+      wickets,
+      bating_average,
+      bowling_average,
+      highest_runs,
+      lowest_runts,
+      run_rate);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MatchStatsImplCopyWith<_$MatchStatsImpl> get copyWith =>
+      __$$MatchStatsImplCopyWithImpl<_$MatchStatsImpl>(this, _$identity);
+}
+
+abstract class _MatchStats implements MatchStats {
+  const factory _MatchStats(
+      {final int played,
+      final MatchResult matchResult,
+      final int runs,
+      final int wickets,
+      final double bating_average,
+      final double bowling_average,
+      final int highest_runs,
+      final int lowest_runts,
+      final double run_rate}) = _$MatchStatsImpl;
+
+  @override
+  int get played;
+  @override
+  MatchResult get matchResult;
+  @override
+  int get runs;
+  @override
+  int get wickets;
+  @override
+  double get bating_average;
+  @override
+  double get bowling_average;
+  @override
+  int get highest_runs;
+  @override
+  int get lowest_runts;
+  @override
+  double get run_rate;
+  @override
+  @JsonKey(ignore: true)
+  _$$MatchStatsImplCopyWith<_$MatchStatsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

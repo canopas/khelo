@@ -1,7 +1,10 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/team/detail/components/primer_progress_bar.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -35,387 +38,99 @@ class TeamDetailStatContent extends ConsumerWidget {
 
   Widget _content(BuildContext context, TeamDetailState state) {
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
       children: [
-        const SizedBox(height: 24),
-        _matchPlayedCount(context, state),
-        const SizedBox(height: 24),
-        _winLostAndTiedCountView(context, state),
-        const SizedBox(height: 16),
-        _runWicketView(context, state),
-        const SizedBox(height: 16),
-        _averageCountView(
+        _matchPlayedProgress(
           context,
-          context.l10n.team_detail_batting_average_title,
-          _calculateTeamBattingAverage(state).toStringAsFixed(2),
+          state.matchStats.matchResult,
+          state.matchStats.played,
         ),
         const SizedBox(height: 16),
-        _averageCountView(
-          context,
-          context.l10n.team_detail_bowling_average_title,
-          _calculateTeamBowlingAverage(state).toStringAsFixed(2),
-        ),
-        const SizedBox(height: 16),
-        _highestAndLowestRunCount(context, state),
-        const SizedBox(height: 16),
-        _runRateCount(context, state),
-        const SizedBox(height: 50),
+        _teamStatsView(context, state.matchStats),
       ],
     );
   }
 
-  Widget _matchPlayedCount(BuildContext context, TeamDetailState state) {
-    final playedMatchCount = state.matches
-            ?.where((element) => element.match_status == MatchStatus.finish)
-            .length ??
-        0;
-    return Center(
-      child: Text.rich(
-        TextSpan(
-            text: playedMatchCount.toString(),
-            style: AppTextStyle.header1
+  Widget _matchPlayedProgress(
+      BuildContext context, MatchResult matchResult, int playedMatches) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: context.colorScheme.containerLow,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$playedMatches ${playedMatches == 1 ? context.l10n.team_detail_match_tab_title : context.l10n.my_game_matches_tab_title}',
+            style: AppTextStyle.header2
                 .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: playedMatchCount == 1
-                    ? context.l10n.team_detail_match_played_title
-                    : context.l10n.team_detail_matches_played_title,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]),
-        textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          PrimerProgressBar(matchResult: matchResult),
+        ],
       ),
     );
   }
 
-  Widget _winLostAndTiedCountView(
-    BuildContext context,
-    TeamDetailState state,
-  ) {
-    final (win, lost, tie) = _calculateTotalMatchResultCount(state);
-    return Row(
-      children: [
-        Expanded(
-          child: _matchResultCountCell(context,
-              title: context.l10n.team_detail_won_title,
-              count: win.toDouble(),
-              tintColor: context.colorScheme.positive),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Expanded(
-          child: _matchResultCountCell(context,
-              title: context.l10n.team_detail_lost_title,
-              count: lost.toDouble(),
-              tintColor: context.colorScheme.alert),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Expanded(
-          child: _matchResultCountCell(context,
-              title: context.l10n.team_detail_tied_title,
-              count: tie.toDouble(),
-              tintColor: context.colorScheme.warning),
-        ),
-      ],
+  Widget _teamStatsView(BuildContext context, MatchStats stats) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+          border: Border.all(color: context.colorScheme.outline),
+          borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _teamStatCell(context,
+              title: context.l10n.team_detail_runs_made_title,
+              count: stats.runs.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_wickets_taken_title,
+              count: stats.wickets.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_batting_average_title,
+              count: stats.bating_average.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_bowling_average_title,
+              count: stats.bowling_average.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_highest_runs_title,
+              count: stats.highest_runs.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_lowest_runs_title,
+              count: stats.lowest_runts.toString()),
+          _teamStatCell(context,
+              title: context.l10n.team_detail_run_rate_title,
+              count: '${stats.run_rate.toStringAsFixed(2)}%'),
+        ],
+      ),
     );
   }
 
-  (int, int, int) _calculateTotalMatchResultCount(TeamDetailState state) {
-    if (state.matches == null) {
-      return (0, 0, 0);
-    }
-
-    var win = 0;
-    var lost = 0;
-    var tie = 0;
-
-    for (final match in state.matches!
-        .where((element) => element.match_status == MatchStatus.finish)) {
-      final firstTeam = match.toss_decision == TossDecision.bat
-          ? match.teams
-              .firstWhere((element) => element.team.id == match.toss_winner_id)
-          : match.teams
-              .firstWhere((element) => element.team.id != match.toss_winner_id);
-      final secondTeam = match.teams
-          .firstWhere((element) => element.team.id != firstTeam.team.id);
-
-      if (firstTeam.run == secondTeam.run) {
-        tie += 1;
-      } else if (firstTeam.run > secondTeam.run) {
-        if (firstTeam.team.id == state.team?.id) {
-          win += 1;
-        } else {
-          lost += 1;
-        }
-      } else {
-        if (secondTeam.team.id == state.team?.id) {
-          win += 1;
-        } else {
-          lost += 1;
-        }
-      }
-    }
-
-    return (win, lost, tie);
-  }
-
-  Widget _matchResultCountCell(
+  Widget _teamStatCell(
     BuildContext context, {
     required String title,
-    required double count,
-    bool showFraction = false,
-    Color? tintColor,
+    required String count,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: tintColor?.withOpacity(0.5) ??
-            context.colorScheme.containerLowOnSurface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text.rich(
-        TextSpan(
-            text:
-                "${showFraction ? "${count.toStringAsFixed(2)}%" : count.toInt().toString()} ",
-            style: AppTextStyle.header1
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: title,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  Widget _runWicketView(
-    BuildContext context,
-    TeamDetailState state,
-  ) {
-    final (runs, wickets) = _calculateTotalRunsAndWickets(state);
-    return Row(
-      children: [
-        Expanded(
-            child: _totalRunsWicketCountCell(
-                context, context.l10n.team_detail_runs_made_title, runs)),
-        const SizedBox(
-          width: 16,
-        ),
-        Expanded(
-            child: _totalRunsWicketCountCell(context,
-                context.l10n.team_detail_wickets_taken_title, wickets)),
-      ],
-    );
-  }
-
-  (int, int) _calculateTotalRunsAndWickets(TeamDetailState state) {
-    if (state.matches == null) {
-      return (0, 0);
-    }
-
-    var runs = 0;
-    var wicket = 0;
-
-    for (final match in state.matches!
-        .where((element) => element.match_status == MatchStatus.finish)) {
-      final team = match.teams
-          .firstWhere((element) => element.team.id == state.team?.id);
-
-      runs += team.run;
-      wicket += team.wicket;
-    }
-
-    return (runs, wicket);
-  }
-
-  Widget _totalRunsWicketCountCell(
-      BuildContext context, String title, int count) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: context.colorScheme.containerLowOnSurface,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text.rich(
-        TextSpan(
-            text: "$count",
-            style: AppTextStyle.header1
+          ),
+          Text(
+            count,
+            style: AppTextStyle.subtitle1
                 .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: "\n$title",
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]),
-        textAlign: TextAlign.center,
+          )
+        ],
       ),
     );
-  }
-
-  Widget _averageCountView(BuildContext context, String title, String average) {
-    return Center(
-      child: Text.rich(
-        TextSpan(
-            text: average,
-            style: AppTextStyle.header1
-                .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: title,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
-
-  double _calculateTeamBattingAverage(TeamDetailState state) {
-    if (state.matches == null) {
-      return 0;
-    }
-    final matches = state.matches!
-        .where((element) => element.match_status == MatchStatus.finish);
-    int totalTeamRuns = 0;
-    int totalTeamOuts = 0;
-
-    for (var match in matches) {
-      final team = match.teams
-          .firstWhere((element) => element.team.id == state.team?.id);
-
-      final opponentTeam = match.teams
-          .firstWhere((element) => element.team.id != state.team?.id);
-
-      totalTeamRuns += team.run;
-      totalTeamOuts += opponentTeam.wicket;
-    }
-
-    if (totalTeamOuts > 0) {
-      return totalTeamRuns / totalTeamOuts;
-    } else {
-      return 0;
-    }
-  }
-
-  double _calculateTeamBowlingAverage(TeamDetailState state) {
-    if (state.matches == null) {
-      return 0;
-    }
-    final matches = state.matches!
-        .where((element) => element.match_status == MatchStatus.finish);
-
-    int totalTeamRunsConceded = 0;
-    int totalTeamWicketsTaken = 0;
-
-    for (var match in matches) {
-      final team = match.teams
-          .firstWhere((element) => element.team.id == state.team?.id);
-
-      final opponentTeam = match.teams
-          .firstWhere((element) => element.team.id != state.team?.id);
-
-      totalTeamRunsConceded += opponentTeam.run;
-      totalTeamWicketsTaken += team.wicket;
-    }
-
-    if (totalTeamWicketsTaken > 0) {
-      return totalTeamRunsConceded / totalTeamWicketsTaken;
-    } else {
-      return 0;
-    }
-  }
-
-  Widget _highestAndLowestRunCount(
-      BuildContext context, TeamDetailState state) {
-    final (highest, lowest) = _calculateHighestAndLowestRun(state);
-    return Row(
-      children: [
-        Expanded(
-            child: _totalRunsWicketCountCell(
-                context, context.l10n.team_detail_highest_runs_title, highest)),
-        const SizedBox(
-          width: 16,
-        ),
-        Expanded(
-            child: _totalRunsWicketCountCell(
-                context, context.l10n.team_detail_lowest_runs_title, lowest)),
-      ],
-    );
-  }
-
-  (int, int) _calculateHighestAndLowestRun(TeamDetailState state) {
-    if (state.matches == null) {
-      return (0, 0);
-    }
-
-    final completedMatches = state.matches!
-        .where((element) => element.match_status == MatchStatus.finish);
-
-    final firstTeam = completedMatches.first.teams
-        .firstWhere((element) => element.team.id == state.team?.id);
-
-    var highest = firstTeam.run;
-    var lowest = firstTeam.run;
-
-    for (final match in completedMatches) {
-      final team = match.teams
-          .firstWhere((element) => element.team.id == state.team?.id);
-
-      if (team.run > highest) {
-        highest = team.run;
-      }
-      if (team.run < lowest) {
-        lowest = team.run;
-      }
-    }
-
-    return (highest, lowest);
-  }
-
-  Widget _runRateCount(
-    BuildContext context,
-    TeamDetailState state,
-  ) {
-    return Row(
-      children: [
-        Expanded(
-            child: _matchResultCountCell(
-          context,
-          title: context.l10n.team_detail_run_rate_title,
-          count: _calculateRunRate(state),
-          showFraction: true,
-        )),
-      ],
-    );
-  }
-
-  double _calculateRunRate(TeamDetailState state) {
-    final matches = state.matches!
-        .where((element) => element.match_status == MatchStatus.finish);
-    int totalRuns = 0;
-    double totalOvers = 0.0;
-
-    for (var match in matches) {
-      final team = match.teams
-          .firstWhere((element) => element.team.id == state.team?.id);
-      int runs = team.run;
-      double overs = team.over;
-
-      totalRuns += runs;
-      totalOvers += overs;
-    }
-
-    double runRate = totalRuns / totalOvers;
-
-    return runRate.isNaN ? 0 : runRate;
   }
 }

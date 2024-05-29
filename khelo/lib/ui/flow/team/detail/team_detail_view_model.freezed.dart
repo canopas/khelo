@@ -22,6 +22,7 @@ mixin _$TeamDetailState {
   List<MatchModel>? get matches => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  MatchStats get matchStats => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TeamDetailStateCopyWith<TeamDetailState> get copyWith =>
@@ -40,9 +41,11 @@ abstract class $TeamDetailStateCopyWith<$Res> {
       String? currentUserId,
       List<MatchModel>? matches,
       int selectedTab,
-      bool loading});
+      bool loading,
+      MatchStats matchStats});
 
   $TeamModelCopyWith<$Res>? get team;
+  $MatchStatsCopyWith<$Res> get matchStats;
 }
 
 /// @nodoc
@@ -64,6 +67,7 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
     Object? matches = freezed,
     Object? selectedTab = null,
     Object? loading = null,
+    Object? matchStats = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -87,6 +91,10 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      matchStats: null == matchStats
+          ? _value.matchStats
+          : matchStats // ignore: cast_nullable_to_non_nullable
+              as MatchStats,
     ) as $Val);
   }
 
@@ -99,6 +107,14 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
 
     return $TeamModelCopyWith<$Res>(_value.team!, (value) {
       return _then(_value.copyWith(team: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MatchStatsCopyWith<$Res> get matchStats {
+    return $MatchStatsCopyWith<$Res>(_value.matchStats, (value) {
+      return _then(_value.copyWith(matchStats: value) as $Val);
     });
   }
 }
@@ -117,10 +133,13 @@ abstract class _$$TeamDetailStateImplCopyWith<$Res>
       String? currentUserId,
       List<MatchModel>? matches,
       int selectedTab,
-      bool loading});
+      bool loading,
+      MatchStats matchStats});
 
   @override
   $TeamModelCopyWith<$Res>? get team;
+  @override
+  $MatchStatsCopyWith<$Res> get matchStats;
 }
 
 /// @nodoc
@@ -140,6 +159,7 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
     Object? matches = freezed,
     Object? selectedTab = null,
     Object? loading = null,
+    Object? matchStats = null,
   }) {
     return _then(_$TeamDetailStateImpl(
       error: freezed == error ? _value.error : error,
@@ -163,6 +183,10 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      matchStats: null == matchStats
+          ? _value.matchStats
+          : matchStats // ignore: cast_nullable_to_non_nullable
+              as MatchStats,
     ));
   }
 }
@@ -176,7 +200,8 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
       this.currentUserId,
       final List<MatchModel>? matches,
       this.selectedTab = 0,
-      this.loading = false})
+      this.loading = false,
+      this.matchStats = const MatchStats()})
       : _matches = matches;
 
   @override
@@ -201,10 +226,13 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
   @override
   @JsonKey()
   final bool loading;
+  @override
+  @JsonKey()
+  final MatchStats matchStats;
 
   @override
   String toString() {
-    return 'TeamDetailState(error: $error, team: $team, currentUserId: $currentUserId, matches: $matches, selectedTab: $selectedTab, loading: $loading)';
+    return 'TeamDetailState(error: $error, team: $team, currentUserId: $currentUserId, matches: $matches, selectedTab: $selectedTab, loading: $loading, matchStats: $matchStats)';
   }
 
   @override
@@ -219,7 +247,9 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
             const DeepCollectionEquality().equals(other._matches, _matches) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab) &&
-            (identical(other.loading, loading) || other.loading == loading));
+            (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.matchStats, matchStats) ||
+                other.matchStats == matchStats));
   }
 
   @override
@@ -230,7 +260,8 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
       currentUserId,
       const DeepCollectionEquality().hash(_matches),
       selectedTab,
-      loading);
+      loading,
+      matchStats);
 
   @JsonKey(ignore: true)
   @override
@@ -247,7 +278,8 @@ abstract class _TeamDetailState implements TeamDetailState {
       final String? currentUserId,
       final List<MatchModel>? matches,
       final int selectedTab,
-      final bool loading}) = _$TeamDetailStateImpl;
+      final bool loading,
+      final MatchStats matchStats}) = _$TeamDetailStateImpl;
 
   @override
   Object? get error;
@@ -261,6 +293,8 @@ abstract class _TeamDetailState implements TeamDetailState {
   int get selectedTab;
   @override
   bool get loading;
+  @override
+  MatchStats get matchStats;
   @override
   @JsonKey(ignore: true)
   _$$TeamDetailStateImplCopyWith<_$TeamDetailStateImpl> get copyWith =>
