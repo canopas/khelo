@@ -122,139 +122,134 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
 
   Widget _body(BuildContext context) {
     final state = ref.watch(addTeamStateProvider);
-    return Material(
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          ListView(
-            padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
-            children: [
-              ProfileImageAvatar(
-                size: profileViewHeight,
-                placeHolderImage: Assets.images.icGroup,
-                isLoading: state.isImageUploading,
-                imageUrl: state.imageUrl,
-                onEditButtonTap: () async {
-                  final imagePath =
-                      await ImagePickerSheet.show<String>(context, true);
-                  if (imagePath != null) {
-                    notifier.onImageSelect(imagePath);
-                  }
+    return Stack(
+      children: [
+        ListView(
+          padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
+          children: [
+            ProfileImageAvatar(
+              size: profileViewHeight,
+              placeHolderImage: Assets.images.icGroup,
+              isLoading: state.isImageUploading,
+              imageUrl: state.imageUrl,
+              onEditButtonTap: () async {
+                final imagePath =
+                    await ImagePickerSheet.show<String>(context, true);
+                if (imagePath != null) {
+                  notifier.onImageSelect(imagePath);
+                }
+              },
+            ),
+            const SizedBox(height: 40),
+            _textInputField(
+                onChanged: (value) {
+                  notifier.onNameTextChanged();
                 },
-              ),
-              const SizedBox(height: 40),
-              _textInputField(
-                  onChanged: (value) {
-                    notifier.onNameTextChanged();
-                  },
-                  controller: state.nameController,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
-                  ],
-                  suffixIcon: state.checkingForAvailability
-                      ? const UnconstrainedBox(
-                          child: AppProgressIndicator(
-                              size: AppProgressIndicatorSize.small))
-                      : state.isNameAvailable != null
-                          ? state.isNameAvailable!
-                              ? Icon(
-                                  Icons.check,
-                                  color: context.colorScheme.positive,
-                                )
-                              : Icon(
-                                  Icons.close,
-                                  color: context.colorScheme.alert,
-                                )
-                          : null,
-                  hintText:
-                      context.l10n.add_team_enter_team_name_placeholder_text),
-              const SizedBox(height: 8),
-              _textInputField(
-                controller: state.locationController,
-                onChanged: (p0) => notifier.onValueChange(),
-                hintText: context.l10n.add_team_location_text,
-              ),
-              if (widget.editTeam == null) ...[
-                Material(
-                  type: MaterialType.transparency,
-                  child: Theme(
-                    data: context.brightness == Brightness.dark
-                        ? materialThemeDataDark.copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            splashFactory: NoSplash.splashFactory)
-                        : materialThemeDataLight.copyWith(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            splashFactory: NoSplash.splashFactory),
-                    child: ListTileTheme(
-                      horizontalTitleGap: 0.0,
-                      child: CheckboxListTile(
-                        value: state.isAddMeCheckBoxEnable,
-                        contentPadding: EdgeInsets.zero,
-                        controlAffinity: ListTileControlAffinity.leading,
-                        title: Text(context
-                            .l10n.add_team_add_as_member_description_text),
-                        onChanged: (value) {
-                          if (value != null) {
-                            notifier.onAddMeCheckBoxTap(value);
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ] else ...[
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text(context.l10n.add_team_players_text,
-                        style: AppTextStyle.header4
-                            .copyWith(color: context.colorScheme.textPrimary)),
-                    actionButton(
-                      context,
-                      onPressed: () =>
-                          AppRoute.addTeamMember(team: widget.editTeam!)
-                              .push(context),
-                      icon: Icon(
-                        CupertinoIcons.add,
-                        color: context.colorScheme.textPrimary,
-                        size: 20,
-                      ),
-                    )
-                  ],
-                ),
-                if (state.teamMembers.isEmpty) ...[
-                  AspectRatio(
-                    aspectRatio: 1.2,
-                    child: Center(
-                      child: Text(
-                        context.l10n.add_team_add_hint_text,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.subtitle1
-                            .copyWith(color: context.colorScheme.textPrimary),
-                      ),
-                    ),
-                  ),
+                controller: state.nameController,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
                 ],
-                ...state.teamMembers.map(
-                  (player) => Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: UserDetailCell(
-                      user: player,
-                      trailing: actionButton(context,
-                          onPressed: () =>
-                              notifier.onRemoveUserFromTeam(player),
-                          icon: const Icon(Icons.close)),
+                suffixIcon: state.checkingForAvailability
+                    ? const UnconstrainedBox(
+                        child: AppProgressIndicator(
+                            size: AppProgressIndicatorSize.small))
+                    : state.isNameAvailable != null
+                        ? state.isNameAvailable!
+                            ? Icon(
+                                Icons.check,
+                                color: context.colorScheme.positive,
+                              )
+                            : Icon(
+                                Icons.close,
+                                color: context.colorScheme.alert,
+                              )
+                        : null,
+                hintText:
+                    context.l10n.add_team_enter_team_name_placeholder_text),
+            const SizedBox(height: 8),
+            _textInputField(
+              controller: state.locationController,
+              onChanged: (p0) => notifier.onValueChange(),
+              hintText: context.l10n.add_team_location_text,
+            ),
+            if (widget.editTeam == null) ...[
+              Material(
+                type: MaterialType.transparency,
+                child: Theme(
+                  data: context.brightness == Brightness.dark
+                      ? materialThemeDataDark.copyWith(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          splashFactory: NoSplash.splashFactory)
+                      : materialThemeDataLight.copyWith(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          splashFactory: NoSplash.splashFactory),
+                  child: ListTileTheme(
+                    horizontalTitleGap: 0.0,
+                    child: CheckboxListTile(
+                      value: state.isAddMeCheckBoxEnable,
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text(context.l10n.add_team_add_as_member_description_text),
+                      onChanged: (value) {
+                        if (value != null) {
+                          notifier.onAddMeCheckBoxTap(value);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ] else ...[
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text(context.l10n.add_team_players_text,
+                      style: AppTextStyle.header4
+                          .copyWith(color: context.colorScheme.textPrimary)),
+                  actionButton(
+                    context,
+                    onPressed: () =>
+                        AppRoute.addTeamMember(team: widget.editTeam!)
+                            .push(context),
+                    icon: Icon(
+                      CupertinoIcons.add,
+                      color: context.colorScheme.textPrimary,
+                      size: 20,
+                    ),
+                  )
+                ],
+              ),
+              if (state.teamMembers.isEmpty) ...[
+                AspectRatio(
+                  aspectRatio: 1.2,
+                  child: Center(
+                    child: Text(
+                      context.l10n.add_team_add_hint_text,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.subtitle1
+                          .copyWith(color: context.colorScheme.textPrimary),
                     ),
                   ),
                 ),
               ],
+              ...state.teamMembers.map(
+                (player) => Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: UserDetailCell(
+                    user: player,
+                    trailing: actionButton(context,
+                        onPressed: () => notifier.onRemoveUserFromTeam(player),
+                        icon: const Icon(Icons.close)),
+                  ),
+                ),
+              ),
             ],
-          ),
-          _stickyButton(context, state)
-        ],
-      ),
+          ],
+        ),
+        _stickyButton(context, state)
+      ],
     );
   }
 
@@ -273,6 +268,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       suffixIcon: suffixIcon,
       style: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textPrimary),
+      hintStyle: AppTextStyle.subtitle3
+          .copyWith(color: context.colorScheme.textDisabled),
       borderRadius: BorderRadius.circular(12),
       borderType: AppTextFieldBorderType.outline,
       backgroundColor: context.colorScheme.containerLow,

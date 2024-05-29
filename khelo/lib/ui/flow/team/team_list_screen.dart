@@ -139,37 +139,40 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
       onTap: () {
         AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
       },
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: ImageAvatar(
-          initial: team.name[0].toUpperCase(),
-          imageUrl: team.profile_img_url,
-          size: 40,
+      child: Material(
+        type: MaterialType.transparency,
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: ImageAvatar(
+            initial: team.name[0].toUpperCase(),
+            imageUrl: team.profile_img_url,
+            size: 40,
+          ),
+          title: Text(
+            team.name,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          subtitle: team.players != null
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                      '${team.players!.length} ${context.l10n.add_team_players_text}',
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textSecondary)),
+                )
+              : null,
+          trailing: showMoreOptionButton
+              ? actionButton(context,
+                  onPressed: () => _moreActionButton(context, team),
+                  icon: Icon(
+                    Platform.isIOS
+                        ? Icons.more_horiz_rounded
+                        : Icons.more_vert_rounded,
+                    color: context.colorScheme.textPrimary,
+                  ))
+              : null,
         ),
-        title: Text(
-          team.name,
-          style: AppTextStyle.subtitle2
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-        subtitle: team.players != null
-            ? Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(
-                    '${team.players!.length} ${context.l10n.add_team_players_text}',
-                    style: AppTextStyle.subtitle2
-                        .copyWith(color: context.colorScheme.textSecondary)),
-              )
-            : null,
-        trailing: showMoreOptionButton
-            ? actionButton(context,
-                onPressed: () => _moreActionButton(context, team),
-                icon: Icon(
-                  Platform.isIOS
-                      ? Icons.more_horiz_rounded
-                      : Icons.more_vert_rounded,
-                  color: context.colorScheme.textPrimary,
-                ))
-            : null,
       ),
     );
   }
