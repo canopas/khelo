@@ -155,7 +155,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           if (_selectedTab == 0) ...[
             const Spacer(),
             actionButton(context,
-                onPressed: () => AppRoute.addMatch,
+                onPressed: () => AppRoute.addMatch().push(context),
                 icon: Icon(
                   Icons.add,
                   color: context.colorScheme.textPrimary,
