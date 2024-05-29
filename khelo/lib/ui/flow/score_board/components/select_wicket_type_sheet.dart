@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
@@ -14,9 +15,10 @@ class SelectWicketTypeSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       isDismissible: true,
+      showDragHandle: false,
       enableDrag: false,
+      isScrollControlled: true,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
@@ -38,55 +40,28 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
   Widget build(BuildContext context) {
     final state = ref.watch(scoreBoardStateProvider);
 
-    return Padding(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-      child: SizedBox(
-        height: context.mediaQuerySize.height * 0.8,
-        child: _body(context, state),
-      ),
-    );
+    return BottomSheetWrapper(
+        content: _wicketTypeContent(context, state),
+        action: [
+          PrimaryButton(
+            context.l10n.common_okay_title,
+            enabled: selectedType != null,
+            onPressed: () => context.pop(selectedType),
+          )
+        ]);
   }
 
-  Widget _body(BuildContext context, ScoreBoardViewState state) {
+  Widget _wicketTypeContent(BuildContext context, ScoreBoardViewState state) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                context.l10n.score_board_select_wicket_type_title,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary, fontSize: 24),
-              ),
-              IconButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  icon: const Icon(Icons.close)),
-            ],
-          ),
+        Text(
+          context.l10n.score_board_inning_complete_title,
+          style: AppTextStyle.header3
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
-        Expanded(
-          child: ListView(
-            shrinkWrap: true,
-            physics: const ScrollPhysics(),
-            children: [
-              _typeList(context, state),
-              const SizedBox(height: 40),
-              PrimaryButton(
-                context.l10n.common_okay_title,
-                onPressed: () => context.pop(selectedType),
-                enabled: selectedType != null,
-              ),
-            ],
-          ),
-        ),
+        const SizedBox(height: 16),
+        _typeList(context, state),
       ],
     );
   }
@@ -99,6 +74,7 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
     return Wrap(
       alignment: WrapAlignment.start,
       spacing: 8,
+      runSpacing: 8,
       children: filters.map(
         (element) {
           final isSelected = selectedType == element;

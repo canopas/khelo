@@ -1,8 +1,9 @@
 import 'package:data/api/match/match_model.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
@@ -10,6 +11,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -60,18 +62,20 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(addTossDetailStateProvider.notifier);
     final state = ref.watch(addTossDetailStateProvider);
 
     _observeActionError(context, ref);
     _observePushScoreBoard();
     return AppPage(
       title: context.l10n.add_toss_detail_screen_title,
-      body: _body(notifier, state),
+      body: Builder(builder: (context) {
+        return _body(context, notifier, state);
+      }),
     );
   }
 
-  Widget _body(AddTossDetailViewNotifier notifier, AddTossDetailState state) {
+  Widget _body(BuildContext context, AddTossDetailViewNotifier notifier,
+      AddTossDetailState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -86,11 +90,11 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
       children: [
         ListView(
           padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(horizontal: 16) +
+              const EdgeInsets.only(left: 16) +
               BottomStickyOverlay.padding,
           children: [
-            _whoWonTossView(notifier, state),
-            _electedToView(notifier, state),
+            _whoWonTossView(context, notifier, state),
+            _electedToView(context, notifier, state),
           ],
         ),
         _stickyButton(context, notifier, state)
@@ -99,54 +103,58 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
   }
 
   Widget _whoWonTossView(
+    BuildContext context,
     AddTossDetailViewNotifier notifier,
     AddTossDetailState state,
   ) {
-    return Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionTitle(context, context.l10n.add_toss_detail_who_won_toss_text),
-        Row(
-          children: [
-            _teamCell(
-              context: context,
-              notifier: notifier,
-              state: state,
-              team: state.match?.teams.first.team,
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            _teamCell(
-              context: context,
-              notifier: notifier,
-              state: state,
-              team: state.match?.teams.last.team,
-            ),
-          ],
+        IntrinsicHeight(
+          child: Row(
+            children: state.match?.teams
+                    .map(
+                      (team) => _tossCellView(
+                        context: context,
+                        imageUrl: team.team.profile_img_url,
+                        initial: team.team.name[0].toUpperCase(),
+                        title: team.team.name,
+                        isSelected: state.tossWinnerTeamId == team.team.id,
+                        onTap: () => notifier
+                            .onTossWinnerSelect(team.team.id ?? "INVALID ID"),
+                      ),
+                    )
+                    .toList() ??
+                [],
+          ),
         )
       ],
     );
   }
 
   Widget _electedToView(
+    BuildContext context,
     AddTossDetailViewNotifier notifier,
     AddTossDetailState state,
   ) {
-    return Wrap(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionTitle(
             context, context.l10n.add_toss_detail_winner_elected_to_text),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: (TossDecision.values)
-              .map((decision) => _tossDecisionCell(
-                    context: context,
-                    image: getTossDecisionImage(decision),
-                    title: decision.getString(context),
-                    isSelected: state.tossWinnerDecision == decision,
-                    onTap: () => notifier.onOptionSelect(decision),
-                  ))
-              .toList(),
+        IntrinsicHeight(
+          child: Row(
+            children: (TossDecision.values)
+                .map((decision) => _tossCellView(
+                      context: context,
+                      image: getTossDecisionImage(decision),
+                      title: decision.getString(context),
+                      isSelected: state.tossWinnerDecision == decision,
+                      onTap: () => notifier.onOptionSelect(decision),
+                    ))
+                .toList(),
+          ),
         ),
       ],
     );
@@ -161,8 +169,8 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
         ),
         Text(
           title,
-          style: AppTextStyle.header1
-              .copyWith(color: context.colorScheme.textSecondary),
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
         const SizedBox(
           height: 16,
@@ -171,47 +179,40 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     );
   }
 
-  Widget _teamCell({
+  Widget _tossCellView({
     required BuildContext context,
-    required AddTossDetailViewNotifier notifier,
-    required AddTossDetailState state,
-    TeamModel? team,
+    String? image,
+    String? imageUrl,
+    String? initial,
+    required String title,
+    required bool isSelected,
+    required Function() onTap,
   }) {
-    final name = team?.name;
-    final imgUrl = team?.profile_img_url;
-    final initial = team?.name[0].toUpperCase();
-    final isSelected = state.tossWinnerTeamId == team?.id;
-
     return Expanded(
       child: OnTapScale(
-        onTap: () {
-          notifier.onTossWinnerSelect(team?.id ?? "INVALID ID");
-        },
+        onTap: onTap,
         child: Container(
+          constraints: const BoxConstraints(minHeight: 164),
+          alignment: Alignment.center,
           padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.only(right: 16),
           decoration: BoxDecoration(
-            color: isSelected
-                ? context.colorScheme.positive.withOpacity(0.1)
-                : context.colorScheme.containerNormalOnSurface,
-            border: Border.all(
-                color: isSelected
-                    ? context.colorScheme.positive
-                    : context.colorScheme.outline),
-            borderRadius: BorderRadius.circular(20),
-          ),
+              borderRadius: BorderRadius.circular(12),
+              border: isSelected
+                  ? Border.all(color: context.colorScheme.primary)
+                  : null,
+              color: context.colorScheme.containerLow),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ImageAvatar(
-                imageUrl: imgUrl,
-                initial: initial ?? "?",
-                size: 60,
-              ),
+              _cellImageView(image, imageUrl, initial),
               const SizedBox(
-                height: 16,
+                height: 24,
               ),
               Text(
-                name ?? "",
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.subtitle1
                     .copyWith(color: context.colorScheme.textPrimary),
@@ -223,48 +224,23 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     );
   }
 
-  Widget _tossDecisionCell({
-    required BuildContext context,
-    required String image,
-    required String title,
-    required bool isSelected,
-    required Function() onTap,
-  }) {
-    return Expanded(
-      child: OnTapScale(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Container(
-              height: 140,
-              width: 140,
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: isSelected
-                      ? Border.all(color: context.colorScheme.positive)
-                      : null,
-                  color: isSelected
-                      ? context.colorScheme.positive.withOpacity(0.1)
-                      : context.colorScheme.containerNormalOnSurface),
-              child: Image.asset(
-                image,
-                fit: BoxFit.cover,
-                color: context.colorScheme.textDisabled,
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              title,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            )
-          ],
-        ),
-      ),
-    );
+  Widget _cellImageView(String? image, String? imageUrl, String? initial) {
+    if (image != null) {
+      return SvgPicture.asset(
+        image,
+        fit: BoxFit.fitHeight,
+        colorFilter:
+            ColorFilter.mode(context.colorScheme.textPrimary, BlendMode.srcIn),
+      );
+    } else if (initial != null) {
+      return ImageAvatar(
+        initial: initial,
+        imageUrl: imageUrl,
+        size: 80,
+      );
+    } else {
+      return const SizedBox();
+    }
   }
 
   Widget _stickyButton(
@@ -285,9 +261,9 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
   String getTossDecisionImage(TossDecision decision) {
     switch (decision) {
       case TossDecision.bat:
-        return "assets/images/ic_batsman.png";
+        return Assets.images.batsman;
       case TossDecision.bowl:
-        return "assets/images/ic_bowler.png";
+        return Assets.images.bowler;
     }
   }
 }

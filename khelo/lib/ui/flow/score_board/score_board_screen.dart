@@ -4,27 +4,29 @@ import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/flow/score_board/components/add_extra_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/add_penalty_run_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/match_complete_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/more_option_dialog.dart';
-import 'package:khelo/ui/flow/score_board/components/over_complete_dialog.dart';
+import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
+import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
+import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
+import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
-import 'package:khelo/ui/flow/score_board/components/striker_selection_dialog.dart';
+import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
+import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
+import 'package:style/theme/colors.dart';
 
-import 'components/inning_complete_dialog.dart';
+import 'components/inning_complete_sheet.dart';
 
 class ScoreBoardScreen extends ConsumerStatefulWidget {
   final String matchId;
@@ -362,10 +364,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         title: context.l10n.score_board_screen_title,
         actions: [_moreOptionButton(context, notifier, state)],
         automaticallyImplyLeading: false,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: _body(context, notifier, state),
-        ),
+        resizeToAvoidBottomInset: false,
+        body: Builder(builder: (context) {
+          return _body(context, notifier, state);
+        }),
       ),
     );
   }
@@ -377,18 +379,59 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   ) {
     return IconButton(
         onPressed: () async {
-          final selection = await MoreOptionDialog.show<
-                  ({MatchOption option, bool contWithInjPlayer})>(context,
-              continueWithInjPlayer: state.continueWithInjuredPlayers);
-
-          if (selection != null && context.mounted) {
-            notifier.onMatchOptionSelect(
-              selection.option,
-              selection.contWithInjPlayer,
-            );
-          }
+          showActionBottomSheet(
+              context: context,
+              items: MatchOption.values
+                  .map(
+                    (option) => BottomSheetAction(
+                      title: option.getTitle(context),
+                      onTap: () {
+                        if (option != MatchOption.continueWithInjuredPlayer) {
+                          context.pop();
+                          notifier.onMatchOptionSelect(option, true);
+                        }
+                      },
+                      child: option == MatchOption.continueWithInjuredPlayer
+                          ? _toggleButton(context, notifier, state)
+                          : null,
+                    ),
+                  )
+                  .toList());
         },
         icon: const Icon(Icons.more_horiz));
+  }
+
+  Widget _toggleButton(
+    BuildContext context,
+    ScoreBoardViewNotifier notifier,
+    ScoreBoardViewState state,
+  ) {
+    bool isContinue = state.continueWithInjuredPlayers;
+
+    return StatefulBuilder(
+      builder: (context, setStateSwitch) {
+        return Theme(
+          data: context.brightness == Brightness.dark
+              ? materialThemeDataDark
+              : materialThemeDataLight,
+          child: SizedBox(
+            height: 22,
+            child: Switch(
+              inactiveTrackColor: context.colorScheme.containerHigh,
+              trackOutlineColor: WidgetStateColor.transparent,
+              thumbColor: WidgetStatePropertyAll(context.colorScheme.onPrimary),
+              value: isContinue,
+              onChanged: (value) {
+                setStateSwitch(() {
+                  isContinue = value;
+                  notifier.onContinueWithInjuredPlayersChange(value);
+                });
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget _body(
@@ -448,7 +491,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Future<void> _onWicketTypeSelect(
       BuildContext context, WicketType type) async {
-    final outBatsMan = await StrikerSelectionDialog.show<UserModel>(
+    final outBatsMan = await StrikerSelectionSheet.show<UserModel>(
       context,
       isForStrikerSelection: false,
     );
@@ -465,7 +508,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
     int? extra;
     if (type == WicketType.runOut && context.mounted) {
-      final runBeforeWicket = await AddExtraDialog.show<(int, bool, bool)>(
+      final runBeforeWicket = await AddExtraSheet.show<(int, bool, bool)>(
           context,
           isOnWicket: true);
       extra = runBeforeWicket?.$1;
@@ -480,14 +523,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showStrikerSelectionDialog(BuildContext context) async {
-    final striker = await StrikerSelectionDialog.show<UserModel>(context);
+    final striker = await StrikerSelectionSheet.show<UserModel>(context);
     if (striker != null && context.mounted) {
       notifier.setOrSwitchStriker(batsManId: striker.id);
     }
   }
 
   Future<void> _showOverCompleteDialog(BuildContext context) async {
-    final startNext = await OverCompleteDialog.show<bool>(context);
+    final startNext = await OverCompleteSheet.show<bool>(context);
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextOver();
@@ -498,7 +541,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showInningCompleteDialog(BuildContext context) async {
-    final startNext = await InningCompleteDialog.show<bool>(context);
+    final startNext = await InningCompleteSheet.show<bool>(context);
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextInning();
@@ -509,7 +552,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showMatchCompleteDialog(BuildContext context) async {
-    final endMatch = await MatchCompleteDialog.show<bool>(context);
+    final endMatch = await MatchCompleteSheet.show<bool>(context);
     if (endMatch != null && context.mounted) {
       if (endMatch) {
         notifier.endMatch();
@@ -537,7 +580,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ExtrasType? extra,
   ) async {
-    final extraData = await AddExtraDialog.show<(int, bool, bool)>(
+    final extraData = await AddExtraSheet.show<(int, bool, bool)>(
       context,
       extrasType: extra,
       isFiveSeven: extra == null,
@@ -569,7 +612,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Future<void> _showAddPenaltyRunDialog(BuildContext context) async {
     final penalty =
-        await AddPenaltyRunDialog.show<({String teamId, int runs})>(context);
+        await AddPenaltyRunSheet.show<({String teamId, int runs})>(context);
 
     if (penalty != null && context.mounted) {
       notifier.handlePenaltyRun(penalty);

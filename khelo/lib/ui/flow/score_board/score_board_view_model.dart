@@ -378,7 +378,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   void onMatchOptionSelect(MatchOption option, bool contWithInjPlayer) {
-    state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
     switch (option) {
       case MatchOption.changeStriker:
         _showStrikerSelectionDialog();
@@ -741,8 +740,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           bowlingTeamInningId: bowlingTeamInningId,
           totalWicketTaken: wicketCount,
           updatedPlayer: updatedPlayers);
-    } catch (e) {
-      debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
+    } catch (e, stack) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while undo last ball -> $e, stack: $stack");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
     }
@@ -758,7 +758,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ?.squad;
 
     final outPlayer = battingTeam
-        ?.firstWhere((element) => element.player.id == lastBall.player_out_id);
+        ?.where((element) => element.player.id == lastBall.player_out_id)
+        .firstOrNull;
 
     if (outPlayer == null) {
       return null;
@@ -956,8 +957,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void onReviewMatchResult(bool contWithInjPlayer) {
     // func will be called only if injured player is remained and user disable that continue with injured player option
-    state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
-
     if (state.otherInning?.innings_status == InningStatus.finish) {
       state = state.copyWith(showMatchCompleteDialog: DateTime.now());
     } else {
@@ -965,15 +964,16 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
+  void onContinueWithInjuredPlayersChange(bool isContinue) {
+    state = state.copyWith(continueWithInjuredPlayers: isContinue);
+  }
+
   Future<void> setPlayers({
     required List<({List<MatchPlayer> players, String teamId})> currentPlayers,
     required bool contWithInjPlayer,
   }) async {
     try {
-      state = state.copyWith(
-          continueWithInjuredPlayers: contWithInjPlayer,
-          actionError: null,
-          isActionInProgress: true);
+      state = state.copyWith(actionError: null, isActionInProgress: true);
 
       MatchPlayer? bowler;
       var battingPlayer = currentPlayers

@@ -1,4 +1,4 @@
-import 'package:data/api/match/match_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -10,10 +10,11 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class SelectWicketTakerSheet extends ConsumerStatefulWidget {
+class StrikerSelectionSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
-    BuildContext context,
-  ) {
+    BuildContext context, {
+    bool isForStrikerSelection = true,
+  }) {
     return showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -23,42 +24,51 @@ class SelectWicketTakerSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return const SelectWicketTakerSheet();
+        return StrikerSelectionSheet(
+          isForStrikerSelection: isForStrikerSelection,
+        );
       },
     );
   }
 
-  const SelectWicketTakerSheet({super.key});
+  final bool isForStrikerSelection;
+
+  const StrikerSelectionSheet({
+    super.key,
+    required this.isForStrikerSelection,
+  });
 
   @override
-  ConsumerState createState() => _SelectWicketTakerSheetState();
+  ConsumerState createState() => _StrikerSelectionSheetState();
 }
 
-class _SelectWicketTakerSheetState
-    extends ConsumerState<SelectWicketTakerSheet> {
-  String? selectedId;
+class _StrikerSelectionSheetState extends ConsumerState<StrikerSelectionSheet> {
+  UserModel? selectedUser;
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scoreBoardStateProvider);
+
     return BottomSheetWrapper(
-      content: _wicketTakerContent(context, state),
-      action: [
-        PrimaryButton(
-          context.l10n.score_board_select_title,
-          enabled: selectedId != null,
-          onPressed: () => context.pop(selectedId),
-        )
-      ],
-    );
+        content: _selectPlayerContent(context, state),
+        action: [
+          PrimaryButton(
+            context.l10n.common_next_title,
+            enabled: selectedUser != null,
+            expanded: false,
+            onPressed: () => context.pop(selectedUser),
+          ),
+        ]);
   }
 
-  Widget _wicketTakerContent(BuildContext context, ScoreBoardViewState state) {
+  Widget _selectPlayerContent(BuildContext context, ScoreBoardViewState state) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          context.l10n.score_board_choose_fielder_title,
+          widget.isForStrikerSelection
+              ? context.l10n.score_board_who_on_strike_title
+              : context.l10n.score_board_who_got_out_title,
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
@@ -69,16 +79,16 @@ class _SelectWicketTakerSheetState
           spacing: 16,
           runSpacing: 16,
           children: [
-            for (final player in getFilteredList(state)) ...[
+            for (final player in state.batsMans ?? []) ...[
               UserCellView(
                 title:
                     player.player.name ?? context.l10n.common_anonymous_title,
                 imageUrl: player.player.profile_img_url,
                 initial: player.player.nameInitial,
-                isSelected: selectedId == player.player.id,
+                isSelected: selectedUser?.id == player.player.id,
                 onTap: () {
                   setState(() {
-                    selectedId = player.player.id;
+                    selectedUser = player.player;
                   });
                 },
               )
@@ -87,18 +97,5 @@ class _SelectWicketTakerSheetState
         ),
       ],
     );
-  }
-
-  List<MatchPlayer> getFilteredList(ScoreBoardViewState state) {
-    if (state.match == null) {
-      return [];
-    }
-
-    final teamId = state.otherInning?.team_id ?? "INVALID ID";
-    final teamPlayers = state.match?.teams
-        .firstWhere((element) => element.team.id == teamId)
-        .squad;
-
-    return teamPlayers ?? [];
   }
 }
