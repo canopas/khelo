@@ -247,6 +247,28 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     onTextChange();
   }
 
+  void onStepperActionTap({
+    required bool isForTotalOverCount,
+    required bool isAdd,
+  }) {
+    final countString = isForTotalOverCount
+        ? state.totalOverController.text
+        : state.overPerBowlerController.text;
+    int overCount = int.tryParse(countString) ?? 0;
+
+    if (isAdd && overCount < 999) {
+      overCount++;
+    } else if (!isAdd && overCount > 1) {
+      overCount--;
+    }
+    if (isForTotalOverCount) {
+      state.totalOverController.text = overCount.toString();
+    } else {
+      state.overPerBowlerController.text = overCount.toString();
+    }
+    onTextChange();
+  }
+
   void setOfficials(List<Officials> officials) {
     state = state.copyWith(officials: officials);
     onTextChange();

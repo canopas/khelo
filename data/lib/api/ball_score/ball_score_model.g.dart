@@ -10,15 +10,15 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
     _$BallScoreModelImpl(
       id: json['id'] as String?,
       inning_id: json['inning_id'] as String,
-      over_number: json['over_number'] as int,
-      ball_number: json['ball_number'] as int,
+      over_number: (json['over_number'] as num).toInt(),
+      ball_number: (json['ball_number'] as num).toInt(),
       bowler_id: json['bowler_id'] as String,
       batsman_id: json['batsman_id'] as String,
       non_striker_id: json['non_striker_id'] as String,
-      runs_scored: json['runs_scored'] as int,
+      runs_scored: (json['runs_scored'] as num).toInt(),
       extras_type:
           $enumDecodeNullable(_$ExtrasTypeEnumMap, json['extras_type']),
-      extras_awarded: json['extras_awarded'] as int?,
+      extras_awarded: (json['extras_awarded'] as num?)?.toInt(),
       wicket_type:
           $enumDecodeNullable(_$WicketTypeEnumMap, json['wicket_type']),
       player_out_id: json['player_out_id'] as String?,

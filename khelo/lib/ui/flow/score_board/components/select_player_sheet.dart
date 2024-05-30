@@ -408,7 +408,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     bool isSecondInningRunning,
     bool injuredPlayerRemained,
   ) {
-    if (injuredPlayerRemained && !isEnabled && widget.playerSelectionType != PlayerSelectionType.bowler) {
+    if (injuredPlayerRemained &&
+        !isEnabled &&
+        widget.playerSelectionType != PlayerSelectionType.bowler) {
       return isSecondInningRunning
           ? context.l10n.score_board_end_match_title
           : context.l10n.score_board_end_inning_title;

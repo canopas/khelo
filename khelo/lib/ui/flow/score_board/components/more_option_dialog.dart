@@ -103,8 +103,8 @@ class _MoreOptionDialogState extends State<MoreOptionDialog> {
           Flexible(
             child: Text(
               option.getTitle(context),
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+              style: AppTextStyle.subtitle1.copyWith(
+                  color: context.colorScheme.textPrimary, fontSize: 20),
             ),
           ),
           option == MatchOption.continueWithInjuredPlayer
