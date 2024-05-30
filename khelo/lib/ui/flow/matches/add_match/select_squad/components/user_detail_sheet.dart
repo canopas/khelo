@@ -1,8 +1,8 @@
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -111,7 +111,8 @@ class UserDetailSheet extends StatelessWidget {
                   .copyWith(color: context.colorScheme.textDisabled),
             ),
             Text(
-              DateFormat.yMMMd().format(user.created_at ?? DateTime.now()),
+              (user.created_at ?? DateTime.now())
+                  .format(context, DateFormatType.dayMonthYear),
               style: AppTextStyle.body2
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
