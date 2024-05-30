@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -19,6 +21,7 @@ class MatchDetailTabScreen extends ConsumerStatefulWidget {
 class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
   late MatchDetailTabViewNotifier notifier;
   late PageController _controller;
+  final ScrollController _scrollController = ScrollController();
 
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
@@ -34,18 +37,38 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
     );
   }
 
+  final List<GlobalKey> _keys = List.generate(50, (index) => GlobalKey());
+
+  void _scrollToIndex(int index) {
+    _scrollController.position.ensureVisible(
+        _keys[index].currentContext!.findRenderObject() as RenderBox,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut);
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = ref.watch(matchDetailTabStateProvider.notifier);
+    final state = ref.watch(matchDetailTabStateProvider);
 
     return AppPage(
-      title: "this Vs this",
+      title: _getScreenTitle(context, state),
       body: Builder(
         builder: (context) {
           return _content(context, notifier);
         },
       ),
     );
+  }
+
+  String _getScreenTitle(BuildContext context, MatchDetailTabState state) {
+    if (state.match != null) {
+      String title = state.match!.teams
+          .map((e) => e.team.name.initials(limit: 3))
+          .join(" ${context.l10n.add_match_versus_short_title} ");
+      return title;
+    }
+    return "${context.l10n.add_match_team_a_title} ${context.l10n.add_match_versus_short_title} ${context.l10n.add_match_team_b_title}";
   }
 
   Widget _content(BuildContext context, MatchDetailTabViewNotifier notifier) {
@@ -61,6 +84,7 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
                   .toList(),
               onPageChanged: (index) {
                 notifier.onTabChange(index);
+                _scrollToIndex(index);
                 setState(() {});
               },
             ),
@@ -72,6 +96,7 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
 
   Widget _tabView(BuildContext context) {
     return SingleChildScrollView(
+      controller: _scrollController,
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
       child: Row(
@@ -80,6 +105,7 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
                 (tab) => _tabButton(
                   tab.getString(context),
                   _selectedTab == tab.index,
+                  tab.index,
                   onTap: () {
                     _controller.jumpToPage(tab.index);
                   },
@@ -89,10 +115,12 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
     );
   }
 
-  Widget _tabButton(String title, bool selected, {VoidCallback? onTap}) {
+  Widget _tabButton(String title, bool selected, int index,
+      {VoidCallback? onTap}) {
     return OnTapScale(
       onTap: onTap,
       child: Container(
+        key: _keys[index],
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(

@@ -8,10 +8,10 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
   const MatchDetailHighlightView({super.key});
@@ -81,20 +81,27 @@ class MatchDetailHighlightView extends ConsumerWidget {
       padding: context.mediaQueryPadding,
       child: Column(
         children: [
-          IntrinsicHeight(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Expanded(
-                  child: _highlightFilterButton(context, teamName,
-                      notifier.showHighlightTeamSelectionDialog),
-                ),
+                    child: AdaptiveOutlinedTile(
+                  placeholder: teamName,
+                  title: teamName,
+                  maxLines: 1,
+                  onTap: notifier.showHighlightTeamSelectionDialog,
+                  showTrailingIcon: true,
+                )),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _highlightFilterButton(
-                      context,
-                      state.highlightFilterOption.getString(context),
-                      notifier.showHighlightFilterSelectionDialog),
-                ),
+                    child: AdaptiveOutlinedTile(
+                  placeholder: state.highlightFilterOption.getString(context),
+                  title: state.highlightFilterOption.getString(context),
+                  maxLines: 1,
+                  onTap: notifier.showHighlightFilterSelectionDialog,
+                  showTrailingIcon: true,
+                )),
               ],
             ),
           ),
@@ -127,6 +134,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
       padding: const EdgeInsets.only(top: 24),
       separatorBuilder: (context, index) => Divider(
         color: context.colorScheme.outline,
+        height: 32,
       ),
       itemBuilder: (context, index) {
         return CommentaryBallSummary(state: state, ball: highlight[index]);
@@ -141,34 +149,6 @@ class MatchDetailHighlightView extends ConsumerWidget {
         ?.team
         .name;
     return teamName ?? "--";
-  }
-
-  Widget _highlightFilterButton(
-      BuildContext context, String title, Function() onTap) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        color: context.colorScheme.containerNormalOnSurface,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ),
-            Icon(
-              Icons.expand_more_sharp,
-              color: context.colorScheme.textPrimary,
-            )
-          ],
-        ),
-      ),
-    );
   }
 
   List<BallScoreModel> _getHighlightsScore(MatchDetailTabState state) {

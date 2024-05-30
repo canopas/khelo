@@ -267,8 +267,6 @@
       }
     }
   },
-  "match_info_playing_title": "Playing",
-  "match_info_bench_title": "Bench",
   "match_info_venue_title": "Venue",
   "match_info_ground_title": "Ground",
   "match_info_city_title": "City",
@@ -451,7 +449,8 @@
       }
     }
   },
-  "match_squad_bench_text": "Bench",
+  "match_squad_playing_title": "Playing",
+  "match_squad_bench_title": "Bench",
   "match_highlight_filter_all_text": "All",
   "match_highlight_filter_fours_text": "Fours",
   "match_highlight_filter_sixes_text": "Sixes",

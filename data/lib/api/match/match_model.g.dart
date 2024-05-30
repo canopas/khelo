@@ -13,18 +13,18 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
           .map((e) => MatchTeamModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
-      number_of_over: (json['number_of_over'] as num).toInt(),
-      over_per_bowler: (json['over_per_bowler'] as num).toInt(),
+      number_of_over: json['number_of_over'] as int,
+      over_per_bowler: json['over_per_bowler'] as int,
       power_play_overs1: (json['power_play_overs1'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
+              ?.map((e) => e as int)
               .toList() ??
           const [],
       power_play_overs2: (json['power_play_overs2'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
+              ?.map((e) => e as int)
               .toList() ??
           const [],
       power_play_overs3: (json['power_play_overs3'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
+              ?.map((e) => e as int)
               .toList() ??
           const [],
       city: json['city'] as String,
@@ -118,8 +118,8 @@ _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map<String, dynamic> json) =>
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
       over: (json['over'] as num?)?.toDouble() ?? 0,
-      run: (json['run'] as num?)?.toInt() ?? 0,
-      wicket: (json['wicket'] as num?)?.toInt() ?? 0,
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
       squad: (json['squad'] as List<dynamic>?)
               ?.map((e) => MatchPlayer.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -142,7 +142,7 @@ _$MatchPlayerImpl _$$MatchPlayerImplFromJson(Map<String, dynamic> json) =>
     _$MatchPlayerImpl(
       player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
       status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']),
-      index: (json['index'] as num?)?.toInt(),
+      index: json['index'] as int?,
     );
 
 Map<String, dynamic> _$$MatchPlayerImplToJson(_$MatchPlayerImpl instance) =>
@@ -170,16 +170,16 @@ _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(
           .map((e) => AddMatchTeamRequest.fromJson(e as Map<String, dynamic>))
           .toList(),
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
-      number_of_over: (json['number_of_over'] as num).toInt(),
-      over_per_bowler: (json['over_per_bowler'] as num).toInt(),
+      number_of_over: json['number_of_over'] as int,
+      over_per_bowler: json['over_per_bowler'] as int,
       power_play_overs1: (json['power_play_overs1'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
+          ?.map((e) => e as int)
           .toList(),
       power_play_overs2: (json['power_play_overs2'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
+          ?.map((e) => e as int)
           .toList(),
       power_play_overs3: (json['power_play_overs3'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
+          ?.map((e) => e as int)
           .toList(),
       city: json['city'] as String,
       ground: json['ground'] as String,
@@ -238,8 +238,8 @@ _$AddMatchTeamRequestImpl _$$AddMatchTeamRequestImplFromJson(
       captain_id: json['captain_id'] as String?,
       admin_id: json['admin_id'] as String?,
       over: (json['over'] as num?)?.toDouble() ?? 0,
-      run: (json['run'] as num?)?.toInt() ?? 0,
-      wicket: (json['wicket'] as num?)?.toInt() ?? 0,
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
       squad: (json['squad'] as List<dynamic>?)
               ?.map(
                   (e) => MatchPlayerRequest.fromJson(e as Map<String, dynamic>))
@@ -264,7 +264,7 @@ _$MatchPlayerRequestImpl _$$MatchPlayerRequestImplFromJson(
     _$MatchPlayerRequestImpl(
       id: json['id'] as String,
       status: $enumDecode(_$PlayerStatusEnumMap, json['status']),
-      index: (json['index'] as num?)?.toInt(),
+      index: json['index'] as int?,
     );
 
 Map<String, dynamic> _$$MatchPlayerRequestImplToJson(
