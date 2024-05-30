@@ -328,7 +328,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(scoreBoardStateProvider.notifier);
     final state = ref.watch(scoreBoardStateProvider);
 
     _observeActionError(context, ref);
@@ -362,11 +361,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       canPop: false,
       child: AppPage(
         title: context.l10n.score_board_screen_title,
-        actions: [_moreOptionButton(context, notifier, state)],
+        actions: [_moreOptionButton(context, state)],
         automaticallyImplyLeading: false,
         resizeToAvoidBottomInset: false,
         body: Builder(builder: (context) {
-          return _body(context, notifier, state);
+          return _body(context, state);
         }),
       ),
     );
@@ -374,7 +373,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Widget _moreOptionButton(
     BuildContext context,
-    ScoreBoardViewNotifier notifier,
     ScoreBoardViewState state,
   ) {
     return IconButton(
@@ -392,7 +390,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
                         }
                       },
                       child: option == MatchOption.continueWithInjuredPlayer
-                          ? _toggleButton(context, notifier, state)
+                          ? _toggleButton(context, state)
                           : null,
                     ),
                   )
@@ -403,7 +401,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Widget _toggleButton(
     BuildContext context,
-    ScoreBoardViewNotifier notifier,
     ScoreBoardViewState state,
   ) {
     bool isContinue = state.continueWithInjuredPlayers;
@@ -436,7 +433,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
   Widget _body(
     BuildContext context,
-    ScoreBoardViewNotifier notifier,
     ScoreBoardViewState state,
   ) {
     if (state.loading) {

@@ -512,13 +512,23 @@
   "score_board_injured_tag_title": "Injured",
   "score_board_who_on_strike_title": "Who's on Strike?",
   "score_board_who_got_out_title": "Who got out",
-  "score_board_end_of_over_title": "End Of Over ",
   "score_board_start_next_over_title": "Start Next Over",
   "score_board_batsman_title": "batsMan",
   "score_board_bowler_title": "bowler",
   "score_board_change_striker_title": "Change Striker",
   "score_board_add_substitute_title": "Add substitute",
-  "score_board_by_title": " by ",
+  "score_board_end_of_over_by_title": "End Of Over {overNumber} by {player}",
+  "@score_board_end_of_over_by_title": {
+    "description": "End Of Over {overNumber} by {player}",
+    "placeholders": {
+      "overNumber": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
   "score_board_can_undo_till_running_over_title": "Undo is only allowed till running over",
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",

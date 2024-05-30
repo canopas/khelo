@@ -66,25 +66,24 @@ class _SelectWicketTakerSheetState
           height: 16,
         ),
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: [
-            for (final player in getFilteredList(state)) ...[
-              UserCellView(
-                title:
-                    player.player.name ?? context.l10n.common_anonymous_title,
-                imageUrl: player.player.profile_img_url,
-                initial: player.player.nameInitial,
-                isSelected: selectedId == player.player.id,
-                onTap: () {
-                  setState(() {
-                    selectedId = player.player.id;
-                  });
-                },
-              )
-            ],
-          ],
-        ),
+            spacing: 16,
+            runSpacing: 16,
+            children: getFilteredList(state)
+                .map(
+                  (player) => UserCellView(
+                    title: player.player.name ??
+                        context.l10n.common_anonymous_title,
+                    imageUrl: player.player.profile_img_url,
+                    initial: player.player.nameInitial,
+                    isSelected: selectedId == player.player.id,
+                    onTap: () {
+                      setState(() {
+                        selectedId = player.player.id;
+                      });
+                    },
+                  ),
+                )
+                .toList()),
       ],
     );
   }

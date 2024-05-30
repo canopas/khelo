@@ -15,7 +15,6 @@ class AddPenaltyRunSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      isDismissible: true,
       showDragHandle: false,
       enableDrag: false,
       isScrollControlled: true,
@@ -108,7 +107,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     borderColor:
-                        BorderColor(Colors.transparent, Colors.transparent),
+                        BorderColor(focusColor:Colors.transparent, unFocusColor:Colors.transparent),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],

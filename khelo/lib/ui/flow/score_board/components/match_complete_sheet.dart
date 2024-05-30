@@ -166,15 +166,15 @@ class MatchCompleteSheet extends ConsumerWidget {
         children: [
           Expanded(
               flex: 4, child: _text(context, title: title, isHeader: isHeader)),
-          Expanded(
-              child: _text(context,
-                  title: data, isHeader: isHeader, isRightAlign: true)),
-          Expanded(
-              child: _text(context,
-                  title: data1, isHeader: isHeader, isRightAlign: true)),
-          Expanded(
-              child: _text(context,
-                  title: data2, isHeader: isHeader, isRightAlign: true)),
+          for (var dataItem in [data, data1, data2])
+            Expanded(
+              child: _text(
+                context,
+                title: dataItem,
+                isHeader: isHeader,
+                isRightAlign: true,
+              ),
+            ),
         ],
       ),
     );

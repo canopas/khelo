@@ -69,13 +69,12 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     return AppPage(
       title: context.l10n.add_toss_detail_screen_title,
       body: Builder(builder: (context) {
-        return _body(context, notifier, state);
+        return _body(context, state);
       }),
     );
   }
 
-  Widget _body(BuildContext context, AddTossDetailViewNotifier notifier,
-      AddTossDetailState state) {
+  Widget _body(BuildContext context, AddTossDetailState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -93,19 +92,23 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
               const EdgeInsets.only(left: 16) +
               BottomStickyOverlay.padding,
           children: [
-            _whoWonTossView(context, notifier, state),
-            _electedToView(context, notifier, state),
+            _whoWonTossView(
+              context,
+              state.match?.teams,
+              state.tossWinnerTeamId,
+            ),
+            _electedToView(context, state.tossWinnerDecision),
           ],
         ),
-        _stickyButton(context, notifier, state)
+        _stickyButton(context, state)
       ],
     );
   }
 
   Widget _whoWonTossView(
     BuildContext context,
-    AddTossDetailViewNotifier notifier,
-    AddTossDetailState state,
+    List<MatchTeamModel>? teams,
+    String? tossWinnerTeamId,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +116,14 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
         _sectionTitle(context, context.l10n.add_toss_detail_who_won_toss_text),
         IntrinsicHeight(
           child: Row(
-            children: state.match?.teams
-                    .map(
+            children: teams
+                    ?.map(
                       (team) => _tossCellView(
                         context: context,
                         imageUrl: team.team.profile_img_url,
                         initial: team.team.name[0].toUpperCase(),
                         title: team.team.name,
-                        isSelected: state.tossWinnerTeamId == team.team.id,
+                        isSelected: tossWinnerTeamId == team.team.id,
                         onTap: () => notifier
                             .onTossWinnerSelect(team.team.id ?? "INVALID ID"),
                       ),
@@ -135,8 +138,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
 
   Widget _electedToView(
     BuildContext context,
-    AddTossDetailViewNotifier notifier,
-    AddTossDetailState state,
+    TossDecision? tossWinnerDecision,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,7 +152,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
                       context: context,
                       image: getTossDecisionImage(decision),
                       title: decision.getString(context),
-                      isSelected: state.tossWinnerDecision == decision,
+                      isSelected: tossWinnerDecision == decision,
                       onTap: () => notifier.onOptionSelect(decision),
                     ))
                 .toList(),
@@ -245,7 +247,6 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
 
   Widget _stickyButton(
     BuildContext context,
-    AddTossDetailViewNotifier notifier,
     AddTossDetailState state,
   ) {
     return BottomStickyOverlay(

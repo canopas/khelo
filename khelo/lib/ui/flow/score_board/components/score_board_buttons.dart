@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -29,75 +30,31 @@ class ScoreBoardButtons extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 3,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.zero,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.one,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.two,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                      ],
-                    ),
+                    child: _buttonRow(context,
+                        buttons: [
+                          ScoreButton.zero,
+                          ScoreButton.one,
+                          ScoreButton.two
+                        ],
+                        backgroundColor: context.colorScheme.containerLow),
                   ),
                   Expanded(
                     flex: 3,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.three,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.four,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.six,
-                          backgroundColor: context.colorScheme.containerLow,
-                        )),
-                      ],
-                    ),
+                    child: _buttonRow(context,
+                        buttons: [
+                          ScoreButton.three,
+                          ScoreButton.four,
+                          ScoreButton.six
+                        ],
+                        backgroundColor: context.colorScheme.containerLow),
                   ),
                   Expanded(
                     flex: 2,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.wideBall,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.noBall,
-                        )),
-                        Expanded(
-                            child: _scoreButton(
-                          context: context,
-                          btn: ScoreButton.bye,
-                        )),
-                      ],
-                    ),
+                    child: _buttonRow(context, buttons: [
+                      ScoreButton.wideBall,
+                      ScoreButton.noBall,
+                      ScoreButton.bye
+                    ]),
                   ),
                 ],
               ),
@@ -135,6 +92,24 @@ class ScoreBoardButtons extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buttonRow(
+    BuildContext context, {
+    required List<ScoreButton> buttons,
+    Color? backgroundColor,
+  }) {
+    return Row(
+        children: buttons
+            .map(
+              (button) => Expanded(
+                  child: _scoreButton(
+                context: context,
+                btn: button,
+                backgroundColor: backgroundColor,
+              )),
+            )
+            .toList());
   }
 
   Widget _scoreButton({

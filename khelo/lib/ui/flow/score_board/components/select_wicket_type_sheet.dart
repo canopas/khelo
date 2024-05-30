@@ -15,7 +15,6 @@ class SelectWicketTypeSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
     return showModalBottomSheet(
       context: context,
-      isDismissible: true,
       showDragHandle: false,
       enableDrag: false,
       isScrollControlled: true,

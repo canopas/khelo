@@ -76,25 +76,25 @@ class _StrikerSelectionSheetState extends ConsumerState<StrikerSelectionSheet> {
           height: 16,
         ),
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: [
-            for (final player in state.batsMans ?? []) ...[
-              UserCellView(
-                title:
-                    player.player.name ?? context.l10n.common_anonymous_title,
-                imageUrl: player.player.profile_img_url,
-                initial: player.player.nameInitial,
-                isSelected: selectedUser?.id == player.player.id,
-                onTap: () {
-                  setState(() {
-                    selectedUser = player.player;
-                  });
-                },
-              )
-            ],
-          ],
-        ),
+            spacing: 16,
+            runSpacing: 16,
+            children: state.batsMans
+                    ?.map(
+                      (player) => UserCellView(
+                        title: player.player.name ??
+                            context.l10n.common_anonymous_title,
+                        imageUrl: player.player.profile_img_url,
+                        initial: player.player.nameInitial,
+                        isSelected: selectedUser?.id == player.player.id,
+                        onTap: () {
+                          setState(() {
+                            selectedUser = player.player;
+                          });
+                        },
+                      ),
+                    )
+                    .toList() ??
+                []),
       ],
     );
   }

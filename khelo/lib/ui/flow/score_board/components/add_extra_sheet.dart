@@ -19,7 +19,6 @@ class AddExtraSheet extends StatefulWidget {
   }) {
     return showModalBottomSheet(
       context: context,
-      isDismissible: true,
       showDragHandle: false,
       enableDrag: false,
       isScrollControlled: true,
@@ -129,8 +128,9 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
                     keyboardType: TextInputType.number,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    borderColor:
-                        BorderColor(Colors.transparent, Colors.transparent),
+                    borderColor: BorderColor(
+                        focusColor: Colors.transparent,
+                        unFocusColor: Colors.transparent),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],

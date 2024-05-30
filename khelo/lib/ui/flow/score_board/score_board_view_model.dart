@@ -740,9 +740,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           bowlingTeamInningId: bowlingTeamInningId,
           totalWicketTaken: wicketCount,
           updatedPlayer: updatedPlayers);
-    } catch (e, stack) {
+    } catch (e) {
       debugPrint(
-          "ScoreBoardViewNotifier: error while undo last ball -> $e, stack: $stack");
+          "ScoreBoardViewNotifier: error while undo last ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
     }

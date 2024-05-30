@@ -79,7 +79,8 @@ class OverCompleteSheet extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "${context.l10n.score_board_end_of_over_title}${state.overCount.toString()}${context.l10n.score_board_by_title}${state.bowler?.player.name}",
+            context.l10n.score_board_end_of_over_by_title(
+                state.overCount, state.bowler?.player.name ?? ""),
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
