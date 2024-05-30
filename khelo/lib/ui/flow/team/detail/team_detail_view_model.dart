@@ -67,30 +67,24 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
   MatchStats _calculateMatchStats(List<MatchModel> matches) {
     if (matches.isEmpty) return const MatchStats();
-
-    final List<MatchModel> finishedMatches = matches
-        .where((match) => match.match_status == MatchStatus.finish)
-        .toList();
-
-    final matchResult = _matchResult(finishedMatches);
-    final runs = _totalRuns(finishedMatches);
-    final wickets = _wickets(finishedMatches);
-    final battingAverage = _battingAverage(finishedMatches);
-    final bowlingAverage = _bowlingAverage(finishedMatches);
-    final (highestRuns, lowestRuns) = _highestAndLowestRuns(finishedMatches);
-    final runRate = _runRate(finishedMatches, runs);
-
+    final finishedMatches = _filterFinishedMatches(matches);
     return MatchStats(
       played: finishedMatches.length,
-      matchResult: matchResult,
-      runs: runs,
-      wickets: wickets,
-      bating_average: battingAverage,
-      bowling_average: bowlingAverage,
-      highest_runs: highestRuns,
-      lowest_runts: lowestRuns,
-      run_rate: runRate,
+      matchResult: _matchResult(finishedMatches),
+      runs: _totalRuns(finishedMatches),
+      wickets: _wickets(finishedMatches),
+      bating_average: _battingAverage(finishedMatches),
+      bowling_average: _bowlingAverage(finishedMatches),
+      highest_runs: _highestAndLowestRuns(finishedMatches).$1,
+      lowest_runts: _highestAndLowestRuns(finishedMatches).$2,
+      run_rate: _runRate(finishedMatches, _totalRuns(finishedMatches)),
     );
+  }
+
+  List<MatchModel> _filterFinishedMatches(List<MatchModel> matches) {
+    return matches
+        .where((match) => match.match_status == MatchStatus.finish)
+        .toList();
   }
 
   int _totalRuns(List<MatchModel> finishedMatches) {

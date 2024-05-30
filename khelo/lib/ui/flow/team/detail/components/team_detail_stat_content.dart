@@ -52,7 +52,10 @@ class TeamDetailStatContent extends ConsumerWidget {
   }
 
   Widget _matchPlayedProgress(
-      BuildContext context, MatchResult matchResult, int playedMatches) {
+    BuildContext context,
+    MatchResult result,
+    int playedMatches,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -68,7 +71,7 @@ class TeamDetailStatContent extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
           const SizedBox(height: 16),
-          PrimerProgressBar(matchResult: matchResult),
+          PrimerProgressBar(matchResult: result),
         ],
       ),
     );
