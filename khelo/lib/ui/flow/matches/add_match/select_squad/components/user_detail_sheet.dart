@@ -35,118 +35,116 @@ class UserDetailSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.only(bottom: 24, left: 16, right: 16),
-      child: Wrap(
-        alignment: WrapAlignment.center,
+      padding: context.mediaQueryPadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          _nameText(context),
-          Divider(
-            height: 32,
-            color: context.colorScheme.outline,
-            thickness: 2,
+          _memberProfile(context),
+          Divider(color: context.colorScheme.outline),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              context.l10n.add_team_member_details_title,
+              style: AppTextStyle.header4.copyWith(
+                color: context.colorScheme.textPrimary,
+              ),
+            ),
           ),
-          _textDividerView(
+          _memberDetailCell(
             context,
-            title1: user.location.toString(),
-            title2: user.gender?.getString(context) ?? "",
+            label: context.l10n.edit_profile_gender_placeholder,
+            value: user.gender?.getString(context),
           ),
-          Divider(
-            height: 32,
-            color: context.colorScheme.outline,
-            thickness: 2,
+          _memberDetailCell(
+            context,
+            label: context.l10n.add_team_location_text,
+            value: user.location.toString(),
           ),
-          _textDividerView(context,
-              title1: user.player_role?.getString(context),
-              title2: user.batting_style?.getString(context),
-              title3: user.bowling_style?.getString(context)),
+          _memberDetailCell(
+            context,
+            label: context.l10n.add_team_player_role_title,
+            value: user.player_role?.getString(context),
+          ),
+          _memberDetailCell(
+            context,
+            label: context.l10n.edit_profile_batting_style_placeholder,
+            value: user.batting_style?.getString(context),
+          ),
+          _memberDetailCell(
+            context,
+            label: context.l10n.edit_profile_bowling_style_placeholder,
+            value: user.bowling_style?.getString(context),
+          ),
         ],
       ),
     );
   }
 
-  Widget _nameText(BuildContext context) {
-    return Row(
-      children: [
-        ImageAvatar(
+  Widget _memberProfile(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: ListTile(
+        dense: true,
+        leading: ImageAvatar(
           initial: user.nameInitial,
           imageUrl: user.profile_img_url,
-          size: 70,
+          size: 40,
         ),
-        Expanded(
-          child: Column(
-            children: [
-              Text(
-                user.name ?? context.l10n.common_anonymous_title,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary, fontSize: 20),
-              ),
-              Text(
-                user.phone.format(context, StringFormats.obscurePhoneNumber),
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary, fontSize: 20),
-              ),
-            ],
-          ),
+        title: Text(
+          user.name ?? context.l10n.common_anonymous_title,
+          style: AppTextStyle.subtitle1
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
-        Text.rich(
-            textAlign: TextAlign.right,
-            TextSpan(
-                text: context.l10n.add_match_joined_on_title,
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.textSecondary),
-                children: [
-                  TextSpan(
-                      text:
-                          "\n${DateFormat.yMMMd().format(user.created_at ?? DateTime.now())}",
-                      style: AppTextStyle.subtitle1
-                          .copyWith(color: context.colorScheme.textSecondary))
-                ])),
-      ],
+        subtitle: Text(
+          user.phone.format(context, StringFormats.obscurePhoneNumber),
+          style: AppTextStyle.body2
+              .copyWith(color: context.colorScheme.textDisabled),
+        ),
+        trailing: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              context.l10n.add_match_joined_on_title,
+              style: AppTextStyle.caption
+                  .copyWith(color: context.colorScheme.textDisabled),
+            ),
+            Text(
+              DateFormat.yMMMd().format(user.created_at ?? DateTime.now()),
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _textDividerView(
+  Widget _memberDetailCell(
     BuildContext context, {
-    required String? title1,
-    required String? title2,
-    String? title3,
+    required String label,
+    required String? value,
   }) {
-    return IntrinsicHeight(
+    if (value == null) return const SizedBox();
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (title1 != null) ...[
-            Text(
-              title1,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
+          Text(
+            label,
+            style: AppTextStyle.body1.copyWith(
+              color: context.colorScheme.textDisabled,
             ),
-          ],
-          if (title2 != null) ...[
-            VerticalDivider(
-              thickness: 2,
-              color: context.colorScheme.outline,
-              width: 24,
+          ),
+          Text(
+            value,
+            style: AppTextStyle.body2.copyWith(
+              color: context.colorScheme.textPrimary,
             ),
-            Text(
-              title2,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ],
-          if (title3 != null) ...[
-            VerticalDivider(
-              thickness: 2,
-              color: context.colorScheme.outline,
-              width: 24,
-            ),
-            Text(
-              title3,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ],
+          )
         ],
       ),
     );
