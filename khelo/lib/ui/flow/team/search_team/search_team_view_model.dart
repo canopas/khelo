@@ -47,30 +47,32 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   }
 
   Future<void> search(String searchKey) async {
+    state = state.copyWith(searchInProgress: true);
+
     try {
-      state = state.copyWith(searchInProgress: true);
+      List<TeamModel> filteredResult;
       if (onlyUserTeams) {
-        final filteredResult = state.userTeams
-            .where((element) => element.name.caseAndSpaceInsensitive
+        filteredResult = state.userTeams
+            .where((team) => team.name.caseAndSpaceInsensitive
                 .startsWith(searchKey.caseAndSpaceInsensitive))
             .toList();
-        state = state.copyWith(
-            searchResults: filteredResult,
-            error: null,
-            searchInProgress: false);
       } else {
         final teams = await _teamService.searchTeam(searchKey);
-        final filteredResult = teams
-            .where((element) => !excludedIds.contains(element.id))
-            .toList();
-        state = state.copyWith(
-            searchResults: filteredResult,
-            error: null,
-            searchInProgress: false);
+        filteredResult =
+            teams.where((team) => !excludedIds.contains(team.id)).toList();
       }
+
+      state = state.copyWith(
+        searchResults: filteredResult,
+        error: null,
+        searchInProgress: false,
+      );
     } catch (e) {
-      state = state.copyWith(searchInProgress: false, error: e);
-      debugPrint("SearchTeamViewNotifier: error while search team -> $e");
+      state = state.copyWith(
+        searchInProgress: false,
+        error: e,
+      );
+      debugPrint("SearchTeamViewNotifier: error while searching team -> $e");
     }
   }
 

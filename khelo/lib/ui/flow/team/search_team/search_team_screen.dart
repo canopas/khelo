@@ -12,6 +12,7 @@ import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 
 class SearchTeamScreen extends ConsumerStatefulWidget {
@@ -41,7 +42,6 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(searchTeamViewStateProvider.notifier);
     final state = ref.watch(searchTeamViewStateProvider);
 
     return AppPage(
@@ -66,16 +66,21 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                     }
                   }
                 : null,
-            icon: const Icon(Icons.check)),
+            icon: Icon(
+              Icons.check,
+              color: state.selectedTeam != null
+                  ? context.colorScheme.primary
+                  : context.colorScheme.textDisabled,
+            )),
       ],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             children: [
-              _searchTextField(context, notifier, state),
+              _searchTextField(context, state),
               Expanded(
-                child: _teamList(context, notifier, state),
+                child: _teamList(context, state),
               ),
             ],
           ),
@@ -86,76 +91,46 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
 
   Widget _searchTextField(
     BuildContext context,
-    SearchTeamViewNotifier notifier,
     SearchTeamState state,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Material(
-        type: MaterialType.transparency,
-        child: TextField(
-          controller: state.searchController,
-          onChanged: (value) => notifier.onSearchChanged(),
-          decoration: InputDecoration(
-            hintText: context.l10n.search_team_search_placeholder_title,
-            contentPadding: const EdgeInsets.all(16),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(30.0),
-              borderSide: BorderSide.none,
-            ),
-            filled: true,
-            fillColor: context.colorScheme.containerLowOnSurface,
-            hintStyle: TextStyle(color: context.colorScheme.textDisabled),
-            prefixIcon: Icon(
-              Icons.search,
-              color: context.colorScheme.textDisabled,
-              size: 24,
-            ),
-            suffix: state.searchInProgress
-                ? const AppProgressIndicator(
-                    radius: 8,
-                  )
-                : const SizedBox(
-                    height: 16,
-                  ),
-          ),
-          onTapOutside: (event) {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          style: AppTextStyle.body2.copyWith(
-            color: context.colorScheme.textPrimary,
-          ),
-        ),
+    return AppTextField(
+      controller: state.searchController,
+      borderRadius: BorderRadius.circular(30),
+      contentPadding: const EdgeInsets.all(16),
+      borderType: AppTextFieldBorderType.outline,
+      onChanged: (value) => notifier.onSearchChanged(),
+      backgroundColor: context.colorScheme.containerLowOnSurface,
+      hintText: context.l10n.search_team_search_placeholder_title,
+      style: AppTextStyle.body2.copyWith(
+        color: context.colorScheme.textPrimary,
       ),
-    );
-  }
-
-  Widget _sectionTitle(BuildContext context, String title) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(
-          height: 24,
-        ),
-        Text(
-          title,
-          style: AppTextStyle.header1
-              .copyWith(color: context.colorScheme.textSecondary),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-      ],
+      hintStyle: AppTextStyle.subtitle2.copyWith(
+        color: context.colorScheme.textDisabled,
+      ),
+      borderColor: BorderColor(
+        focusColor: Colors.transparent,
+        unFocusColor: Colors.transparent,
+      ),
+      onTapOutside: (event) {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      prefixIcon: Icon(
+        Icons.search,
+        color: context.colorScheme.textDisabled,
+        size: 24,
+      ),
+      suffixIcon: state.searchInProgress
+          ? const UnconstrainedBox(child: AppProgressIndicator(radius: 8))
+          : const SizedBox(),
     );
   }
 
   Widget _teamList(
     BuildContext context,
-    SearchTeamViewNotifier notifier,
     SearchTeamState state,
   ) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {
@@ -168,18 +143,19 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     return ListView(
       children: [
         for (final team in state.searchResults) ...[
-          const SizedBox(
-            height: 16,
-          ),
-          _teamProfileCell(context, notifier, state, team)
+          _teamProfileCell(context, state, team),
+          Divider(color: context.colorScheme.outline),
         ],
         if (state.userTeams.isNotEmpty) ...[
-          _sectionTitle(context, context.l10n.search_team_your_teams_title),
+          const SizedBox(height: 24),
+          Text(
+            context.l10n.search_team_your_teams_title,
+            style: AppTextStyle.header2
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
           for (final team in state.userTeams) ...[
-            _teamProfileCell(context, notifier, state, team),
-            const SizedBox(
-              height: 16,
-            ),
+            _teamProfileCell(context, state, team),
+            Divider(color: context.colorScheme.outline),
           ],
         ],
       ],
@@ -188,55 +164,58 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
 
   Widget _teamProfileCell(
     BuildContext context,
-    SearchTeamViewNotifier notifier,
     SearchTeamState state,
     TeamModel team,
   ) {
     return OnTapScale(
-        onTap: () {
-          notifier.onTeamCellTap(team);
-        },
-        onLongTap: () {
-          // TODO: play haptic feedback.
-          TeamMemberDialog.show<bool>(context, team: team);
-        },
-        child: Row(
-          children: [
-            ImageAvatar(
-              initial: team.name[0].toUpperCase(),
-              imageUrl: team.profile_img_url,
-              size: 50,
+      onTap: () => notifier.onTeamCellTap(team),
+      onLongTap: () => TeamMemberDialog.show<bool>(context, team: team),
+      child: Material(
+        type: MaterialType.transparency,
+        child: ListTile(
+          dense: true,
+          contentPadding: EdgeInsets.zero,
+          leading: ImageAvatar(
+            initial: team.name[0].toUpperCase(),
+            imageUrl: team.profile_img_url,
+            size: 40,
+          ),
+          title: Text(
+            team.name,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          subtitle: Text.rich(
+            TextSpan(
+              text: team.city != null
+                  ? team.city!
+                  : context.l10n.common_not_specified_title,
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.textSecondary),
+              children: [
+                WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      constraints:
+                          const BoxConstraints(maxHeight: 4, maxWidth: 4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: context.colorScheme.textDisabled,
+                      ),
+                    )),
+                TextSpan(
+                  text: context.l10n
+                      .search_team_player_title(team.players?.length ?? 0),
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    team.name,
-                    style: AppTextStyle.header4
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                  Text.rich(TextSpan(
-                      text: team.city != null
-                          ? team.city!
-                          : context.l10n.common_not_specified_title,
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary),
-                      children: [
-                        TextSpan(
-                            text:
-                                " - ${context.l10n.search_team_member_title(team.players?.length ?? 0)}")
-                      ])),
-                ],
-              ),
-            ),
-            if (team.id == state.selectedTeam?.id) ...[
-              const Icon(Icons.check_circle_sharp)
-            ]
-          ],
-        ));
+          ),
+          trailing: (team.id == state.selectedTeam?.id)
+              ? const Icon(Icons.check_circle_sharp)
+              : null,
+        ),
+      ),
+    );
   }
 }
