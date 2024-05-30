@@ -51,12 +51,13 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     if (state.editTeam == null) {
       return;
     }
-    state = state.copyWith(teamMembers: [...state.teamMembers, ...players]);
+    state = state.copyWith(
+        teamMembers: {...state.teamMembers, ...players}.toList());
     onValueChange();
   }
 
-  void onAddMeCheckBoxTap() {
-    state = state.copyWith(isAddMeCheckBoxEnable: !state.isAddMeCheckBoxEnable);
+  void onAddMeCheckBoxTap(bool isAddMeCheckBoxEnable) {
+    state = state.copyWith(isAddMeCheckBoxEnable: isAddMeCheckBoxEnable);
   }
 
   Future<void> onImageSelect(String imagePath) async {

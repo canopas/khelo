@@ -15,7 +15,6 @@ import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
@@ -23,6 +22,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/theme/colors.dart';
+import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/image_picker_sheet.dart';
 
@@ -167,7 +167,8 @@ class EditProfileScreen extends ConsumerWidget {
       borderRadius: BorderRadius.circular(12),
       borderType: AppTextFieldBorderType.outline,
       backgroundColor: context.colorScheme.containerLow,
-      borderColor: BorderColor(Colors.transparent, Colors.transparent),
+      borderColor: BorderColor(
+          focusColor: Colors.transparent, unFocusColor: Colors.transparent),
       hintText: placeholderText,
       hintStyle: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textDisabled),
@@ -182,22 +183,20 @@ class EditProfileScreen extends ConsumerWidget {
     return Row(
       children: [
         Expanded(
-          child: _selectionDropDownButton(
-            context,
+          child: AdaptiveOutlinedTile(
             headerText: context.l10n.edit_profile_dob_placeholder,
             title: state.dob.format(context, DateFormatType.shortDate),
+            showTrailingIcon: true,
             placeholder: context.l10n.edit_profile_dob_placeholder,
             onTap: () => _selectDate(context, notifier, state),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: _selectionDropDownButton(
-            context,
+          child: AdaptiveOutlinedTile(
             headerText: context.l10n.edit_profile_gender_placeholder,
             title: state.gender?.getString(context),
             placeholder: context.l10n.edit_profile_gender_placeholder,
-            showTrailingIcon: false,
             onTap: () {
               showActionBottomSheet(
                   context: context,
@@ -228,10 +227,10 @@ class EditProfileScreen extends ConsumerWidget {
   ) {
     return Column(
       children: [
-        _selectionDropDownButton(
-          context,
+        AdaptiveOutlinedTile(
           title: state.playerRole?.getString(context),
           placeholder: context.l10n.edit_profile_player_role_placeholder,
+          showTrailingIcon: true,
           onTap: () {
             showActionBottomSheet(
                 context: context,
@@ -251,10 +250,10 @@ class EditProfileScreen extends ConsumerWidget {
           },
         ),
         const SizedBox(height: 24),
-        _selectionDropDownButton(
-          context,
+        AdaptiveOutlinedTile(
           title: state.battingStyle?.getString(context),
           placeholder: context.l10n.edit_profile_batting_style_placeholder,
+          showTrailingIcon: true,
           onTap: () {
             showActionBottomSheet(
                 context: context,
@@ -274,10 +273,10 @@ class EditProfileScreen extends ConsumerWidget {
           },
         ),
         const SizedBox(height: 24),
-        _selectionDropDownButton(
-          context,
+        AdaptiveOutlinedTile(
           title: state.bowlingStyle?.getString(context),
           placeholder: context.l10n.edit_profile_bowling_style_placeholder,
+          showTrailingIcon: true,
           onTap: () {
             showActionBottomSheet(
                 context: context,
@@ -315,62 +314,6 @@ class EditProfileScreen extends ConsumerWidget {
             ),
           )
         : null;
-  }
-
-  Widget _selectionDropDownButton(
-    BuildContext context, {
-    String? headerText,
-    String? title,
-    required String placeholder,
-    bool showTrailingIcon = true,
-    required Function() onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (headerText != null) ...[
-          Text(
-            headerText,
-            style: AppTextStyle.caption
-                .copyWith(color: context.colorScheme.textDisabled),
-          ),
-          const SizedBox(height: 4),
-        ],
-        OnTapScale(
-          onTap: onTap,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: context.colorScheme.outline)),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title ?? placeholder,
-                    style: AppTextStyle.subtitle3.copyWith(
-                        color: title != null
-                            ? context.colorScheme.textPrimary
-                            : context.colorScheme.textSecondary),
-                  ),
-                ),
-                if (showTrailingIcon) ...[
-                  SvgPicture.asset(
-                    Assets.images.icArrowDown,
-                    height: 18,
-                    width: 18,
-                    colorFilter: ColorFilter.mode(
-                      context.colorScheme.textPrimary,
-                      BlendMode.srcATop,
-                    ),
-                  )
-                ]
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
   }
 
   Future<void> _selectDate(

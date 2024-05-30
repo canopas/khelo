@@ -15,6 +15,7 @@ class AppTextField extends StatelessWidget {
   final Color? backgroundColor;
   final bool expands;
   final bool enabled;
+  final Widget? suffixIcon;
   final BorderRadius? borderRadius;
   final AppTextFieldBorderType borderType;
   final BorderColor? borderColor;
@@ -30,6 +31,7 @@ class AppTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final TextAlign textAlign;
+  final Widget? prefixIcon;
   final List<TextInputFormatter>? inputFormatters;
   final Function(PointerDownEvent)? onTapOutside;
 
@@ -45,6 +47,7 @@ class AppTextField extends StatelessWidget {
     this.backgroundColor,
     this.expands = false,
     this.enabled = true,
+    this.suffixIcon,
     this.onChanged,
     this.borderType = AppTextFieldBorderType.underline,
     this.borderColor,
@@ -60,6 +63,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.focusNode,
     this.inputFormatters,
+    this.prefixIcon,
     this.textAlign = TextAlign.start,
     this.onTapOutside,
   });
@@ -118,11 +122,13 @@ class AppTextField extends StatelessWidget {
               const SizedBox(),
           maxLength: maxLength,
           decoration: InputDecoration(
+            prefixIcon: prefixIcon,
             isDense: isDense,
             isCollapsed: isCollapsed,
             hintText: hintText,
             hintStyle: hintStyle,
             fillColor: backgroundColor,
+            suffixIcon: suffixIcon,
             filled: backgroundColor != null,
             focusedBorder: _border(context, true),
             enabledBorder: _border(context, false),
@@ -145,7 +151,7 @@ class AppTextField extends StatelessWidget {
         );
       case AppTextFieldBorderType.outline:
         return OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: borderRadius ?? BorderRadius.circular(8),
           borderSide: BorderSide(
             color: focused
                 ? borderColor?.focusColor ?? context.colorScheme.primary
@@ -176,5 +182,5 @@ class BorderColor {
   Color? focusColor;
   Color? unFocusColor;
 
-  BorderColor(this.focusColor, this.unFocusColor);
+  BorderColor({this.focusColor, this.unFocusColor});
 }

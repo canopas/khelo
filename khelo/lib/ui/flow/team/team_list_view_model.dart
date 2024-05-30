@@ -52,14 +52,14 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   }
 
   void _filterTeamList() {
-    List<TeamModel> list = [];
+    List<TeamModel> filteredTeams;
     switch (state.selectedFilter) {
       case TeamFilterOption.createdByMe:
-        list = state.teams
+        filteredTeams = state.teams
             .where((element) => element.created_by == state.currentUserId)
             .toList();
       case TeamFilterOption.memberMe:
-        list = state.teams
+        filteredTeams = state.teams
             .where((element) =>
                 element.created_by == state.currentUserId ||
                 (element.players
@@ -68,10 +68,10 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
                     false))
             .toList();
       default:
-        list = state.teams;
+        filteredTeams = state.teams;
     }
 
-    state = state.copyWith(filteredTeams: list);
+    state = state.copyWith(filteredTeams: filteredTeams);
   }
 
   void onFilterOptionSelect(TeamFilterOption filter) {
@@ -92,12 +92,6 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   onResume() {
     _cancelStreamSubscription();
     _loadTeamList();
-  }
-
-  @override
-  void dispose() {
-    _cancelStreamSubscription();
-    super.dispose();
   }
 }
 

@@ -2,19 +2,23 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/bottom_sticky_overlay.dart';
+import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class SelectAdminAndCaptainDialog extends ConsumerWidget {
   static Future<T?> show<T>(BuildContext context) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      useRootNavigator: true,
+      backgroundColor: context.colorScheme.surface,
       builder: (context) {
         return const SelectAdminAndCaptainDialog();
       },
@@ -28,30 +32,28 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
     final notifier = ref.watch(selectSquadStateProvider.notifier);
     final state = ref.watch(selectSquadStateProvider);
 
-    return AlertDialog(
-      backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(
-        context.l10n.select_squad_select_admin_captain_title,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textPrimary),
+    return SizedBox(
+      height: context.mediaQuerySize.height * 0.8,
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+                child: Text(
+                  context.l10n.select_squad_select_admin_captain_title,
+                  style: AppTextStyle.header4
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+              ),
+              Expanded(child: _selectCaptainContent(context, notifier, state)),
+            ],
+          ),
+          _stickyButton(context, state),
+        ],
       ),
-      content: _selectCaptainContent(context, notifier, state),
-      actionsAlignment: MainAxisAlignment.spaceAround,
-      actions: [
-        OnTapScale(
-            onTap: () => context.pop({
-                  "captain_id": state.captainId,
-                  "admin_id": state.adminId,
-                }),
-            enabled: state.isOkayBtnEnable,
-            child: Text(
-              context.l10n.common_okay_title,
-              style: AppTextStyle.subtitle1.copyWith(
-                  color: state.isOkayBtnEnable
-                      ? context.colorScheme.primary
-                      : context.colorScheme.textDisabled),
-            )),
-      ],
     );
   }
 
@@ -60,70 +62,32 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
     SelectSquadViewNotifier notifier,
     SelectSquadViewState state,
   ) {
-    return SingleChildScrollView(
-      child: Wrap(
-        runSpacing: 16,
-        children: [
-          for (final member in state.squad) ...[
-            _userProfileCell(context, notifier, state, member),
-          ],
-        ],
+    return ListView.separated(
+      itemCount: state.squad.length,
+      padding: BottomStickyOverlay.padding,
+      separatorBuilder: (context, index) => Divider(
+        color: context.colorScheme.outline,
+        height: 32,
       ),
+      itemBuilder: (context, index) {
+        final member = state.squad[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: UserDetailCell(
+            user: member.player,
+            trailing: _selectButtons(context, notifier, state, member),
+          ),
+        );
+      },
     );
   }
 
-  Widget _userProfileCell(
+  Widget _selectButtons(
     BuildContext context,
     SelectSquadViewNotifier notifier,
     SelectSquadViewState state,
     MatchPlayer member,
   ) {
-    return Row(
-      children: [
-        ImageAvatar(
-          initial: member.player.nameInitial,
-          imageUrl: member.player.profile_img_url,
-          size: 50,
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                member.player.name ?? context.l10n.common_anonymous_title,
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              Text(
-                  member.player.player_role != null
-                      ? member.player.player_role!.getString(context)
-                      : context.l10n.common_not_specified_title,
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textSecondary)),
-              if (member.player.phone != null) ...[
-                const SizedBox(
-                  height: 2,
-                ),
-                Text(
-                  member.player.phone
-                      .format(context, StringFormats.obscurePhoneNumber),
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textSecondary),
-                ),
-              ],
-            ],
-          ),
-        ),
-        _selectButtons(context, notifier, state, member)
-      ],
-    );
-  }
-
-  Widget _selectButtons(BuildContext context, SelectSquadViewNotifier notifier,
-      SelectSquadViewState state, MatchPlayer member) {
     return Wrap(
       direction: Axis.horizontal,
       spacing: 8,
@@ -163,17 +127,33 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
           }
         },
         child: Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            border: Border.all(color: context.colorScheme.textPrimary),
-            color: isSelected ? context.colorScheme.primary : null,
+            color: isSelected
+                ? context.colorScheme.primary
+                : context.colorScheme.containerLow,
             shape: BoxShape.circle,
           ),
           child: Text(
             title,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary),
+            style: AppTextStyle.caption.copyWith(
+                color: isSelected
+                    ? context.colorScheme.textInversePrimary
+                    : context.colorScheme.textDisabled),
           ),
         ));
+  }
+
+  Widget _stickyButton(BuildContext context, SelectSquadViewState state) {
+    return BottomStickyOverlay(
+      child: PrimaryButton(
+        context.l10n.common_okay_title,
+        enabled: state.isOkayBtnEnable,
+        onPressed: () => context.pop({
+          "captain_id": state.captainId,
+          "admin_id": state.adminId,
+        }),
+      ),
+    );
   }
 }
