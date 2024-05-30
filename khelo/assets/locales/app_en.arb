@@ -159,7 +159,7 @@
   "search_team_search_placeholder_title": "Search team name",
   "search_team_your_teams_title": "Your Teams",
   "search_team_select_title": "Select",
-  "search_team_player_title": "{count, plural, =0{{count} Player} =1{{count} Player} other{{count} Players}}",
+  "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
   "@search_team_player_title": {
     "placeholders": {
       "count": {}

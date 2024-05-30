@@ -46,17 +46,17 @@ class TeamMemberDialog extends StatelessWidget {
       ),
       content: SingleChildScrollView(
         child: Wrap(
-          runSpacing: 16,
-          children: [
-            for (final member in team.players != null ? team.players! : []) ...[
-              UserDetailCell(
-                user: member,
-                trailing:
-                    isForVerification ? _selectButton(context, member) : null,
-              ),
-            ],
-          ],
-        ),
+            runSpacing: 16,
+            children: (team.players ?? [])
+                .map(
+                  (member) => UserDetailCell(
+                    user: member,
+                    trailing: isForVerification
+                        ? _selectButton(context, member)
+                        : null,
+                  ),
+                )
+                .toList()),
       ),
     );
   }
