@@ -58,6 +58,12 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
             highlightTeamId: match.teams.first.team.id,
             error: null);
         if (!state.inningsQueryListenerSet) {
+          final expandedTeam = state.match?.match_status == MatchStatus.finish
+              ? state.match?.matchResult?.winType == WinnerByType.tie
+                  ? state.match?.teams.first.team.id
+                  : state.match?.matchResult?.teamId
+              : state.match?.current_playing_team_id;
+          state = state.copyWith(expandedTeamScorecard: [expandedTeam ?? ""]);
           _loadInnings();
         }
       },
@@ -167,6 +173,23 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     await ballScoreStreamSubscription.cancel();
   }
 
+  void onTabChange(int tab) {
+    if (state.selectedTab != tab) {
+      state = state.copyWith(selectedTab: tab);
+    }
+  }
+
+  void onScorecardExpansionChange(String teamId, bool isExpanded) {
+    List<String> expandedList = state.expandedTeamScorecard.toList();
+    if (isExpanded) {
+      expandedList.add(teamId);
+    } else {
+      expandedList.remove(teamId);
+    }
+    state =
+        state.copyWith(expandedTeamScorecard: expandedList.toSet().toList());
+  }
+
   @override
   void dispose() {
     cancelStreamSubscription();
@@ -184,6 +207,8 @@ class MatchDetailTabState with _$MatchDetailTabState {
     String? highlightTeamId,
     DateTime? showTeamSelectionSheet,
     DateTime? showHighlightOptionSelectionSheet,
+    @Default(0) int selectedTab,
+    @Default([]) List<String> expandedTeamScorecard,
     @Default([]) List<BallScoreModel> ballScores,
     @Default(false) bool loading,
     @Default(false) bool inningsQueryListenerSet,

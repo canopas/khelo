@@ -38,7 +38,8 @@ class MatchDetailSquadView extends ConsumerWidget {
     }
 
     return ListView(
-        padding: context.mediaQueryPadding,
+        padding: context.mediaQueryPadding +
+            const EdgeInsets.only(left: 16, right: 16, top: 24),
         children: _buildTeamList(context, state));
   }
 
@@ -49,14 +50,13 @@ class MatchDetailSquadView extends ConsumerWidget {
     }
     for (final team in state.match!.teams) {
       children.add(_sectionTitleView(context, team.team.name));
-      children.add(const SizedBox(height: 8));
       children.addAll(_buildSquadList(
         context,
         team.squad,
         captainId: team.captain_id ?? "",
       ));
       children.addAll(_buildBenchList(context, team));
-      children.add(const SizedBox(height: 16));
+      children.add(const SizedBox(height: 24));
     }
     return children;
   }
@@ -69,8 +69,6 @@ class MatchDetailSquadView extends ConsumerWidget {
     List<Widget> children = [];
 
     for (final player in squad) {
-      children.add(const SizedBox(height: 8));
-
       children.add(_squadCellView(
         context,
         player.player,
@@ -89,10 +87,8 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (players == null || players.isEmpty) {
       return children;
     }
-    children.add(_sectionTitleView(
-      context,
-      context.l10n.match_squad_bench_text,
-      isSemiTitle: false,
+    children.add(Divider(
+      color: context.colorScheme.outline,
     ));
     for (final player in players) {
       children.add(_squadCellView(
@@ -107,21 +103,14 @@ class MatchDetailSquadView extends ConsumerWidget {
   Widget _sectionTitleView(
     BuildContext context,
     String title, {
-    bool isSemiTitle = true,
+    bool isSemiTitle = false,
   }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: isSemiTitle
-          ? context.colorScheme.containerNormalOnSurface
-          : Colors.transparent,
-      child: Text(
-        title,
-        style: isSemiTitle
-            ? AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary)
-            : AppTextStyle.header3
-                .copyWith(color: context.colorScheme.textPrimary),
-      ),
+    return Text(
+      title,
+      style: isSemiTitle
+          ? AppTextStyle.body1.copyWith(color: context.colorScheme.textPrimary)
+          : AppTextStyle.header4
+              .copyWith(color: context.colorScheme.textPrimary),
     );
   }
 
@@ -131,32 +120,33 @@ class MatchDetailSquadView extends ConsumerWidget {
     bool isCaptain = false,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           ImageAvatar(
             initial: player.nameInitial,
             imageUrl: player.profile_img_url,
-            size: 50,
+            size: 40,
           ),
           const SizedBox(
-            width: 8,
+            width: 16,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "${player.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
-                style: AppTextStyle.header4
+                style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
               const SizedBox(
-                height: 4,
+                height: 2,
               ),
               Text(
-                player.player_role?.getString(context) ?? "",
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textPrimary),
+                player.player_role?.getString(context) ??
+                    context.l10n.common_not_specified_title,
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
               )
             ],
           )

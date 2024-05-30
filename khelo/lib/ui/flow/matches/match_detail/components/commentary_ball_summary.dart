@@ -27,11 +27,11 @@ class CommentaryBallSummary extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Expanded(flex: 1, child: _ballNumberView(context)),
+          _ballNumberView(context),
           const SizedBox(
-            width: 16,
+            width: 24,
           ),
-          Expanded(flex: 7, child: _ballSummaryTextView(context)),
+          Expanded(child: _ballSummaryTextView(context)),
         ],
       ),
     );
@@ -41,12 +41,15 @@ class CommentaryBallSummary extends ConsumerWidget {
     return Column(
       children: [
         Text("${ball.over_number - 1}.${ball.ball_number}",
-            style: AppTextStyle.header3
-                .copyWith(color: context.colorScheme.textPrimary)),
+            style: showBallScore
+                ? AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled)
+                : AppTextStyle.body1
+                    .copyWith(color: context.colorScheme.textDisabled)),
         if (showBallScore) ...[
           BallScoreView(
             ball: ball,
-            size: 35,
+            size: 24,
           )
         ]
       ],
@@ -82,15 +85,15 @@ class CommentaryBallSummary extends ConsumerWidget {
           .match_commentary_runs_fours_sixes_text(run, ballCount, fours, sixes);
     }
     return Text.rich(
+      style:
+          AppTextStyle.body1.copyWith(color: context.colorScheme.textDisabled),
       TextSpan(
           text: context.l10n
               .match_commentary_bowler_to_batsman_text(bowler ?? "", batsMan),
-          style: AppTextStyle.subtitle1
-              .copyWith(color: context.colorScheme.textPrimary),
           children: [
             TextSpan(
               text: " ${_getBallResult(context, ball)}",
-              style: AppTextStyle.header3
+              style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
             TextSpan(
@@ -98,12 +101,10 @@ class CommentaryBallSummary extends ConsumerWidget {
             ),
             TextSpan(
               text: batsManSummary,
-              style: AppTextStyle.header3
+              style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textPrimary),
             )
           ]),
-      style: AppTextStyle.subtitle1
-          .copyWith(color: context.colorScheme.textPrimary),
     );
   }
 

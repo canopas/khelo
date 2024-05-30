@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -65,7 +64,7 @@ class MatchCompleteDialog extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _winnerMessageText(context, state.match),
+        WonByMessageText(matchResult: state.match?.matchResult),
         const SizedBox(
           height: 16,
         ),
@@ -146,30 +145,5 @@ class MatchCompleteDialog extends ConsumerWidget {
       teamInning?.total_wickets ?? 0,
       teamInning?.overs ?? 0
     );
-  }
-
-  Widget _winnerMessageText(BuildContext context, MatchModel? match) {
-    if (match == null) {
-      return const SizedBox();
-    }
-    final winSummary = match
-        .copyWith(match_status: MatchStatus.finish)
-        .getWinnerSummary(context);
-    if (winSummary != null) {
-      if (winSummary.teamName.isEmpty) {
-        return Text(
-          context.l10n.score_board_match_tied_text,
-          style: AppTextStyle.subtitle1
-              .copyWith(color: context.colorScheme.primary),
-        );
-      }
-      return WonByMessageText(
-        teamName: winSummary.teamName,
-        difference: winSummary.difference,
-        trailingText: winSummary.wonByText,
-      );
-    } else {
-      return const SizedBox();
-    }
   }
 }

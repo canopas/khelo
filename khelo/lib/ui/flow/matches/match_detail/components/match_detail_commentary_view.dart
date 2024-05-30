@@ -21,7 +21,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
     final state = ref.watch(matchDetailTabStateProvider);
     final notifier = ref.watch(matchDetailTabStateProvider.notifier);
 
-    return _body(context, notifier,state);
+    return _body(context, notifier, state);
   }
 
   Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
@@ -125,37 +125,31 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           .firstWhere((element) => element.team.id == teamId)
           .team
           .name;
-      return Column(
-        children: [
-          const SizedBox(
-            height: 16,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text.rich(TextSpan(
-                text: "$teamName",
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.primary),
-                children: [
-                  TextSpan(
-                    text: context.l10n.match_commentary_end_inning_text_part_1,
-                    style: AppTextStyle.subtitle1
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                  TextSpan(
-                      text: context.l10n.match_commentary_runs_text(
-                          (state.firstInning?.total_runs ?? 0) + 1)),
-                  TextSpan(
-                    text: context.l10n.match_commentary_end_inning_text_part_2,
-                    style: AppTextStyle.subtitle1
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                ])),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-        ],
+      return Container(
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            borderRadius: BorderRadius.circular(8)),
+        child: Text.rich(TextSpan(
+            text: "$teamName",
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.primary),
+            children: [
+              TextSpan(
+                text: context.l10n.match_commentary_end_inning_text_part_1,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              TextSpan(
+                  text: context.l10n.match_commentary_runs_text(
+                      (state.firstInning?.total_runs ?? 0) + 1)),
+              TextSpan(
+                text: context.l10n.match_commentary_end_inning_text_part_2,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+            ])),
       );
     } else {
       return const SizedBox();

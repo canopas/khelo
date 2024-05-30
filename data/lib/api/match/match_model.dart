@@ -55,6 +55,71 @@ class MatchTeamModel with _$MatchTeamModel {
       _$MatchTeamModelFromJson(json);
 }
 
+extension DataMatchModel on MatchModel {
+  MatchResult? get matchResult {
+    if (match_status != MatchStatus.finish) {
+      return null;
+    }
+
+    final firstTeam = toss_decision == TossDecision.bat
+        ? teams.firstWhere((element) => element.team.id == toss_winner_id)
+        : teams.firstWhere((element) => element.team.id != toss_winner_id);
+    final secondTeam =
+        teams.firstWhere((element) => element.team.id != firstTeam.team.id);
+
+    if (firstTeam.run > secondTeam.run) {
+      // first batting team won
+      final teamName = firstTeam.team.name;
+
+      final runDifference = firstTeam.run - secondTeam.run;
+      return MatchResult(
+          teamId: firstTeam.team.id ?? "",
+          teamName: teamName,
+          difference: runDifference,
+          winType: WinnerByType.run);
+    } else if (firstTeam.run == secondTeam.run) {
+      return MatchResult(
+        teamId: "",
+        teamName: "",
+        difference: 0,
+        winType: WinnerByType.tie,
+      );
+    } else {
+      // second batting team won
+      final teamName = secondTeam.team.name;
+
+      final wicketDifference = secondTeam.squad.length - firstTeam.wicket;
+
+      return MatchResult(
+        teamId: secondTeam.team.id ?? "",
+        teamName: teamName,
+        difference: wicketDifference,
+        winType: WinnerByType.wicket,
+      );
+    }
+  }
+}
+
+enum WinnerByType {
+  run,
+  wicket,
+  tie;
+}
+
+class MatchResult {
+  String teamId;
+  int difference;
+  String teamName;
+  WinnerByType winType;
+
+  MatchResult({
+    required this.teamId,
+    required this.teamName,
+    required this.difference,
+    required this.winType,
+  });
+}
+
 @freezed
 class MatchPlayer with _$MatchPlayer {
   const factory MatchPlayer({
@@ -104,7 +169,7 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
     required String team_id,
     String? captain_id,
     String? admin_id,
-    @Default(0)  double over,
+    @Default(0) double over,
     @Default(0) int run,
     @Default(0) int wicket,
     @Default([]) List<MatchPlayerRequest> squad,

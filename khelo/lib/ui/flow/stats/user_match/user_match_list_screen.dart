@@ -6,7 +6,6 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -145,7 +144,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary)),
             Divider(color: context.colorScheme.outline),
-            _winnerMessageText(context, match)
+            WonByMessageText(matchResult: match.matchResult),
           ],
         ),
       ),
@@ -171,25 +170,5 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
         ),
       ],
     );
-  }
-
-  Widget _winnerMessageText(BuildContext context, MatchModel match) {
-    final winSummary = match.getWinnerSummary(context);
-    if (match.match_status == MatchStatus.finish && winSummary != null) {
-      if (winSummary.teamName.isEmpty) {
-        return Text(
-          context.l10n.score_board_match_tied_text,
-          style: AppTextStyle.subtitle1
-              .copyWith(color: context.colorScheme.primary),
-        );
-      }
-      return WonByMessageText(
-        teamName: winSummary.teamName,
-        difference: winSummary.difference,
-        trailingText: winSummary.wonByText,
-      );
-    } else {
-      return const SizedBox();
-    }
   }
 }

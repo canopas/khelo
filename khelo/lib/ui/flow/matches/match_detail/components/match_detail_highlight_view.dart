@@ -88,9 +88,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
                   child: _highlightFilterButton(context, teamName,
                       notifier.showHighlightTeamSelectionDialog),
                 ),
-                const VerticalDivider(
-                  width: 1,
-                ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: _highlightFilterButton(
                       context,
@@ -117,7 +115,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
           child: Text(
             context.l10n.match_highlight_empty_highlight_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle3
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -126,8 +124,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
     return ListView.separated(
       itemCount: highlight.length,
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-      separatorBuilder: (context, index) => const Divider(),
+      padding: const EdgeInsets.only(top: 24),
+      separatorBuilder: (context, index) => Divider(
+        color: context.colorScheme.outline,
+      ),
       itemBuilder: (context, index) {
         return CommentaryBallSummary(state: state, ball: highlight[index]);
       },

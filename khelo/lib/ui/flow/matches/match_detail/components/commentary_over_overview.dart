@@ -24,70 +24,89 @@ class CommentaryOverOverview extends ConsumerWidget {
 
     final over = _getOverBallScores(state, index);
     final overLastBall = over.lastOrNull;
-    final overNumber = overLastBall?.over_number ?? 0;
     final inningId = overLastBall?.inning_id ?? "INVALID ID";
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: context.colorScheme.containerNormalOnSurface,
+      padding: const EdgeInsets.all(16),
+      color: context.colorScheme.containerLow,
       child: Column(
         children: [
           IntrinsicHeight(
             child: Row(
               children: [
-                Text(
-                  "$overNumber",
-                  style: AppTextStyle.header1
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
+                _overCount(context, overLastBall?.over_number ?? 0),
                 const SizedBox(
-                  width: 12,
+                  width: 16,
                 ),
                 _divider(context, axis: Axis.vertical),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BowlerSummary(
-                          state: state,
-                          index: index + 1,
-                          inningId: inningId,
-                          bowlerId: overLastBall?.bowler_id ?? "INVALID ID"),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      OverScoreView(
-                        over: over,
-                        size: 30,
-                      )
-                    ],
-                  ),
+                const SizedBox(
+                  width: 16,
+                ),
+                _bowlerAndOverSummary(
+                  context,
+                  state,
+                  inningId: inningId,
+                  bowlerId: overLastBall?.bowler_id ?? "INVALID ID",
+                  over: over,
                 )
               ],
             ),
           ),
+          const SizedBox(height: 16),
           _divider(context),
-          IntrinsicHeight(
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 4,
-                  child: _batsMenView(
-                      context,
-                      state,
-                      inningId,
-                      index,
-                      overLastBall?.batsman_id ?? "INVALID ID",
-                      overLastBall?.non_striker_id ?? "INVALID ID"),
-                ),
-                _divider(context, axis: Axis.vertical),
-                Expanded(
-                  flex: 3,
-                  child: _teamTotalView(context, state, inningId),
-                ),
-              ],
-            ),
+          const SizedBox(height: 16),
+          _teamTotalView(context, state, inningId),
+          const SizedBox(height: 16),
+          _batsManScoreView(context, state, index,
+              overLastBall?.batsman_id ?? "INVALID ID", inningId),
+          const SizedBox(height: 4),
+          _batsManScoreView(context, state, index,
+              overLastBall?.non_striker_id ?? "INVALID ID", inningId),
+        ],
+      ),
+    );
+  }
+
+  Widget _overCount(BuildContext context, int overNumber) {
+    return Column(
+      children: [
+        Text(
+          context.l10n.match_scorecard_over_text,
+          style: AppTextStyle.caption
+              .copyWith(color: context.colorScheme.textDisabled),
+        ),
+        Text(
+          "$overNumber",
+          style: AppTextStyle.header1
+              .copyWith(color: context.colorScheme.textPrimary),
+        ),
+      ],
+    );
+  }
+
+  Widget _bowlerAndOverSummary(
+    BuildContext context,
+    MatchDetailTabState state, {
+    required String inningId,
+    required String bowlerId,
+    required List<BallScoreModel> over,
+  }) {
+    return Flexible(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BowlerSummary(
+              state: state,
+              index: index + 1,
+              inningId: inningId,
+              bowlerId: bowlerId),
+          const SizedBox(
+            height: 8,
           ),
+          OverScoreView(
+            over: over,
+            size: 32,
+          )
         ],
       ),
     );
@@ -109,24 +128,15 @@ class CommentaryOverOverview extends ConsumerWidget {
   Widget _divider(BuildContext context, {Axis axis = Axis.horizontal}) {
     if (axis == Axis.horizontal) {
       return Divider(
+        height: 0,
         color: context.colorScheme.outline,
       );
     } else {
       return VerticalDivider(
+        width: 0,
         color: context.colorScheme.outline,
       );
     }
-  }
-
-  Widget _batsMenView(BuildContext context, MatchDetailTabState state,
-      String inningId, int index, String batsmanId, String nonStrikerId) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _batsManScoreView(context, state, index, batsmanId, inningId),
-        _batsManScoreView(context, state, index, nonStrikerId, inningId)
-      ],
-    );
   }
 
   Widget _batsManScoreView(BuildContext context, MatchDetailTabState state,
@@ -139,18 +149,18 @@ class CommentaryOverOverview extends ConsumerWidget {
         Flexible(
             child: Text(
           batsManName,
-          style: AppTextStyle.subtitle1
+          style: AppTextStyle.subtitle2
               .copyWith(color: context.colorScheme.textPrimary),
         )),
         Text.rich(TextSpan(
             text: "$runs",
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
             children: [
               TextSpan(
                 text: "($ball)",
-                style: AppTextStyle.body1
-                    .copyWith(color: context.colorScheme.textPrimary),
+                style: AppTextStyle.body2
+                    .copyWith(color: context.colorScheme.textSecondary),
               )
             ])),
       ],
@@ -207,7 +217,7 @@ class CommentaryOverOverview extends ConsumerWidget {
     final (run, wicket) = _getTeamScoreTillIndex(state, inningId);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ImageAvatar(
           initial: team?.name[0].toUpperCase() ?? "?",
@@ -215,28 +225,19 @@ class CommentaryOverOverview extends ConsumerWidget {
           size: 35,
         ),
         const SizedBox(width: 6),
-        Flexible(
-          child: Column(
-            children: [
-              Text(
-                team?.name ?? "",
-                textAlign: TextAlign.center,
-                style: AppTextStyle.subtitle2
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              Text.rich(TextSpan(
-                  text: "$run",
-                  style: AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textPrimary),
-                  children: [
-                    TextSpan(
-                        text: "($wicket)",
-                        style: AppTextStyle.body1
-                            .copyWith(color: context.colorScheme.textPrimary))
-                  ])),
-            ],
+        Expanded(
+          child: Text(
+            team?.name ?? "",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyle.subtitle3
+                .copyWith(color: context.colorScheme.textSecondary),
           ),
         ),
+        const SizedBox(width: 6),
+        Text("$run-$wicket",
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary)),
       ],
     );
   }
@@ -303,16 +304,13 @@ class BowlerSummary extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),
           child: Text.rich(TextSpan(
               text: "$bowlerName",
-              style: isForBowlerIntro
-                  ? AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textPrimary)
-                  : AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textPrimary),
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
               children: [
                 TextSpan(
                   text:
                       " [$over - $maidenOversCount - $runsConceded - $wicketCount]",
-                  style: AppTextStyle.body1
+                  style: AppTextStyle.subtitle3
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 if (isForBowlerIntro) ...[

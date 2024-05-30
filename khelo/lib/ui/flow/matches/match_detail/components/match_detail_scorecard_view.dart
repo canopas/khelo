@@ -1,12 +1,12 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -20,10 +20,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(matchDetailTabStateProvider);
     final notifier = ref.watch(matchDetailTabStateProvider.notifier);
-    return _body(context, notifier,state);
+    return _body(context, notifier, state);
   }
 
-  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
+  Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
+      MatchDetailTabState state) {
     if (state.loading) {
       return const AppProgressIndicator();
     }
@@ -51,10 +52,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
         ),
       );
     }
-    return _scorecardView(context, state);
+    return _scorecardView(context, notifier, state);
   }
 
-  Widget _scorecardView(BuildContext context, MatchDetailTabState state) {
+  Widget _scorecardView(BuildContext context,
+      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
     if (state.match == null) {
       return const SizedBox();
     }
@@ -64,40 +66,34 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children: [
         _winnerMessageText(context, state.match!),
         for (final team in state.match!.teams) ...[
-          _teamTitleView(
-              context,
-              team,
-              state.match!.teams
+          _teamTitleView(context,
+              team: team,
+              initiallyExpanded:
+                  state.expandedTeamScorecard.contains(team.team.id),
+              wicket: state.match!.teams
                       .where((element) => element.team.id != team.team.id)
                       .firstOrNull
                       ?.wicket ??
-                  0),
-          _dataTable(context, state, team, isForBatting: true),
-          const SizedBox(
-            height: 16,
-          ),
-          _fallOfWicketView(
-              context,
-              state,
-              state.firstInning?.team_id == team.team.id
-                  ? state.firstInning?.id ?? 'INVALID ID'
-                  : state.secondInning?.id ?? 'INVALID ID'),
-          const SizedBox(
-            height: 16,
-          ),
-          _dataTable(context, state, team, isForBatting: false),
-          const SizedBox(
-            height: 16,
-          ),
-          _powerPlayView(
-              context,
-              state,
-              state.firstInning?.team_id == team.team.id
-                  ? state.firstInning?.id ?? 'INVALID ID'
-                  : state.secondInning?.id ?? 'INVALID ID'),
-          const SizedBox(
-            height: 20,
-          )
+                  0,
+              onExpansionChanged: (isExpanded) => notifier
+                  .onScorecardExpansionChange(team.team.id ?? "", isExpanded),
+              children: [
+                _dataTable(context, state, team, isForBatting: true),
+                _fallOfWicketView(
+                    context,
+                    state,
+                    state.firstInning?.team_id == team.team.id
+                        ? state.firstInning?.id ?? 'INVALID ID'
+                        : state.secondInning?.id ?? 'INVALID ID'),
+                _dataTable(context, state, team, isForBatting: false),
+                _powerPlayView(
+                    context,
+                    state,
+                    state.firstInning?.team_id == team.team.id
+                        ? state.firstInning?.id ?? 'INVALID ID'
+                        : state.secondInning?.id ?? 'INVALID ID'),
+              ]),
+          const SizedBox(height: 16),
         ]
       ],
     );
@@ -122,17 +118,16 @@ class MatchDetailScorecardView extends ConsumerWidget {
             highlightRow: true,
             header: Text(
               context.l10n.match_scorecard_fall_of_wicket_text,
-              style: AppTextStyle.subtitle1
+              style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
             )),
-        const SizedBox(
-          height: 4,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        Container(
+          width: double.infinity,
+          color: context.colorScheme.surface,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
           child: Text(
             wickets,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -187,14 +182,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
           highlightRow: true,
           header: Text(
             context.l10n.match_scorecard_power_play_text,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           )));
-      children.add(
-        const SizedBox(
-          height: 4,
-        ),
-      );
       int index = 0;
       for (var element in powerPlays) {
         index++;
@@ -202,7 +192,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
             data: [(element.$1), "${element.$2}"],
             header: Text(
               context.l10n.power_play_text(index),
-              style: AppTextStyle.subtitle1
+              style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
             )));
       }
@@ -295,12 +285,16 @@ class MatchDetailScorecardView extends ConsumerWidget {
                     context.l10n.match_scorecard_wide_ball_short_text,
                     context.l10n.match_scorecard_economy_short_text
                   ],
-            header: Text(isForBatting
-                ? context.l10n.match_scorecard_batter_text
-                : context.l10n.match_scorecard_bowler_text)),
-        const SizedBox(
-          height: 4,
-        ),
+            header: Text(
+              isForBatting
+                  ? context.l10n.match_scorecard_batter_text
+                  : context.l10n.match_scorecard_bowler_text,
+              style: AppTextStyle.body1
+                  .copyWith(color: context.colorScheme.textDisabled),
+            )),
+        // const SizedBox(
+        //   height: 4,
+        // ),
         if (isForBatting)
           ..._buildBatsmanList(
             context,
@@ -329,11 +323,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }) {
     return Container(
       padding: EdgeInsets.symmetric(
-          horizontal: 16.0, vertical: highlightRow ? 2 : 0),
+          horizontal: 16.0, vertical: highlightRow ? 4 : 8),
       decoration: BoxDecoration(
         color: highlightRow
-            ? context.colorScheme.containerNormalOnSurface
-            : Colors.transparent,
+            ? context.colorScheme.containerLowOnSurface
+            : context.colorScheme.surface,
       ),
       child: Row(
         children: [
@@ -345,10 +339,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
                 child: Text(
               data[i],
               style: i == highlightColumnNumber
-                  ? AppTextStyle.header3
+                  ? AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary)
-                  : AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textPrimary),
+                  : AppTextStyle.caption
+                      .copyWith(color: context.colorScheme.textDisabled),
               textAlign: TextAlign.center,
             )),
           ]
@@ -407,16 +401,21 @@ class MatchDetailScorecardView extends ConsumerWidget {
             children: [
               Text(
                 "${player.player.name}",
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary, fontSize: 20),
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
               ),
               Text(
                 wicketString,
-                style: AppTextStyle.body1
-                    .copyWith(color: context.colorScheme.textSecondary),
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
               ),
             ],
           )));
+
+      children.add(Divider(
+        height: 0,
+        color: context.colorScheme.outline,
+      ));
     }
     final (bye, legBye, wide, noBall, penalty) =
         _getExtraCounts(state, inningId);
@@ -425,6 +424,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
         count: (bye + legBye + wide + noBall + penalty),
         countDescription: context.l10n.match_scorecard_extras_short_text(
             bye, legBye, wide, noBall, penalty)));
+    children.add(Divider(
+      height: 0,
+      color: context.colorScheme.outline,
+    ));
 
     final inning = state.firstInning?.id == inningId
         ? state.firstInning
@@ -437,6 +440,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
         count: inning?.total_runs ?? 0,
         countDescription: context.l10n.match_scorecard_wicket_over_text(
             bowlingInning?.total_wickets ?? 0, inning?.overs ?? 0)));
+    children.add(Divider(
+      height: 0,
+      color: context.colorScheme.outline,
+    ));
 
     String yetToPlayPlayers = players
         .where((element) => element.index == null)
@@ -450,19 +457,20 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }
 
   Widget _didNotBatView(BuildContext context, String players) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      color: context.colorScheme.surface,
       child: Row(
         children: [
           Expanded(
               child: Text(
             context.l10n.match_scorecard_did_not_bat_text,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           )),
           Expanded(
               child: Text(players,
-                  style: AppTextStyle.subtitle1
+                  style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary))),
         ],
       ),
@@ -504,25 +512,26 @@ class MatchDetailScorecardView extends ConsumerWidget {
     required int count,
     required String countDescription,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      color: context.colorScheme.surface,
       child: Row(
         children: [
           Expanded(
               child: Text(
             title,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           )),
           Expanded(
               child: Text.rich(
-                  style: AppTextStyle.header3
+                  style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary),
                   TextSpan(text: "$count", children: [
                     TextSpan(
                         text: " ($countDescription)",
-                        style: AppTextStyle.subtitle1
-                            .copyWith(color: context.colorScheme.textPrimary))
+                        style: AppTextStyle.caption
+                            .copyWith(color: context.colorScheme.textDisabled))
                   ]))),
         ],
       ),
@@ -609,10 +618,18 @@ class MatchDetailScorecardView extends ConsumerWidget {
     required List<MatchPlayer> players,
   }) {
     List<Widget> children = [];
-    for (final player in players) {
+    for (int index = 0; index < players.length; index++) {
+      final player = players[index];
       final (over, maiden, runsConceded, wicket, noBall, wideBall, economy) =
           _getBowlingPerformance(state, inningId, player.player.id);
       if (over != null) {
+        if (index != 0) {
+          children.add(Divider(
+            height: 0,
+            color: context.colorScheme.outline,
+          ));
+        }
+
         children.add(_tableRow(context,
             highlightColumnNumber: 3,
             data: [
@@ -624,7 +641,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
               wideBall.toString(),
               economy.toStringAsFixed(1)
             ],
-            header: Text("${player.player.name}")));
+            header: Text(
+              "${player.player.name}",
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            )));
       }
     }
     return children;
@@ -685,49 +706,73 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }
 
   Widget _winnerMessageText(BuildContext context, MatchModel match) {
-    final winSummary = match.getWinnerSummary(context);
-    if (match.match_status == MatchStatus.finish && winSummary != null) {
-      if (winSummary.teamName.isEmpty) {
-        return Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            context.l10n.score_board_match_tied_text,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.primary),
-          ),
-        );
-      }
-      return Padding(
-        padding: const EdgeInsets.all(16),
-        child: WonByMessageText(
-          teamName: winSummary.teamName,
-          difference: winSummary.difference,
-          trailingText: winSummary.wonByText,
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: WonByMessageText(
+        isHighlighted: false,
+        matchResult: match.matchResult,
+      ),
+    );
   }
 
-  Widget _teamTitleView(BuildContext context, MatchTeamModel team, int wicket) {
-    return Container(
-      color: context.colorScheme.primary,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            team.team.name,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+  Widget _teamTitleView(
+    BuildContext context, {
+    required MatchTeamModel team,
+    required int wicket,
+    required bool initiallyExpanded,
+    required List<Widget> children,
+    required Function(bool) onExpansionChanged,
+  }) {
+    return Material(
+      type: MaterialType.transparency,
+      child: ExpansionTile(
+        backgroundColor: context.colorScheme.primary,
+        collapsedBackgroundColor: context.colorScheme.primary,
+        collapsedIconColor: context.colorScheme.onPrimary,
+        controlAffinity: ListTileControlAffinity.platform,
+        iconColor: context.colorScheme.onPrimary,
+        initiallyExpanded: initiallyExpanded,
+        onExpansionChanged: onExpansionChanged,
+        trailing: AnimatedRotation(
+          turns: initiallyExpanded ? 0.5 : 0,
+          duration: const Duration(milliseconds: 300),
+          child: Icon(
+            CupertinoIcons.chevron_up,
+            size: 24,
+            color: context.colorScheme.onPrimary,
           ),
-          Text(
-            "${team.run} - $wicket ${context.l10n.match_commentary_trailing_over_short_text(team.over)}",
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
-          )
-        ],
+        ),
+        collapsedShape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
+        shape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                team.team.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.onPrimary),
+              ),
+            ),
+            Text.rich(
+              TextSpan(text: "${team.run}-$wicket ", children: [
+                TextSpan(
+                    text: "(${team.over})",
+                    style: AppTextStyle.body2
+                        .copyWith(color: context.colorScheme.onPrimary))
+              ]),
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.onPrimary),
+            ),
+          ],
+        ),
+        children: children,
       ),
     );
   }

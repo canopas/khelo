@@ -17,8 +17,19 @@
   "common_no_title": "No",
   "common_retry_title": "Retry",
   "common_not_specified_title": "Not Specified",
-  "common_runs_dot_title": " Runs.",
-  "common_wickets_dot_title": " Wickets.",
+  "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
+  "@common_runs_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "common_wickets_title": "{count, plural, =0{{count} wickets} =1{{count} wicket} other{{count} wickets}}",
+  "@common_wickets_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "common_tie_title": "Tie",
   "common_wicket_taken_title": " Wicket taken",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
@@ -234,29 +245,30 @@
   "match_detail_commentary_tab_title": "Commentary",
   "match_detail_scorecard_tab_title": "Scorecard",
   "match_detail_squad_tab_title": "Squad",
-  "match_detail_match_info_tab_title": "Match Info",
+  "match_detail_match_info_tab_title": "Info",
   "match_detail_highlight_tab_title": "Highlight",
   "match_detail_overs_tab_title": "Overs",
-  "match_info_match_title": "Match:",
-  "match_info_date_title": "Date:",
-  "match_info_toss_title": "Toss:",
-  "match_info_time_title": "Time:",
-  "match_info_umpire_title": "Umpire:",
-  "match_info_referee_title": "Referee:",
-  "match_info_squad_title": "{name} Squad:",
+  "match_info_match_title": "Match",
+  "match_info_date_title": "Date",
+  "match_info_toss_title": "Toss",
+  "match_info_time_title": "Time",
+  "match_info_umpire_title": "Umpire",
+  "match_info_referee_title": "Referee",
+  "match_info_date_and_time_title": "Date & Time",
+  "match_info_squad_title": "{name} Squad",
   "@match_info_squad_title": {
-    "description": "{name} Squad:",
+    "description": "{name} Squad",
     "placeholders": {
       "name": {
         "type": "String"
       }
     }
   },
-  "match_info_playing_title": "Playing:",
-  "match_info_bench_title": "Bench:",
+  "match_info_playing_title": "Playing",
+  "match_info_bench_title": "Bench",
   "match_info_venue_title": "Venue",
-  "match_info_ground_title": "Ground:",
-  "match_info_city_title": "City:",
+  "match_info_ground_title": "Ground",
+  "match_info_city_title": "City",
   "match_info_captain_short_title": "(c)",
   "match_info_toss_detail_text": "{name} won the toss and opt to {decision}",
   "@match_info_toss_detail_text": {
@@ -352,6 +364,15 @@
   "match_commentary_end_inning_text_part_1": " wraps up their innings, leaving ",
   "match_commentary_end_inning_text_part_2": " for victory.",
   "match_commentary_empty_commentary_text": "Commentary will be shown here as soon as the match starts.",
+  "match_commentary_inning_count_text": "Inning {count}",
+  "@match_commentary_inning_count_text": {
+    "description": "Inning {count}",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "match_scorecard_fall_of_wicket_text": "Fall of Wicket",
   "match_scorecard_over_text": "Over",
   "match_scorecard_run_text": "Run",
@@ -370,8 +391,8 @@
   "match_scorecard_batter_text": "Batter",
   "match_scorecard_bowler_text": "Bowler",
   "match_scorecard_not_out_text": "Not out",
-  "match_scorecard_bowler_catcher_short_text": "b {bowler} c {fielder}",
   "match_scorecard_did_not_bat_text": "Did not bat",
+  "match_scorecard_bowler_catcher_short_text": "b {bowler} c {fielder}",
   "@match_scorecard_bowler_catcher_short_text": {
     "description": "b {bowler} c {fielder}",
     "placeholders": {

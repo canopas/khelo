@@ -1,4 +1,5 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/innings/inning_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -53,41 +54,56 @@ class MatchDetailOversView extends ConsumerWidget {
     }
 
     return ListView(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(horizontal: 16),
+      padding: context.mediaQueryPadding,
       children: [
-        const FinalScoreView(),
-        ..._buildOverList(context, state, state.firstInning?.id ?? ""),
-        ..._buildOverList(context, state, state.secondInning?.id ?? ""),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: FinalScoreView(),
+        ),
+        ..._buildOverList(
+            context,
+            state,
+            state.firstInning?.id ?? "",
+            state.secondInning?.innings_status == InningStatus.yetToStart
+                ? 1
+                : 2),
+        ..._buildOverList(context, state, state.secondInning?.id ?? "", 1),
       ],
     );
   }
 
-  List<Widget> _buildOverList(
-      BuildContext context, MatchDetailTabState state, String inningId) {
+  List<Widget> _buildOverList(BuildContext context, MatchDetailTabState state,
+      String inningId, int inningCount) {
     final filterBallScore = state.ballScores
         .where((element) => inningId == element.inning_id)
         .toList();
 
     final oversList = filterBallScore.chunkArrayByOver();
     List<Widget> children = [];
-    for (int i = oversList.length - 1; i >= 0; i--) {
-      final over = oversList[i];
 
-      children.add(const SizedBox(height: 16));
-
-      children.add(_overCellView(context, over));
-    }
     if (oversList.isNotEmpty) {
       children.add(
-        _teamNameTitleView(context, state, inningId),
+        _teamNameTitleView(context, state, inningId, inningCount),
       );
+    }
+
+    for (int i = oversList.length - 1; i >= 0; i--) {
+      final over = oversList[i];
+      final (bowler, striker, nonStriker) = _getPlayerName(state, over.last);
+      children.add(_overCellView(context, over, bowler, striker, nonStriker));
+      if (i != 0) {
+        children.add(Divider(
+          height: 32,
+          color: context.colorScheme.outline,
+        ));
+      }
     }
 
     return children;
   }
 
-  Widget _overCellView(BuildContext context, List<BallScoreModel> over) {
+  Widget _overCellView(BuildContext context, List<BallScoreModel> over,
+      String bowler, String striker, String nonStriker) {
     final overCount = over.first.over_number;
     final runs = over.fold(
         0,
@@ -95,32 +111,77 @@ class MatchDetailOversView extends ConsumerWidget {
             previousValue +
             element.runs_scored +
             (element.extras_awarded ?? 0));
-    return Row(
-      children: [
-        Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.match_commentary_former_over_short_text(overCount),
-              style: AppTextStyle.header4
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            Text(
-              context.l10n.match_commentary_runs_text(runs),
-              style: AppTextStyle.body2
-                  .copyWith(color: context.colorScheme.textSecondary),
-            ),
-          ],
-        )),
-        Expanded(
-            flex: 4,
-            child: OverScoreView(
-              over: over,
-              size: 35,
-            ))
-      ],
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.l10n.match_commentary_former_over_short_text(overCount),
+                style: AppTextStyle.body2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              Text(
+                context.l10n.match_commentary_runs_text(runs),
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
+              ),
+            ],
+          ),
+          const SizedBox(width: 24),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${context.l10n.match_commentary_bowler_to_batsman_text(bowler, striker)} & $nonStriker",
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              OverScoreView(
+                over: over,
+                size: 24,
+              ),
+            ],
+          ))
+        ],
+      ),
     );
+  }
+
+  (String, String, String) _getPlayerName(
+      MatchDetailTabState state, BallScoreModel ball) {
+    final battingTeamId = ball.inning_id == state.firstInning?.id
+        ? state.firstInning?.team_id
+        : state.secondInning?.team_id;
+    final bowlingTeamId = ball.inning_id == state.firstInning?.id
+        ? state.secondInning?.team_id
+        : state.firstInning?.team_id;
+    final battingSquad = state.match?.teams
+        .firstWhere((element) => battingTeamId == element.team.id)
+        .team
+        .players;
+    final bowlingSquad = state.match?.teams
+        .firstWhere((element) => bowlingTeamId == element.team.id)
+        .team
+        .players;
+
+    final bowlerName = bowlingSquad
+        ?.firstWhere((element) => element.id == ball.bowler_id)
+        .name;
+
+    final batsmanName = battingSquad
+        ?.firstWhere((element) => element.id == ball.batsman_id)
+        .name;
+    final nonStriker = battingSquad
+        ?.firstWhere((element) => element.id == ball.non_striker_id)
+        .name;
+
+    return (bowlerName ?? "", batsmanName ?? "", nonStriker ?? "");
   }
 
   String _getTeamNameByInningId(MatchDetailTabState state, String inningId) {
@@ -136,15 +197,15 @@ class MatchDetailOversView extends ConsumerWidget {
     return teamName ?? "--";
   }
 
-  Widget _teamNameTitleView(
-      BuildContext context, MatchDetailTabState state, String inningId) {
+  Widget _teamNameTitleView(BuildContext context, MatchDetailTabState state,
+      String inningId, int inningCount) {
     final title = _getTeamNameByInningId(state, inningId);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8, top: 8, left: 4, right: 4),
+      padding: const EdgeInsets.only(top: 32, bottom: 16, left: 16, right: 16),
       child: Text(
-        title,
-        style: AppTextStyle.header1
-            .copyWith(color: context.colorScheme.textSecondary),
+        "${context.l10n.match_commentary_inning_count_text(inningCount)}: $title",
+        style: AppTextStyle.subtitle1
+            .copyWith(color: context.colorScheme.textPrimary),
       ),
     );
   }

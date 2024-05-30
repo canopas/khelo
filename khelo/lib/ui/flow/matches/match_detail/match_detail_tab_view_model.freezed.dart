@@ -24,6 +24,8 @@ mixin _$MatchDetailTabState {
   DateTime? get showTeamSelectionSheet => throw _privateConstructorUsedError;
   DateTime? get showHighlightOptionSelectionSheet =>
       throw _privateConstructorUsedError;
+  int get selectedTab => throw _privateConstructorUsedError;
+  List<String> get expandedTeamScorecard => throw _privateConstructorUsedError;
   List<BallScoreModel> get ballScores => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get inningsQueryListenerSet => throw _privateConstructorUsedError;
@@ -50,6 +52,8 @@ abstract class $MatchDetailTabStateCopyWith<$Res> {
       String? highlightTeamId,
       DateTime? showTeamSelectionSheet,
       DateTime? showHighlightOptionSelectionSheet,
+      int selectedTab,
+      List<String> expandedTeamScorecard,
       List<BallScoreModel> ballScores,
       bool loading,
       bool inningsQueryListenerSet,
@@ -81,6 +85,8 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
     Object? highlightTeamId = freezed,
     Object? showTeamSelectionSheet = freezed,
     Object? showHighlightOptionSelectionSheet = freezed,
+    Object? selectedTab = null,
+    Object? expandedTeamScorecard = null,
     Object? ballScores = null,
     Object? loading = null,
     Object? inningsQueryListenerSet = null,
@@ -114,6 +120,14 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
           ? _value.showHighlightOptionSelectionSheet
           : showHighlightOptionSelectionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
+      expandedTeamScorecard: null == expandedTeamScorecard
+          ? _value.expandedTeamScorecard
+          : expandedTeamScorecard // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       ballScores: null == ballScores
           ? _value.ballScores
           : ballScores // ignore: cast_nullable_to_non_nullable
@@ -190,6 +204,8 @@ abstract class _$$MatchDetailTabStateImplCopyWith<$Res>
       String? highlightTeamId,
       DateTime? showTeamSelectionSheet,
       DateTime? showHighlightOptionSelectionSheet,
+      int selectedTab,
+      List<String> expandedTeamScorecard,
       List<BallScoreModel> ballScores,
       bool loading,
       bool inningsQueryListenerSet,
@@ -222,6 +238,8 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
     Object? highlightTeamId = freezed,
     Object? showTeamSelectionSheet = freezed,
     Object? showHighlightOptionSelectionSheet = freezed,
+    Object? selectedTab = null,
+    Object? expandedTeamScorecard = null,
     Object? ballScores = null,
     Object? loading = null,
     Object? inningsQueryListenerSet = null,
@@ -255,6 +273,14 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
           ? _value.showHighlightOptionSelectionSheet
           : showHighlightOptionSelectionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
+      expandedTeamScorecard: null == expandedTeamScorecard
+          ? _value._expandedTeamScorecard
+          : expandedTeamScorecard // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       ballScores: null == ballScores
           ? _value._ballScores
           : ballScores // ignore: cast_nullable_to_non_nullable
@@ -290,12 +316,15 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       this.highlightTeamId,
       this.showTeamSelectionSheet,
       this.showHighlightOptionSelectionSheet,
+      this.selectedTab = 0,
+      final List<String> expandedTeamScorecard = const [],
       final List<BallScoreModel> ballScores = const [],
       this.loading = false,
       this.inningsQueryListenerSet = false,
       this.ballScoreQueryListenerSet = false,
       this.highlightFilterOption = HighlightFilterOption.all})
-      : _ballScores = ballScores;
+      : _expandedTeamScorecard = expandedTeamScorecard,
+        _ballScores = ballScores;
 
   @override
   final Object? error;
@@ -311,6 +340,19 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
   final DateTime? showTeamSelectionSheet;
   @override
   final DateTime? showHighlightOptionSelectionSheet;
+  @override
+  @JsonKey()
+  final int selectedTab;
+  final List<String> _expandedTeamScorecard;
+  @override
+  @JsonKey()
+  List<String> get expandedTeamScorecard {
+    if (_expandedTeamScorecard is EqualUnmodifiableListView)
+      return _expandedTeamScorecard;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_expandedTeamScorecard);
+  }
+
   final List<BallScoreModel> _ballScores;
   @override
   @JsonKey()
@@ -335,7 +377,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
 
   @override
   String toString() {
-    return 'MatchDetailTabState(error: $error, match: $match, firstInning: $firstInning, secondInning: $secondInning, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, ballScores: $ballScores, loading: $loading, inningsQueryListenerSet: $inningsQueryListenerSet, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, highlightFilterOption: $highlightFilterOption)';
+    return 'MatchDetailTabState(error: $error, match: $match, firstInning: $firstInning, secondInning: $secondInning, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, selectedTab: $selectedTab, expandedTeamScorecard: $expandedTeamScorecard, ballScores: $ballScores, loading: $loading, inningsQueryListenerSet: $inningsQueryListenerSet, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, highlightFilterOption: $highlightFilterOption)';
   }
 
   @override
@@ -357,6 +399,10 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
                     showHighlightOptionSelectionSheet) ||
                 other.showHighlightOptionSelectionSheet ==
                     showHighlightOptionSelectionSheet) &&
+            (identical(other.selectedTab, selectedTab) ||
+                other.selectedTab == selectedTab) &&
+            const DeepCollectionEquality()
+                .equals(other._expandedTeamScorecard, _expandedTeamScorecard) &&
             const DeepCollectionEquality()
                 .equals(other._ballScores, _ballScores) &&
             (identical(other.loading, loading) || other.loading == loading) &&
@@ -380,6 +426,8 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       highlightTeamId,
       showTeamSelectionSheet,
       showHighlightOptionSelectionSheet,
+      selectedTab,
+      const DeepCollectionEquality().hash(_expandedTeamScorecard),
       const DeepCollectionEquality().hash(_ballScores),
       loading,
       inningsQueryListenerSet,
@@ -403,6 +451,8 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
           final String? highlightTeamId,
           final DateTime? showTeamSelectionSheet,
           final DateTime? showHighlightOptionSelectionSheet,
+          final int selectedTab,
+          final List<String> expandedTeamScorecard,
           final List<BallScoreModel> ballScores,
           final bool loading,
           final bool inningsQueryListenerSet,
@@ -424,6 +474,10 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
   DateTime? get showTeamSelectionSheet;
   @override
   DateTime? get showHighlightOptionSelectionSheet;
+  @override
+  int get selectedTab;
+  @override
+  List<String> get expandedTeamScorecard;
   @override
   List<BallScoreModel> get ballScores;
   @override
