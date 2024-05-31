@@ -104,7 +104,7 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
     required String team_id,
     String? captain_id,
     String? admin_id,
-    @Default(0)  double over,
+    @Default(0) double over,
     @Default(0) int run,
     @Default(0) int wicket,
     @Default([]) List<MatchPlayerRequest> squad,
@@ -208,4 +208,28 @@ enum TossDecision {
   final int value;
 
   const TossDecision(this.value);
+}
+
+@freezed
+class TeamMatchStatus with _$TeamMatchStatus {
+  const factory TeamMatchStatus({
+    @Default(0) int win,
+    @Default(0) int tie,
+    @Default(0) int lost,
+  }) = _TeamMatchStatus;
+}
+
+@freezed
+class TeamStat with _$TeamStat {
+  const factory TeamStat({
+    @Default(0) int played,
+    @Default(TeamMatchStatus()) TeamMatchStatus status,
+    @Default(0) int runs,
+    @Default(0) int wickets,
+    @Default(0.0) double bating_average,
+    @Default(0.0) double bowling_average,
+    @Default(0) int highest_runs,
+    @Default(0) int lowest_runts,
+    @Default(0.0) double run_rate,
+  }) = _TeamStat;
 }

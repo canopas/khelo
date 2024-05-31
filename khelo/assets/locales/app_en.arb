@@ -200,18 +200,46 @@
   "team_detail_empty_match_title": "Team hasn't compete with opponent till now.",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_empty_stat_title": "Team's analysis will be shown here based on it's previous matches.",
-  "team_detail_won_title": "Won",
-  "team_detail_lost_title": "Lost",
-  "team_detail_tied_title": "Tied",
+  "team_detail_won_title": "Won({win})",
+  "@team_detail_won_title": {
+    "description": "Won({win})",
+    "placeholders": {
+      "win": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_lost_title": "Lost({lost})",
+  "@team_detail_lost_title": {
+    "description": "Lost({lost})",
+    "placeholders": {
+      "lost": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_tie_title": "Tie({tie})",
+  "@team_detail_tie_title": {
+    "description": "Tie({tie})",
+    "placeholders": {
+      "tie": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_match_title": "{count, plural, =0{{count} Matches} =1{{count} Match} other{{count} Matches}}",
+  "@team_detail_match_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "team_detail_runs_made_title": "Runs Made",
   "team_detail_wickets_taken_title": "Wickets Taken",
-  "team_detail_batting_average_title": "\nBatting Average",
-  "team_detail_bowling_average_title": "\nBowling Average",
+  "team_detail_batting_average_title": "Batting Average",
+  "team_detail_bowling_average_title": "Bowling Average",
   "team_detail_highest_runs_title": "Highest Runs",
   "team_detail_lowest_runs_title": "Lowest Runs",
   "team_detail_run_rate_title": "Run Rate",
-  "team_detail_match_played_title": "\nMatch played",
-  "team_detail_matches_played_title": "\nMatches played",
   "team_detail_overs_title": "Overs:",
   "match_status_yet_to_start_title": "Yet to start",
   "match_status_running_title": "Running",

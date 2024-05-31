@@ -2277,3 +2277,465 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   _$$MatchPlayerRequestImplCopyWith<_$MatchPlayerRequestImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$TeamMatchStatus {
+  int get win => throw _privateConstructorUsedError;
+  int get tie => throw _privateConstructorUsedError;
+  int get lost => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $TeamMatchStatusCopyWith<TeamMatchStatus> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TeamMatchStatusCopyWith<$Res> {
+  factory $TeamMatchStatusCopyWith(
+          TeamMatchStatus value, $Res Function(TeamMatchStatus) then) =
+      _$TeamMatchStatusCopyWithImpl<$Res, TeamMatchStatus>;
+  @useResult
+  $Res call({int win, int tie, int lost});
+}
+
+/// @nodoc
+class _$TeamMatchStatusCopyWithImpl<$Res, $Val extends TeamMatchStatus>
+    implements $TeamMatchStatusCopyWith<$Res> {
+  _$TeamMatchStatusCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? win = null,
+    Object? tie = null,
+    Object? lost = null,
+  }) {
+    return _then(_value.copyWith(
+      win: null == win
+          ? _value.win
+          : win // ignore: cast_nullable_to_non_nullable
+              as int,
+      tie: null == tie
+          ? _value.tie
+          : tie // ignore: cast_nullable_to_non_nullable
+              as int,
+      lost: null == lost
+          ? _value.lost
+          : lost // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TeamMatchStatusImplCopyWith<$Res>
+    implements $TeamMatchStatusCopyWith<$Res> {
+  factory _$$TeamMatchStatusImplCopyWith(_$TeamMatchStatusImpl value,
+          $Res Function(_$TeamMatchStatusImpl) then) =
+      __$$TeamMatchStatusImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int win, int tie, int lost});
+}
+
+/// @nodoc
+class __$$TeamMatchStatusImplCopyWithImpl<$Res>
+    extends _$TeamMatchStatusCopyWithImpl<$Res, _$TeamMatchStatusImpl>
+    implements _$$TeamMatchStatusImplCopyWith<$Res> {
+  __$$TeamMatchStatusImplCopyWithImpl(
+      _$TeamMatchStatusImpl _value, $Res Function(_$TeamMatchStatusImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? win = null,
+    Object? tie = null,
+    Object? lost = null,
+  }) {
+    return _then(_$TeamMatchStatusImpl(
+      win: null == win
+          ? _value.win
+          : win // ignore: cast_nullable_to_non_nullable
+              as int,
+      tie: null == tie
+          ? _value.tie
+          : tie // ignore: cast_nullable_to_non_nullable
+              as int,
+      lost: null == lost
+          ? _value.lost
+          : lost // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TeamMatchStatusImpl implements _TeamMatchStatus {
+  const _$TeamMatchStatusImpl({this.win = 0, this.tie = 0, this.lost = 0});
+
+  @override
+  @JsonKey()
+  final int win;
+  @override
+  @JsonKey()
+  final int tie;
+  @override
+  @JsonKey()
+  final int lost;
+
+  @override
+  String toString() {
+    return 'TeamMatchStatus(win: $win, tie: $tie, lost: $lost)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TeamMatchStatusImpl &&
+            (identical(other.win, win) || other.win == win) &&
+            (identical(other.tie, tie) || other.tie == tie) &&
+            (identical(other.lost, lost) || other.lost == lost));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, win, tie, lost);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
+      __$$TeamMatchStatusImplCopyWithImpl<_$TeamMatchStatusImpl>(
+          this, _$identity);
+}
+
+abstract class _TeamMatchStatus implements TeamMatchStatus {
+  const factory _TeamMatchStatus(
+      {final int win, final int tie, final int lost}) = _$TeamMatchStatusImpl;
+
+  @override
+  int get win;
+  @override
+  int get tie;
+  @override
+  int get lost;
+  @override
+  @JsonKey(ignore: true)
+  _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$TeamStat {
+  int get played => throw _privateConstructorUsedError;
+  TeamMatchStatus get status => throw _privateConstructorUsedError;
+  int get runs => throw _privateConstructorUsedError;
+  int get wickets => throw _privateConstructorUsedError;
+  double get bating_average => throw _privateConstructorUsedError;
+  double get bowling_average => throw _privateConstructorUsedError;
+  int get highest_runs => throw _privateConstructorUsedError;
+  int get lowest_runts => throw _privateConstructorUsedError;
+  double get run_rate => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $TeamStatCopyWith<TeamStat> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TeamStatCopyWith<$Res> {
+  factory $TeamStatCopyWith(TeamStat value, $Res Function(TeamStat) then) =
+      _$TeamStatCopyWithImpl<$Res, TeamStat>;
+  @useResult
+  $Res call(
+      {int played,
+      TeamMatchStatus status,
+      int runs,
+      int wickets,
+      double bating_average,
+      double bowling_average,
+      int highest_runs,
+      int lowest_runts,
+      double run_rate});
+
+  $TeamMatchStatusCopyWith<$Res> get status;
+}
+
+/// @nodoc
+class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
+    implements $TeamStatCopyWith<$Res> {
+  _$TeamStatCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? played = null,
+    Object? status = null,
+    Object? runs = null,
+    Object? wickets = null,
+    Object? bating_average = null,
+    Object? bowling_average = null,
+    Object? highest_runs = null,
+    Object? lowest_runts = null,
+    Object? run_rate = null,
+  }) {
+    return _then(_value.copyWith(
+      played: null == played
+          ? _value.played
+          : played // ignore: cast_nullable_to_non_nullable
+              as int,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as TeamMatchStatus,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      wickets: null == wickets
+          ? _value.wickets
+          : wickets // ignore: cast_nullable_to_non_nullable
+              as int,
+      bating_average: null == bating_average
+          ? _value.bating_average
+          : bating_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      highest_runs: null == highest_runs
+          ? _value.highest_runs
+          : highest_runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      lowest_runts: null == lowest_runts
+          ? _value.lowest_runts
+          : lowest_runts // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_rate: null == run_rate
+          ? _value.run_rate
+          : run_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamMatchStatusCopyWith<$Res> get status {
+    return $TeamMatchStatusCopyWith<$Res>(_value.status, (value) {
+      return _then(_value.copyWith(status: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$TeamStatImplCopyWith<$Res>
+    implements $TeamStatCopyWith<$Res> {
+  factory _$$TeamStatImplCopyWith(
+          _$TeamStatImpl value, $Res Function(_$TeamStatImpl) then) =
+      __$$TeamStatImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int played,
+      TeamMatchStatus status,
+      int runs,
+      int wickets,
+      double bating_average,
+      double bowling_average,
+      int highest_runs,
+      int lowest_runts,
+      double run_rate});
+
+  @override
+  $TeamMatchStatusCopyWith<$Res> get status;
+}
+
+/// @nodoc
+class __$$TeamStatImplCopyWithImpl<$Res>
+    extends _$TeamStatCopyWithImpl<$Res, _$TeamStatImpl>
+    implements _$$TeamStatImplCopyWith<$Res> {
+  __$$TeamStatImplCopyWithImpl(
+      _$TeamStatImpl _value, $Res Function(_$TeamStatImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? played = null,
+    Object? status = null,
+    Object? runs = null,
+    Object? wickets = null,
+    Object? bating_average = null,
+    Object? bowling_average = null,
+    Object? highest_runs = null,
+    Object? lowest_runts = null,
+    Object? run_rate = null,
+  }) {
+    return _then(_$TeamStatImpl(
+      played: null == played
+          ? _value.played
+          : played // ignore: cast_nullable_to_non_nullable
+              as int,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as TeamMatchStatus,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      wickets: null == wickets
+          ? _value.wickets
+          : wickets // ignore: cast_nullable_to_non_nullable
+              as int,
+      bating_average: null == bating_average
+          ? _value.bating_average
+          : bating_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      bowling_average: null == bowling_average
+          ? _value.bowling_average
+          : bowling_average // ignore: cast_nullable_to_non_nullable
+              as double,
+      highest_runs: null == highest_runs
+          ? _value.highest_runs
+          : highest_runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      lowest_runts: null == lowest_runts
+          ? _value.lowest_runts
+          : lowest_runts // ignore: cast_nullable_to_non_nullable
+              as int,
+      run_rate: null == run_rate
+          ? _value.run_rate
+          : run_rate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TeamStatImpl implements _TeamStat {
+  const _$TeamStatImpl(
+      {this.played = 0,
+      this.status = const TeamMatchStatus(),
+      this.runs = 0,
+      this.wickets = 0,
+      this.bating_average = 0.0,
+      this.bowling_average = 0.0,
+      this.highest_runs = 0,
+      this.lowest_runts = 0,
+      this.run_rate = 0.0});
+
+  @override
+  @JsonKey()
+  final int played;
+  @override
+  @JsonKey()
+  final TeamMatchStatus status;
+  @override
+  @JsonKey()
+  final int runs;
+  @override
+  @JsonKey()
+  final int wickets;
+  @override
+  @JsonKey()
+  final double bating_average;
+  @override
+  @JsonKey()
+  final double bowling_average;
+  @override
+  @JsonKey()
+  final int highest_runs;
+  @override
+  @JsonKey()
+  final int lowest_runts;
+  @override
+  @JsonKey()
+  final double run_rate;
+
+  @override
+  String toString() {
+    return 'TeamStat(played: $played, status: $status, runs: $runs, wickets: $wickets, bating_average: $bating_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runts: $lowest_runts, run_rate: $run_rate)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TeamStatImpl &&
+            (identical(other.played, played) || other.played == played) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.runs, runs) || other.runs == runs) &&
+            (identical(other.wickets, wickets) || other.wickets == wickets) &&
+            (identical(other.bating_average, bating_average) ||
+                other.bating_average == bating_average) &&
+            (identical(other.bowling_average, bowling_average) ||
+                other.bowling_average == bowling_average) &&
+            (identical(other.highest_runs, highest_runs) ||
+                other.highest_runs == highest_runs) &&
+            (identical(other.lowest_runts, lowest_runts) ||
+                other.lowest_runts == lowest_runts) &&
+            (identical(other.run_rate, run_rate) ||
+                other.run_rate == run_rate));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, played, status, runs, wickets,
+      bating_average, bowling_average, highest_runs, lowest_runts, run_rate);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
+      __$$TeamStatImplCopyWithImpl<_$TeamStatImpl>(this, _$identity);
+}
+
+abstract class _TeamStat implements TeamStat {
+  const factory _TeamStat(
+      {final int played,
+      final TeamMatchStatus status,
+      final int runs,
+      final int wickets,
+      final double bating_average,
+      final double bowling_average,
+      final int highest_runs,
+      final int lowest_runts,
+      final double run_rate}) = _$TeamStatImpl;
+
+  @override
+  int get played;
+  @override
+  TeamMatchStatus get status;
+  @override
+  int get runs;
+  @override
+  int get wickets;
+  @override
+  double get bating_average;
+  @override
+  double get bowling_average;
+  @override
+  int get highest_runs;
+  @override
+  int get lowest_runts;
+  @override
+  double get run_rate;
+  @override
+  @JsonKey(ignore: true)
+  _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

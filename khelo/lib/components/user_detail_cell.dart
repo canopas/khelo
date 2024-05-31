@@ -12,12 +12,14 @@ class UserDetailCell extends StatelessWidget {
   final UserModel user;
   final Function()? onTap;
   final Widget? trailing;
+  final bool showPhoneNumber;
 
   const UserDetailCell({
     super.key,
     required this.user,
     this.onTap,
     this.trailing,
+    this.showPhoneNumber = true,
   });
 
   @override
@@ -48,10 +50,8 @@ class UserDetailCell extends StatelessWidget {
                         : context.l10n.common_not_specified_title,
                     style: AppTextStyle.caption
                         .copyWith(color: context.colorScheme.textDisabled)),
-                if (user.phone != null) ...[
-                  const SizedBox(
-                    height: 2,
-                  ),
+                if (user.phone != null && showPhoneNumber) ...[
+                  const SizedBox(height: 2),
                   Text(
                     user.phone
                         .format(context, StringFormats.obscurePhoneNumber),
