@@ -13,6 +13,7 @@ class AppPage extends StatelessWidget {
   final Widget? floatingActionButton;
   final Widget? body;
   final bool automaticallyImplyLeading;
+  final bool resizeToAvoidBottomInset;
   final Color? backgroundColor;
 
   const AppPage({
@@ -24,6 +25,7 @@ class AppPage extends StatelessWidget {
     this.leading,
     this.body,
     this.automaticallyImplyLeading = true,
+    this.resizeToAvoidBottomInset = true,
     this.floatingActionButton,
     this.backgroundColor,
   });
@@ -39,6 +41,7 @@ class AppPage extends StatelessWidget {
 
   Widget _cupertino(BuildContext context) => CupertinoPageScaffold(
         backgroundColor: backgroundColor,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         navigationBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null
@@ -84,6 +87,7 @@ class AppPage extends StatelessWidget {
 
   Widget _material() => Scaffold(
         backgroundColor: backgroundColor,
+        resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null

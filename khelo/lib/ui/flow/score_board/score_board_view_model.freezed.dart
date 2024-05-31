@@ -30,25 +30,26 @@ mixin _$ScoreBoardViewState {
       throw _privateConstructorUsedError;
   DateTime? get showSelectPlayerSheet => throw _privateConstructorUsedError;
   DateTime? get showSelectWicketTypeSheet => throw _privateConstructorUsedError;
-  DateTime? get showStrikerSelectionDialog =>
-      throw _privateConstructorUsedError;
+  DateTime? get showStrikerSelectionSheet => throw _privateConstructorUsedError;
   DateTime? get showUndoBallConfirmationDialog =>
       throw _privateConstructorUsedError;
-  DateTime? get showOverCompleteDialog => throw _privateConstructorUsedError;
-  DateTime? get showInningCompleteDialog => throw _privateConstructorUsedError;
-  DateTime? get showMatchCompleteDialog => throw _privateConstructorUsedError;
-  DateTime? get showBoundaryDialogForSix => throw _privateConstructorUsedError;
-  DateTime? get showBoundaryDialogForFour => throw _privateConstructorUsedError;
-  DateTime? get showAddExtraDialogForNoBall =>
+  DateTime? get showOverCompleteSheet => throw _privateConstructorUsedError;
+  DateTime? get showInningCompleteSheet => throw _privateConstructorUsedError;
+  DateTime? get showMatchCompleteSheet => throw _privateConstructorUsedError;
+  DateTime? get showBoundaryConfirmationDialogForSix =>
       throw _privateConstructorUsedError;
-  DateTime? get showAddExtraDialogForLegBye =>
+  DateTime? get showBoundaryConfirmationDialogForFour =>
       throw _privateConstructorUsedError;
-  DateTime? get showAddExtraDialogForBye => throw _privateConstructorUsedError;
-  DateTime? get showAddExtraDialogForFiveSeven =>
+  DateTime? get showAddExtraSheetForNoBall =>
       throw _privateConstructorUsedError;
-  DateTime? get showPauseScoringDialog => throw _privateConstructorUsedError;
-  DateTime? get showAddPenaltyRunDialog => throw _privateConstructorUsedError;
-  DateTime? get showEndMatchDialog => throw _privateConstructorUsedError;
+  DateTime? get showAddExtraSheetForLegBye =>
+      throw _privateConstructorUsedError;
+  DateTime? get showAddExtraSheetForBye => throw _privateConstructorUsedError;
+  DateTime? get showAddExtraSheetForFiveSeven =>
+      throw _privateConstructorUsedError;
+  DateTime? get showPauseScoringSheet => throw _privateConstructorUsedError;
+  DateTime? get showAddPenaltyRunSheet => throw _privateConstructorUsedError;
+  DateTime? get showEndMatchSheet => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
   List<BallScoreModel> get currentScoresList =>
       throw _privateConstructorUsedError;
@@ -89,20 +90,20 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showSelectBowlerAndBatsManSheet,
       DateTime? showSelectPlayerSheet,
       DateTime? showSelectWicketTypeSheet,
-      DateTime? showStrikerSelectionDialog,
+      DateTime? showStrikerSelectionSheet,
       DateTime? showUndoBallConfirmationDialog,
-      DateTime? showOverCompleteDialog,
-      DateTime? showInningCompleteDialog,
-      DateTime? showMatchCompleteDialog,
-      DateTime? showBoundaryDialogForSix,
-      DateTime? showBoundaryDialogForFour,
-      DateTime? showAddExtraDialogForNoBall,
-      DateTime? showAddExtraDialogForLegBye,
-      DateTime? showAddExtraDialogForBye,
-      DateTime? showAddExtraDialogForFiveSeven,
-      DateTime? showPauseScoringDialog,
-      DateTime? showAddPenaltyRunDialog,
-      DateTime? showEndMatchDialog,
+      DateTime? showOverCompleteSheet,
+      DateTime? showInningCompleteSheet,
+      DateTime? showMatchCompleteSheet,
+      DateTime? showBoundaryConfirmationDialogForSix,
+      DateTime? showBoundaryConfirmationDialogForFour,
+      DateTime? showAddExtraSheetForNoBall,
+      DateTime? showAddExtraSheetForLegBye,
+      DateTime? showAddExtraSheetForBye,
+      DateTime? showAddExtraSheetForFiveSeven,
+      DateTime? showPauseScoringSheet,
+      DateTime? showAddPenaltyRunSheet,
+      DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
@@ -148,20 +149,20 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showSelectBowlerAndBatsManSheet = freezed,
     Object? showSelectPlayerSheet = freezed,
     Object? showSelectWicketTypeSheet = freezed,
-    Object? showStrikerSelectionDialog = freezed,
+    Object? showStrikerSelectionSheet = freezed,
     Object? showUndoBallConfirmationDialog = freezed,
-    Object? showOverCompleteDialog = freezed,
-    Object? showInningCompleteDialog = freezed,
-    Object? showMatchCompleteDialog = freezed,
-    Object? showBoundaryDialogForSix = freezed,
-    Object? showBoundaryDialogForFour = freezed,
-    Object? showAddExtraDialogForNoBall = freezed,
-    Object? showAddExtraDialogForLegBye = freezed,
-    Object? showAddExtraDialogForBye = freezed,
-    Object? showAddExtraDialogForFiveSeven = freezed,
-    Object? showPauseScoringDialog = freezed,
-    Object? showAddPenaltyRunDialog = freezed,
-    Object? showEndMatchDialog = freezed,
+    Object? showOverCompleteSheet = freezed,
+    Object? showInningCompleteSheet = freezed,
+    Object? showMatchCompleteSheet = freezed,
+    Object? showBoundaryConfirmationDialogForSix = freezed,
+    Object? showBoundaryConfirmationDialogForFour = freezed,
+    Object? showAddExtraSheetForNoBall = freezed,
+    Object? showAddExtraSheetForLegBye = freezed,
+    Object? showAddExtraSheetForBye = freezed,
+    Object? showAddExtraSheetForFiveSeven = freezed,
+    Object? showPauseScoringSheet = freezed,
+    Object? showAddPenaltyRunSheet = freezed,
+    Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
@@ -223,61 +224,63 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.showSelectWicketTypeSheet
           : showSelectWicketTypeSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showStrikerSelectionDialog: freezed == showStrikerSelectionDialog
-          ? _value.showStrikerSelectionDialog
-          : showStrikerSelectionDialog // ignore: cast_nullable_to_non_nullable
+      showStrikerSelectionSheet: freezed == showStrikerSelectionSheet
+          ? _value.showStrikerSelectionSheet
+          : showStrikerSelectionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showUndoBallConfirmationDialog: freezed == showUndoBallConfirmationDialog
           ? _value.showUndoBallConfirmationDialog
           : showUndoBallConfirmationDialog // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showOverCompleteDialog: freezed == showOverCompleteDialog
-          ? _value.showOverCompleteDialog
-          : showOverCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showOverCompleteSheet: freezed == showOverCompleteSheet
+          ? _value.showOverCompleteSheet
+          : showOverCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showInningCompleteDialog: freezed == showInningCompleteDialog
-          ? _value.showInningCompleteDialog
-          : showInningCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showInningCompleteSheet: freezed == showInningCompleteSheet
+          ? _value.showInningCompleteSheet
+          : showInningCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showMatchCompleteDialog: freezed == showMatchCompleteDialog
-          ? _value.showMatchCompleteDialog
-          : showMatchCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showMatchCompleteSheet: freezed == showMatchCompleteSheet
+          ? _value.showMatchCompleteSheet
+          : showMatchCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showBoundaryDialogForSix: freezed == showBoundaryDialogForSix
-          ? _value.showBoundaryDialogForSix
-          : showBoundaryDialogForSix // ignore: cast_nullable_to_non_nullable
+      showBoundaryConfirmationDialogForSix: freezed ==
+              showBoundaryConfirmationDialogForSix
+          ? _value.showBoundaryConfirmationDialogForSix
+          : showBoundaryConfirmationDialogForSix // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showBoundaryDialogForFour: freezed == showBoundaryDialogForFour
-          ? _value.showBoundaryDialogForFour
-          : showBoundaryDialogForFour // ignore: cast_nullable_to_non_nullable
+      showBoundaryConfirmationDialogForFour: freezed ==
+              showBoundaryConfirmationDialogForFour
+          ? _value.showBoundaryConfirmationDialogForFour
+          : showBoundaryConfirmationDialogForFour // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForNoBall: freezed == showAddExtraDialogForNoBall
-          ? _value.showAddExtraDialogForNoBall
-          : showAddExtraDialogForNoBall // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForNoBall: freezed == showAddExtraSheetForNoBall
+          ? _value.showAddExtraSheetForNoBall
+          : showAddExtraSheetForNoBall // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForLegBye: freezed == showAddExtraDialogForLegBye
-          ? _value.showAddExtraDialogForLegBye
-          : showAddExtraDialogForLegBye // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForLegBye: freezed == showAddExtraSheetForLegBye
+          ? _value.showAddExtraSheetForLegBye
+          : showAddExtraSheetForLegBye // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForBye: freezed == showAddExtraDialogForBye
-          ? _value.showAddExtraDialogForBye
-          : showAddExtraDialogForBye // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForBye: freezed == showAddExtraSheetForBye
+          ? _value.showAddExtraSheetForBye
+          : showAddExtraSheetForBye // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForFiveSeven: freezed == showAddExtraDialogForFiveSeven
-          ? _value.showAddExtraDialogForFiveSeven
-          : showAddExtraDialogForFiveSeven // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForFiveSeven: freezed == showAddExtraSheetForFiveSeven
+          ? _value.showAddExtraSheetForFiveSeven
+          : showAddExtraSheetForFiveSeven // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showPauseScoringDialog: freezed == showPauseScoringDialog
-          ? _value.showPauseScoringDialog
-          : showPauseScoringDialog // ignore: cast_nullable_to_non_nullable
+      showPauseScoringSheet: freezed == showPauseScoringSheet
+          ? _value.showPauseScoringSheet
+          : showPauseScoringSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddPenaltyRunDialog: freezed == showAddPenaltyRunDialog
-          ? _value.showAddPenaltyRunDialog
-          : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
+      showAddPenaltyRunSheet: freezed == showAddPenaltyRunSheet
+          ? _value.showAddPenaltyRunSheet
+          : showAddPenaltyRunSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showEndMatchDialog: freezed == showEndMatchDialog
-          ? _value.showEndMatchDialog
-          : showEndMatchDialog // ignore: cast_nullable_to_non_nullable
+      showEndMatchSheet: freezed == showEndMatchSheet
+          ? _value.showEndMatchSheet
+          : showEndMatchSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
@@ -401,20 +404,20 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showSelectBowlerAndBatsManSheet,
       DateTime? showSelectPlayerSheet,
       DateTime? showSelectWicketTypeSheet,
-      DateTime? showStrikerSelectionDialog,
+      DateTime? showStrikerSelectionSheet,
       DateTime? showUndoBallConfirmationDialog,
-      DateTime? showOverCompleteDialog,
-      DateTime? showInningCompleteDialog,
-      DateTime? showMatchCompleteDialog,
-      DateTime? showBoundaryDialogForSix,
-      DateTime? showBoundaryDialogForFour,
-      DateTime? showAddExtraDialogForNoBall,
-      DateTime? showAddExtraDialogForLegBye,
-      DateTime? showAddExtraDialogForBye,
-      DateTime? showAddExtraDialogForFiveSeven,
-      DateTime? showPauseScoringDialog,
-      DateTime? showAddPenaltyRunDialog,
-      DateTime? showEndMatchDialog,
+      DateTime? showOverCompleteSheet,
+      DateTime? showInningCompleteSheet,
+      DateTime? showMatchCompleteSheet,
+      DateTime? showBoundaryConfirmationDialogForSix,
+      DateTime? showBoundaryConfirmationDialogForFour,
+      DateTime? showAddExtraSheetForNoBall,
+      DateTime? showAddExtraSheetForLegBye,
+      DateTime? showAddExtraSheetForBye,
+      DateTime? showAddExtraSheetForFiveSeven,
+      DateTime? showPauseScoringSheet,
+      DateTime? showAddPenaltyRunSheet,
+      DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
@@ -462,20 +465,20 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showSelectBowlerAndBatsManSheet = freezed,
     Object? showSelectPlayerSheet = freezed,
     Object? showSelectWicketTypeSheet = freezed,
-    Object? showStrikerSelectionDialog = freezed,
+    Object? showStrikerSelectionSheet = freezed,
     Object? showUndoBallConfirmationDialog = freezed,
-    Object? showOverCompleteDialog = freezed,
-    Object? showInningCompleteDialog = freezed,
-    Object? showMatchCompleteDialog = freezed,
-    Object? showBoundaryDialogForSix = freezed,
-    Object? showBoundaryDialogForFour = freezed,
-    Object? showAddExtraDialogForNoBall = freezed,
-    Object? showAddExtraDialogForLegBye = freezed,
-    Object? showAddExtraDialogForBye = freezed,
-    Object? showAddExtraDialogForFiveSeven = freezed,
-    Object? showPauseScoringDialog = freezed,
-    Object? showAddPenaltyRunDialog = freezed,
-    Object? showEndMatchDialog = freezed,
+    Object? showOverCompleteSheet = freezed,
+    Object? showInningCompleteSheet = freezed,
+    Object? showMatchCompleteSheet = freezed,
+    Object? showBoundaryConfirmationDialogForSix = freezed,
+    Object? showBoundaryConfirmationDialogForFour = freezed,
+    Object? showAddExtraSheetForNoBall = freezed,
+    Object? showAddExtraSheetForLegBye = freezed,
+    Object? showAddExtraSheetForBye = freezed,
+    Object? showAddExtraSheetForFiveSeven = freezed,
+    Object? showPauseScoringSheet = freezed,
+    Object? showAddPenaltyRunSheet = freezed,
+    Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
@@ -537,61 +540,63 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.showSelectWicketTypeSheet
           : showSelectWicketTypeSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showStrikerSelectionDialog: freezed == showStrikerSelectionDialog
-          ? _value.showStrikerSelectionDialog
-          : showStrikerSelectionDialog // ignore: cast_nullable_to_non_nullable
+      showStrikerSelectionSheet: freezed == showStrikerSelectionSheet
+          ? _value.showStrikerSelectionSheet
+          : showStrikerSelectionSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showUndoBallConfirmationDialog: freezed == showUndoBallConfirmationDialog
           ? _value.showUndoBallConfirmationDialog
           : showUndoBallConfirmationDialog // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showOverCompleteDialog: freezed == showOverCompleteDialog
-          ? _value.showOverCompleteDialog
-          : showOverCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showOverCompleteSheet: freezed == showOverCompleteSheet
+          ? _value.showOverCompleteSheet
+          : showOverCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showInningCompleteDialog: freezed == showInningCompleteDialog
-          ? _value.showInningCompleteDialog
-          : showInningCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showInningCompleteSheet: freezed == showInningCompleteSheet
+          ? _value.showInningCompleteSheet
+          : showInningCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showMatchCompleteDialog: freezed == showMatchCompleteDialog
-          ? _value.showMatchCompleteDialog
-          : showMatchCompleteDialog // ignore: cast_nullable_to_non_nullable
+      showMatchCompleteSheet: freezed == showMatchCompleteSheet
+          ? _value.showMatchCompleteSheet
+          : showMatchCompleteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showBoundaryDialogForSix: freezed == showBoundaryDialogForSix
-          ? _value.showBoundaryDialogForSix
-          : showBoundaryDialogForSix // ignore: cast_nullable_to_non_nullable
+      showBoundaryConfirmationDialogForSix: freezed ==
+              showBoundaryConfirmationDialogForSix
+          ? _value.showBoundaryConfirmationDialogForSix
+          : showBoundaryConfirmationDialogForSix // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showBoundaryDialogForFour: freezed == showBoundaryDialogForFour
-          ? _value.showBoundaryDialogForFour
-          : showBoundaryDialogForFour // ignore: cast_nullable_to_non_nullable
+      showBoundaryConfirmationDialogForFour: freezed ==
+              showBoundaryConfirmationDialogForFour
+          ? _value.showBoundaryConfirmationDialogForFour
+          : showBoundaryConfirmationDialogForFour // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForNoBall: freezed == showAddExtraDialogForNoBall
-          ? _value.showAddExtraDialogForNoBall
-          : showAddExtraDialogForNoBall // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForNoBall: freezed == showAddExtraSheetForNoBall
+          ? _value.showAddExtraSheetForNoBall
+          : showAddExtraSheetForNoBall // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForLegBye: freezed == showAddExtraDialogForLegBye
-          ? _value.showAddExtraDialogForLegBye
-          : showAddExtraDialogForLegBye // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForLegBye: freezed == showAddExtraSheetForLegBye
+          ? _value.showAddExtraSheetForLegBye
+          : showAddExtraSheetForLegBye // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForBye: freezed == showAddExtraDialogForBye
-          ? _value.showAddExtraDialogForBye
-          : showAddExtraDialogForBye // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForBye: freezed == showAddExtraSheetForBye
+          ? _value.showAddExtraSheetForBye
+          : showAddExtraSheetForBye // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddExtraDialogForFiveSeven: freezed == showAddExtraDialogForFiveSeven
-          ? _value.showAddExtraDialogForFiveSeven
-          : showAddExtraDialogForFiveSeven // ignore: cast_nullable_to_non_nullable
+      showAddExtraSheetForFiveSeven: freezed == showAddExtraSheetForFiveSeven
+          ? _value.showAddExtraSheetForFiveSeven
+          : showAddExtraSheetForFiveSeven // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showPauseScoringDialog: freezed == showPauseScoringDialog
-          ? _value.showPauseScoringDialog
-          : showPauseScoringDialog // ignore: cast_nullable_to_non_nullable
+      showPauseScoringSheet: freezed == showPauseScoringSheet
+          ? _value.showPauseScoringSheet
+          : showPauseScoringSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showAddPenaltyRunDialog: freezed == showAddPenaltyRunDialog
-          ? _value.showAddPenaltyRunDialog
-          : showAddPenaltyRunDialog // ignore: cast_nullable_to_non_nullable
+      showAddPenaltyRunSheet: freezed == showAddPenaltyRunSheet
+          ? _value.showAddPenaltyRunSheet
+          : showAddPenaltyRunSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      showEndMatchDialog: freezed == showEndMatchDialog
-          ? _value.showEndMatchDialog
-          : showEndMatchDialog // ignore: cast_nullable_to_non_nullable
+      showEndMatchSheet: freezed == showEndMatchSheet
+          ? _value.showEndMatchSheet
+          : showEndMatchSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
@@ -662,20 +667,20 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showSelectBowlerAndBatsManSheet,
       this.showSelectPlayerSheet,
       this.showSelectWicketTypeSheet,
-      this.showStrikerSelectionDialog,
+      this.showStrikerSelectionSheet,
       this.showUndoBallConfirmationDialog,
-      this.showOverCompleteDialog,
-      this.showInningCompleteDialog,
-      this.showMatchCompleteDialog,
-      this.showBoundaryDialogForSix,
-      this.showBoundaryDialogForFour,
-      this.showAddExtraDialogForNoBall,
-      this.showAddExtraDialogForLegBye,
-      this.showAddExtraDialogForBye,
-      this.showAddExtraDialogForFiveSeven,
-      this.showPauseScoringDialog,
-      this.showAddPenaltyRunDialog,
-      this.showEndMatchDialog,
+      this.showOverCompleteSheet,
+      this.showInningCompleteSheet,
+      this.showMatchCompleteSheet,
+      this.showBoundaryConfirmationDialogForSix,
+      this.showBoundaryConfirmationDialogForFour,
+      this.showAddExtraSheetForNoBall,
+      this.showAddExtraSheetForLegBye,
+      this.showAddExtraSheetForBye,
+      this.showAddExtraSheetForFiveSeven,
+      this.showPauseScoringSheet,
+      this.showAddPenaltyRunSheet,
+      this.showEndMatchSheet,
       this.invalidUndoToast,
       final List<BallScoreModel> currentScoresList = const [],
       final List<BallScoreModel> previousScoresList = const [],
@@ -727,33 +732,33 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   @override
   final DateTime? showSelectWicketTypeSheet;
   @override
-  final DateTime? showStrikerSelectionDialog;
+  final DateTime? showStrikerSelectionSheet;
   @override
   final DateTime? showUndoBallConfirmationDialog;
   @override
-  final DateTime? showOverCompleteDialog;
+  final DateTime? showOverCompleteSheet;
   @override
-  final DateTime? showInningCompleteDialog;
+  final DateTime? showInningCompleteSheet;
   @override
-  final DateTime? showMatchCompleteDialog;
+  final DateTime? showMatchCompleteSheet;
   @override
-  final DateTime? showBoundaryDialogForSix;
+  final DateTime? showBoundaryConfirmationDialogForSix;
   @override
-  final DateTime? showBoundaryDialogForFour;
+  final DateTime? showBoundaryConfirmationDialogForFour;
   @override
-  final DateTime? showAddExtraDialogForNoBall;
+  final DateTime? showAddExtraSheetForNoBall;
   @override
-  final DateTime? showAddExtraDialogForLegBye;
+  final DateTime? showAddExtraSheetForLegBye;
   @override
-  final DateTime? showAddExtraDialogForBye;
+  final DateTime? showAddExtraSheetForBye;
   @override
-  final DateTime? showAddExtraDialogForFiveSeven;
+  final DateTime? showAddExtraSheetForFiveSeven;
   @override
-  final DateTime? showPauseScoringDialog;
+  final DateTime? showPauseScoringSheet;
   @override
-  final DateTime? showAddPenaltyRunDialog;
+  final DateTime? showAddPenaltyRunSheet;
   @override
-  final DateTime? showEndMatchDialog;
+  final DateTime? showEndMatchSheet;
   @override
   final DateTime? invalidUndoToast;
   final List<BallScoreModel> _currentScoresList;
@@ -806,7 +811,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionDialog: $showStrikerSelectionDialog, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteDialog: $showOverCompleteDialog, showInningCompleteDialog: $showInningCompleteDialog, showMatchCompleteDialog: $showMatchCompleteDialog, showBoundaryDialogForSix: $showBoundaryDialogForSix, showBoundaryDialogForFour: $showBoundaryDialogForFour, showAddExtraDialogForNoBall: $showAddExtraDialogForNoBall, showAddExtraDialogForLegBye: $showAddExtraDialogForLegBye, showAddExtraDialogForBye: $showAddExtraDialogForBye, showAddExtraDialogForFiveSeven: $showAddExtraDialogForFiveSeven, showPauseScoringDialog: $showPauseScoringDialog, showAddPenaltyRunDialog: $showAddPenaltyRunDialog, showEndMatchDialog: $showEndMatchDialog, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showBoundaryConfirmationDialogForSix: $showBoundaryConfirmationDialogForSix, showBoundaryConfirmationDialogForFour: $showBoundaryConfirmationDialogForFour, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -837,36 +842,36 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                 other.showSelectPlayerSheet == showSelectPlayerSheet) &&
             (identical(other.showSelectWicketTypeSheet, showSelectWicketTypeSheet) ||
                 other.showSelectWicketTypeSheet == showSelectWicketTypeSheet) &&
-            (identical(other.showStrikerSelectionDialog, showStrikerSelectionDialog) ||
-                other.showStrikerSelectionDialog ==
-                    showStrikerSelectionDialog) &&
+            (identical(other.showStrikerSelectionSheet, showStrikerSelectionSheet) ||
+                other.showStrikerSelectionSheet == showStrikerSelectionSheet) &&
             (identical(other.showUndoBallConfirmationDialog, showUndoBallConfirmationDialog) ||
                 other.showUndoBallConfirmationDialog ==
                     showUndoBallConfirmationDialog) &&
-            (identical(other.showOverCompleteDialog, showOverCompleteDialog) ||
-                other.showOverCompleteDialog == showOverCompleteDialog) &&
-            (identical(other.showInningCompleteDialog, showInningCompleteDialog) ||
-                other.showInningCompleteDialog == showInningCompleteDialog) &&
-            (identical(other.showMatchCompleteDialog, showMatchCompleteDialog) ||
-                other.showMatchCompleteDialog == showMatchCompleteDialog) &&
-            (identical(other.showBoundaryDialogForSix, showBoundaryDialogForSix) ||
-                other.showBoundaryDialogForSix == showBoundaryDialogForSix) &&
-            (identical(other.showBoundaryDialogForFour, showBoundaryDialogForFour) ||
-                other.showBoundaryDialogForFour == showBoundaryDialogForFour) &&
-            (identical(other.showAddExtraDialogForNoBall, showAddExtraDialogForNoBall) ||
-                other.showAddExtraDialogForNoBall ==
-                    showAddExtraDialogForNoBall) &&
-            (identical(other.showAddExtraDialogForLegBye, showAddExtraDialogForLegBye) ||
-                other.showAddExtraDialogForLegBye ==
-                    showAddExtraDialogForLegBye) &&
-            (identical(other.showAddExtraDialogForBye, showAddExtraDialogForBye) ||
-                other.showAddExtraDialogForBye == showAddExtraDialogForBye) &&
-            (identical(other.showAddExtraDialogForFiveSeven, showAddExtraDialogForFiveSeven) ||
-                other.showAddExtraDialogForFiveSeven ==
-                    showAddExtraDialogForFiveSeven) &&
-            (identical(other.showPauseScoringDialog, showPauseScoringDialog) || other.showPauseScoringDialog == showPauseScoringDialog) &&
-            (identical(other.showAddPenaltyRunDialog, showAddPenaltyRunDialog) || other.showAddPenaltyRunDialog == showAddPenaltyRunDialog) &&
-            (identical(other.showEndMatchDialog, showEndMatchDialog) || other.showEndMatchDialog == showEndMatchDialog) &&
+            (identical(other.showOverCompleteSheet, showOverCompleteSheet) ||
+                other.showOverCompleteSheet == showOverCompleteSheet) &&
+            (identical(other.showInningCompleteSheet, showInningCompleteSheet) ||
+                other.showInningCompleteSheet == showInningCompleteSheet) &&
+            (identical(other.showMatchCompleteSheet, showMatchCompleteSheet) ||
+                other.showMatchCompleteSheet == showMatchCompleteSheet) &&
+            (identical(other.showBoundaryConfirmationDialogForSix, showBoundaryConfirmationDialogForSix) ||
+                other.showBoundaryConfirmationDialogForSix ==
+                    showBoundaryConfirmationDialogForSix) &&
+            (identical(other.showBoundaryConfirmationDialogForFour, showBoundaryConfirmationDialogForFour) ||
+                other.showBoundaryConfirmationDialogForFour ==
+                    showBoundaryConfirmationDialogForFour) &&
+            (identical(other.showAddExtraSheetForNoBall, showAddExtraSheetForNoBall) ||
+                other.showAddExtraSheetForNoBall ==
+                    showAddExtraSheetForNoBall) &&
+            (identical(other.showAddExtraSheetForLegBye, showAddExtraSheetForLegBye) ||
+                other.showAddExtraSheetForLegBye ==
+                    showAddExtraSheetForLegBye) &&
+            (identical(other.showAddExtraSheetForBye, showAddExtraSheetForBye) ||
+                other.showAddExtraSheetForBye == showAddExtraSheetForBye) &&
+            (identical(other.showAddExtraSheetForFiveSeven, showAddExtraSheetForFiveSeven) ||
+                other.showAddExtraSheetForFiveSeven == showAddExtraSheetForFiveSeven) &&
+            (identical(other.showPauseScoringSheet, showPauseScoringSheet) || other.showPauseScoringSheet == showPauseScoringSheet) &&
+            (identical(other.showAddPenaltyRunSheet, showAddPenaltyRunSheet) || other.showAddPenaltyRunSheet == showAddPenaltyRunSheet) &&
+            (identical(other.showEndMatchSheet, showEndMatchSheet) || other.showEndMatchSheet == showEndMatchSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
@@ -897,20 +902,20 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showSelectBowlerAndBatsManSheet,
         showSelectPlayerSheet,
         showSelectWicketTypeSheet,
-        showStrikerSelectionDialog,
+        showStrikerSelectionSheet,
         showUndoBallConfirmationDialog,
-        showOverCompleteDialog,
-        showInningCompleteDialog,
-        showMatchCompleteDialog,
-        showBoundaryDialogForSix,
-        showBoundaryDialogForFour,
-        showAddExtraDialogForNoBall,
-        showAddExtraDialogForLegBye,
-        showAddExtraDialogForBye,
-        showAddExtraDialogForFiveSeven,
-        showPauseScoringDialog,
-        showAddPenaltyRunDialog,
-        showEndMatchDialog,
+        showOverCompleteSheet,
+        showInningCompleteSheet,
+        showMatchCompleteSheet,
+        showBoundaryConfirmationDialogForSix,
+        showBoundaryConfirmationDialogForFour,
+        showAddExtraSheetForNoBall,
+        showAddExtraSheetForLegBye,
+        showAddExtraSheetForBye,
+        showAddExtraSheetForFiveSeven,
+        showPauseScoringSheet,
+        showAddPenaltyRunSheet,
+        showEndMatchSheet,
         invalidUndoToast,
         const DeepCollectionEquality().hash(_currentScoresList),
         const DeepCollectionEquality().hash(_previousScoresList),
@@ -948,20 +953,20 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showSelectBowlerAndBatsManSheet,
       final DateTime? showSelectPlayerSheet,
       final DateTime? showSelectWicketTypeSheet,
-      final DateTime? showStrikerSelectionDialog,
+      final DateTime? showStrikerSelectionSheet,
       final DateTime? showUndoBallConfirmationDialog,
-      final DateTime? showOverCompleteDialog,
-      final DateTime? showInningCompleteDialog,
-      final DateTime? showMatchCompleteDialog,
-      final DateTime? showBoundaryDialogForSix,
-      final DateTime? showBoundaryDialogForFour,
-      final DateTime? showAddExtraDialogForNoBall,
-      final DateTime? showAddExtraDialogForLegBye,
-      final DateTime? showAddExtraDialogForBye,
-      final DateTime? showAddExtraDialogForFiveSeven,
-      final DateTime? showPauseScoringDialog,
-      final DateTime? showAddPenaltyRunDialog,
-      final DateTime? showEndMatchDialog,
+      final DateTime? showOverCompleteSheet,
+      final DateTime? showInningCompleteSheet,
+      final DateTime? showMatchCompleteSheet,
+      final DateTime? showBoundaryConfirmationDialogForSix,
+      final DateTime? showBoundaryConfirmationDialogForFour,
+      final DateTime? showAddExtraSheetForNoBall,
+      final DateTime? showAddExtraSheetForLegBye,
+      final DateTime? showAddExtraSheetForBye,
+      final DateTime? showAddExtraSheetForFiveSeven,
+      final DateTime? showPauseScoringSheet,
+      final DateTime? showAddPenaltyRunSheet,
+      final DateTime? showEndMatchSheet,
       final DateTime? invalidUndoToast,
       final List<BallScoreModel> currentScoresList,
       final List<BallScoreModel> previousScoresList,
@@ -1002,33 +1007,33 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   @override
   DateTime? get showSelectWicketTypeSheet;
   @override
-  DateTime? get showStrikerSelectionDialog;
+  DateTime? get showStrikerSelectionSheet;
   @override
   DateTime? get showUndoBallConfirmationDialog;
   @override
-  DateTime? get showOverCompleteDialog;
+  DateTime? get showOverCompleteSheet;
   @override
-  DateTime? get showInningCompleteDialog;
+  DateTime? get showInningCompleteSheet;
   @override
-  DateTime? get showMatchCompleteDialog;
+  DateTime? get showMatchCompleteSheet;
   @override
-  DateTime? get showBoundaryDialogForSix;
+  DateTime? get showBoundaryConfirmationDialogForSix;
   @override
-  DateTime? get showBoundaryDialogForFour;
+  DateTime? get showBoundaryConfirmationDialogForFour;
   @override
-  DateTime? get showAddExtraDialogForNoBall;
+  DateTime? get showAddExtraSheetForNoBall;
   @override
-  DateTime? get showAddExtraDialogForLegBye;
+  DateTime? get showAddExtraSheetForLegBye;
   @override
-  DateTime? get showAddExtraDialogForBye;
+  DateTime? get showAddExtraSheetForBye;
   @override
-  DateTime? get showAddExtraDialogForFiveSeven;
+  DateTime? get showAddExtraSheetForFiveSeven;
   @override
-  DateTime? get showPauseScoringDialog;
+  DateTime? get showPauseScoringSheet;
   @override
-  DateTime? get showAddPenaltyRunDialog;
+  DateTime? get showAddPenaltyRunSheet;
   @override
-  DateTime? get showEndMatchDialog;
+  DateTime? get showEndMatchSheet;
   @override
   DateTime? get invalidUndoToast;
   @override

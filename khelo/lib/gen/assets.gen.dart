@@ -12,19 +12,20 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/batsman.svg
+  String get batsman => 'assets/images/batsman.svg';
+
+  /// File path: assets/images/bowler.svg
+  String get bowler => 'assets/images/bowler.svg';
+
   /// File path: assets/images/ic_arrow_down.svg
   String get icArrowDown => 'assets/images/ic_arrow_down.svg';
 
-  /// File path: assets/images/ic_batsman.png
-  AssetGenImage get icBatsman =>
-      const AssetGenImage('assets/images/ic_batsman.png');
+  /// File path: assets/images/ic_bat_selected.svg
+  String get icBatSelected => 'assets/images/ic_bat_selected.svg';
 
   /// File path: assets/images/ic_bin.svg
   String get icBin => 'assets/images/ic_bin.svg';
-
-  /// File path: assets/images/ic_bowler.png
-  AssetGenImage get icBowler =>
-      const AssetGenImage('assets/images/ic_bowler.png');
 
   /// File path: assets/images/ic_calendar.svg
   String get icCalendar => 'assets/images/ic_calendar.svg';
@@ -90,10 +91,11 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        batsman,
+        bowler,
         icArrowDown,
-        icBatsman,
+        icBatSelected,
         icBin,
-        icBowler,
         icCalendar,
         icCamera,
         icCheck,

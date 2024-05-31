@@ -1,35 +1,40 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
-import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
+import 'package:khelo/ui/flow/score_board/components/user_cell_view.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/theme/colors.dart';
 
 class SelectPlayerSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     required PlayerSelectionType type,
     required bool continueWithInjPlayer,
+    required List<MatchPlayer> batsManList,
+    required List<MatchPlayer> bowlerList,
   }) {
     return showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       isDismissible: false,
+      showDragHandle: false,
       enableDrag: false,
+      isScrollControlled: true,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
         return SelectPlayerSheet(
           playerSelectionType: type,
           continueWithInjPlayer: continueWithInjPlayer,
+          batsManList: batsManList,
+          bowlerList: bowlerList,
         );
       },
     );
@@ -37,11 +42,15 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
 
   final PlayerSelectionType playerSelectionType;
   final bool continueWithInjPlayer;
+  final List<MatchPlayer> batsManList;
+  final List<MatchPlayer> bowlerList;
 
   const SelectPlayerSheet({
     super.key,
     required this.playerSelectionType,
     required this.continueWithInjPlayer,
+    required this.batsManList,
+    required this.bowlerList,
   });
 
   @override
@@ -63,123 +72,82 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scoreBoardStateProvider);
-
-    return Padding(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        height: context.mediaQuerySize.height * 0.8,
-        child: _body(context, state),
-      ),
-    );
-  }
-
-  Widget _body(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    final List<MatchPlayer> batsManList =
-        widget.playerSelectionType != PlayerSelectionType.bowler
-            ? _getFilteredList(state, type: PlayerSelectionType.batsMan)
-            : [];
-    final List<MatchPlayer> bowlerList =
-        widget.playerSelectionType != PlayerSelectionType.batsMan
-            ? _getFilteredList(state, type: PlayerSelectionType.bowler)
-            : [];
+    final notifier = ref.watch(scoreBoardStateProvider.notifier);
 
     final showCheckBox = widget.playerSelectionType !=
             PlayerSelectionType.bowler
-        ? batsManList.any((element) => element.status == PlayerStatus.injured)
+        ? widget.batsManList.any((element) => element.status == PlayerStatus.injured)
         : false;
 
     final injuredPlayerRemained =
         widget.playerSelectionType != PlayerSelectionType.bowler
-            ? batsManList.every((e) => e.status == PlayerStatus.injured)
+            ? widget.batsManList.every((e) => e.status == PlayerStatus.injured)
             : false;
-
-    return Stack(
-      children: [
-        ListView(
-          children: [
-            // batsman
-            if (widget.playerSelectionType != PlayerSelectionType.bowler &&
-                batsManList.isNotEmpty) ...[
-              _sectionTitle(
-                  context,
-                  (widget.playerSelectionType == PlayerSelectionType.all)
-                      ? context.l10n.score_board_choose_opening_batsmen_title
-                      : context.l10n.score_board_choose_batsman_title(
-                          state.lastAssignedIndex + 1)),
-              _remainingPlayerGrid(
-                context,
-                state,
-                batsManList,
-                PlayerSelectionType.batsMan,
-              ),
-            ],
-
-            // bowler
-            if (widget.playerSelectionType != PlayerSelectionType.batsMan) ...[
-              _sectionTitle(
-                  context,
-                  context.l10n.score_board_choose_bowler_for_over_title(
-                      state.overCount)),
-              _remainingPlayerGrid(
-                context,
-                state,
-                bowlerList,
-                PlayerSelectionType.bowler,
-              ),
-            ],
-          ],
+    return BottomSheetWrapper(
+        content: _selectPlayerContent(
+          context,
+          state,
+          batsManList: widget.batsManList,
+          bowlerList: widget.bowlerList,
         ),
-        _stickyButton(context, state, showCheckBox, injuredPlayerRemained),
+        action: [
+          _stickyButton(
+              context, notifier, state, showCheckBox, injuredPlayerRemained)
+        ]);
+  }
+
+  Widget _selectPlayerContent(
+    BuildContext context,
+    ScoreBoardViewState state, {
+    required List<MatchPlayer> batsManList,
+    required List<MatchPlayer> bowlerList,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // batsman
+        if (widget.playerSelectionType != PlayerSelectionType.bowler &&
+            batsManList.isNotEmpty) ...[
+          _sectionTitle(
+              context,
+              (widget.playerSelectionType == PlayerSelectionType.all)
+                  ? context.l10n.score_board_choose_opening_batsmen_title
+                  : context.l10n.score_board_choose_batsman_title(
+                      state.lastAssignedIndex + 1)),
+          _remainingPlayerGrid(
+            context,
+            state,
+            batsManList,
+            PlayerSelectionType.batsMan,
+          ),
+        ],
+
+        // bowler
+        if (widget.playerSelectionType != PlayerSelectionType.batsMan) ...[
+          const SizedBox(height: 24),
+          _sectionTitle(
+              context,
+              context.l10n
+                  .score_board_choose_bowler_for_over_title(state.overCount)),
+          _remainingPlayerGrid(
+            context,
+            state,
+            bowlerList,
+            PlayerSelectionType.bowler,
+          ),
+        ],
       ],
     );
-  }
-
-  List<MatchPlayer> _getFilteredList(
-    ScoreBoardViewState state, {
-    required PlayerSelectionType type,
-  }) {
-    if (state.match == null) {
-      return [];
-    }
-
-    final teamId = (type == PlayerSelectionType.batsMan
-            ? state.currentInning?.team_id
-            : state.otherInning?.team_id) ??
-        "INVALID ID";
-    final teamPlayers = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
-        ?.squad;
-
-    if (type == PlayerSelectionType.bowler) {
-      return teamPlayers ?? [];
-    } else {
-      return teamPlayers
-              ?.where((element) => _isPlayerEligibleForBatsman(element.status))
-              .toList() ??
-          [];
-    }
-  }
-
-  bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
-    return status != PlayerStatus.played &&
-        status != PlayerStatus.playing &&
-        status != PlayerStatus.suspended;
   }
 
   Widget _sectionTitle(BuildContext context, String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 24),
         Text(
           title,
-          style: AppTextStyle.header1
-              .copyWith(color: context.colorScheme.textSecondary),
+          style: AppTextStyle.header3
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
         const SizedBox(height: 16),
       ],
@@ -192,36 +160,31 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     List<MatchPlayer> list,
     PlayerSelectionType type,
   ) {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 0.7),
-      itemCount: list.length,
-      itemBuilder: (context, index) {
-        final player = list[index];
-
-        return _userCellWithTag(
-          context: context,
-          state: state,
-          showOverCount: type == PlayerSelectionType.bowler,
-          user: player.player,
-          tag: player.status == PlayerStatus.injured &&
-                  type == PlayerSelectionType.batsMan
-              ? context.l10n.score_board_injured_tag_title
-              : null,
-          isSelected: type == PlayerSelectionType.batsMan
-              ? [batsMan1?.player.id, batsMan2?.player.id]
-                  .contains(player.player.id)
-              : bowler?.player.id == player.player.id,
-          disableCell: player.status == PlayerStatus.injured &&
-              type == PlayerSelectionType.batsMan &&
-              !isEnabled,
-          onTap: () {
-            setState(() {
+    final showOverCount = type == PlayerSelectionType.bowler;
+    return Wrap(
+      spacing: 16,
+      runSpacing: 16,
+      children: [
+        for (final player in list) ...[
+          UserCellView(
+            title: player.player.name ?? context.l10n.common_anonymous_title,
+            imageUrl: player.player.profile_img_url,
+            initial: player.player.nameInitial,
+            subtitle: showOverCount
+                ? "(${context.l10n.match_list_overs_title(_getOverCount(state, player.player.id))})"
+                : null,
+            isSelected: type == PlayerSelectionType.batsMan
+                ? [batsMan1?.player.id, batsMan2?.player.id]
+                    .contains(player.player.id)
+                : bowler?.player.id == player.player.id,
+            tag: player.status == PlayerStatus.injured &&
+                    type == PlayerSelectionType.batsMan
+                ? context.l10n.score_board_injured_tag_title
+                : null,
+            disableCell: player.status == PlayerStatus.injured &&
+                type == PlayerSelectionType.batsMan &&
+                !isEnabled,
+            onTap: () => setState(() {
               if (type == PlayerSelectionType.batsMan) {
                 if (widget.playerSelectionType == PlayerSelectionType.all) {
                   if (batsMan1?.player.id == player.player.id) {
@@ -242,76 +205,10 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
               } else {
                 bowler = player;
               }
-            });
-          },
-        );
-      },
-    );
-  }
-
-  Widget _userCellWithTag({
-    required BuildContext context,
-    required ScoreBoardViewState state,
-    UserModel? user,
-    String? tag,
-    bool showOverCount = false,
-    required bool isSelected,
-    required bool disableCell,
-    required Function() onTap,
-  }) {
-    final overCount =
-        showOverCount ? _getOverCount(state, user?.id ?? "INVALID ID") : 0;
-
-    return OnTapScale(
-      enabled: !disableCell,
-      onTap: disableCell ? null : onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? context.colorScheme.primary
-              : disableCell
-                  ? Colors.transparent
-                  : context.colorScheme.containerNormalOnSurface,
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            user != null
-                ? ImageAvatar(
-                    imageUrl: user.profile_img_url,
-                    initial: user.nameInitial,
-                    size: 60,
-                  )
-                : _profilePlaceHolder(context, size: 60),
-            const SizedBox(
-              height: 16,
-            ),
-            Text(
-              user?.name ?? context.l10n.score_board_select_player_title,
-              style: AppTextStyle.subtitle1.copyWith(
-                  color: disableCell
-                      ? context.colorScheme.textDisabled
-                      : context.colorScheme.textPrimary),
-            ),
-            if (showOverCount) ...[
-              Text(
-                "(${context.l10n.match_list_overs_title(overCount)})",
-                style: AppTextStyle.body1
-                    .copyWith(color: context.colorScheme.textDisabled),
-              )
-            ],
-            if (tag != null) ...[
-              Text(
-                tag,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.alert),
-              ),
-            ]
-          ],
-        ),
-      ),
+            }),
+          )
+        ],
+      ],
     );
   }
 
@@ -329,78 +226,50 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     return (scores.length / 6).floor();
   }
 
-  Widget _profilePlaceHolder(
-    BuildContext context, {
-    required double size,
-  }) {
-    return Container(
-      height: size,
-      width: size,
-      decoration: BoxDecoration(
-        color: context.colorScheme.containerLow,
-        shape: BoxShape.circle,
-      ),
-      child: const Icon(Icons.person),
-    );
-  }
-
   Widget _stickyButton(
     BuildContext context,
+    ScoreBoardViewNotifier notifier,
     ScoreBoardViewState state,
     bool showContWithInjPlayerOption,
     bool injuredPlayerRemained,
   ) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (showContWithInjPlayerOption) ...[
-            _contWithInjPlayerOption(context),
-            const SizedBox(height: 16)
-          ],
-          PrimaryButton(
-            _getButtonTitle(
-                state.otherInning?.innings_status == InningStatus.finish,
-                injuredPlayerRemained),
-            enabled: _isStickyButtonEnable(injuredPlayerRemained),
-            onPressed: () =>
-                _onSelectButton(context, state, injuredPlayerRemained),
-          ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (showContWithInjPlayerOption) ...[
+          _contWithInjPlayerOption(context, notifier),
+          const SizedBox(height: 16)
         ],
-      ),
+        PrimaryButton(
+          _getButtonTitle(
+              state.otherInning?.innings_status == InningStatus.finish,
+              injuredPlayerRemained),
+          enabled: _isStickyButtonEnable(injuredPlayerRemained),
+          onPressed: () =>
+              _onSelectButton(context, state, injuredPlayerRemained),
+        ),
+      ],
     );
   }
 
-  Widget _contWithInjPlayerOption(BuildContext context) {
-    return OnTapScale(
-      onTap: () {
-        setState(() {
-          isEnabled = !isEnabled;
-          if (!isEnabled) {
-            if (batsMan1?.status == PlayerStatus.injured) {
-              batsMan1 = null;
-            }
-            if (batsMan2?.status == PlayerStatus.injured) {
-              batsMan2 = null;
-            }
+  Widget _contWithInjPlayerOption(
+      BuildContext context, ScoreBoardViewNotifier notifier) {
+    return _checkBoxView(
+      context,
+      title: context.l10n.score_board_continue_with_injured_player_title,
+      value: isEnabled,
+      onChange: (value) => setState(() {
+        isEnabled = !isEnabled;
+        notifier.onContinueWithInjuredPlayersChange(isEnabled);
+        if (!isEnabled) {
+          if (batsMan1?.status == PlayerStatus.injured) {
+            batsMan1 = null;
           }
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          children: [
-            Icon(isEnabled ? Icons.check_box : Icons.check_box_outline_blank),
-            const SizedBox(width: 8),
-            Text(
-              context.l10n.score_board_continue_with_injured_player_title,
-              style: AppTextStyle.subtitle1.copyWith(
-                  color: context.colorScheme.textPrimary, fontSize: 20),
-            ),
-          ],
-        ),
-      ),
+          if (batsMan2?.status == PlayerStatus.injured) {
+            batsMan2 = null;
+          }
+        }
+      }),
     );
   }
 
@@ -481,6 +350,44 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         contWithInjPlayer: isEnabled,
       ));
     }
+  }
+
+  Widget _checkBoxView(
+    BuildContext context, {
+    required String title,
+    required bool value,
+    required Function(bool) onChange,
+  }) {
+    return Theme(
+      data: context.brightness == Brightness.dark
+          ? materialThemeDataDark.copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashFactory: NoSplash.splashFactory)
+          : materialThemeDataLight.copyWith(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              splashFactory: NoSplash.splashFactory),
+      child: ListTileTheme(
+          horizontalTitleGap: 0.0,
+          child: CheckboxListTile(
+            value: value,
+            side:
+                BorderSide(color: context.colorScheme.containerHigh, width: 2),
+            onChanged: (value) {
+              if (value != null) {
+                onChange(value);
+              }
+            },
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            title: Text(
+              title,
+              style: AppTextStyle.body1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+          )),
+    );
   }
 }
 

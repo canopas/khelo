@@ -191,8 +191,8 @@
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
-  "add_toss_detail_bat_text": "Bat",
-  "add_toss_detail_bowl_text": "Bowl",
+  "add_toss_detail_bat_text": "Batting",
+  "add_toss_detail_bowl_text": "Bowling",
   "team_detail_screen_title": "Team Detail",
   "team_detail_member_tab_title": "Member",
   "team_detail_empty_member_title": "No team member are added to the team.",
@@ -458,8 +458,10 @@
   "score_board_one_text": "1",
   "score_board_two_text": "2",
   "score_board_three_text": "3",
-  "score_board_four_text": "4\nFour",
-  "score_board_six_text": "6\nSix",
+  "score_board_four_text": "4",
+  "score_board_four_title": "Four",
+  "score_board_six_text": "6",
+  "score_board_six_title": "Six",
   "score_board_five_or_seven_text": "5, 7",
   "score_board_out_text": "OUT",
   "score_board_wicket_text": "WICKET",
@@ -512,18 +514,29 @@
   "score_board_injured_tag_title": "Injured",
   "score_board_who_on_strike_title": "Who's on Strike?",
   "score_board_who_got_out_title": "Who got out",
-  "score_board_end_of_over_title": "End Of Over ",
   "score_board_start_next_over_title": "Start Next Over",
   "score_board_batsman_title": "batsMan",
   "score_board_bowler_title": "bowler",
   "score_board_change_striker_title": "Change Striker",
   "score_board_add_substitute_title": "Add substitute",
-  "score_board_by_title": " by ",
+  "score_board_end_of_over_by_title": "End Of Over {overNumber} by {player}",
+  "@score_board_end_of_over_by_title": {
+    "description": "End Of Over {overNumber} by {player}",
+    "placeholders": {
+      "overNumber": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
   "score_board_can_undo_till_running_over_title": "Undo is only allowed till running over",
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
   "score_board_pause_scoring_title": "Pause Scoring",
   "score_board_penalty_run_title": "Penalty Run",
+  "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
   "score_board_pause_title": "Pause",
   "score_board_more_options_title": "More Options",
