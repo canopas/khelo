@@ -741,8 +741,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           totalWicketTaken: wicketCount,
           updatedPlayer: updatedPlayers);
     } catch (e) {
-      debugPrint(
-          "ScoreBoardViewNotifier: error while undo last ball -> $e");
+      debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
     }
@@ -1013,6 +1012,30 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     } catch (e) {
       state = state.copyWith(actionError: e, isActionInProgress: false);
     }
+  }
+
+  OverStatModel getCurrentOverStatics() {
+    final scoresList = state.currentScoresList
+        .where((element) => element.over_number == state.overCount);
+
+    int run = scoresList
+        .where((element) => (element.extras_type == ExtrasType.noBall ||
+            element.extras_type == null))
+        .fold(0, (runCount, element) => runCount + element.runs_scored);
+
+    final wicket = scoresList
+        .where((element) => (element.wicket_type != null &&
+            element.wicket_type != WicketType.retiredHurt))
+        .length;
+
+    final extras = scoresList
+        .where((element) => (element.extras_type != null))
+        .fold(
+            0,
+            (extraCount, element) =>
+                extraCount + (element.extras_awarded ?? 0));
+
+    return OverStatModel(run: run, wicket: wicket, extra: extras);
   }
 
   _cancelStreamSubscription() async {

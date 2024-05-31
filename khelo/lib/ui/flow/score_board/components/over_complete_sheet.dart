@@ -12,7 +12,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class OverCompleteSheet extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(BuildContext context, OverStatModel overStat) {
     return showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -22,12 +22,14 @@ class OverCompleteSheet extends ConsumerWidget {
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return const OverCompleteSheet();
+        return OverCompleteSheet(overStat: overStat);
       },
     );
   }
 
-  const OverCompleteSheet({super.key});
+  final OverStatModel overStat;
+
+  const OverCompleteSheet({super.key, required this.overStat});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -68,8 +70,6 @@ class OverCompleteSheet extends ConsumerWidget {
   }
 
   Widget _scoreDetailCard(BuildContext context, ScoreBoardViewState state) {
-    final (run, wicket, extra) = _getCurrentOverStatics(state);
-
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -91,21 +91,21 @@ class OverCompleteSheet extends ConsumerWidget {
                   child: _detailInfoCell(
                 context,
                 placeholder: "${context.l10n.score_board_runs_title}:",
-                title: run.toString(),
+                title: overStat.run.toString(),
               )),
               const SizedBox(width: 8),
               Expanded(
                   child: _detailInfoCell(
                 context,
                 placeholder: "${context.l10n.score_board_wickets_text}:",
-                title: wicket.toString(),
+                title: overStat.wicket.toString(),
               )),
             ],
           ),
           const SizedBox(height: 8),
           _detailInfoCell(context,
               placeholder: "${context.l10n.score_board_extras_title}:",
-              title: extra.toString()),
+              title: overStat.extra.toString()),
           const SizedBox(height: 24),
           _detailInfoCell(
             context,
@@ -190,27 +190,6 @@ class OverCompleteSheet extends ConsumerWidget {
         .length;
 
     return (totalRuns, batsManFacedBall);
-  }
-
-  (int, int, int) _getCurrentOverStatics(ScoreBoardViewState state) {
-    final scoresList = state.currentScoresList
-        .where((element) => element.over_number == state.overCount);
-
-    int run = scoresList
-        .where((element) => (element.extras_type == ExtrasType.noBall ||
-            element.extras_type == null))
-        .fold(0, (sum, element) => sum + element.runs_scored);
-
-    final wicket = scoresList
-        .where((element) => (element.wicket_type != null &&
-            element.wicket_type != WicketType.retiredHurt))
-        .length;
-
-    final extras = scoresList
-        .where((element) => (element.extras_type != null))
-        .fold(0, (sum, element) => sum + (element.extras_awarded ?? 0));
-
-    return (run, wicket, extras);
   }
 
   String _getCurrentTeamName(BuildContext context, ScoreBoardViewState state) {

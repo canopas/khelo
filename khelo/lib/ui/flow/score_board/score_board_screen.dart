@@ -526,7 +526,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showOverCompleteDialog(BuildContext context) async {
-    final startNext = await OverCompleteSheet.show<bool>(context);
+    final startNext = await OverCompleteSheet.show<bool>(context, notifier.getCurrentOverStatics());
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextOver();

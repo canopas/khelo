@@ -31,6 +31,18 @@ class BallScoreModel with _$BallScoreModel {
       _$BallScoreModelFromJson(json);
 }
 
+@freezed
+class OverStatModel with _$OverStatModel {
+  const factory OverStatModel({
+    @Default(0) int run,
+    @Default(0) int wicket,
+    @Default(0) int extra,
+  }) = _OverStatModel;
+
+  factory OverStatModel.fromJson(Map<String, dynamic> json) =>
+      _$OverStatModelFromJson(json);
+}
+
 @JsonEnum(valueField: "value")
 enum ExtrasType {
   wide(1),
