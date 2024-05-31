@@ -2,25 +2,28 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class TeamMemberDialog extends StatelessWidget {
+class TeamMemberSheet extends StatelessWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     required TeamModel team,
     bool isForVerification = false,
   }) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      showDragHandle: true,
+      useRootNavigator: true,
+      backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return TeamMemberDialog(
+        return TeamMemberSheet(
           team: team,
           isForVerification: isForVerification,
         );
@@ -31,7 +34,7 @@ class TeamMemberDialog extends StatelessWidget {
   final TeamModel team;
   final bool isForVerification;
 
-  const TeamMemberDialog({
+  const TeamMemberSheet({
     super.key,
     required this.team,
     this.isForVerification = false,
@@ -39,67 +42,35 @@ class TeamMemberDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(
-        team.name,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textPrimary),
-      ),
-      content: SingleChildScrollView(
-        child: Wrap(
-          runSpacing: 16,
+    return Container(
+      padding: context.mediaQueryPadding +
+          const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            for (final member in team.players != null ? team.players! : []) ...[
-              _userProfileCell(context, member),
-            ],
+            Text(
+              team.name,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+                runSpacing: 16,
+                children: (team.players ?? [])
+                    .map(
+                      (member) => UserDetailCell(
+                        user: member,
+                        trailing: isForVerification
+                            ? _selectButton(context, member)
+                            : null,
+                      ),
+                    )
+                    .toList()),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _userProfileCell(BuildContext context, UserModel user) {
-    return Row(
-      children: [
-        ImageAvatar(
-          initial: user.nameInitial,
-          imageUrl: user.profile_img_url,
-          size: 50,
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                user.name ?? context.l10n.common_anonymous_title,
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              Text(
-                  user.player_role != null
-                      ? user.player_role!.getString(context)
-                      : context.l10n.common_not_specified_title,
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textSecondary)),
-              if (user.phone != null) ...[
-                const SizedBox(
-                  height: 2,
-                ),
-                Text(
-                  user.phone.format(context, StringFormats.obscurePhoneNumber),
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textSecondary),
-                ),
-              ],
-            ],
-          ),
-        ),
-        if (isForVerification) ...[_selectButton(context, user)]
-      ],
     );
   }
 

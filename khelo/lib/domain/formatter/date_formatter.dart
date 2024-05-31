@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 
-enum DateFormatType { dateAndTime, date, time, shortDate }
+enum DateFormatType { dateAndTime, date, time, shortDate, dayMonthYear }
 
 extension DateFormatter on DateTime {
   String format(BuildContext context, DateFormatType type) {
@@ -20,6 +20,8 @@ extension DateFormatter on DateTime {
             .format(this);
       case DateFormatType.shortDate:
         return DateFormat('dd MMM yyyy').format(this);
+      case DateFormatType.dayMonthYear:
+        return DateFormat.yMMMd().format(this);
     }
   }
 }
