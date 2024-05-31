@@ -21,6 +21,8 @@
   "common_wickets_dot_title": " Wickets.",
   "common_wicket_taken_title": " Wicket taken",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
+  "common_camera_text": "Camera",
+  "common_gallery_text": "Gallery",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
     "placeholders": {
