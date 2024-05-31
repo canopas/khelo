@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/primary_button.dart';
@@ -89,7 +89,10 @@ class MatchCompleteSheet extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _winnerMessageText(context, state.match),
+              WonByMessageText(
+                  matchResult: state.match?.matchResult,
+                  textStyle: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary)),
               const SizedBox(height: 16),
               _table(context, state),
             ],
@@ -200,30 +203,5 @@ class MatchCompleteSheet extends ConsumerWidget {
               ? context.colorScheme.textDisabled
               : context.colorScheme.textPrimary),
     );
-  }
-
-  Widget _winnerMessageText(BuildContext context, MatchModel? match) {
-    if (match == null) {
-      return const SizedBox();
-    }
-    final winSummary = match
-        .copyWith(match_status: MatchStatus.finish)
-        .getWinnerSummary(context);
-    if (winSummary != null) {
-      if (winSummary.teamName.isEmpty) {
-        return Text(
-          context.l10n.score_board_match_tied_text,
-          style: AppTextStyle.subtitle2
-              .copyWith(color: context.colorScheme.textPrimary),
-        );
-      }
-      return Text(
-        "${winSummary.teamName} ${context.l10n.score_board_won_by_title} ${winSummary.difference} ${winSummary.wonByText}",
-        style: AppTextStyle.subtitle2
-            .copyWith(color: context.colorScheme.textPrimary),
-      );
-    } else {
-      return const SizedBox();
-    }
   }
 }

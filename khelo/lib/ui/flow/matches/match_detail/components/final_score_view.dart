@@ -36,9 +36,7 @@ class FinalScoreView extends ConsumerWidget {
     }
     children.add(const SizedBox(height: 8));
     if (state.match!.match_status == MatchStatus.finish) {
-      children.add(Divider(
-        color: context.colorScheme.outline,
-      ));
+      children.add(Divider(color: context.colorScheme.outline));
       children.add(_winnerMessageText(context, state.match!));
     }
 

@@ -84,9 +84,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           ));
           children.add(const SizedBox(height: 24));
           children.add(CommentaryOverOverview(index: index));
-          children.add(const SizedBox(
-            height: 8,
-          ));
+          children.add(const SizedBox(height: 8));
         }
       }
 

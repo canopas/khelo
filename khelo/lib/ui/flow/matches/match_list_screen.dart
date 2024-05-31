@@ -64,9 +64,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
     MatchListViewState state,
   ) {
     if (state.loading) {
-      return const Center(
-        child: AppProgressIndicator(),
-      );
+      return const Center(child: AppProgressIndicator());
     }
     if (state.error != null) {
       return ErrorScreen(

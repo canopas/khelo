@@ -28,9 +28,7 @@ class CommentaryBallSummary extends ConsumerWidget {
       child: Row(
         children: [
           _ballNumberView(context),
-          const SizedBox(
-            width: 24,
-          ),
+          const SizedBox(width: 24),
           Expanded(child: _ballSummaryTextView(context)),
         ],
       ),
@@ -46,12 +44,7 @@ class CommentaryBallSummary extends ConsumerWidget {
                     .copyWith(color: context.colorScheme.textDisabled)
                 : AppTextStyle.body1
                     .copyWith(color: context.colorScheme.textDisabled)),
-        if (showBallScore) ...[
-          BallScoreView(
-            ball: ball,
-            size: 24,
-          )
-        ]
+        if (showBallScore) ...[BallScoreView(ball: ball, size: 24)]
       ],
     );
   }

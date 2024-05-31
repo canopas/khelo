@@ -26,7 +26,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
       MatchDetailTabState state) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {
@@ -709,7 +709,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: WonByMessageText(
-        isHighlighted: false,
+        textStyle: AppTextStyle.body1
+            .copyWith(color: context.colorScheme.textDisabled),
         matchResult: match.matchResult,
       ),
     );

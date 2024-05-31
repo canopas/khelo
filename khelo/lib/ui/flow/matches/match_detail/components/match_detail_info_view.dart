@@ -26,7 +26,7 @@ class MatchDetailInfoView extends ConsumerWidget {
   Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
       MatchDetailTabState state) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {

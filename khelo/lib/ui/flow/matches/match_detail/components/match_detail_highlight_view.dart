@@ -62,7 +62,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
     MatchDetailTabState state,
   ) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {
@@ -132,10 +132,8 @@ class MatchDetailHighlightView extends ConsumerWidget {
     return ListView.separated(
       itemCount: highlight.length,
       padding: const EdgeInsets.only(top: 24),
-      separatorBuilder: (context, index) => Divider(
-        color: context.colorScheme.outline,
-        height: 32,
-      ),
+      separatorBuilder: (context, index) =>
+          Divider(color: context.colorScheme.outline, height: 32),
       itemBuilder: (context, index) {
         return CommentaryBallSummary(state: state, ball: highlight[index]);
       },
@@ -196,8 +194,11 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .toList());
   }
 
-  void showTeamSelectionSheet(BuildContext context, List<MatchTeamModel>? teams,
-      Function(String) onTap) {
+  void showTeamSelectionSheet(
+    BuildContext context,
+    List<MatchTeamModel>? teams,
+    Function(String) onTap,
+  ) {
     showActionBottomSheet(
       context: context,
       items: teams

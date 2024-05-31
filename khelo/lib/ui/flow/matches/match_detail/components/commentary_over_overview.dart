@@ -35,13 +35,9 @@ class CommentaryOverOverview extends ConsumerWidget {
             child: Row(
               children: [
                 _overCount(context, overLastBall?.over_number ?? 0),
-                const SizedBox(
-                  width: 16,
-                ),
+                const SizedBox(width: 16),
                 _divider(context, axis: Axis.vertical),
-                const SizedBox(
-                  width: 16,
-                ),
+                const SizedBox(width: 16),
                 _bowlerAndOverSummary(
                   context,
                   state,
@@ -100,13 +96,8 @@ class CommentaryOverOverview extends ConsumerWidget {
               index: index + 1,
               inningId: inningId,
               bowlerId: bowlerId),
-          const SizedBox(
-            height: 8,
-          ),
-          OverScoreView(
-            over: over,
-            size: 32,
-          )
+          const SizedBox(height: 8),
+          OverScoreView(over: over, size: 32)
         ],
       ),
     );
@@ -127,15 +118,9 @@ class CommentaryOverOverview extends ConsumerWidget {
 
   Widget _divider(BuildContext context, {Axis axis = Axis.horizontal}) {
     if (axis == Axis.horizontal) {
-      return Divider(
-        height: 0,
-        color: context.colorScheme.outline,
-      );
+      return Divider(height: 0, color: context.colorScheme.outline);
     } else {
-      return VerticalDivider(
-        width: 0,
-        color: context.colorScheme.outline,
-      );
+      return VerticalDivider(width: 0, color: context.colorScheme.outline);
     }
   }
 
