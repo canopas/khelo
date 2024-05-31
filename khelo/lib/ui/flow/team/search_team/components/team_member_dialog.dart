@@ -9,16 +9,21 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class TeamMemberDialog extends StatelessWidget {
+class TeamMemberSheet extends StatelessWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     required TeamModel team,
     bool isForVerification = false,
   }) {
-    return showDialog(
+    return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      showDragHandle: true,
+      useRootNavigator: true,
+      backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return TeamMemberDialog(
+        return TeamMemberSheet(
           team: team,
           isForVerification: isForVerification,
         );
@@ -29,7 +34,7 @@ class TeamMemberDialog extends StatelessWidget {
   final TeamModel team;
   final bool isForVerification;
 
-  const TeamMemberDialog({
+  const TeamMemberSheet({
     super.key,
     required this.team,
     this.isForVerification = false,
@@ -37,26 +42,34 @@ class TeamMemberDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: context.colorScheme.containerLowOnSurface,
-      title: Text(
-        team.name,
-        style: AppTextStyle.subtitle1
-            .copyWith(color: context.colorScheme.textPrimary),
-      ),
-      content: SingleChildScrollView(
-        child: Wrap(
-            runSpacing: 16,
-            children: (team.players ?? [])
-                .map(
-                  (member) => UserDetailCell(
-                    user: member,
-                    trailing: isForVerification
-                        ? _selectButton(context, member)
-                        : null,
-                  ),
-                )
-                .toList()),
+    return Container(
+      padding: context.mediaQueryPadding +
+          const EdgeInsets.only(bottom: 24, left: 16, right: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              team.name,
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+                runSpacing: 16,
+                children: (team.players ?? [])
+                    .map(
+                      (member) => UserDetailCell(
+                        user: member,
+                        trailing: isForVerification
+                            ? _selectButton(context, member)
+                            : null,
+                      ),
+                    )
+                    .toList()),
+          ],
+        ),
       ),
     );
   }

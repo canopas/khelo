@@ -89,7 +89,14 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   }
 
   void onTeamCellTap(TeamModel team) {
-    state = state.copyWith(selectedTeam: team);
+    state = state.copyWith(actionError: null);
+    final playersCount = (team.players ?? []).length;
+    if (playersCount >= 2) {
+      state = state.copyWith(selectedTeam: team);
+    } else {
+      state =
+          state.copyWith(actionError: "The team must have at least 2 players.");
+    }
   }
 
   @override
@@ -104,6 +111,7 @@ class SearchTeamState with _$SearchTeamState {
   const factory SearchTeamState({
     required TextEditingController searchController,
     Object? error,
+    String? actionError,
     TeamModel? selectedTeam,
     @Default([]) List<TeamModel> searchResults,
     @Default([]) List<TeamModel> userTeams,

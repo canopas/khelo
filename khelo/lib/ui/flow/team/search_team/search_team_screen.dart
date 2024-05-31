@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -43,6 +44,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(searchTeamViewStateProvider);
+    _observeActionError();
 
     return AppPage(
       title: context.l10n.search_team_screen_title,
@@ -55,7 +57,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                         .contains(state.selectedTeam?.id)) {
                       context.pop(state.selectedTeam);
                     } else {
-                      final res = await TeamMemberDialog.show<bool>(
+                      final res = await TeamMemberSheet.show<bool>(
                         context,
                         team: state.selectedTeam!,
                         isForVerification: true,
@@ -169,7 +171,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
   ) {
     return OnTapScale(
       onTap: () => notifier.onTeamCellTap(team),
-      onLongTap: () => TeamMemberDialog.show<bool>(context, team: team),
+      onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
       child: Material(
         type: MaterialType.transparency,
         child: ListTile(
@@ -216,6 +218,17 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               : null,
         ),
       ),
+    );
+  }
+
+  void _observeActionError() {
+    ref.listen(
+      searchTeamViewStateProvider.select((value) => value.actionError),
+      (previous, next) {
+        if (next != null) {
+          showErrorSnackBar(context: context, error: next);
+        }
+      },
     );
   }
 }
