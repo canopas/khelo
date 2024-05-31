@@ -83,9 +83,11 @@
   "add_team_add_as_member_description_text": "Add me as a team member",
   "add_team_enter_team_name_placeholder_text": "Enter team name",
   "add_team_location_text": "Location",
+  "add_team_player_role_title": "Playing role",
   "add_team_players_text": "Players",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
   "add_team_member_screen_title": "Add team member",
+  "add_team_member_details_title": "Details",
   "add_team_member_search_placeholder_text": "Search member name",
   "add_team_member_verify_placeholder_text": "Enter the last five digits of the phone number of the selected player.",
   "add_team_member_verify_title": "Verify",
@@ -159,8 +161,8 @@
   "search_team_search_placeholder_title": "Search team name",
   "search_team_your_teams_title": "Your Teams",
   "search_team_select_title": "Select",
-  "search_team_member_title": "{count, plural, =0{{count} Members} =1{{count} Member} other{{count} Members}}",
-  "@search_team_member_title": {
+  "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
+  "@search_team_player_title": {
     "placeholders": {
       "count": {}
     }
