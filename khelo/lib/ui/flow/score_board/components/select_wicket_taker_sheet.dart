@@ -12,8 +12,9 @@ import 'package:style/text/app_text_style.dart';
 
 class SelectWicketTakerSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
-    BuildContext context,
-  ) {
+    BuildContext context, {
+    required List<MatchPlayer> fielderList,
+  }) {
     return showModalBottomSheet(
       context: context,
       isDismissible: false,
@@ -23,12 +24,14 @@ class SelectWicketTakerSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return const SelectWicketTakerSheet();
+        return SelectWicketTakerSheet(fielderList: fielderList);
       },
     );
   }
 
-  const SelectWicketTakerSheet({super.key});
+  final List<MatchPlayer> fielderList;
+
+  const SelectWicketTakerSheet({super.key, required this.fielderList});
 
   @override
   ConsumerState createState() => _SelectWicketTakerSheetState();
@@ -62,13 +65,11 @@ class _SelectWicketTakerSheetState
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Wrap(
             spacing: 16,
             runSpacing: 16,
-            children: getFilteredList(state)
+            children: widget.fielderList
                 .map(
                   (player) => UserCellView(
                     title: player.player.name ??
@@ -86,18 +87,5 @@ class _SelectWicketTakerSheetState
                 .toList()),
       ],
     );
-  }
-
-  List<MatchPlayer> getFilteredList(ScoreBoardViewState state) {
-    if (state.match == null) {
-      return [];
-    }
-
-    final teamId = state.otherInning?.team_id ?? "INVALID ID";
-    final teamPlayers = state.match?.teams
-        .firstWhere((element) => element.team.id == teamId)
-        .squad;
-
-    return teamPlayers ?? [];
   }
 }

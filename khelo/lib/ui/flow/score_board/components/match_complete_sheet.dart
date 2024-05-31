@@ -1,3 +1,4 @@
+import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,8 @@ class MatchCompleteSheet extends ConsumerWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     bool showUndoButton = true,
+    required TeamRunStat firstTeamRunStat,
+    required TeamRunStat secondTeamRunStat,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -27,14 +30,22 @@ class MatchCompleteSheet extends ConsumerWidget {
       builder: (context) {
         return MatchCompleteSheet(
           showUndoButton: showUndoButton,
+          firstTeamRunStat: firstTeamRunStat,
+          secondTeamRunStat: secondTeamRunStat,
         );
       },
     );
   }
 
   final bool showUndoButton;
+  final TeamRunStat firstTeamRunStat;
+  final TeamRunStat secondTeamRunStat;
 
-  const MatchCompleteSheet({super.key, required this.showUndoButton});
+  const MatchCompleteSheet(
+      {super.key,
+      required this.showUndoButton,
+      required this.firstTeamRunStat,
+      required this.secondTeamRunStat});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -69,9 +80,7 @@ class MatchCompleteSheet extends ConsumerWidget {
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -106,11 +115,11 @@ class MatchCompleteSheet extends ConsumerWidget {
             data2: context.l10n.score_board_o_title,
             isHeader: true,
           ),
-          _teamScore(context, state, team: state.match?.teams.firstOrNull),
+          _teamScore(context, state, teamRunStat: firstTeamRunStat),
           _teamScore(
             context,
             state,
-            team: state.match?.teams.elementAt(1),
+            teamRunStat: secondTeamRunStat,
             isLast: true,
           )
         ],
@@ -121,20 +130,15 @@ class MatchCompleteSheet extends ConsumerWidget {
   Widget _teamScore(
     BuildContext context,
     ScoreBoardViewState state, {
-    required MatchTeamModel? team,
+    required TeamRunStat teamRunStat,
     bool isLast = false,
   }) {
-    if (team == null) {
-      return const SizedBox();
-    }
-    final (run, wicket, overs) =
-        _getTeamRunDetails(state, team.team.id ?? "INVALID ID");
     return _row(
       context,
-      title: team.team.name,
-      data: run.toString(),
-      data1: wicket.toString(),
-      data2: overs.toString(),
+      title: teamRunStat.teamName,
+      data: teamRunStat.run.toString(),
+      data1: teamRunStat.wicket.toString(),
+      data2: teamRunStat.over.toString(),
       isLast: isLast,
     );
   }
@@ -195,19 +199,6 @@ class MatchCompleteSheet extends ConsumerWidget {
           color: isHeader
               ? context.colorScheme.textDisabled
               : context.colorScheme.textPrimary),
-    );
-  }
-
-  (int, int, double) _getTeamRunDetails(
-      ScoreBoardViewState state, String teamId) {
-    final teamInning = state.currentInning?.team_id == teamId
-        ? state.currentInning
-        : state.otherInning;
-
-    return (
-      teamInning?.total_runs ?? 0,
-      teamInning?.total_wickets ?? 0,
-      teamInning?.overs ?? 0
     );
   }
 

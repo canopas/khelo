@@ -484,178 +484,6 @@ abstract class _BallScoreModel implements BallScoreModel {
       throw _privateConstructorUsedError;
 }
 
-OverStatModel _$OverStatModelFromJson(Map<String, dynamic> json) {
-  return _OverStatModel.fromJson(json);
-}
-
-/// @nodoc
-mixin _$OverStatModel {
-  int get run => throw _privateConstructorUsedError;
-  int get wicket => throw _privateConstructorUsedError;
-  int get extra => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $OverStatModelCopyWith<OverStatModel> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $OverStatModelCopyWith<$Res> {
-  factory $OverStatModelCopyWith(
-          OverStatModel value, $Res Function(OverStatModel) then) =
-      _$OverStatModelCopyWithImpl<$Res, OverStatModel>;
-  @useResult
-  $Res call({int run, int wicket, int extra});
-}
-
-/// @nodoc
-class _$OverStatModelCopyWithImpl<$Res, $Val extends OverStatModel>
-    implements $OverStatModelCopyWith<$Res> {
-  _$OverStatModelCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? run = null,
-    Object? wicket = null,
-    Object? extra = null,
-  }) {
-    return _then(_value.copyWith(
-      run: null == run
-          ? _value.run
-          : run // ignore: cast_nullable_to_non_nullable
-              as int,
-      wicket: null == wicket
-          ? _value.wicket
-          : wicket // ignore: cast_nullable_to_non_nullable
-              as int,
-      extra: null == extra
-          ? _value.extra
-          : extra // ignore: cast_nullable_to_non_nullable
-              as int,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$OverStatModelImplCopyWith<$Res>
-    implements $OverStatModelCopyWith<$Res> {
-  factory _$$OverStatModelImplCopyWith(
-          _$OverStatModelImpl value, $Res Function(_$OverStatModelImpl) then) =
-      __$$OverStatModelImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({int run, int wicket, int extra});
-}
-
-/// @nodoc
-class __$$OverStatModelImplCopyWithImpl<$Res>
-    extends _$OverStatModelCopyWithImpl<$Res, _$OverStatModelImpl>
-    implements _$$OverStatModelImplCopyWith<$Res> {
-  __$$OverStatModelImplCopyWithImpl(
-      _$OverStatModelImpl _value, $Res Function(_$OverStatModelImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? run = null,
-    Object? wicket = null,
-    Object? extra = null,
-  }) {
-    return _then(_$OverStatModelImpl(
-      run: null == run
-          ? _value.run
-          : run // ignore: cast_nullable_to_non_nullable
-              as int,
-      wicket: null == wicket
-          ? _value.wicket
-          : wicket // ignore: cast_nullable_to_non_nullable
-              as int,
-      extra: null == extra
-          ? _value.extra
-          : extra // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$OverStatModelImpl implements _OverStatModel {
-  const _$OverStatModelImpl({this.run = 0, this.wicket = 0, this.extra = 0});
-
-  factory _$OverStatModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$OverStatModelImplFromJson(json);
-
-  @override
-  @JsonKey()
-  final int run;
-  @override
-  @JsonKey()
-  final int wicket;
-  @override
-  @JsonKey()
-  final int extra;
-
-  @override
-  String toString() {
-    return 'OverStatModel(run: $run, wicket: $wicket, extra: $extra)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OverStatModelImpl &&
-            (identical(other.run, run) || other.run == run) &&
-            (identical(other.wicket, wicket) || other.wicket == wicket) &&
-            (identical(other.extra, extra) || other.extra == extra));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, run, wicket, extra);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
-      __$$OverStatModelImplCopyWithImpl<_$OverStatModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$OverStatModelImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _OverStatModel implements OverStatModel {
-  const factory _OverStatModel(
-      {final int run, final int wicket, final int extra}) = _$OverStatModelImpl;
-
-  factory _OverStatModel.fromJson(Map<String, dynamic> json) =
-      _$OverStatModelImpl.fromJson;
-
-  @override
-  int get run;
-  @override
-  int get wicket;
-  @override
-  int get extra;
-  @override
-  @JsonKey(ignore: true)
-  _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
 /// @nodoc
 mixin _$UserStat {
   BattingStat? get battingStat => throw _privateConstructorUsedError;
@@ -1382,5 +1210,371 @@ abstract class _FieldingStat implements FieldingStat {
   @override
   @JsonKey(ignore: true)
   _$$FieldingStatImplCopyWith<_$FieldingStatImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+OverStatModel _$OverStatModelFromJson(Map<String, dynamic> json) {
+  return _OverStatModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$OverStatModel {
+  int get run => throw _privateConstructorUsedError;
+  int get wicket => throw _privateConstructorUsedError;
+  int get extra => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $OverStatModelCopyWith<OverStatModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $OverStatModelCopyWith<$Res> {
+  factory $OverStatModelCopyWith(
+          OverStatModel value, $Res Function(OverStatModel) then) =
+      _$OverStatModelCopyWithImpl<$Res, OverStatModel>;
+  @useResult
+  $Res call({int run, int wicket, int extra});
+}
+
+/// @nodoc
+class _$OverStatModelCopyWithImpl<$Res, $Val extends OverStatModel>
+    implements $OverStatModelCopyWith<$Res> {
+  _$OverStatModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? run = null,
+    Object? wicket = null,
+    Object? extra = null,
+  }) {
+    return _then(_value.copyWith(
+      run: null == run
+          ? _value.run
+          : run // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      extra: null == extra
+          ? _value.extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$OverStatModelImplCopyWith<$Res>
+    implements $OverStatModelCopyWith<$Res> {
+  factory _$$OverStatModelImplCopyWith(
+          _$OverStatModelImpl value, $Res Function(_$OverStatModelImpl) then) =
+      __$$OverStatModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int run, int wicket, int extra});
+}
+
+/// @nodoc
+class __$$OverStatModelImplCopyWithImpl<$Res>
+    extends _$OverStatModelCopyWithImpl<$Res, _$OverStatModelImpl>
+    implements _$$OverStatModelImplCopyWith<$Res> {
+  __$$OverStatModelImplCopyWithImpl(
+      _$OverStatModelImpl _value, $Res Function(_$OverStatModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? run = null,
+    Object? wicket = null,
+    Object? extra = null,
+  }) {
+    return _then(_$OverStatModelImpl(
+      run: null == run
+          ? _value.run
+          : run // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      extra: null == extra
+          ? _value.extra
+          : extra // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$OverStatModelImpl implements _OverStatModel {
+  const _$OverStatModelImpl({this.run = 0, this.wicket = 0, this.extra = 0});
+
+  factory _$OverStatModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$OverStatModelImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int run;
+  @override
+  @JsonKey()
+  final int wicket;
+  @override
+  @JsonKey()
+  final int extra;
+
+  @override
+  String toString() {
+    return 'OverStatModel(run: $run, wicket: $wicket, extra: $extra)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$OverStatModelImpl &&
+            (identical(other.run, run) || other.run == run) &&
+            (identical(other.wicket, wicket) || other.wicket == wicket) &&
+            (identical(other.extra, extra) || other.extra == extra));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, run, wicket, extra);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
+      __$$OverStatModelImplCopyWithImpl<_$OverStatModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$OverStatModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _OverStatModel implements OverStatModel {
+  const factory _OverStatModel(
+      {final int run, final int wicket, final int extra}) = _$OverStatModelImpl;
+
+  factory _OverStatModel.fromJson(Map<String, dynamic> json) =
+      _$OverStatModelImpl.fromJson;
+
+  @override
+  int get run;
+  @override
+  int get wicket;
+  @override
+  int get extra;
+  @override
+  @JsonKey(ignore: true)
+  _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+TeamRunStat _$TeamRunStatFromJson(Map<String, dynamic> json) {
+  return _TeamRunStat.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TeamRunStat {
+  String get teamName => throw _privateConstructorUsedError;
+  int get run => throw _privateConstructorUsedError;
+  int get wicket => throw _privateConstructorUsedError;
+  double get over => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TeamRunStatCopyWith<TeamRunStat> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TeamRunStatCopyWith<$Res> {
+  factory $TeamRunStatCopyWith(
+          TeamRunStat value, $Res Function(TeamRunStat) then) =
+      _$TeamRunStatCopyWithImpl<$Res, TeamRunStat>;
+  @useResult
+  $Res call({String teamName, int run, int wicket, double over});
+}
+
+/// @nodoc
+class _$TeamRunStatCopyWithImpl<$Res, $Val extends TeamRunStat>
+    implements $TeamRunStatCopyWith<$Res> {
+  _$TeamRunStatCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? teamName = null,
+    Object? run = null,
+    Object? wicket = null,
+    Object? over = null,
+  }) {
+    return _then(_value.copyWith(
+      teamName: null == teamName
+          ? _value.teamName
+          : teamName // ignore: cast_nullable_to_non_nullable
+              as String,
+      run: null == run
+          ? _value.run
+          : run // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      over: null == over
+          ? _value.over
+          : over // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TeamRunStatImplCopyWith<$Res>
+    implements $TeamRunStatCopyWith<$Res> {
+  factory _$$TeamRunStatImplCopyWith(
+          _$TeamRunStatImpl value, $Res Function(_$TeamRunStatImpl) then) =
+      __$$TeamRunStatImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String teamName, int run, int wicket, double over});
+}
+
+/// @nodoc
+class __$$TeamRunStatImplCopyWithImpl<$Res>
+    extends _$TeamRunStatCopyWithImpl<$Res, _$TeamRunStatImpl>
+    implements _$$TeamRunStatImplCopyWith<$Res> {
+  __$$TeamRunStatImplCopyWithImpl(
+      _$TeamRunStatImpl _value, $Res Function(_$TeamRunStatImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? teamName = null,
+    Object? run = null,
+    Object? wicket = null,
+    Object? over = null,
+  }) {
+    return _then(_$TeamRunStatImpl(
+      teamName: null == teamName
+          ? _value.teamName
+          : teamName // ignore: cast_nullable_to_non_nullable
+              as String,
+      run: null == run
+          ? _value.run
+          : run // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      over: null == over
+          ? _value.over
+          : over // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TeamRunStatImpl implements _TeamRunStat {
+  const _$TeamRunStatImpl(
+      {this.teamName = "", this.run = 0, this.wicket = 0, this.over = 0});
+
+  factory _$TeamRunStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TeamRunStatImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final String teamName;
+  @override
+  @JsonKey()
+  final int run;
+  @override
+  @JsonKey()
+  final int wicket;
+  @override
+  @JsonKey()
+  final double over;
+
+  @override
+  String toString() {
+    return 'TeamRunStat(teamName: $teamName, run: $run, wicket: $wicket, over: $over)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TeamRunStatImpl &&
+            (identical(other.teamName, teamName) ||
+                other.teamName == teamName) &&
+            (identical(other.run, run) || other.run == run) &&
+            (identical(other.wicket, wicket) || other.wicket == wicket) &&
+            (identical(other.over, over) || other.over == over));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, teamName, run, wicket, over);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TeamRunStatImplCopyWith<_$TeamRunStatImpl> get copyWith =>
+      __$$TeamRunStatImplCopyWithImpl<_$TeamRunStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TeamRunStatImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TeamRunStat implements TeamRunStat {
+  const factory _TeamRunStat(
+      {final String teamName,
+      final int run,
+      final int wicket,
+      final double over}) = _$TeamRunStatImpl;
+
+  factory _TeamRunStat.fromJson(Map<String, dynamic> json) =
+      _$TeamRunStatImpl.fromJson;
+
+  @override
+  String get teamName;
+  @override
+  int get run;
+  @override
+  int get wicket;
+  @override
+  double get over;
+  @override
+  @JsonKey(ignore: true)
+  _$$TeamRunStatImplCopyWith<_$TeamRunStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

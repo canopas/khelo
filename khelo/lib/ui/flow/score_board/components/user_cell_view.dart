@@ -67,9 +67,7 @@ class UserCellView extends StatelessWidget {
                     size: 40,
                   )
                 : _profilePlaceHolder(context, size: 40),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             Text(
               title,
               maxLines: 2,

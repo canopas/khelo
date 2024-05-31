@@ -132,12 +132,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowStrikerSelectionDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowStrikerSelectionSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select(
-            (value) => value.showStrikerSelectionDialog), (previous, next) {
+            (value) => value.showStrikerSelectionSheet), (previous, next) {
       if (next != null) {
-        _showStrikerSelectionDialog(context);
+        _showStrikerSelectionSheet(context);
       }
     });
   }
@@ -157,101 +157,103 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowOverCompleteDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowOverCompleteSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select((value) => value.showOverCompleteDialog),
+        scoreBoardStateProvider.select((value) => value.showOverCompleteSheet),
         (previous, next) {
       if (next != null) {
-        _showOverCompleteDialog(context);
+        _showOverCompleteSheet(context);
       }
     });
   }
 
-  void _observeShowInningCompleteDialog(
+  void _observeShowInningCompleteSheet(
     BuildContext context,
     WidgetRef ref,
   ) {
     ref.listen(
         scoreBoardStateProvider.select(
-            (value) => value.showInningCompleteDialog), (previous, next) {
+            (value) => value.showInningCompleteSheet), (previous, next) {
       if (next != null) {
-        _showInningCompleteDialog(context);
+        _showInningCompleteSheet(context);
       }
     });
   }
 
-  void _observeShowMatchCompleteDialog(
+  void _observeShowMatchCompleteSheet(
     BuildContext context,
     WidgetRef ref,
   ) {
     ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showMatchCompleteDialog), (previous, next) {
+        scoreBoardStateProvider.select((value) => value.showMatchCompleteSheet),
+        (previous, next) {
       if (next != null) {
-        _showMatchCompleteDialog(context);
+        _showMatchCompleteSheet(context);
       }
     });
   }
 
-  void _observeShowBoundaryDialogForSix(BuildContext context, WidgetRef ref) {
+  void _observeShowBoundaryConfirmationDialogForSix(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showBoundaryConfirmationDialogForSix),
+        (previous, next) {
+      if (next != null) {
+        _showBoundaryConfirmationDialog(context, 6);
+      }
+    });
+  }
+
+  void _observeShowBoundaryConfirmationDialogForFour(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showBoundaryConfirmationDialogForFour),
+        (previous, next) {
+      if (next != null) {
+        _showBoundaryConfirmationDialog(context, 4);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForNoBall(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select(
-            (value) => value.showBoundaryDialogForSix), (previous, next) {
+            (value) => value.showAddExtraSheetForNoBall), (previous, next) {
       if (next != null) {
-        _showBoundaryDialog(context, 6);
+        _showAddExtraSheet(context, ExtrasType.noBall);
       }
     });
   }
 
-  void _observeShowBoundaryDialogForFour(BuildContext context, WidgetRef ref) {
+  void _observeShowAddExtraSheetForLegBye(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select(
-            (value) => value.showBoundaryDialogForFour), (previous, next) {
+            (value) => value.showAddExtraSheetForLegBye), (previous, next) {
       if (next != null) {
-        _showBoundaryDialog(context, 4);
+        _showAddExtraSheet(context, ExtrasType.legBye);
       }
     });
   }
 
-  void _observeShowAddExtraDialogForNoBall(
+  void _observeShowAddExtraSheetForBye(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showAddExtraSheetForBye), (previous, next) {
+      if (next != null) {
+        _showAddExtraSheet(context, ExtrasType.bye);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForFiveSeven(
       BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select(
-            (value) => value.showAddExtraDialogForNoBall), (previous, next) {
+            (value) => value.showAddExtraSheetForFiveSeven), (previous, next) {
       if (next != null) {
-        _showAddExtraDialog(context, ExtrasType.noBall);
-      }
-    });
-  }
-
-  void _observeShowAddExtraDialogForLegBye(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraDialogForLegBye), (previous, next) {
-      if (next != null) {
-        _showAddExtraDialog(context, ExtrasType.legBye);
-      }
-    });
-  }
-
-  void _observeShowAddExtraDialogForBye(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraDialogForBye), (previous, next) {
-      if (next != null) {
-        _showAddExtraDialog(context, ExtrasType.bye);
-      }
-    });
-  }
-
-  void _observeShowAddExtraDialogForFiveSeven(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraDialogForFiveSeven), (previous, next) {
-      if (next != null) {
-        _showAddExtraDialog(context, null);
+        _showAddExtraSheet(context, null);
       }
     });
   }
@@ -265,9 +267,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowPauseScoringDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowPauseScoringSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select((value) => value.showPauseScoringDialog),
+        scoreBoardStateProvider.select((value) => value.showPauseScoringSheet),
         (previous, next) {
       if (next != null) {
         showConfirmationDialog(context,
@@ -279,21 +281,21 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowAddPenaltyRunDialog(BuildContext context, WidgetRef ref) {
+  void _observeShowAddPenaltyRunSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddPenaltyRunDialog), (previous, next) {
+        scoreBoardStateProvider.select((value) => value.showAddPenaltyRunSheet),
+        (previous, next) {
       if (next != null) {
-        _showAddPenaltyRunDialog(
+        _showAddPenaltyRunSheet(
           context,
         );
       }
     });
   }
 
-  void _observeEndMatchDialogue(BuildContext context, WidgetRef ref) {
+  void _observeEndMatchSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
-        scoreBoardStateProvider.select((value) => value.showEndMatchDialog),
+        scoreBoardStateProvider.select((value) => value.showEndMatchSheet),
         (previous, next) {
       if (next != null) {
         showConfirmationDialog(context,
@@ -340,21 +342,21 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowSelectPlayerSheet(
         context, ref, state.continueWithInjuredPlayers);
     _observeShowSelectWicketTypeSheet(context, ref);
-    _observeShowStrikerSelectionDialog(context, ref);
+    _observeShowStrikerSelectionSheet(context, ref);
     _observeShowUndoBallConfirmationDialog(context, ref);
-    _observeShowOverCompleteDialog(context, ref);
-    _observeShowInningCompleteDialog(context, ref);
-    _observeShowMatchCompleteDialog(context, ref);
-    _observeShowBoundaryDialogForSix(context, ref);
-    _observeShowBoundaryDialogForFour(context, ref);
-    _observeShowAddExtraDialogForNoBall(context, ref);
-    _observeShowAddExtraDialogForLegBye(context, ref);
-    _observeShowAddExtraDialogForBye(context, ref);
-    _observeShowAddExtraDialogForFiveSeven(context, ref);
+    _observeShowOverCompleteSheet(context, ref);
+    _observeShowInningCompleteSheet(context, ref);
+    _observeShowMatchCompleteSheet(context, ref);
+    _observeShowBoundaryConfirmationDialogForSix(context, ref);
+    _observeShowBoundaryConfirmationDialogForFour(context, ref);
+    _observeShowAddExtraSheetForNoBall(context, ref);
+    _observeShowAddExtraSheetForLegBye(context, ref);
+    _observeShowAddExtraSheetForBye(context, ref);
+    _observeShowAddExtraSheetForFiveSeven(context, ref);
     _observePop(context, ref);
-    _observeShowPauseScoringDialog(context, ref);
-    _observeShowAddPenaltyRunDialog(context, ref);
-    _observeEndMatchDialogue(context, ref);
+    _observeShowPauseScoringSheet(context, ref);
+    _observeShowAddPenaltyRunSheet(context, ref);
+    _observeEndMatchSheet(context, ref);
     _observeInvalidUndoToast(context, ref);
 
     return PopScope(
@@ -447,7 +449,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
     return Column(
       children: [
-        const ScoreDisplayView(),
+        ScoreDisplayView(
+          currentOverBall: notifier.getCurrentOverBall(),
+          overCountString: notifier.getOverCount(),
+          battingTeamName: notifier.getTeamName(),
+          bowlingTeamName: notifier.getTeamName(isBattingTeam: false),
+        ),
         ScoreBoardButtons(onTap: notifier.onScoreButtonTap),
       ],
     );
@@ -466,6 +473,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       context,
       type: type,
       continueWithInjPlayer: continueWithInjuredPlayers,
+      batsManList: notifier.getFilteredPlayerList(PlayerSelectionType.batsMan),
+      bowlerList: notifier.getFilteredPlayerList(PlayerSelectionType.bowler),
     );
     if (result != null && context.mounted) {
       if (result.selectedPlayer != null) {
@@ -499,7 +508,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             type == WicketType.runOut ||
             type == WicketType.caughtBehind) &&
         context.mounted) {
-      wicketTakerId = await SelectWicketTakerSheet.show<String>(context);
+      wicketTakerId = await SelectWicketTakerSheet.show<String>(context,
+          fielderList: notifier.getFielderList());
     }
 
     int? extra;
@@ -518,15 +528,16 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         wicketType: type);
   }
 
-  Future<void> _showStrikerSelectionDialog(BuildContext context) async {
+  Future<void> _showStrikerSelectionSheet(BuildContext context) async {
     final striker = await StrikerSelectionSheet.show<UserModel>(context);
     if (striker != null && context.mounted) {
       notifier.setOrSwitchStriker(batsManId: striker.id);
     }
   }
 
-  Future<void> _showOverCompleteDialog(BuildContext context) async {
-    final startNext = await OverCompleteSheet.show<bool>(context, notifier.getCurrentOverStatics());
+  Future<void> _showOverCompleteSheet(BuildContext context) async {
+    final startNext = await OverCompleteSheet.show<bool>(
+        context, notifier.getCurrentOverStatics());
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextOver();
@@ -536,8 +547,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showInningCompleteDialog(BuildContext context) async {
-    final startNext = await InningCompleteSheet.show<bool>(context);
+  Future<void> _showInningCompleteSheet(BuildContext context) async {
+    final startNext = await InningCompleteSheet.show<bool>(context,
+        extra: notifier.getExtras(),
+        teamName: notifier.getTeamName() ??
+            context.l10n.score_board_current_team_title,
+        overCountString: notifier.getOverCount());
     if (startNext != null && context.mounted) {
       if (startNext) {
         notifier.startNextInning();
@@ -547,8 +562,12 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showMatchCompleteDialog(BuildContext context) async {
-    final endMatch = await MatchCompleteSheet.show<bool>(context);
+  Future<void> _showMatchCompleteSheet(BuildContext context) async {
+    final endMatch = await MatchCompleteSheet.show<bool>(
+      context,
+      firstTeamRunStat: notifier.getTeamRunDetails(true),
+      secondTeamRunStat: notifier.getTeamRunDetails(false),
+    );
     if (endMatch != null && context.mounted) {
       if (endMatch) {
         notifier.endMatch();
@@ -558,7 +577,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showBoundaryDialog(BuildContext context, int run) async {
+  Future<void> _showBoundaryConfirmationDialog(
+      BuildContext context, int run) async {
     showConfirmationDialog(
       context,
       title: context.l10n.score_board_boundary_text,
@@ -572,7 +592,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     );
   }
 
-  Future<void> _showAddExtraDialog(
+  Future<void> _showAddExtraSheet(
     BuildContext context,
     ExtrasType? extra,
   ) async {
@@ -606,7 +626,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showAddPenaltyRunDialog(BuildContext context) async {
+  Future<void> _showAddPenaltyRunSheet(BuildContext context) async {
     final penalty =
         await AddPenaltyRunSheet.show<({String teamId, int runs})>(context);
 

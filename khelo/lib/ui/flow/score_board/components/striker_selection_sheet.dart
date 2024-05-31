@@ -72,9 +72,7 @@ class _StrikerSelectionSheetState extends ConsumerState<StrikerSelectionSheet> {
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Wrap(
             spacing: 16,
             runSpacing: 16,

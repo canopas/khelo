@@ -11,7 +11,18 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class ScoreDisplayView extends ConsumerWidget {
-  const ScoreDisplayView({super.key});
+  final List<BallScoreModel> currentOverBall;
+  final String? battingTeamName;
+  final String? bowlingTeamName;
+  final String overCountString;
+
+  const ScoreDisplayView({
+    super.key,
+    required this.currentOverBall,
+    required this.battingTeamName,
+    required this.bowlingTeamName,
+    required this.overCountString,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,10 +33,7 @@ class ScoreDisplayView extends ConsumerWidget {
         children: [
           _matchScoreView(context, state),
           const SizedBox(height: 32),
-          Divider(
-            height: 0,
-            color: context.colorScheme.outline,
-          ),
+          Divider(height: 0, color: context.colorScheme.outline),
           _batsManDetailsView(context, state),
           _bowlerAndBallDetailView(context, state),
         ],
@@ -35,22 +43,10 @@ class ScoreDisplayView extends ConsumerWidget {
 
   Widget _teamName(
     BuildContext context,
-    ScoreBoardViewState state,
     bool batting,
   ) {
-    final String? battingTeam = state.match?.teams
-        .where((element) => element.team.id == state.currentInning?.team_id)
-        .firstOrNull
-        ?.team
-        .name;
-    final String? bowlingTeam = state.match?.teams
-        .where((element) => element.team.id == state.otherInning?.team_id)
-        .firstOrNull
-        ?.team
-        .name;
-
     return Text(
-      (batting ? battingTeam : bowlingTeam) ?? "",
+      (batting ? battingTeamName : bowlingTeamName) ?? "",
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyle.subtitle1
@@ -62,7 +58,6 @@ class ScoreDisplayView extends ConsumerWidget {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    final currentOver = _getCurrentOver(state);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,7 +67,7 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _teamName(context, state, true),
+          _teamName(context, true),
           const SizedBox(height: 12),
           Row(
             children: [
@@ -87,7 +82,7 @@ class ScoreDisplayView extends ConsumerWidget {
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
                     TextSpan(
-                      text: '($currentOver/${state.match?.number_of_over})',
+                      text: '($overCountString/${state.match?.number_of_over})',
                       style: AppTextStyle.body1
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
@@ -152,11 +147,6 @@ class ScoreDisplayView extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
-  }
-
-  String _getCurrentOver(ScoreBoardViewState state) {
-    return state.currentInning?.overs.toString() ??
-        "${state.overCount - 1}.${state.ballCount}";
   }
 
   Widget _batsManDetailsView(BuildContext context, ScoreBoardViewState state) {
@@ -256,7 +246,7 @@ class ScoreDisplayView extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _teamName(context, state, false),
+            child: _teamName(context, false),
           ),
           const SizedBox(height: 8),
           _bowlerNameView(
@@ -264,7 +254,7 @@ class ScoreDisplayView extends ConsumerWidget {
               state.bowler?.player.name ??
                   context.l10n.score_board_player_title),
           const SizedBox(height: 16),
-          _ballHistoryListView(context, state),
+          _ballHistoryListView(context),
         ],
       ),
     );
@@ -294,29 +284,20 @@ class ScoreDisplayView extends ConsumerWidget {
     );
   }
 
-  Widget _ballHistoryListView(BuildContext context, ScoreBoardViewState state) {
+  Widget _ballHistoryListView(BuildContext context) {
     return SingleChildScrollView(
       reverse: true,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (final ball in _getFilteredCurrentOverBall(state)) ...[
+          for (final ball in currentOverBall) ...[
             _ballView(context, ball),
             const SizedBox(width: 8)
           ]
         ],
       ),
     );
-  }
-
-  List<BallScoreModel> _getFilteredCurrentOverBall(ScoreBoardViewState state) {
-    final list = state.currentScoresList
-        .where((element) =>
-            element.over_number == state.overCount &&
-            element.extras_type != ExtrasType.penaltyRun)
-        .toList();
-    return list;
   }
 
   Widget _ballView(BuildContext context, BallScoreModel ball) {

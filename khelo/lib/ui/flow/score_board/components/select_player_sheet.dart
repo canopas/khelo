@@ -18,6 +18,8 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required PlayerSelectionType type,
     required bool continueWithInjPlayer,
+    required List<MatchPlayer> batsManList,
+    required List<MatchPlayer> bowlerList,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -31,6 +33,8 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
         return SelectPlayerSheet(
           playerSelectionType: type,
           continueWithInjPlayer: continueWithInjPlayer,
+          batsManList: batsManList,
+          bowlerList: bowlerList,
         );
       },
     );
@@ -38,11 +42,15 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
 
   final PlayerSelectionType playerSelectionType;
   final bool continueWithInjPlayer;
+  final List<MatchPlayer> batsManList;
+  final List<MatchPlayer> bowlerList;
 
   const SelectPlayerSheet({
     super.key,
     required this.playerSelectionType,
     required this.continueWithInjPlayer,
+    required this.batsManList,
+    required this.bowlerList,
   });
 
   @override
@@ -66,30 +74,21 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     final state = ref.watch(scoreBoardStateProvider);
     final notifier = ref.watch(scoreBoardStateProvider.notifier);
 
-    final List<MatchPlayer> batsManList =
-        widget.playerSelectionType != PlayerSelectionType.bowler
-            ? _getFilteredList(state, type: PlayerSelectionType.batsMan)
-            : [];
-    final List<MatchPlayer> bowlerList =
-        widget.playerSelectionType != PlayerSelectionType.batsMan
-            ? _getFilteredList(state, type: PlayerSelectionType.bowler)
-            : [];
-
     final showCheckBox = widget.playerSelectionType !=
             PlayerSelectionType.bowler
-        ? batsManList.any((element) => element.status == PlayerStatus.injured)
+        ? widget.batsManList.any((element) => element.status == PlayerStatus.injured)
         : false;
 
     final injuredPlayerRemained =
         widget.playerSelectionType != PlayerSelectionType.bowler
-            ? batsManList.every((e) => e.status == PlayerStatus.injured)
+            ? widget.batsManList.every((e) => e.status == PlayerStatus.injured)
             : false;
     return BottomSheetWrapper(
         content: _selectPlayerContent(
           context,
           state,
-          batsManList: batsManList,
-          bowlerList: bowlerList,
+          batsManList: widget.batsManList,
+          bowlerList: widget.bowlerList,
         ),
         action: [
           _stickyButton(
@@ -139,39 +138,6 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         ],
       ],
     );
-  }
-
-  List<MatchPlayer> _getFilteredList(
-    ScoreBoardViewState state, {
-    required PlayerSelectionType type,
-  }) {
-    if (state.match == null) {
-      return [];
-    }
-
-    final teamId = (type == PlayerSelectionType.batsMan
-            ? state.currentInning?.team_id
-            : state.otherInning?.team_id) ??
-        "INVALID ID";
-    final teamPlayers = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
-        ?.squad;
-
-    if (type == PlayerSelectionType.bowler) {
-      return teamPlayers ?? [];
-    } else {
-      return teamPlayers
-              ?.where((element) => _isPlayerEligibleForBatsman(element.status))
-              .toList() ??
-          [];
-    }
-  }
-
-  bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
-    return status != PlayerStatus.played &&
-        status != PlayerStatus.playing &&
-        status != PlayerStatus.suspended;
   }
 
   Widget _sectionTitle(BuildContext context, String title) {

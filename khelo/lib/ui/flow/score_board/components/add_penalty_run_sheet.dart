@@ -72,9 +72,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         _addRunsView(context, state),
       ],
     );
@@ -106,8 +104,9 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
                     keyboardType: TextInputType.number,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    borderColor:
-                        BorderColor(focusColor:Colors.transparent, unFocusColor:Colors.transparent),
+                    borderColor: BorderColor(
+                        focusColor: Colors.transparent,
+                        unFocusColor: Colors.transparent),
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],
@@ -133,9 +132,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
-          const SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           _chooseTeamForPenaltyRun(context, state),
         ],
       ),

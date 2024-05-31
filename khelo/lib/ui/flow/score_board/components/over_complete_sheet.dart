@@ -61,9 +61,7 @@ class OverCompleteSheet extends ConsumerWidget {
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         _scoreDetailCard(context, state),
       ],
     );

@@ -12,6 +12,9 @@ class InningCompleteSheet extends ConsumerWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     bool showUndoButton = true,
+    required String overCountString,
+    required String teamName,
+    required int extra,
   }) {
     return showModalBottomSheet(
       context: context,
@@ -24,14 +27,26 @@ class InningCompleteSheet extends ConsumerWidget {
       builder: (context) {
         return InningCompleteSheet(
           showUndoButton: showUndoButton,
+          extra: extra,
+          teamName: teamName,
+          overCountString: overCountString,
         );
       },
     );
   }
 
   final bool showUndoButton;
+  final String overCountString;
+  final String teamName;
+  final int extra;
 
-  const InningCompleteSheet({super.key, required this.showUndoButton});
+  const InningCompleteSheet({
+    super.key,
+    required this.showUndoButton,
+    required this.overCountString,
+    required this.teamName,
+    required this.extra,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,8 +72,6 @@ class InningCompleteSheet extends ConsumerWidget {
   }
 
   Widget _inningContent(BuildContext context, ScoreBoardViewState state) {
-    final teamName = _getCurrentTeamName(context, state);
-    final extras = _getExtras(state);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -67,9 +80,7 @@ class InningCompleteSheet extends ConsumerWidget {
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -105,13 +116,13 @@ class InningCompleteSheet extends ConsumerWidget {
                       child: _detailInfoCell(
                           context,
                           "${context.l10n.score_board_extras_title}:",
-                          extras.toString())),
+                          extra.toString())),
                   const SizedBox(width: 8),
                   Expanded(
                       child: _detailInfoCell(
                           context,
                           "${context.l10n.score_board_overs_title}:",
-                          _getOverCount(state))),
+                          overCountString)),
                 ],
               ),
             ],
@@ -133,37 +144,12 @@ class InningCompleteSheet extends ConsumerWidget {
           style: AppTextStyle.body2
               .copyWith(color: context.colorScheme.textDisabled),
           children: [
-            const WidgetSpan(
-                child: SizedBox(
-              width: 16,
-            )),
+            const WidgetSpan(child: SizedBox(width: 16)),
             TextSpan(
                 text: title,
                 style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.textPrimary)),
           ])),
     );
-  }
-
-  String _getOverCount(ScoreBoardViewState state) {
-    return state.currentInning?.overs.toString() ??
-        "${state.overCount - 1}.${state.ballCount}";
-  }
-
-  String _getCurrentTeamName(BuildContext context, ScoreBoardViewState state) {
-    final teamId = state.currentInning?.team_id;
-    final teamName = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
-        ?.team
-        .name;
-    return teamName ?? context.l10n.score_board_current_team_title;
-  }
-
-  int _getExtras(ScoreBoardViewState state) {
-    final extras = state.currentScoresList
-        .where((element) => (element.extras_type != null))
-        .fold(0, (sum, element) => sum + (element.extras_awarded ?? 0));
-    return extras;
   }
 }

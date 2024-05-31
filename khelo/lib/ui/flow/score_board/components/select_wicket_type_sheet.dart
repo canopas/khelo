@@ -69,12 +69,11 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    const filters = WicketType.values;
     return Wrap(
       alignment: WrapAlignment.start,
       spacing: 8,
       runSpacing: 8,
-      children: filters.map(
+      children: WicketType.values.map(
         (element) {
           final isSelected = selectedType == element;
           return OnTapScale(
@@ -92,10 +91,7 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
                       : context.colorScheme.textPrimary,
                 ),
               ),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               side: BorderSide(
                 color: isSelected
                     ? context.colorScheme.primary
