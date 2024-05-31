@@ -103,3 +103,28 @@ class FieldingStat with _$FieldingStat {
     @Default(0) int stumping,
   }) = _FieldingStat;
 }
+
+@freezed
+class OverStatModel with _$OverStatModel {
+  const factory OverStatModel({
+    @Default(0) int run,
+    @Default(0) int wicket,
+    @Default(0) int extra,
+  }) = _OverStatModel;
+
+  factory OverStatModel.fromJson(Map<String, dynamic> json) =>
+      _$OverStatModelFromJson(json);
+}
+
+@freezed
+class TeamRunStat with _$TeamRunStat {
+  const factory TeamRunStat({
+    @Default("") String teamName,
+    @Default(0) int run,
+    @Default(0) int wicket,
+    @Default(0) double over,
+  }) = _TeamRunStat;
+
+  factory TeamRunStat.fromJson(Map<String, dynamic> json) =>
+      _$TeamRunStatFromJson(json);
+}

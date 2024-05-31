@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 
 class VerifyAddTeamMemberDialog extends StatefulWidget {
@@ -49,29 +50,38 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
           children: [
             Text(
               context.l10n.add_team_member_verify_placeholder_text,
-              style: AppTextStyle.header4.copyWith(
+              style: AppTextStyle.subtitle1.copyWith(
                 color: context.colorScheme.textPrimary,
                 fontSize: 20,
               ),
             ),
-            TextField(
-              maxLength: 5,
-              decoration: InputDecoration(
-                  counterStyle: AppTextStyle.body1
-                      .copyWith(color: context.colorScheme.textDisabled)),
-              textAlign: TextAlign.center,
-              style: AppTextStyle.subtitle1.copyWith(
-                color: context.colorScheme.textPrimary,
-                fontSize: 34,
+            const SizedBox(height: 16),
+            Flexible(
+              child: AppTextField(
+                maxLength: 5,
+                autoFocus: true,
+                keyboardType: TextInputType.phone,
+                borderType: AppTextFieldBorderType.outline,
+                borderColor: BorderColor(
+                  focusColor: Colors.transparent,
+                  unFocusColor: Colors.transparent,
+                ),
+                backgroundColor: context.colorScheme.containerLow,
+                borderRadius: BorderRadius.circular(12),
+                contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                style: AppTextStyle.header1.copyWith(
+                  color: context.colorScheme.textPrimary,
+                ),
+                textAlign: TextAlign.center,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    verificationNumber = value;
+                  });
+                },
               ),
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ],
-              onChanged: (value) {
-                setState(() {
-                  verificationNumber = value;
-                });
-              },
             ),
           ],
         ),

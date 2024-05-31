@@ -94,9 +94,11 @@
   "add_team_add_as_member_description_text": "Add me as a team member",
   "add_team_enter_team_name_placeholder_text": "Enter team name",
   "add_team_location_text": "Location",
+  "add_team_player_role_title": "Playing role",
   "add_team_players_text": "Players",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
   "add_team_member_screen_title": "Add team member",
+  "add_team_member_details_title": "Details",
   "add_team_member_search_placeholder_text": "Search member name",
   "add_team_member_verify_placeholder_text": "Enter the last five digits of the phone number of the selected player.",
   "add_team_member_verify_title": "Verify",
@@ -170,8 +172,8 @@
   "search_team_search_placeholder_title": "Search team name",
   "search_team_your_teams_title": "Your Teams",
   "search_team_select_title": "Select",
-  "search_team_member_title": "{count, plural, =0{{count} Members} =1{{count} Member} other{{count} Members}}",
-  "@search_team_member_title": {
+  "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
+  "@search_team_player_title": {
     "placeholders": {
       "count": {}
     }
@@ -200,8 +202,8 @@
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
-  "add_toss_detail_bat_text": "Bat",
-  "add_toss_detail_bowl_text": "Bowl",
+  "add_toss_detail_bat_text": "Batting",
+  "add_toss_detail_bowl_text": "Bowling",
   "team_detail_screen_title": "Team Detail",
   "team_detail_member_tab_title": "Member",
   "team_detail_empty_member_title": "No team member are added to the team.",
@@ -209,18 +211,46 @@
   "team_detail_empty_match_title": "Team hasn't compete with opponent till now.",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_empty_stat_title": "Team's analysis will be shown here based on it's previous matches.",
-  "team_detail_won_title": "Won",
-  "team_detail_lost_title": "Lost",
-  "team_detail_tied_title": "Tied",
+  "team_detail_won_title": "Won({win})",
+  "@team_detail_won_title": {
+    "description": "Won({win})",
+    "placeholders": {
+      "win": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_lost_title": "Lost({lost})",
+  "@team_detail_lost_title": {
+    "description": "Lost({lost})",
+    "placeholders": {
+      "lost": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_tie_title": "Tie({tie})",
+  "@team_detail_tie_title": {
+    "description": "Tie({tie})",
+    "placeholders": {
+      "tie": {
+        "type": "int"
+      }
+    }
+  },
+  "team_detail_match_title": "{count, plural, =0{{count} Matches} =1{{count} Match} other{{count} Matches}}",
+  "@team_detail_match_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "team_detail_runs_made_title": "Runs Made",
   "team_detail_wickets_taken_title": "Wickets Taken",
-  "team_detail_batting_average_title": "\nBatting Average",
-  "team_detail_bowling_average_title": "\nBowling Average",
+  "team_detail_batting_average_title": "Batting Average",
+  "team_detail_bowling_average_title": "Bowling Average",
   "team_detail_highest_runs_title": "Highest Runs",
   "team_detail_lowest_runs_title": "Lowest Runs",
   "team_detail_run_rate_title": "Run Rate",
-  "team_detail_match_played_title": "\nMatch played",
-  "team_detail_matches_played_title": "\nMatches played",
   "team_detail_overs_title": "Overs:",
   "match_status_yet_to_start_title": "Yet to start",
   "match_status_running_title": "Running",
@@ -476,8 +506,10 @@
   "score_board_one_text": "1",
   "score_board_two_text": "2",
   "score_board_three_text": "3",
-  "score_board_four_text": "4\nFour",
-  "score_board_six_text": "6\nSix",
+  "score_board_four_text": "4",
+  "score_board_four_title": "Four",
+  "score_board_six_text": "6",
+  "score_board_six_title": "Six",
   "score_board_five_or_seven_text": "5, 7",
   "score_board_out_text": "OUT",
   "score_board_wicket_text": "WICKET",
@@ -530,18 +562,29 @@
   "score_board_injured_tag_title": "Injured",
   "score_board_who_on_strike_title": "Who's on Strike?",
   "score_board_who_got_out_title": "Who got out",
-  "score_board_end_of_over_title": "End Of Over ",
   "score_board_start_next_over_title": "Start Next Over",
   "score_board_batsman_title": "batsMan",
   "score_board_bowler_title": "bowler",
   "score_board_change_striker_title": "Change Striker",
   "score_board_add_substitute_title": "Add substitute",
-  "score_board_by_title": " by ",
+  "score_board_end_of_over_by_title": "End Of Over {overNumber} by {player}",
+  "@score_board_end_of_over_by_title": {
+    "description": "End Of Over {overNumber} by {player}",
+    "placeholders": {
+      "overNumber": {
+        "type": "int"
+      },
+      "player": {
+        "type": "String"
+      }
+    }
+  },
   "score_board_can_undo_till_running_over_title": "Undo is only allowed till running over",
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
   "score_board_pause_scoring_title": "Pause Scoring",
   "score_board_penalty_run_title": "Penalty Run",
+  "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
   "score_board_pause_title": "Pause",
   "score_board_more_options_title": "More Options",

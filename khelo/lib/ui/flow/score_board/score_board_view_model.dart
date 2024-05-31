@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
+import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'score_board_view_model.freezed.dart';
@@ -301,7 +302,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   void _configureStrikerId() {
     final lastBall = _getLastBallExceptPenaltyBall();
     if (lastBall == null) {
-      _showStrikerSelectionDialog();
+      _showStrikerSelectionSheet();
       return;
     }
 
@@ -332,7 +333,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         if (newBatsmanId != null) {
           striker = newBatsmanId;
         } else {
-          _showStrikerSelectionDialog();
+          _showStrikerSelectionSheet();
           return;
         }
       }
@@ -378,23 +379,22 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   void onMatchOptionSelect(MatchOption option, bool contWithInjPlayer) {
-    state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
     switch (option) {
       case MatchOption.changeStriker:
-        _showStrikerSelectionDialog();
+        _showStrikerSelectionSheet();
       case MatchOption.pauseScoring:
-        state = state.copyWith(showPauseScoringDialog: DateTime.now());
+        state = state.copyWith(showPauseScoringSheet: DateTime.now());
       case MatchOption.penaltyRun:
-        state = state.copyWith(showAddPenaltyRunDialog: DateTime.now());
+        state = state.copyWith(showAddPenaltyRunSheet: DateTime.now());
       case MatchOption.endMatch:
-        state = state.copyWith(showEndMatchDialog: DateTime.now());
+        state = state.copyWith(showEndMatchSheet: DateTime.now());
       default:
         return;
     }
   }
 
-  void _showStrikerSelectionDialog() {
-    state = state.copyWith(showStrikerSelectionDialog: DateTime.now());
+  void _showStrikerSelectionSheet() {
+    state = state.copyWith(showStrikerSelectionSheet: DateTime.now());
   }
 
   void onScoreButtonTap(ScoreButton btn) {
@@ -411,11 +411,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.three:
         addBall(run: 3);
       case ScoreButton.four:
-        state = state.copyWith(showBoundaryDialogForFour: DateTime.now());
+        state = state.copyWith(
+            showBoundaryConfirmationDialogForFour: DateTime.now());
       case ScoreButton.six:
-        state = state.copyWith(showBoundaryDialogForSix: DateTime.now());
+        state = state.copyWith(
+            showBoundaryConfirmationDialogForSix: DateTime.now());
       case ScoreButton.fiveOrSeven:
-        state = state.copyWith(showAddExtraDialogForFiveSeven: DateTime.now());
+        state = state.copyWith(showAddExtraSheetForFiveSeven: DateTime.now());
       case ScoreButton.undo:
         final lastBall = _getLastBallExceptPenaltyBall();
         if (lastBall == null || lastBall.over_number != state.overCount) {
@@ -427,7 +429,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.out:
         state = state.copyWith(showSelectWicketTypeSheet: DateTime.now());
       case ScoreButton.noBall:
-        state = state.copyWith(showAddExtraDialogForNoBall: DateTime.now());
+        state = state.copyWith(showAddExtraSheetForNoBall: DateTime.now());
       case ScoreButton.wideBall:
         addBall(
           run: 0,
@@ -435,9 +437,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           extra: 1,
         );
       case ScoreButton.bye:
-        state = state.copyWith(showAddExtraDialogForBye: DateTime.now());
+        state = state.copyWith(showAddExtraSheetForBye: DateTime.now());
       case ScoreButton.legBye:
-        state = state.copyWith(showAddExtraDialogForLegBye: DateTime.now());
+        state = state.copyWith(showAddExtraSheetForLegBye: DateTime.now());
     }
   }
 
@@ -588,12 +590,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     if (allOut || allDeliveryDelivered || targetAchieved) {
       // match or inning complete
       if (_isMatchTied()) {
-        state = state.copyWith(showMatchCompleteDialog: DateTime.now());
+        state = state.copyWith(showMatchCompleteSheet: DateTime.now());
       } else {
         if (state.otherInning?.innings_status == InningStatus.finish) {
-          state = state.copyWith(showMatchCompleteDialog: DateTime.now());
+          state = state.copyWith(showMatchCompleteSheet: DateTime.now());
         } else {
-          state = state.copyWith(showInningCompleteDialog: DateTime.now());
+          state = state.copyWith(showInningCompleteSheet: DateTime.now());
         }
       }
     } else {
@@ -608,7 +610,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           .toList();
       if (fairDeliveries.length == 6) {
         // over complete
-        state = state.copyWith(showOverCompleteDialog: DateTime.now());
+        state = state.copyWith(showOverCompleteSheet: DateTime.now());
       } else {
         if (playerOutId != null &&
             (state.batsMans?.map((e) => e.player.id).contains(playerOutId) ??
@@ -758,7 +760,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ?.squad;
 
     final outPlayer = battingTeam
-        ?.firstWhere((element) => element.player.id == lastBall.player_out_id);
+        ?.where((element) => element.player.id == lastBall.player_out_id)
+        .firstOrNull;
 
     if (outPlayer == null) {
       return null;
@@ -956,13 +959,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void onReviewMatchResult(bool contWithInjPlayer) {
     // func will be called only if injured player is remained and user disable that continue with injured player option
-    state = state.copyWith(continueWithInjuredPlayers: contWithInjPlayer);
-
     if (state.otherInning?.innings_status == InningStatus.finish) {
-      state = state.copyWith(showMatchCompleteDialog: DateTime.now());
+      state = state.copyWith(showMatchCompleteSheet: DateTime.now());
     } else {
-      state = state.copyWith(showInningCompleteDialog: DateTime.now());
+      state = state.copyWith(showInningCompleteSheet: DateTime.now());
     }
+  }
+
+  void onContinueWithInjuredPlayersChange(bool isContinue) {
+    state = state.copyWith(continueWithInjuredPlayers: isContinue);
   }
 
   Future<void> setPlayers({
@@ -970,10 +975,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     required bool contWithInjPlayer,
   }) async {
     try {
-      state = state.copyWith(
-          continueWithInjuredPlayers: contWithInjPlayer,
-          actionError: null,
-          isActionInProgress: true);
+      state = state.copyWith(actionError: null, isActionInProgress: true);
 
       MatchPlayer? bowler;
       var battingPlayer = currentPlayers
@@ -1015,6 +1017,125 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
+  OverStatModel getCurrentOverStatics() {
+    final scoresList = state.currentScoresList
+        .where((element) => element.over_number == state.overCount);
+
+    int run = scoresList
+        .where((element) => (element.extras_type == ExtrasType.noBall ||
+            element.extras_type == null))
+        .fold(0, (runCount, element) => runCount + element.runs_scored);
+
+    final wicket = scoresList
+        .where((element) => (element.wicket_type != null &&
+            element.wicket_type != WicketType.retiredHurt))
+        .length;
+
+    final extras = scoresList
+        .where((element) => (element.extras_type != null))
+        .fold(
+            0,
+            (extraCount, element) =>
+                extraCount + (element.extras_awarded ?? 0));
+
+    return OverStatModel(run: run, wicket: wicket, extra: extras);
+  }
+
+  TeamRunStat getTeamRunDetails(bool isFirstInning) {
+    final teamInning = isFirstInning ? state.currentInning : state.otherInning;
+
+    final teamName = state.match?.teams
+        .where((element) => element.team.id == teamInning?.team_id)
+        .firstOrNull
+        ?.team
+        .name;
+
+    return TeamRunStat(
+        teamName: teamName ?? "",
+        run: teamInning?.total_runs ?? 0,
+        wicket: teamInning?.total_wickets ?? 0,
+        over: teamInning?.overs ?? 0);
+  }
+
+  String getOverCount() {
+    return state.currentInning?.overs.toString() ??
+        "${state.overCount - 1}.${state.ballCount}";
+  }
+
+  String? getTeamName({bool isBattingTeam = true}) {
+    final teamId = isBattingTeam
+        ? state.currentInning?.team_id
+        : state.otherInning?.team_id;
+    final teamName = state.match?.teams
+        .where((element) => element.team.id == teamId)
+        .firstOrNull
+        ?.team
+        .name;
+    return teamName;
+  }
+
+  int getExtras() {
+    final extras = state.currentScoresList
+        .where((element) => (element.extras_type != null))
+        .fold(
+            0,
+            (extraCount, element) =>
+                extraCount + (element.extras_awarded ?? 0));
+    return extras;
+  }
+
+  List<MatchPlayer> getFilteredPlayerList(PlayerSelectionType type) {
+    if (state.match == null) {
+      return [];
+    }
+
+    final teamId = (type == PlayerSelectionType.batsMan
+            ? state.currentInning?.team_id
+            : state.otherInning?.team_id) ??
+        "INVALID ID";
+    final teamPlayers = state.match?.teams
+        .where((element) => element.team.id == teamId)
+        .firstOrNull
+        ?.squad;
+
+    if (type == PlayerSelectionType.bowler) {
+      return teamPlayers ?? [];
+    } else {
+      return teamPlayers
+              ?.where((element) => _isPlayerEligibleForBatsman(element.status))
+              .toList() ??
+          [];
+    }
+  }
+
+  bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
+    return status != PlayerStatus.played &&
+        status != PlayerStatus.playing &&
+        status != PlayerStatus.suspended;
+  }
+
+  List<MatchPlayer> getFielderList() {
+    if (state.match == null) {
+      return [];
+    }
+
+    final teamId = state.otherInning?.team_id ?? "INVALID ID";
+    final teamPlayers = state.match?.teams
+        .firstWhere((element) => element.team.id == teamId)
+        .squad;
+
+    return teamPlayers ?? [];
+  }
+
+  List<BallScoreModel> getCurrentOverBall() {
+    final list = state.currentScoresList
+        .where((element) =>
+            element.over_number == state.overCount &&
+            element.extras_type != ExtrasType.penaltyRun)
+        .toList();
+    return list;
+  }
+
   _cancelStreamSubscription() async {
     await _matchStreamSubscription.cancel();
     await _ballScoreStreamSubscription.cancel();
@@ -1049,20 +1170,20 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showSelectBowlerAndBatsManSheet,
     DateTime? showSelectPlayerSheet,
     DateTime? showSelectWicketTypeSheet,
-    DateTime? showStrikerSelectionDialog,
+    DateTime? showStrikerSelectionSheet,
     DateTime? showUndoBallConfirmationDialog,
-    DateTime? showOverCompleteDialog,
-    DateTime? showInningCompleteDialog,
-    DateTime? showMatchCompleteDialog,
-    DateTime? showBoundaryDialogForSix,
-    DateTime? showBoundaryDialogForFour,
-    DateTime? showAddExtraDialogForNoBall,
-    DateTime? showAddExtraDialogForLegBye,
-    DateTime? showAddExtraDialogForBye,
-    DateTime? showAddExtraDialogForFiveSeven,
-    DateTime? showPauseScoringDialog,
-    DateTime? showAddPenaltyRunDialog,
-    DateTime? showEndMatchDialog,
+    DateTime? showOverCompleteSheet,
+    DateTime? showInningCompleteSheet,
+    DateTime? showMatchCompleteSheet,
+    DateTime? showBoundaryConfirmationDialogForSix,
+    DateTime? showBoundaryConfirmationDialogForFour,
+    DateTime? showAddExtraSheetForNoBall,
+    DateTime? showAddExtraSheetForLegBye,
+    DateTime? showAddExtraSheetForBye,
+    DateTime? showAddExtraSheetForFiveSeven,
+    DateTime? showPauseScoringSheet,
+    DateTime? showAddPenaltyRunSheet,
+    DateTime? showEndMatchSheet,
     DateTime? invalidUndoToast,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,

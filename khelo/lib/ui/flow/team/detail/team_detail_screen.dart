@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -52,9 +54,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(teamDetailStateProvider.notifier);
     final state = ref.watch(teamDetailStateProvider);
-
     return AppPage(
       title: state.team?.name ?? context.l10n.team_detail_screen_title,
       body: _body(context, state),
@@ -74,80 +74,59 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       );
     }
 
-    return Padding(
-      padding: context.mediaQueryPadding,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _teamProfileView(context, state),
-          _tabView(context),
-          _content(context),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _teamProfileView(context, state),
+        const SizedBox(height: 16),
+        _tabView(context),
+        _content(context),
+      ],
     );
   }
 
   Widget _teamProfileView(BuildContext context, TeamDetailState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: context.colorScheme.containerNormal,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // profile view
-              ImageAvatar(
-                initial: state.team?.name[0].toUpperCase() ?? "?",
-                imageUrl: state.team?.profile_img_url,
-                size: 90,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(state.team?.name ?? "",
-                      style: AppTextStyle.header4
-                          .copyWith(color: context.colorScheme.textPrimary)),
-                  Text(state.team?.city ?? "",
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textPrimary)),
-                  Text(
-                      DateFormat.yMMMd()
-                          .format(state.team?.created_at ?? DateTime.now()),
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textPrimary)),
-                ],
-              ),
-            ],
+          // profile view
+          ImageAvatar(
+            initial: state.team?.name[0].toUpperCase() ?? "?",
+            imageUrl: state.team?.profile_img_url,
+            size: 80,
           ),
           const SizedBox(
-            height: 16,
+            width: 16,
           ),
-          const Divider(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(state.team?.name ?? "",
+                  style: AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textPrimary)),
+              const SizedBox(height: 4),
+              Text(
+                  (state.team?.created_at ?? DateTime.now())
+                      .format(context, DateFormatType.dayMonthYear),
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.textSecondary)),
+            ],
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _content(BuildContext context) {
-    return Expanded(
-      child: PageView(
-        controller: _controller,
-        children: _tabs,
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
       ),
     );
   }
 
   Widget _tabView(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
           _tabButton(
@@ -173,6 +152,15 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               _controller.jumpToPage(2);
             },
           ),
+          if (_selectedTab == 0) ...[
+            const Spacer(),
+            actionButton(context,
+                onPressed: () => AppRoute.addMatch().push(context),
+                icon: Icon(
+                  Icons.add,
+                  color: context.colorScheme.textPrimary,
+                )),
+          ],
         ],
       ),
     );
@@ -197,6 +185,19 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
                 : context.colorScheme.textSecondary,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _content(BuildContext context) {
+    return Expanded(
+      child: PageView(
+        controller: _controller,
+        children: _tabs,
+        onPageChanged: (index) {
+          notifier.onTabChange(index);
+          setState(() {});
+        },
       ),
     );
   }

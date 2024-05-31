@@ -73,3 +73,33 @@ const _$WicketTypeEnumMap = {
   WicketType.retired: 13,
   WicketType.retiredHurt: 14,
 };
+
+_$OverStatModelImpl _$$OverStatModelImplFromJson(Map<String, dynamic> json) =>
+    _$OverStatModelImpl(
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
+      extra: json['extra'] as int? ?? 0,
+    );
+
+Map<String, dynamic> _$$OverStatModelImplToJson(_$OverStatModelImpl instance) =>
+    <String, dynamic>{
+      'run': instance.run,
+      'wicket': instance.wicket,
+      'extra': instance.extra,
+    };
+
+_$TeamRunStatImpl _$$TeamRunStatImplFromJson(Map<String, dynamic> json) =>
+    _$TeamRunStatImpl(
+      teamName: json['teamName'] as String? ?? "",
+      run: json['run'] as int? ?? 0,
+      wicket: json['wicket'] as int? ?? 0,
+      over: (json['over'] as num?)?.toDouble() ?? 0,
+    );
+
+Map<String, dynamic> _$$TeamRunStatImplToJson(_$TeamRunStatImpl instance) =>
+    <String, dynamic>{
+      'teamName': instance.teamName,
+      'run': instance.run,
+      'wicket': instance.wicket,
+      'over': instance.over,
+    };

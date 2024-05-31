@@ -274,3 +274,27 @@ enum TossDecision {
 
   const TossDecision(this.value);
 }
+
+@freezed
+class TeamMatchStatus with _$TeamMatchStatus {
+  const factory TeamMatchStatus({
+    @Default(0) int win,
+    @Default(0) int tie,
+    @Default(0) int lost,
+  }) = _TeamMatchStatus;
+}
+
+@freezed
+class TeamStat with _$TeamStat {
+  const factory TeamStat({
+    @Default(0) int played,
+    @Default(TeamMatchStatus()) TeamMatchStatus status,
+    @Default(0) int runs,
+    @Default(0) int wickets,
+    @Default(0.0) double bating_average,
+    @Default(0.0) double bowling_average,
+    @Default(0) int highest_runs,
+    @Default(0) int lowest_runts,
+    @Default(0.0) double run_rate,
+  }) = _TeamStat;
+}
