@@ -2279,29 +2279,29 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
 }
 
 /// @nodoc
-mixin _$MatchResult {
+mixin _$TeamMatchStatus {
   int get win => throw _privateConstructorUsedError;
   int get tie => throw _privateConstructorUsedError;
   int get lost => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $MatchResultCopyWith<MatchResult> get copyWith =>
+  $TeamMatchStatusCopyWith<TeamMatchStatus> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MatchResultCopyWith<$Res> {
-  factory $MatchResultCopyWith(
-          MatchResult value, $Res Function(MatchResult) then) =
-      _$MatchResultCopyWithImpl<$Res, MatchResult>;
+abstract class $TeamMatchStatusCopyWith<$Res> {
+  factory $TeamMatchStatusCopyWith(
+          TeamMatchStatus value, $Res Function(TeamMatchStatus) then) =
+      _$TeamMatchStatusCopyWithImpl<$Res, TeamMatchStatus>;
   @useResult
   $Res call({int win, int tie, int lost});
 }
 
 /// @nodoc
-class _$MatchResultCopyWithImpl<$Res, $Val extends MatchResult>
-    implements $MatchResultCopyWith<$Res> {
-  _$MatchResultCopyWithImpl(this._value, this._then);
+class _$TeamMatchStatusCopyWithImpl<$Res, $Val extends TeamMatchStatus>
+    implements $TeamMatchStatusCopyWith<$Res> {
+  _$TeamMatchStatusCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -2333,22 +2333,22 @@ class _$MatchResultCopyWithImpl<$Res, $Val extends MatchResult>
 }
 
 /// @nodoc
-abstract class _$$MatchResultImplCopyWith<$Res>
-    implements $MatchResultCopyWith<$Res> {
-  factory _$$MatchResultImplCopyWith(
-          _$MatchResultImpl value, $Res Function(_$MatchResultImpl) then) =
-      __$$MatchResultImplCopyWithImpl<$Res>;
+abstract class _$$TeamMatchStatusImplCopyWith<$Res>
+    implements $TeamMatchStatusCopyWith<$Res> {
+  factory _$$TeamMatchStatusImplCopyWith(_$TeamMatchStatusImpl value,
+          $Res Function(_$TeamMatchStatusImpl) then) =
+      __$$TeamMatchStatusImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call({int win, int tie, int lost});
 }
 
 /// @nodoc
-class __$$MatchResultImplCopyWithImpl<$Res>
-    extends _$MatchResultCopyWithImpl<$Res, _$MatchResultImpl>
-    implements _$$MatchResultImplCopyWith<$Res> {
-  __$$MatchResultImplCopyWithImpl(
-      _$MatchResultImpl _value, $Res Function(_$MatchResultImpl) _then)
+class __$$TeamMatchStatusImplCopyWithImpl<$Res>
+    extends _$TeamMatchStatusCopyWithImpl<$Res, _$TeamMatchStatusImpl>
+    implements _$$TeamMatchStatusImplCopyWith<$Res> {
+  __$$TeamMatchStatusImplCopyWithImpl(
+      _$TeamMatchStatusImpl _value, $Res Function(_$TeamMatchStatusImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2358,7 +2358,7 @@ class __$$MatchResultImplCopyWithImpl<$Res>
     Object? tie = null,
     Object? lost = null,
   }) {
-    return _then(_$MatchResultImpl(
+    return _then(_$TeamMatchStatusImpl(
       win: null == win
           ? _value.win
           : win // ignore: cast_nullable_to_non_nullable
@@ -2377,8 +2377,8 @@ class __$$MatchResultImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MatchResultImpl implements _MatchResult {
-  const _$MatchResultImpl({this.win = 0, this.tie = 0, this.lost = 0});
+class _$TeamMatchStatusImpl implements _TeamMatchStatus {
+  const _$TeamMatchStatusImpl({this.win = 0, this.tie = 0, this.lost = 0});
 
   @override
   @JsonKey()
@@ -2392,14 +2392,14 @@ class _$MatchResultImpl implements _MatchResult {
 
   @override
   String toString() {
-    return 'MatchResult(win: $win, tie: $tie, lost: $lost)';
+    return 'TeamMatchStatus(win: $win, tie: $tie, lost: $lost)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MatchResultImpl &&
+            other is _$TeamMatchStatusImpl &&
             (identical(other.win, win) || other.win == win) &&
             (identical(other.tie, tie) || other.tie == tie) &&
             (identical(other.lost, lost) || other.lost == lost));
@@ -2411,13 +2411,14 @@ class _$MatchResultImpl implements _MatchResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MatchResultImplCopyWith<_$MatchResultImpl> get copyWith =>
-      __$$MatchResultImplCopyWithImpl<_$MatchResultImpl>(this, _$identity);
+  _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
+      __$$TeamMatchStatusImplCopyWithImpl<_$TeamMatchStatusImpl>(
+          this, _$identity);
 }
 
-abstract class _MatchResult implements MatchResult {
-  const factory _MatchResult({final int win, final int tie, final int lost}) =
-      _$MatchResultImpl;
+abstract class _TeamMatchStatus implements TeamMatchStatus {
+  const factory _TeamMatchStatus(
+      {final int win, final int tie, final int lost}) = _$TeamMatchStatusImpl;
 
   @override
   int get win;
@@ -2427,14 +2428,14 @@ abstract class _MatchResult implements MatchResult {
   int get lost;
   @override
   @JsonKey(ignore: true)
-  _$$MatchResultImplCopyWith<_$MatchResultImpl> get copyWith =>
+  _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-mixin _$MatchStats {
+mixin _$TeamStat {
   int get played => throw _privateConstructorUsedError;
-  MatchResult get matchResult => throw _privateConstructorUsedError;
+  TeamMatchStatus get status => throw _privateConstructorUsedError;
   int get runs => throw _privateConstructorUsedError;
   int get wickets => throw _privateConstructorUsedError;
   double get bating_average => throw _privateConstructorUsedError;
@@ -2444,19 +2445,18 @@ mixin _$MatchStats {
   double get run_rate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $MatchStatsCopyWith<MatchStats> get copyWith =>
+  $TeamStatCopyWith<TeamStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $MatchStatsCopyWith<$Res> {
-  factory $MatchStatsCopyWith(
-          MatchStats value, $Res Function(MatchStats) then) =
-      _$MatchStatsCopyWithImpl<$Res, MatchStats>;
+abstract class $TeamStatCopyWith<$Res> {
+  factory $TeamStatCopyWith(TeamStat value, $Res Function(TeamStat) then) =
+      _$TeamStatCopyWithImpl<$Res, TeamStat>;
   @useResult
   $Res call(
       {int played,
-      MatchResult matchResult,
+      TeamMatchStatus status,
       int runs,
       int wickets,
       double bating_average,
@@ -2465,13 +2465,13 @@ abstract class $MatchStatsCopyWith<$Res> {
       int lowest_runts,
       double run_rate});
 
-  $MatchResultCopyWith<$Res> get matchResult;
+  $TeamMatchStatusCopyWith<$Res> get status;
 }
 
 /// @nodoc
-class _$MatchStatsCopyWithImpl<$Res, $Val extends MatchStats>
-    implements $MatchStatsCopyWith<$Res> {
-  _$MatchStatsCopyWithImpl(this._value, this._then);
+class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
+    implements $TeamStatCopyWith<$Res> {
+  _$TeamStatCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -2482,7 +2482,7 @@ class _$MatchStatsCopyWithImpl<$Res, $Val extends MatchStats>
   @override
   $Res call({
     Object? played = null,
-    Object? matchResult = null,
+    Object? status = null,
     Object? runs = null,
     Object? wickets = null,
     Object? bating_average = null,
@@ -2496,10 +2496,10 @@ class _$MatchStatsCopyWithImpl<$Res, $Val extends MatchStats>
           ? _value.played
           : played // ignore: cast_nullable_to_non_nullable
               as int,
-      matchResult: null == matchResult
-          ? _value.matchResult
-          : matchResult // ignore: cast_nullable_to_non_nullable
-              as MatchResult,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as TeamMatchStatus,
       runs: null == runs
           ? _value.runs
           : runs // ignore: cast_nullable_to_non_nullable
@@ -2533,24 +2533,24 @@ class _$MatchStatsCopyWithImpl<$Res, $Val extends MatchStats>
 
   @override
   @pragma('vm:prefer-inline')
-  $MatchResultCopyWith<$Res> get matchResult {
-    return $MatchResultCopyWith<$Res>(_value.matchResult, (value) {
-      return _then(_value.copyWith(matchResult: value) as $Val);
+  $TeamMatchStatusCopyWith<$Res> get status {
+    return $TeamMatchStatusCopyWith<$Res>(_value.status, (value) {
+      return _then(_value.copyWith(status: value) as $Val);
     });
   }
 }
 
 /// @nodoc
-abstract class _$$MatchStatsImplCopyWith<$Res>
-    implements $MatchStatsCopyWith<$Res> {
-  factory _$$MatchStatsImplCopyWith(
-          _$MatchStatsImpl value, $Res Function(_$MatchStatsImpl) then) =
-      __$$MatchStatsImplCopyWithImpl<$Res>;
+abstract class _$$TeamStatImplCopyWith<$Res>
+    implements $TeamStatCopyWith<$Res> {
+  factory _$$TeamStatImplCopyWith(
+          _$TeamStatImpl value, $Res Function(_$TeamStatImpl) then) =
+      __$$TeamStatImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int played,
-      MatchResult matchResult,
+      TeamMatchStatus status,
       int runs,
       int wickets,
       double bating_average,
@@ -2560,22 +2560,22 @@ abstract class _$$MatchStatsImplCopyWith<$Res>
       double run_rate});
 
   @override
-  $MatchResultCopyWith<$Res> get matchResult;
+  $TeamMatchStatusCopyWith<$Res> get status;
 }
 
 /// @nodoc
-class __$$MatchStatsImplCopyWithImpl<$Res>
-    extends _$MatchStatsCopyWithImpl<$Res, _$MatchStatsImpl>
-    implements _$$MatchStatsImplCopyWith<$Res> {
-  __$$MatchStatsImplCopyWithImpl(
-      _$MatchStatsImpl _value, $Res Function(_$MatchStatsImpl) _then)
+class __$$TeamStatImplCopyWithImpl<$Res>
+    extends _$TeamStatCopyWithImpl<$Res, _$TeamStatImpl>
+    implements _$$TeamStatImplCopyWith<$Res> {
+  __$$TeamStatImplCopyWithImpl(
+      _$TeamStatImpl _value, $Res Function(_$TeamStatImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? played = null,
-    Object? matchResult = null,
+    Object? status = null,
     Object? runs = null,
     Object? wickets = null,
     Object? bating_average = null,
@@ -2584,15 +2584,15 @@ class __$$MatchStatsImplCopyWithImpl<$Res>
     Object? lowest_runts = null,
     Object? run_rate = null,
   }) {
-    return _then(_$MatchStatsImpl(
+    return _then(_$TeamStatImpl(
       played: null == played
           ? _value.played
           : played // ignore: cast_nullable_to_non_nullable
               as int,
-      matchResult: null == matchResult
-          ? _value.matchResult
-          : matchResult // ignore: cast_nullable_to_non_nullable
-              as MatchResult,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as TeamMatchStatus,
       runs: null == runs
           ? _value.runs
           : runs // ignore: cast_nullable_to_non_nullable
@@ -2627,10 +2627,10 @@ class __$$MatchStatsImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$MatchStatsImpl implements _MatchStats {
-  const _$MatchStatsImpl(
+class _$TeamStatImpl implements _TeamStat {
+  const _$TeamStatImpl(
       {this.played = 0,
-      this.matchResult = const MatchResult(),
+      this.status = const TeamMatchStatus(),
       this.runs = 0,
       this.wickets = 0,
       this.bating_average = 0.0,
@@ -2644,7 +2644,7 @@ class _$MatchStatsImpl implements _MatchStats {
   final int played;
   @override
   @JsonKey()
-  final MatchResult matchResult;
+  final TeamMatchStatus status;
   @override
   @JsonKey()
   final int runs;
@@ -2669,17 +2669,16 @@ class _$MatchStatsImpl implements _MatchStats {
 
   @override
   String toString() {
-    return 'MatchStats(played: $played, matchResult: $matchResult, runs: $runs, wickets: $wickets, bating_average: $bating_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runts: $lowest_runts, run_rate: $run_rate)';
+    return 'TeamStat(played: $played, status: $status, runs: $runs, wickets: $wickets, bating_average: $bating_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runts: $lowest_runts, run_rate: $run_rate)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$MatchStatsImpl &&
+            other is _$TeamStatImpl &&
             (identical(other.played, played) || other.played == played) &&
-            (identical(other.matchResult, matchResult) ||
-                other.matchResult == matchResult) &&
+            (identical(other.status, status) || other.status == status) &&
             (identical(other.runs, runs) || other.runs == runs) &&
             (identical(other.wickets, wickets) || other.wickets == wickets) &&
             (identical(other.bating_average, bating_average) ||
@@ -2695,41 +2694,32 @@ class _$MatchStatsImpl implements _MatchStats {
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      played,
-      matchResult,
-      runs,
-      wickets,
-      bating_average,
-      bowling_average,
-      highest_runs,
-      lowest_runts,
-      run_rate);
+  int get hashCode => Object.hash(runtimeType, played, status, runs, wickets,
+      bating_average, bowling_average, highest_runs, lowest_runts, run_rate);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$MatchStatsImplCopyWith<_$MatchStatsImpl> get copyWith =>
-      __$$MatchStatsImplCopyWithImpl<_$MatchStatsImpl>(this, _$identity);
+  _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
+      __$$TeamStatImplCopyWithImpl<_$TeamStatImpl>(this, _$identity);
 }
 
-abstract class _MatchStats implements MatchStats {
-  const factory _MatchStats(
+abstract class _TeamStat implements TeamStat {
+  const factory _TeamStat(
       {final int played,
-      final MatchResult matchResult,
+      final TeamMatchStatus status,
       final int runs,
       final int wickets,
       final double bating_average,
       final double bowling_average,
       final int highest_runs,
       final int lowest_runts,
-      final double run_rate}) = _$MatchStatsImpl;
+      final double run_rate}) = _$TeamStatImpl;
 
   @override
   int get played;
   @override
-  MatchResult get matchResult;
+  TeamMatchStatus get status;
   @override
   int get runs;
   @override
@@ -2746,6 +2736,6 @@ abstract class _MatchStats implements MatchStats {
   double get run_rate;
   @override
   @JsonKey(ignore: true)
-  _$$MatchStatsImplCopyWith<_$MatchStatsImpl> get copyWith =>
+  _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

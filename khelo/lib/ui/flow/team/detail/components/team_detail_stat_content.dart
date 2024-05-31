@@ -42,18 +42,18 @@ class TeamDetailStatContent extends ConsumerWidget {
       children: [
         _matchPlayedProgress(
           context,
-          state.matchStats.matchResult,
-          state.matchStats.played,
+          state.teamStat.status,
+          state.teamStat.played,
         ),
         const SizedBox(height: 16),
-        _teamStatsView(context, state.matchStats),
+        _teamStatsView(context, state.teamStat),
       ],
     );
   }
 
   Widget _matchPlayedProgress(
     BuildContext context,
-    MatchResult result,
+    TeamMatchStatus status,
     int playedMatches,
   ) {
     return Container(
@@ -66,18 +66,18 @@ class TeamDetailStatContent extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '$playedMatches ${playedMatches == 1 ? context.l10n.team_detail_match_tab_title : context.l10n.my_game_matches_tab_title}',
+            '$playedMatches ${context.l10n.team_detail_match_title(playedMatches)}',
             style: AppTextStyle.header2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
           const SizedBox(height: 16),
-          PrimerProgressBar(matchResult: result),
+          PrimerProgressBar(status: status),
         ],
       ),
     );
   }
 
-  Widget _teamStatsView(BuildContext context, MatchStats stats) {
+  Widget _teamStatsView(BuildContext context, TeamStat stat) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -88,25 +88,25 @@ class TeamDetailStatContent extends ConsumerWidget {
         children: [
           _teamStatCell(context,
               title: context.l10n.team_detail_runs_made_title,
-              count: stats.runs.toString()),
+              count: stat.runs.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_wickets_taken_title,
-              count: stats.wickets.toString()),
+              count: stat.wickets.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_batting_average_title,
-              count: stats.bating_average.toString()),
+              count: stat.bating_average.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_bowling_average_title,
-              count: stats.bowling_average.toString()),
+              count: stat.bowling_average.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_highest_runs_title,
-              count: stats.highest_runs.toString()),
+              count: stat.highest_runs.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_lowest_runs_title,
-              count: stats.lowest_runts.toString()),
+              count: stat.lowest_runts.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_run_rate_title,
-              count: '${stats.run_rate.toStringAsFixed(2)}%'),
+              count: '${stat.run_rate.toStringAsFixed(2)}%'),
         ],
       ),
     );

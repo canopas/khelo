@@ -56,21 +56,21 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
       state = state.copyWith(loading: true);
       final matches = await _matchService
           .getMatchesByTeamId(state.team!.id ?? "INVALID ID");
-      final matchStats = _calculateMatchStats(matches);
-      state = state.copyWith(
-          matches: matches, matchStats: matchStats, loading: false);
+      final teamStat = _calculateTeamStat(matches);
+      state =
+          state.copyWith(matches: matches, teamStat: teamStat, loading: false);
     } catch (e) {
       debugPrint(
           "TeamDetailViewNotifier: error while loading team matches -> $e");
     }
   }
 
-  MatchStats _calculateMatchStats(List<MatchModel> matches) {
-    if (matches.isEmpty) return const MatchStats();
+  TeamStat _calculateTeamStat(List<MatchModel> matches) {
+    if (matches.isEmpty) return const TeamStat();
     final finishedMatches = _filterFinishedMatches(matches);
-    return MatchStats(
+    return TeamStat(
       played: finishedMatches.length,
-      matchResult: _matchResult(finishedMatches),
+      status: _teamMatchStatus(finishedMatches),
       runs: _totalRuns(finishedMatches),
       wickets: _wickets(finishedMatches),
       bating_average: _battingAverage(finishedMatches),
@@ -155,10 +155,10 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     return totalOvers > 0 ? runs / totalOvers : 0;
   }
 
-  MatchResult _matchResult(List<MatchModel> finishedMatches) {
-    return finishedMatches.fold<MatchResult>(
-      const MatchResult(),
-      (acc, match) {
+  TeamMatchStatus _teamMatchStatus(List<MatchModel> finishedMatches) {
+    return finishedMatches.fold<TeamMatchStatus>(
+      const TeamMatchStatus(),
+      (status, match) {
         final firstTeam = match.teams.firstWhere((team) =>
             team.team.id ==
             (match.toss_decision == TossDecision.bat
@@ -172,13 +172,16 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
             match.teams.firstWhere((team) => team.team.id != firstTeam.team.id);
 
         if (firstTeam.run == secondTeam.run) {
-          return MatchResult(win: acc.win, lost: acc.lost, tie: acc.tie + 1);
+          return TeamMatchStatus(
+              win: status.win, lost: status.lost, tie: status.tie + 1);
         } else if ((firstTeam.run > secondTeam.run &&
                 firstTeam.team.id == teamId) ||
             (firstTeam.run < secondTeam.run && secondTeam.team.id == teamId)) {
-          return MatchResult(win: acc.win + 1, lost: acc.lost, tie: acc.tie);
+          return TeamMatchStatus(
+              win: status.win + 1, lost: status.lost, tie: status.tie);
         } else {
-          return MatchResult(win: acc.win, lost: acc.lost + 1, tie: acc.tie);
+          return TeamMatchStatus(
+              win: status.win, lost: status.lost + 1, tie: status.tie);
         }
       },
     );
@@ -200,6 +203,6 @@ class TeamDetailState with _$TeamDetailState {
     List<MatchModel>? matches,
     @Default(0) int selectedTab,
     @Default(false) bool loading,
-    @Default(MatchStats()) MatchStats matchStats,
+    @Default(TeamStat()) TeamStat teamStat,
   }) = _TeamDetailState;
 }

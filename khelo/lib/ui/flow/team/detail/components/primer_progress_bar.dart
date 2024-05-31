@@ -6,11 +6,11 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class PrimerProgressBar extends StatelessWidget {
-  final MatchResult matchResult;
+  final TeamMatchStatus status;
 
   const PrimerProgressBar({
     super.key,
-    required this.matchResult,
+    required this.status,
   });
 
   @override
@@ -21,16 +21,16 @@ class PrimerProgressBar extends StatelessWidget {
           children: [
             _progressBarSegment(
               color: context.colorScheme.positive,
-              count: matchResult.win,
+              count: status.win,
               isStartRadius: true,
             ),
             _progressBarSegment(
               color: context.colorScheme.secondary,
-              count: matchResult.tie,
+              count: status.tie,
             ),
             _progressBarSegment(
               color: context.colorScheme.alert,
-              count: matchResult.lost,
+              count: status.lost,
               isEndRadius: true,
             ),
           ],
@@ -42,17 +42,17 @@ class PrimerProgressBar extends StatelessWidget {
             _legendItem(
               context,
               color: context.colorScheme.positive,
-              text: context.l10n.team_detail_won_title(matchResult.win),
+              text: context.l10n.team_detail_won_title(status.win),
             ),
             _legendItem(
               context,
               color: context.colorScheme.secondary,
-              text: context.l10n.team_detail_tie_title(matchResult.tie),
+              text: context.l10n.team_detail_tie_title(status.tie),
             ),
             _legendItem(
               context,
               color: context.colorScheme.alert,
-              text: context.l10n.team_detail_lost_title(matchResult.lost),
+              text: context.l10n.team_detail_lost_title(status.lost),
             ),
           ],
         )

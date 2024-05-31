@@ -227,6 +227,12 @@
       }
     }
   },
+  "team_detail_match_title": "{count, plural, =0{{count} Matches} =1{{count} Match} other{{count} Matches}}",
+  "@team_detail_match_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "team_detail_runs_made_title": "Runs Made",
   "team_detail_wickets_taken_title": "Wickets Taken",
   "team_detail_batting_average_title": "Batting Average",

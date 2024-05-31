@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/ui/flow/team/detail/components/member_cell.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -13,7 +13,18 @@ class TeamDetailMemberContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
 
-    if (state.team?.players?.isEmpty ?? true) {
+    if (state.team?.players != null &&
+        state.team?.players?.isNotEmpty == true) {
+      return ListView.separated(
+        padding: context.mediaQueryPadding + const EdgeInsets.all(16),
+        itemCount: state.team!.players!.length,
+        itemBuilder: (context, index) {
+          final member = state.team!.players![index];
+          return UserDetailCell(user: member, isShowNumber: false);
+        },
+        separatorBuilder: (context, index) => const SizedBox(height: 16),
+      );
+    } else {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -26,15 +37,5 @@ class TeamDetailMemberContent extends ConsumerWidget {
         ),
       );
     }
-
-    return ListView.builder(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: state.team!.players!.length,
-      itemBuilder: (context, index) {
-        final member = state.team!.players![index];
-        return MemberCell(member: member);
-      },
-    );
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
@@ -113,8 +113,8 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
                       .copyWith(color: context.colorScheme.textPrimary)),
               const SizedBox(height: 4),
               Text(
-                  DateFormat.yMMMd()
-                      .format(state.team?.created_at ?? DateTime.now()),
+                  (state.team?.created_at ?? DateTime.now())
+                      .format(context, DateFormatType.dayMonthYear),
                   style: AppTextStyle.body2
                       .copyWith(color: context.colorScheme.textSecondary)),
             ],
