@@ -20,7 +20,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
         itemCount: state.team!.players!.length,
         itemBuilder: (context, index) {
           final member = state.team!.players![index];
-          return UserDetailCell(user: member, isShowNumber: false);
+          return UserDetailCell(user: member, showPhoneNumber: false);
         },
         separatorBuilder: (context, index) => const SizedBox(height: 16),
       );
