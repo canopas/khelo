@@ -55,7 +55,7 @@ class ImagePickerSheet extends ConsumerWidget {
               _sheetOptionCell(
                 context,
                 image: Assets.images.icCamera,
-                option: context.l10n.common_camera_text,
+                option: context.l10n.image_picker_camera_option_text,
                 onTap: () async {
                   final image = await _picker.pickImage(
                     source: ImageSource.camera,
@@ -76,7 +76,7 @@ class ImagePickerSheet extends ConsumerWidget {
               _sheetOptionCell(
                 context,
                 image: Assets.images.icGallery,
-                option: context.l10n.common_gallery_text,
+                option: context.l10n.image_picker_gallery_option_text,
                 onTap: () async {
                   final image = await _picker.pickImage(
                     source: ImageSource.gallery,
