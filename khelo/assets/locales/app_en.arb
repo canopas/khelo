@@ -21,6 +21,8 @@
   "common_wickets_dot_title": " Wickets.",
   "common_wicket_taken_title": " Wicket taken",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
+  "common_camera_text": "Camera",
+  "common_gallery_text": "Gallery",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
     "placeholders": {
@@ -620,7 +622,9 @@
   "profile_complete_profile_btn_title": "Complete Profile",
   "profile_complete_your_profile_title": "Complete your profile",
   "profile_complete_profile_description": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
-  "image_picker_choose_option_title": "Choose an option.",
+  "image_picker_choose_option_title": "Choose an option",
+  "image_picker_camera_option_text": "Camera",
+  "image_picker_gallery_option_text": "Gallery",
   "image_picker_crop_image_title": "Crop Image",
   "batting_style_right_hand_bat_title": "Right hand bat",
   "batting_style_left_hand_bat_title": "Left hand bat",
