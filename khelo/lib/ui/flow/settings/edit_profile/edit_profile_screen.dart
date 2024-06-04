@@ -33,28 +33,6 @@ class EditProfileScreen extends ConsumerWidget {
 
   final double profileViewHeight = 128;
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(editProfileStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeIsSaved(BuildContext context, WidgetRef ref) {
-    ref.listen(editProfileStateProvider.select((state) => state.isSaved),
-        (previous, next) {
-      if (next) {
-        if (isToCreateAccount) {
-          AppRoute.main.go(context);
-        } else {
-          context.pop();
-        }
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(editProfileStateProvider.notifier);
@@ -354,5 +332,27 @@ class EditProfileScreen extends ConsumerWidget {
         onPressed: () => notifier.onSubmitTap(),
       ),
     );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(editProfileStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeIsSaved(BuildContext context, WidgetRef ref) {
+    ref.listen(editProfileStateProvider.select((state) => state.isSaved),
+        (previous, next) {
+      if (next) {
+        if (isToCreateAccount) {
+          AppRoute.main.go(context);
+        } else {
+          context.pop();
+        }
+      }
+    });
   }
 }

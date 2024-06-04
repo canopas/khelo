@@ -65,8 +65,8 @@ class SearchUserBottomSheet extends ConsumerWidget {
 
     return state.searchedUsers.isEmpty
         ? Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Center(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Center(
               child: Text(
                 context.l10n.search_user_empty_text,
                 textAlign: TextAlign.center,
@@ -75,7 +75,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
                 ),
               ),
             ),
-        )
+          )
         : ListView.separated(
             separatorBuilder: (context, index) {
               return Divider(

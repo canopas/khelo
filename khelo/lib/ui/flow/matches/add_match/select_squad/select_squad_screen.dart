@@ -49,7 +49,6 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(selectSquadStateProvider.notifier);
     final state = ref.watch(selectSquadStateProvider);
 
     return AppPage(
@@ -76,18 +75,16 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                   BlendMode.srcIn),
             )),
       ],
-      body: Builder(
-        builder: (context) {
-          return ListView(
-            padding: context.mediaQueryPadding +
-                const EdgeInsets.symmetric(horizontal: 16),
-            children: [
-              _playingSquadList(context, notifier, state),
-              _teamMemberList(context, notifier, state)
-            ],
-          );
-        }
-      ),
+      body: Builder(builder: (context) {
+        return ListView(
+          padding: context.mediaQueryPadding +
+              const EdgeInsets.symmetric(horizontal: 16),
+          children: [
+            _playingSquadList(context, notifier, state),
+            _teamMemberList(context, notifier, state)
+          ],
+        );
+      }),
     );
   }
 

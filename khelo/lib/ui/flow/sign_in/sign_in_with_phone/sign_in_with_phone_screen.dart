@@ -18,47 +18,6 @@ import 'components/sign_in_with_phone_country_picker.dart';
 class SignInWithPhoneScreen extends ConsumerWidget {
   const SignInWithPhoneScreen({super.key});
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        signInWithPhoneStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeOtp({required BuildContext context, required WidgetRef ref}) {
-    ref.listen(
-      signInWithPhoneStateProvider.select((value) => value.verificationId),
-      (previous, current) async {
-        if (current != null) {
-          final state = ref.watch(signInWithPhoneStateProvider);
-          final bool? success = await AppRoute.verifyOTP(
-            countryCode: state.code.dialCode,
-            phoneNumber: state.phone,
-            verificationId: current,
-          ).push<bool>(context);
-          if (success != null && success && context.mounted) {
-            onSignInSuccess(context, ref);
-          }
-        }
-      },
-    );
-  }
-
-  void _observeSignInSuccess({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) {
-    ref.listen(
-      signInWithPhoneStateProvider.select((value) => value.signInSuccess),
-      (previous, current) async {
-        if (current && context.mounted) onSignInSuccess(context, ref);
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(signInWithPhoneStateProvider.notifier);
@@ -155,5 +114,46 @@ class SignInWithPhoneScreen extends ConsumerWidget {
     } else {
       AppRoute.main.go(context);
     }
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        signInWithPhoneStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeOtp({required BuildContext context, required WidgetRef ref}) {
+    ref.listen(
+      signInWithPhoneStateProvider.select((value) => value.verificationId),
+      (previous, current) async {
+        if (current != null) {
+          final state = ref.watch(signInWithPhoneStateProvider);
+          final bool? success = await AppRoute.verifyOTP(
+            countryCode: state.code.dialCode,
+            phoneNumber: state.phone,
+            verificationId: current,
+          ).push<bool>(context);
+          if (success != null && success && context.mounted) {
+            onSignInSuccess(context, ref);
+          }
+        }
+      },
+    );
+  }
+
+  void _observeSignInSuccess({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    ref.listen(
+      signInWithPhoneStateProvider.select((value) => value.signInSuccess),
+      (previous, current) async {
+        if (current && context.mounted) onSignInSuccess(context, ref);
+      },
+    );
   }
 }

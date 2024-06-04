@@ -40,26 +40,6 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     runPostFrame(() => notifier.setData(widget.matchId));
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(addTossDetailStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observePushScoreBoard() {
-    ref.listen(
-        addTossDetailStateProvider.select((value) => value.pushScoreBoard),
-        (previous, next) {
-      if (next != null && next) {
-        AppRoute.scoreBoard(matchId: notifier.matchId!)
-            .pushReplacement(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(addTossDetailStateProvider);
@@ -266,5 +246,25 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
       case TossDecision.bowl:
         return Assets.images.bowler;
     }
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTossDetailStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observePushScoreBoard() {
+    ref.listen(
+        addTossDetailStateProvider.select((value) => value.pushScoreBoard),
+        (previous, next) {
+      if (next != null && next) {
+        AppRoute.scoreBoard(matchId: notifier.matchId!)
+            .pushReplacement(context);
+      }
+    });
   }
 }
