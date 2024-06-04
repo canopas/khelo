@@ -282,10 +282,10 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         !isEnabled &&
         widget.playerSelectionType != PlayerSelectionType.bowler) {
       return isSecondInningRunning
-          ? context.l10n.score_board_end_match_title
+          ? context.l10n.common_end_match_title
           : context.l10n.score_board_end_inning_title;
     } else {
-      return context.l10n.score_board_select_title;
+      return context.l10n.common_select_title.toLowerCase();
     }
   }
 

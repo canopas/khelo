@@ -384,7 +384,7 @@ enum TeamType {
   String getString(BuildContext context) {
     switch (this) {
       case TeamType.a:
-        return context.l10n.add_match_team_a_title;
+        return context.l10n.common_a_title;
       case TeamType.b:
         return context.l10n.add_match_team_b_title;
     }

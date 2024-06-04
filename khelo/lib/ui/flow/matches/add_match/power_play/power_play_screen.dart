@@ -55,7 +55,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
     final state = ref.watch(powerPlayStateProvider);
 
     return AppPage(
-      title: context.l10n.power_play_screen_title,
+      title: context.l10n.common_power_play_title,
       body: Builder(builder: (context) {
         return Stack(
           children: [

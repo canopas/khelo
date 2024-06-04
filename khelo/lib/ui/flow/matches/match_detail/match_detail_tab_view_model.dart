@@ -214,7 +214,7 @@ enum MatchDetailTab {
       case MatchDetailTab.highlight:
         return context.l10n.match_detail_highlight_tab_title;
       case MatchDetailTab.overs:
-        return context.l10n.match_detail_overs_tab_title;
+        return context.l10n.common_overs_title;
     }
   }
 
@@ -251,7 +251,7 @@ enum HighlightFilterOption {
       case HighlightFilterOption.sixes:
         return context.l10n.match_highlight_filter_sixes_text;
       case HighlightFilterOption.wickets:
-        return context.l10n.match_highlight_filter_wickets_text;
+        return context.l10n.common_wickets_text;
     }
   }
 }

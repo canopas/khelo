@@ -50,7 +50,7 @@ class OverDetailView extends StatelessWidget {
           const SizedBox(height: 8),
           _detailCellView(
             context,
-            title: context.l10n.add_match_power_play_overs_title,
+            title: context.l10n.common_power_play_title,
             trailing: _powerPlayCount(context, notifier, state),
             onTap: () async {
               if (state.isPowerPlayButtonEnable) {

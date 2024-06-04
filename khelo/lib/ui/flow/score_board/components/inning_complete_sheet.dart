@@ -105,7 +105,7 @@ class InningCompleteSheet extends ConsumerWidget {
                   Expanded(
                       child: _detailInfoCell(
                           context,
-                          "${context.l10n.score_board_wickets_text}:",
+                          "${context.l10n.common_wickets_text}:",
                           (state.otherInning?.total_wickets ?? "").toString())),
                 ],
               ),
@@ -121,7 +121,7 @@ class InningCompleteSheet extends ConsumerWidget {
                   Expanded(
                       child: _detailInfoCell(
                           context,
-                          "${context.l10n.score_board_overs_title}:",
+                          "${context.l10n.common_overs_title}:",
                           overCountString)),
                 ],
               ),

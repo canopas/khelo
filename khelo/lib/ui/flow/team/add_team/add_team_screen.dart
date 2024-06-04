@@ -53,7 +53,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
 
     return AppPage(
       title: widget.editTeam != null
-          ? context.l10n.edit_team_screen_title
+          ? context.l10n.common_edit_team_title
           : context.l10n.add_team_screen_title,
       automaticallyImplyLeading: false,
       leading: actionButton(
@@ -139,7 +139,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             _textInputField(
               controller: state.locationController,
               onChanged: (p0) => notifier.onValueChange(),
-              hintText: context.l10n.add_team_location_text,
+              hintText: context.l10n.common_location_title,
             ),
             if (widget.editTeam == null) ...[
               Material(

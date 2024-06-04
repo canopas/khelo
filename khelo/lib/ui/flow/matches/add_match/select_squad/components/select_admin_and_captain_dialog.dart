@@ -103,7 +103,7 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
         ),
         _captainAdminButton(
           context,
-          title: context.l10n.select_squad_admin_short_title,
+          title: context.l10n.common_a_title,
           isSelected: state.adminId == member.player.id,
           onTap: () => notifier.onCaptainOrAdminSelect(
             PlayerMatchRole.admin,

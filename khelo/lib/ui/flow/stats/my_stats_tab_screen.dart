@@ -99,7 +99,7 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
       child: Row(
         children: [
           _tabButton(
-            context.l10n.my_stat_matches_tab_title,
+            context.l10n.common_matches_title,
             _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
@@ -107,7 +107,7 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
           ),
           const SizedBox(width: 8),
           _tabButton(
-            context.l10n.my_stat_stats_tab_title,
+            context.l10n.tab_stats_title,
             _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);

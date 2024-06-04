@@ -613,7 +613,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         (previous, next) {
       if (next != null) {
         showConfirmationDialog(context,
-            title: context.l10n.score_board_end_match_title,
+            title: context.l10n.common_end_match_title,
             message: context.l10n.score_board_end_match_description_text,
             confirmBtnText: context.l10n.common_okay_title,
             onConfirm: notifier.abandonMatch);
