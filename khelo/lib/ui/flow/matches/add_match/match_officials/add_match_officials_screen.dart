@@ -39,7 +39,6 @@ class _AddMatchOfficialsScreenState
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(addMatchOfficialsStateProvider.notifier);
     final state = ref.watch(addMatchOfficialsStateProvider);
 
     return AppPage(

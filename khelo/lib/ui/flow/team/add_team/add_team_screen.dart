@@ -45,37 +45,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     runPostFrame(() => notifier.setData(editTeam: widget.editTeam));
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(addTeamStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeTeam(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      addTeamStateProvider.select((value) => value.team),
-      (previous, current) async {
-        if (current != null) {
-          AppRoute.addTeamMember(team: current).pushReplacement(context);
-        }
-      },
-    );
-  }
-
-  void _observePop(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      addTeamStateProvider.select((value) => value.isPop),
-      (previous, current) async {
-        if (current && context.mounted) {
-          context.pop();
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     _observeActionError(context, ref);
@@ -191,7 +160,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                       value: state.isAddMeCheckBoxEnable,
                       contentPadding: EdgeInsets.zero,
                       controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(context.l10n.add_team_add_as_member_description_text),
+                      title: Text(
+                          context.l10n.add_team_add_as_member_description_text),
                       onChanged: (value) {
                         if (value != null) {
                           notifier.onAddMeCheckBoxTap(value);
@@ -324,6 +294,37 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTeamStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeTeam(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      addTeamStateProvider.select((value) => value.team),
+      (previous, current) async {
+        if (current != null) {
+          AppRoute.addTeamMember(team: current).pushReplacement(context);
+        }
+      },
+    );
+  }
+
+  void _observePop(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      addTeamStateProvider.select((value) => value.isPop),
+      (previous, current) async {
+        if (current && context.mounted) {
+          context.pop();
+        }
       },
     );
   }

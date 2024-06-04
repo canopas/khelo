@@ -44,46 +44,6 @@ class AddMatchScreen extends ConsumerStatefulWidget {
 class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   late AddMatchViewNotifier notifier;
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(addMatchViewStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observePushTossDetailScreen(
-    BuildContext context,
-    WidgetRef ref,
-    String? matchId,
-  ) {
-    ref.listen(
-        addMatchViewStateProvider.select((value) => value.pushTossDetailScreen),
-        (previous, next) {
-      if (next == true) {
-        AppRoute.addTossDetail(
-                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
-                    "INVALID ID")
-            .pushReplacement(context);
-      } else if (next == false) {
-        AppRoute.scoreBoard(
-                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
-                    "INVALID ID")
-            .pushReplacement(context);
-      }
-    });
-  }
-
-  void _observePop(BuildContext context, WidgetRef ref) {
-    ref.listen(addMatchViewStateProvider.select((value) => value.pop),
-        (previous, next) {
-      if (next != null && next) {
-        context.pop();
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -471,5 +431,45 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         );
       },
     );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addMatchViewStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observePushTossDetailScreen(
+    BuildContext context,
+    WidgetRef ref,
+    String? matchId,
+  ) {
+    ref.listen(
+        addMatchViewStateProvider.select((value) => value.pushTossDetailScreen),
+        (previous, next) {
+      if (next == true) {
+        AppRoute.addTossDetail(
+                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
+                    "INVALID ID")
+            .pushReplacement(context);
+      } else if (next == false) {
+        AppRoute.scoreBoard(
+                matchId: ref.read(addMatchViewStateProvider.notifier).matchId ??
+                    "INVALID ID")
+            .pushReplacement(context);
+      }
+    });
+  }
+
+  void _observePop(BuildContext context, WidgetRef ref) {
+    ref.listen(addMatchViewStateProvider.select((value) => value.pop),
+        (previous, next) {
+      if (next != null && next) {
+        context.pop();
+      }
+    });
   }
 }

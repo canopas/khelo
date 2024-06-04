@@ -74,10 +74,11 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     final state = ref.watch(scoreBoardStateProvider);
     final notifier = ref.watch(scoreBoardStateProvider.notifier);
 
-    final showCheckBox = widget.playerSelectionType !=
-            PlayerSelectionType.bowler
-        ? widget.batsManList.any((element) => element.status == PlayerStatus.injured)
-        : false;
+    final showCheckBox =
+        widget.playerSelectionType != PlayerSelectionType.bowler
+            ? widget.batsManList
+                .any((element) => element.status == PlayerStatus.injured)
+            : false;
 
     final injuredPlayerRemained =
         widget.playerSelectionType != PlayerSelectionType.bowler

@@ -40,287 +40,6 @@ class ScoreBoardScreen extends ConsumerStatefulWidget {
 class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   late ScoreBoardViewNotifier notifier;
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(scoreBoardStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeShowSelectBatsManSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showSelectBatsManSheet),
-        (previous, next) {
-      if (next != null) {
-        _showSelectPlayerSheet(
-          context,
-          continueWithInjuredPlayers,
-          PlayerSelectionType.batsMan,
-        );
-      }
-    });
-  }
-
-  void _observeShowSelectBowlerSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showSelectBowlerSheet),
-        (previous, next) {
-      if (next != null) {
-        _showSelectPlayerSheet(
-          context,
-          continueWithInjuredPlayers,
-          PlayerSelectionType.bowler,
-        );
-      }
-    });
-  }
-
-  void _observeShowSelectBowlerAndBatsManSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider
-            .select((value) => value.showSelectBowlerAndBatsManSheet),
-        (previous, next) {
-      if (next != null) {
-        _showSelectPlayerSheet(
-          context,
-          continueWithInjuredPlayers,
-          PlayerSelectionType.batsManAndBowler,
-        );
-      }
-    });
-  }
-
-  void _observeShowSelectPlayerSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
-        (previous, next) {
-      if (next != null) {
-        _showSelectPlayerSheet(
-          context,
-          continueWithInjuredPlayers,
-          PlayerSelectionType.all,
-        );
-      }
-    });
-  }
-
-  void _observeShowSelectWicketTypeSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showSelectWicketTypeSheet), (previous, next) {
-      if (next != null) {
-        _showSelectWicketTypeSheet(context);
-      }
-    });
-  }
-
-  void _observeShowStrikerSelectionSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showStrikerSelectionSheet), (previous, next) {
-      if (next != null) {
-        _showStrikerSelectionSheet(context);
-      }
-    });
-  }
-
-  void _observeShowUndoBallConfirmationDialog(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showUndoBallConfirmationDialog), (previous, next) {
-      if (next != null) {
-        showConfirmationDialog(context,
-            title: context.l10n.score_board_undo_last_ball_title,
-            message: context.l10n.score_board_undo_last_ball_description_text,
-            confirmBtnText: context.l10n.score_board_undo_title,
-            onConfirm: notifier.undoLastBall);
-      }
-    });
-  }
-
-  void _observeShowOverCompleteSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showOverCompleteSheet),
-        (previous, next) {
-      if (next != null) {
-        _showOverCompleteSheet(context);
-      }
-    });
-  }
-
-  void _observeShowInningCompleteSheet(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showInningCompleteSheet), (previous, next) {
-      if (next != null) {
-        _showInningCompleteSheet(context);
-      }
-    });
-  }
-
-  void _observeShowMatchCompleteSheet(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showMatchCompleteSheet),
-        (previous, next) {
-      if (next != null) {
-        _showMatchCompleteSheet(context);
-      }
-    });
-  }
-
-  void _observeShowBoundaryConfirmationDialogForSix(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider
-            .select((value) => value.showBoundaryConfirmationDialogForSix),
-        (previous, next) {
-      if (next != null) {
-        _showBoundaryConfirmationDialog(context, 6);
-      }
-    });
-  }
-
-  void _observeShowBoundaryConfirmationDialogForFour(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider
-            .select((value) => value.showBoundaryConfirmationDialogForFour),
-        (previous, next) {
-      if (next != null) {
-        _showBoundaryConfirmationDialog(context, 4);
-      }
-    });
-  }
-
-  void _observeShowAddExtraSheetForNoBall(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraSheetForNoBall), (previous, next) {
-      if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.noBall);
-      }
-    });
-  }
-
-  void _observeShowAddExtraSheetForLegBye(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraSheetForLegBye), (previous, next) {
-      if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.legBye);
-      }
-    });
-  }
-
-  void _observeShowAddExtraSheetForBye(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraSheetForBye), (previous, next) {
-      if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.bye);
-      }
-    });
-  }
-
-  void _observeShowAddExtraSheetForFiveSeven(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select(
-            (value) => value.showAddExtraSheetForFiveSeven), (previous, next) {
-      if (next != null) {
-        _showAddExtraSheet(context, null);
-      }
-    });
-  }
-
-  void _observePop(BuildContext context, WidgetRef ref) {
-    ref.listen(scoreBoardStateProvider.select((value) => value.pop),
-        (previous, next) {
-      if (next) {
-        context.pop();
-      }
-    });
-  }
-
-  void _observeShowPauseScoringSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showPauseScoringSheet),
-        (previous, next) {
-      if (next != null) {
-        showConfirmationDialog(context,
-            title: context.l10n.score_board_pause_scoring_title,
-            message: context.l10n.score_board_pause_scoring_description_text,
-            confirmBtnText: context.l10n.score_board_pause_title,
-            onConfirm: notifier.onPauseScoring);
-      }
-    });
-  }
-
-  void _observeShowAddPenaltyRunSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showAddPenaltyRunSheet),
-        (previous, next) {
-      if (next != null) {
-        _showAddPenaltyRunSheet(
-          context,
-        );
-      }
-    });
-  }
-
-  void _observeEndMatchSheet(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.showEndMatchSheet),
-        (previous, next) {
-      if (next != null) {
-        showConfirmationDialog(context,
-            title: context.l10n.score_board_end_match_title,
-            message: context.l10n.score_board_end_match_description_text,
-            confirmBtnText: context.l10n.common_okay_title,
-            onConfirm: notifier.abandonMatch);
-      }
-    });
-  }
-
-  void _observeInvalidUndoToast(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider.select((value) => value.invalidUndoToast),
-        (previous, next) {
-      if (next != null) {
-        showSnackBar(
-          context,
-          context.l10n.score_board_can_undo_till_running_over_title,
-          length: SnackBarLength.long,
-        );
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -633,5 +352,286 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     if (penalty != null && context.mounted) {
       notifier.handlePenaltyRun(penalty);
     }
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(scoreBoardStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeShowSelectBatsManSheet(
+    BuildContext context,
+    WidgetRef ref,
+    bool continueWithInjuredPlayers,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showSelectBatsManSheet),
+        (previous, next) {
+      if (next != null) {
+        _showSelectPlayerSheet(
+          context,
+          continueWithInjuredPlayers,
+          PlayerSelectionType.batsMan,
+        );
+      }
+    });
+  }
+
+  void _observeShowSelectBowlerSheet(
+    BuildContext context,
+    WidgetRef ref,
+    bool continueWithInjuredPlayers,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showSelectBowlerSheet),
+        (previous, next) {
+      if (next != null) {
+        _showSelectPlayerSheet(
+          context,
+          continueWithInjuredPlayers,
+          PlayerSelectionType.bowler,
+        );
+      }
+    });
+  }
+
+  void _observeShowSelectBowlerAndBatsManSheet(
+    BuildContext context,
+    WidgetRef ref,
+    bool continueWithInjuredPlayers,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showSelectBowlerAndBatsManSheet),
+        (previous, next) {
+      if (next != null) {
+        _showSelectPlayerSheet(
+          context,
+          continueWithInjuredPlayers,
+          PlayerSelectionType.batsManAndBowler,
+        );
+      }
+    });
+  }
+
+  void _observeShowSelectPlayerSheet(
+    BuildContext context,
+    WidgetRef ref,
+    bool continueWithInjuredPlayers,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
+        (previous, next) {
+      if (next != null) {
+        _showSelectPlayerSheet(
+          context,
+          continueWithInjuredPlayers,
+          PlayerSelectionType.all,
+        );
+      }
+    });
+  }
+
+  void _observeShowSelectWicketTypeSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showSelectWicketTypeSheet), (previous, next) {
+      if (next != null) {
+        _showSelectWicketTypeSheet(context);
+      }
+    });
+  }
+
+  void _observeShowStrikerSelectionSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showStrikerSelectionSheet), (previous, next) {
+      if (next != null) {
+        _showStrikerSelectionSheet(context);
+      }
+    });
+  }
+
+  void _observeShowUndoBallConfirmationDialog(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showUndoBallConfirmationDialog), (previous, next) {
+      if (next != null) {
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_undo_last_ball_title,
+            message: context.l10n.score_board_undo_last_ball_description_text,
+            confirmBtnText: context.l10n.score_board_undo_title,
+            onConfirm: notifier.undoLastBall);
+      }
+    });
+  }
+
+  void _observeShowOverCompleteSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showOverCompleteSheet),
+        (previous, next) {
+      if (next != null) {
+        _showOverCompleteSheet(context);
+      }
+    });
+  }
+
+  void _observeShowInningCompleteSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showInningCompleteSheet), (previous, next) {
+      if (next != null) {
+        _showInningCompleteSheet(context);
+      }
+    });
+  }
+
+  void _observeShowMatchCompleteSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showMatchCompleteSheet),
+        (previous, next) {
+      if (next != null) {
+        _showMatchCompleteSheet(context);
+      }
+    });
+  }
+
+  void _observeShowBoundaryConfirmationDialogForSix(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showBoundaryConfirmationDialogForSix),
+        (previous, next) {
+      if (next != null) {
+        _showBoundaryConfirmationDialog(context, 6);
+      }
+    });
+  }
+
+  void _observeShowBoundaryConfirmationDialogForFour(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showBoundaryConfirmationDialogForFour),
+        (previous, next) {
+      if (next != null) {
+        _showBoundaryConfirmationDialog(context, 4);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForNoBall(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showAddExtraSheetForNoBall), (previous, next) {
+      if (next != null) {
+        _showAddExtraSheet(context, ExtrasType.noBall);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForLegBye(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showAddExtraSheetForLegBye), (previous, next) {
+      if (next != null) {
+        _showAddExtraSheet(context, ExtrasType.legBye);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForBye(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showAddExtraSheetForBye), (previous, next) {
+      if (next != null) {
+        _showAddExtraSheet(context, ExtrasType.bye);
+      }
+    });
+  }
+
+  void _observeShowAddExtraSheetForFiveSeven(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showAddExtraSheetForFiveSeven), (previous, next) {
+      if (next != null) {
+        _showAddExtraSheet(context, null);
+      }
+    });
+  }
+
+  void _observePop(BuildContext context, WidgetRef ref) {
+    ref.listen(scoreBoardStateProvider.select((value) => value.pop),
+        (previous, next) {
+      if (next) {
+        context.pop();
+      }
+    });
+  }
+
+  void _observeShowPauseScoringSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showPauseScoringSheet),
+        (previous, next) {
+      if (next != null) {
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_pause_scoring_title,
+            message: context.l10n.score_board_pause_scoring_description_text,
+            confirmBtnText: context.l10n.score_board_pause_title,
+            onConfirm: notifier.onPauseScoring);
+      }
+    });
+  }
+
+  void _observeShowAddPenaltyRunSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showAddPenaltyRunSheet),
+        (previous, next) {
+      if (next != null) {
+        _showAddPenaltyRunSheet(
+          context,
+        );
+      }
+    });
+  }
+
+  void _observeEndMatchSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showEndMatchSheet),
+        (previous, next) {
+      if (next != null) {
+        showConfirmationDialog(context,
+            title: context.l10n.score_board_end_match_title,
+            message: context.l10n.score_board_end_match_description_text,
+            confirmBtnText: context.l10n.common_okay_title,
+            onConfirm: notifier.abandonMatch);
+      }
+    });
+  }
+
+  void _observeInvalidUndoToast(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.invalidUndoToast),
+        (previous, next) {
+      if (next != null) {
+        showSnackBar(
+          context,
+          context.l10n.score_board_can_undo_till_running_over_title,
+          length: SnackBarLength.long,
+        );
+      }
+    });
   }
 }

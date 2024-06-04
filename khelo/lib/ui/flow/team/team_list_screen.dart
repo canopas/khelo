@@ -55,19 +55,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     }
   }
 
-  void _observeShowFilterOptionSheet(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    ref.listen(
-        teamListViewStateProvider
-            .select((value) => value.showFilterOptionSheet), (previous, next) {
-      if (next != null) {
-        _filterActionSheet(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -215,5 +202,18 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
               ),
             )
             .toList());
+  }
+
+  void _observeShowFilterOptionSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        teamListViewStateProvider
+            .select((value) => value.showFilterOptionSheet), (previous, next) {
+      if (next != null) {
+        _filterActionSheet(context);
+      }
+    });
   }
 }

@@ -52,7 +52,6 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
     int maxOversInRow = _calculateMaxOversInRow(context);
     double approxCellWidth = _calculateCellWidth(context, maxOversInRow);
 
-    notifier = ref.watch(powerPlayStateProvider.notifier);
     final state = ref.watch(powerPlayStateProvider);
 
     return AppPage(
