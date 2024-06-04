@@ -198,7 +198,7 @@
   "select_squad_rest_of_team_title": "Rest of The Team",
   "select_squad_empty_squad_text": "Select squad via adding it from team members list.",
   "select_squad_empty_team_member_text": "No team member added in this team, try to add people you know as a team member.",
-
+  "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Batting",
