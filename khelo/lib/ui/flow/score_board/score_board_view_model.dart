@@ -1264,7 +1264,7 @@ enum MatchOption {
       case MatchOption.continueWithInjuredPlayer:
         return context.l10n.score_board_continue_with_injured_player_title;
       case MatchOption.endMatch:
-        return context.l10n.score_board_end_of_match_title;
+        return context.l10n.common_end_match_title;
     }
   }
 }

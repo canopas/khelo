@@ -52,7 +52,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     final state = ref.watch(selectSquadStateProvider);
 
     return AppPage(
-      title: context.l10n.select_squad_screen_title,
+      title: context.l10n.common_select_squad_title,
       actions: [
         actionButton(context,
             onPressed: state.isDoneBtnEnable

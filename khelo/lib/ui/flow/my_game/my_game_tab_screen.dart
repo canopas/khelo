@@ -110,7 +110,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
       child: Row(
         children: [
           _tabButton(
-            context.l10n.my_game_matches_tab_title,
+            context.l10n.common_matches_title,
             _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);

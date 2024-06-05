@@ -171,7 +171,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         _inputField(
           context: context,
           controller: state.cityController,
-          hintText: context.l10n.add_match_city_title,
+          hintText: context.l10n.common_city_title,
           onChange: () => notifier.onTextChange(),
         ),
         _matchScheduleView(context, notifier, state),

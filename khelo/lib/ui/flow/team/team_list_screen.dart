@@ -177,7 +177,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         },
       ),
       BottomSheetAction(
-        title: context.l10n.team_list_edit_team_title,
+        title: context.l10n.common_edit_team_title,
         onTap: () {
           context.pop();
           AppRoute.addTeam(team: team).push(context);

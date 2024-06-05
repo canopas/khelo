@@ -13,7 +13,7 @@ extension BallTypeString on BallType {
       case BallType.tennis:
         return context.l10n.add_match_ball_type_tennis_title;
       case BallType.other:
-        return context.l10n.add_match_ball_type_other_title;
+        return context.l10n.common_other_title;
     }
   }
 }
@@ -121,7 +121,7 @@ extension UserGenderString on UserGender {
       case UserGender.female:
         return context.l10n.edit_profile_gender_female_title;
       case UserGender.other:
-        return context.l10n.edit_profile_gender_other_title;
+        return context.l10n.common_other_title;
       case UserGender.unknown:
         return "";
     }
@@ -183,7 +183,7 @@ extension WicketTypeString on WicketType {
       case WicketType.stumped:
         return context.l10n.wicket_type_stumped_title;
       case WicketType.runOut:
-        return context.l10n.wicket_type_run_out_title;
+        return context.l10n.common_run_out_title;
       case WicketType.hitWicket:
         return context.l10n.wicket_type_hit_wicket_title;
       case WicketType.hitBallTwice:

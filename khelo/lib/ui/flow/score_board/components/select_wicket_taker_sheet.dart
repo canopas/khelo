@@ -48,7 +48,7 @@ class _SelectWicketTakerSheetState
       content: _wicketTakerContent(context, state),
       action: [
         PrimaryButton(
-          context.l10n.score_board_select_title,
+          context.l10n.common_select_title.toLowerCase(),
           enabled: selectedId != null,
           onPressed: () => context.pop(selectedId),
         )

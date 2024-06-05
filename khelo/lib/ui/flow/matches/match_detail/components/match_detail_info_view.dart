@@ -56,7 +56,7 @@ class MatchDetailInfoView extends ConsumerWidget {
             title: context.l10n.match_info_ground_title,
             subtitle: state.match?.ground ?? "-"),
         _dataRowView(context,
-            title: context.l10n.match_info_city_title,
+            title: context.l10n.common_city_title,
             subtitle: state.match?.city ?? "-"),
       ],
     );
@@ -108,7 +108,7 @@ class MatchDetailInfoView extends ConsumerWidget {
   Widget _matchTitleView(BuildContext context, MatchModel match) {
     String title = match.teams
         .map((e) => e.team.name)
-        .join(" ${context.l10n.add_match_versus_short_title} ");
+        .join(" ${context.l10n.common_versus_short_title} ");
     return _dataRowView(context,
         title: context.l10n.match_info_match_title, subtitle: title);
   }
