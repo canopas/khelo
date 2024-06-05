@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services"
+    id "com.google.firebase.crashlytics"
 }
 
 def localProperties = new Properties()
@@ -58,9 +59,8 @@ android {
     }
 
 
-
     signingConfigs {
-        if (System.getenv("APKSIGN_KEYSTORE") != null){
+        if (System.getenv("APKSIGN_KEYSTORE") != null) {
             release {
                 storeFile file(System.getenv("APKSIGN_KEYSTORE"))
                 storePassword System.getenv("APKSIGN_KEYSTORE_PASS")
@@ -70,7 +70,7 @@ android {
         } else {
             release {
                 // Signing with the debug keys for now, so `flutter run --release` works.
-                keyAlias   'androiddebugkey'
+                keyAlias 'androiddebugkey'
                 keyPassword 'android'
                 storeFile file('debug.keystore')
                 storePassword 'android'
@@ -78,7 +78,7 @@ android {
         }
     }
 
-    buildTypes{
+    buildTypes {
 
         release {
             minifyEnabled true
@@ -88,7 +88,7 @@ android {
 
             signingConfig signingConfigs.release
         }
-        debug{
+        debug {
             minifyEnabled true
             debuggable true
 

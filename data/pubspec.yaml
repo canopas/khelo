@@ -18,8 +18,8 @@ dependencies:
   cloud_firestore: ^4.14.0
 
   # auth
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.20.0
 
   # io
   dio: ^5.0.2
@@ -29,7 +29,7 @@ dependencies:
 
   # device + package info
   device_info_plus: ^9.1.1
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.0.0
   flutter_timezone: ^1.0.8
   path: ^1.8.3
 
