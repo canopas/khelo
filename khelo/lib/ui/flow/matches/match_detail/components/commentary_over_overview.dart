@@ -155,6 +155,10 @@ class BowlerSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (bowlerSummary.overDelivered == 0) {
+      return const SizedBox();
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

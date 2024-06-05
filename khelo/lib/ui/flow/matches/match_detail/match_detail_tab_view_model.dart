@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
@@ -113,12 +112,17 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       state.secondInning?.id ?? "INVALID ID"
     ]).listen(
       (scores) {
+        final sortedList = scores.toList();
+        sortedList.sort((a, b) => a.ballScore.time.compareTo(b.ballScore.time));
+
         final overList = state.overList.toList();
-        for (final score in scores) {
+        for (final score in sortedList) {
           if (score.type == DocumentChangeType.added) {
             final overSummary =
                 _configureOverSummary(overList, score.ballScore);
-
+            overList.removeWhere((element) =>
+                element.overNumber == overSummary?.overNumber &&
+                element.inning_id == overSummary?.inning_id);
             if (overSummary != null) {
               overList.add(overSummary);
             }
@@ -132,9 +136,9 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
               overList.add(overSummary);
             }
           }
-          overList.sort((a, b) => a.time.compareTo(b.time));
         }
 
+        overList.sort((a, b) => a.time.compareTo(b.time));
         state = state.copyWith(overList: overList, loading: false, error: null);
         changeHighlightFilter();
       },
@@ -187,17 +191,22 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           isFieldingTeam: true);
     }
 
-    final lastOver = overList
+    final currentOver = overList
         .where((element) =>
             element.overNumber == ball.over_number &&
             element.inning_id == ball.inning_id)
         .firstOrNull;
 
-    if (lastOver != null) {
-      return lastOver
+    if (currentOver != null) {
+      return currentOver
           .copyWith(striker: striker, nonStriker: nonStriker, bowler: bowler)
           .addBall(ball, catchBy: catchBy);
     } else {
+      final lastOver = overList
+          .where((element) =>
+              element.overNumber == ball.over_number - 1 &&
+              element.inning_id == ball.inning_id)
+          .firstOrNull;
       return OverSummary(
               inning_id: ball.inning_id,
               overNumber: ball.over_number,
@@ -258,7 +267,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     OverSummary? lastPlayerContainedOver = overList
         .where((element) =>
             element.inning_id == inningId &&
-            (element.striker.player.id == playerId))
+            (element.striker.player.id == playerId ||
+                element.nonStriker.player.id == playerId))
         .lastOrNull;
     BatsmanSummary? lastBatsman;
     if (lastPlayerContainedOver != null) {
@@ -266,7 +276,15 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           ? lastPlayerContainedOver.striker
           : lastPlayerContainedOver.nonStriker;
     }
-
+    if (lastBatsman == null) {
+      final overContainingOutPlayers = overList
+          .where((element) =>
+              element.inning_id == inningId &&
+              element.outPlayers.any((e) => e.player.id == playerId))
+          .lastOrNull;
+      lastBatsman = overContainingOutPlayers?.outPlayers
+          .firstWhere((element) => element.player.id == playerId);
+    }
     if (lastBatsman == null) {
       Player player =
           _getPlayerByInningId(inningId: inningId, playerId: playerId);
@@ -321,18 +339,32 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   void changeHighlightFilter() {
-    final highlightList = state.overList
-        .where((element) =>
-            element.team_id == state.highlightTeamId &&
-            element.balls
-                .map((e) =>
-                    e.extras_type != null ||
-                    e.wicket_type != null ||
-                    e.is_six ||
-                    e.is_four)
-                .contains(true))
-        .toList();
-    state = state.copyWith(highlightFiltered: highlightList);
+    final highlightList = state.overList.where((element) {
+      return element.team_id == state.highlightTeamId &&
+          element.balls.any(shouldIncludeInHighlight);
+    }).map((over) {
+      final filteredBalls = over.balls.where(shouldIncludeInHighlight).toList();
+      return over.copyWith(balls: filteredBalls);
+    }).toList();
+
+    state = state.copyWith(filteredHighlight: highlightList);
+  }
+
+  bool shouldIncludeInHighlight(BallScoreModel ball) {
+    switch (state.highlightFilterOption) {
+      case HighlightFilterOption.all:
+        return ball.extras_type != null ||
+            ball.wicket_type != null ||
+            ball.is_six ||
+            ball.is_four;
+      case HighlightFilterOption.fours:
+        return ball.is_four;
+      case HighlightFilterOption.sixes:
+        return ball.is_six;
+      case HighlightFilterOption.wickets:
+        return ball.wicket_type != null &&
+            ball.wicket_type != WicketType.retiredHurt;
+    }
   }
 
   Future<void> cancelStreamSubscription() async {
@@ -382,7 +414,7 @@ class MatchDetailTabState with _$MatchDetailTabState {
     DateTime? showHighlightOptionSelectionSheet,
     @Default(0) int selectedTab,
     @Default([]) List<OverSummary> overList,
-    @Default([]) List<OverSummary> highlightFiltered,
+    @Default([]) List<OverSummary> filteredHighlight,
     @Default([]) List<String> expandedTeamScorecard,
     @Default(false) bool loading,
     @Default(false) bool ballScoreQueryListenerSet,

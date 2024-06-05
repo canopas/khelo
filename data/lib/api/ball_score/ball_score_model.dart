@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:data/extensions/double_extensions.dart';
+import 'package:data/extensions/int_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ball_score_model.freezed.dart';
@@ -216,8 +217,10 @@ extension OverSummaryMetaData on OverSummary {
       balls.lastOrNull?.ball_number == 6 &&
       (balls.lastOrNull?.isLegalDelivery() ?? false);
 
-  double get overCount =>
-      double.parse("${overNumber - 1}.$legalDeliveriesCount");
+  double get overCount {
+    int totalBalls = ((overNumber - 1) * 6) + legalDeliveriesCount;
+    return totalBalls.toOvers();
+  }
 
   int get legalDeliveriesCount =>
       balls.where((ball) => (ball.isLegalDelivery() ?? false)).length;
@@ -265,7 +268,7 @@ extension OverSummaryMetaData on OverSummary {
         balls.where((element) => element.extras_type == ExtrasType.wide).length;
     final wideBalls = bowler.wideBalls - wideBallInOver;
 
-    final overDelivered = bowler.overDelivered.removeOver(legalDeliveriesCount);
+    final overDelivered = bowler.overDelivered.remove(legalDeliveriesCount);
     return bowler.copyWith(
         wideBalls: wideBalls,
         runsConceded: runsConceded,
@@ -313,12 +316,8 @@ extension OverSummaryMetaData on OverSummary {
       bowler: bowler.addBall(ball,
           isMaidenWithoutTheBall: runs == 0 && wickets == 0 && extras == 0),
       outPlayers: outPlayersList,
-      striker: ball.batsman_id == configuredStriker.player.id
-          ? configuredStriker
-          : configuredNonStriker,
-      nonStriker: ball.non_striker_id == configuredNonStriker.player.id
-          ? configuredNonStriker
-          : configuredStriker,
+      striker: configuredStriker,
+      nonStriker: configuredNonStriker,
     );
   }
 
@@ -395,7 +394,7 @@ extension BowlerSummaryMetaData on BowlerSummary {
         ball.extras_type == ExtrasType.wide ? wideBalls + 1 : wideBalls;
 
     final overDeliverCount = (ball.isLegalDelivery() ?? false)
-        ? overDelivered.addOver(1)
+        ? overDelivered.add(1)
         : overDelivered;
 
     final runCount = ball.extras_type == null ||
@@ -441,7 +440,7 @@ extension BowlerSummaryMetaData on BowlerSummary {
         ball.extras_type == ExtrasType.wide ? wideBalls - 1 : wideBalls;
 
     final overDeliverCount = (ball.isLegalDelivery() ?? false)
-        ? overDelivered.removeOver(1)
+        ? overDelivered.remove(1)
         : overDelivered;
 
     final runCount = ball.extras_type == null ||

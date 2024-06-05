@@ -388,8 +388,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
         title: context.l10n.match_scorecard_total_text,
         count: inningLastOver.totalRuns,
         countDescription: context.l10n.match_scorecard_wicket_over_text(
-            inningLastOver.totalWickets,
-            inningLastOver.overCount)));
+            inningLastOver.totalWickets, inningLastOver.overCount)));
     children.add(Divider(
       height: 0,
       color: context.colorScheme.outline,

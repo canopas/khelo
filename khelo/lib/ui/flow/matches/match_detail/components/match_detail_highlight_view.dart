@@ -1,3 +1,4 @@
+import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -101,15 +102,14 @@ class MatchDetailHighlightView extends ConsumerWidget {
               ],
             ),
           ),
-          Expanded(child: _highlightList(context, notifier, state)),
+          Expanded(child: _highlightList(context, state)),
         ],
       ),
     );
   }
 
-  Widget _highlightList(BuildContext context,
-      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
-    final highlight = state.highlightFiltered;
+  Widget _highlightList(BuildContext context, MatchDetailTabState state) {
+    final highlight = state.filteredHighlight;
 
     if (highlight.isEmpty) {
       return Center(
@@ -132,22 +132,25 @@ class MatchDetailHighlightView extends ConsumerWidget {
           Divider(color: context.colorScheme.outline, height: 32),
       itemBuilder: (context, index) {
         final overSummary = highlight[index];
-        final filterBall = overSummary.balls.where(
-          (element) =>
-              element.is_four ||
-              element.is_six ||
-              element.extras_type != null ||
-              element.wicket_type != null,
-        );
-        return Column(
-          children: [
-            for (final ball in filterBall) ...[
-              CommentaryBallSummary(ball: ball, overSummary: overSummary),
-            ]
-          ],
-        );
+        return Column(children: _buildHighlightList(context, overSummary));
       },
     );
+  }
+
+  List<Widget> _buildHighlightList(
+      BuildContext context, OverSummary overSummary) {
+    List<Widget> children = [];
+    for (int index = 0; index < overSummary.balls.length; index++) {
+      children.add(CommentaryBallSummary(
+          ball: overSummary.balls[index], overSummary: overSummary));
+      if (index != overSummary.balls.length - 1) {
+        children.add(Divider(
+          color: context.colorScheme.outline,
+          height: 32,
+        ));
+      }
+    }
+    return children;
   }
 
   String _getTeamNameByInningId(MatchDetailTabState state) {
