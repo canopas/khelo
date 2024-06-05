@@ -191,7 +191,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                       value: state.isAddMeCheckBoxEnable,
                       contentPadding: EdgeInsets.zero,
                       controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(context.l10n.add_team_add_as_member_description_text),
+                      title: Text(
+                          context.l10n.add_team_add_as_member_description_text),
                       onChanged: (value) {
                         if (value != null) {
                           notifier.onAddMeCheckBoxTap(value);

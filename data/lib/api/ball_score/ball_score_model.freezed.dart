@@ -1578,3 +1578,1343 @@ abstract class _TeamRunStat implements TeamRunStat {
   _$$TeamRunStatImplCopyWith<_$TeamRunStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$OverSummary {
+  String get inning_id => throw _privateConstructorUsedError;
+  String get team_id => throw _privateConstructorUsedError;
+  List<BallScoreModel> get balls => throw _privateConstructorUsedError;
+  BowlerSummary get bowler => throw _privateConstructorUsedError;
+  BatsmanSummary get striker => throw _privateConstructorUsedError;
+  BatsmanSummary get nonStriker => throw _privateConstructorUsedError;
+  List<BatsmanSummary> get outPlayers => throw _privateConstructorUsedError;
+  int get overNumber => throw _privateConstructorUsedError;
+  ExtraSummary get extrasSummary => throw _privateConstructorUsedError;
+  int get totalRuns => throw _privateConstructorUsedError;
+  int get totalWickets => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $OverSummaryCopyWith<OverSummary> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $OverSummaryCopyWith<$Res> {
+  factory $OverSummaryCopyWith(
+          OverSummary value, $Res Function(OverSummary) then) =
+      _$OverSummaryCopyWithImpl<$Res, OverSummary>;
+  @useResult
+  $Res call(
+      {String inning_id,
+      String team_id,
+      List<BallScoreModel> balls,
+      BowlerSummary bowler,
+      BatsmanSummary striker,
+      BatsmanSummary nonStriker,
+      List<BatsmanSummary> outPlayers,
+      int overNumber,
+      ExtraSummary extrasSummary,
+      int totalRuns,
+      int totalWickets});
+
+  $BowlerSummaryCopyWith<$Res> get bowler;
+  $BatsmanSummaryCopyWith<$Res> get striker;
+  $BatsmanSummaryCopyWith<$Res> get nonStriker;
+  $ExtraSummaryCopyWith<$Res> get extrasSummary;
+}
+
+/// @nodoc
+class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
+    implements $OverSummaryCopyWith<$Res> {
+  _$OverSummaryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? inning_id = null,
+    Object? team_id = null,
+    Object? balls = null,
+    Object? bowler = null,
+    Object? striker = null,
+    Object? nonStriker = null,
+    Object? outPlayers = null,
+    Object? overNumber = null,
+    Object? extrasSummary = null,
+    Object? totalRuns = null,
+    Object? totalWickets = null,
+  }) {
+    return _then(_value.copyWith(
+      inning_id: null == inning_id
+          ? _value.inning_id
+          : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      balls: null == balls
+          ? _value.balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      bowler: null == bowler
+          ? _value.bowler
+          : bowler // ignore: cast_nullable_to_non_nullable
+              as BowlerSummary,
+      striker: null == striker
+          ? _value.striker
+          : striker // ignore: cast_nullable_to_non_nullable
+              as BatsmanSummary,
+      nonStriker: null == nonStriker
+          ? _value.nonStriker
+          : nonStriker // ignore: cast_nullable_to_non_nullable
+              as BatsmanSummary,
+      outPlayers: null == outPlayers
+          ? _value.outPlayers
+          : outPlayers // ignore: cast_nullable_to_non_nullable
+              as List<BatsmanSummary>,
+      overNumber: null == overNumber
+          ? _value.overNumber
+          : overNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      extrasSummary: null == extrasSummary
+          ? _value.extrasSummary
+          : extrasSummary // ignore: cast_nullable_to_non_nullable
+              as ExtraSummary,
+      totalRuns: null == totalRuns
+          ? _value.totalRuns
+          : totalRuns // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalWickets: null == totalWickets
+          ? _value.totalWickets
+          : totalWickets // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BowlerSummaryCopyWith<$Res> get bowler {
+    return $BowlerSummaryCopyWith<$Res>(_value.bowler, (value) {
+      return _then(_value.copyWith(bowler: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BatsmanSummaryCopyWith<$Res> get striker {
+    return $BatsmanSummaryCopyWith<$Res>(_value.striker, (value) {
+      return _then(_value.copyWith(striker: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BatsmanSummaryCopyWith<$Res> get nonStriker {
+    return $BatsmanSummaryCopyWith<$Res>(_value.nonStriker, (value) {
+      return _then(_value.copyWith(nonStriker: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ExtraSummaryCopyWith<$Res> get extrasSummary {
+    return $ExtraSummaryCopyWith<$Res>(_value.extrasSummary, (value) {
+      return _then(_value.copyWith(extrasSummary: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$OverSummaryImplCopyWith<$Res>
+    implements $OverSummaryCopyWith<$Res> {
+  factory _$$OverSummaryImplCopyWith(
+          _$OverSummaryImpl value, $Res Function(_$OverSummaryImpl) then) =
+      __$$OverSummaryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String inning_id,
+      String team_id,
+      List<BallScoreModel> balls,
+      BowlerSummary bowler,
+      BatsmanSummary striker,
+      BatsmanSummary nonStriker,
+      List<BatsmanSummary> outPlayers,
+      int overNumber,
+      ExtraSummary extrasSummary,
+      int totalRuns,
+      int totalWickets});
+
+  @override
+  $BowlerSummaryCopyWith<$Res> get bowler;
+  @override
+  $BatsmanSummaryCopyWith<$Res> get striker;
+  @override
+  $BatsmanSummaryCopyWith<$Res> get nonStriker;
+  @override
+  $ExtraSummaryCopyWith<$Res> get extrasSummary;
+}
+
+/// @nodoc
+class __$$OverSummaryImplCopyWithImpl<$Res>
+    extends _$OverSummaryCopyWithImpl<$Res, _$OverSummaryImpl>
+    implements _$$OverSummaryImplCopyWith<$Res> {
+  __$$OverSummaryImplCopyWithImpl(
+      _$OverSummaryImpl _value, $Res Function(_$OverSummaryImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? inning_id = null,
+    Object? team_id = null,
+    Object? balls = null,
+    Object? bowler = null,
+    Object? striker = null,
+    Object? nonStriker = null,
+    Object? outPlayers = null,
+    Object? overNumber = null,
+    Object? extrasSummary = null,
+    Object? totalRuns = null,
+    Object? totalWickets = null,
+  }) {
+    return _then(_$OverSummaryImpl(
+      inning_id: null == inning_id
+          ? _value.inning_id
+          : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      balls: null == balls
+          ? _value._balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as List<BallScoreModel>,
+      bowler: null == bowler
+          ? _value.bowler
+          : bowler // ignore: cast_nullable_to_non_nullable
+              as BowlerSummary,
+      striker: null == striker
+          ? _value.striker
+          : striker // ignore: cast_nullable_to_non_nullable
+              as BatsmanSummary,
+      nonStriker: null == nonStriker
+          ? _value.nonStriker
+          : nonStriker // ignore: cast_nullable_to_non_nullable
+              as BatsmanSummary,
+      outPlayers: null == outPlayers
+          ? _value._outPlayers
+          : outPlayers // ignore: cast_nullable_to_non_nullable
+              as List<BatsmanSummary>,
+      overNumber: null == overNumber
+          ? _value.overNumber
+          : overNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+      extrasSummary: null == extrasSummary
+          ? _value.extrasSummary
+          : extrasSummary // ignore: cast_nullable_to_non_nullable
+              as ExtraSummary,
+      totalRuns: null == totalRuns
+          ? _value.totalRuns
+          : totalRuns // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalWickets: null == totalWickets
+          ? _value.totalWickets
+          : totalWickets // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$OverSummaryImpl implements _OverSummary {
+  const _$OverSummaryImpl(
+      {this.inning_id = '',
+      this.team_id = '',
+      final List<BallScoreModel> balls = const [],
+      this.bowler = const BowlerSummary(),
+      this.striker = const BatsmanSummary(),
+      this.nonStriker = const BatsmanSummary(),
+      final List<BatsmanSummary> outPlayers = const [],
+      this.overNumber = 0,
+      this.extrasSummary = const ExtraSummary(),
+      this.totalRuns = 0,
+      this.totalWickets = 0})
+      : _balls = balls,
+        _outPlayers = outPlayers;
+
+  @override
+  @JsonKey()
+  final String inning_id;
+  @override
+  @JsonKey()
+  final String team_id;
+  final List<BallScoreModel> _balls;
+  @override
+  @JsonKey()
+  List<BallScoreModel> get balls {
+    if (_balls is EqualUnmodifiableListView) return _balls;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_balls);
+  }
+
+  @override
+  @JsonKey()
+  final BowlerSummary bowler;
+  @override
+  @JsonKey()
+  final BatsmanSummary striker;
+  @override
+  @JsonKey()
+  final BatsmanSummary nonStriker;
+  final List<BatsmanSummary> _outPlayers;
+  @override
+  @JsonKey()
+  List<BatsmanSummary> get outPlayers {
+    if (_outPlayers is EqualUnmodifiableListView) return _outPlayers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_outPlayers);
+  }
+
+  @override
+  @JsonKey()
+  final int overNumber;
+  @override
+  @JsonKey()
+  final ExtraSummary extrasSummary;
+  @override
+  @JsonKey()
+  final int totalRuns;
+  @override
+  @JsonKey()
+  final int totalWickets;
+
+  @override
+  String toString() {
+    return 'OverSummary(inning_id: $inning_id, team_id: $team_id, balls: $balls, bowler: $bowler, striker: $striker, nonStriker: $nonStriker, outPlayers: $outPlayers, overNumber: $overNumber, extrasSummary: $extrasSummary, totalRuns: $totalRuns, totalWickets: $totalWickets)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$OverSummaryImpl &&
+            (identical(other.inning_id, inning_id) ||
+                other.inning_id == inning_id) &&
+            (identical(other.team_id, team_id) || other.team_id == team_id) &&
+            const DeepCollectionEquality().equals(other._balls, _balls) &&
+            (identical(other.bowler, bowler) || other.bowler == bowler) &&
+            (identical(other.striker, striker) || other.striker == striker) &&
+            (identical(other.nonStriker, nonStriker) ||
+                other.nonStriker == nonStriker) &&
+            const DeepCollectionEquality()
+                .equals(other._outPlayers, _outPlayers) &&
+            (identical(other.overNumber, overNumber) ||
+                other.overNumber == overNumber) &&
+            (identical(other.extrasSummary, extrasSummary) ||
+                other.extrasSummary == extrasSummary) &&
+            (identical(other.totalRuns, totalRuns) ||
+                other.totalRuns == totalRuns) &&
+            (identical(other.totalWickets, totalWickets) ||
+                other.totalWickets == totalWickets));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      inning_id,
+      team_id,
+      const DeepCollectionEquality().hash(_balls),
+      bowler,
+      striker,
+      nonStriker,
+      const DeepCollectionEquality().hash(_outPlayers),
+      overNumber,
+      extrasSummary,
+      totalRuns,
+      totalWickets);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$OverSummaryImplCopyWith<_$OverSummaryImpl> get copyWith =>
+      __$$OverSummaryImplCopyWithImpl<_$OverSummaryImpl>(this, _$identity);
+}
+
+abstract class _OverSummary implements OverSummary {
+  const factory _OverSummary(
+      {final String inning_id,
+      final String team_id,
+      final List<BallScoreModel> balls,
+      final BowlerSummary bowler,
+      final BatsmanSummary striker,
+      final BatsmanSummary nonStriker,
+      final List<BatsmanSummary> outPlayers,
+      final int overNumber,
+      final ExtraSummary extrasSummary,
+      final int totalRuns,
+      final int totalWickets}) = _$OverSummaryImpl;
+
+  @override
+  String get inning_id;
+  @override
+  String get team_id;
+  @override
+  List<BallScoreModel> get balls;
+  @override
+  BowlerSummary get bowler;
+  @override
+  BatsmanSummary get striker;
+  @override
+  BatsmanSummary get nonStriker;
+  @override
+  List<BatsmanSummary> get outPlayers;
+  @override
+  int get overNumber;
+  @override
+  ExtraSummary get extrasSummary;
+  @override
+  int get totalRuns;
+  @override
+  int get totalWickets;
+  @override
+  @JsonKey(ignore: true)
+  _$$OverSummaryImplCopyWith<_$OverSummaryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$BatsmanSummary {
+  Player get player => throw _privateConstructorUsedError;
+  Player? get ballBy => throw _privateConstructorUsedError;
+  Player? get catchBy => throw _privateConstructorUsedError;
+  WicketType? get wicketType => throw _privateConstructorUsedError;
+  double? get outAtOver => throw _privateConstructorUsedError;
+  int get runs => throw _privateConstructorUsedError;
+  int get ballFaced => throw _privateConstructorUsedError;
+  int get sixes => throw _privateConstructorUsedError;
+  int get fours => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $BatsmanSummaryCopyWith<BatsmanSummary> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BatsmanSummaryCopyWith<$Res> {
+  factory $BatsmanSummaryCopyWith(
+          BatsmanSummary value, $Res Function(BatsmanSummary) then) =
+      _$BatsmanSummaryCopyWithImpl<$Res, BatsmanSummary>;
+  @useResult
+  $Res call(
+      {Player player,
+      Player? ballBy,
+      Player? catchBy,
+      WicketType? wicketType,
+      double? outAtOver,
+      int runs,
+      int ballFaced,
+      int sixes,
+      int fours});
+
+  $PlayerCopyWith<$Res> get player;
+  $PlayerCopyWith<$Res>? get ballBy;
+  $PlayerCopyWith<$Res>? get catchBy;
+}
+
+/// @nodoc
+class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
+    implements $BatsmanSummaryCopyWith<$Res> {
+  _$BatsmanSummaryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? player = null,
+    Object? ballBy = freezed,
+    Object? catchBy = freezed,
+    Object? wicketType = freezed,
+    Object? outAtOver = freezed,
+    Object? runs = null,
+    Object? ballFaced = null,
+    Object? sixes = null,
+    Object? fours = null,
+  }) {
+    return _then(_value.copyWith(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
+      ballBy: freezed == ballBy
+          ? _value.ballBy
+          : ballBy // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      catchBy: freezed == catchBy
+          ? _value.catchBy
+          : catchBy // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      wicketType: freezed == wicketType
+          ? _value.wicketType
+          : wicketType // ignore: cast_nullable_to_non_nullable
+              as WicketType?,
+      outAtOver: freezed == outAtOver
+          ? _value.outAtOver
+          : outAtOver // ignore: cast_nullable_to_non_nullable
+              as double?,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      ballFaced: null == ballFaced
+          ? _value.ballFaced
+          : ballFaced // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res> get player {
+    return $PlayerCopyWith<$Res>(_value.player, (value) {
+      return _then(_value.copyWith(player: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res>? get ballBy {
+    if (_value.ballBy == null) {
+      return null;
+    }
+
+    return $PlayerCopyWith<$Res>(_value.ballBy!, (value) {
+      return _then(_value.copyWith(ballBy: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res>? get catchBy {
+    if (_value.catchBy == null) {
+      return null;
+    }
+
+    return $PlayerCopyWith<$Res>(_value.catchBy!, (value) {
+      return _then(_value.copyWith(catchBy: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$BatsmanSummaryImplCopyWith<$Res>
+    implements $BatsmanSummaryCopyWith<$Res> {
+  factory _$$BatsmanSummaryImplCopyWith(_$BatsmanSummaryImpl value,
+          $Res Function(_$BatsmanSummaryImpl) then) =
+      __$$BatsmanSummaryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Player player,
+      Player? ballBy,
+      Player? catchBy,
+      WicketType? wicketType,
+      double? outAtOver,
+      int runs,
+      int ballFaced,
+      int sixes,
+      int fours});
+
+  @override
+  $PlayerCopyWith<$Res> get player;
+  @override
+  $PlayerCopyWith<$Res>? get ballBy;
+  @override
+  $PlayerCopyWith<$Res>? get catchBy;
+}
+
+/// @nodoc
+class __$$BatsmanSummaryImplCopyWithImpl<$Res>
+    extends _$BatsmanSummaryCopyWithImpl<$Res, _$BatsmanSummaryImpl>
+    implements _$$BatsmanSummaryImplCopyWith<$Res> {
+  __$$BatsmanSummaryImplCopyWithImpl(
+      _$BatsmanSummaryImpl _value, $Res Function(_$BatsmanSummaryImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? player = null,
+    Object? ballBy = freezed,
+    Object? catchBy = freezed,
+    Object? wicketType = freezed,
+    Object? outAtOver = freezed,
+    Object? runs = null,
+    Object? ballFaced = null,
+    Object? sixes = null,
+    Object? fours = null,
+  }) {
+    return _then(_$BatsmanSummaryImpl(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
+      ballBy: freezed == ballBy
+          ? _value.ballBy
+          : ballBy // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      catchBy: freezed == catchBy
+          ? _value.catchBy
+          : catchBy // ignore: cast_nullable_to_non_nullable
+              as Player?,
+      wicketType: freezed == wicketType
+          ? _value.wicketType
+          : wicketType // ignore: cast_nullable_to_non_nullable
+              as WicketType?,
+      outAtOver: freezed == outAtOver
+          ? _value.outAtOver
+          : outAtOver // ignore: cast_nullable_to_non_nullable
+              as double?,
+      runs: null == runs
+          ? _value.runs
+          : runs // ignore: cast_nullable_to_non_nullable
+              as int,
+      ballFaced: null == ballFaced
+          ? _value.ballFaced
+          : ballFaced // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BatsmanSummaryImpl implements _BatsmanSummary {
+  const _$BatsmanSummaryImpl(
+      {this.player = const Player(),
+      this.ballBy,
+      this.catchBy,
+      this.wicketType,
+      this.outAtOver,
+      this.runs = 0,
+      this.ballFaced = 0,
+      this.sixes = 0,
+      this.fours = 0});
+
+  @override
+  @JsonKey()
+  final Player player;
+  @override
+  final Player? ballBy;
+  @override
+  final Player? catchBy;
+  @override
+  final WicketType? wicketType;
+  @override
+  final double? outAtOver;
+  @override
+  @JsonKey()
+  final int runs;
+  @override
+  @JsonKey()
+  final int ballFaced;
+  @override
+  @JsonKey()
+  final int sixes;
+  @override
+  @JsonKey()
+  final int fours;
+
+  @override
+  String toString() {
+    return 'BatsmanSummary(player: $player, ballBy: $ballBy, catchBy: $catchBy, wicketType: $wicketType, outAtOver: $outAtOver, runs: $runs, ballFaced: $ballFaced, sixes: $sixes, fours: $fours)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BatsmanSummaryImpl &&
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.ballBy, ballBy) || other.ballBy == ballBy) &&
+            (identical(other.catchBy, catchBy) || other.catchBy == catchBy) &&
+            (identical(other.wicketType, wicketType) ||
+                other.wicketType == wicketType) &&
+            (identical(other.outAtOver, outAtOver) ||
+                other.outAtOver == outAtOver) &&
+            (identical(other.runs, runs) || other.runs == runs) &&
+            (identical(other.ballFaced, ballFaced) ||
+                other.ballFaced == ballFaced) &&
+            (identical(other.sixes, sixes) || other.sixes == sixes) &&
+            (identical(other.fours, fours) || other.fours == fours));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, player, ballBy, catchBy,
+      wicketType, outAtOver, runs, ballFaced, sixes, fours);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BatsmanSummaryImplCopyWith<_$BatsmanSummaryImpl> get copyWith =>
+      __$$BatsmanSummaryImplCopyWithImpl<_$BatsmanSummaryImpl>(
+          this, _$identity);
+}
+
+abstract class _BatsmanSummary implements BatsmanSummary {
+  const factory _BatsmanSummary(
+      {final Player player,
+      final Player? ballBy,
+      final Player? catchBy,
+      final WicketType? wicketType,
+      final double? outAtOver,
+      final int runs,
+      final int ballFaced,
+      final int sixes,
+      final int fours}) = _$BatsmanSummaryImpl;
+
+  @override
+  Player get player;
+  @override
+  Player? get ballBy;
+  @override
+  Player? get catchBy;
+  @override
+  WicketType? get wicketType;
+  @override
+  double? get outAtOver;
+  @override
+  int get runs;
+  @override
+  int get ballFaced;
+  @override
+  int get sixes;
+  @override
+  int get fours;
+  @override
+  @JsonKey(ignore: true)
+  _$$BatsmanSummaryImplCopyWith<_$BatsmanSummaryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$BowlerSummary {
+  Player get player => throw _privateConstructorUsedError;
+  int get runsConceded => throw _privateConstructorUsedError;
+  int get maiden => throw _privateConstructorUsedError;
+  double get overDelivered => throw _privateConstructorUsedError;
+  int get wicket => throw _privateConstructorUsedError;
+  int get noBalls => throw _privateConstructorUsedError;
+  int get wideBalls => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $BowlerSummaryCopyWith<BowlerSummary> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BowlerSummaryCopyWith<$Res> {
+  factory $BowlerSummaryCopyWith(
+          BowlerSummary value, $Res Function(BowlerSummary) then) =
+      _$BowlerSummaryCopyWithImpl<$Res, BowlerSummary>;
+  @useResult
+  $Res call(
+      {Player player,
+      int runsConceded,
+      int maiden,
+      double overDelivered,
+      int wicket,
+      int noBalls,
+      int wideBalls});
+
+  $PlayerCopyWith<$Res> get player;
+}
+
+/// @nodoc
+class _$BowlerSummaryCopyWithImpl<$Res, $Val extends BowlerSummary>
+    implements $BowlerSummaryCopyWith<$Res> {
+  _$BowlerSummaryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? player = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? overDelivered = null,
+    Object? wicket = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
+  }) {
+    return _then(_value.copyWith(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      overDelivered: null == overDelivered
+          ? _value.overDelivered
+          : overDelivered // ignore: cast_nullable_to_non_nullable
+              as double,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlayerCopyWith<$Res> get player {
+    return $PlayerCopyWith<$Res>(_value.player, (value) {
+      return _then(_value.copyWith(player: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$BowlerSummaryImplCopyWith<$Res>
+    implements $BowlerSummaryCopyWith<$Res> {
+  factory _$$BowlerSummaryImplCopyWith(
+          _$BowlerSummaryImpl value, $Res Function(_$BowlerSummaryImpl) then) =
+      __$$BowlerSummaryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {Player player,
+      int runsConceded,
+      int maiden,
+      double overDelivered,
+      int wicket,
+      int noBalls,
+      int wideBalls});
+
+  @override
+  $PlayerCopyWith<$Res> get player;
+}
+
+/// @nodoc
+class __$$BowlerSummaryImplCopyWithImpl<$Res>
+    extends _$BowlerSummaryCopyWithImpl<$Res, _$BowlerSummaryImpl>
+    implements _$$BowlerSummaryImplCopyWith<$Res> {
+  __$$BowlerSummaryImplCopyWithImpl(
+      _$BowlerSummaryImpl _value, $Res Function(_$BowlerSummaryImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? player = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? overDelivered = null,
+    Object? wicket = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
+  }) {
+    return _then(_$BowlerSummaryImpl(
+      player: null == player
+          ? _value.player
+          : player // ignore: cast_nullable_to_non_nullable
+              as Player,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      overDelivered: null == overDelivered
+          ? _value.overDelivered
+          : overDelivered // ignore: cast_nullable_to_non_nullable
+              as double,
+      wicket: null == wicket
+          ? _value.wicket
+          : wicket // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$BowlerSummaryImpl implements _BowlerSummary {
+  const _$BowlerSummaryImpl(
+      {this.player = const Player(),
+      this.runsConceded = 0,
+      this.maiden = 0,
+      this.overDelivered = 0,
+      this.wicket = 0,
+      this.noBalls = 0,
+      this.wideBalls = 0});
+
+  @override
+  @JsonKey()
+  final Player player;
+  @override
+  @JsonKey()
+  final int runsConceded;
+  @override
+  @JsonKey()
+  final int maiden;
+  @override
+  @JsonKey()
+  final double overDelivered;
+  @override
+  @JsonKey()
+  final int wicket;
+  @override
+  @JsonKey()
+  final int noBalls;
+  @override
+  @JsonKey()
+  final int wideBalls;
+
+  @override
+  String toString() {
+    return 'BowlerSummary(player: $player, runsConceded: $runsConceded, maiden: $maiden, overDelivered: $overDelivered, wicket: $wicket, noBalls: $noBalls, wideBalls: $wideBalls)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BowlerSummaryImpl &&
+            (identical(other.player, player) || other.player == player) &&
+            (identical(other.runsConceded, runsConceded) ||
+                other.runsConceded == runsConceded) &&
+            (identical(other.maiden, maiden) || other.maiden == maiden) &&
+            (identical(other.overDelivered, overDelivered) ||
+                other.overDelivered == overDelivered) &&
+            (identical(other.wicket, wicket) || other.wicket == wicket) &&
+            (identical(other.noBalls, noBalls) || other.noBalls == noBalls) &&
+            (identical(other.wideBalls, wideBalls) ||
+                other.wideBalls == wideBalls));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, player, runsConceded, maiden,
+      overDelivered, wicket, noBalls, wideBalls);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BowlerSummaryImplCopyWith<_$BowlerSummaryImpl> get copyWith =>
+      __$$BowlerSummaryImplCopyWithImpl<_$BowlerSummaryImpl>(this, _$identity);
+}
+
+abstract class _BowlerSummary implements BowlerSummary {
+  const factory _BowlerSummary(
+      {final Player player,
+      final int runsConceded,
+      final int maiden,
+      final double overDelivered,
+      final int wicket,
+      final int noBalls,
+      final int wideBalls}) = _$BowlerSummaryImpl;
+
+  @override
+  Player get player;
+  @override
+  int get runsConceded;
+  @override
+  int get maiden;
+  @override
+  double get overDelivered;
+  @override
+  int get wicket;
+  @override
+  int get noBalls;
+  @override
+  int get wideBalls;
+  @override
+  @JsonKey(ignore: true)
+  _$$BowlerSummaryImplCopyWith<_$BowlerSummaryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$Player {
+  String get id => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $PlayerCopyWith<Player> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PlayerCopyWith<$Res> {
+  factory $PlayerCopyWith(Player value, $Res Function(Player) then) =
+      _$PlayerCopyWithImpl<$Res, Player>;
+  @useResult
+  $Res call({String id, String name});
+}
+
+/// @nodoc
+class _$PlayerCopyWithImpl<$Res, $Val extends Player>
+    implements $PlayerCopyWith<$Res> {
+  _$PlayerCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$PlayerImplCopyWith<$Res> implements $PlayerCopyWith<$Res> {
+  factory _$$PlayerImplCopyWith(
+          _$PlayerImpl value, $Res Function(_$PlayerImpl) then) =
+      __$$PlayerImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String id, String name});
+}
+
+/// @nodoc
+class __$$PlayerImplCopyWithImpl<$Res>
+    extends _$PlayerCopyWithImpl<$Res, _$PlayerImpl>
+    implements _$$PlayerImplCopyWith<$Res> {
+  __$$PlayerImplCopyWithImpl(
+      _$PlayerImpl _value, $Res Function(_$PlayerImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? name = null,
+  }) {
+    return _then(_$PlayerImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$PlayerImpl implements _Player {
+  const _$PlayerImpl({this.id = "", this.name = ""});
+
+  @override
+  @JsonKey()
+  final String id;
+  @override
+  @JsonKey()
+  final String name;
+
+  @override
+  String toString() {
+    return 'Player(id: $id, name: $name)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PlayerImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.name, name) || other.name == name));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, name);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
+      __$$PlayerImplCopyWithImpl<_$PlayerImpl>(this, _$identity);
+}
+
+abstract class _Player implements Player {
+  const factory _Player({final String id, final String name}) = _$PlayerImpl;
+
+  @override
+  String get id;
+  @override
+  String get name;
+  @override
+  @JsonKey(ignore: true)
+  _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+mixin _$ExtraSummary {
+  int get bye => throw _privateConstructorUsedError;
+  int get legBye => throw _privateConstructorUsedError;
+  int get noBall => throw _privateConstructorUsedError;
+  int get wideBall => throw _privateConstructorUsedError;
+  int get penalty => throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $ExtraSummaryCopyWith<ExtraSummary> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExtraSummaryCopyWith<$Res> {
+  factory $ExtraSummaryCopyWith(
+          ExtraSummary value, $Res Function(ExtraSummary) then) =
+      _$ExtraSummaryCopyWithImpl<$Res, ExtraSummary>;
+  @useResult
+  $Res call({int bye, int legBye, int noBall, int wideBall, int penalty});
+}
+
+/// @nodoc
+class _$ExtraSummaryCopyWithImpl<$Res, $Val extends ExtraSummary>
+    implements $ExtraSummaryCopyWith<$Res> {
+  _$ExtraSummaryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? bye = null,
+    Object? legBye = null,
+    Object? noBall = null,
+    Object? wideBall = null,
+    Object? penalty = null,
+  }) {
+    return _then(_value.copyWith(
+      bye: null == bye
+          ? _value.bye
+          : bye // ignore: cast_nullable_to_non_nullable
+              as int,
+      legBye: null == legBye
+          ? _value.legBye
+          : legBye // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBall: null == noBall
+          ? _value.noBall
+          : noBall // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBall: null == wideBall
+          ? _value.wideBall
+          : wideBall // ignore: cast_nullable_to_non_nullable
+              as int,
+      penalty: null == penalty
+          ? _value.penalty
+          : penalty // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ExtraSummaryImplCopyWith<$Res>
+    implements $ExtraSummaryCopyWith<$Res> {
+  factory _$$ExtraSummaryImplCopyWith(
+          _$ExtraSummaryImpl value, $Res Function(_$ExtraSummaryImpl) then) =
+      __$$ExtraSummaryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int bye, int legBye, int noBall, int wideBall, int penalty});
+}
+
+/// @nodoc
+class __$$ExtraSummaryImplCopyWithImpl<$Res>
+    extends _$ExtraSummaryCopyWithImpl<$Res, _$ExtraSummaryImpl>
+    implements _$$ExtraSummaryImplCopyWith<$Res> {
+  __$$ExtraSummaryImplCopyWithImpl(
+      _$ExtraSummaryImpl _value, $Res Function(_$ExtraSummaryImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? bye = null,
+    Object? legBye = null,
+    Object? noBall = null,
+    Object? wideBall = null,
+    Object? penalty = null,
+  }) {
+    return _then(_$ExtraSummaryImpl(
+      bye: null == bye
+          ? _value.bye
+          : bye // ignore: cast_nullable_to_non_nullable
+              as int,
+      legBye: null == legBye
+          ? _value.legBye
+          : legBye // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBall: null == noBall
+          ? _value.noBall
+          : noBall // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBall: null == wideBall
+          ? _value.wideBall
+          : wideBall // ignore: cast_nullable_to_non_nullable
+              as int,
+      penalty: null == penalty
+          ? _value.penalty
+          : penalty // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ExtraSummaryImpl implements _ExtraSummary {
+  const _$ExtraSummaryImpl(
+      {this.bye = 0,
+      this.legBye = 0,
+      this.noBall = 0,
+      this.wideBall = 0,
+      this.penalty = 0});
+
+  @override
+  @JsonKey()
+  final int bye;
+  @override
+  @JsonKey()
+  final int legBye;
+  @override
+  @JsonKey()
+  final int noBall;
+  @override
+  @JsonKey()
+  final int wideBall;
+  @override
+  @JsonKey()
+  final int penalty;
+
+  @override
+  String toString() {
+    return 'ExtraSummary(bye: $bye, legBye: $legBye, noBall: $noBall, wideBall: $wideBall, penalty: $penalty)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExtraSummaryImpl &&
+            (identical(other.bye, bye) || other.bye == bye) &&
+            (identical(other.legBye, legBye) || other.legBye == legBye) &&
+            (identical(other.noBall, noBall) || other.noBall == noBall) &&
+            (identical(other.wideBall, wideBall) ||
+                other.wideBall == wideBall) &&
+            (identical(other.penalty, penalty) || other.penalty == penalty));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, bye, legBye, noBall, wideBall, penalty);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExtraSummaryImplCopyWith<_$ExtraSummaryImpl> get copyWith =>
+      __$$ExtraSummaryImplCopyWithImpl<_$ExtraSummaryImpl>(this, _$identity);
+}
+
+abstract class _ExtraSummary implements ExtraSummary {
+  const factory _ExtraSummary(
+      {final int bye,
+      final int legBye,
+      final int noBall,
+      final int wideBall,
+      final int penalty}) = _$ExtraSummaryImpl;
+
+  @override
+  int get bye;
+  @override
+  int get legBye;
+  @override
+  int get noBall;
+  @override
+  int get wideBall;
+  @override
+  int get penalty;
+  @override
+  @JsonKey(ignore: true)
+  _$$ExtraSummaryImplCopyWith<_$ExtraSummaryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

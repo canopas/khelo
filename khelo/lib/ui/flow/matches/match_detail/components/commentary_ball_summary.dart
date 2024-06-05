@@ -1,28 +1,26 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
-import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class CommentaryBallSummary extends ConsumerWidget {
-  final MatchDetailTabState state;
+class CommentaryBallSummary extends StatelessWidget {
+  final OverSummary overSummary;
   final BallScoreModel ball;
   final bool showBallScore;
 
   const CommentaryBallSummary({
     super.key,
-    required this.state,
+    required this.overSummary,
     required this.ball,
     this.showBallScore = true,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
@@ -49,43 +47,47 @@ class CommentaryBallSummary extends ConsumerWidget {
     );
   }
 
-  Widget _ballSummaryTextView(
-    BuildContext context,
-  ) {
-    final (batsMan, bowler, fielder, outPlayer) = _getPlayerName(state, ball);
+  Widget _ballSummaryTextView(BuildContext context) {
+    final outPlayerSummary = overSummary.outPlayers
+        .where((element) => element.player.id == ball.player_out_id)
+        .firstOrNull;
     final wicketTakerText = ball.wicket_type != null
-        ? " ${ball.wicket_type?.getString(context)}${fielder != null ? context.l10n.match_commentary_by_fielder_text(fielder) : ""}!!"
+        ? " ${ball.wicket_type?.getString(context)}${outPlayerSummary?.catchBy != null ? context.l10n.match_commentary_by_fielder_text(outPlayerSummary?.catchBy?.name ?? "") : ""}!!"
         : "";
-    final (run, ballCount, fours, sixes) =
-        _getBatsmanSummary(context, state, ball);
+
+    final bowlerName = overSummary.bowler.player.name;
+    final batsmanName = _getBatsmanNameById(ball.batsman_id);
 
     String batsManSummary = " ";
-    if (ball.wicket_type != null) {
-      batsManSummary += outPlayer ?? batsMan;
+    if (outPlayerSummary != null && outPlayerSummary.wicketType != null) {
+      batsManSummary += outPlayerSummary.player.name;
 
-      if (ball.wicket_type != WicketType.retired &&
-          ball.wicket_type != WicketType.retiredHurt &&
-          ball.wicket_type != WicketType.timedOut) {
-        batsManSummary +=
-            context.l10n.match_commentary_b_bowler_text(bowler ?? "");
+      if (outPlayerSummary.wicketType != WicketType.retired &&
+          outPlayerSummary.wicketType != WicketType.retiredHurt &&
+          outPlayerSummary.wicketType != WicketType.timedOut) {
+        batsManSummary += context.l10n.match_commentary_b_bowler_text(
+            outPlayerSummary.ballBy?.name ?? "");
 
-        if (fielder != null) {
-          batsManSummary +=
-              context.l10n.match_commentary_c_fielder_text(fielder);
+        if (outPlayerSummary.catchBy != null) {
+          batsManSummary += context.l10n.match_commentary_c_fielder_text(
+              outPlayerSummary.catchBy?.name ?? "");
         }
       }
-      batsManSummary += context.l10n
-          .match_commentary_runs_fours_sixes_text(run, ballCount, fours, sixes);
+      batsManSummary += context.l10n.match_commentary_runs_fours_sixes_text(
+          outPlayerSummary.runs,
+          outPlayerSummary.ballFaced,
+          outPlayerSummary.fours,
+          outPlayerSummary.sixes);
     }
     return Text.rich(
       style:
           AppTextStyle.body1.copyWith(color: context.colorScheme.textDisabled),
       TextSpan(
           text: context.l10n
-              .match_commentary_bowler_to_batsman_text(bowler ?? "", batsMan),
+              .match_commentary_bowler_to_batsman_text(bowlerName, batsmanName),
           children: [
             TextSpan(
-              text: " ${_getBallResult(context, ball)}",
+              text: " ${_getBallResult(context)}",
               style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
@@ -101,85 +103,24 @@ class CommentaryBallSummary extends ConsumerWidget {
     );
   }
 
-  (String, String?, String?, String?) _getPlayerName(
-      MatchDetailTabState state, BallScoreModel ball) {
-    final battingTeamId = ball.inning_id == state.firstInning?.id
-        ? state.firstInning?.team_id
-        : state.secondInning?.team_id;
-    final bowlingTeamId = ball.inning_id == state.firstInning?.id
-        ? state.secondInning?.team_id
-        : state.firstInning?.team_id;
-    final battingSquad = state.match?.teams
-        .firstWhere((element) => battingTeamId == element.team.id)
-        .team
-        .players;
-    final bowlingSquad = state.match?.teams
-        .firstWhere((element) => bowlingTeamId == element.team.id)
-        .team
-        .players;
-
-    final bowlerName = bowlingSquad
-        ?.firstWhere((element) => element.id == ball.bowler_id)
-        .name;
-
-    final fielderName = bowlingSquad
-        ?.where((element) => element.id == ball.wicket_taker_id)
-        .firstOrNull
-        ?.name;
-
-    final batsmanName = battingSquad
-        ?.firstWhere((element) => element.id == ball.batsman_id)
-        .name;
-    String? outPlayerName;
-    if (ball.player_out_id != ball.batsman_id) {
-      outPlayerName = battingSquad
-          ?.where((element) => element.id == ball.player_out_id)
-          .firstOrNull
-          ?.name;
+  String _getBatsmanNameById(String batsmanId) {
+    if (overSummary.striker.player.id == batsmanId) {
+      return overSummary.striker.player.name;
+    } else if (overSummary.nonStriker.player.id == batsmanId) {
+      return overSummary.nonStriker.player.name;
+    } else if (overSummary.outPlayers
+        .map((e) => e.player.id)
+        .contains(batsmanId)) {
+      return overSummary.outPlayers
+          .firstWhere((e) => e.player.id == batsmanId)
+          .player
+          .name;
+    } else {
+      return "";
     }
-    return (batsmanName ?? "", bowlerName, fielderName, outPlayerName);
   }
 
-  (int, int, int, int) _getBatsmanSummary(
-      BuildContext context, MatchDetailTabState state, BallScoreModel ball) {
-    if (ball.wicket_type == null) {
-      return (0, 0, 0, 0);
-    }
-    final score = state.ballScores.where((element) =>
-        element.inning_id == ball.inning_id &&
-        element.batsman_id == ball.player_out_id &&
-        element.extras_type != ExtrasType.penaltyRun &&
-        element.wicket_type == WicketType.retired &&
-        element.wicket_type == WicketType.retiredHurt &&
-        element.wicket_type == WicketType.timedOut);
-
-    int fours = 0;
-    int sixes = 0;
-    int ballCount = 0;
-    int run = 0;
-    for (var element in score) {
-      if (element.extras_type != ExtrasType.wide) {
-        ballCount = ballCount + 1;
-      }
-
-      if (element.extras_type == ExtrasType.noBall) {
-        final extra = (element.extras_awarded ?? 0) > 1
-            ? (element.extras_awarded ?? 1) - 1
-            : 0;
-        run = run + extra;
-      }
-      run = run + element.runs_scored;
-      if (element.is_six && element.runs_scored == 6) {
-        sixes = sixes + 1;
-      } else if (element.is_four && element.runs_scored == 4) {
-        fours = fours + 1;
-      }
-    }
-
-    return (run, ballCount, fours, sixes);
-  }
-
-  String _getBallResult(BuildContext context, BallScoreModel ball) {
+  String _getBallResult(BuildContext context) {
     if (ball.extras_type == null && ball.wicket_type == null) {
       if (ball.runs_scored == 4 && ball.is_four) {
         return context.l10n.match_commentary_four_text;

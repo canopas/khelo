@@ -12,8 +12,8 @@ _$InningModelImpl _$$InningModelImplFromJson(Map<String, dynamic> json) =>
       match_id: json['match_id'] as String,
       team_id: json['team_id'] as String,
       overs: (json['overs'] as num?)?.toDouble() ?? 0,
-      total_runs: (json['total_runs'] as num?)?.toInt() ?? 0,
-      total_wickets: (json['total_wickets'] as num?)?.toInt() ?? 0,
+      total_runs: json['total_runs'] as int? ?? 0,
+      total_wickets: json['total_wickets'] as int? ?? 0,
       innings_status:
           $enumDecodeNullable(_$InningStatusEnumMap, json['innings_status']),
     );

@@ -32,14 +32,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: () => notifier.onResume(),
       );
     }
 
-    if (state.ballScores.isEmpty) {
+    if (state.overList.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -52,223 +49,159 @@ class MatchDetailScorecardView extends ConsumerWidget {
         ),
       );
     }
-    return _scorecardView(context, notifier, state);
-  }
-
-  Widget _scorecardView(BuildContext context,
-      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
-    if (state.match == null) {
-      return const SizedBox();
-    }
 
     return ListView(
       padding: context.mediaQueryPadding,
-      children: [
-        _winnerMessageText(context, state.match!),
-        for (final team in state.match!.teams) ...[
-          _teamTitleView(context,
-              team: team,
-              initiallyExpanded:
-                  state.expandedTeamScorecard.contains(team.team.id),
-              wicket: state.match!.teams
-                      .where((element) => element.team.id != team.team.id)
-                      .firstOrNull
-                      ?.wicket ??
-                  0,
-              onExpansionChanged: (isExpanded) => notifier
-                  .onScorecardExpansionChange(team.team.id ?? "", isExpanded),
-              children: [
-                _dataTable(context, state, team, isForBatting: true),
-                _fallOfWicketView(
-                    context,
-                    state,
-                    state.firstInning?.team_id == team.team.id
-                        ? state.firstInning?.id ?? 'INVALID ID'
-                        : state.secondInning?.id ?? 'INVALID ID'),
-                _dataTable(context, state, team, isForBatting: false),
-                _powerPlayView(
-                    context,
-                    state,
-                    state.firstInning?.team_id == team.team.id
-                        ? state.firstInning?.id ?? 'INVALID ID'
-                        : state.secondInning?.id ?? 'INVALID ID'),
-              ]),
-          const SizedBox(height: 16),
-        ]
-      ],
+      children: _buildChildren(context, notifier, state),
     );
   }
 
-  Widget _fallOfWicketView(
+  List<Widget> _buildChildren(
     BuildContext context,
+    MatchDetailTabViewNotifier notifier,
     MatchDetailTabState state,
-    String inningId,
   ) {
-    final wickets = _getFallOfTheWicketDetail(state, inningId)
-        .map((e) => "${e.$1} (${e.$2}, ${e.$3})")
-        .join(", ");
-    if (wickets.isEmpty) {
-      return const SizedBox();
+    List<Widget> children = [];
+    children.add(_winnerMessageText(context, state.match!));
+    for (final inningOvers in groupOversByInning(state.overList)) {
+      final overs = inningOvers.lastOrNull;
+      final batsmen = _getBatsmen(inningOvers);
+      final bowler = _getBowlers(inningOvers);
+
+      final yetToPlayPlayers = state.match?.teams
+          .where((element) => element.team.id == overs?.team_id)
+          .firstOrNull
+          ?.squad
+          .where((element) => element.index == null)
+          .map((e) => e.player.name)
+          .join(", ");
+
+      List<List<int>> powerPlays = [];
+      if ((state.match?.power_play_overs1 ?? []).isNotEmpty) {
+        powerPlays.add(state.match!.power_play_overs1);
+      }
+      if ((state.match?.power_play_overs2 ?? []).isNotEmpty) {
+        powerPlays.add(state.match!.power_play_overs2);
+      }
+      if ((state.match?.power_play_overs2 ?? []).isNotEmpty) {
+        powerPlays.add(state.match!.power_play_overs2);
+      }
+
+      children.add(_teamTitleView(context,
+          teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
+          over: overs ?? const OverSummary(),
+          initiallyExpanded:
+              state.expandedTeamScorecard.contains(overs?.team_id ?? ""),
+          onExpansionChanged: (isExpanded) => notifier
+              .onScorecardExpansionChange(overs?.team_id ?? "", isExpanded),
+          children: [
+            // batsmen summary
+            _dataTable(context, batsmen: batsmen),
+
+            // total summary (extra, total, didNotBat)
+            ..._buildMatchTotalView(context,
+                inningLastOver: overs ?? const OverSummary(),
+                didNotBatPlayers: yetToPlayPlayers ?? ""),
+
+            // fallOfWicket summary
+            _fallOfWicketView(context, inningOvers),
+
+            // bowlers summary
+            _dataTable(context, bowler: bowler),
+
+            // powerPlay summary
+            _powerPlayView(context, powerPlays, inningOvers),
+          ]));
+      children.add(const SizedBox(height: 16));
     }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _tableRow(context,
-            data: [],
-            highlightRow: true,
-            header: Text(
-              context.l10n.match_scorecard_fall_of_wicket_text,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
-            )),
-        Container(
-          width: double.infinity,
-          color: context.colorScheme.surface,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-          child: Text(
-            wickets,
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
+    return children;
+  }
+
+  Widget _winnerMessageText(BuildContext context, MatchModel match) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: WonByMessageText(
+        textStyle: AppTextStyle.body1
+            .copyWith(color: context.colorScheme.textDisabled),
+        matchResult: match.matchResult,
+      ),
+    );
+  }
+
+  Widget _teamTitleView(
+    BuildContext context, {
+    required String teamName,
+    required OverSummary over,
+    required bool initiallyExpanded,
+    required List<Widget> children,
+    required Function(bool) onExpansionChanged,
+  }) {
+    return Material(
+      type: MaterialType.transparency,
+      child: ExpansionTile(
+        backgroundColor: context.colorScheme.primary,
+        collapsedBackgroundColor: context.colorScheme.primary,
+        collapsedIconColor: context.colorScheme.onPrimary,
+        controlAffinity: ListTileControlAffinity.platform,
+        iconColor: context.colorScheme.onPrimary,
+        initiallyExpanded: initiallyExpanded,
+        onExpansionChanged: onExpansionChanged,
+        trailing: AnimatedRotation(
+          turns: initiallyExpanded ? 0.5 : 0,
+          duration: const Duration(milliseconds: 300),
+          child: Icon(
+            CupertinoIcons.chevron_up,
+            size: 24,
+            color: context.colorScheme.onPrimary,
           ),
         ),
-      ],
-    );
-  }
-
-  List<(int, String, String)> _getFallOfTheWicketDetail(
-    MatchDetailTabState state,
-    String inningId,
-  ) {
-    List<(int, String, String)> wickets = [];
-    final scores = state.ballScores.where((element) =>
-        element.inning_id == inningId &&
-        element.wicket_type != null &&
-        element.wicket_type != WicketType.retiredHurt);
-    for (final ball in scores) {
-      final teamId = state.firstInning?.id == inningId
-          ? state.firstInning?.team_id
-          : state.secondInning?.team_id;
-      final playerName = state.match?.teams
-          .firstWhere((element) => element.team.id == teamId)
-          .squad
-          .firstWhere((element) => element.player.id == ball.player_out_id)
-          .player
-          .name;
-      final over = "${ball.over_number - 1}.${ball.ball_number}";
-      final runs = _getTotalRunsBetweenOvers(state, inningId,
-          endOver: ball.over_number, endBall: ball.ball_number);
-      wickets.add((runs, playerName ?? "--", over));
-    }
-
-    return wickets;
-  }
-
-  Widget _powerPlayView(
-    BuildContext context,
-    MatchDetailTabState state,
-    String inningId,
-  ) {
-    final List<(String overs, int run)> powerPlays =
-        _getPowerPlayDetails(state, inningId);
-    if (powerPlays.isEmpty) {
-      return const SizedBox();
-    } else {
-      List<Widget> children = [];
-      children.add(_tableRow(context,
-          data: [
-            context.l10n.match_scorecard_over_text,
-            context.l10n.match_scorecard_run_text
-          ],
-          highlightRow: true,
-          header: Text(
-            context.l10n.match_scorecard_power_play_text,
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-          )));
-      int index = 0;
-      for (var element in powerPlays) {
-        index++;
-        children.add(_tableRow(context,
-            data: [(element.$1), "${element.$2}"],
-            header: Text(
-              context.l10n.power_play_text(index),
+        collapsedShape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
+        shape: const RoundedRectangleBorder(
+          side: BorderSide.none,
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                teamName,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.onPrimary),
+              ),
+            ),
+            Text.rich(
+              TextSpan(
+                  text: "${over.totalRuns}-${over.totalWickets} ",
+                  children: [
+                    TextSpan(
+                        text: "(${over.overCount})",
+                        style: AppTextStyle.body2
+                            .copyWith(color: context.colorScheme.onPrimary))
+                  ]),
               style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
-            )));
-      }
-      return Column(
+                  .copyWith(color: context.colorScheme.onPrimary),
+            ),
+          ],
+        ),
         children: children,
-      );
-    }
-  }
-
-  List<(String, int)> _getPowerPlayDetails(
-      MatchDetailTabState state, String inningId) {
-    List<(String, int)> powerPlays = [];
-
-    void addPowerPlayDetails(List<int>? powerPlayOvers) {
-      if (powerPlayOvers != null) {
-        final start = powerPlayOvers.firstOrNull;
-        final end = powerPlayOvers.lastOrNull;
-        if (start != null && end != null) {
-          powerPlays.add((
-            start == end ? "$start" : "$start - $end",
-            _getTotalRunsBetweenOvers(state, inningId,
-                startOver: start, endOver: end)
-          ));
-        }
-      }
-    }
-
-    addPowerPlayDetails(state.match?.power_play_overs1);
-    addPowerPlayDetails(state.match?.power_play_overs2);
-    addPowerPlayDetails(state.match?.power_play_overs3);
-
-    return powerPlays;
-  }
-
-  int _getTotalRunsBetweenOvers(
-    MatchDetailTabState state,
-    String inningId, {
-    int startOver = 0,
-    required int endOver,
-    int endBall = 6,
-  }) {
-    final runs = state.ballScores
-        .where((element) =>
-            element.inning_id == inningId &&
-            element.over_number >= startOver &&
-            (element.over_number < endOver ||
-                (element.over_number == endOver &&
-                    element.ball_number <= endBall)))
-        .fold(
-            0,
-            (previousValue, element) =>
-                previousValue +
-                element.runs_scored +
-                (element.extras_awarded ?? 0));
-    return runs;
+      ),
+    );
   }
 
   Widget _dataTable(
-    BuildContext context,
-    MatchDetailTabState state,
-    MatchTeamModel team, {
-    required bool isForBatting,
+    BuildContext context, {
+    List<BatsmanSummary>? batsmen,
+    List<BowlerSummary>? bowler,
   }) {
-    final teamInningId = state.firstInning?.team_id == team.team.id
-        ? state.firstInning?.id
-        : state.secondInning?.id;
-
-    final bowlingSquad = state.match?.teams
-        .firstWhere((element) => element.team.id != team.team.id)
-        .squad;
-
     return Column(
       children: [
         _tableRow(context,
             highlightRow: true,
-            data: isForBatting
+            data: batsmen != null
                 ? [
                     context.l10n.match_scorecard_run_short_text,
                     context.l10n.match_scorecard_ball_short_text,
@@ -286,30 +219,16 @@ class MatchDetailScorecardView extends ConsumerWidget {
                     context.l10n.match_scorecard_economy_short_text
                   ],
             header: Text(
-              isForBatting
+              batsmen != null
                   ? context.l10n.match_scorecard_batter_text
                   : context.l10n.match_scorecard_bowler_text,
               style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textDisabled),
             )),
-        // const SizedBox(
-        //   height: 4,
-        // ),
-        if (isForBatting)
-          ..._buildBatsmanList(
-            context,
-            state,
-            bowlingSquad: bowlingSquad ?? [],
-            inningId: teamInningId ?? "INVALID ID",
-            players: team.squad,
-          )
+        if (batsmen != null)
+          ..._buildBatsmanList(context, batsmen: batsmen)
         else
-          ..._buildBowlerList(
-            context,
-            state,
-            inningId: teamInningId ?? "INVALID ID",
-            players: bowlingSquad ?? [],
-          ),
+          ..._buildBowlerList(context, bowlers: bowler ?? []),
       ],
     );
   }
@@ -352,55 +271,43 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }
 
   List<Widget> _buildBatsmanList(
-    BuildContext context,
-    MatchDetailTabState state, {
-    required String inningId,
-    required List<MatchPlayer> players,
-    required List<MatchPlayer> bowlingSquad,
+    BuildContext context, {
+    required List<BatsmanSummary> batsmen,
   }) {
-    List<MatchPlayer> filteredPlayer =
-        players.where((element) => element.index != null).toList();
-    filteredPlayer.sort((a, b) => a.index?.compareTo(b.index ?? 0) ?? 0);
     List<Widget> children = [];
-    for (final player in filteredPlayer) {
-      final (run, ball, four, six, strikeRate) =
-          _getBattingPerformance(state, inningId, player.player.id);
-
-      final (bowler, fielder, wicketType) =
-          _getWicketDetail(state, bowlingSquad, inningId, player.player.id);
-
+    for (final player in batsmen) {
       String wicketString = "";
-      if (wicketType == null) {
+      if (player.wicketType == null) {
         wicketString = context.l10n.match_scorecard_not_out_text;
       } else {
-        if (fielder == null) {
-          wicketString = wicketType.getString(context);
+        if (player.catchBy == null) {
+          wicketString = player.wicketType?.getString(context) ?? "";
 
-          if (wicketType != WicketType.timedOut &&
-              wicketType != WicketType.retired &&
-              wicketType != WicketType.retiredHurt) {
-            wicketString += " ($bowler)";
+          if (player.wicketType != WicketType.timedOut &&
+              player.wicketType != WicketType.retired &&
+              player.wicketType != WicketType.retiredHurt) {
+            wicketString += " (${player.ballBy?.name})";
           }
         } else {
-          wicketString = context.l10n
-              .match_scorecard_bowler_catcher_short_text(bowler ?? "", fielder);
+          wicketString = context.l10n.match_scorecard_bowler_catcher_short_text(
+              player.ballBy?.name ?? "", player.catchBy?.name ?? "");
         }
       }
       children.add(_tableRow(context,
           highlightColumnNumber: 0,
           data: [
-            run.toString(),
-            ball.toString(),
-            four.toString(),
-            six.toString(),
-            strikeRate.toStringAsFixed(1)
+            player.runs.toString(),
+            player.ballFaced.toString(),
+            player.fours.toString(),
+            player.sixes.toString(),
+            player.strikeRate.toString(),
           ],
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "${player.player.name}",
+                player.player.name,
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
@@ -417,93 +324,82 @@ class MatchDetailScorecardView extends ConsumerWidget {
         color: context.colorScheme.outline,
       ));
     }
-    final (bye, legBye, wide, noBall, penalty) =
-        _getExtraCounts(state, inningId);
-    children.add(_matchTotalView(context,
-        title: context.l10n.match_scorecard_extra_text,
-        count: (bye + legBye + wide + noBall + penalty),
-        countDescription: context.l10n.match_scorecard_extras_short_text(
-            bye, legBye, wide, noBall, penalty)));
-    children.add(Divider(
-      height: 0,
-      color: context.colorScheme.outline,
-    ));
-
-    final inning = state.firstInning?.id == inningId
-        ? state.firstInning
-        : state.secondInning;
-    final bowlingInning = state.firstInning?.id == inningId
-        ? state.secondInning
-        : state.firstInning;
-    children.add(_matchTotalView(context,
-        title: context.l10n.match_scorecard_total_text,
-        count: inning?.total_runs ?? 0,
-        countDescription: context.l10n.match_scorecard_wicket_over_text(
-            bowlingInning?.total_wickets ?? 0, inning?.overs ?? 0)));
-    children.add(Divider(
-      height: 0,
-      color: context.colorScheme.outline,
-    ));
-
-    String yetToPlayPlayers = players
-        .where((element) => element.index == null)
-        .map((e) => e.player.name)
-        .join(", ");
-    if (yetToPlayPlayers.isNotEmpty) {
-      children.add(_didNotBatView(context, yetToPlayPlayers));
-    }
-
     return children;
   }
 
-  Widget _didNotBatView(BuildContext context, String players) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-      color: context.colorScheme.surface,
-      child: Row(
-        children: [
-          Expanded(
-              child: Text(
-            context.l10n.match_scorecard_did_not_bat_text,
+  List<Widget> _buildBowlerList(
+    BuildContext context, {
+    required List<BowlerSummary> bowlers,
+  }) {
+    List<Widget> children = [];
+    for (int index = 0; index < bowlers.length; index++) {
+      final bowler = bowlers[index];
+
+      if (index != 0) {
+        children.add(Divider(
+          height: 0,
+          color: context.colorScheme.outline,
+        ));
+      }
+
+      children.add(_tableRow(context,
+          highlightColumnNumber: 3,
+          data: [
+            bowler.overDelivered.toString(),
+            bowler.maiden.toString(),
+            bowler.runsConceded.toString(),
+            bowler.wicket.toString(),
+            bowler.noBalls.toString(),
+            bowler.wideBalls.toString(),
+            bowler.economy.toString(),
+          ],
+          header: Text(
+            bowler.player.name,
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
-          )),
-          Expanded(
-              child: Text(players,
-                  style: AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textPrimary))),
-        ],
-      ),
-    );
+          )));
+    }
+    return children;
   }
 
-  (int, int, int, int, int) _getExtraCounts(
-      MatchDetailTabState state, String inningId) {
-    int wide = 0;
-    int noBall = 0;
-    int penalty = 0;
-    int legBye = 0;
-    int bye = 0;
-    final extrasScore = state.ballScores.where((element) =>
-        element.inning_id == inningId && element.extras_type != null);
+  List<Widget> _buildMatchTotalView(
+    BuildContext context, {
+    required OverSummary inningLastOver,
+    required String didNotBatPlayers,
+  }) {
+    List<Widget> children = [];
+    // Extra Summary
+    children.add(_matchTotalView(context,
+        title: context.l10n.match_scorecard_extra_text,
+        count: inningLastOver.extrasSummary.total,
+        countDescription: context.l10n.match_scorecard_extras_short_text(
+            inningLastOver.extrasSummary.bye,
+            inningLastOver.extrasSummary.legBye,
+            inningLastOver.extrasSummary.wideBall,
+            inningLastOver.extrasSummary.noBall,
+            inningLastOver.extrasSummary.penalty)));
+    children.add(Divider(
+      height: 0,
+      color: context.colorScheme.outline,
+    ));
 
-    for (var element in extrasScore) {
-      switch (element.extras_type) {
-        case ExtrasType.wide:
-          wide = wide + (element.extras_awarded ?? 0);
-        case ExtrasType.noBall:
-          noBall = noBall + (element.extras_awarded ?? 0);
-        case ExtrasType.bye:
-          penalty = penalty + (element.extras_awarded ?? 0);
-        case ExtrasType.legBye:
-          legBye = legBye + (element.extras_awarded ?? 0);
-        case ExtrasType.penaltyRun:
-          bye = bye + (element.extras_awarded ?? 0);
-        default:
-          break;
-      }
+    // total summary
+    children.add(_matchTotalView(context,
+        title: context.l10n.match_scorecard_total_text,
+        count: inningLastOver.totalRuns,
+        countDescription: context.l10n.match_scorecard_wicket_over_text(
+            inningLastOver.totalWickets,
+            inningLastOver.overCount)));
+    children.add(Divider(
+      height: 0,
+      color: context.colorScheme.outline,
+    ));
+
+    // did not bat summary
+    if (didNotBatPlayers.isNotEmpty) {
+      children.add(_didNotBatView(context, didNotBatPlayers));
     }
-    return (bye, legBye, wide, noBall, penalty);
+    return children;
   }
 
   Widget _matchTotalView(
@@ -538,243 +434,205 @@ class MatchDetailScorecardView extends ConsumerWidget {
     );
   }
 
-  (int, int, int, int, double) _getBattingPerformance(
-    MatchDetailTabState state,
-    String inningId,
-    String batsManId,
-  ) {
-    final batScore = state.ballScores.where(
-      (element) =>
-          element.inning_id == inningId &&
-          element.batsman_id == batsManId &&
-          element.extras_type != ExtrasType.penaltyRun &&
-          element.wicket_type != WicketType.timedOut &&
-          element.wicket_type != WicketType.retiredHurt &&
-          element.wicket_type != WicketType.retired,
+  Widget _didNotBatView(BuildContext context, String players) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      color: context.colorScheme.surface,
+      child: Row(
+        children: [
+          Expanded(
+              child: Text(
+            context.l10n.match_scorecard_did_not_bat_text,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          )),
+          Expanded(
+              child: Text(players,
+                  style: AppTextStyle.caption
+                      .copyWith(color: context.colorScheme.textPrimary))),
+        ],
+      ),
     );
-    int run = 0;
-    int ball = 0;
-    int fours = 0;
-    int sixes = 0;
-
-    for (var element in batScore) {
-      if (element.extras_type != ExtrasType.wide) {
-        ball = ball + 1;
-      }
-
-      if (element.extras_type == ExtrasType.noBall) {
-        final extra = (element.extras_awarded ?? 0) > 1
-            ? (element.extras_awarded ?? 1) - 1
-            : 0;
-        run = run + extra;
-      }
-      run = run + element.runs_scored;
-      if (element.is_six && element.runs_scored == 6) {
-        sixes = sixes + 1;
-      } else if (element.is_four && element.runs_scored == 4) {
-        fours = fours + 1;
-      }
-    }
-
-    final strikeRate = (run / ball) * 100;
-    return (run, ball, fours, sixes, strikeRate.isNaN ? 0 : strikeRate);
   }
 
-  (String?, String?, WicketType?) _getWicketDetail(
-    MatchDetailTabState state,
-    List<MatchPlayer> bowlingSquad,
-    String inningId,
-    String batsManId,
-  ) {
-    final batScore = state.ballScores
-        .where(
-          (element) =>
-              element.inning_id == inningId &&
-              element.player_out_id == batsManId,
-        )
-        .firstOrNull;
-    if (batScore == null) {
-      return (null, null, null);
+  Widget _fallOfWicketView(
+      BuildContext context, List<OverSummary> inningOvers) {
+    final oversWithWicket =
+        inningOvers.expand((over) => over.outPlayers).toList();
+
+    if (oversWithWicket.isEmpty) {
+      return const SizedBox();
     }
-
-    final bowlerName = bowlingSquad
-        .where((element) => element.player.id == batScore.bowler_id)
-        .firstOrNull
-        ?.player
-        .name;
-    final fielderName = bowlingSquad
-        .where((element) => element.player.id == batScore.wicket_taker_id)
-        .firstOrNull
-        ?.player
-        .name;
-
-    return (bowlerName, fielderName, batScore.wicket_type);
-  }
-
-  List<Widget> _buildBowlerList(
-    BuildContext context,
-    MatchDetailTabState state, {
-    required String inningId,
-    required List<MatchPlayer> players,
-  }) {
-    List<Widget> children = [];
-    for (int index = 0; index < players.length; index++) {
-      final player = players[index];
-      final (over, maiden, runsConceded, wicket, noBall, wideBall, economy) =
-          _getBowlingPerformance(state, inningId, player.player.id);
-      if (over != null) {
-        if (index != 0) {
-          children.add(Divider(
-            height: 0,
-            color: context.colorScheme.outline,
-          ));
-        }
-
-        children.add(_tableRow(context,
-            highlightColumnNumber: 3,
-            data: [
-              over.toStringAsFixed(1),
-              maiden.toString(),
-              runsConceded.toString(),
-              wicket.toString(),
-              noBall.toString(),
-              wideBall.toString(),
-              economy.toStringAsFixed(1)
-            ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _tableRow(context,
+            data: [],
+            highlightRow: true,
             header: Text(
-              "${player.player.name}",
+              context.l10n.match_scorecard_fall_of_wicket_text,
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
-            )));
-      }
+            )),
+        Container(
+          width: double.infinity,
+          color: context.colorScheme.surface,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Text.rich(
+            TextSpan(
+                children: _buildFallOfWicketText(context, oversWithWicket)),
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<TextSpan> _buildFallOfWicketText(
+    BuildContext context,
+    List<BatsmanSummary> oversWithWicket,
+  ) {
+    List<TextSpan> children = [];
+
+    for (int index = 0; index < oversWithWicket.length; index++) {
+      final batsmen = oversWithWicket[index];
+      children.add(TextSpan(text: "${batsmen.runs} ("));
+      children.add(TextSpan(
+          text: batsmen.player.name,
+          style: AppTextStyle.caption
+              .copyWith(color: context.colorScheme.secondary)));
+      children.add(TextSpan(
+          text:
+              ", ${batsmen.outAtOver})${index == oversWithWicket.length - 1 ? "" : ", "}"));
     }
     return children;
   }
 
-  (double?, int, int, int, int, int, double) _getBowlingPerformance(
-    MatchDetailTabState state,
-    String inningId,
-    String bowlerId,
+  Widget _powerPlayView(
+    BuildContext context,
+    List<List<int>> powerPlays,
+    List<OverSummary> inningOvers,
   ) {
-    final batScore = state.ballScores.where(
-      (element) =>
-          element.inning_id == inningId &&
-          element.bowler_id == bowlerId &&
-          element.extras_type != ExtrasType.penaltyRun &&
-          element.wicket_type != WicketType.timedOut &&
-          element.wicket_type != WicketType.retiredHurt &&
-          element.wicket_type != WicketType.retired,
-    );
-    if (batScore.isEmpty) {
-      return (null, 0, 0, 0, 0, 0, 0);
+    if (powerPlays.isEmpty) {
+      return const SizedBox();
+    } else {
+      List<Widget> children = [];
+      children.add(_tableRow(context,
+          data: [
+            context.l10n.match_scorecard_over_text,
+            context.l10n.match_scorecard_run_text
+          ],
+          highlightRow: true,
+          header: Text(
+            context.l10n.match_scorecard_power_play_text,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          )));
+      int index = 0;
+      for (var powerPlay in powerPlays) {
+        final start = powerPlay.first;
+        final end = powerPlay.last;
+        index++;
+        children.add(_tableRow(context,
+            data: [
+              "$start-$end",
+              "${_getTotalRunsBetweenOvers(inningOvers, start, end)}"
+            ],
+            header: Text(
+              context.l10n.power_play_text(index),
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            )));
+      }
+      return Column(
+        children: children,
+      );
     }
-    int ball = 0;
-    int maiden = 0;
-    int run = 0;
-    int wicket = 0;
-    int noBall = 0;
-    int wide = 0;
+  }
 
-    for (var element in batScore) {
-      if (element.extras_type == ExtrasType.noBall) {
-        final extra = (element.extras_awarded ?? 0) > 1
-            ? (element.extras_awarded ?? 1) - 1
-            : 0;
-        run = run + element.runs_scored + extra;
-        noBall = noBall + 1;
-      } else if (element.extras_type == ExtrasType.wide) {
-        wide = wide + 1;
+  List<List<OverSummary>> groupOversByInning(List<OverSummary> overs) {
+    Map<String, List<OverSummary>> groupedOvers = {};
+
+    for (var over in overs) {
+      if (groupedOvers.containsKey(over.inning_id)) {
+        groupedOvers[over.inning_id]!.add(over);
       } else {
-        run = run + element.runs_scored + (element.extras_awarded ?? 0);
-        ball = ball + 1;
-        if (element.wicket_type != null) {
-          wicket = wicket + 1;
-        }
+        groupedOvers[over.inning_id] = [over];
       }
     }
-    final over = ball / 6;
-    final economy = run / over;
-    return (
-      over,
-      maiden,
-      run,
-      wicket,
-      noBall,
-      wide,
-      economy.isNaN ? 0 : economy
-    );
+
+    return groupedOvers.values.toList();
   }
 
-  Widget _winnerMessageText(BuildContext context, MatchModel match) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: WonByMessageText(
-        textStyle: AppTextStyle.body1
-            .copyWith(color: context.colorScheme.textDisabled),
-        matchResult: match.matchResult,
-      ),
-    );
+  String _getTeamNameByTeamId(MatchDetailTabState state, String teamId) {
+    return state.match?.teams
+            .where((element) => element.team.id == teamId)
+            .firstOrNull
+            ?.team
+            .name ??
+        "";
   }
 
-  Widget _teamTitleView(
-    BuildContext context, {
-    required MatchTeamModel team,
-    required int wicket,
-    required bool initiallyExpanded,
-    required List<Widget> children,
-    required Function(bool) onExpansionChanged,
-  }) {
-    return Material(
-      type: MaterialType.transparency,
-      child: ExpansionTile(
-        backgroundColor: context.colorScheme.primary,
-        collapsedBackgroundColor: context.colorScheme.primary,
-        collapsedIconColor: context.colorScheme.onPrimary,
-        controlAffinity: ListTileControlAffinity.platform,
-        iconColor: context.colorScheme.onPrimary,
-        initiallyExpanded: initiallyExpanded,
-        onExpansionChanged: onExpansionChanged,
-        trailing: AnimatedRotation(
-          turns: initiallyExpanded ? 0.5 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: Icon(
-            CupertinoIcons.chevron_up,
-            size: 24,
-            color: context.colorScheme.onPrimary,
-          ),
-        ),
-        collapsedShape: const RoundedRectangleBorder(
-          side: BorderSide.none,
-        ),
-        shape: const RoundedRectangleBorder(
-          side: BorderSide.none,
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                team.team.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.onPrimary),
-              ),
-            ),
-            Text.rich(
-              TextSpan(text: "${team.run}-$wicket ", children: [
-                TextSpan(
-                    text: "(${team.over})",
-                    style: AppTextStyle.body2
-                        .copyWith(color: context.colorScheme.onPrimary))
-              ]),
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.onPrimary),
-            ),
-          ],
-        ),
-        children: children,
-      ),
-    );
+  List<BatsmanSummary> _getBatsmen(List<OverSummary> inningOvers) {
+    final lastOver = inningOvers.lastOrNull;
+    List<BatsmanSummary> batsmen =
+        inningOvers.expand((over) => over.outPlayers).toList();
+    if (!batsmen
+            .map((e) => e.player.id)
+            .contains(lastOver?.striker.player.id) &&
+        lastOver != null) {
+      batsmen.add(lastOver.striker);
+    }
+    if (!batsmen
+            .map((e) => e.player.id)
+            .contains(lastOver?.nonStriker.player.id) &&
+        lastOver != null) {
+      batsmen.add(lastOver.nonStriker);
+    }
+
+    // remove duplicate
+    Map<String, BatsmanSummary> batsManMap = {};
+    for (final batsman in batsmen) {
+      batsManMap[batsman.player.id] = batsman;
+    }
+
+    return batsManMap.values.toList();
+  }
+
+  List<BowlerSummary> _getBowlers(List<OverSummary> inningOvers) {
+    Map<String, BowlerSummary> bowlerMap = {};
+
+    // remove duplicate
+    for (OverSummary over in inningOvers) {
+      bowlerMap[over.bowler.player.id] = over.bowler;
+    }
+    List<BowlerSummary> bowlers = bowlerMap.values.toList();
+
+    return bowlers;
+  }
+
+  int _getTotalRunsBetweenOvers(
+    List<OverSummary> inningOvers,
+    int startOver,
+    int endOver,
+  ) {
+    if (startOver > endOver) return 0;
+    final runsBeforeStartOver =
+        (startOver - 1).isNegative || (startOver - 1) == 0
+            ? 0
+            : inningOvers
+                    .where((element) => element.overNumber == startOver - 1)
+                    .firstOrNull
+                    ?.totalRuns ??
+                0;
+
+    final runsAfterEndOver = inningOvers
+            .where((element) => element.overNumber == endOver)
+            .firstOrNull
+            ?.totalRuns ??
+        0;
+
+    return runsAfterEndOver - runsBeforeStartOver;
   }
 }

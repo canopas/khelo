@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 

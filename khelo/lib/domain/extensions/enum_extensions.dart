@@ -219,15 +219,15 @@ extension ExtrasTypeString on ExtrasType {
   }
 }
 
-extension WinnerByTypeString on WinnerByType{
+extension WinnerByTypeString on WinnerByType {
   String getString(BuildContext context, int difference) {
-    switch(this) {
-    case WinnerByType.run:
-    return context.l10n.common_runs_title(difference);
-    case WinnerByType.wicket:
-    return context.l10n.common_wickets_title(difference);
-    case WinnerByType.tie:
-    return context.l10n.common_tie_title;
+    switch (this) {
+      case WinnerByType.run:
+        return context.l10n.common_runs_title(difference);
+      case WinnerByType.wicket:
+        return context.l10n.common_wickets_title(difference);
+      case WinnerByType.tie:
+        return context.l10n.common_tie_title;
     }
   }
 }

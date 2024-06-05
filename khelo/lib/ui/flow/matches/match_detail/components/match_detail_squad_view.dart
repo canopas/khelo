@@ -29,10 +29,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: () => notifier.onResume(),
       );
     }
 

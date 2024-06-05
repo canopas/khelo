@@ -1,4 +1,3 @@
-import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,10 +67,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: () => notifier.onResume(),
       );
     }
 
@@ -113,7 +109,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
   Widget _highlightList(BuildContext context,
       MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
-    final highlight = _getHighlightsScore(state);
+    final highlight = state.highlightFiltered;
 
     if (highlight.isEmpty) {
       return Center(
@@ -135,7 +131,21 @@ class MatchDetailHighlightView extends ConsumerWidget {
       separatorBuilder: (context, index) =>
           Divider(color: context.colorScheme.outline, height: 32),
       itemBuilder: (context, index) {
-        return CommentaryBallSummary(state: state, ball: highlight[index]);
+        final overSummary = highlight[index];
+        final filterBall = overSummary.balls.where(
+          (element) =>
+              element.is_four ||
+              element.is_six ||
+              element.extras_type != null ||
+              element.wicket_type != null,
+        );
+        return Column(
+          children: [
+            for (final ball in filterBall) ...[
+              CommentaryBallSummary(ball: ball, overSummary: overSummary),
+            ]
+          ],
+        );
       },
     );
   }
@@ -147,36 +157,6 @@ class MatchDetailHighlightView extends ConsumerWidget {
         ?.team
         .name;
     return teamName ?? "--";
-  }
-
-  List<BallScoreModel> _getHighlightsScore(MatchDetailTabState state) {
-    final inningId = state.firstInning?.team_id == state.highlightTeamId
-        ? state.firstInning?.id
-        : state.secondInning?.id;
-    switch (state.highlightFilterOption) {
-      case HighlightFilterOption.all:
-        return state.ballScores
-            .where((element) =>
-                element.inning_id == inningId &&
-                (element.wicket_type != null ||
-                    element.is_four ||
-                    element.is_six))
-            .toList();
-      case HighlightFilterOption.fours:
-        return state.ballScores
-            .where(
-                (element) => element.inning_id == inningId && element.is_four)
-            .toList();
-      case HighlightFilterOption.sixes:
-        return state.ballScores
-            .where((element) => element.inning_id == inningId && element.is_six)
-            .toList();
-      case HighlightFilterOption.wickets:
-        return state.ballScores
-            .where((element) =>
-                element.inning_id == inningId && element.wicket_type != null)
-            .toList();
-    }
   }
 
   void showFilterOptionSelectionSheet(
