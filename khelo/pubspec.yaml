@@ -58,10 +58,11 @@ dependencies:
   freezed_annotation: ^2.4.1
 
   # auth
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.16.0
-  firebase_storage: ^11.6.0
-  cloud_firestore: ^4.14.0
+  firebase_core: ^2.32.0
+  firebase_auth: ^4.20.0
+  firebase_storage: ^11.7.7
+  cloud_firestore: ^4.17.5
+  firebase_crashlytics: ^3.5.7
 
   # state management
   flutter_riverpod: ^2.4.9
