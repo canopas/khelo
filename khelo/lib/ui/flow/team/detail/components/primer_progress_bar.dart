@@ -22,16 +22,20 @@ class PrimerProgressBar extends StatelessWidget {
             _progressBarSegment(
               color: context.colorScheme.positive,
               count: status.win,
-              isStartRadius: true,
+              isStartRadius: status.win != 0,
+              isEndRadius: status.tie == 0 && status.lost == 0,
             ),
             _progressBarSegment(
               color: context.colorScheme.secondary,
               count: status.tie,
+              isStartRadius: status.win == 0,
+              isEndRadius: status.lost == 0,
             ),
             _progressBarSegment(
               color: context.colorScheme.alert,
               count: status.lost,
-              isEndRadius: true,
+              isEndRadius: status.lost != 0,
+              isStartRadius: status.win == 0 && status.tie == 0,
             ),
           ],
         ),
