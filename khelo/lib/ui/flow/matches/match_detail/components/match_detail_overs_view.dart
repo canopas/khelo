@@ -6,7 +6,6 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/ball_score_model_extension.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -31,21 +30,18 @@ class MatchDetailOversView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 
-    if (state.ballScores.isEmpty) {
+    if (state.overList.isEmpty) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
             context.l10n.match_overs_empty_over_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -53,41 +49,40 @@ class MatchDetailOversView extends ConsumerWidget {
     }
 
     return ListView(
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.symmetric(horizontal: 16),
+      padding: context.mediaQueryPadding,
       children: [
-        const FinalScoreView(),
-        ..._buildOverList(context, state, state.firstInning?.id ?? ""),
-        ..._buildOverList(context, state, state.secondInning?.id ?? ""),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: FinalScoreView(),
+        ),
+        ..._buildOverList(context, state),
       ],
     );
   }
 
-  List<Widget> _buildOverList(
-      BuildContext context, MatchDetailTabState state, String inningId) {
-    final filterBallScore = state.ballScores
-        .where((element) => inningId == element.inning_id)
-        .toList();
-
-    final oversList = filterBallScore.chunkArrayByOver();
+  List<Widget> _buildOverList(BuildContext context, MatchDetailTabState state) {
     List<Widget> children = [];
-    for (int i = oversList.length - 1; i >= 0; i--) {
-      final over = oversList[i];
 
-      children.add(const SizedBox(height: 16));
+    for (int i = state.overList.length - 1; i >= 0; i--) {
+      final over = state.overList.elementAt(i);
+      final nextOver = state.overList.elementAtOrNull(i + 1);
+      if (nextOver?.inning_id != over.inning_id) {
+        children.add(
+          _teamNameTitleView(context, state, over.inning_id,
+              state.firstInning?.id == over.inning_id ? 1 : 2),
+        );
+      } else {
+        children.add(Divider(height: 32, color: context.colorScheme.outline));
+      }
 
-      children.add(_overCellView(context, over));
+      children.add(_overCellView(context, over.balls, over.bowler.player.name,
+          over.striker.player.name, over.nonStriker.player.name));
     }
-    if (oversList.isNotEmpty) {
-      children.add(
-        _teamNameTitleView(context, state, inningId),
-      );
-    }
-
     return children;
   }
 
-  Widget _overCellView(BuildContext context, List<BallScoreModel> over) {
+  Widget _overCellView(BuildContext context, List<BallScoreModel> over,
+      String bowler, String striker, String nonStriker) {
     final overCount = over.first.over_number;
     final runs = over.fold(
         0,
@@ -95,31 +90,46 @@ class MatchDetailOversView extends ConsumerWidget {
             previousValue +
             element.runs_scored +
             (element.extras_awarded ?? 0));
-    return Row(
-      children: [
-        Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.match_commentary_former_over_short_text(overCount),
-              style: AppTextStyle.header4
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            Text(
-              context.l10n.match_commentary_runs_text(runs),
-              style: AppTextStyle.body2
-                  .copyWith(color: context.colorScheme.textSecondary),
-            ),
-          ],
-        )),
-        Expanded(
-            flex: 4,
-            child: OverScoreView(
-              over: over,
-              size: 35,
-            ))
-      ],
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                context.l10n.match_commentary_former_over_short_text(overCount),
+                style: AppTextStyle.body2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                context.l10n.match_commentary_runs_text(runs),
+                style: AppTextStyle.caption
+                    .copyWith(color: context.colorScheme.textDisabled),
+              ),
+            ],
+          ),
+          const SizedBox(width: 24),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${context.l10n.match_commentary_bowler_to_batsman_text(bowler, striker)} & $nonStriker",
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              const SizedBox(height: 4),
+              OverScoreView(
+                over: over,
+                size: 24,
+              ),
+            ],
+          ))
+        ],
+      ),
     );
   }
 
@@ -136,15 +146,15 @@ class MatchDetailOversView extends ConsumerWidget {
     return teamName ?? "--";
   }
 
-  Widget _teamNameTitleView(
-      BuildContext context, MatchDetailTabState state, String inningId) {
+  Widget _teamNameTitleView(BuildContext context, MatchDetailTabState state,
+      String inningId, int inningCount) {
     final title = _getTeamNameByInningId(state, inningId);
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8, top: 8, left: 4, right: 4),
+      padding: const EdgeInsets.only(top: 32, bottom: 16, left: 16, right: 16),
       child: Text(
-        title,
-        style: AppTextStyle.header1
-            .copyWith(color: context.colorScheme.textSecondary),
+        "${context.l10n.match_commentary_inning_count_text(inningCount)}: $title",
+        style: AppTextStyle.subtitle1
+            .copyWith(color: context.colorScheme.textPrimary),
       ),
     );
   }

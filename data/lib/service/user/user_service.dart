@@ -101,7 +101,8 @@ class UserService {
           .collection(FireStoreConst.usersCollection)
           .where(FireStoreConst.nameLowercase,
               isGreaterThanOrEqualTo: searchKey.toLowerCase())
-          .where(FireStoreConst.nameLowercase, isLessThan: '${searchKey.toLowerCase()}z')
+          .where(FireStoreConst.nameLowercase,
+              isLessThan: '${searchKey.toLowerCase()}z')
           .get();
 
       return snapshot.docs.map((doc) {

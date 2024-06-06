@@ -5,7 +5,6 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/data_model_extensions/match_model_extension.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/gen/assets.gen.dart';
@@ -150,19 +149,9 @@ class MatchDetailCell extends StatelessWidget {
   }
 
   Widget _winnerMessageText(BuildContext context) {
-    final winSummary = match.getWinnerSummary(context);
-    if (match.match_status == MatchStatus.finish && winSummary != null) {
-      if (winSummary.teamName.isEmpty) {
-        return Text(
-          context.l10n.score_board_match_tied_text,
-          style: AppTextStyle.subtitle1
-              .copyWith(color: context.colorScheme.textPrimary),
-        );
-      }
+    if (match.match_status == MatchStatus.finish) {
       return WonByMessageText(
-        teamName: winSummary.teamName,
-        difference: winSummary.difference,
-        trailingText: winSummary.wonByText,
+        matchResult: match.matchResult,
       );
     } else {
       return Text(

@@ -13,8 +13,8 @@ class OverScoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      runSpacing: 4,
-      spacing: 4,
+      runSpacing: 8,
+      spacing: 8,
       children: over.map((ball) {
         return BallScoreView(
           ball: ball,
@@ -44,7 +44,7 @@ class BallScoreView extends StatelessWidget {
       ),
       child: Text(
         title,
-        style: AppTextStyle.header4.copyWith(color: textColor),
+        style: AppTextStyle.caption.copyWith(color: textColor),
       ),
     );
   }
@@ -80,10 +80,10 @@ class BallScoreView extends StatelessWidget {
             ? context.colorScheme.secondary
             : ball.is_six
                 ? context.colorScheme.primary
-                : context.colorScheme.containerNormalOnSurface,
+                : context.colorScheme.containerLow,
         (ball.is_four || ball.is_six)
-            ? context.colorScheme.textInversePrimary
-            : context.colorScheme.secondary
+            ? context.colorScheme.onPrimary
+            : context.colorScheme.textDisabled
       );
     }
   }

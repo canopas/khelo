@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
-import 'package:style/extensions/context_extensions.dart';
+import 'package:style/button/tab_button.dart';
 
 class MatchDetailTabScreen extends ConsumerStatefulWidget {
   final String matchId;
@@ -17,39 +18,100 @@ class MatchDetailTabScreen extends ConsumerStatefulWidget {
 
 class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
   late MatchDetailTabViewNotifier notifier;
+  late PageController _controller;
+  final ScrollController _scrollController = ScrollController();
+
+  int get _selectedTab => _controller.hasClients
+      ? _controller.page?.round() ?? 0
+      : _controller.initialPage;
 
   @override
   void initState() {
     super.initState();
     notifier = ref.read(matchDetailTabStateProvider.notifier);
     runPostFrame(() => notifier.setData(widget.matchId));
+    _controller = PageController(
+      initialPage: ref.read(matchDetailTabStateProvider).selectedTab,
+    );
+  }
+
+  final List<GlobalKey> _keys = List.generate(50, (index) => GlobalKey());
+
+  void _scrollToIndex(int index) {
+    _scrollController.position.ensureVisible(
+        _keys[index].currentContext!.findRenderObject() as RenderBox,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut);
   }
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(matchDetailTabStateProvider.notifier);
+    final state = ref.watch(matchDetailTabStateProvider);
 
-    return DefaultTabController(
-      length: MatchDetailTab.values.length,
-      child: AppPage(
-        title: context.l10n.match_detail_screen_title,
-        tabBar: TabBar(
-          tabAlignment: TabAlignment.start,
-          indicatorColor: context.colorScheme.primary,
-          labelColor: context.colorScheme.primary,
-          unselectedLabelColor: context.colorScheme.textSecondary,
-          dividerColor: context.colorScheme.outline,
-          splashFactory: NoSplash.splashFactory,
-          isScrollable: true,
-          tabs: MatchDetailTab.values
-              .map((tab) => Tab(text: tab.getString(context)))
-              .toList(),
-        ),
-        body: TabBarView(
-            children: MatchDetailTab.values
-                .map((tab) => tab.getTabScreen())
-                .toList()),
+    return AppPage(
+      title: _getScreenTitle(context, state),
+      body: Builder(
+        builder: (context) {
+          return _content(context, notifier);
+        },
       ),
+    );
+  }
+
+  String _getScreenTitle(BuildContext context, MatchDetailTabState state) {
+    if (state.match != null) {
+      String title = state.match!.teams
+          .map((e) => e.team.name.initials(limit: 3))
+          .join(" ${context.l10n.common_versus_short_title} ");
+      return title;
+    }
+    return "${context.l10n.common_a_title} ${context.l10n.common_versus_short_title} ${context.l10n.add_match_team_b_title}";
+  }
+
+  Widget _content(BuildContext context, MatchDetailTabViewNotifier notifier) {
+    return SafeArea(
+      child: Column(
+        children: [
+          _tabView(context),
+          Expanded(
+            child: PageView(
+              controller: _controller,
+              children: MatchDetailTab.values
+                  .map((tab) => tab.getTabScreen())
+                  .toList(),
+              onPageChanged: (index) {
+                notifier.onTabChange(index);
+                _scrollToIndex(index);
+                setState(() {});
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _tabView(BuildContext context) {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
+      child: Row(
+          children: MatchDetailTab.values
+              .map(
+                (tab) => Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: TabButton(
+                    tab.getString(context),
+                    selected: _selectedTab == tab.index,
+                    globalKey: _keys[tab.index],
+                    onTap: () {
+                      _controller.jumpToPage(tab.index);
+                    },
+                  ),
+                ),
+              )
+              .toList()),
     );
   }
 }

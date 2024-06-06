@@ -6,12 +6,14 @@ import 'package:style/text/app_text_style.dart';
 class TabButton extends StatelessWidget {
   final Function() onTap;
   final String text;
+  final GlobalKey? globalKey;
   final bool selected;
 
   const TabButton(
     this.text, {
     super.key,
     required this.onTap,
+    this.globalKey,
     this.selected = false,
   });
 
@@ -20,6 +22,7 @@ class TabButton extends StatelessWidget {
     return OnTapScale(
       onTap: onTap,
       child: Container(
+        key: globalKey,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: selected

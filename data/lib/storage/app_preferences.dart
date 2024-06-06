@@ -13,6 +13,5 @@ final currentUserPod = Provider<UserModel?>((ref) {
   return json == null ? null : UserModel.fromJsonString(json);
 });
 
-final hasUserSession = Provider<bool>((ref) => ref.watch(currentUserPod) != null);
-
-
+final hasUserSession =
+    Provider<bool>((ref) => ref.watch(currentUserPod) != null);

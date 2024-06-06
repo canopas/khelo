@@ -63,9 +63,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
 
   Widget _body(BuildContext context, TeamDetailState state) {
     if (state.loading) {
-      return const Center(
-        child: AppProgressIndicator(),
-      );
+      return const Center(child: AppProgressIndicator());
     }
     if (state.error != null) {
       return ErrorScreen(
