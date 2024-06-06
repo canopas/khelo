@@ -30,7 +30,7 @@ class MatchDetailOversView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -41,7 +41,7 @@ class MatchDetailOversView extends ConsumerWidget {
           child: Text(
             context.l10n.match_overs_empty_over_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -103,6 +103,7 @@ class MatchDetailOversView extends ConsumerWidget {
                 style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
+              const SizedBox(height: 8),
               Text(
                 context.l10n.match_commentary_runs_text(runs),
                 style: AppTextStyle.caption

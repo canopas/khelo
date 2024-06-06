@@ -29,7 +29,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 

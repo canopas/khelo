@@ -34,7 +34,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -45,7 +45,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           child: Text(
             context.l10n.match_commentary_empty_commentary_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),

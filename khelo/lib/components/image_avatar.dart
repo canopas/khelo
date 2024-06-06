@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -21,27 +22,42 @@ class ImageAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: size,
-      width: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
+    return MediaQuery.withNoTextScaling(
+      child: Container(
+        height: size,
+        width: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: backgroundColor ?? context.colorScheme.containerHigh,
-          border: Border.all(color: context.colorScheme.textDisabled),
-          image: (imageUrl != null)
-              ? DecorationImage(
-                  fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(imageUrl!))
-              : null),
-      child: imageUrl == null
-          ? Text(
-              initial,
-              style: AppTextStyle.header2.copyWith(
-                color: foregroundColor ?? context.colorScheme.secondary,
+        ),
+        child: imageUrl == null
+            ? _initialView(context)
+            : CachedNetworkImage(
+                imageUrl: imageUrl!,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => _initialView(context),
+                placeholder: (context, url) => _initialView(context),
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
-            )
-          : null,
+      ),
+    );
+  }
+
+  Widget _initialView(BuildContext context) {
+    return Text(
+      initial,
+      style: AppTextStyle.subtitle1.copyWith(
+          color: foregroundColor ?? context.colorScheme.textPrimary,
+          fontSize: size / 2.15),
     );
   }
 }

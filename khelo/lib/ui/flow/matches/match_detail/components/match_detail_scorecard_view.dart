@@ -32,7 +32,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -43,7 +43,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
           child: Text(
             context.l10n.match_scorecard_empty_scorecard_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -83,8 +83,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
       if ((state.match?.power_play_overs2 ?? []).isNotEmpty) {
         powerPlays.add(state.match!.power_play_overs2);
       }
-      if ((state.match?.power_play_overs2 ?? []).isNotEmpty) {
-        powerPlays.add(state.match!.power_play_overs2);
+      if ((state.match?.power_play_overs3 ?? []).isNotEmpty) {
+        powerPlays.add(state.match!.power_play_overs3);
       }
 
       children.add(_teamTitleView(context,
@@ -241,8 +241,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     required List<String> data,
   }) {
     return Container(
-      padding: EdgeInsets.symmetric(
-          horizontal: 16.0, vertical: highlightRow ? 4 : 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: highlightRow
             ? context.colorScheme.containerLowOnSurface

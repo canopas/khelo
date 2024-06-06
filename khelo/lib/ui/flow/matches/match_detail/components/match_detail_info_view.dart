@@ -32,7 +32,7 @@ class MatchDetailInfoView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -88,7 +88,7 @@ class MatchDetailInfoView extends ConsumerWidget {
       return const SizedBox();
     }
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

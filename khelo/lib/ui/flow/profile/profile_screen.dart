@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
+import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
@@ -87,27 +87,10 @@ class ProfileScreen extends ConsumerWidget {
             borderRadius: BorderRadius.circular(16)),
         child: Row(
           children: [
-            Container(
-              height: 80,
-              width: 80,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: context.colorScheme.containerHigh,
-                shape: BoxShape.circle,
-                image: state.currentUser?.profile_img_url != null
-                    ? DecorationImage(
-                        image: CachedNetworkImageProvider(
-                            state.currentUser!.profile_img_url!),
-                        fit: BoxFit.cover)
-                    : null,
-              ),
-              child: state.currentUser?.profile_img_url == null
-                  ? Text(state.currentUser?.nameInitial ?? '?',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.header2.copyWith(
-                        color: context.colorScheme.textPrimary,
-                      ))
-                  : null,
+            ImageAvatar(
+              size: 80,
+              imageUrl: state.currentUser?.profile_img_url,
+              initial: state.currentUser?.nameInitial ?? '?',
             ),
             const SizedBox(
               width: 16,

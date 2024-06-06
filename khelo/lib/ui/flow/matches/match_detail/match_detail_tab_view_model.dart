@@ -79,6 +79,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
                     element.team_id != state.match?.toss_winner_id))
             .firstOrNull;
 
+        onScorecardExpansionChange(
+          match.matchResult?.teamId ?? match.teams.firstOrNull?.team.id ?? "",
+          true,
+        );
         state = state.copyWith(
             highlightTeamId: state.highlightTeamId ?? match.teams.first.team.id,
             firstInning: firstInning,
@@ -90,18 +94,19 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         }
       }, onError: (e) {
         debugPrint(
-            "ScoreBoardViewNotifier: error while loading match and inning -> $e");
+            "MatchDetailTabViewNotifier: error while loading match and inning -> $e");
         state = state.copyWith(error: AppError.fromError(e), loading: false);
       });
     } catch (e) {
       debugPrint(
-          "ScoreBoardViewNotifier: error while loading match and inning -> $e");
+          "MatchDetailTabViewNotifier: error while loading match and inning -> $e");
       state = state.copyWith(error: AppError.fromError(e), loading: false);
     }
   }
 
   void _loadBallScores() {
     if (state.firstInning == null || state.secondInning == null) {
+      state = state.copyWith(loading: false);
       return;
     }
     state = state.copyWith(ballScoreQueryListenerSet: true);
@@ -145,7 +150,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       onError: (e, stack) {
         state = state.copyWith(error: e, loading: false);
         debugPrint(
-            "MatchDetailTabViewNotifier: error while load ball scores -> $e. \n stack -> $stack");
+            "MatchDetailTabViewNotifier: error while load ball scores -> $e");
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -44,31 +45,44 @@ class ProfileImageAvatar extends StatelessWidget {
       width: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: imageUrl != null && !isLoading
-              ? DecorationImage(
-                  image: CachedNetworkImageProvider(imageUrl!),
-                  fit: BoxFit.cover)
-              : null,
-          color: context.colorScheme.primary),
-      child: _imagePlaceHolder(context),
+          shape: BoxShape.circle, color: context.colorScheme.primary),
+      child: (imageUrl != null && !isLoading)
+          ? CachedNetworkImage(
+              imageUrl: imageUrl!,
+              fit: BoxFit.cover,
+              errorWidget: (context, url, error) => _placeHolderIcon(context),
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            )
+          : _imagePlaceHolder(context),
     );
   }
 
   Widget? _imagePlaceHolder(BuildContext context) {
     return imageUrl == null && !isLoading
-        ? SvgPicture.asset(
-            placeHolderImage ?? Assets.images.icProfileThin,
-            height: size / 2,
-            width: size / 2,
-            colorFilter: ColorFilter.mode(
-              context.colorScheme.textInversePrimary,
-              BlendMode.srcATop,
-            ),
-          )
+        ? _placeHolderIcon(context)
         : isLoading
             ? AppProgressIndicator(color: context.colorScheme.surface)
             : null;
+  }
+
+  Widget _placeHolderIcon(BuildContext context) {
+    return SvgPicture.asset(
+      placeHolderImage ?? Assets.images.icProfileThin,
+      height: size / 2,
+      width: size / 2,
+      colorFilter: ColorFilter.mode(
+        context.colorScheme.textInversePrimary,
+        BlendMode.srcATop,
+      ),
+    );
   }
 
   Widget _editImageButton(

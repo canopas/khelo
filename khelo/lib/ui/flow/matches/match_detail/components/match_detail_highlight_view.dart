@@ -68,7 +68,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () => notifier.onResume(),
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -118,7 +118,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
           child: Text(
             context.l10n.match_highlight_empty_highlight_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle3
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),

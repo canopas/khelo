@@ -48,7 +48,6 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = ref.watch(matchDetailTabStateProvider.notifier);
     final state = ref.watch(matchDetailTabStateProvider);
 
     return AppPage(
