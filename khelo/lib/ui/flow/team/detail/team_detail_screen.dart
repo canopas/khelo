@@ -9,8 +9,8 @@ import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
+import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -129,25 +129,25 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          _tabButton(
+          TabButton(
             context.l10n.team_detail_match_tab_title,
-            _selectedTab == 0,
+            selected: _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
             },
           ),
           const SizedBox(width: 8),
-          _tabButton(
+          TabButton(
             context.l10n.team_detail_member_tab_title,
-            _selectedTab == 1,
+            selected: _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);
             },
           ),
           const SizedBox(width: 8),
-          _tabButton(
+          TabButton(
             context.l10n.team_detail_stat_tab_title,
-            _selectedTab == 2,
+            selected: _selectedTab == 2,
             onTap: () {
               _controller.jumpToPage(2);
             },
@@ -162,29 +162,6 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
                 )),
           ],
         ],
-      ),
-    );
-  }
-
-  Widget _tabButton(String title, bool selected, {VoidCallback? onTap}) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? context.colorScheme.primary
-              : context.colorScheme.containerLow,
-          borderRadius: BorderRadius.circular(56),
-        ),
-        child: Text(
-          title,
-          style: AppTextStyle.body2.copyWith(
-            color: selected
-                ? context.colorScheme.onPrimary
-                : context.colorScheme.textSecondary,
-          ),
-        ),
       ),
     );
   }
