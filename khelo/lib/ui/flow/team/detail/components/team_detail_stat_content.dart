@@ -66,7 +66,7 @@ class TeamDetailStatContent extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            '$playedMatches ${context.l10n.team_detail_match_title(playedMatches)}',
+            context.l10n.team_detail_match_title(playedMatches),
             style: AppTextStyle.header2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
