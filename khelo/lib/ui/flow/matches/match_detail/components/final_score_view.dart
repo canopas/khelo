@@ -41,10 +41,13 @@ class FinalScoreView extends ConsumerWidget {
       children.add(_winnerMessageText(context, state.match!));
     } else if (state.match?.match_status == MatchStatus.running) {
       children.add(Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const Spacer(),
-          MatchStatusTag(
-              status: state.match?.match_status ?? MatchStatus.running),
+          Padding(
+            padding: const EdgeInsets.only(top: 16, bottom: 24),
+            child: MatchStatusTag(
+                status: state.match?.match_status ?? MatchStatus.running),
+          ),
         ],
       ));
     }

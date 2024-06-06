@@ -5,9 +5,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
+import 'package:style/button/tab_button.dart';
 
 class MatchDetailTabScreen extends ConsumerStatefulWidget {
   final String matchId;
@@ -101,42 +99,19 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
       child: Row(
           children: MatchDetailTab.values
               .map(
-                (tab) => _tabButton(
-                  tab.getString(context),
-                  _selectedTab == tab.index,
-                  tab.index,
-                  onTap: () {
-                    _controller.jumpToPage(tab.index);
-                  },
+                (tab) => Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: TabButton(
+                    tab.getString(context),
+                    selected: _selectedTab == tab.index,
+                    globalKey: _keys[tab.index],
+                    onTap: () {
+                      _controller.jumpToPage(tab.index);
+                    },
+                  ),
                 ),
               )
               .toList()),
-    );
-  }
-
-  Widget _tabButton(String title, bool selected, int index,
-      {VoidCallback? onTap}) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        key: _keys[index],
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.only(right: 16),
-        decoration: BoxDecoration(
-          color: selected
-              ? context.colorScheme.primary
-              : context.colorScheme.containerLow,
-          borderRadius: BorderRadius.circular(56),
-        ),
-        child: Text(
-          title,
-          style: AppTextStyle.body2.copyWith(
-            color: selected
-                ? context.colorScheme.onPrimary
-                : context.colorScheme.textDisabled,
-          ),
-        ),
-      ),
     );
   }
 }
