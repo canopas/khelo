@@ -71,9 +71,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         if (widget.editTeam != null) ...[
           actionButton(
             context,
-            onPressed: () {
-              _showDeleteAlert(context, onDelete: notifier.onTeamDelete);
-            },
+            onPressed: () =>
+                _showDeleteAlert(context, onDelete: notifier.onTeamDelete),
             icon: SvgPicture.asset(
               Assets.images.icBin,
               height: 24,
@@ -111,9 +110,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             ),
             const SizedBox(height: 40),
             _textInputField(
-                onChanged: (value) {
-                  notifier.onNameTextChanged();
-                },
+                onChanged: (value) => notifier.onNameTextChanged(),
                 controller: state.nameController,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
@@ -124,14 +121,10 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                             size: AppProgressIndicatorSize.small))
                     : state.isNameAvailable != null
                         ? state.isNameAvailable!
-                            ? Icon(
-                                Icons.check,
-                                color: context.colorScheme.positive,
-                              )
-                            : Icon(
-                                Icons.close,
-                                color: context.colorScheme.alert,
-                              )
+                            ? Icon(Icons.check,
+                                color: context.colorScheme.positive)
+                            : Icon(Icons.close,
+                                color: context.colorScheme.alert)
                         : null,
                 hintText:
                     context.l10n.add_team_enter_team_name_placeholder_text),
@@ -258,7 +251,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             !state.isImageUploading &&
             !state.checkingForAvailability,
         progress: state.isAddInProgress,
-        onPressed: () => notifier.onAddBtnTap(),
+        onPressed: notifier.onAddBtnTap,
       ),
     );
   }
@@ -276,7 +269,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               context.l10n.common_delete_title.toLowerCase())),
           actions: [
             TextButton(
-              onPressed: () => context.pop(),
+              onPressed: context.pop,
               child: Text(
                 context.l10n.common_cancel_title,
                 style: TextStyle(color: context.colorScheme.textSecondary),

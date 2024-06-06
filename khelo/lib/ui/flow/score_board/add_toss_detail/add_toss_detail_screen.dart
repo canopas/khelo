@@ -96,21 +96,20 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
         _sectionTitle(context, context.l10n.add_toss_detail_who_won_toss_text),
         IntrinsicHeight(
           child: Row(
-            children: teams
-                    ?.map(
-                      (team) => _tossCellView(
-                        context: context,
-                        imageUrl: team.team.profile_img_url,
-                        initial: team.team.name[0].toUpperCase(),
-                        title: team.team.name,
-                        isSelected: tossWinnerTeamId == team.team.id,
-                        onTap: () => notifier
-                            .onTossWinnerSelect(team.team.id ?? "INVALID ID"),
-                      ),
-                    )
-                    .toList() ??
-                [],
-          ),
+              children: teams
+                      ?.map(
+                        (team) => _tossCellView(
+                          context: context,
+                          imageUrl: team.team.profile_img_url,
+                          initial: team.team.name[0].toUpperCase(),
+                          title: team.team.name,
+                          isSelected: tossWinnerTeamId == team.team.id,
+                          onTap: () => notifier
+                              .onTossWinnerSelect(team.team.id ?? "INVALID ID"),
+                        ),
+                      )
+                      .toList() ??
+                  []),
         )
       ],
     );
@@ -146,17 +145,13 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
         Text(
           title,
           style: AppTextStyle.subtitle1
               .copyWith(color: context.colorScheme.textPrimary),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
       ],
     );
   }
@@ -188,9 +183,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _cellImageView(image, imageUrl, initial),
-              const SizedBox(
-                height: 24,
-              ),
+              const SizedBox(height: 24),
               Text(
                 title,
                 maxLines: 2,
@@ -234,7 +227,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
         context.l10n.common_next_title,
         enabled: state.isButtonEnable,
         progress: state.isTossDetailUpdateInProgress,
-        onPressed: () => notifier.onNextButtonTap(),
+        onPressed: notifier.onNextButtonTap,
       ),
     );
   }

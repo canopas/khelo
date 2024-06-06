@@ -37,18 +37,14 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
                           .copyWith(color: context.colorScheme.textPrimary),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const SizedBox(height: 16),
                     Text(
                       context.l10n.intro_description_text,
                       style: AppTextStyle.body1
                           .copyWith(color: context.colorScheme.textSecondary),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    const SizedBox(height: 24),
                     PrimaryButton(
                       context.l10n.intro_register_btn_text,
                       onPressed: () =>

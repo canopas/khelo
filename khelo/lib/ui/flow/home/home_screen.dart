@@ -137,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 match.current_playing_team_id ==
                     match.teams.elementAt(1).team.id),
             const SizedBox(
-              height: 8,
+              height: 8
             ),
           ],
         ),
@@ -223,16 +223,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Text(
               context.l10n.home_screen_no_matches_title,
               textAlign: TextAlign.center,
-              style: AppTextStyle.header2
+              style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
             const SizedBox(
-              height: 8,
+              height: 8
             ),
             Text(
               context.l10n.home_screen_no_matches_description_text,
               textAlign: TextAlign.center,
-              style: AppTextStyle.subtitle1
+              style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textSecondary),
             ),
           ],

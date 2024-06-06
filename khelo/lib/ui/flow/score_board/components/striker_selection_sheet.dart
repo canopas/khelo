@@ -77,8 +77,7 @@ class _StrikerSelectionSheetState extends ConsumerState<StrikerSelectionSheet> {
             spacing: 16,
             runSpacing: 16,
             children: state.batsMans
-                    ?.map(
-                      (player) => UserCellView(
+                    ?.map((player) => UserCellView(
                         title: player.player.name ??
                             context.l10n.common_anonymous_title,
                         imageUrl: player.player.profile_img_url,
@@ -88,9 +87,7 @@ class _StrikerSelectionSheetState extends ConsumerState<StrikerSelectionSheet> {
                           setState(() {
                             selectedUser = player.player;
                           });
-                        },
-                      ),
-                    )
+                        }))
                     .toList() ??
                 []),
       ],

@@ -77,11 +77,7 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
         (element) {
           final isSelected = selectedType == element;
           return OnTapScale(
-            onTap: () {
-              setState(() {
-                selectedType = element;
-              });
-            },
+            onTap: () => setState(() => selectedType = element),
             child: Chip(
               label: Text(
                 element.getString(context),

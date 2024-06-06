@@ -115,15 +115,11 @@ class EditProfileScreen extends ConsumerWidget {
         _textInputField(context, notifier,
             placeholderText: context.l10n.edit_profile_name_placeholder,
             controller: state.nameController),
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         _textInputField(context, notifier,
             placeholderText: context.l10n.edit_profile_email_placeholder,
             controller: state.emailController),
-        const SizedBox(
-          height: 8,
-        ),
+        const SizedBox(height: 8),
         _textInputField(context, notifier,
             placeholderText: context.l10n.common_location_title,
             controller: state.locationController),
@@ -214,16 +210,15 @@ class EditProfileScreen extends ConsumerWidget {
                 context: context,
                 items: PlayerRole.values
                     .map((role) => BottomSheetAction(
-                          title: role.getString(context),
-                          child: showCheckMark(
-                            context,
-                            showCheck: state.playerRole == role,
-                          ),
-                          onTap: () {
-                            context.pop();
-                            notifier.onPlayerRoleChange(role);
-                          },
-                        ))
+                        title: role.getString(context),
+                        child: showCheckMark(
+                          context,
+                          showCheck: state.playerRole == role,
+                        ),
+                        onTap: () {
+                          context.pop();
+                          notifier.onPlayerRoleChange(role);
+                        }))
                     .toList());
           },
         ),
@@ -237,16 +232,15 @@ class EditProfileScreen extends ConsumerWidget {
                 context: context,
                 items: BattingStyle.values
                     .map((style) => BottomSheetAction(
-                          title: style.getString(context),
-                          child: showCheckMark(
-                            context,
-                            showCheck: state.battingStyle == style,
-                          ),
-                          onTap: () {
-                            context.pop();
-                            notifier.onBattingStyleChange(style);
-                          },
-                        ))
+                        title: style.getString(context),
+                        child: showCheckMark(
+                          context,
+                          showCheck: state.battingStyle == style,
+                        ),
+                        onTap: () {
+                          context.pop();
+                          notifier.onBattingStyleChange(style);
+                        }))
                     .toList());
           },
         ),
@@ -260,16 +254,15 @@ class EditProfileScreen extends ConsumerWidget {
                 context: context,
                 items: BowlingStyle.values
                     .map((style) => BottomSheetAction(
-                          title: style.getString(context),
-                          child: showCheckMark(
-                            context,
-                            showCheck: state.bowlingStyle == style,
-                          ),
-                          onTap: () {
-                            context.pop();
-                            notifier.onBowlingStyleChange(style);
-                          },
-                        ))
+                        title: style.getString(context),
+                        child: showCheckMark(
+                          context,
+                          showCheck: state.bowlingStyle == style,
+                        ),
+                        onTap: () {
+                          context.pop();
+                          notifier.onBowlingStyleChange(style);
+                        }))
                     .toList());
           },
         ),

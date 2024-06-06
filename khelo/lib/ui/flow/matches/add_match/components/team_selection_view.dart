@@ -118,9 +118,7 @@ class TeamSelectionView extends StatelessWidget {
                       : null,
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 8),
           Text(
             team?.name ?? context.l10n.add_match_team_name_placeholder,
             textAlign: TextAlign.center,
@@ -129,9 +127,7 @@ class TeamSelectionView extends StatelessWidget {
             maxLines: 2,
           ),
           if (team != null) ...[
-            const SizedBox(
-              height: 4,
-            ),
+            const SizedBox(height: 4),
             _selectSquadButton(
                 context, notifier, state, team, type, validSquad),
           ],

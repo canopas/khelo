@@ -30,18 +30,15 @@ class BallSelectionView extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.only(left: 16),
             child: Row(
-              children: [
-                for (final type in BallType.values) ...[
-                  _ballTypeCell(
-                    context: context,
-                    title: type.getString(context),
-                    image: _getBallTypeImage(context, type),
-                    isSelected: state.ballType == type,
-                    onTap: () => notifier.onBallTypeSelection(type),
-                  ),
-                ],
-              ],
-            )),
+                children: BallType.values
+                    .map((type) => _ballTypeCell(
+                          context: context,
+                          title: type.getString(context),
+                          image: _getBallTypeImage(context, type),
+                          isSelected: state.ballType == type,
+                          onTap: () => notifier.onBallTypeSelection(type),
+                        ))
+                    .toList())),
       ],
     );
   }
@@ -58,9 +55,7 @@ class BallSelectionView extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
         margin: const EdgeInsets.only(right: 16),
-        constraints: const BoxConstraints(
-          minWidth: 121.0,
-        ),
+        constraints: const BoxConstraints(minWidth: 121),
         decoration: BoxDecoration(
           border: Border.all(color: context.colorScheme.outline),
           borderRadius: BorderRadius.circular(16),

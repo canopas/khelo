@@ -28,24 +28,22 @@ class MatchOfficialSelectionView extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16),
             child: Row(
               children: MatchOfficials.values
-                  .map(
-                    (official) => OfficialsCellView(
-                      type: official,
-                      isWholeCellTappable: true,
-                      user: state.officials
-                          .where((element) => element.type == official)
-                          .firstOrNull
-                          ?.user,
-                      onCardTap: () async {
-                        final officials = await AppRoute.addMatchOfficials(
-                                officials: state.officials)
-                            .push<List<Officials>>(context);
-                        if (officials != null && context.mounted) {
-                          notifier.setOfficials(officials);
-                        }
-                      },
-                    ),
-                  )
+                  .map((official) => OfficialsCellView(
+                        type: official,
+                        isWholeCellTappable: true,
+                        user: state.officials
+                            .where((element) => element.type == official)
+                            .firstOrNull
+                            ?.user,
+                        onCardTap: () async {
+                          final officials = await AppRoute.addMatchOfficials(
+                                  officials: state.officials)
+                              .push<List<Officials>>(context);
+                          if (officials != null && context.mounted) {
+                            notifier.setOfficials(officials);
+                          }
+                        },
+                      ))
                   .toList(),
             )),
       ],

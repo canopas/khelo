@@ -14,9 +14,7 @@ class VerifyAddTeamMemberDialog extends StatefulWidget {
     return showDialog(
       context: context,
       builder: (context) {
-        return VerifyAddTeamMemberDialog(
-          phoneNumber: phoneNumber,
-        );
+        return VerifyAddTeamMemberDialog(phoneNumber: phoneNumber);
       },
     );
   }
@@ -76,11 +74,8 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 ],
-                onChanged: (value) {
-                  setState(() {
-                    verificationNumber = value;
-                  });
-                },
+                onChanged: (value) =>
+                    setState(() => verificationNumber = value),
               ),
             ),
           ],
@@ -88,7 +83,7 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: () => context.pop(),
+            onPressed: context.pop,
             child: Text(
               context.l10n.common_cancel_title,
               style: AppTextStyle.button.copyWith(

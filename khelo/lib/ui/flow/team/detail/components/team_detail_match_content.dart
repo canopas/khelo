@@ -51,8 +51,8 @@ class TeamDetailMatchContent extends ConsumerWidget {
           child: Text(
             context.l10n.team_detail_empty_match_title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary, fontSize: 20),
+            style: AppTextStyle.body2
+                .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
       );

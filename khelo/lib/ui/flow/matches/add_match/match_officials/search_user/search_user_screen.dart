@@ -42,9 +42,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
         child: Column(
           children: [
             _searchTextField(context, notifier, state),
-            Expanded(
-              child: _body(context, notifier, state),
-            ),
+            Expanded(child: _body(context, notifier, state)),
           ],
         ),
       ),
@@ -70,8 +68,8 @@ class SearchUserBottomSheet extends ConsumerWidget {
               child: Text(
                 context.l10n.search_user_empty_text,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.subtitle3.copyWith(
-                  color: context.colorScheme.textDisabled,
+                style: AppTextStyle.body1.copyWith(
+                  color: context.colorScheme.textPrimary,
                 ),
               ),
             ),

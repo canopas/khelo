@@ -94,7 +94,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
           child: Text(
             context.l10n.team_list_empty_list_description,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -123,9 +123,8 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     required bool showMoreOptionButton,
   }) {
     return OnTapScale(
-      onTap: () {
-        AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context);
-      },
+      onTap: () =>
+          AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context),
       child: Material(
         type: MaterialType.transparency,
         child: ListTile(
@@ -192,15 +191,12 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         useRootNavigator: true,
         showDragHandle: true,
         items: TeamFilterOption.values
-            .map(
-              (option) => BottomSheetAction(
+            .map((option) => BottomSheetAction(
                 title: option.getString(context),
                 onTap: () {
                   context.pop();
                   notifier.onFilterOptionSelect(option);
-                },
-              ),
-            )
+                }))
             .toList());
   }
 
