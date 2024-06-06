@@ -8,11 +8,10 @@ import 'package:khelo/ui/flow/matches/match_list_screen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/large_icon_button.dart';
+import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
 
 class MyGameTabScreen extends ConsumerStatefulWidget {
   const MyGameTabScreen({super.key});
@@ -109,17 +108,17 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          _tabButton(
+          TabButton(
             context.l10n.common_matches_title,
-            _selectedTab == 0,
+            selected: _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
             },
           ),
           const SizedBox(width: 8),
-          _tabButton(
+          TabButton(
             context.l10n.my_game_teams_tab_title,
-            _selectedTab == 1,
+            selected: _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);
             },
@@ -137,29 +136,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                 icon: Icon(Icons.add, color: context.colorScheme.primary)),
           ]
         ],
-      ),
-    );
-  }
-
-  Widget _tabButton(String title, bool selected, {VoidCallback? onTap}) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? context.colorScheme.primary
-              : context.colorScheme.containerLow,
-          borderRadius: BorderRadius.circular(56),
-        ),
-        child: Text(
-          title,
-          style: AppTextStyle.body2.copyWith(
-            color: selected
-                ? context.colorScheme.onPrimary
-                : context.colorScheme.textSecondary,
-          ),
-        ),
       ),
     );
   }

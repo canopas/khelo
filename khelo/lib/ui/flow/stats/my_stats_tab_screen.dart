@@ -5,9 +5,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/my_stats_tab_view_model.dart';
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_screen.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
-import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
+import 'package:style/button/tab_button.dart';
 
 class MyStatsTabScreen extends ConsumerStatefulWidget {
   const MyStatsTabScreen({super.key});
@@ -98,45 +96,22 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
-          _tabButton(
+          TabButton(
             context.l10n.common_matches_title,
-            _selectedTab == 0,
+            selected: _selectedTab == 0,
             onTap: () {
               _controller.jumpToPage(0);
             },
           ),
           const SizedBox(width: 8),
-          _tabButton(
+          TabButton(
             context.l10n.tab_stats_title,
-            _selectedTab == 1,
+            selected: _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _tabButton(String title, bool selected, {VoidCallback? onTap}) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected
-              ? context.colorScheme.primary
-              : context.colorScheme.containerLow,
-          borderRadius: BorderRadius.circular(56),
-        ),
-        child: Text(
-          title,
-          style: AppTextStyle.body2.copyWith(
-            color: selected
-                ? context.colorScheme.onPrimary
-                : context.colorScheme.textSecondary,
-          ),
-        ),
       ),
     );
   }
