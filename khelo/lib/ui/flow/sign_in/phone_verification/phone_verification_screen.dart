@@ -50,26 +50,6 @@ class _PhoneVerificationScreenState
     super.initState();
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(
-        phoneVerificationStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeVerificationComplete() {
-    ref.listen(
-        phoneVerificationStateProvider
-            .select((value) => value.isVerificationComplete), (previous, next) {
-      if (next) {
-        context.pop(next);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(phoneVerificationStateProvider);
@@ -172,5 +152,25 @@ class _PhoneVerificationScreenState
         ),
       ],
     );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        phoneVerificationStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeVerificationComplete() {
+    ref.listen(
+        phoneVerificationStateProvider
+            .select((value) => value.isVerificationComplete), (previous, next) {
+      if (next) {
+        context.pop(next);
+      }
+    });
   }
 }

@@ -55,19 +55,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     }
   }
 
-  void _observeShowFilterOptionSheet(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    ref.listen(
-        teamListViewStateProvider
-            .select((value) => value.showFilterOptionSheet), (previous, next) {
-      if (next != null) {
-        _filterActionSheet(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -190,7 +177,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         },
       ),
       BottomSheetAction(
-        title: context.l10n.team_list_edit_team_title,
+        title: context.l10n.common_edit_team_title,
         onTap: () {
           context.pop();
           AppRoute.addTeam(team: team).push(context);
@@ -215,5 +202,18 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
               ),
             )
             .toList());
+  }
+
+  void _observeShowFilterOptionSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        teamListViewStateProvider
+            .select((value) => value.showFilterOptionSheet), (previous, next) {
+      if (next != null) {
+        _filterActionSheet(context);
+      }
+    });
   }
 }

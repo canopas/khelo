@@ -90,7 +90,7 @@ class TeamMemberSheet extends StatelessWidget {
         decoration: BoxDecoration(
             color: context.colorScheme.containerLow,
             borderRadius: BorderRadius.circular(20)),
-        child: Text(context.l10n.search_team_select_title),
+        child: Text(context.l10n.common_select_title),
       ),
     );
   }

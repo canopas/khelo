@@ -45,37 +45,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     runPostFrame(() => notifier.setData(editTeam: widget.editTeam));
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(addTeamStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeTeam(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      addTeamStateProvider.select((value) => value.team),
-      (previous, current) async {
-        if (current != null) {
-          AppRoute.addTeamMember(team: current).pushReplacement(context);
-        }
-      },
-    );
-  }
-
-  void _observePop(BuildContext context, WidgetRef ref) {
-    ref.listen(
-      addTeamStateProvider.select((value) => value.isPop),
-      (previous, current) async {
-        if (current && context.mounted) {
-          context.pop();
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     _observeActionError(context, ref);
@@ -84,7 +53,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
 
     return AppPage(
       title: widget.editTeam != null
-          ? context.l10n.edit_team_screen_title
+          ? context.l10n.common_edit_team_title
           : context.l10n.add_team_screen_title,
       automaticallyImplyLeading: false,
       leading: actionButton(
@@ -170,7 +139,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             _textInputField(
               controller: state.locationController,
               onChanged: (p0) => notifier.onValueChange(),
-              hintText: context.l10n.add_team_location_text,
+              hintText: context.l10n.common_location_title,
             ),
             if (widget.editTeam == null) ...[
               Material(
@@ -325,6 +294,37 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(addTeamStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeTeam(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      addTeamStateProvider.select((value) => value.team),
+      (previous, current) async {
+        if (current != null) {
+          AppRoute.addTeamMember(team: current).pushReplacement(context);
+        }
+      },
+    );
+  }
+
+  void _observePop(BuildContext context, WidgetRef ref) {
+    ref.listen(
+      addTeamStateProvider.select((value) => value.isPop),
+      (previous, current) async {
+        if (current && context.mounted) {
+          context.pop();
+        }
       },
     );
   }

@@ -114,7 +114,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_batting_title,
+                  title: context.l10n.common_batting_average_title,
                   count: battingStat.average.toString()),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_strike_rate_title,
@@ -151,7 +151,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_bowling_title,
+                  title: context.l10n.common_bowling_average_title,
                   count: bowlingStat.average.toString()),
               _subStatisticView(context,
                   title: context.l10n.my_stat_stats_strike_rate_title,
@@ -182,7 +182,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
               title: context.l10n.my_stat_stats_catches_title,
               count: fieldingStat.catches.toString()),
           _subStatisticView(context,
-              title: context.l10n.my_stat_stats_run_out_title,
+              title: context.l10n.common_run_out_title,
               count: fieldingStat.runOut.toString()),
           _subStatisticView(context,
               title: context.l10n.my_stat_stats_stumping_title,

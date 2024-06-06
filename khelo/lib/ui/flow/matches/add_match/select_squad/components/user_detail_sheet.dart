@@ -58,7 +58,7 @@ class UserDetailSheet extends StatelessWidget {
           ),
           _memberDetailCell(
             context,
-            label: context.l10n.add_team_location_text,
+            label: context.l10n.common_location_title,
             value: user.location.toString(),
           ),
           _memberDetailCell(

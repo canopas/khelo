@@ -99,7 +99,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
         TabItem(
           tabIcon: const Icon(Icons.home_outlined),
           tabActiveIcon: const Icon(Icons.home),
-          tabLabel: context.l10n.tab_home_title,
+          tabLabel: context.l10n.home_screen_title.toLowerCase(),
           route: '',
           onTap: () {
             _materialPageController.jumpToPage(0);
@@ -108,7 +108,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
         TabItem(
           tabIcon: const Icon(Icons.sports_baseball_outlined),
           tabActiveIcon: const Icon(Icons.sports_baseball),
-          tabLabel: context.l10n.tab_my_cricket_title,
+          tabLabel: context.l10n.my_cricket_screen_title.toLowerCase(),
           route: '',
           onTap: () {
             _materialPageController.jumpToPage(1);

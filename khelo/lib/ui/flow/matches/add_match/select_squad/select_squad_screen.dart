@@ -49,11 +49,10 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    notifier = ref.watch(selectSquadStateProvider.notifier);
     final state = ref.watch(selectSquadStateProvider);
 
     return AppPage(
-      title: context.l10n.select_squad_screen_title,
+      title: context.l10n.common_select_squad_title,
       actions: [
         actionButton(context,
             onPressed: state.isDoneBtnEnable

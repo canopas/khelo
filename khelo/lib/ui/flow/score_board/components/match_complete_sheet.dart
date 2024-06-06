@@ -62,7 +62,7 @@ class MatchCompleteSheet extends ConsumerWidget {
           ),
         ],
         PrimaryButton(
-          context.l10n.score_board_end_match_title,
+          context.l10n.common_end_match_title,
           expanded: false,
           onPressed: () => context.pop(true),
         ),

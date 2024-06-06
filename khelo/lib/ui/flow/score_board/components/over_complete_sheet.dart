@@ -95,7 +95,7 @@ class OverCompleteSheet extends ConsumerWidget {
               Expanded(
                   child: _detailInfoCell(
                 context,
-                placeholder: "${context.l10n.score_board_wickets_text}:",
+                placeholder: "${context.l10n.common_wickets_text}:",
                 title: overStat.wicket.toString(),
               )),
             ],

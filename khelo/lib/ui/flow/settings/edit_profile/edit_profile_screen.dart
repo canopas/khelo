@@ -33,28 +33,6 @@ class EditProfileScreen extends ConsumerWidget {
 
   final double profileViewHeight = 128;
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(editProfileStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeIsSaved(BuildContext context, WidgetRef ref) {
-    ref.listen(editProfileStateProvider.select((state) => state.isSaved),
-        (previous, next) {
-      if (next) {
-        if (isToCreateAccount) {
-          AppRoute.main.go(context);
-        } else {
-          context.pop();
-        }
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(editProfileStateProvider.notifier);
@@ -147,7 +125,7 @@ class EditProfileScreen extends ConsumerWidget {
           height: 8,
         ),
         _textInputField(context, notifier,
-            placeholderText: context.l10n.edit_profile_location_placeholder,
+            placeholderText: context.l10n.common_location_title,
             controller: state.locationController),
       ],
     );
@@ -348,11 +326,33 @@ class EditProfileScreen extends ConsumerWidget {
   ) {
     return BottomStickyOverlay(
       child: PrimaryButton(
-        context.l10n.edit_profile_save_title,
+        context.l10n.common_save_title,
         progress: state.isSaveInProgress,
         enabled: state.isButtonEnable && !state.isImageUploading,
         onPressed: () => notifier.onSubmitTap(),
       ),
     );
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(editProfileStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeIsSaved(BuildContext context, WidgetRef ref) {
+    ref.listen(editProfileStateProvider.select((state) => state.isSaved),
+        (previous, next) {
+      if (next) {
+        if (isToCreateAccount) {
+          AppRoute.main.go(context);
+        } else {
+          context.pop();
+        }
+      }
+    });
   }
 }

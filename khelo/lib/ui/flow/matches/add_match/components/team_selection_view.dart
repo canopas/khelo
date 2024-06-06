@@ -35,7 +35,7 @@ class TeamSelectionView extends StatelessWidget {
               _selectTeamCell(context, notifier, state, TeamType.a),
               Center(
                 child: Text(
-                  context.l10n.add_match_versus_short_title,
+                  context.l10n.common_versus_short_title,
                   style: AppTextStyle.subtitle1
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
@@ -164,7 +164,7 @@ class TeamSelectionView extends StatelessWidget {
           }
         },
         child: Text(
-          context.l10n.add_match_select_squad_title,
+          context.l10n.common_select_squad_title,
           style: AppTextStyle.button.copyWith(
               color: isValidSquad
                   ? context.colorScheme.primary

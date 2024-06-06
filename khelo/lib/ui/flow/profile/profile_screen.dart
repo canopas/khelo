@@ -17,23 +17,6 @@ import 'package:style/text/app_text_style.dart';
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(profileStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
-  }
-
-  void _observeUserSession(BuildContext context, WidgetRef ref) {
-    ref.listen(hasUserSession, (previous, next) {
-      if (!next) {
-        AppRoute.intro.go(context);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.watch(profileStateProvider.notifier);
@@ -146,5 +129,22 @@ class ProfileScreen extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(profileStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeUserSession(BuildContext context, WidgetRef ref) {
+    ref.listen(hasUserSession, (previous, next) {
+      if (!next) {
+        AppRoute.intro.go(context);
+      }
+    });
   }
 }
