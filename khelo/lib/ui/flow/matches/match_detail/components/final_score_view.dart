@@ -2,6 +2,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/match_status_tag.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -35,9 +36,17 @@ class FinalScoreView extends ConsumerWidget {
       children.add(const SizedBox(height: 8));
     }
     children.add(const SizedBox(height: 8));
+    children.add(Divider(color: context.colorScheme.outline));
     if (state.match!.match_status == MatchStatus.finish) {
-      children.add(Divider(color: context.colorScheme.outline));
       children.add(_winnerMessageText(context, state.match!));
+    } else if (state.match?.match_status == MatchStatus.running) {
+      children.add(Row(
+        children: [
+          const Spacer(),
+          MatchStatusTag(
+              status: state.match?.match_status ?? MatchStatus.running),
+        ],
+      ));
     }
 
     return children;

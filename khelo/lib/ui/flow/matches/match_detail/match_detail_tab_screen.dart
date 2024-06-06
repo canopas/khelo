@@ -64,10 +64,10 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
     if (state.match != null) {
       String title = state.match!.teams
           .map((e) => e.team.name.initials(limit: 3))
-          .join(" ${context.l10n.add_match_versus_short_title} ");
+          .join(" ${context.l10n.common_versus_short_title} ");
       return title;
     }
-    return "${context.l10n.add_match_team_a_title} ${context.l10n.add_match_versus_short_title} ${context.l10n.add_match_team_b_title}";
+    return "${context.l10n.common_a_title} ${context.l10n.common_versus_short_title} ${context.l10n.add_match_team_b_title}";
   }
 
   Widget _content(BuildContext context, MatchDetailTabViewNotifier notifier) {

@@ -94,7 +94,7 @@ class MatchDetailSquadView extends ConsumerWidget {
             textStyle: AppTextStyle.header4,
           )),
           _titleView(context,
-              title: context.l10n.add_match_versus_short_title,
+              title: context.l10n.common_versus_short_title,
               verticalPadding: 8),
           Expanded(
               child: _titleView(
