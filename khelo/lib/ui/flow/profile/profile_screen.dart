@@ -48,9 +48,7 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               _userProfileView(context, state),
               if (state.currentUser != null) ...[
-                const SizedBox(
-                  height: 24,
-                ),
+                const SizedBox(height: 24),
                 _inCompleteProfileView(context, state.currentUser!)
               ],
             ],
@@ -75,9 +73,7 @@ class ProfileScreen extends ConsumerWidget {
               imageUrl: state.currentUser?.profile_img_url,
               initial: state.currentUser?.nameInitial ?? '?',
             ),
-            const SizedBox(
-              width: 16,
-            ),
+            const SizedBox(width: 16),
             Expanded(
               child: Text(
                 state.currentUser?.name ?? context.l10n.common_anonymous_title,
@@ -108,18 +104,14 @@ class ProfileScreen extends ConsumerWidget {
               style: AppTextStyle.header4
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             Text(
               context.l10n.profile_complete_profile_description,
               textAlign: TextAlign.center,
               style: AppTextStyle.body1
                   .copyWith(color: context.colorScheme.textSecondary),
             ),
-            const SizedBox(
-              height: 16,
-            ),
+            const SizedBox(height: 16),
             PrimaryButton(
                 onPressed: () => AppRoute.editProfile().push(context),
                 context.l10n.profile_complete_profile_btn_title)

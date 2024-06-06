@@ -168,8 +168,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: AppTextStyle.subtitle3
-            .copyWith(color: context.colorScheme.textDisabled),
+        style:
+            AppTextStyle.body1.copyWith(color: context.colorScheme.textPrimary),
       ),
     );
   }
@@ -186,9 +186,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
         Text(
           title,
           style: AppTextStyle.subtitle1
@@ -204,9 +202,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                 .copyWith(color: context.colorScheme.textDisabled),
           ),
         ],
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
       ],
     );
   }

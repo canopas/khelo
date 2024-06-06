@@ -25,12 +25,11 @@ class SectionTitle extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Text(
-              title,
-              style: AppTextStyle.header4
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ),
+              child: Text(
+            title,
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary),
+          )),
           trailing ?? const SizedBox()
         ],
       ),

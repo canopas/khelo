@@ -8,7 +8,7 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/flow/team/search_team/components/team_member_dialog.dart';
+import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -81,9 +81,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           child: Column(
             children: [
               _searchTextField(context, state),
-              Expanded(
-                child: _teamList(context, state),
-              ),
+              Expanded(child: _teamList(context, state)),
             ],
           ),
         ),
@@ -113,9 +111,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         focusColor: Colors.transparent,
         unFocusColor: Colors.transparent,
       ),
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
+      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       prefixIcon: Icon(
         Icons.search,
         color: context.colorScheme.textDisabled,

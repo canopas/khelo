@@ -78,9 +78,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
         ),
         tabBuilder: (BuildContext context, int index) {
           return CupertinoTabView(
-            builder: (BuildContext context) {
-              return _widgets[index];
-            },
+            builder: (BuildContext context) => _widgets[index],
           );
         },
       );
@@ -101,36 +99,28 @@ class _MainScreenState extends ConsumerState<MainScreen>
           tabActiveIcon: const Icon(Icons.home),
           tabLabel: context.l10n.home_screen_title.toLowerCase(),
           route: '',
-          onTap: () {
-            _materialPageController.jumpToPage(0);
-          },
+          onTap: () => _materialPageController.jumpToPage(0),
         ),
         TabItem(
           tabIcon: const Icon(Icons.sports_baseball_outlined),
           tabActiveIcon: const Icon(Icons.sports_baseball),
           tabLabel: context.l10n.my_cricket_screen_title.toLowerCase(),
           route: '',
-          onTap: () {
-            _materialPageController.jumpToPage(1);
-          },
+          onTap: () => _materialPageController.jumpToPage(1),
         ),
         TabItem(
           tabIcon: const Icon(Icons.stacked_bar_chart_outlined),
           tabActiveIcon: const Icon(Icons.stacked_bar_chart),
           tabLabel: context.l10n.tab_stats_title,
           route: '',
-          onTap: () {
-            _materialPageController.jumpToPage(2);
-          },
+          onTap: () => _materialPageController.jumpToPage(2),
         ),
         TabItem(
           tabIcon: const Icon(Icons.person_outlined),
           tabActiveIcon: const Icon(Icons.person),
           tabLabel: context.l10n.tab_profile_title.toLowerCase(),
           route: '',
-          onTap: () {
-            _materialPageController.jumpToPage(3);
-          },
+          onTap: () => _materialPageController.jumpToPage(3),
         ),
       ];
 }

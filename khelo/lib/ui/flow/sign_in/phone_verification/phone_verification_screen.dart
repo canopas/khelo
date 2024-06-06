@@ -76,9 +76,7 @@ class _PhoneVerificationScreenState
                         style: AppTextStyle.header1
                             .copyWith(color: context.colorScheme.textPrimary),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const SizedBox(height: 8),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
@@ -90,12 +88,8 @@ class _PhoneVerificationScreenState
                       ),
                       const SizedBox(height: 16),
                       _phoneNumberView(context),
-                      const EnterOTPView(
-                        count: 6,
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      const EnterOTPView(count: 6),
+                      const SizedBox(height: 8),
                       if (state.showErrorVerificationCodeText) ...[
                         Text(
                             context
@@ -104,18 +98,14 @@ class _PhoneVerificationScreenState
                             style: AppTextStyle.body2
                                 .copyWith(color: context.colorScheme.alert)),
                       ],
-                      const SizedBox(
-                        height: 24,
-                      ),
+                      const SizedBox(height: 24),
                       PrimaryButton(
                         enabled: state.enableVerify,
                         progress: state.verifying,
                         context.l10n.otp_verification_verify_otp_text,
                         onPressed: () => notifier.verifyOTP(),
                       ),
-                      const SizedBox(
-                        height: 16,
-                      ),
+                      const SizedBox(height: 16),
                       PhoneVerificationResendCodeView(
                           countryCode: widget.countryCode,
                           phoneNumber: widget.phoneNumber),
@@ -142,9 +132,7 @@ class _PhoneVerificationScreenState
         ),
         actionButton(
           context,
-          onPressed: () {
-            context.pop();
-          },
+          onPressed: context.pop,
           icon: Icon(
             CupertinoIcons.pen,
             color: context.colorScheme.primary,

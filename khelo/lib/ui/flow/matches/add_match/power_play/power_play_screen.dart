@@ -76,9 +76,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
                         approxCellWidth: approxCellWidth,
                       ),
                     ],
-                    const SizedBox(
-                      height: 50,
-                    ),
+                    const SizedBox(height: 50),
                   ],
                 ),
               ),
@@ -99,9 +97,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -123,9 +119,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
             ),
           ],
         ),
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
       ],
     );
   }
@@ -150,17 +144,12 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
         for (int i = 0;
             i < (widget.totalOvers / maxOversInRow).ceil();
             i++) ...[
-          if (i != 0)
-            SizedBox(
-              height: padding,
-            ),
+          if (i != 0) SizedBox(height: padding),
           Row(
             children: [
               for (int j = 0; j < maxOversInRow; j++) ...[
                 if (i * maxOversInRow + j < widget.totalOvers) ...[
-                  SizedBox(
-                    width: j != 0 ? spacingBetweenElements : 0,
-                  ),
+                  SizedBox(width: j != 0 ? spacingBetweenElements : 0),
                   _gridCellView(
                     context: context,
                     state: state,

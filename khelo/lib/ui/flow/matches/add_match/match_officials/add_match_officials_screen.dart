@@ -53,9 +53,7 @@ class _AddMatchOfficialsScreenState
                   _sectionTitle(context, type.getTitle(context)),
                   _officialList(context, notifier, state, type),
                 ],
-                const SizedBox(
-                  height: 40,
-                )
+                const SizedBox(height: 40)
               ],
             ),
             _stickyButton(context, state)
@@ -81,9 +79,7 @@ class _AddMatchOfficialsScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(
-            height: 24,
-          ),
+          const SizedBox(height: 24),
           Text(
             title,
             style: AppTextStyle.header4

@@ -31,7 +31,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
           child: Text(
             context.l10n.team_detail_empty_member_title,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),

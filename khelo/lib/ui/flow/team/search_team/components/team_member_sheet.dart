@@ -59,14 +59,12 @@ class TeamMemberSheet extends StatelessWidget {
             Wrap(
                 runSpacing: 16,
                 children: (team.players ?? [])
-                    .map(
-                      (member) => UserDetailCell(
-                        user: member,
-                        trailing: isForVerification
-                            ? _selectButton(context, member)
-                            : null,
-                      ),
-                    )
+                    .map((member) => UserDetailCell(
+                          user: member,
+                          trailing: isForVerification
+                              ? _selectButton(context, member)
+                              : null,
+                        ))
                     .toList()),
           ],
         ),
@@ -90,7 +88,11 @@ class TeamMemberSheet extends StatelessWidget {
         decoration: BoxDecoration(
             color: context.colorScheme.containerLow,
             borderRadius: BorderRadius.circular(20)),
-        child: Text(context.l10n.common_select_title),
+        child: Text(
+          context.l10n.common_select_title,
+          style: AppTextStyle.body2
+              .copyWith(color: context.colorScheme.textDisabled),
+        ),
       ),
     );
   }

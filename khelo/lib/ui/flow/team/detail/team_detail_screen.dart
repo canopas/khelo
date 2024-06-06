@@ -100,9 +100,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             imageUrl: state.team?.profile_img_url,
             size: 80,
           ),
-          const SizedBox(
-            width: 16,
-          ),
+          const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -130,25 +128,19 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           TabButton(
             context.l10n.team_detail_match_tab_title,
             selected: _selectedTab == 0,
-            onTap: () {
-              _controller.jumpToPage(0);
-            },
+            onTap: () => _controller.jumpToPage(0),
           ),
           const SizedBox(width: 8),
           TabButton(
             context.l10n.team_detail_member_tab_title,
             selected: _selectedTab == 1,
-            onTap: () {
-              _controller.jumpToPage(1);
-            },
+            onTap: () => _controller.jumpToPage(1),
           ),
           const SizedBox(width: 8),
           TabButton(
             context.l10n.team_detail_stat_tab_title,
             selected: _selectedTab == 2,
-            onTap: () {
-              _controller.jumpToPage(2);
-            },
+            onTap: () => _controller.jumpToPage(2),
           ),
           if (_selectedTab == 0) ...[
             const Spacer(),

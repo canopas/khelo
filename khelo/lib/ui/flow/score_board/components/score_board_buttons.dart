@@ -101,14 +101,12 @@ class ScoreBoardButtons extends StatelessWidget {
   }) {
     return Row(
         children: buttons
-            .map(
-              (button) => Expanded(
-                  child: _scoreButton(
-                context: context,
-                btn: button,
-                backgroundColor: backgroundColor,
-              )),
-            )
+            .map((button) => Expanded(
+                    child: _scoreButton(
+                  context: context,
+                  btn: button,
+                  backgroundColor: backgroundColor,
+                )))
             .toList());
   }
 

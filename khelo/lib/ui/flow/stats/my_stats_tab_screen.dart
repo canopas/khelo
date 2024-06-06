@@ -99,17 +99,13 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
           TabButton(
             context.l10n.common_matches_title,
             selected: _selectedTab == 0,
-            onTap: () {
-              _controller.jumpToPage(0);
-            },
+            onTap: () => _controller.jumpToPage(0),
           ),
           const SizedBox(width: 8),
           TabButton(
             context.l10n.tab_stats_title,
             selected: _selectedTab == 1,
-            onTap: () {
-              _controller.jumpToPage(1);
-            },
+            onTap: () => _controller.jumpToPage(1),
           ),
         ],
       ),

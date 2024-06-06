@@ -86,7 +86,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
       return Center(
         child: Text(
           context.l10n.match_list_no_match_yet_title,
-          style: AppTextStyle.subtitle1
+          style: AppTextStyle.body1
               .copyWith(color: context.colorScheme.textPrimary),
         ),
       );

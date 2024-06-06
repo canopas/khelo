@@ -198,9 +198,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                 Align(
                   alignment: Alignment.topRight,
                   child: OnTapScale(
-                      onTap: () {
-                        notifier.unSelectUser(user);
-                      },
+                      onTap: () => notifier.unSelectUser(user),
                       child: Icon(
                         Icons.cancel_rounded,
                         color: context.colorScheme.textPrimary,

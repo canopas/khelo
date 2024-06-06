@@ -145,9 +145,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           const EdgeInsets.symmetric(vertical: 24),
       children: [
         TeamSelectionView(notifier: notifier, state: state),
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
         SectionTitle(
             title: context.l10n.add_match_match_type_title,
             trailing: _matchTypeButton(
@@ -156,18 +154,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
               notifier.onMatchTypeSelection,
             )),
         OverDetailView(notifier: notifier, state: state),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         _inputField(
           context: context,
           controller: state.groundController,
           hintText: context.l10n.add_match_ground_title,
           onChange: () => notifier.onTextChange(),
         ),
-        const SizedBox(
-          height: 16,
-        ),
+        const SizedBox(height: 16),
         _inputField(
           context: context,
           controller: state.cityController,
