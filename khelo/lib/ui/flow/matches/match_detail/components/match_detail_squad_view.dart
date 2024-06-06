@@ -1,4 +1,3 @@
-import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,136 +29,195 @@ class MatchDetailSquadView extends ConsumerWidget {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 
+    return _listView(context, state);
+  }
+
+  Widget _listView(BuildContext context, MatchDetailTabState state) {
+    final firstTeam = state.match!.teams.firstOrNull;
+    final secondTeam = state.match!.teams.elementAtOrNull(1);
+    final firstTeamSquad = firstTeam?.squad.map((e) => e.player).toList() ?? [];
+    final secondTeamSquad =
+        secondTeam?.squad.map((e) => e.player).toList() ?? [];
+
+    final firstTeamBench = firstTeam?.team.players
+            ?.where((element) =>
+                !firstTeamSquad.map((e) => e.id).contains(element.id))
+            .toList() ??
+        [];
+
+    final secondTeamBench = secondTeam?.team.players
+            ?.where((element) =>
+                !secondTeamSquad.map((e) => e.id).contains(element.id))
+            .toList() ??
+        [];
+
     return ListView(
-        padding: context.mediaQueryPadding,
-        children: _buildTeamList(context, state));
+      padding: context.mediaQueryPadding,
+      children: [
+        _teamNameView(context,
+            firstTeamName: firstTeam?.team.name ?? "",
+            secondTeamName: secondTeam?.team.name ?? ""),
+        ..._buildTeamList(context,
+            title: context.l10n.match_squad_playing_title,
+            firstTeamPlayers: firstTeamSquad,
+            secondPlayers: secondTeamSquad,
+            firstTeamCaptainId: state.match!.teams.firstOrNull?.captain_id,
+            secondTeamCaptainId:
+                state.match!.teams.elementAtOrNull(1)?.captain_id),
+        ..._buildTeamList(context,
+            title: context.l10n.match_squad_bench_title,
+            firstTeamPlayers: firstTeamBench,
+            secondPlayers: secondTeamBench)
+      ],
+    );
   }
 
-  List<Widget> _buildTeamList(BuildContext context, MatchDetailTabState state) {
-    List<Widget> children = [];
-    if (state.match == null) {
-      return children;
-    }
-    for (final team in state.match!.teams) {
-      children.add(_sectionTitleView(context, team.team.name));
-      children.add(const SizedBox(height: 8));
-      children.addAll(_buildSquadList(
-        context,
-        team.squad,
-        captainId: team.captain_id ?? "",
-      ));
-      children.addAll(_buildBenchList(context, team));
-      children.add(const SizedBox(height: 16));
-    }
-    return children;
-  }
-
-  List<Widget> _buildSquadList(
-    BuildContext context,
-    List<MatchPlayer> squad, {
-    required String captainId,
-  }) {
-    List<Widget> children = [];
-
-    for (final player in squad) {
-      children.add(const SizedBox(height: 8));
-
-      children.add(_squadCellView(
-        context,
-        player.player,
-        isCaptain: player.player.id == captainId,
-      ));
-    }
-    return children;
-  }
-
-  List<Widget> _buildBenchList(BuildContext context, MatchTeamModel team) {
-    List<Widget> children = [];
-    final squadPlayerIds = team.squad.map((e) => e.player.id).toSet();
-    final players = team.team.players
-        ?.where((element) => !squadPlayerIds.contains(element.id))
-        .toList();
-    if (players == null || players.isEmpty) {
-      return children;
-    }
-    children.add(_sectionTitleView(
-      context,
-      context.l10n.match_squad_bench_text,
-      isSemiTitle: false,
-    ));
-    for (final player in players) {
-      children.add(_squadCellView(
-        context,
-        player,
-        isCaptain: false,
-      ));
-    }
-    return children;
-  }
-
-  Widget _sectionTitleView(
-    BuildContext context,
-    String title, {
-    bool isSemiTitle = true,
+  Widget _teamNameView(
+    BuildContext context, {
+    required String firstTeamName,
+    required String secondTeamName,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      color: isSemiTitle
-          ? context.colorScheme.containerNormalOnSurface
-          : Colors.transparent,
-      child: Text(
-        title,
-        style: isSemiTitle
-            ? AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textPrimary)
-            : AppTextStyle.header3
-                .copyWith(color: context.colorScheme.textPrimary),
+      color: context.colorScheme.containerLow,
+      child: Row(
+        children: [
+          Expanded(
+              child: _titleView(
+            context,
+            title: firstTeamName,
+            textAlign: TextAlign.left,
+            verticalPadding: 8,
+            textStyle: AppTextStyle.header4,
+          )),
+          _titleView(context,
+              title: context.l10n.common_versus_short_title,
+              verticalPadding: 8),
+          Expanded(
+              child: _titleView(
+            context,
+            title: secondTeamName,
+            textAlign: TextAlign.right,
+            verticalPadding: 8,
+            textStyle: AppTextStyle.header4,
+          )),
+        ],
       ),
     );
   }
 
-  Widget _squadCellView(
-    BuildContext context,
-    UserModel player, {
-    bool isCaptain = false,
+  List<Widget> _buildTeamList(
+    BuildContext context, {
+    required String title,
+    required List<UserModel> firstTeamPlayers,
+    required List<UserModel> secondPlayers,
+    String? firstTeamCaptainId,
+    String? secondTeamCaptainId,
+  }) {
+    List<Widget> children = [];
+
+    final listLength = firstTeamPlayers.length > firstTeamPlayers.length
+        ? firstTeamPlayers.length
+        : firstTeamPlayers.length;
+    if (listLength > 0) {
+      children.add(const SizedBox(height: 16));
+      children.add(_titleView(context, title: title));
+    }
+
+    for (int index = 0; index < listLength; index++) {
+      final firstTeamPlayer = firstTeamPlayers.elementAtOrNull(index);
+      final secondTeamPlayer = secondPlayers.elementAtOrNull(index);
+      children.add(Padding(
+        padding: EdgeInsets.symmetric(horizontal: index == 0 ? 0 : 16),
+        child: Divider(
+          height: 0,
+          color: context.colorScheme.outline,
+        ),
+      ));
+      children.add(Row(
+        children: [
+          Expanded(
+              child: _playerProfileView(context,
+                  user: firstTeamPlayer, captainId: firstTeamCaptainId)),
+          Expanded(
+              child: _playerProfileView(context,
+                  user: secondTeamPlayer,
+                  isFirstCell: false,
+                  captainId: secondTeamCaptainId))
+        ],
+      ));
+    }
+    return children;
+  }
+
+  Widget _titleView(
+    BuildContext context, {
+    required String title,
+    TextAlign textAlign = TextAlign.center,
+    TextStyle textStyle = AppTextStyle.subtitle1,
+    double verticalPadding = 12,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(vertical: verticalPadding, horizontal: 16),
+      child: Text(
+        title,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        textAlign: textAlign,
+        style: textStyle.copyWith(color: context.colorScheme.textPrimary),
+      ),
+    );
+  }
+
+  Widget _playerProfileView(
+    BuildContext context, {
+    UserModel? user,
+    bool isFirstCell = true,
+    String? captainId,
+  }) {
+    if (user == null) {
+      return const SizedBox();
+    }
+    bool isCaptain = user.id == captainId;
+    return Container(
+      padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+      decoration: BoxDecoration(
+          border: BorderDirectional(
+              end: BorderSide(
+                  color: isFirstCell
+                      ? context.colorScheme.outline
+                      : Colors.transparent))),
       child: Row(
         children: [
           ImageAvatar(
-            initial: player.nameInitial,
-            imageUrl: player.profile_img_url,
-            size: 50,
+            initial: user.nameInitial,
+            imageUrl: user.profile_img_url,
+            size: 40,
           ),
-          const SizedBox(
-            width: 8,
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  user.name == null
+                      ? context.l10n.common_anonymous_title
+                      : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                Text(
+                    user.player_role != null
+                        ? user.player_role!.getString(context)
+                        : context.l10n.common_not_specified_title,
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textDisabled)),
+              ],
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "${player.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                player.player_role?.getString(context) ?? "",
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textPrimary),
-              )
-            ],
-          )
         ],
       ),
     );

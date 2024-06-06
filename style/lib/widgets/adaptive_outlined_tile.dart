@@ -8,6 +8,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
   final String? headerText;
   final String? headerImage;
   final String? title;
+  final int? maxLines;
   final String placeholder;
   final bool showTrailingIcon;
   final Function()? onTap;
@@ -17,6 +18,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
     this.headerText,
     this.headerImage,
     this.title,
+    this.maxLines,
     required this.placeholder,
     this.showTrailingIcon = false,
     this.onTap,
@@ -61,6 +63,8 @@ class AdaptiveOutlinedTile extends StatelessWidget {
                 Expanded(
                   child: Text(
                     title ?? placeholder,
+                    maxLines: maxLines,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyle.subtitle3.copyWith(
                         color: title != null
                             ? context.colorScheme.textPrimary

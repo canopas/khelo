@@ -26,46 +26,51 @@ class MatchDetailInfoView extends ConsumerWidget {
   Widget _body(BuildContext context, MatchDetailTabViewNotifier notifier,
       MatchDetailTabState state) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 
     return ListView(
-      padding: context.mediaQueryPadding,
+      padding: context.mediaQueryPadding +
+          const EdgeInsets.symmetric(horizontal: 16),
       children: [
         _sectionTitle(context, context.l10n.match_detail_match_info_tab_title),
         _matchTitleView(context, state.match!),
-        _matchDateTimeView(context, state.match?.start_time ?? DateTime.now()),
+        _dataRowView(context,
+            title: context.l10n.match_info_date_and_time_title,
+            subtitle: state.match?.start_time
+                .format(context, DateFormatType.shortDateTime)),
         _tossDetailView(context, state.match!),
-        _matchOfficialView(context, state.match!),
-        for (final team in state.match?.teams ?? []) ...[
-          _teamPlayerView(context, team: team)
-        ],
-        const SizedBox(height: 16),
-        _sectionTitle(context, context.l10n.match_info_venue_title),
         _dataRowView(context,
-            title: context.l10n.match_info_ground_title,
-            subtitle: state.match?.ground ?? "-"),
+            title: context.l10n.match_info_venue_title,
+            subtitle: state.match?.ground),
         _dataRowView(context,
-            title: context.l10n.common_city_title,
-            subtitle: state.match?.city ?? "-"),
+            title: context.l10n.add_match_officials_umpires_title,
+            subtitle: state.match?.umpires?.map((e) => e.name).join(", ")),
+        _dataRowView(
+          context,
+          title: context.l10n.add_match_officials_referee_title,
+          subtitle: state.match?.referee?.name,
+        ),
+        _dataRowView(context,
+            title: context.l10n.add_match_officials_commentators_title,
+            subtitle: state.match?.commentators?.map((e) => e.name).join(", ")),
+        _dataRowView(context,
+            title: context.l10n.add_match_officials_scorers_title,
+            subtitle: state.match?.scorers?.map((e) => e.name).join(", ")),
       ],
     );
   }
 
   Widget _sectionTitle(BuildContext context, String title) {
-    return Container(
-      color: context.colorScheme.containerNormalOnSurface,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24, bottom: 16),
       child: Text(
         title,
         style: AppTextStyle.subtitle1
@@ -79,27 +84,27 @@ class MatchDetailInfoView extends ConsumerWidget {
     required String title,
     String? subtitle,
   }) {
+    if (subtitle == null || subtitle.isEmpty) {
+      return const SizedBox();
+    }
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 6),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            title,
+            style: AppTextStyle.body1
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+          const SizedBox(width: 16),
           Expanded(
-              flex: 1,
               child: Text(
-                title,
-                style: AppTextStyle.header4
-                    .copyWith(color: context.colorScheme.textPrimary),
-              )),
-          if (subtitle != null) ...[
-            Expanded(
-                flex: 3,
-                child: Text(
-                  subtitle,
-                  style: AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textPrimary),
-                )),
-          ],
+            subtitle,
+            textAlign: TextAlign.right,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
+          )),
         ],
       ),
     );
@@ -111,19 +116,6 @@ class MatchDetailInfoView extends ConsumerWidget {
         .join(" ${context.l10n.common_versus_short_title} ");
     return _dataRowView(context,
         title: context.l10n.match_info_match_title, subtitle: title);
-  }
-
-  Widget _matchDateTimeView(BuildContext context, DateTime matchTime) {
-    return Column(
-      children: [
-        _dataRowView(context,
-            title: context.l10n.match_info_date_title,
-            subtitle: matchTime.format(context, DateFormatType.date)),
-        _dataRowView(context,
-            title: context.l10n.match_info_time_title,
-            subtitle: matchTime.format(context, DateFormatType.time)),
-      ],
-    );
   }
 
   Widget _tossDetailView(BuildContext context, MatchModel match) {
@@ -144,49 +136,5 @@ class MatchDetailInfoView extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
-  }
-
-  Widget _teamPlayerView(
-    BuildContext context, {
-    required MatchTeamModel team,
-  }) {
-    String playing = team.squad
-        .map((e) =>
-            "${e.player.name}${team.captain_id == e.player.id ? context.l10n.match_info_captain_short_title : ""}")
-        .join(", ");
-    String? bench = team.team.players
-        ?.where((element) =>
-            !team.squad.map((e) => e.player.id).contains(element.id))
-        .join(", ");
-    return Column(
-      children: [
-        _dataRowView(context,
-            title: context.l10n.match_info_squad_title(team.team.name)),
-        _dataRowView(context,
-            title: context.l10n.match_info_playing_title, subtitle: playing),
-        if (bench != null && (bench).isNotEmpty) ...[
-          _dataRowView(context,
-              title: context.l10n.match_info_bench_title, subtitle: bench),
-        ],
-      ],
-    );
-  }
-
-  Widget _matchOfficialView(BuildContext context, MatchModel match) {
-    String? umpires = match.umpires?.map((e) => e.name).join(", ");
-    return Column(
-      children: [
-        if (umpires != null && umpires.isNotEmpty) ...[
-          _dataRowView(context,
-              title: context.l10n.match_info_umpire_title, subtitle: umpires),
-        ],
-        if (match.referee?.name != null &&
-            (match.referee?.name ?? "").isNotEmpty) ...[
-          _dataRowView(context,
-              title: context.l10n.match_info_referee_title,
-              subtitle: match.referee?.name),
-        ],
-      ],
-    );
   }
 }

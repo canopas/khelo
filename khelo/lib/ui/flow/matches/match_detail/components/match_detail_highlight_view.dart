@@ -8,10 +8,10 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
   const MatchDetailHighlightView({super.key});
@@ -62,16 +62,13 @@ class MatchDetailHighlightView extends ConsumerWidget {
     MatchDetailTabState state,
   ) {
     if (state.loading) {
-      return const AppProgressIndicator();
+      return const Center(child: AppProgressIndicator());
     }
 
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: () async {
-          await notifier.cancelStreamSubscription();
-          notifier.loadMatch();
-        },
+        onRetryTap: notifier.onResume,
       );
     }
 
@@ -81,34 +78,38 @@ class MatchDetailHighlightView extends ConsumerWidget {
       padding: context.mediaQueryPadding,
       child: Column(
         children: [
-          IntrinsicHeight(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 Expanded(
-                  child: _highlightFilterButton(context, teamName,
-                      notifier.showHighlightTeamSelectionDialog),
-                ),
-                const VerticalDivider(
-                  width: 1,
-                ),
+                    child: AdaptiveOutlinedTile(
+                  placeholder: teamName,
+                  title: teamName,
+                  maxLines: 1,
+                  onTap: notifier.showHighlightTeamSelectionDialog,
+                  showTrailingIcon: true,
+                )),
+                const SizedBox(width: 8),
                 Expanded(
-                  child: _highlightFilterButton(
-                      context,
-                      state.highlightFilterOption.getString(context),
-                      notifier.showHighlightFilterSelectionDialog),
-                ),
+                    child: AdaptiveOutlinedTile(
+                  placeholder: state.highlightFilterOption.getString(context),
+                  title: state.highlightFilterOption.getString(context),
+                  maxLines: 1,
+                  onTap: notifier.showHighlightFilterSelectionDialog,
+                  showTrailingIcon: true,
+                )),
               ],
             ),
           ),
-          Expanded(child: _highlightList(context, notifier, state)),
+          Expanded(child: _highlightList(context, state)),
         ],
       ),
     );
   }
 
-  Widget _highlightList(BuildContext context,
-      MatchDetailTabViewNotifier notifier, MatchDetailTabState state) {
-    final highlight = _getHighlightsScore(state);
+  Widget _highlightList(BuildContext context, MatchDetailTabState state) {
+    final highlight = state.filteredHighlight;
 
     if (highlight.isEmpty) {
       return Center(
@@ -117,7 +118,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
           child: Text(
             context.l10n.match_highlight_empty_highlight_text,
             textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
         ),
@@ -126,12 +127,30 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
     return ListView.separated(
       itemCount: highlight.length,
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-      separatorBuilder: (context, index) => const Divider(),
+      padding: const EdgeInsets.only(top: 24),
+      separatorBuilder: (context, index) =>
+          Divider(color: context.colorScheme.outline, height: 32),
       itemBuilder: (context, index) {
-        return CommentaryBallSummary(state: state, ball: highlight[index]);
+        final overSummary = highlight[index];
+        return Column(children: _buildHighlightList(context, overSummary));
       },
     );
+  }
+
+  List<Widget> _buildHighlightList(
+      BuildContext context, OverSummary overSummary) {
+    List<Widget> children = [];
+    for (int index = 0; index < overSummary.balls.length; index++) {
+      children.add(CommentaryBallSummary(
+          ball: overSummary.balls[index], overSummary: overSummary));
+      if (index != overSummary.balls.length - 1) {
+        children.add(Divider(
+          color: context.colorScheme.outline,
+          height: 32,
+        ));
+      }
+    }
+    return children;
   }
 
   String _getTeamNameByInningId(MatchDetailTabState state) {
@@ -141,64 +160,6 @@ class MatchDetailHighlightView extends ConsumerWidget {
         ?.team
         .name;
     return teamName ?? "--";
-  }
-
-  Widget _highlightFilterButton(
-      BuildContext context, String title, Function() onTap) {
-    return OnTapScale(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        color: context.colorScheme.containerNormalOnSurface,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textPrimary,
-                    overflow: TextOverflow.ellipsis),
-              ),
-            ),
-            Icon(
-              Icons.expand_more_sharp,
-              color: context.colorScheme.textPrimary,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  List<BallScoreModel> _getHighlightsScore(MatchDetailTabState state) {
-    final inningId = state.firstInning?.team_id == state.highlightTeamId
-        ? state.firstInning?.id
-        : state.secondInning?.id;
-    switch (state.highlightFilterOption) {
-      case HighlightFilterOption.all:
-        return state.ballScores
-            .where((element) =>
-                element.inning_id == inningId &&
-                (element.wicket_type != null ||
-                    element.is_four ||
-                    element.is_six))
-            .toList();
-      case HighlightFilterOption.fours:
-        return state.ballScores
-            .where(
-                (element) => element.inning_id == inningId && element.is_four)
-            .toList();
-      case HighlightFilterOption.sixes:
-        return state.ballScores
-            .where((element) => element.inning_id == inningId && element.is_six)
-            .toList();
-      case HighlightFilterOption.wickets:
-        return state.ballScores
-            .where((element) =>
-                element.inning_id == inningId && element.wicket_type != null)
-            .toList();
-    }
   }
 
   void showFilterOptionSelectionSheet(
@@ -216,8 +177,11 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .toList());
   }
 
-  void showTeamSelectionSheet(BuildContext context, List<MatchTeamModel>? teams,
-      Function(String) onTap) {
+  void showTeamSelectionSheet(
+    BuildContext context,
+    List<MatchTeamModel>? teams,
+    Function(String) onTap,
+  ) {
     showActionBottomSheet(
       context: context,
       items: teams
