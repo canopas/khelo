@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
@@ -56,7 +57,6 @@ class AddExtraSheet extends StatefulWidget {
 class _AddExtraSheetState extends State<AddExtraSheet> {
   bool notFromBat = false;
   bool isBoundary = false;
-  bool isButtonEnable = false;
 
   TextEditingController runController = TextEditingController();
 
@@ -67,7 +67,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
       action: [
         PrimaryButton(
           context.l10n.common_next_title,
-          enabled: isButtonEnable,
+          enabled: runController.text.isNotEmpty,
           onPressed: () {
             context.pop((
               int.parse(runController.text),
@@ -92,8 +92,63 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
               .copyWith(color: context.colorScheme.textPrimary),
         ),
         const SizedBox(height: 16),
-        _addRunsView(context),
+        if (widget.isFiveSeven) ...[
+          Wrap(
+            spacing: 16,
+            children: [
+              _runButton(
+                text: context.l10n.score_board_five_text,
+                onTap: () {
+                  setState(() {
+                    runController.text = context.l10n.score_board_five_text;
+                  });
+                },
+                selected: runController.text.contains(
+                  context.l10n.score_board_five_text,
+                ),
+              ),
+              _runButton(
+                text: context.l10n.score_board_seven_text,
+                onTap: () {
+                  setState(() {
+                    runController.text = context.l10n.score_board_seven_text;
+                  });
+                },
+                selected: runController.text.contains(
+                  context.l10n.score_board_seven_text,
+                ),
+              ),
+            ],
+          ),
+        ] else ...[
+          _addRunsView(context),
+        ],
       ],
+    );
+  }
+
+  Widget _runButton({
+    required text,
+    required Function() onTap,
+    required bool selected,
+  }) {
+    return OnTapScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+        decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            borderRadius: BorderRadius.circular(12),
+            border: selected
+                ? Border.all(color: context.colorScheme.primary)
+                : null),
+        child: Text(
+          text,
+          style: AppTextStyle.subtitle1.copyWith(
+            color: context.colorScheme.textPrimary,
+          ),
+        ),
+      ),
     );
   }
 
@@ -136,8 +191,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
                     ],
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textPrimary),
-                    onChanged: (value) =>
-                        setState(() => isButtonEnable = value.isNotEmpty),
+                    onChanged: (_) => setState(() {}),
                   ),
                 ),
               ),
@@ -208,9 +262,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
   }
 
   String _getExtraTitle(BuildContext context, ExtrasType? type) {
-    if (widget.isFiveSeven) {
-      return context.l10n.score_board_five_or_seven_text;
-    } else if (type == ExtrasType.noBall) {
+    if (type == ExtrasType.noBall) {
       return "${context.l10n.score_board_no_ball_short_text} +";
     } else if (type == ExtrasType.bye) {
       return context.l10n.score_board_bye_text;
