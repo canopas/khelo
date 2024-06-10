@@ -103,7 +103,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
     return ListView.separated(
       itemCount: state.filteredTeams.length,
-      padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+      padding: const EdgeInsets.symmetric(horizontal: 16) + context.mediaQueryPadding,
       separatorBuilder: (context, index) =>
           Divider(color: context.colorScheme.outline),
       itemBuilder: (context, index) {
