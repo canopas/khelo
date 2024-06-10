@@ -58,7 +58,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
   Widget _body(BuildContext context) {
     final state = ref.watch(userStatViewStateProvider);
 
-    if (state.loading) return const AppProgressIndicator();
+    if (state.loading) return const Center(child: AppProgressIndicator());
 
     if (state.error != null) {
       return ErrorScreen(
