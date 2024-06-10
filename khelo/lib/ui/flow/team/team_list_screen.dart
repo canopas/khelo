@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
@@ -16,6 +17,8 @@ import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../gen/assets.gen.dart';
 
 class TeamListScreen extends ConsumerStatefulWidget {
   const TeamListScreen({super.key});
@@ -197,9 +200,12 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
                 child: selectedFilter == option
-                    ? Icon(
-                        Icons.check,
-                        color: context.colorScheme.primary,
+                    ? SvgPicture.asset(
+                        Assets.images.icCheck,
+                        colorFilter: ColorFilter.mode(
+                          context.colorScheme.primary,
+                          BlendMode.srcATop,
+                        ),
                       )
                     : null,
                 onTap: () {

@@ -2,6 +2,7 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -12,6 +13,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
+
+import '../../../../../gen/assets.gen.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
   const MatchDetailHighlightView({super.key});
@@ -177,9 +180,12 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .map((option) => BottomSheetAction(
                   title: option.getString(context),
                   child: highlightFilterOption == option
-                      ? Icon(
-                          Icons.check,
-                          color: context.colorScheme.primary,
+                      ? SvgPicture.asset(
+                          Assets.images.icCheck,
+                          colorFilter: ColorFilter.mode(
+                            context.colorScheme.primary,
+                            BlendMode.srcATop,
+                          ),
                         )
                       : null,
                   onTap: () {
@@ -205,9 +211,12 @@ class MatchDetailHighlightView extends ConsumerWidget {
               ?.map((match) => BottomSheetAction(
                     title: match.team.name,
                     child: highlightTeamId == match.team.id
-                        ? Icon(
-                            Icons.check,
-                            color: context.colorScheme.primary,
+                        ? SvgPicture.asset(
+                            Assets.images.icCheck,
+                            colorFilter: ColorFilter.mode(
+                              context.colorScheme.primary,
+                              BlendMode.srcATop,
+                            ),
                           )
                         : null,
                     onTap: () {
