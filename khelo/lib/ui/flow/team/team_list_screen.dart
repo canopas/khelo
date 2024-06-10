@@ -103,7 +103,8 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
     return ListView.separated(
       itemCount: state.filteredTeams.length,
-      padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+      padding: const EdgeInsets.symmetric(horizontal: 16) +
+          context.mediaQueryPadding,
       separatorBuilder: (context, index) =>
           Divider(color: context.colorScheme.outline),
       itemBuilder: (context, index) {
@@ -186,13 +187,21 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
   }
 
   void _filterActionSheet(BuildContext context) async {
-    return showActionBottomSheet(
+    final selectedFilter = ref.watch(
+        teamListViewStateProvider.select((value) => value.selectedFilter));
+    return await showActionBottomSheet(
         context: context,
         useRootNavigator: true,
         showDragHandle: true,
         items: TeamFilterOption.values
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
+                child: selectedFilter == option
+                    ? Icon(
+                        Icons.check,
+                        color: context.colorScheme.primary,
+                      )
+                    : null,
                 onTap: () {
                   context.pop();
                   notifier.onFilterOptionSelect(option);

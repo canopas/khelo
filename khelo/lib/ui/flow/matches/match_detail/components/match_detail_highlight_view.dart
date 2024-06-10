@@ -26,7 +26,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
         matchDetailTabStateProvider
             .select((value) => value.showTeamSelectionSheet), (previous, next) {
       if (next != null) {
-        showTeamSelectionSheet(context, teams, onTap);
+        showTeamSelectionSheet(context, ref, teams, onTap);
       }
     });
   }
@@ -38,7 +38,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .select((value) => value.showHighlightOptionSelectionSheet),
         (previous, next) {
       if (next != null) {
-        showFilterOptionSelectionSheet(context, onSelection);
+        showFilterOptionSelectionSheet(context, ref, onTap: onSelection);
       }
     });
   }
@@ -163,15 +163,28 @@ class MatchDetailHighlightView extends ConsumerWidget {
   }
 
   void showFilterOptionSelectionSheet(
-      BuildContext context, Function(HighlightFilterOption) onTap) {
-    showActionBottomSheet(
+    BuildContext context,
+    WidgetRef ref, {
+    required Function(HighlightFilterOption) onTap,
+  }) async {
+    final highlightFilterOption = ref.watch(matchDetailTabStateProvider.select(
+      (value) => value.highlightFilterOption,
+    ));
+
+    return await showActionBottomSheet(
         context: context,
         items: HighlightFilterOption.values
-            .map((e) => BottomSheetAction(
-                  title: e.getString(context),
+            .map((option) => BottomSheetAction(
+                  title: option.getString(context),
+                  child: highlightFilterOption == option
+                      ? Icon(
+                          Icons.check,
+                          color: context.colorScheme.primary,
+                        )
+                      : null,
                   onTap: () {
                     context.pop();
-                    onTap(e);
+                    onTap(option);
                   },
                 ))
             .toList());
@@ -179,17 +192,27 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
   void showTeamSelectionSheet(
     BuildContext context,
+    WidgetRef ref,
     List<MatchTeamModel>? teams,
     Function(String) onTap,
-  ) {
-    showActionBottomSheet(
+  ) async {
+    final highlightTeamId = ref.watch(matchDetailTabStateProvider.select(
+      (value) => value.highlightTeamId,
+    ));
+    return await showActionBottomSheet(
       context: context,
       items: teams
-              ?.map((e) => BottomSheetAction(
-                    title: e.team.name,
+              ?.map((match) => BottomSheetAction(
+                    title: match.team.name,
+                    child: highlightTeamId == match.team.id
+                        ? Icon(
+                            Icons.check,
+                            color: context.colorScheme.primary,
+                          )
+                        : null,
                     onTap: () {
                       context.pop();
-                      onTap(e.team.id ?? "INVALID ID");
+                      onTap(match.team.id ?? "INVALID ID");
                     },
                   ))
               .toList() ??
