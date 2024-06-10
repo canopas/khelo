@@ -189,9 +189,8 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     ]);
   }
 
-  void _filterActionSheet(BuildContext context) async {
-    final selectedFilter = ref.watch(
-        teamListViewStateProvider.select((value) => value.selectedFilter));
+  void _filterActionSheet(
+      BuildContext context, TeamFilterOption selectedFilter) async {
     return await showActionBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -223,7 +222,9 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         teamListViewStateProvider
             .select((value) => value.showFilterOptionSheet), (previous, next) {
       if (next != null) {
-        _filterActionSheet(context);
+        final selectedFilter = ref.watch(
+            teamListViewStateProvider.select((value) => value.selectedFilter));
+        _filterActionSheet(context, selectedFilter);
       }
     });
   }

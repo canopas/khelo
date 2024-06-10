@@ -29,7 +29,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
         matchDetailTabStateProvider
             .select((value) => value.showTeamSelectionSheet), (previous, next) {
       if (next != null) {
-        showTeamSelectionSheet(context, ref, teams, onTap);
+        final highlightTeamId = ref.watch(matchDetailTabStateProvider.select(
+          (value) => value.highlightTeamId,
+        ));
+        showTeamSelectionSheet(context, teams, onTap, highlightTeamId);
       }
     });
   }
@@ -41,7 +44,15 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .select((value) => value.showHighlightOptionSelectionSheet),
         (previous, next) {
       if (next != null) {
-        showFilterOptionSelectionSheet(context, ref, onTap: onSelection);
+        final highlightFilterOption =
+            ref.watch(matchDetailTabStateProvider.select(
+          (value) => value.highlightFilterOption,
+        ));
+        showFilterOptionSelectionSheet(
+          context,
+          onTap: onSelection,
+          highlightFilterOption: highlightFilterOption,
+        );
       }
     });
   }
@@ -166,14 +177,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
   }
 
   void showFilterOptionSelectionSheet(
-    BuildContext context,
-    WidgetRef ref, {
+    BuildContext context, {
     required Function(HighlightFilterOption) onTap,
+    required HighlightFilterOption highlightFilterOption,
   }) async {
-    final highlightFilterOption = ref.watch(matchDetailTabStateProvider.select(
-      (value) => value.highlightFilterOption,
-    ));
-
     return await showActionBottomSheet(
         context: context,
         items: HighlightFilterOption.values
@@ -198,13 +205,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
   void showTeamSelectionSheet(
     BuildContext context,
-    WidgetRef ref,
     List<MatchTeamModel>? teams,
     Function(String) onTap,
+    String? highlightTeamId,
   ) async {
-    final highlightTeamId = ref.watch(matchDetailTabStateProvider.select(
-      (value) => value.highlightTeamId,
-    ));
     return await showActionBottomSheet(
       context: context,
       items: teams
