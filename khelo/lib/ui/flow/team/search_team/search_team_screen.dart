@@ -1,6 +1,7 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -15,6 +16,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../../gen/assets.gen.dart';
 
 class SearchTeamScreen extends ConsumerStatefulWidget {
   final List<String>? excludedIds;
@@ -50,30 +53,34 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
       title: context.l10n.search_team_screen_title,
       actions: [
         IconButton(
-            onPressed: state.selectedTeam != null
-                ? () async {
-                    if (state.userTeams
-                        .map((e) => e.id)
-                        .contains(state.selectedTeam?.id)) {
+          onPressed: state.selectedTeam != null
+              ? () async {
+                  if (state.userTeams
+                      .map((e) => e.id)
+                      .contains(state.selectedTeam?.id)) {
+                    context.pop(state.selectedTeam);
+                  } else {
+                    final res = await TeamMemberSheet.show<bool>(
+                      context,
+                      team: state.selectedTeam!,
+                      isForVerification: true,
+                    );
+                    if (res != null && res && context.mounted) {
                       context.pop(state.selectedTeam);
-                    } else {
-                      final res = await TeamMemberSheet.show<bool>(
-                        context,
-                        team: state.selectedTeam!,
-                        isForVerification: true,
-                      );
-                      if (res != null && res && context.mounted) {
-                        context.pop(state.selectedTeam);
-                      }
                     }
                   }
-                : null,
-            icon: Icon(
-              Icons.check,
-              color: state.selectedTeam != null
+                }
+              : null,
+          icon: SvgPicture.asset(
+            Assets.images.icCheck,
+            colorFilter: ColorFilter.mode(
+              state.selectedTeam != null
                   ? context.colorScheme.primary
                   : context.colorScheme.textDisabled,
-            )),
+              BlendMode.srcATop,
+            ),
+          ),
+        ),
       ],
       body: SafeArea(
         child: Padding(
@@ -210,7 +217,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
             ),
           ),
           trailing: (team.id == state.selectedTeam?.id)
-              ? const Icon(Icons.check_circle_sharp)
+              ? SvgPicture.asset(Assets.images.icRoundedCheck)
               : null,
         ),
       ),
