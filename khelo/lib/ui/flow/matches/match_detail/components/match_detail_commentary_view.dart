@@ -76,7 +76,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
       if (nextOverSummary != null &&
           nextOverSummary.overNumber != overSummary.overNumber) {
         children.add(BowlerSummaryView(
-          bowlerSummary:nextOverSummary.bowlerStatAtStart,
+          bowlerSummary: nextOverSummary.bowlerStatAtStart,
           isForBowlerIntro: true,
         ));
         children.add(const SizedBox(height: 24));
