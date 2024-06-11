@@ -223,7 +223,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
     );
   }
 
-  Widget? _checkWidget(BuildContext context, {required bool isShowCheck}) =>
+  Widget? _checkWidget(
+    BuildContext context, {
+    required bool isShowCheck,
+  }) =>
       isShowCheck
           ? SvgPicture.asset(
               Assets.images.icCheck,
