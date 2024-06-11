@@ -186,15 +186,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
         items: HighlightFilterOption.values
             .map((option) => BottomSheetAction(
                   title: option.getString(context),
-                  child: highlightFilterOption == option
-                      ? SvgPicture.asset(
-                          Assets.images.icCheck,
-                          colorFilter: ColorFilter.mode(
-                            context.colorScheme.primary,
-                            BlendMode.srcATop,
-                          ),
-                        )
-                      : null,
+                  child: _checkWidget(
+                    context,
+                    isShowCheck: highlightFilterOption == option,
+                  ),
                   onTap: () {
                     context.pop();
                     onTap(option);
@@ -214,15 +209,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
       items: teams
               ?.map((match) => BottomSheetAction(
                     title: match.team.name,
-                    child: highlightTeamId == match.team.id
-                        ? SvgPicture.asset(
-                            Assets.images.icCheck,
-                            colorFilter: ColorFilter.mode(
-                              context.colorScheme.primary,
-                              BlendMode.srcATop,
-                            ),
-                          )
-                        : null,
+                    child: _checkWidget(
+                      context,
+                      isShowCheck: highlightTeamId == match.team.id,
+                    ),
                     onTap: () {
                       context.pop();
                       onTap(match.team.id ?? "INVALID ID");
@@ -232,4 +222,15 @@ class MatchDetailHighlightView extends ConsumerWidget {
           [],
     );
   }
+
+  Widget? _checkWidget(BuildContext context, {required bool isShowCheck}) =>
+      isShowCheck
+          ? SvgPicture.asset(
+              Assets.images.icCheck,
+              colorFilter: ColorFilter.mode(
+                context.colorScheme.primary,
+                BlendMode.srcATop,
+              ),
+            )
+          : null;
 }

@@ -56,8 +56,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           onPressed: state.selectedTeam != null
               ? () async {
                   if (state.userTeams
-                      .map((e) => e.id)
-                      .contains(state.selectedTeam?.id)) {
+                      .any((team) => team.id == state.selectedTeam?.id)) {
                     context.pop(state.selectedTeam);
                   } else {
                     final res = await TeamMemberSheet.show<bool>(
