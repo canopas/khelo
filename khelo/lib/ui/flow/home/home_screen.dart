@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +24,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final _controller = PageController(keepPage: true, viewportFraction: 0.9);
+  final _controller =
+      PageController(initialPage: 100, keepPage: true, viewportFraction: 0.9);
   late HomeViewNotifier notifier;
 
   @override
@@ -78,9 +81,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 )
               : PageView.builder(
                   controller: _controller,
-                  itemCount: state.matches.length,
                   itemBuilder: (context, index) {
-                    return _matchCell(context, state.matches[index]);
+                    return _matchCell(
+                        context, state.matches[index % state.matches.length]);
                   },
                 ),
         ),

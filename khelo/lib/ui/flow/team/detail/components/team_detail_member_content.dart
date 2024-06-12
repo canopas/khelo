@@ -6,6 +6,8 @@ import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../matches/add_match/select_squad/components/user_detail_sheet.dart';
+
 class TeamDetailMemberContent extends ConsumerWidget {
   const TeamDetailMemberContent({super.key});
 
@@ -20,7 +22,10 @@ class TeamDetailMemberContent extends ConsumerWidget {
         itemCount: state.team!.players!.length,
         itemBuilder: (context, index) {
           final member = state.team!.players![index];
-          return UserDetailCell(user: member, showPhoneNumber: false);
+          return UserDetailCell(
+              user: member,
+              onTap: () => UserDetailSheet.show(context, member),
+              showPhoneNumber: false);
         },
         separatorBuilder: (context, index) => const SizedBox(height: 16),
       );

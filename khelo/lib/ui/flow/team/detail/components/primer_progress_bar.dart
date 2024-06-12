@@ -97,6 +97,7 @@ class PrimerProgressBar extends StatelessWidget {
           WidgetSpan(
             alignment: PlaceholderAlignment.middle,
             child: Container(
+              margin: const EdgeInsets.only(right: 4),
               constraints: const BoxConstraints(minHeight: 8, minWidth: 8),
               decoration: BoxDecoration(
                 color: color,
