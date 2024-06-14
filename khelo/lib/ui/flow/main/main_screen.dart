@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
 import 'package:khelo/ui/flow/stats/my_stats_tab_screen.dart';
@@ -71,7 +73,9 @@ class _MainScreenState extends ConsumerState<MainScreen>
         backgroundColor: context.colorScheme.surface,
         controller: _cupertinoTabController,
         tabBar: CupertinoTabBar(
-          backgroundColor: context.colorScheme.containerNormalOnSurface,
+          backgroundColor: context.colorScheme.containerLowOnSurface,
+          height: 65,
+          border: null,
           items: _tabItems(context)
               .map((e) => e.toBottomNavigationBarItem(context))
               .toList(),
@@ -95,32 +99,61 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   List<TabItem> _tabItems(BuildContext context) => [
         TabItem(
-          tabIcon: const Icon(Icons.home_outlined),
-          tabActiveIcon: const Icon(Icons.home),
+          tabIcon: _tabImage(context, imagePath: Assets.images.icHome),
+          tabActiveIcon: _tabImage(context,
+              imagePath: Assets.images.icHome, isActive: true),
           tabLabel: context.l10n.home_screen_title.toLowerCase(),
           route: '',
           onTap: () => _materialPageController.jumpToPage(0),
         ),
         TabItem(
-          tabIcon: const Icon(Icons.sports_baseball_outlined),
-          tabActiveIcon: const Icon(Icons.sports_baseball),
+          tabIcon: _tabImage(context, imagePath: Assets.images.icCricket),
+          tabActiveIcon: _tabImage(
+            context,
+            imagePath: Assets.images.icCricket,
+            isActive: true,
+          ),
           tabLabel: context.l10n.my_cricket_screen_title.toLowerCase(),
           route: '',
           onTap: () => _materialPageController.jumpToPage(1),
         ),
         TabItem(
-          tabIcon: const Icon(Icons.stacked_bar_chart_outlined),
-          tabActiveIcon: const Icon(Icons.stacked_bar_chart),
+          tabIcon: _tabImage(context, imagePath: Assets.images.icStats),
+          tabActiveIcon: _tabImage(context,
+              imagePath: Assets.images.icStats, isActive: true),
           tabLabel: context.l10n.tab_stats_title,
           route: '',
           onTap: () => _materialPageController.jumpToPage(2),
         ),
         TabItem(
-          tabIcon: const Icon(Icons.person_outlined),
-          tabActiveIcon: const Icon(Icons.person),
+          tabIcon: _tabImage(context, imagePath: Assets.images.icProfile),
+          tabActiveIcon: _tabImage(context,
+              imagePath: Assets.images.icProfile, isActive: true),
           tabLabel: context.l10n.tab_profile_title.toLowerCase(),
           route: '',
           onTap: () => _materialPageController.jumpToPage(3),
         ),
       ];
+
+  Widget _tabImage(
+    BuildContext context, {
+    required String imagePath,
+    bool isActive = false,
+  }) {
+    return Container(
+      height: 32,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      decoration: BoxDecoration(
+          color: isActive ? context.colorScheme.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(30)),
+      child: SvgPicture.asset(imagePath,
+          height: 24,
+          width: 24,
+          colorFilter: ColorFilter.mode(
+              isActive
+                  ? context.colorScheme.onPrimary
+                  : context.colorScheme.textDisabled,
+              BlendMode.srcIn)),
+    );
+  }
 }

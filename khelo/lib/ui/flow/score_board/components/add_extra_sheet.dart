@@ -9,7 +9,7 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/theme/colors.dart';
+import 'package:style/widgets/rounded_check_box.dart';
 
 class AddExtraSheet extends StatefulWidget {
   static Future<T?> show<T>(
@@ -206,59 +206,20 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
           ),
           if (widget.extrasType == ExtrasType.noBall) ...[
             const SizedBox(height: 16),
-            _checkBoxView(
-              context,
+            RoundedCheckBoxTile(
               title: context.l10n.score_board_not_from_bat_text,
-              value: notFromBat,
-              onChange: (value) => setState(() => notFromBat = value),
+              isSelected: notFromBat,
+              onTap: (value) => setState(() => notFromBat = value),
             ),
-            _checkBoxView(
-              context,
+            const SizedBox(height: 16),
+            RoundedCheckBoxTile(
               title: context.l10n.score_board_is_boundary_text,
-              value: isBoundary,
-              onChange: (value) => setState(() => isBoundary = value),
+              isSelected: isBoundary,
+              onTap: (value) => setState(() => isBoundary = value),
             ),
           ],
         ],
       ),
-    );
-  }
-
-  Widget _checkBoxView(
-    BuildContext context, {
-    required String title,
-    required bool value,
-    required Function(bool) onChange,
-  }) {
-    return Theme(
-      data: context.brightness == Brightness.dark
-          ? materialThemeDataDark.copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory)
-          : materialThemeDataLight.copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory),
-      child: ListTileTheme(
-          horizontalTitleGap: 0.0,
-          child: CheckboxListTile(
-            value: value,
-            side:
-                BorderSide(color: context.colorScheme.containerHigh, width: 2),
-            onChanged: (value) {
-              if (value != null) {
-                onChange(value);
-              }
-            },
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              title,
-              style: AppTextStyle.body1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          )),
     );
   }
 

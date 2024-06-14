@@ -269,10 +269,12 @@ class ScoreDisplayView extends ConsumerWidget {
           children: [
             WidgetSpan(
                 alignment: PlaceholderAlignment.middle,
-                child: Icon(
-                  Icons.sports_baseball_outlined,
-                  size: 16,
-                  color: context.colorScheme.secondary,
+                child: SvgPicture.asset(
+                  Assets.images.icCricket,
+                  height: 16,
+                  width: 16,
+                  colorFilter: ColorFilter.mode(
+                      context.colorScheme.secondary, BlendMode.srcIn),
                 )),
             TextSpan(
               text: ' $name',

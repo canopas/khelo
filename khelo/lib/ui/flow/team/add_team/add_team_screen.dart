@@ -21,7 +21,7 @@ import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
-import 'package:style/theme/colors.dart';
+import 'package:style/widgets/rounded_check_box.dart';
 
 import '../../../../gen/assets.gen.dart';
 
@@ -135,33 +135,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               hintText: context.l10n.common_location_title,
             ),
             if (widget.editTeam == null) ...[
-              Material(
-                type: MaterialType.transparency,
-                child: Theme(
-                  data: context.brightness == Brightness.dark
-                      ? materialThemeDataDark.copyWith(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashFactory: NoSplash.splashFactory)
-                      : materialThemeDataLight.copyWith(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          splashFactory: NoSplash.splashFactory),
-                  child: ListTileTheme(
-                    horizontalTitleGap: 0.0,
-                    child: CheckboxListTile(
-                      value: state.isAddMeCheckBoxEnable,
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(
-                          context.l10n.add_team_add_as_member_description_text),
-                      onChanged: (value) {
-                        if (value != null) {
-                          notifier.onAddMeCheckBoxTap(value);
-                        }
-                      },
-                    ),
-                  ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: RoundedCheckBoxTile(
+                  title: context.l10n.add_team_add_as_member_description_text,
+                  style: AppTextStyle.caption
+                      .copyWith(color: context.colorScheme.textSecondary),
+                  isSelected: state.isAddMeCheckBoxEnable,
+                  onTap: notifier.onAddMeCheckBoxTap,
                 ),
               ),
             ] else ...[

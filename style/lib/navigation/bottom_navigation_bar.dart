@@ -55,15 +55,10 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
       currentIndex: _selectedIndex,
       unselectedItemColor: colors.textDisabled,
       selectedItemColor: colors.primary,
-      backgroundColor: colors.containerNormalOnSurface,
-      selectedLabelStyle: AppTextStyle.body2.copyWith(
-        color: colors.primary,
-        fontSize: 11,
-      ),
-      unselectedLabelStyle: AppTextStyle.body2.copyWith(
-        color: colors.textDisabled,
-        fontSize: 11,
-      ),
+      backgroundColor: colors.containerLowOnSurface,
+      selectedLabelStyle: AppTextStyle.caption.copyWith(color: colors.primary),
+      unselectedLabelStyle:
+          AppTextStyle.caption.copyWith(color: colors.textDisabled),
       onTap: (index) {
         onTab(index);
         widget.tabs[index].onTap.call();
