@@ -55,7 +55,7 @@ class SignInWithPhoneScreen extends ConsumerWidget {
                       ),
                       _phoneInputField(context, notifier, state),
                       PrimaryButton(
-                        context.l10n.sign_in_get_otp_btn_text,
+                        context.l10n.sign_in_continue_btn_text,
                         enabled: state.enableBtn && !state.verifying,
                         progress: state.verifying,
                         onPressed: notifier.verifyPhoneNumber,

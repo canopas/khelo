@@ -27,10 +27,9 @@ class IntroGradientBackground extends StatelessWidget {
         colors: [
           context.colorScheme.surface,
           context.colorScheme.surface,
-          context.colorScheme.surface,
           context.colorScheme.primaryVariantOnSurface,
         ],
-        begin: Alignment.topCenter,
+        begin: Alignment.center,
         end: Alignment.bottomCenter,
       )),
       child: SvgPicture.asset(
@@ -38,6 +37,11 @@ class IntroGradientBackground extends StatelessWidget {
             ? Assets.images.introCricketDark
             : Assets.images.introCricketLight,
         fit: BoxFit.fitWidth,
+        colorFilter: context.colorScheme.themeMode == ThemeMode.light
+            ? ColorFilter.mode(
+                context.colorScheme.primaryVariantOnSurface.withOpacity(0.8),
+                BlendMode.srcATop)
+            : null,
       ),
     );
   }
