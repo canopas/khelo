@@ -70,6 +70,7 @@ class ScoreDisplayView extends ConsumerWidget {
           _teamName(context, true),
           const SizedBox(height: 12),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text.rich(
                 textAlign: TextAlign.center,

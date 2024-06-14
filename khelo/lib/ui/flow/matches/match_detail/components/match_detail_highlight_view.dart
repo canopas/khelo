@@ -2,6 +2,7 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -12,6 +13,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
+
+import '../../../../../gen/assets.gen.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
   const MatchDetailHighlightView({super.key});
@@ -26,7 +29,10 @@ class MatchDetailHighlightView extends ConsumerWidget {
         matchDetailTabStateProvider
             .select((value) => value.showTeamSelectionSheet), (previous, next) {
       if (next != null) {
-        showTeamSelectionSheet(context, teams, onTap);
+        final highlightTeamId = ref.watch(matchDetailTabStateProvider.select(
+          (value) => value.highlightTeamId,
+        ));
+        showTeamSelectionSheet(context, teams, onTap, highlightTeamId);
       }
     });
   }
@@ -38,7 +44,15 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .select((value) => value.showHighlightOptionSelectionSheet),
         (previous, next) {
       if (next != null) {
-        showFilterOptionSelectionSheet(context, onSelection);
+        final highlightFilterOption =
+            ref.watch(matchDetailTabStateProvider.select(
+          (value) => value.highlightFilterOption,
+        ));
+        showFilterOptionSelectionSheet(
+          context,
+          onTap: onSelection,
+          highlightFilterOption: highlightFilterOption,
+        );
       }
     });
   }
@@ -163,15 +177,22 @@ class MatchDetailHighlightView extends ConsumerWidget {
   }
 
   void showFilterOptionSelectionSheet(
-      BuildContext context, Function(HighlightFilterOption) onTap) {
-    showActionBottomSheet(
+    BuildContext context, {
+    required Function(HighlightFilterOption) onTap,
+    required HighlightFilterOption highlightFilterOption,
+  }) async {
+    return await showActionBottomSheet(
         context: context,
         items: HighlightFilterOption.values
-            .map((e) => BottomSheetAction(
-                  title: e.getString(context),
+            .map((option) => BottomSheetAction(
+                  title: option.getString(context),
+                  child: _checkWidget(
+                    context,
+                    isShowCheck: highlightFilterOption == option,
+                  ),
                   onTap: () {
                     context.pop();
-                    onTap(e);
+                    onTap(option);
                   },
                 ))
             .toList());
@@ -181,19 +202,38 @@ class MatchDetailHighlightView extends ConsumerWidget {
     BuildContext context,
     List<MatchTeamModel>? teams,
     Function(String) onTap,
-  ) {
-    showActionBottomSheet(
+    String? highlightTeamId,
+  ) async {
+    return await showActionBottomSheet(
       context: context,
       items: teams
-              ?.map((e) => BottomSheetAction(
-                    title: e.team.name,
+              ?.map((match) => BottomSheetAction(
+                    title: match.team.name,
+                    child: _checkWidget(
+                      context,
+                      isShowCheck: highlightTeamId == match.team.id,
+                    ),
                     onTap: () {
                       context.pop();
-                      onTap(e.team.id ?? "INVALID ID");
+                      onTap(match.team.id ?? "INVALID ID");
                     },
                   ))
               .toList() ??
           [],
     );
   }
+
+  Widget? _checkWidget(
+    BuildContext context, {
+    required bool isShowCheck,
+  }) =>
+      isShowCheck
+          ? SvgPicture.asset(
+              Assets.images.icCheck,
+              colorFilter: ColorFilter.mode(
+                context.colorScheme.primary,
+                BlendMode.srcATop,
+              ),
+            )
+          : null;
 }

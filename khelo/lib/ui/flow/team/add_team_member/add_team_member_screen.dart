@@ -2,6 +2,7 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -18,6 +19,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../../gen/assets.gen.dart';
 
 class AddTeamMemberScreen extends ConsumerStatefulWidget {
   final TeamModel team;
@@ -51,13 +54,18 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
           visible: state.selectedUsers.isNotEmpty,
           child: state.isAddInProgress
               ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
-              : actionButton(context,
+              : actionButton(
+                  context,
                   onPressed: () => notifier.addPlayersToTeam(widget.team.id),
-                  icon: Icon(
-                    Icons.check,
-                    color: context.colorScheme.primary,
-                  )),
-        )
+                  icon: SvgPicture.asset(
+                    Assets.images.icCheck,
+                    colorFilter: ColorFilter.mode(
+                      context.colorScheme.primary,
+                      BlendMode.srcATop,
+                    ),
+                  ),
+                ),
+        ),
       ],
       body: Builder(builder: (context) {
         return Padding(

@@ -49,81 +49,73 @@ class MatchDetailScorecardView extends ConsumerWidget {
         ),
       );
     }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (state.match?.matchResult != null) ...[
+          _winnerMessageText(context, state.match!.matchResult!),
+        ],
+        Expanded(
+          child: ListView.separated(
+            padding: context.mediaQueryPadding +
+                EdgeInsets.symmetric(
+                    vertical: state.match?.matchResult == null ? 16 : 0),
+            itemCount: groupOversByInning(state.overList).length,
+            itemBuilder: (context, index) {
+              final inningOvers = groupOversByInning(state.overList)[index];
+              final overs = inningOvers.lastOrNull;
+              final batsmen = _getBatsmen(inningOvers);
+              final bowler = _getBowlers(inningOvers);
 
-    return ListView(
-      padding: context.mediaQueryPadding,
-      children: _buildChildren(context, notifier, state),
+              final yetToPlayPlayers = state.match?.teams
+                  .where((element) => element.team.id == overs?.team_id)
+                  .firstOrNull
+                  ?.squad
+                  .where((element) => element.index == null)
+                  .map((e) => e.player.name)
+                  .join(", ");
+
+              List<List<int>> powerPlays = [
+                if (state.match?.power_play_overs1.isNotEmpty ?? false)
+                  state.match!.power_play_overs1,
+                if (state.match?.power_play_overs2.isNotEmpty ?? false)
+                  state.match!.power_play_overs2,
+                if (state.match?.power_play_overs3.isNotEmpty ?? false)
+                  state.match!.power_play_overs3,
+              ];
+
+              return _teamTitleView(context,
+                  teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
+                  over: overs ?? const OverSummary(),
+                  initiallyExpanded: state.expandedTeamScorecard
+                      .contains(overs?.team_id ?? ""),
+                  children: [
+                    _dataTable(context, batsmen: batsmen),
+                    ..._buildMatchTotalView(context,
+                        inningLastOver: overs ?? const OverSummary(),
+                        didNotBatPlayers: yetToPlayPlayers ?? ""),
+                    _fallOfWicketView(context, inningOvers),
+                    _dataTable(context, bowler: bowler),
+                    _powerPlayView(context, powerPlays, inningOvers),
+                  ],
+                  onExpansionChanged: (isExpanded) =>
+                      notifier.onScorecardExpansionChange(
+                          overs?.team_id ?? "", isExpanded));
+            },
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+          ),
+        ),
+      ],
     );
   }
 
-  List<Widget> _buildChildren(
-    BuildContext context,
-    MatchDetailTabViewNotifier notifier,
-    MatchDetailTabState state,
-  ) {
-    List<Widget> children = [];
-    children.add(_winnerMessageText(context, state.match!));
-    for (final inningOvers in groupOversByInning(state.overList)) {
-      final overs = inningOvers.lastOrNull;
-      final batsmen = _getBatsmen(inningOvers);
-      final bowler = _getBowlers(inningOvers);
-
-      final yetToPlayPlayers = state.match?.teams
-          .where((element) => element.team.id == overs?.team_id)
-          .firstOrNull
-          ?.squad
-          .where((element) => element.index == null)
-          .map((e) => e.player.name)
-          .join(", ");
-
-      List<List<int>> powerPlays = [];
-      if ((state.match?.power_play_overs1 ?? []).isNotEmpty) {
-        powerPlays.add(state.match!.power_play_overs1);
-      }
-      if ((state.match?.power_play_overs2 ?? []).isNotEmpty) {
-        powerPlays.add(state.match!.power_play_overs2);
-      }
-      if ((state.match?.power_play_overs3 ?? []).isNotEmpty) {
-        powerPlays.add(state.match!.power_play_overs3);
-      }
-
-      children.add(_teamTitleView(context,
-          teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
-          over: overs ?? const OverSummary(),
-          initiallyExpanded:
-              state.expandedTeamScorecard.contains(overs?.team_id ?? ""),
-          onExpansionChanged: (isExpanded) => notifier
-              .onScorecardExpansionChange(overs?.team_id ?? "", isExpanded),
-          children: [
-            // batsmen summary
-            _dataTable(context, batsmen: batsmen),
-
-            // total summary (extra, total, didNotBat)
-            ..._buildMatchTotalView(context,
-                inningLastOver: overs ?? const OverSummary(),
-                didNotBatPlayers: yetToPlayPlayers ?? ""),
-
-            // fallOfWicket summary
-            _fallOfWicketView(context, inningOvers),
-
-            // bowlers summary
-            _dataTable(context, bowler: bowler),
-
-            // powerPlay summary
-            _powerPlayView(context, powerPlays, inningOvers),
-          ]));
-      children.add(const SizedBox(height: 16));
-    }
-    return children;
-  }
-
-  Widget _winnerMessageText(BuildContext context, MatchModel match) {
+  Widget _winnerMessageText(BuildContext context, MatchResult matchResult) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: WonByMessageText(
         textStyle: AppTextStyle.body1
             .copyWith(color: context.colorScheme.textDisabled),
-        matchResult: match.matchResult,
+        matchResult: matchResult,
       ),
     );
   }
@@ -150,17 +142,13 @@ class MatchDetailScorecardView extends ConsumerWidget {
           turns: initiallyExpanded ? 0.5 : 0,
           duration: const Duration(milliseconds: 300),
           child: Icon(
-            CupertinoIcons.chevron_up,
+            CupertinoIcons.chevron_down,
             size: 24,
             color: context.colorScheme.onPrimary,
           ),
         ),
-        collapsedShape: const RoundedRectangleBorder(
-          side: BorderSide.none,
-        ),
-        shape: const RoundedRectangleBorder(
-          side: BorderSide.none,
-        ),
+        collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+        shape: const RoundedRectangleBorder(side: BorderSide.none),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -22,7 +22,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final _controller = PageController(keepPage: true, viewportFraction: 0.9);
+  final _controller =
+      PageController(initialPage: 100, keepPage: true, viewportFraction: 0.9);
   late HomeViewNotifier notifier;
 
   @override
@@ -36,7 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final state = ref.watch(homeViewStateProvider);
 
     return AppPage(
-      title: context.l10n.home_screen_title,
+      title: context.l10n.common_matches_title,
       body: _body(context, notifier, state),
     );
   }
@@ -67,42 +68,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BuildContext context,
     HomeViewState state,
   ) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 187,
-            child: state.matches.length == 1
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: _matchCell(context, state.matches.first),
-                  )
-                : PageView.builder(
-                    padEnds: false,
-                    controller: _controller,
-                    itemCount: state.matches.length,
-                    itemBuilder: (context, index) {
-                      return _matchCell(context, state.matches[index]);
-                    },
-                  ),
-          ),
-          const SizedBox(height: 16),
-          if (state.matches.length >= 2) ...[
-            SmoothPageIndicator(
-              controller: _controller,
-              count: state.matches.length,
-              effect: ExpandingDotsEffect(
-                expansionFactor: 2,
-                dotHeight: 8,
-                dotWidth: 8,
-                dotColor: context.colorScheme.containerHigh,
-                activeDotColor: context.colorScheme.secondary,
-              ),
-            )
-          ],
+    return Column(
+      children: [
+        SizedBox(
+          height: 187,
+          child: state.matches.length == 1
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: _matchCell(context, state.matches.first),
+                )
+              : PageView.builder(
+                  controller: _controller,
+                  itemBuilder: (context, index) {
+                    return _matchCell(
+                        context, state.matches[index % state.matches.length]);
+                  },
+                ),
+        ),
+        const SizedBox(height: 16),
+        if (state.matches.length >= 2) ...[
+          SmoothPageIndicator(
+            controller: _controller,
+            count: state.matches.length,
+            effect: ExpandingDotsEffect(
+              expansionFactor: 2,
+              dotHeight: 8,
+              dotWidth: 8,
+              dotColor: context.colorScheme.containerHigh,
+              activeDotColor: context.colorScheme.secondary,
+            ),
+          )
         ],
-      ),
+      ],
     );
   }
 
@@ -136,9 +133,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 match.teams.first.wicket,
                 match.current_playing_team_id ==
                     match.teams.elementAt(1).team.id),
-            const SizedBox(
-              height: 8
-            ),
+            const SizedBox(height: 8),
           ],
         ),
       ),
@@ -226,9 +221,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
-            const SizedBox(
-              height: 8
-            ),
+            const SizedBox(height: 8),
             Text(
               context.l10n.home_screen_no_matches_description_text,
               textAlign: TextAlign.center,
