@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import '../gen/assets.gen.dart';
 
 class ImagePickerSheet extends ConsumerWidget {
   static Future<T?> show<T>(BuildContext context, bool allowCrop) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       backgroundColor: context.colorScheme.surface,

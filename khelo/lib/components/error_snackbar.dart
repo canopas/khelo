@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:khelo/domain/extensions/app_error_extension.dart';
 
@@ -9,6 +10,7 @@ void showErrorSnackBar({
   SnackBarLength length = SnackBarLength.short,
 }) {
   final message = error.l10nMessage(context);
+  HapticFeedback.mediumImpact();
   showSnackBar(
     context,
     message,

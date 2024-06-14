@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/extensions/column_extensions.dart';
@@ -10,6 +11,7 @@ Future<T?> showActionBottomSheet<T>({
   bool useRootNavigator = true,
   bool? showDragHandle,
 }) async {
+  HapticFeedback.mediumImpact();
   return await showModalBottomSheet<T>(
     backgroundColor: context.colorScheme.surface,
     shape: const RoundedRectangleBorder(

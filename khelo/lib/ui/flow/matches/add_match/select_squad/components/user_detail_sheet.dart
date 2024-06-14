@@ -1,5 +1,6 @@
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
@@ -13,6 +14,7 @@ class UserDetailSheet extends StatelessWidget {
     BuildContext context,
     UserModel user,
   ) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
