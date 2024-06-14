@@ -1,6 +1,7 @@
 import 'package:canopas_country_picker/canopas_country_picker.dart';
 import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/device/device_service.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -67,9 +68,9 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             state = state.copyWith(verifying: false, signInSuccess: true);
           },
           onVerificationFailed: (error) {
-            // FirebaseCrashlytics.instance.recordError(error, error.stackTrace,
-            //     reason: "Verify Phone-Number Error",
-            //     information: [error.statusCode ?? "", error.message ?? ""]);
+            FirebaseCrashlytics.instance.recordError(error, error.stackTrace,
+                reason: "Verify Phone-Number Error",
+                information: [error.statusCode ?? "", error.message ?? ""]);
             state = state.copyWith(verifying: false, actionError: error);
             debugPrint(
                 "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
@@ -78,10 +79,12 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             state = state.copyWith(
                 verificationId: verificationId, verifying: false);
           });
-    } catch (e) {
-      state = state.copyWith(verifying: false, actionError: e);
+    } catch (error, stack) {
+      FirebaseCrashlytics.instance
+          .recordError(error, stack, reason: "Verify Phone-Number Error");
+      state = state.copyWith(verifying: false, actionError: error);
       debugPrint(
-          "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $e");
+          "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
     }
   }
 }

@@ -146,8 +146,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
     return LargeIconButton(
       backgroundColor: context.colorScheme.primary,
       onTap: () async {
-        // AppRoute.addMatch().push(context);
-        // FirebaseCrashlytics.instance.crash();
+        AppRoute.addMatch().push(context);
       },
       icon: Icon(
         Icons.add_rounded,

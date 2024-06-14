@@ -10,7 +10,7 @@
 		<string>74a6f92b-75d4-4c72-b610-435ae643721f</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>1EDB213DC565912BC6BC866ADEBF192575C633DC</string>
+	<string>Apple Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>

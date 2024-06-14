@@ -718,7 +718,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.canopas.khelo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "provision-khelo-distribution-2024-05-16";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "provision-khelo-distribution-2024-06-12";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
