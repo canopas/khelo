@@ -96,6 +96,7 @@
 
   "otp_verification_verify_otp_text": "Verify OTP",
   "otp_verification_enter_otp_text": "Enter OTP you received",
+  "otp_verification_description": "We've sent a verification code to your phone.",
   "otp_verification_resend_code_text": "Resend Code",
   "otp_verification_incorrect_otp_error_text": "*Please enter correct OTP",
 
