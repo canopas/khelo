@@ -37,6 +37,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_commentator.svg
   String get icCommentator => 'assets/images/ic_commentator.svg';
 
+  /// File path: assets/images/ic_cricket.svg
+  String get icCricket => 'assets/images/ic_cricket.svg';
+
   /// File path: assets/images/ic_edit.svg
   String get icEdit => 'assets/images/ic_edit.svg';
 
@@ -45,6 +48,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_group.svg
   String get icGroup => 'assets/images/ic_group.svg';
+
+  /// File path: assets/images/ic_home.svg
+  String get icHome => 'assets/images/ic_home.svg';
 
   /// File path: assets/images/ic_location.svg
   String get icLocation => 'assets/images/ic_location.svg';
@@ -63,6 +69,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_search.svg
   String get icSearch => 'assets/images/ic_search.svg';
+
+  /// File path: assets/images/ic_stats.svg
+  String get icStats => 'assets/images/ic_stats.svg';
 
   /// File path: assets/images/ic_time.svg
   String get icTime => 'assets/images/ic_time.svg';
@@ -96,15 +105,18 @@ class $AssetsImagesGen {
         icCamera,
         icCheck,
         icCommentator,
+        icCricket,
         icEdit,
         icGallery,
         icGroup,
+        icHome,
         icLocation,
         icProfile,
         icProfileThin,
         icReferee,
         icScorer,
         icSearch,
+        icStats,
         icTime,
         icUmpire,
         introCricketDark,

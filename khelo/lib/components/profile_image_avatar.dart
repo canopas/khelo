@@ -76,8 +76,8 @@ class ProfileImageAvatar extends StatelessWidget {
   Widget _placeHolderIcon(BuildContext context) {
     return SvgPicture.asset(
       placeHolderImage ?? Assets.images.icProfileThin,
-      height: size / 2,
-      width: size / 2,
+      height: size / 3,
+      width: size / 3,
       colorFilter: ColorFilter.mode(
         context.colorScheme.textInversePrimary,
         BlendMode.srcATop,

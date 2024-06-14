@@ -11,7 +11,7 @@ import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/theme/colors.dart';
+import 'package:style/widgets/rounded_check_box.dart';
 
 class SelectPlayerSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
@@ -255,11 +255,10 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
 
   Widget _contWithInjPlayerOption(
       BuildContext context, ScoreBoardViewNotifier notifier) {
-    return _checkBoxView(
-      context,
+    return RoundedCheckBoxTile(
       title: context.l10n.score_board_continue_with_injured_player_title,
-      value: isEnabled,
-      onChange: (value) => setState(() {
+      isSelected: isEnabled,
+      onTap: (value) => setState(() {
         isEnabled = !isEnabled;
         notifier.onContinueWithInjuredPlayersChange(isEnabled);
         if (!isEnabled) {
@@ -351,44 +350,6 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         contWithInjPlayer: isEnabled,
       ));
     }
-  }
-
-  Widget _checkBoxView(
-    BuildContext context, {
-    required String title,
-    required bool value,
-    required Function(bool) onChange,
-  }) {
-    return Theme(
-      data: context.brightness == Brightness.dark
-          ? materialThemeDataDark.copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory)
-          : materialThemeDataLight.copyWith(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              splashFactory: NoSplash.splashFactory),
-      child: ListTileTheme(
-          horizontalTitleGap: 0.0,
-          child: CheckboxListTile(
-            value: value,
-            side:
-                BorderSide(color: context.colorScheme.containerHigh, width: 2),
-            onChanged: (value) {
-              if (value != null) {
-                onChange(value);
-              }
-            },
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(
-              title,
-              style: AppTextStyle.body1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          )),
-    );
   }
 }
 
