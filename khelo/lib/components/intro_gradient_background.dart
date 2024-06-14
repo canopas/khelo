@@ -27,10 +27,9 @@ class IntroGradientBackground extends StatelessWidget {
         colors: [
           context.colorScheme.surface,
           context.colorScheme.surface,
-          context.colorScheme.surface,
           context.colorScheme.primaryVariantOnSurface,
         ],
-        begin: Alignment.topCenter,
+        begin: Alignment.center,
         end: Alignment.bottomCenter,
       )),
       child: SvgPicture.asset(
