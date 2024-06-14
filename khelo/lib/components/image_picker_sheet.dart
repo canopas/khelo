@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import '../gen/assets.gen.dart';
 
 class ImagePickerSheet extends ConsumerWidget {
   static Future<T?> show<T>(BuildContext context, bool allowCrop) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       backgroundColor: context.colorScheme.surface,
@@ -141,7 +143,6 @@ class ImagePickerSheet extends ConsumerWidget {
   Future<CroppedFile?> _openCropImage(BuildContext context, XFile image) async {
     final croppedImage = await ImageCropper().cropImage(
       sourcePath: image.path,
-      aspectRatioPresets: [CropAspectRatioPreset.square],
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: context.l10n.image_picker_crop_image_title,
@@ -149,13 +150,13 @@ class ImagePickerSheet extends ConsumerWidget {
           toolbarWidgetColor: context.colorScheme.onPrimary,
           initAspectRatio: CropAspectRatioPreset.square,
           lockAspectRatio: true,
+          aspectRatioPresets: [CropAspectRatioPreset.square],
         ),
         IOSUiSettings(
           title: context.l10n.image_picker_crop_image_title,
+          aspectRatioPresets: [CropAspectRatioPreset.square],
         ),
-        WebUiSettings(
-          context: context,
-        ),
+        WebUiSettings(context: context),
       ],
     );
 

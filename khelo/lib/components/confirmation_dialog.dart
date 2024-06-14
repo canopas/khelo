@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -14,6 +15,7 @@ void showConfirmationDialog(
   required VoidCallback onConfirm,
   VoidCallback? onCancel,
 }) {
+  HapticFeedback.mediumImpact();
   showAdaptiveDialog(
     context: context,
     barrierDismissible: true,

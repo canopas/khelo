@@ -1,5 +1,6 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -15,6 +16,7 @@ class SelectWicketTakerSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required List<MatchPlayer> fielderList,
   }) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       isDismissible: false,

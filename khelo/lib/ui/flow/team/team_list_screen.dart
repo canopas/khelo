@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
@@ -16,6 +17,8 @@ import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../gen/assets.gen.dart';
 
 class TeamListScreen extends ConsumerStatefulWidget {
   const TeamListScreen({super.key});
@@ -103,7 +106,8 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
     return ListView.separated(
       itemCount: state.filteredTeams.length,
-      padding: const EdgeInsets.symmetric(horizontal: 16) + context.mediaQueryPadding,
+      padding: const EdgeInsets.symmetric(horizontal: 16) +
+          context.mediaQueryPadding,
       separatorBuilder: (context, index) =>
           Divider(color: context.colorScheme.outline),
       itemBuilder: (context, index) {
@@ -185,14 +189,24 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     ]);
   }
 
-  void _filterActionSheet(BuildContext context) async {
-    return showActionBottomSheet(
+  void _filterActionSheet(
+      BuildContext context, TeamFilterOption selectedFilter) async {
+    return await showActionBottomSheet(
         context: context,
         useRootNavigator: true,
         showDragHandle: true,
         items: TeamFilterOption.values
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
+                child: selectedFilter == option
+                    ? SvgPicture.asset(
+                        Assets.images.icCheck,
+                        colorFilter: ColorFilter.mode(
+                          context.colorScheme.primary,
+                          BlendMode.srcATop,
+                        ),
+                      )
+                    : null,
                 onTap: () {
                   context.pop();
                   notifier.onFilterOptionSelect(option);
@@ -208,7 +222,9 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         teamListViewStateProvider
             .select((value) => value.showFilterOptionSheet), (previous, next) {
       if (next != null) {
-        _filterActionSheet(context);
+        final selectedFilter = ref.watch(
+            teamListViewStateProvider.select((value) => value.selectedFilter));
+        _filterActionSheet(context, selectedFilter);
       }
     });
   }

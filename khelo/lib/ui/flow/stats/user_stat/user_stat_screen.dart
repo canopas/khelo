@@ -58,7 +58,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
   Widget _body(BuildContext context) {
     final state = ref.watch(userStatViewStateProvider);
 
-    if (state.loading) return const AppProgressIndicator();
+    if (state.loading) return const Center(child: AppProgressIndicator());
 
     if (state.error != null) {
       return ErrorScreen(
@@ -110,19 +110,22 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             count: battingStat.runScored.toString(),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _subStatisticView(context,
-                  title: context.l10n.common_batting_average_title,
-                  count: battingStat.average.toString()),
-              _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_strike_rate_title,
-                  count: '${battingStat.strikeRate.toStringAsFixed(2)}%'),
-              _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_ball_faced_title,
-                  count: battingStat.ballFaced.toString()),
-            ],
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _subStatisticView(context,
+                    title: context.l10n.common_batting_average_title,
+                    count: battingStat.average.toStringAsFixed(2)),
+                _subStatisticView(context,
+                    title: context.l10n.my_stat_stats_strike_rate_title,
+                    count: '${battingStat.strikeRate.toStringAsFixed(2)}%'),
+                _subStatisticView(context,
+                    title: context.l10n.my_stat_stats_ball_faced_title,
+                    count: battingStat.ballFaced.toString()),
+              ],
+            ),
           ),
         ],
       ),
@@ -147,19 +150,22 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             count: bowlingStat.wicketTaken.toString(),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _subStatisticView(context,
-                  title: context.l10n.common_bowling_average_title,
-                  count: bowlingStat.average.toString()),
-              _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_strike_rate_title,
-                  count: '${bowlingStat.strikeRate.toStringAsFixed(2)}%'),
-              _subStatisticView(context,
-                  title: context.l10n.my_stat_stats_economy_rate_title,
-                  count: bowlingStat.economyRate.toStringAsFixed(2)),
-            ],
+          IntrinsicHeight(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _subStatisticView(context,
+                    title: context.l10n.common_bowling_average_title,
+                    count: bowlingStat.average.toStringAsFixed(2)),
+                _subStatisticView(context,
+                    title: context.l10n.my_stat_stats_strike_rate_title,
+                    count: '${bowlingStat.strikeRate.toStringAsFixed(2)}%'),
+                _subStatisticView(context,
+                    title: context.l10n.my_stat_stats_economy_rate_title,
+                    count: bowlingStat.economyRate.toStringAsFixed(2)),
+              ],
+            ),
           ),
         ],
       ),
@@ -175,19 +181,21 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
       decoration: BoxDecoration(
           border: Border.all(color: context.colorScheme.outline),
           borderRadius: BorderRadius.circular(16)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _subStatisticView(context,
-              title: context.l10n.my_stat_stats_catches_title,
-              count: fieldingStat.catches.toString()),
-          _subStatisticView(context,
-              title: context.l10n.common_run_out_title,
-              count: fieldingStat.runOut.toString()),
-          _subStatisticView(context,
-              title: context.l10n.my_stat_stats_stumping_title,
-              count: fieldingStat.stumping.toString()),
-        ],
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _subStatisticView(context,
+                title: context.l10n.my_stat_stats_catches_title,
+                count: fieldingStat.catches.toString()),
+            _subStatisticView(context,
+                title: context.l10n.common_run_out_title,
+                count: fieldingStat.runOut.toString()),
+            _subStatisticView(context,
+                title: context.l10n.my_stat_stats_stumping_title,
+                count: fieldingStat.stumping.toString()),
+          ],
+        ),
       ),
     );
   }
@@ -231,7 +239,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
   }) {
     return Expanded(
       child: Container(
-          padding: const EdgeInsets.all(14),
+          padding: const EdgeInsets.all(12),
           margin: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
               color: context.colorScheme.containerLow,
@@ -244,7 +252,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
                 style: AppTextStyle.subtitle1
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               Text(
                 title,
                 textAlign: TextAlign.center,

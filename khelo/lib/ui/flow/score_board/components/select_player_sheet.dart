@@ -2,6 +2,7 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -21,6 +22,7 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
     required List<MatchPlayer> batsManList,
     required List<MatchPlayer> bowlerList,
   }) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       isDismissible: false,

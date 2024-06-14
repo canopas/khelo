@@ -1,6 +1,7 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -15,6 +16,7 @@ class TeamMemberSheet extends StatelessWidget {
     required TeamModel team,
     bool isForVerification = false,
   }) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,

@@ -6,8 +6,6 @@ on:
     branches:
       - main
 
-
-
 jobs:
   build:
     runs-on: macos-13
@@ -28,6 +26,7 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
+        flutter-version: '3.22.2'
         channel: 'stable'
         cache: true
 
@@ -45,6 +44,7 @@ jobs:
         cd data && flutter clean && flutter pub get
         cd ../style && flutter clean && flutter pub get
         cd ../khelo && flutter clean && flutter pub get
+        cd ios && pod install --repo-update && flutter clean && flutter pub get
         cd ..
 
     - name: Install Codemagic CLI tools
@@ -79,15 +79,13 @@ jobs:
         buildNumber=$(( ${versionValue[0]} * 1000000 + ${versionValue[1]} * 10000 + ${{ github.run_number }} ))
         IFS=''
         buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
-        echo "Generating android build $buildName $buildNumber"   
+        echo "Generating iOS build $buildName $buildNumber"   
         flutter build ipa --release --build-number=$buildNumber --build-name=$buildName --export-options-plist=$HOME/export_options.plist
+        echo "Uploading dSYM to Crashlytics"
+        ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/Runner/GoogleService-Info.plist -p ios build/ios/archive/Runner.xcarchive/dSYMs
 
     - name: Publish the app to App Store Connect
       run: |
         APP_FILE=$(find $(pwd) -name "*.ipa")
         app-store-connect publish \
         --path "$APP_FILE"
-      
-
-
-
