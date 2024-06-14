@@ -79,10 +79,11 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             state = state.copyWith(
                 verificationId: verificationId, verifying: false);
           });
-    } catch (e) {
-      state = state.copyWith(verifying: false, actionError: e);
+    } catch (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, reason: "Verify Phone-Number Error");
+      state = state.copyWith(verifying: false, actionError: error);
       debugPrint(
-          "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $e");
+          "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
     }
   }
 }
