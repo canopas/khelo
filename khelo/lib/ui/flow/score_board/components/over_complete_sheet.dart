@@ -1,6 +1,7 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,6 +14,7 @@ import 'package:style/text/app_text_style.dart';
 
 class OverCompleteSheet extends ConsumerWidget {
   static Future<T?> show<T>(BuildContext context, OverStatModel overStat) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       isDismissible: false,

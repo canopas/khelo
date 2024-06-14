@@ -1,5 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -13,6 +14,7 @@ import 'package:style/text/app_text_style.dart';
 
 class SelectWicketTypeSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       showDragHandle: false,

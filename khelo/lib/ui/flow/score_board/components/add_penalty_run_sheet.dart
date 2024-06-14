@@ -13,6 +13,7 @@ import 'package:style/text/app_text_style.dart';
 
 class AddPenaltyRunSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       showDragHandle: false,

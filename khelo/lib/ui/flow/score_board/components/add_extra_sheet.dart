@@ -18,6 +18,7 @@ class AddExtraSheet extends StatefulWidget {
     bool isOnWicket = false,
     bool isFiveSeven = false,
   }) {
+    HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
       showDragHandle: false,
