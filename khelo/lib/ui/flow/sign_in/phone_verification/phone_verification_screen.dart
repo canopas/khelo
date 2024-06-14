@@ -76,16 +76,6 @@ class _PhoneVerificationScreenState
                         style: AppTextStyle.header1
                             .copyWith(color: context.colorScheme.textPrimary),
                       ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          context.l10n.otp_verification_description,
-                          style: AppTextStyle.body1.copyWith(
-                              color: context.colorScheme.textSecondary),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
                       const SizedBox(height: 16),
                       _phoneNumberView(context),
                       const EnterOTPView(count: 6),

@@ -4,7 +4,7 @@ import '../text/app_text_style.dart';
 
 const primaryColor = Color(0xFF01579B);
 
-const primaryVariantLightColor = Color(0xFFEDF5FB);
+const primaryVariantLightColor = Color(0x4D01579B);
 const primaryVariantDarkColor = Color(0x6601579B);
 
 const secondaryColor = Color(0xFFF57F17);
