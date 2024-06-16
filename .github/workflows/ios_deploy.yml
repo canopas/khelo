@@ -46,7 +46,7 @@ jobs:
         cd khelo
         echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart  
         echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > ios/Runner/GoogleService-Info.plist
-        echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
+        echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase_app_id_file.json
 
     - name: Install Dependencies
       run: |
@@ -58,9 +58,6 @@ jobs:
 
     - name: Install Codemagic CLI tools
       run: pip install codemagic-cli-tools
-
-    - name: install flutterfire CLI
-      run: dart pub global activate flutterfire_cli
 
     - name: Set up keychain
       run: keychain initialize
