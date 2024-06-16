@@ -1,11 +1,13 @@
 name: Android Build APK
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+#on:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
 
+
+on: push
 jobs:
 
   build:
