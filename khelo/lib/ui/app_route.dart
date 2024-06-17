@@ -14,7 +14,6 @@ import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_screen.dart'
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen.dart';
 import 'package:khelo/ui/flow/score_board/score_board_screen.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
-import 'package:khelo/ui/flow/settings/support/contact_support_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
@@ -216,9 +215,6 @@ class AppRoute {
       pathEditProfile,
       builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
-  static AppRoute contactSupport() => AppRoute(pathContactSupport,
-      builder: (_) => const ContactSupportScreen());
-
   static AppRoute teamDetail({required String teamId}) =>
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
@@ -243,14 +239,6 @@ class AppRoute {
       builder: (context, state) {
         return state.extra == null
             ? const EditProfileScreen(isToCreateAccount: true)
-            : state.widget(context);
-      },
-    ),
-    GoRoute(
-      path: pathContactSupport,
-      builder: (context, state) {
-        return state.extra == null
-            ? const ContactSupportScreen()
             : state.widget(context);
       },
     ),
