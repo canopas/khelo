@@ -118,7 +118,8 @@ class EditProfileScreen extends ConsumerWidget {
         const SizedBox(height: 8),
         _textInputField(context, notifier,
             placeholderText: context.l10n.edit_profile_email_placeholder,
-            controller: state.emailController),
+            controller: state.emailController,
+            keyboardType: TextInputType.emailAddress),
         const SizedBox(height: 8),
         _textInputField(context, notifier,
             placeholderText: context.l10n.common_location_title,
@@ -132,10 +133,12 @@ class EditProfileScreen extends ConsumerWidget {
     EditProfileViewNotifier notifier, {
     required String placeholderText,
     required TextEditingController controller,
+    TextInputType? keyboardType,
   }) {
     return AppTextField(
       controller: controller,
       onChanged: (value) => notifier.onValueChange(),
+      keyboardType: keyboardType,
       style: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textPrimary),
       borderRadius: BorderRadius.circular(12),
