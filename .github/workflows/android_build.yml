@@ -16,7 +16,7 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
@@ -77,7 +77,7 @@ jobs:
           mv build/app/outputs/apk/release/Khelo*.apk .
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Khelo APK
           path: Khelo*.apk
