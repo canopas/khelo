@@ -74,19 +74,19 @@ jobs:
           buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
           echo "Generating android build $buildName $buildNumber"          
           flutter build apk --release --build-number=$buildNumber --build-name=$buildName
-#          echo "release dir"
-#          ls build/app/outputs/apk/release
-#
-#          mv build/app/outputs/apk/release/Khelo*.apk .
-#
-#          echo "cur dir::"
-#          ls  .
+          echo "release dir"
+          ls build/app/outputs/apk/release/
+
+          mv build/app/outputs/apk/release/Khelo*.apk .
+
+          echo "cur dir::"
+          ls  .
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Khelo APK
-          path: build/app/outputs/apk/release/Khelo*.apk
+          path: Khelo*.apk
           retention-days: 2
     
 
