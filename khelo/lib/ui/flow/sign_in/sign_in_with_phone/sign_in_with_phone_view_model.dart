@@ -59,6 +59,7 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
   }
 
   Future<void> verifyPhoneNumber() async {
+    print("xxx --- verifyPhoneNumber --- xxx");
     state = state.copyWith(verifying: true, actionError: null);
     try {
       _authService.verifyPhoneNumber(
@@ -80,10 +81,11 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
                 verificationId: verificationId, verifying: false);
           });
     } catch (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, reason: "Verify Phone-Number Error");
-      state = state.copyWith(verifying: false, actionError: error);
-      debugPrint(
-          "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
+      throw Exception(error);
+      // FirebaseCrashlytics.instance.recordError(error, stack, reason: "Verify Phone-Number Error");
+      // state = state.copyWith(verifying: false, actionError: error);
+      // debugPrint(
+      //     "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
     }
   }
 }
