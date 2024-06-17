@@ -4,6 +4,7 @@ import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'profile_view_model.freezed.dart';
 
@@ -35,6 +36,15 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("ProfileViewNotifier: error while sign Out -> $e");
+    }
+  }
+
+  void onPrivacyPolicy(String path) async {
+    try {
+      final targetUrl = Uri.parse(path);
+      await launchUrl(targetUrl, mode: LaunchMode.externalApplication);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
     }
   }
 }

@@ -16,6 +16,7 @@
   "common_yes_title": "Yes",
   "common_no_title": "No",
   "common_retry_title": "Retry",
+  "common_submit_title": "Submit",
   "common_not_specified_title": "Not Specified",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
@@ -640,6 +641,16 @@
   "edit_profile_gender_male_title": "Male",
   "edit_profile_gender_female_title": "Female",
   "edit_profile_gender_prefer_not_to_say_title": "Prefer not to say",
+
+  "profile_settings_title": "Settings",
+  "profile_setting_privacy_policy_title": "Privacy policy",
+
+  "@_CONTACT_SUPPORT": {
+  },
+  "contact_support_title": "Contact support",
+  "contact_support_title_text": "Title",
+  "contact_support_description_title": "Description...",
+  "contact_support_attachment": "Attachment (if any)",
 
   "profile_complete_profile_btn_title": "Complete Profile",
   "profile_complete_your_profile_title": "Complete your profile",

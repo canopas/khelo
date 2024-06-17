@@ -1,7 +1,9 @@
 import 'package:data/api/user/user_models.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
@@ -13,6 +15,8 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../gen/assets.gen.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -26,20 +30,6 @@ class ProfileScreen extends ConsumerWidget {
     _observeUserSession(context, ref);
     return AppPage(
       title: context.l10n.tab_profile_title,
-      actions: [
-        TextButton(
-            onPressed: () => showConfirmationDialog(context,
-                title: context.l10n.common_sign_out_title,
-                message: context.l10n.alert_confirm_default_message(
-                    context.l10n.common_sign_out_title.toLowerCase()),
-                confirmBtnText: context.l10n.common_sign_out_title,
-                onConfirm: notifier.onSignOutTap),
-            child: Text(
-              context.l10n.common_sign_out_title,
-              style: AppTextStyle.button
-                  .copyWith(color: context.colorScheme.alert),
-            ))
-      ],
       body: Builder(
         builder: (context) {
           return ListView(
@@ -51,6 +41,14 @@ class ProfileScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 _inCompleteProfileView(context, state.currentUser!)
               ],
+              const SizedBox(height: 24),
+              Text(
+                context.l10n.profile_settings_title,
+                style: AppTextStyle.header4
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+              const SizedBox(height: 16),
+              _settingsView(context, notifier),
             ],
           );
         },
@@ -121,6 +119,80 @@ class ProfileScreen extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
+  }
+
+  Widget _settingsView(
+    BuildContext context,
+    ProfileViewNotifier notifier,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colorScheme.outline),
+      ),
+      child: Column(
+        children: [
+          _settingItem(
+            context,
+            icon: Assets.images.icContactSupport,
+            title: context.l10n.contact_support_title,
+            onTap: () => AppRoute.contactSupport().push(context),
+          ),
+          _settingItem(
+            context,
+            icon: Assets.images.icPrivacyPolicy,
+            title: context.l10n.profile_setting_privacy_policy_title,
+            onTap: () => notifier.onPrivacyPolicy(
+                "https://github.com/canopas/khelo/docs/index.md"),
+          ),
+          _settingItem(
+            context,
+            icon: Assets.images.icSignOut,
+            color: context.colorScheme.alert,
+            title: context.l10n.common_sign_out_title,
+            onTap: () {
+              showConfirmationDialog(context,
+                  title: context.l10n.common_sign_out_title,
+                  message: context.l10n.alert_confirm_default_message(
+                      context.l10n.common_sign_out_title.toLowerCase()),
+                  confirmBtnText: context.l10n.common_sign_out_title,
+                  onConfirm: notifier.onSignOutTap);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _settingItem(
+    BuildContext context, {
+    required String icon,
+    Color? color,
+    required String title,
+    required Function() onTap,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: OnTapScale(
+        onTap: onTap,
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              icon,
+              colorFilter: ColorFilter.mode(
+                  color ?? context.colorScheme.textPrimary, BlendMode.srcATop),
+            ),
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: color ?? context.colorScheme.textPrimary),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _observeActionError(BuildContext context, WidgetRef ref) {

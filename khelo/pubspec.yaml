@@ -49,6 +49,7 @@ dependencies:
   fluttertoast: ^8.2.4
   smooth_page_indicator: ^1.1.0
   flutter_svg: ^2.0.10+1
+  url_launcher: ^6.3.0
 
   # picker
   canopas_country_picker: ^0.0.4
