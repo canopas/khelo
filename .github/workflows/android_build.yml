@@ -76,7 +76,7 @@ jobs:
           flutter build apk --release --build-number=$buildNumber --build-name=$buildName
 
           cd ..
-          mv build/app/outputs/apk/release/Khelo*.apk .
+          mv khelo/build/app/outputs/apk/release/Khelo*.apk .
 
       - name: List files in root directory
         run: ls -la
