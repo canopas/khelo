@@ -1,13 +1,11 @@
 name: Android Build APK
 
-#on:
-#  workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
-
-on: push
 jobs:
 
   build:
@@ -77,9 +75,6 @@ jobs:
 
           cd ..
           mv khelo/build/app/outputs/apk/release/Khelo*.apk .
-
-      - name: List files in root directory
-        run: ls -la
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
