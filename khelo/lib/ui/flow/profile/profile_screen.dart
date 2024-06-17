@@ -49,6 +49,18 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               _settingsView(context, notifier),
+              const SizedBox(height: 24),
+              Visibility(
+                visible: state.appVersion != null,
+                child: Text(
+                  context.l10n.profile_setting_app_version_text(
+                      state.appVersion.toString()),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyle.body2.copyWith(
+                    color: context.colorScheme.textDisabled,
+                  ),
+                ),
+              )
             ],
           );
         },
