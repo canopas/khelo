@@ -47,7 +47,11 @@ jobs:
         echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart  
         echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > ios/Runner/GoogleService-Info.plist
         echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
-
+        cat lib/firebase_options.dart
+        cat ios/Runner/GoogleService-Info.plist
+        cat firebase.json
+        
+        
     - name: Install Dependencies
       run: |
         cd data && flutter clean && flutter pub get
