@@ -25,7 +25,6 @@ import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
   static const pathEditProfile = '/edit-profile';
-  static const pathContactSupport = "/contact-support";
   static const pathAddTeamMember = '/add-team-member';
   static const pathAddTeam = '/add-team';
   static const pathPowerPlay = '/power-play';
