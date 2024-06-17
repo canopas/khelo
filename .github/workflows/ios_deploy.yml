@@ -1,12 +1,10 @@
 name: Publish to App Store Connect
 
-#on:
-#  workflow_dispatch:
-#  push:
-#    branches:
-#      - main
-
-on: push
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -23,7 +21,7 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Xcode
       uses: maxim-lobanov/setup-xcode@v1
@@ -47,11 +45,7 @@ jobs:
         echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart  
         echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > ios/Runner/GoogleService-Info.plist
         echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
-        cat lib/firebase_options.dart
-        cat ios/Runner/GoogleService-Info.plist
-        cat firebase.json
-        
-        
+
     - name: Install Dependencies
       run: |
         cd data && flutter clean && flutter pub get
