@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ProfileState {
   Object? get actionError => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
+  String? get appVersion => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ProfileStateCopyWith<ProfileState> get copyWith =>
@@ -30,7 +31,7 @@ abstract class $ProfileStateCopyWith<$Res> {
           ProfileState value, $Res Function(ProfileState) then) =
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
-  $Res call({Object? actionError, UserModel? currentUser});
+  $Res call({Object? actionError, UserModel? currentUser, String? appVersion});
 
   $UserModelCopyWith<$Res>? get currentUser;
 }
@@ -50,6 +51,7 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   $Res call({
     Object? actionError = freezed,
     Object? currentUser = freezed,
+    Object? appVersion = freezed,
   }) {
     return _then(_value.copyWith(
       actionError: freezed == actionError ? _value.actionError : actionError,
@@ -57,6 +59,10 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      appVersion: freezed == appVersion
+          ? _value.appVersion
+          : appVersion // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -81,7 +87,7 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
       __$$ProfileStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? actionError, UserModel? currentUser});
+  $Res call({Object? actionError, UserModel? currentUser, String? appVersion});
 
   @override
   $UserModelCopyWith<$Res>? get currentUser;
@@ -100,6 +106,7 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
   $Res call({
     Object? actionError = freezed,
     Object? currentUser = freezed,
+    Object? appVersion = freezed,
   }) {
     return _then(_$ProfileStateImpl(
       actionError: freezed == actionError ? _value.actionError : actionError,
@@ -107,6 +114,10 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      appVersion: freezed == appVersion
+          ? _value.appVersion
+          : appVersion // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -114,16 +125,19 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ProfileStateImpl implements _ProfileState {
-  const _$ProfileStateImpl({this.actionError, this.currentUser});
+  const _$ProfileStateImpl(
+      {this.actionError, this.currentUser, this.appVersion});
 
   @override
   final Object? actionError;
   @override
   final UserModel? currentUser;
+  @override
+  final String? appVersion;
 
   @override
   String toString() {
-    return 'ProfileState(actionError: $actionError, currentUser: $currentUser)';
+    return 'ProfileState(actionError: $actionError, currentUser: $currentUser, appVersion: $appVersion)';
   }
 
   @override
@@ -134,12 +148,17 @@ class _$ProfileStateImpl implements _ProfileState {
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
             (identical(other.currentUser, currentUser) ||
-                other.currentUser == currentUser));
+                other.currentUser == currentUser) &&
+            (identical(other.appVersion, appVersion) ||
+                other.appVersion == appVersion));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(actionError), currentUser);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(actionError),
+      currentUser,
+      appVersion);
 
   @JsonKey(ignore: true)
   @override
@@ -151,12 +170,15 @@ class _$ProfileStateImpl implements _ProfileState {
 abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
       {final Object? actionError,
-      final UserModel? currentUser}) = _$ProfileStateImpl;
+      final UserModel? currentUser,
+      final String? appVersion}) = _$ProfileStateImpl;
 
   @override
   Object? get actionError;
   @override
   UserModel? get currentUser;
+  @override
+  String? get appVersion;
   @override
   @JsonKey(ignore: true)
   _$$ProfileStateImplCopyWith<_$ProfileStateImpl> get copyWith =>

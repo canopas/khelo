@@ -121,7 +121,7 @@ extension UserGenderString on UserGender {
       case UserGender.female:
         return context.l10n.edit_profile_gender_female_title;
       case UserGender.other:
-        return context.l10n.common_other_title;
+        return context.l10n.edit_profile_gender_prefer_not_to_say_title;
       case UserGender.unknown:
         return "";
     }

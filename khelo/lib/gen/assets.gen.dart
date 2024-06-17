@@ -16,6 +16,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/bowler.svg
   String get bowler => 'assets/images/bowler.svg';
 
+  /// File path: assets/images/ic_about_us.svg
+  String get icAboutUs => 'assets/images/ic_about_us.svg';
+
   /// File path: assets/images/ic_arrow_down.svg
   String get icArrowDown => 'assets/images/ic_arrow_down.svg';
 
@@ -37,6 +40,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_commentator.svg
   String get icCommentator => 'assets/images/ic_commentator.svg';
 
+  /// File path: assets/images/ic_contact_support.svg
+  String get icContactSupport => 'assets/images/ic_contact_support.svg';
+
   /// File path: assets/images/ic_cricket.svg
   String get icCricket => 'assets/images/ic_cricket.svg';
 
@@ -55,6 +61,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_location.svg
   String get icLocation => 'assets/images/ic_location.svg';
 
+  /// File path: assets/images/ic_privacy_policy.svg
+  String get icPrivacyPolicy => 'assets/images/ic_privacy_policy.svg';
+
   /// File path: assets/images/ic_profile.svg
   String get icProfile => 'assets/images/ic_profile.svg';
 
@@ -72,6 +81,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_search.svg
   String get icSearch => 'assets/images/ic_search.svg';
+
+  /// File path: assets/images/ic_sign_out.svg
+  String get icSignOut => 'assets/images/ic_sign_out.svg';
 
   /// File path: assets/images/ic_stats.svg
   String get icStats => 'assets/images/ic_stats.svg';
@@ -101,6 +113,7 @@ class $AssetsImagesGen {
   List<String> get values => [
         batsman,
         bowler,
+        icAboutUs,
         icArrowDown,
         icBatSelected,
         icBin,
@@ -108,18 +121,21 @@ class $AssetsImagesGen {
         icCamera,
         icCheck,
         icCommentator,
+        icContactSupport,
         icCricket,
         icEdit,
         icGallery,
         icGroup,
         icHome,
         icLocation,
+        icPrivacyPolicy,
         icProfile,
         icProfileThin,
         icReferee,
         icRoundedCheck,
         icScorer,
         icSearch,
+        icSignOut,
         icStats,
         icTime,
         icUmpire,
