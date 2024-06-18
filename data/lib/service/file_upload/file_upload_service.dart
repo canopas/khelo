@@ -50,7 +50,8 @@ class FileUploadService {
 
 enum ImageUploadType {
   user(FireStoreConst.userProfileImagesFolder),
-  team(FireStoreConst.teamProfileImagesFolder);
+  team(FireStoreConst.teamProfileImagesFolder),
+  support(FireStoreConst.supportImagesFolder);
 
   const ImageUploadType(this.value);
 
