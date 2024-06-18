@@ -10,9 +10,9 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
     String? id,
     required String title,
     String? description,
-    @Default([]) List<String> attachment_urls,
-    required String user_id,
-    required DateTime created_at,
+    @Default([]) List<String> attachmentUrls,
+    required String userId,
+    required DateTime createdAt,
   }) = _AddSupportCaseRequest;
 
   factory AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =>

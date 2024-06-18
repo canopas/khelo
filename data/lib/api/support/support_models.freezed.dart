@@ -24,9 +24,9 @@ mixin _$AddSupportCaseRequest {
   String? get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  List<String> get attachment_urls => throw _privateConstructorUsedError;
-  String get user_id => throw _privateConstructorUsedError;
-  DateTime get created_at => throw _privateConstructorUsedError;
+  List<String> get attachmentUrls => throw _privateConstructorUsedError;
+  String get userId => throw _privateConstructorUsedError;
+  DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,9 +44,9 @@ abstract class $AddSupportCaseRequestCopyWith<$Res> {
       {String? id,
       String title,
       String? description,
-      List<String> attachment_urls,
-      String user_id,
-      DateTime created_at});
+      List<String> attachmentUrls,
+      String userId,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -66,9 +66,9 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
     Object? id = freezed,
     Object? title = null,
     Object? description = freezed,
-    Object? attachment_urls = null,
-    Object? user_id = null,
-    Object? created_at = null,
+    Object? attachmentUrls = null,
+    Object? userId = null,
+    Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -83,17 +83,17 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      attachment_urls: null == attachment_urls
-          ? _value.attachment_urls
-          : attachment_urls // ignore: cast_nullable_to_non_nullable
+      attachmentUrls: null == attachmentUrls
+          ? _value.attachmentUrls
+          : attachmentUrls // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      user_id: null == user_id
-          ? _value.user_id
-          : user_id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      created_at: null == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ) as $Val);
   }
@@ -112,9 +112,9 @@ abstract class _$$AddSupportCaseRequestImplCopyWith<$Res>
       {String? id,
       String title,
       String? description,
-      List<String> attachment_urls,
-      String user_id,
-      DateTime created_at});
+      List<String> attachmentUrls,
+      String userId,
+      DateTime createdAt});
 }
 
 /// @nodoc
@@ -132,9 +132,9 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? title = null,
     Object? description = freezed,
-    Object? attachment_urls = null,
-    Object? user_id = null,
-    Object? created_at = null,
+    Object? attachmentUrls = null,
+    Object? userId = null,
+    Object? createdAt = null,
   }) {
     return _then(_$AddSupportCaseRequestImpl(
       id: freezed == id
@@ -149,17 +149,17 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String?,
-      attachment_urls: null == attachment_urls
-          ? _value._attachment_urls
-          : attachment_urls // ignore: cast_nullable_to_non_nullable
+      attachmentUrls: null == attachmentUrls
+          ? _value._attachmentUrls
+          : attachmentUrls // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      user_id: null == user_id
-          ? _value.user_id
-          : user_id // ignore: cast_nullable_to_non_nullable
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      created_at: null == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
+      createdAt: null == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
     ));
   }
@@ -172,10 +172,10 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
       {this.id,
       required this.title,
       this.description,
-      final List<String> attachment_urls = const [],
-      required this.user_id,
-      required this.created_at})
-      : _attachment_urls = attachment_urls;
+      final List<String> attachmentUrls = const [],
+      required this.userId,
+      required this.createdAt})
+      : _attachmentUrls = attachmentUrls;
 
   factory _$AddSupportCaseRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$AddSupportCaseRequestImplFromJson(json);
@@ -186,23 +186,23 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
   final String title;
   @override
   final String? description;
-  final List<String> _attachment_urls;
+  final List<String> _attachmentUrls;
   @override
   @JsonKey()
-  List<String> get attachment_urls {
-    if (_attachment_urls is EqualUnmodifiableListView) return _attachment_urls;
+  List<String> get attachmentUrls {
+    if (_attachmentUrls is EqualUnmodifiableListView) return _attachmentUrls;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_attachment_urls);
+    return EqualUnmodifiableListView(_attachmentUrls);
   }
 
   @override
-  final String user_id;
+  final String userId;
   @override
-  final DateTime created_at;
+  final DateTime createdAt;
 
   @override
   String toString() {
-    return 'AddSupportCaseRequest(id: $id, title: $title, description: $description, attachment_urls: $attachment_urls, user_id: $user_id, created_at: $created_at)';
+    return 'AddSupportCaseRequest(id: $id, title: $title, description: $description, attachmentUrls: $attachmentUrls, userId: $userId, createdAt: $createdAt)';
   }
 
   @override
@@ -215,22 +215,16 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
             (identical(other.description, description) ||
                 other.description == description) &&
             const DeepCollectionEquality()
-                .equals(other._attachment_urls, _attachment_urls) &&
-            (identical(other.user_id, user_id) || other.user_id == user_id) &&
-            (identical(other.created_at, created_at) ||
-                other.created_at == created_at));
+                .equals(other._attachmentUrls, _attachmentUrls) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      const DeepCollectionEquality().hash(_attachment_urls),
-      user_id,
-      created_at);
+  int get hashCode => Object.hash(runtimeType, id, title, description,
+      const DeepCollectionEquality().hash(_attachmentUrls), userId, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -252,9 +246,9 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
       {final String? id,
       required final String title,
       final String? description,
-      final List<String> attachment_urls,
-      required final String user_id,
-      required final DateTime created_at}) = _$AddSupportCaseRequestImpl;
+      final List<String> attachmentUrls,
+      required final String userId,
+      required final DateTime createdAt}) = _$AddSupportCaseRequestImpl;
 
   factory _AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =
       _$AddSupportCaseRequestImpl.fromJson;
@@ -266,11 +260,11 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   @override
   String? get description;
   @override
-  List<String> get attachment_urls;
+  List<String> get attachmentUrls;
   @override
-  String get user_id;
+  String get userId;
   @override
-  DateTime get created_at;
+  DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
   _$$AddSupportCaseRequestImplCopyWith<_$AddSupportCaseRequestImpl>

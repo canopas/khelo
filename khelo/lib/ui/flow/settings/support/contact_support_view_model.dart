@@ -121,10 +121,10 @@ class ContactSupportViewStateNotifier
       final supportCase = AddSupportCaseRequest(
           title: state.titleController.text.trim(),
           description: state.descriptionController.text.trim(),
-          attachment_urls:
+          attachmentUrls:
               state.attachments.map((e) => e.url).whereNotNull().toList(),
-          user_id: _currantUserId ?? '',
-          created_at: DateTime.now());
+          userId: _currantUserId ?? '',
+          createdAt: DateTime.now());
 
       await supportService.addSupportCase(supportCase).whenComplete(
             () => state = state.copyWith(pop: true, submitting: false),
