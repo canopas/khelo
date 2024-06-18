@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: macos-13
+    runs-on: macos-latest
 
     env:
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -21,7 +21,12 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
+
+    - name: Set up Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4'
 
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
@@ -34,10 +39,12 @@ jobs:
       env:
         FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
         GOOGLE_SERVICE_INFO_PLIST_BASE64: ${{ secrets.GOOGLE_SERVICE_INFO_PLIST_BASE64 }}
+        FIREBASE_JSON_BASE64: ${{ secrets.FIREBASE_JSON_BASE64 }}
       run: |
         cd khelo
         echo $FIREBASE_OPTIONS_BASE64 | base64 --decode > lib/firebase_options.dart  
         echo $GOOGLE_SERVICE_INFO_PLIST_BASE64 | base64 --decode > ios/Runner/GoogleService-Info.plist
+        echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
 
     - name: Install Dependencies
       run: |

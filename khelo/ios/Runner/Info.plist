@@ -30,7 +30,6 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>app-1-753506519474-ios-8cd38557e090c0b51e7cab</string>
-				<string>com.googleusercontent.apps.753506519474-6qolf71653023s197ur4ag97q2lvaf9r</string>
 			</array>
 		</dict>
 	</array>
@@ -46,6 +45,10 @@
 	<string>Select a profile image from your device's gallery to showcase your preferred photo in moments of your choice.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
