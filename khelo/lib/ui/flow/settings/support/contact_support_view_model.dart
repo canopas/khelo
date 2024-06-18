@@ -28,13 +28,13 @@ class ContactSupportViewStateNotifier
   final ImagePicker picker;
   final FileUploadService fileUploadService;
   final SupportService supportService;
-  final String? _currantUserId;
+  final String? _currentUserId;
 
   ContactSupportViewStateNotifier(
     this.picker,
     this.fileUploadService,
     this.supportService,
-    this._currantUserId,
+    this._currentUserId,
   ) : super(ContactSupportViewState(
           titleController: TextEditingController(),
           descriptionController: TextEditingController(),
@@ -65,15 +65,11 @@ class ContactSupportViewStateNotifier
       if (isLarge) {
         final attachments = state.attachments.toList();
         attachments.removeWhere((element) => element.path == path);
-        state = state.copyWith(
-            attachments: attachments,
-            actionError:
-                "Oops! Your file exceeds the maximum allowed size of 25 MB. Please choose a smaller file and try again.");
+        state = state.copyWith(attachments: attachments);
       } else {
         final url = await fileUploadService.uploadProfileImage(
             path, ImageUploadType.support);
         state = state.copyWith(
-          actionError: null,
           attachments: state.attachments.updateWhere(
             where: (attachment) => attachment.path == path,
             updated: (oldElement) => oldElement.copyWith(
@@ -123,7 +119,7 @@ class ContactSupportViewStateNotifier
           description: state.descriptionController.text.trim(),
           attachmentUrls:
               state.attachments.map((e) => e.url).whereNotNull().toList(),
-          userId: _currantUserId ?? '',
+          userId: _currentUserId ?? '',
           createdAt: DateTime.now());
 
       await supportService.addSupportCase(supportCase).whenComplete(

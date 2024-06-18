@@ -6,9 +6,7 @@ import '../../errors/app_error.dart';
 import '../../utils/constant/firestore_constant.dart';
 
 final supportServiceProvider = Provider(
-  (ref) => SupportService(
-    FirebaseFirestore.instance,
-  ),
+  (ref) => SupportService(FirebaseFirestore.instance),
 );
 
 class SupportService {

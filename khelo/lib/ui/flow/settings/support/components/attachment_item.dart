@@ -10,29 +10,23 @@ import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
 class AttachmentsTypeView extends StatelessWidget {
-  final double height;
-  final double width;
   final String path;
-  final double borderRadius;
   final bool isNetwork;
 
   const AttachmentsTypeView({
     super.key,
     required this.path,
-    this.height = 50,
-    this.width = 50,
-    this.borderRadius = 12,
     this.isNetwork = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
-      width: width,
+      height: 50,
+      width: 50,
       decoration: BoxDecoration(
         color: context.colorScheme.containerNormal,
-        borderRadius: BorderRadius.circular(borderRadius),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: _getFileView(
         iconColor: context.colorScheme.textDisabled,
@@ -46,17 +40,14 @@ class AttachmentsTypeView extends StatelessWidget {
     required String path,
   }) {
     if (path.attachmentType.isImage) {
-      return Hero(
-        tag: 'chat-widget/$path',
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image: isNetwork
-                  ? CachedNetworkImageProvider(path) as ImageProvider
-                  : FileImage(File(path)),
-              fit: BoxFit.cover,
-            ),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: isNetwork
+                ? CachedNetworkImageProvider(path) as ImageProvider
+                : FileImage(File(path)),
+            fit: BoxFit.cover,
           ),
         ),
       );
@@ -90,7 +81,7 @@ class AttachmentItem extends StatelessWidget {
       children: [
         AttachmentsTypeView(path: path),
         const SizedBox(width: 16),
-        Flexible(
+        Expanded(
           child: Text(
             path.attachmentName,
             style: AppTextStyle.body2.copyWith(

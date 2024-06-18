@@ -90,9 +90,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
         const SizedBox(height: 16),
         _attachmentButton(
           context: context,
-          onAttachmentTap: () {
-            notifier.pickAttachments();
-          },
+          onAttachmentTap: notifier.pickAttachments,
         ),
         ListView.separated(
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -111,7 +109,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
           enabled: !state.submitting && state.enableSubmit,
           progress: state.submitting,
           context.l10n.common_submit_title,
-          onPressed: () => notifier.onSubmit(),
+          onPressed: notifier.onSubmit,
         ),
       ],
     );
@@ -156,7 +154,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
           Text(
             context.l10n.contact_support_attachment,
             style: AppTextStyle.body2.copyWith(
-              color: context.colorScheme.textSecondary,
+              color: context.colorScheme.textPrimary,
             ),
           ),
         ],
