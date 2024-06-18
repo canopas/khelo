@@ -60,7 +60,8 @@ class ProfileScreen extends ConsumerWidget {
                     color: context.colorScheme.textDisabled,
                   ),
                 ),
-              )
+              ),
+              const SizedBox(height: 24),
             ],
           );
         },
