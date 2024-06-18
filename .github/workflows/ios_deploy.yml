@@ -1,10 +1,11 @@
 name: Publish to App Store Connect
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+#on:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - main
+on: push
 
 jobs:
   build:
@@ -56,9 +57,6 @@ jobs:
 
     - name: Install Codemagic CLI tools
       run: pip install codemagic-cli-tools
-
-    - name: install flutterfire CLI
-      run: dart pub global activate flutterfire_cli
 
     - name: Set up keychain
       run: keychain initialize
