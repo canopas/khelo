@@ -9,7 +9,6 @@ import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/button/action_button.dart';
-import 'package:style/button/large_icon_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 
@@ -71,10 +70,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
     final notifier = ref.watch(myGameTabViewStateProvider.notifier);
 
     return AppPage(
-      floatingActionButton: Visibility(
-        visible: _selectedTab == 0,
-        child: _floatingAddButton(context),
-      ),
       body: Builder(
         builder: (context) {
           return _content(context, notifier);
@@ -105,9 +100,10 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
 
   Widget _tabView(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
+          const SizedBox(width: 16),
           TabButton(
             context.l10n.common_matches_title,
             selected: _selectedTab == 0,
@@ -123,34 +119,21 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
               _controller.jumpToPage(1);
             },
           ),
+          const Spacer(),
           if (_selectedTab == 1) ...[
-            const Spacer(),
             actionButton(context,
                 onPressed: () => ref
                     .read(teamListViewStateProvider.notifier)
                     .onFilterButtonTap(),
                 icon: Icon(CupertinoIcons.slider_horizontal_3,
                     color: context.colorScheme.primary)),
-            actionButton(context,
-                onPressed: () => AppRoute.addTeam().push(context),
-                icon: Icon(Icons.add, color: context.colorScheme.primary)),
-          ]
+          ],
+          actionButton(context,
+              onPressed: () => _selectedTab == 1
+                  ? AppRoute.addTeam().push(context)
+                  : AppRoute.addMatch().push(context),
+              icon: Icon(Icons.add, color: context.colorScheme.primary)),
         ],
-      ),
-    );
-  }
-
-  Widget _floatingAddButton(
-    BuildContext context,
-  ) {
-    return LargeIconButton(
-      backgroundColor: context.colorScheme.primary,
-      onTap: () async {
-        AppRoute.addMatch().push(context);
-      },
-      icon: Icon(
-        Icons.add_rounded,
-        color: context.colorScheme.onPrimary,
       ),
     );
   }
