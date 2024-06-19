@@ -145,7 +145,7 @@ jobs:
             IFS=''
             buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
             echo "Generating android build $buildName $buildNumber"          
-            flutter build apk --release --build-number=$buildNumber --build-name=$buildName
+            flutter build appbundle --build-number=$buildNumber --build-name=$buildName
 
             cd ..
             mv khelo/build/app/outputs/bundle/release/app-release.aab .
