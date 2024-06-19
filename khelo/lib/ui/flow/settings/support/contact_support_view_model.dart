@@ -44,7 +44,7 @@ class ContactSupportViewStateNotifier
   void onValueChange() {
     state = state.copyWith(
       actionError: null,
-      enableSubmit: state.titleController.text.trim().isNotEmpty &&
+      enableSubmit: state.titleController.text.trim().isNotEmpty ||
           state.attachments
                   .where((element) => element.uploadStatus.isUploading)
                   .firstOrNull !=
