@@ -57,6 +57,9 @@ jobs:
     - name: Install Codemagic CLI tools
       run: pip install codemagic-cli-tools
 
+    - name: install flutterfire CLI
+      run: dart pub global activate flutterfire_cli
+
     - name: Set up keychain
       run: keychain initialize
 
