@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/support/support_service.dart';
@@ -61,24 +62,9 @@ class ContactSupportViewStateNotifier
             uploadStatus: AttachmentUploadStatus.uploading),
       ]);
       onValueChange();
+
       final bool isLarge = await File(path).length() > 25 * 1024 * 1024;
-      if (isLarge) {
-        final attachments = state.attachments.toList();
-        attachments.removeWhere((element) => element.path == path);
-        state = state.copyWith(attachments: attachments);
-      } else {
-        final url = await fileUploadService.uploadProfileImage(
-            path, ImageUploadType.support);
-        state = state.copyWith(
-          attachments: state.attachments.updateWhere(
-            where: (attachment) => attachment.path == path,
-            updated: (oldElement) => oldElement.copyWith(
-              url: url,
-              uploadStatus: AttachmentUploadStatus.uploaded,
-            ),
-          ),
-        );
-      }
+      isLarge ? _handleLargeFile(path) : _uploadFile(path);
 
       onValueChange();
     } catch (error, _) {
@@ -86,6 +72,28 @@ class ContactSupportViewStateNotifier
       debugPrint(
           "ContactSupportViewStateNotifier: Error while uploading $path error $error");
     }
+  }
+
+  void _handleLargeFile(String path) async {
+    final attachments = state.attachments.toList();
+    attachments.removeWhere((element) => element.path == path);
+
+    state = state.copyWith(
+        attachments: attachments, actionError: const LargeAttachmentUploadError());
+  }
+
+  void _uploadFile(String path) async {
+    final url = await fileUploadService.uploadProfileImage(
+        path, ImageUploadType.support);
+    state = state.copyWith(
+      attachments: state.attachments.updateWhere(
+        where: (attachment) => attachment.path == path,
+        updated: (oldElement) => oldElement.copyWith(
+          url: url,
+          uploadStatus: AttachmentUploadStatus.uploaded,
+        ),
+      ),
+    );
   }
 
   void pickAttachments() async {
@@ -105,9 +113,17 @@ class ContactSupportViewStateNotifier
 
   void removeAttachment(int index) {
     state = state.copyWith(
-      attachments: state.attachments.toList()..removeAt(index),
-    );
+        attachments: state.attachments.toList()..removeAt(index));
     onValueChange();
+  }
+
+  void discardAttachments() async {
+    for (final attachment in state.attachments) {
+      if (attachment.url != null) {
+        await fileUploadService.deleteUploadedImage(attachment.url!);
+      }
+    }
+    state = state.copyWith(attachments: []);
   }
 
   void onSubmit() async {

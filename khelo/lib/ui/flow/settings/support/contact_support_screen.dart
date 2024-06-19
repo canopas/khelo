@@ -59,18 +59,23 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(contactSupportStateNotifierProvider);
     _errorObserve();
     _popObserve();
-    return AppPage(
-      title: context.l10n.contact_support_title,
-      body: Builder(builder: (context) {
-        return _body(context);
-      }),
+    return PopScope(
+      onPopInvoked: (didPop) {
+        if (!state.pop) return notifier.discardAttachments();
+      },
+      child: AppPage(
+        title: context.l10n.contact_support_title,
+        body: Builder(builder: (context) {
+          return _body(context, state);
+        }),
+      ),
     );
   }
 
-  Widget _body(BuildContext context) {
-    final state = ref.watch(contactSupportStateNotifierProvider);
+  Widget _body(BuildContext context, ContactSupportViewState state) {
     return ListView(
       padding: context.mediaQueryPadding + const EdgeInsets.all(16),
       children: [
