@@ -153,5 +153,5 @@
 <h2>Contact Us</h2>
 <p>If you have any questions about this Privacy Policy, You can contact us:</p>
 <ul>
-<li>By email: jimmy@canopas.com</li>
+<li>By email: <a href="mailto:contact@canopas.com">contact@canopas.com</a></li>
 </ul>
