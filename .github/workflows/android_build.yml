@@ -14,11 +14,12 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
+          distribution: 'oracle'
           java-version: 17.0.6
           cache: 'gradle'
 
@@ -32,7 +33,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.0
-          bundle-cache: true
+          bundler-cache: true
 
       - name: Retrieve the secret and decode it to file
         env:
@@ -72,10 +73,12 @@ jobs:
           buildName="${versionValue[0]}.${versionValue[1]}.${{ github.run_number }}"
           echo "Generating android build $buildName $buildNumber"          
           flutter build apk --release --build-number=$buildNumber --build-name=$buildName
-          mv build/app/outputs/apk/release/Khelo*.apk .
+
+          cd ..
+          mv khelo/build/app/outputs/apk/release/Khelo*.apk .
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Khelo APK
           path: Khelo*.apk

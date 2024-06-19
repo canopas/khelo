@@ -96,11 +96,15 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
               context: context,
               error: saveBtnError.getString(context),
             ),
-      icon: Icon(
-        Icons.alarm,
-        color: saveBtnError == null
-            ? context.colorScheme.primary
-            : context.colorScheme.textDisabled,
+      icon: SvgPicture.asset(
+        Assets.images.icSave,
+        width: 24,
+        height: 24,
+        colorFilter: ColorFilter.mode(
+            saveBtnError == null
+                ? context.colorScheme.primary
+                : context.colorScheme.textDisabled,
+            BlendMode.srcIn),
       ),
     );
   }

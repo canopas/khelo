@@ -14,11 +14,12 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up JDK 1.8
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
+          distribution: 'oracle'
           java-version: 17.0.6
           cache: 'gradle'
 
@@ -32,7 +33,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3.0
-          bundle-cache: true
+          bundler-cache: true
 
       - name: Retrieve the secret and decode it to file
         env:
@@ -43,7 +44,7 @@ jobs:
           cd khelo
           echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
           echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -di > android/app/google-services.json
-          
+
 
       - name: Install Dependencies
         run: |
