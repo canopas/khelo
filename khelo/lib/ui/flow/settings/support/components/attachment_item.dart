@@ -90,20 +90,22 @@ class AttachmentItem extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
-        if (isLoading)
+        if (isLoading) ...[
           const Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.symmetric(horizontal: 16),
             child: AppProgressIndicator(size: AppProgressIndicatorSize.small),
           ),
-        actionButton(
-          context,
-          onPressed: onCancelTap,
-          icon: Icon(
-            Icons.cancel_rounded,
-            color: context.colorScheme.textDisabled,
-            size: 28,
+        ] else ...[
+          actionButton(
+            context,
+            onPressed: onCancelTap,
+            icon: Icon(
+              Icons.cancel_rounded,
+              color: context.colorScheme.textDisabled,
+              size: 28,
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

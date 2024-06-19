@@ -47,7 +47,7 @@ class ContactSupportViewStateNotifier
       enableSubmit: state.titleController.text.trim().isNotEmpty &&
           state.attachments
                   .where((element) => element.uploadStatus.isUploading)
-                  .firstOrNull ==
+                  .firstOrNull !=
               null,
     );
   }
@@ -113,8 +113,10 @@ class ContactSupportViewStateNotifier
   }
 
   void removeAttachment(int index) async {
-    await fileUploadService
-        .deleteUploadedImage(state.attachments.elementAt(index).url ?? '');
+    if (state.attachments.elementAt(index).url != null) {
+      await fileUploadService
+          .deleteUploadedImage(state.attachments.elementAt(index).url ?? '');
+    }
     state = state.copyWith(
         attachments: state.attachments.toList()..removeAt(index));
     onValueChange();
