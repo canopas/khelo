@@ -131,10 +131,12 @@ class AppRoute {
         ),
       );
 
-  static AppRoute addMatch({String? matchId}) => AppRoute(
+  static AppRoute addMatch({String? matchId, TeamModel? defaultTeam}) =>
+      AppRoute(
         pathAddMatch,
         builder: (_) => AddMatchScreen(
           matchId: matchId,
+          defaultTeam: defaultTeam,
         ),
       );
 
