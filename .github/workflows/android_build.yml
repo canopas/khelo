@@ -44,7 +44,6 @@ jobs:
           echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
           echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -di > android/app/google-services.json
 
-
       - name: Install Dependencies
         run: |
           cd data && flutter clean && flutter pub get
@@ -52,7 +51,7 @@ jobs:
           cd ../khelo && flutter clean && flutter pub get
           cd ..
 
-      - name: Deploy Internally
+      - name: Generate Build
         env:
           APKSIGN_KEYSTORE_BASE64: ${{ secrets.APKSIGN_KEYSTORE_BASE64 }}
           APKSIGN_KEYSTORE_PASS: ${{ secrets.APKSIGN_KEYSTORE_PASS }}
@@ -75,6 +74,7 @@ jobs:
 
           cd ..
           mv khelo/build/app/outputs/apk/release/Khelo*.apk .
+          mv khelo/build/app/outputs/bundle/release/app-release.aab .
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -82,5 +82,10 @@ jobs:
           name: Khelo APK
           path: Khelo*.apk
           retention-days: 2
-    
 
+      - name: Upload AAB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Khelo AAB
+          path: app-release.aab
+          retention-days: 2
