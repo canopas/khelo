@@ -1,3 +1,4 @@
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,8 +35,9 @@ import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 class AddMatchScreen extends ConsumerStatefulWidget {
   final String? matchId;
+  final TeamModel? defaultTeam;
 
-  const AddMatchScreen({super.key, this.matchId});
+  const AddMatchScreen({super.key, this.matchId, this.defaultTeam});
 
   @override
   ConsumerState createState() => _AddMatchScreenState();
@@ -48,7 +50,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(addMatchViewStateProvider.notifier);
-    runPostFrame(() => notifier.setData(widget.matchId));
+    runPostFrame(() => notifier.setData(widget.matchId, widget.defaultTeam));
   }
 
   @override
@@ -163,14 +165,14 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           context: context,
           controller: state.groundController,
           hintText: context.l10n.add_match_ground_title,
-          onChange: () => notifier.onTextChange(),
+          onChange: notifier.onTextChange,
         ),
         const SizedBox(height: 16),
         _inputField(
           context: context,
           controller: state.cityController,
           hintText: context.l10n.common_city_title,
-          onChange: () => notifier.onTextChange(),
+          onChange: notifier.onTextChange,
         ),
         _matchScheduleView(context, notifier, state),
         BallSelectionView(notifier: notifier, state: state),
@@ -409,7 +411,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
               context.l10n.common_delete_title.toLowerCase())),
           actions: [
             TextButton(
-              onPressed: () => context.pop(),
+              onPressed: context.pop,
               child: Text(
                 context.l10n.common_cancel_title,
                 style: TextStyle(color: context.colorScheme.textSecondary),

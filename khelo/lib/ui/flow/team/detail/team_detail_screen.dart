@@ -77,7 +77,14 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       children: [
         _teamProfileView(context, state),
         const SizedBox(height: 16),
-        _tabView(context),
+        _tabView(
+          context,
+          onAddButtonTap: () => AppRoute.addMatch(
+                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                      ? state.team
+                      : null)
+              .push(context),
+        ),
         _content(context),
       ],
     );
@@ -120,7 +127,10 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     );
   }
 
-  Widget _tabView(BuildContext context) {
+  Widget _tabView(
+    BuildContext context, {
+    required Function() onAddButtonTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
@@ -145,7 +155,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           if (_selectedTab == 0) ...[
             const Spacer(),
             actionButton(context,
-                onPressed: () => AppRoute.addMatch().push(context),
+                onPressed: onAddButtonTap,
                 icon: Icon(
                   Icons.add,
                   color: context.colorScheme.textPrimary,
