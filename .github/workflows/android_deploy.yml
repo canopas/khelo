@@ -1,18 +1,17 @@
 name: Publish to Google Play Store
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+#on:
+#  push:
+#    branches:
+#      - main
+#  workflow_dispatch:
+on: push
 
 jobs:
-
-  build:
+  deploy_internal_android:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4
 
