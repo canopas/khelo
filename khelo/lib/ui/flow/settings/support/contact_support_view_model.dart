@@ -75,11 +75,12 @@ class ContactSupportViewStateNotifier
   }
 
   void _handleLargeFile(String path) async {
-    final attachments = state.attachments.toList();
-    attachments.removeWhere((element) => element.path == path);
+    final attachments = state.attachments.toList()
+      ..removeWhere((element) => element.path == path);
 
     state = state.copyWith(
-        attachments: attachments, actionError: const LargeAttachmentUploadError());
+        attachments: attachments,
+        actionError: const LargeAttachmentUploadError());
   }
 
   void _uploadFile(String path) async {
@@ -111,7 +112,9 @@ class ContactSupportViewStateNotifier
     }
   }
 
-  void removeAttachment(int index) {
+  void removeAttachment(int index) async {
+    await fileUploadService
+        .deleteUploadedImage(state.attachments.elementAt(index).url ?? '');
     state = state.copyWith(
         attachments: state.attachments.toList()..removeAt(index));
     onValueChange();
