@@ -37,10 +37,12 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           currentUserId: userId,
         ));
 
-  void setData(String? matchId) {
+  void setData(String? matchId, TeamModel? defaultTeam) {
     this.matchId = matchId;
     if (matchId != null) {
       getMatchById();
+    } else if (defaultTeam != null) {
+      onTeamSelect(defaultTeam, TeamType.a);
     } else {
       onTextChange();
     }
