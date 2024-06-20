@@ -644,6 +644,7 @@
 
   "profile_settings_title": "Settings",
   "profile_setting_privacy_policy_title": "Privacy policy",
+  "profile_setting_terms_and_condition_title": "Terms and condition",
   "profile_setting_app_version_text": "App Version: {version}",
 
   "@_CONTACT_SUPPORT": {

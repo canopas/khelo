@@ -156,8 +156,15 @@ class ProfileScreen extends ConsumerWidget {
             context,
             icon: Assets.images.icPrivacyPolicy,
             title: context.l10n.profile_setting_privacy_policy_title,
-            onTap: () => notifier.onPrivacyPolicy(
-                "https://canopas.github.io/khelo/privacy-policy"),
+            onTap: () => notifier
+                .openUrl("https://canopas.github.io/khelo/privacy-policy"),
+          ),
+          _settingItem(
+            context,
+            icon: Assets.images.icTermsConditions,
+            title: context.l10n.profile_setting_terms_and_condition_title,
+            onTap: () => notifier
+                .openUrl("https://canopas.github.io/khelo/terms-and-condition"),
           ),
           _settingItem(
             context,
