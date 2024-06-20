@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
@@ -57,6 +61,19 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     final state = ref.watch(teamDetailStateProvider);
     return AppPage(
       title: state.team?.name ?? context.l10n.team_detail_screen_title,
+      actions: (state.currentUserId == state.team?.created_by)
+          ? [
+              actionButton(
+                context,
+                icon: Icon(
+                    Platform.isIOS
+                        ? Icons.more_horiz_rounded
+                        : Icons.more_vert_rounded,
+                    color: context.colorScheme.textPrimary),
+                onPressed: () => _moreActionButton(context, state),
+              ),
+            ]
+          : null,
       body: _body(context, state),
     );
   }
@@ -77,14 +94,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       children: [
         _teamProfileView(context, state),
         const SizedBox(height: 16),
-        _tabView(
-          context,
-          onAddButtonTap: () => AppRoute.addMatch(
-                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
-                      ? state.team
-                      : null)
-              .push(context),
-        ),
+        _tabView(context),
         _content(context),
       ],
     );
@@ -127,10 +137,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     );
   }
 
-  Widget _tabView(
-    BuildContext context, {
-    required Function() onAddButtonTap,
-  }) {
+  Widget _tabView(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
@@ -152,15 +159,6 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             selected: _selectedTab == 2,
             onTap: () => _controller.jumpToPage(2),
           ),
-          if (_selectedTab == 0) ...[
-            const Spacer(),
-            actionButton(context,
-                onPressed: onAddButtonTap,
-                icon: Icon(
-                  Icons.add,
-                  color: context.colorScheme.textPrimary,
-                )),
-          ],
         ],
       ),
     );
@@ -177,6 +175,41 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         },
       ),
     );
+  }
+
+  void _moreActionButton(
+    BuildContext context,
+    TeamDetailState state,
+  ) async {
+    return showActionBottomSheet(context: context, items: [
+      BottomSheetAction(
+        title: context.l10n.common_edit_team_title,
+        onTap: () {
+          context.pop();
+          AppRoute.addTeam(team: state.team).push(context);
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.add_match_screen_title,
+        onTap: () {
+          context.pop();
+          AppRoute.addMatch(
+                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                      ? state.team
+                      : null)
+              .push(context);
+        },
+      ),
+      if (state.team != null) ...[
+        BottomSheetAction(
+          title: context.l10n.team_list_add_members_title,
+          onTap: () {
+            context.pop();
+            AppRoute.addTeamMember(team: state.team!).push(context);
+          },
+        ),
+      ],
+    ]);
   }
 
   @override
