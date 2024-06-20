@@ -58,9 +58,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       automaticallyImplyLeading: false,
       leading: actionButton(
         context,
-        onPressed: () {
-          context.pop();
-        },
+        onPressed: context.pop,
         icon: Icon(
           Icons.arrow_back,
           color: context.colorScheme.textPrimary,
