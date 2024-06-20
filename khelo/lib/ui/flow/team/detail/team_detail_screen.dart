@@ -89,14 +89,17 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       );
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _teamProfileView(context, state),
-        const SizedBox(height: 16),
-        _tabView(context),
-        _content(context),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _teamProfileView(context, state),
+          const SizedBox(height: 16),
+          _tabView(context),
+          _content(context),
+        ],
+      ),
     );
   }
 
