@@ -74,7 +74,9 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               ),
             ]
           : null,
-      body: _body(context, state),
+      body: Builder(builder: (context) {
+        return _body(context, state);
+      }),
     );
   }
 
@@ -90,7 +92,8 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding:
+          context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
