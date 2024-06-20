@@ -49,7 +49,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  void onPrivacyPolicy(String path) async {
+  void openUrl(String path) async {
     try {
       final targetUrl = Uri.parse(path);
       await launchUrl(targetUrl, mode: LaunchMode.externalApplication);
