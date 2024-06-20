@@ -200,15 +200,13 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               .push(context);
         },
       ),
-      if (state.team != null) ...[
-        BottomSheetAction(
-          title: context.l10n.team_list_add_members_title,
-          onTap: () {
-            context.pop();
-            AppRoute.addTeamMember(team: state.team!).push(context);
-          },
-        ),
-      ],
+      BottomSheetAction(
+        title: context.l10n.team_list_add_members_title,
+        onTap: () {
+          context.pop();
+          AppRoute.addTeamMember(team: state.team!).push(context);
+        },
+      ),
     ]);
   }
 
