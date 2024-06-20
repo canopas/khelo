@@ -64,7 +64,7 @@ class ContactSupportViewStateNotifier
             uploadStatus: AttachmentUploadStatus.uploading),
       ]);
       onValueChange();
-      final bool isLarge = await File(path).isFileUnderMaxSize();
+      final bool isLarge = !(await File(path).isFileUnderMaxSize());
 
       if (isLarge) {
         final attachments = state.attachments.toList()
