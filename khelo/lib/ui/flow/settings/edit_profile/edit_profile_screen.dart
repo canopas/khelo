@@ -42,9 +42,6 @@ class EditProfileScreen extends ConsumerWidget {
     _observeIsSaved(context, ref);
 
     return PopScope(
-      onPopInvoked: (didPop) async {
-        await notifier.onBackBtnPressed();
-      },
       child: AppPage(
         title: context.l10n.edit_profile_screen_title,
         actions: [
@@ -79,6 +76,7 @@ class EditProfileScreen extends ConsumerWidget {
                         size: profileViewHeight,
                         placeHolderImage: Assets.images.icProfileThin,
                         imageUrl: state.imageUrl,
+                        filePath: state.filePath,
                         isLoading: state.isImageUploading,
                         onEditButtonTap: () async {
                           final imagePath = await ImagePickerSheet.show<String>(

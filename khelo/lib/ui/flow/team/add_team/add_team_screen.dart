@@ -59,7 +59,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       leading: actionButton(
         context,
         onPressed: () {
-          notifier.onBackBtnPressed();
           context.pop();
         },
         icon: Icon(
@@ -99,7 +98,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               size: profileViewHeight,
               placeHolderImage: Assets.images.icGroup,
               isLoading: state.isImageUploading,
-              imageUrl: state.imageUrl,
+              imageUrl: state.editTeam?.profile_img_url,
+              filePath: state.filePath,
               onEditButtonTap: () async {
                 final imagePath =
                     await ImagePickerSheet.show<String>(context, true);

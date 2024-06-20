@@ -6,9 +6,6 @@ class FireStoreConst {
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";
   static const String supportCollection = "contact_support";
-  static const String userProfileImagesFolder = "UserProfileImages";
-  static const String teamProfileImagesFolder = "TeamProfileImages";
-  static const String supportImagesFolder = "SupportImages";
 
   // matches field const
   static const String id = "id";
@@ -41,4 +38,5 @@ class FireStoreConst {
   static const String players = "players";
   static const String createdBy = "created_by";
   static const String nameLowercase = "name_lowercase";
+  static const String profileImageUrl = "profile_img_url";
 }

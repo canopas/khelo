@@ -6,12 +6,14 @@ import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/support/support_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/constant/firebase_storage_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:data/api/support/support_models.dart';
+import 'package:khelo/domain/extensions/file_extension.dart';
 
 part 'contact_support_view_model.freezed.dart';
 
@@ -62,7 +64,7 @@ class ContactSupportViewStateNotifier
             uploadStatus: AttachmentUploadStatus.uploading),
       ]);
       onValueChange();
-      final bool isLarge = await File(path).length() > 25 * 1024 * 1024;
+      final bool isLarge = await File(path).isFileUnderMaxSize();
 
       if (isLarge) {
         final attachments = state.attachments.toList()
@@ -73,7 +75,10 @@ class ContactSupportViewStateNotifier
             actionError: const LargeAttachmentUploadError());
       } else {
         final url = await fileUploadService.uploadProfileImage(
-            path, ImageUploadType.support);
+            filePath: path,
+            uploadPath: StorageConst.supportAttachmentUploadPath(
+                userId: _currentUserId ?? '',
+                imageName: _generateImageFilename()));
         state = state.copyWith(
           attachments: state.attachments.updateWhere(
             where: (attachment) => attachment.path == path,
@@ -91,6 +96,11 @@ class ContactSupportViewStateNotifier
       debugPrint(
           "ContactSupportViewStateNotifier: Error while uploading $path error $error");
     }
+  }
+
+  String _generateImageFilename() {
+    DateTime now = DateTime.now();
+    return "IMG_${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}${now.millisecond}";
   }
 
   void pickAttachments() async {

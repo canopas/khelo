@@ -156,6 +156,19 @@ class TeamService {
     }
   }
 
+  Future<void> updateProfileImageUrl(String teamId, String? imageUrl) async {
+    try {
+      DocumentReference teamRef =
+          _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
+
+      await teamRef.set({
+        FireStoreConst.profileImageUrl: imageUrl,
+      }, SetOptions(merge: true));
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<void> deleteTeam(String teamId) async {
     try {
       await _firestore

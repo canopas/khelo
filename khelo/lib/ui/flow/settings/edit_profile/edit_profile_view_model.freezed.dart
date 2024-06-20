@@ -25,6 +25,7 @@ mixin _$EditProfileState {
       throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
+  String? get filePath => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   UserGender? get gender => throw _privateConstructorUsedError;
   BattingStyle? get battingStyle => throw _privateConstructorUsedError;
@@ -53,6 +54,7 @@ abstract class $EditProfileStateCopyWith<$Res> {
       TextEditingController locationController,
       Object? actionError,
       UserModel? currentUser,
+      String? filePath,
       String? imageUrl,
       UserGender? gender,
       BattingStyle? battingStyle,
@@ -85,6 +87,7 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? locationController = null,
     Object? actionError = freezed,
     Object? currentUser = freezed,
+    Object? filePath = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
     Object? battingStyle = freezed,
@@ -117,6 +120,10 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      filePath: freezed == filePath
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
+              as String?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -184,6 +191,7 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       TextEditingController locationController,
       Object? actionError,
       UserModel? currentUser,
+      String? filePath,
       String? imageUrl,
       UserGender? gender,
       BattingStyle? battingStyle,
@@ -215,6 +223,7 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? locationController = null,
     Object? actionError = freezed,
     Object? currentUser = freezed,
+    Object? filePath = freezed,
     Object? imageUrl = freezed,
     Object? gender = freezed,
     Object? battingStyle = freezed,
@@ -247,6 +256,10 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.currentUser
           : currentUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      filePath: freezed == filePath
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
+              as String?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -297,6 +310,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       required this.locationController,
       this.actionError,
       this.currentUser,
+      this.filePath,
       this.imageUrl = null,
       this.gender = null,
       this.battingStyle = null,
@@ -319,6 +333,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
   final Object? actionError;
   @override
   final UserModel? currentUser;
+  @override
+  final String? filePath;
   @override
   @JsonKey()
   final String? imageUrl;
@@ -349,7 +365,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
 
   @override
   String toString() {
-    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, actionError: $actionError, currentUser: $currentUser, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
+    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, actionError: $actionError, currentUser: $currentUser, filePath: $filePath, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
   }
 
   @override
@@ -368,6 +384,8 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 .equals(other.actionError, actionError) &&
             (identical(other.currentUser, currentUser) ||
                 other.currentUser == currentUser) &&
+            (identical(other.filePath, filePath) ||
+                other.filePath == filePath) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.gender, gender) || other.gender == gender) &&
@@ -395,6 +413,7 @@ class _$EditProfileStateImpl implements _EditProfileState {
       locationController,
       const DeepCollectionEquality().hash(actionError),
       currentUser,
+      filePath,
       imageUrl,
       gender,
       battingStyle,
@@ -421,6 +440,7 @@ abstract class _EditProfileState implements EditProfileState {
       required final TextEditingController locationController,
       final Object? actionError,
       final UserModel? currentUser,
+      final String? filePath,
       final String? imageUrl,
       final UserGender? gender,
       final BattingStyle? battingStyle,
@@ -443,6 +463,8 @@ abstract class _EditProfileState implements EditProfileState {
   Object? get actionError;
   @override
   UserModel? get currentUser;
+  @override
+  String? get filePath;
   @override
   String? get imageUrl;
   @override

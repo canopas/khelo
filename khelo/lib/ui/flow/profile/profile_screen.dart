@@ -150,7 +150,7 @@ class ProfileScreen extends ConsumerWidget {
             context,
             icon: Assets.images.icContactSupport,
             title: context.l10n.contact_support_title,
-            onTap: () =>AppRoute.contactSupport().push(context),
+            onTap: () => AppRoute.contactSupport().push(context),
           ),
           _settingItem(
             context,

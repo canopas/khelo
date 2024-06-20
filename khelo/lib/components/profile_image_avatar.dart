@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:style/indicator/progress_indicator.dart';
 class ProfileImageAvatar extends StatelessWidget {
   final double size;
   final String? imageUrl;
+  final String? filePath;
   final String? placeHolderImage;
   final bool isLoading;
   final Function() onEditButtonTap;
@@ -18,6 +21,7 @@ class ProfileImageAvatar extends StatelessWidget {
     super.key,
     required this.size,
     this.imageUrl,
+    this.filePath,
     this.placeHolderImage,
     required this.isLoading,
     required this.onEditButtonTap,
@@ -45,23 +49,33 @@ class ProfileImageAvatar extends StatelessWidget {
       width: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          shape: BoxShape.circle, color: context.colorScheme.primary),
-      child: (imageUrl != null && !isLoading)
-          ? CachedNetworkImage(
-              imageUrl: imageUrl!,
-              fit: BoxFit.cover,
-              errorWidget: (context, url, error) => _placeHolderIcon(context),
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
+          shape: BoxShape.circle,
+          color: context.colorScheme.primary,
+          image: (filePath != null)
+              ? DecorationImage(
+                  image: FileImage(File(filePath!)),
+                  fit: BoxFit.cover,
+                )
+              : null),
+      child: (filePath != null)
+          ? null
+          : (imageUrl != null && !isLoading)
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl!,
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) =>
+                      _placeHolderIcon(context),
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-          : _imagePlaceHolder(context),
+                )
+              : _imagePlaceHolder(context),
     );
   }
 

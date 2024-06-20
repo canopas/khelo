@@ -21,7 +21,7 @@ mixin _$AddTeamState {
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  String? get filePath => throw _privateConstructorUsedError;
   bool? get isNameAvailable => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
   TeamModel? get editTeam => throw _privateConstructorUsedError;
@@ -49,7 +49,7 @@ abstract class $AddTeamStateCopyWith<$Res> {
       {TextEditingController nameController,
       TextEditingController locationController,
       Object? actionError,
-      String? imageUrl,
+      String? filePath,
       bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
@@ -83,7 +83,7 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     Object? nameController = null,
     Object? locationController = null,
     Object? actionError = freezed,
-    Object? imageUrl = freezed,
+    Object? filePath = freezed,
     Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
@@ -106,9 +106,9 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      filePath: freezed == filePath
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
               as String?,
       isNameAvailable: freezed == isNameAvailable
           ? _value.isNameAvailable
@@ -206,7 +206,7 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
       {TextEditingController nameController,
       TextEditingController locationController,
       Object? actionError,
-      String? imageUrl,
+      String? filePath,
       bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
@@ -241,7 +241,7 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
     Object? nameController = null,
     Object? locationController = null,
     Object? actionError = freezed,
-    Object? imageUrl = freezed,
+    Object? filePath = freezed,
     Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
@@ -264,9 +264,9 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
           : locationController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      filePath: freezed == filePath
+          ? _value.filePath
+          : filePath // ignore: cast_nullable_to_non_nullable
               as String?,
       isNameAvailable: freezed == isNameAvailable
           ? _value.isNameAvailable
@@ -323,7 +323,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
       {required this.nameController,
       required this.locationController,
       this.actionError,
-      this.imageUrl,
+      this.filePath,
       this.isNameAvailable,
       this.team,
       this.editTeam,
@@ -344,7 +344,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
   @override
   final Object? actionError;
   @override
-  final String? imageUrl;
+  final String? filePath;
   @override
   final bool? isNameAvailable;
   @override
@@ -382,7 +382,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
 
   @override
   String toString() {
-    return 'AddTeamState(nameController: $nameController, locationController: $locationController, actionError: $actionError, imageUrl: $imageUrl, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
+    return 'AddTeamState(nameController: $nameController, locationController: $locationController, actionError: $actionError, filePath: $filePath, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
   }
 
   @override
@@ -396,8 +396,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
                 other.locationController == locationController) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.filePath, filePath) ||
+                other.filePath == filePath) &&
             (identical(other.isNameAvailable, isNameAvailable) ||
                 other.isNameAvailable == isNameAvailable) &&
             (identical(other.team, team) || other.team == team) &&
@@ -427,7 +427,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
       nameController,
       locationController,
       const DeepCollectionEquality().hash(actionError),
-      imageUrl,
+      filePath,
       isNameAvailable,
       team,
       editTeam,
@@ -452,7 +452,7 @@ abstract class _AddTeamState implements AddTeamState {
       {required final TextEditingController nameController,
       required final TextEditingController locationController,
       final Object? actionError,
-      final String? imageUrl,
+      final String? filePath,
       final bool? isNameAvailable,
       final TeamModel? team,
       final TeamModel? editTeam,
@@ -472,7 +472,7 @@ abstract class _AddTeamState implements AddTeamState {
   @override
   Object? get actionError;
   @override
-  String? get imageUrl;
+  String? get filePath;
   @override
   bool? get isNameAvailable;
   @override
