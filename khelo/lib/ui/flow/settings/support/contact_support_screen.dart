@@ -83,6 +83,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
           context,
           placeholderText: context.l10n.contact_support_title_placeholder_text,
           controller: state.titleController,
+          onChanged: (value) => notifier.onValueChange(),
         ),
         const SizedBox(height: 16),
         _textInputField(
@@ -114,7 +115,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
           enabled: !state.submitting && state.enableSubmit,
           progress: state.submitting,
           context.l10n.common_submit_title,
-          onPressed: notifier.onSubmit,
+          onPressed: notifier.submitSupportCase,
         ),
       ],
     );
@@ -124,11 +125,12 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
     BuildContext context, {
     required String placeholderText,
     required TextEditingController controller,
+    Function(String)? onChanged,
     int? maxLines,
   }) {
     return AppTextField(
       controller: controller,
-      onChanged: (value) => notifier.onValueChange(),
+      onChanged: onChanged,
       maxLines: maxLines,
       style: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textPrimary),

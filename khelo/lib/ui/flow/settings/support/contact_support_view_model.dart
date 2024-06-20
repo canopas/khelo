@@ -44,10 +44,10 @@ class ContactSupportViewStateNotifier
   void onValueChange() {
     state = state.copyWith(
       actionError: null,
-      enableSubmit: state.titleController.text.trim().isNotEmpty ||
+      enableSubmit: state.titleController.text.trim().isNotEmpty &&
           state.attachments
                   .where((element) => element.uploadStatus.isUploading)
-                  .firstOrNull !=
+                  .firstOrNull ==
               null,
     );
   }
@@ -62,9 +62,28 @@ class ContactSupportViewStateNotifier
             uploadStatus: AttachmentUploadStatus.uploading),
       ]);
       onValueChange();
-
       final bool isLarge = await File(path).length() > 25 * 1024 * 1024;
-      isLarge ? _handleLargeFile(path) : _uploadFile(path);
+
+      if (isLarge) {
+        final attachments = state.attachments.toList()
+          ..removeWhere((element) => element.path == path);
+
+        state = state.copyWith(
+            attachments: attachments,
+            actionError: const LargeAttachmentUploadError());
+      } else {
+        final url = await fileUploadService.uploadProfileImage(
+            path, ImageUploadType.support);
+        state = state.copyWith(
+          attachments: state.attachments.updateWhere(
+            where: (attachment) => attachment.path == path,
+            updated: (oldElement) => oldElement.copyWith(
+              url: url,
+              uploadStatus: AttachmentUploadStatus.uploaded,
+            ),
+          ),
+        );
+      }
 
       onValueChange();
     } catch (error, _) {
@@ -72,29 +91,6 @@ class ContactSupportViewStateNotifier
       debugPrint(
           "ContactSupportViewStateNotifier: Error while uploading $path error $error");
     }
-  }
-
-  void _handleLargeFile(String path) async {
-    final attachments = state.attachments.toList()
-      ..removeWhere((element) => element.path == path);
-
-    state = state.copyWith(
-        attachments: attachments,
-        actionError: const LargeAttachmentUploadError());
-  }
-
-  void _uploadFile(String path) async {
-    final url = await fileUploadService.uploadProfileImage(
-        path, ImageUploadType.support);
-    state = state.copyWith(
-      attachments: state.attachments.updateWhere(
-        where: (attachment) => attachment.path == path,
-        updated: (oldElement) => oldElement.copyWith(
-          url: url,
-          uploadStatus: AttachmentUploadStatus.uploaded,
-        ),
-      ),
-    );
   }
 
   void pickAttachments() async {
@@ -131,9 +127,9 @@ class ContactSupportViewStateNotifier
     state = state.copyWith(attachments: []);
   }
 
-  void onSubmit() async {
+  void submitSupportCase() async {
     try {
-      state = state.copyWith(submitting: true);
+      state = state.copyWith(submitting: true, actionError: null);
 
       final supportCase = AddSupportCaseRequest(
           title: state.titleController.text.trim(),
