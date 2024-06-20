@@ -5,8 +5,10 @@ class FireStoreConst {
   static const String inningsCollection = "innings";
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";
+  static const String supportCollection = "contact_support";
   static const String userProfileImagesFolder = "UserProfileImages";
   static const String teamProfileImagesFolder = "TeamProfileImages";
+  static const String supportImagesFolder = "SupportImages";
 
   // matches field const
   static const String id = "id";

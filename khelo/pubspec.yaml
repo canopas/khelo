@@ -42,6 +42,8 @@ dependencies:
   shared_preferences: ^2.2.2
   rxdart: ^0.27.7
 
+  collection: any
+
   # UI
   cupertino_icons: ^1.0.2
   image_cropper: ^7.0.3

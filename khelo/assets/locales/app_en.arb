@@ -650,6 +650,10 @@
   "@_CONTACT_SUPPORT": {
   },
   "contact_support_title": "Contact support",
+  "contact_support_title_placeholder_text": "Title",
+  "contact_support_description_placeholder_text": "Description...",
+  "contact_support_attachment": "Attachment (if any)",
+  "large_attachment_upload_error_text": "Oops! Your file exceeds the maximum allowed size of 25 MB. Please choose a smaller file and try again.",
 
   "profile_complete_profile_btn_title": "Complete Profile",
   "profile_complete_your_profile_title": "Complete your profile",

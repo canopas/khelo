@@ -32,6 +32,8 @@ class AppError implements Exception {
       return _handleFirebaseError(error);
     } else if (error is TypeError) {
       return SomethingWentWrongError(stackTrace: error.stackTrace);
+    } else if (error is LargeAttachmentUploadError) {
+      return const LargeAttachmentUploadError();
     } else {
       return SomethingWentWrongError(stackTrace: stack);
     }
@@ -82,4 +84,12 @@ class SomethingWentWrongError extends AppError {
     super.statusCode,
     super.stackTrace,
   }) : super(l10nCode: AppErrorL10nCodes.somethingWentWrongError);
+}
+
+class LargeAttachmentUploadError extends AppError {
+  const LargeAttachmentUploadError()
+      : super(
+            l10nCode: AppErrorL10nCodes.largeAttachmentUpload,
+            message:
+                "Oops! Your file exceeds the maximum allowed size of 25 MB. Please choose a smaller file and try again.");
 }

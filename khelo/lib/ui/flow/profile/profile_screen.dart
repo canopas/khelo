@@ -150,14 +150,14 @@ class ProfileScreen extends ConsumerWidget {
             context,
             icon: Assets.images.icContactSupport,
             title: context.l10n.contact_support_title,
-            onTap: () {},
+            onTap: () =>AppRoute.contactSupport().push(context),
           ),
           _settingItem(
             context,
             icon: Assets.images.icPrivacyPolicy,
             title: context.l10n.profile_setting_privacy_policy_title,
             onTap: () => notifier
-                .openUrl("https://github.com/canopas/khelo/docs/index.md"),
+                .openUrl("https://canopas.github.io/khelo/privacy-policy"),
           ),
           _settingItem(
             context,

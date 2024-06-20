@@ -13,6 +13,8 @@ extension AppErrorExtensions on Object {
           return context.l10n.error_something_went_wrong;
         case AppErrorL10nCodes.invalidPhoneNumber:
           return context.l10n.sign_in_invalid_phone_number_text;
+        case AppErrorL10nCodes.largeAttachmentUpload:
+          return context.l10n.large_attachment_upload_error_text;
         default:
           return (this as AppError).message ??
               context.l10n.error_something_went_wrong;
