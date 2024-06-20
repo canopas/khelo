@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:data/api/user/user_models.dart';
+import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/constant/firebase_storage_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:khelo/domain/extensions/file_extension.dart';
 
 part 'add_team_view_model.freezed.dart';
 
@@ -38,9 +42,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     state.nameController.text = editTeam?.name ?? "";
     state.locationController.text = editTeam?.city ?? "";
     state = state.copyWith(
-        imageUrl: editTeam?.profile_img_url,
-        editTeam: editTeam,
-        teamMembers: editTeam?.players ?? []);
+        editTeam: editTeam, teamMembers: editTeam?.players ?? []);
   }
 
   void _updateUser(UserModel? user) {
@@ -63,14 +65,13 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   Future<void> onImageSelect(String imagePath) async {
     try {
       state = state.copyWith(isImageUploading: true, actionError: null);
-      final imageUrl = await _fileUploadService.uploadProfileImage(
-          imagePath, ImageUploadType.team);
-      final prevUrl = state.imageUrl;
-
-      if (prevUrl != null && prevUrl != state.editTeam?.profile_img_url) {
-        await deleteUnusedImage(prevUrl);
+      if (await File(imagePath).isFileUnderMaxSize()) {
+        state = state.copyWith(filePath: imagePath, isImageUploading: false);
+      } else {
+        state = state.copyWith(
+            isImageUploading: false,
+            actionError: const LargeAttachmentUploadError());
       }
-      state = state.copyWith(imageUrl: imageUrl, isImageUploading: false);
       onValueChange();
     } catch (e) {
       state = state.copyWith(isImageUploading: false, actionError: e);
@@ -78,23 +79,9 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     }
   }
 
-  Future<void> onBackBtnPressed() async {
-    if (state.imageUrl != state.editTeam?.profile_img_url &&
-        state.imageUrl != null) {
-      await deleteUnusedImage(state.imageUrl!);
-    }
-  }
-
   Future<void> onAddBtnTap() async {
     try {
       state = state.copyWith(isAddInProgress: true, actionError: null);
-      final String? previousImageUrl;
-      if (state.editTeam?.profile_img_url != null &&
-          state.imageUrl != state.editTeam?.profile_img_url) {
-        previousImageUrl = state.editTeam!.profile_img_url!;
-      } else {
-        previousImageUrl = null;
-      }
 
       final name = state.nameController.text.trim();
       final location = state.locationController.text.trim();
@@ -110,21 +97,25 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       if (state.editTeam != null) {
         players = state.teamMembers;
       }
-
+      String? imageUrl = state.editTeam?.profile_img_url;
       AddTeamRequestModel team = AddTeamRequestModel(
           id: state.editTeam?.id,
           name: name,
           name_lowercase: name.caseAndSpaceInsensitive,
-          profile_img_url: state.imageUrl,
+          profile_img_url: imageUrl,
           city: location.toLowerCase(),
           created_by: state.currentUser!.id,
           players: players.map((e) => e.id).toList(),
           created_at: state.editTeam?.created_at ?? DateTime.now());
 
       final newTeamId = await _teamService.updateTeam(team);
-
-      if (previousImageUrl != null) {
-        await deleteUnusedImage(previousImageUrl);
+      if (state.filePath != null) {
+        imageUrl = await _fileUploadService.uploadProfileImage(
+          filePath: state.filePath!,
+          uploadPath: StorageConst.teamProfileUploadPath(
+              userId: state.currentUser!.id, teamId: newTeamId),
+        );
+        await _teamService.updateProfileImageUrl(newTeamId, imageUrl);
       }
 
       if (state.editTeam != null) {
@@ -142,7 +133,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             id: newTeamId,
             name: name,
             name_lowercase: name.caseAndSpaceInsensitive,
-            profile_img_url: state.imageUrl,
+            profile_img_url: imageUrl,
             city: location.toLowerCase(),
             created_by: state.currentUser!.id,
             players: players,
@@ -212,19 +203,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     }
     state = state.copyWith(actionError: null);
     try {
-      String? teamProfileImageUrl;
-      String? currentImageUrl;
-      if (state.imageUrl != null) {
-        if (state.imageUrl != state.editTeam!.profile_img_url &&
-            state.editTeam!.profile_img_url != null) {
-          teamProfileImageUrl = state.editTeam!.profile_img_url!;
-        }
-        currentImageUrl = state.imageUrl!;
-      } else {
-        if (state.editTeam!.profile_img_url != null) {
-          teamProfileImageUrl = state.editTeam!.profile_img_url!;
-        }
-      }
+      final teamProfileImageUrl = state.editTeam!.profile_img_url;
 
       await _teamService.deleteTeam(state.editTeam!.id ?? "INVALID ID");
       state = state.copyWith(isPop: true);
@@ -232,9 +211,6 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       if (teamProfileImageUrl != null) {
         await deleteUnusedImage(teamProfileImageUrl);
       }
-      if (currentImageUrl != null) {
-        await deleteUnusedImage(currentImageUrl);
-      } // do not merge above both if-conditions in if-else or any other control-flow, at a time both variable may have non-null value
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("AddTeamViewNotifier: error while delete team -> $e");
@@ -254,7 +230,7 @@ class AddTeamState with _$AddTeamState {
     required TextEditingController nameController,
     required TextEditingController locationController,
     Object? actionError,
-    String? imageUrl,
+    String? filePath,
     bool? isNameAvailable,
     TeamModel? team,
     TeamModel? editTeam,

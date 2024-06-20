@@ -41,66 +41,62 @@ class EditProfileScreen extends ConsumerWidget {
     _observeActionError(context, ref);
     _observeIsSaved(context, ref);
 
-    return PopScope(
-      onPopInvoked: (didPop) async {
-        await notifier.onBackBtnPressed();
-      },
-      child: AppPage(
-        title: context.l10n.edit_profile_screen_title,
-        actions: [
-          if (!isToCreateAccount) ...[
-            actionButton(context,
-                onPressed: () => showConfirmationDialog(context,
-                    title: context.l10n.common_delete_title,
-                    message: context.l10n.alert_confirm_default_message(
-                        context.l10n.common_delete_title.toLowerCase()),
-                    confirmBtnText: context.l10n.common_delete_title,
-                    onConfirm: notifier.onDeleteTap),
-                icon: SvgPicture.asset(
-                  Assets.images.icBin,
-                  height: 24,
-                  width: 24,
-                  fit: BoxFit.contain,
-                  colorFilter: ColorFilter.mode(
-                      context.colorScheme.primary, BlendMode.srcATop),
-                )),
-          ]
-        ],
-        body: Builder(
-          builder: (context) {
-            return Stack(
-              children: [
-                ListView(
-                  padding: context.mediaQueryPadding +
-                      const EdgeInsets.all(16.0) +
-                      BottomStickyOverlay.padding,
-                  children: [
-                    ProfileImageAvatar(
-                        size: profileViewHeight,
-                        placeHolderImage: Assets.images.icProfileThin,
-                        imageUrl: state.imageUrl,
-                        isLoading: state.isImageUploading,
-                        onEditButtonTap: () async {
-                          final imagePath = await ImagePickerSheet.show<String>(
-                              context, true);
-                          if (imagePath != null) {
-                            notifier.onImageChange(imagePath);
-                          }
-                        }),
-                    const SizedBox(height: 24),
-                    _userContactDetailsView(context, notifier, state),
-                    const SizedBox(height: 24),
-                    _userPersonalDetailsView(context, notifier, state),
-                    const SizedBox(height: 24),
-                    _userPlayStyleView(context, notifier, state),
-                    const SizedBox(height: 24),
-                  ],
-                ),
-                _stickyButton(context, notifier, state)
-              ],
-            );
-          },
-        ),
+    return AppPage(
+      title: context.l10n.edit_profile_screen_title,
+      actions: [
+        if (!isToCreateAccount) ...[
+          actionButton(context,
+              onPressed: () => showConfirmationDialog(context,
+                  title: context.l10n.common_delete_title,
+                  message: context.l10n.alert_confirm_default_message(
+                      context.l10n.common_delete_title.toLowerCase()),
+                  confirmBtnText: context.l10n.common_delete_title,
+                  onConfirm: notifier.onDeleteTap),
+              icon: SvgPicture.asset(
+                Assets.images.icBin,
+                height: 24,
+                width: 24,
+                fit: BoxFit.contain,
+                colorFilter: ColorFilter.mode(
+                    context.colorScheme.primary, BlendMode.srcATop),
+              )),
+        ]
+      ],
+      body: Builder(
+        builder: (context) {
+          return Stack(
+            children: [
+              ListView(
+                padding: context.mediaQueryPadding +
+                    const EdgeInsets.all(16.0) +
+                    BottomStickyOverlay.padding,
+                children: [
+                  ProfileImageAvatar(
+                      size: profileViewHeight,
+                      placeHolderImage: Assets.images.icProfileThin,
+                      imageUrl: state.imageUrl,
+                      filePath: state.filePath,
+                      isLoading: state.isImageUploading,
+                      onEditButtonTap: () async {
+                        final imagePath =
+                            await ImagePickerSheet.show<String>(context, true);
+                        if (imagePath != null) {
+                          notifier.onImageChange(imagePath);
+                        }
+                      }),
+                  const SizedBox(height: 24),
+                  _userContactDetailsView(context, notifier, state),
+                  const SizedBox(height: 24),
+                  _userPersonalDetailsView(context, notifier, state),
+                  const SizedBox(height: 24),
+                  _userPlayStyleView(context, notifier, state),
+                  const SizedBox(height: 24),
+                ],
+              ),
+              _stickyButton(context, notifier, state)
+            ],
+          );
+        },
       ),
     );
   }

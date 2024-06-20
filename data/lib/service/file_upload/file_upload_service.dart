@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:data/errors/app_error.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as path;
 
 final fileUploadServiceProvider = Provider(
   (ref) => FileUploadService(FirebaseStorage.instance),
@@ -14,21 +12,15 @@ class FileUploadService {
 
   FileUploadService(this._firebaseStorage);
 
-  Future<String> uploadProfileImage(
-    String imagePath,
-    ImageUploadType type,
-  ) async {
-    var file = File(imagePath);
+  Future<String> uploadProfileImage({
+    required String filePath,
+    required String uploadPath,
+  }) async {
+    var file = File(filePath);
     if (await file.exists()) {
       try {
-        String fileExtension = path.extension(file.path);
-        DateTime currentDate = DateTime.now();
-        String imgName =
-            "IMG_${currentDate.year}${currentDate.month}${currentDate.day}${currentDate.hour}${currentDate.minute}${currentDate.second}${currentDate.millisecond}$fileExtension";
-        var snapshot = await _firebaseStorage
-            .ref()
-            .child('${type.value}/$imgName')
-            .putFile(file);
+        var snapshot =
+            await _firebaseStorage.ref().child(uploadPath).putFile(file);
         var downloadUrl = await snapshot.ref.getDownloadURL();
         return downloadUrl;
       } catch (error, stack) {
@@ -46,14 +38,4 @@ class FileUploadService {
       throw AppError.fromError(error, stack);
     }
   }
-}
-
-enum ImageUploadType {
-  user(FireStoreConst.userProfileImagesFolder),
-  team(FireStoreConst.teamProfileImagesFolder),
-  support(FireStoreConst.supportImagesFolder);
-
-  const ImageUploadType(this.value);
-
-  final String value;
 }
