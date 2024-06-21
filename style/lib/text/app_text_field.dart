@@ -22,10 +22,12 @@ class AppTextField extends StatelessWidget {
   final double borderWidth;
   final TextInputAction? textInputAction;
   final String? hintText;
+  final String? errorText;
   final bool? isDense;
   final EdgeInsetsGeometry? contentPadding;
   final bool? isCollapsed;
   final TextStyle? hintStyle;
+  final TextStyle? errorStyle;
   final Function(String)? onChanged;
   final bool autoFocus;
   final TextInputType? keyboardType;
@@ -56,6 +58,8 @@ class AppTextField extends StatelessWidget {
     this.borderRadius,
     this.hintText,
     this.hintStyle,
+    this.errorText,
+    this.errorStyle,
     this.contentPadding,
     this.isDense,
     this.isCollapsed,
@@ -125,6 +129,9 @@ class AppTextField extends StatelessWidget {
             prefixIcon: prefixIcon,
             isDense: isDense,
             isCollapsed: isCollapsed,
+            errorText: errorText,
+            errorStyle: errorStyle ??
+                AppTextStyle.caption.copyWith(color: context.colorScheme.alert),
             hintText: hintText,
             hintStyle: hintStyle,
             fillColor: backgroundColor,
@@ -132,6 +139,8 @@ class AppTextField extends StatelessWidget {
             filled: backgroundColor != null,
             focusedBorder: _border(context, true),
             enabledBorder: _border(context, false),
+            focusedErrorBorder: _border(context, true, isError: true),
+            errorBorder: _border(context, false, isError: true),
             contentPadding: contentPadding ??
                 (borderType == AppTextFieldBorderType.outline
                     ? const EdgeInsets.symmetric(
@@ -143,7 +152,8 @@ class AppTextField extends StatelessWidget {
         ),
       );
 
-  InputBorder _border(BuildContext context, bool focused) {
+  InputBorder _border(BuildContext context, bool focused,
+      {bool isError = false}) {
     switch (borderType) {
       case AppTextFieldBorderType.none:
         return const UnderlineInputBorder(
@@ -153,18 +163,22 @@ class AppTextField extends StatelessWidget {
         return OutlineInputBorder(
           borderRadius: borderRadius ?? BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: focused
-                ? borderColor?.focusColor ?? context.colorScheme.primary
-                : borderColor?.unFocusColor ?? context.colorScheme.outline,
+            color: isError
+                ? context.colorScheme.alert
+                : focused
+                    ? borderColor?.focusColor ?? context.colorScheme.primary
+                    : borderColor?.unFocusColor ?? context.colorScheme.outline,
             width: borderWidth,
           ),
         );
       case AppTextFieldBorderType.underline:
         return UnderlineInputBorder(
           borderSide: BorderSide(
-            color: focused
-                ? borderColor?.focusColor ?? context.colorScheme.primary
-                : borderColor?.unFocusColor ?? context.colorScheme.outline,
+            color: isError
+                ? context.colorScheme.alert
+                : focused
+                    ? borderColor?.focusColor ?? context.colorScheme.primary
+                    : borderColor?.unFocusColor ?? context.colorScheme.outline,
             width: borderWidth,
           ),
         );

@@ -33,6 +33,8 @@ class VerifyAddTeamMemberDialog extends StatefulWidget {
 
 class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
   String verificationNumber = "";
+  String? errorString;
+  static const int verifyNumberCount = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,8 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
         child: Column(
           children: [
             Text(
-              context.l10n.add_team_member_verify_placeholder_text,
+              context.l10n
+                  .add_team_member_verify_placeholder_text(verifyNumberCount),
               style: AppTextStyle.subtitle1.copyWith(
                 color: context.colorScheme.textPrimary,
                 fontSize: 20,
@@ -56,7 +59,7 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
             const SizedBox(height: 16),
             Flexible(
               child: AppTextField(
-                maxLength: 5,
+                maxLength: verifyNumberCount,
                 autoFocus: true,
                 keyboardType: TextInputType.phone,
                 borderType: AppTextFieldBorderType.outline,
@@ -64,6 +67,7 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
                   focusColor: Colors.transparent,
                   unFocusColor: Colors.transparent,
                 ),
+                errorText: errorString,
                 backgroundColor: context.colorScheme.containerLow,
                 borderRadius: BorderRadius.circular(12),
                 contentPadding: const EdgeInsets.symmetric(vertical: 16),
@@ -74,8 +78,10 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                 ],
-                onChanged: (value) =>
-                    setState(() => verificationNumber = value),
+                onChanged: (value) => setState(() {
+                  verificationNumber = value;
+                  errorString = null;
+                }),
               ),
             ),
           ],
@@ -90,13 +96,24 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
                   color: context.colorScheme.textPrimary, fontSize: 18),
             )),
         TextButton(
-            onPressed: verificationNumber.trim().length == 5
-                ? () => context.pop(widget.phoneNumber == verificationNumber)
+            onPressed: verificationNumber.trim().length == verifyNumberCount
+                ? () {
+                    final lastDigits = widget.phoneNumber.substring(
+                        widget.phoneNumber.length - verifyNumberCount);
+                    if (lastDigits == verificationNumber) {
+                      context.pop(lastDigits == verificationNumber);
+                    } else {
+                      setState(() {
+                        errorString =
+                            context.l10n.add_team_member_verify_error_text;
+                      });
+                    }
+                  }
                 : null,
             child: Text(
               context.l10n.add_team_member_verify_title,
               style: AppTextStyle.button.copyWith(
-                  color: verificationNumber.trim().length == 5
+                  color: verificationNumber.trim().length == verifyNumberCount
                       ? context.colorScheme.textPrimary
                       : context.colorScheme.textDisabled,
                   fontSize: 18),

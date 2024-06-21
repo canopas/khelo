@@ -76,7 +76,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               state.selectedTeam != null
                   ? context.colorScheme.primary
                   : context.colorScheme.textDisabled,
-              BlendMode.srcATop,
+              BlendMode.srcIn,
             ),
           ),
         ),
@@ -225,10 +225,12 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
 
   void _observeActionError() {
     ref.listen(
-      searchTeamViewStateProvider.select((value) => value.actionError),
+      searchTeamViewStateProvider.select((value) => value.showSelectionError),
       (previous, next) {
-        if (next != null) {
-          showErrorSnackBar(context: context, error: next);
+        if (next) {
+          showErrorSnackBar(
+              context: context,
+              error: context.l10n.search_team_selection_error_text);
         }
       },
     );

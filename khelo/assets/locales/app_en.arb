@@ -94,7 +94,6 @@
   "sign_in_verify_phone_number_description": "We will send you a one time password on your mobile number",
   "sign_in_continue_btn_text": "Continue",
   "sign_in_invalid_phone_number_text": "Please enter valid phone number",
-
   "otp_verification_verify_otp_text": "Verify OTP",
   "otp_verification_enter_otp_text": "Enter OTP you received",
   "otp_verification_description": "We've sent a verification code to your phone.",
@@ -121,10 +120,19 @@
   "add_team_member_screen_title": "Add team member",
   "add_team_member_details_title": "Details",
   "add_team_member_search_placeholder_text": "Search member name",
-  "add_team_member_verify_placeholder_text": "Enter the last five digits of the phone number of the selected player.",
   "add_team_member_verify_title": "Verify",
   "add_team_member_search_hint_text": "Search the person name above to add them in your team.",
   "add_team_member_added_text": "ADDED",
+  "add_team_member_verify_error_text": "Please enter correct digits",
+  "add_team_member_verify_placeholder_text": "Enter the last {count} digits of the phone number of the selected player.",
+  "@add_team_member_verify_placeholder_text": {
+    "description": "Enter the last {count} digits of the phone number of the selected player.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
 
   "team_list_add_members_title": "Add Members",
   "team_list_all_teams_title": "All teams",
@@ -183,11 +191,12 @@
   "add_match_unselected_team_error": "Please select teams",
   "add_match_invalid_squad_error": "Please select valid squad",
 
+  "search_user_hint_title": "Search user name",
+  "search_user_empty_text": "Search the person name in above input area.",
   "search_team_screen_title": "Search Team",
   "search_team_your_teams_title": "Your Teams",
-  "search_user_hint_title": "Search user name",
+  "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",
   "search_team_search_placeholder_title": "Search team name",
-  "search_user_empty_text": "Search the person name in above input area.",
   "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
   "@search_team_player_title": {
     "placeholders": {

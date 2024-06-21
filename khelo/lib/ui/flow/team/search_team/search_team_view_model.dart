@@ -89,13 +89,13 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   }
 
   void onTeamCellTap(TeamModel team) {
-    state = state.copyWith(actionError: null);
+    state = state.copyWith(showSelectionError: false);
     final playersCount = (team.players ?? []).length;
     if (playersCount >= 2) {
-      state = state.copyWith(selectedTeam: team);
+      final isAlreadySelected = state.selectedTeam?.id == team.id;
+      state = state.copyWith(selectedTeam: isAlreadySelected ? null : team);
     } else {
-      state =
-          state.copyWith(actionError: "The team must have at least 2 players.");
+      state = state.copyWith(showSelectionError: true);
     }
   }
 
@@ -111,11 +111,11 @@ class SearchTeamState with _$SearchTeamState {
   const factory SearchTeamState({
     required TextEditingController searchController,
     Object? error,
-    String? actionError,
     TeamModel? selectedTeam,
     @Default([]) List<TeamModel> searchResults,
     @Default([]) List<TeamModel> userTeams,
     @Default(false) bool loading,
+    @Default(false) bool showSelectionError,
     @Default(false) bool searchInProgress,
   }) = _SearchTeamState;
 }

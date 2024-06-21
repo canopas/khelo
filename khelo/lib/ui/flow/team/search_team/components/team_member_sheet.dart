@@ -79,7 +79,7 @@ class TeamMemberSheet extends StatelessWidget {
       onTap: () async {
         if (user.phone != null) {
           final res = await VerifyAddTeamMemberDialog.show(context,
-              phoneNumber: user.phone!.substring(user.phone!.length - 5));
+              phoneNumber: user.phone!);
           if (res != null && res && context.mounted) {
             context.pop(res);
           }
