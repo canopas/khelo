@@ -29,8 +29,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
   AddMatchViewNotifier(this._matchService, String? userId)
       : super(AddMatchViewState(
-          totalOverController: TextEditingController(),
-          overPerBowlerController: TextEditingController(),
+          totalOverController: TextEditingController(text: "10"),
+          overPerBowlerController: TextEditingController(text: "2"),
           cityController: TextEditingController(),
           groundController: TextEditingController(),
           matchTime: DateTime.now(),
