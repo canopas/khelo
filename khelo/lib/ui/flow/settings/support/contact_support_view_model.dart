@@ -54,7 +54,10 @@ class ContactSupportViewStateNotifier
     );
   }
 
-  void _uploadAttachments({required String path, required String name}) async {
+  Future<void> _uploadAttachments({
+    required String path,
+    required String name,
+  }) async {
     try {
       state = state.copyWith(attachments: [
         ...state.attachments,
@@ -100,7 +103,7 @@ class ContactSupportViewStateNotifier
 
   String _generateImageFilename() {
     DateTime now = DateTime.now();
-    return "IMG_${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}${now.millisecond}";
+    return "IMG_${now.year}${now.month}${now.day}${now.hour}${now.minute}${now.second}${now.millisecond}${now.microsecond}";
   }
 
   void pickAttachments() async {
