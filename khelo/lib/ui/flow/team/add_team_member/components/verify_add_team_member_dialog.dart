@@ -42,8 +42,8 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
       backgroundColor: context.colorScheme.containerLowOnSurface,
       title: Text(
         context.l10n.add_team_member_verify_title,
-        style: AppTextStyle.header1
-            .copyWith(color: context.colorScheme.textPrimary, fontSize: 26),
+        style: AppTextStyle.header3
+            .copyWith(color: context.colorScheme.textPrimary),
       ),
       content: IntrinsicHeight(
         child: Column(
@@ -51,7 +51,7 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
             Text(
               context.l10n
                   .add_team_member_verify_placeholder_text(verifyNumberCount),
-              style: AppTextStyle.subtitle1.copyWith(
+              style: AppTextStyle.subtitle2.copyWith(
                 color: context.colorScheme.textPrimary,
                 fontSize: 20,
               ),
@@ -92,8 +92,8 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
             onPressed: context.pop,
             child: Text(
               context.l10n.common_cancel_title,
-              style: AppTextStyle.button.copyWith(
-                  color: context.colorScheme.textPrimary, fontSize: 18),
+              style: AppTextStyle.button
+                  .copyWith(color: context.colorScheme.textPrimary),
             )),
         TextButton(
             onPressed: verificationNumber.trim().length == verifyNumberCount
@@ -115,8 +115,7 @@ class _VerifyAddTeamMemberDialogState extends State<VerifyAddTeamMemberDialog> {
               style: AppTextStyle.button.copyWith(
                   color: verificationNumber.trim().length == verifyNumberCount
                       ? context.colorScheme.textPrimary
-                      : context.colorScheme.textDisabled,
-                  fontSize: 18),
+                      : context.colorScheme.textDisabled),
             )),
       ],
     );
