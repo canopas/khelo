@@ -1,5 +1,6 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -36,7 +37,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     }
 
     try {
-      state = state.copyWith(loading: true);
+      state = state.copyWith(loading: state.team == null);
 
       final team = await _teamService.getTeamById(teamId!);
       state = state.copyWith(team: team, loading: false);
@@ -53,7 +54,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
       return;
     }
     try {
-      state = state.copyWith(loading: true);
+      state = state.copyWith(loading: state.matches == null);
       final matches = await _matchService
           .getMatchesByTeamId(state.team!.id ?? "INVALID ID");
       final teamStat = _calculateTeamStat(matches);
@@ -185,6 +186,12 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
         }
       },
     );
+  }
+
+  void updateTeamMember(List<UserModel> members) {
+    state = state.copyWith(
+        team: state.team
+            ?.copyWith(players: [...state.team?.players ?? [], ...members]));
   }
 
   void onTabChange(int tab) {
