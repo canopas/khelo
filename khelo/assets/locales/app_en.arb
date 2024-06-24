@@ -197,6 +197,8 @@
   "search_team_your_teams_title": "Your Teams",
   "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",
   "search_team_search_placeholder_title": "Search team name",
+  "search_team_create_team_title": "Create team",
+  "search_team_create_team_description": "Create Your Dream Cricket Team Today!",
   "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
   "@search_team_player_title": {
     "placeholders": {
