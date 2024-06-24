@@ -41,7 +41,7 @@ These Terms constitute the entire agreement between you and Canopas regarding yo
 
 These Terms and Conditions will be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions.
 
-This clarifies that Indian law applies to any disputes arising from the use of the Cloud Gallery app developed by Canopas Software LLP.
+This clarifies that Indian law applies to any disputes arising from the use of the Khelo app developed by Canopas Software LLP.
 
 #### 9. Changes to the Terms
 
