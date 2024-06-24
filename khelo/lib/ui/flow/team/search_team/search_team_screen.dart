@@ -245,10 +245,13 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
             ),
           ),
           const SizedBox(width: 16),
-          PrimaryButton(
-            context.l10n.search_team_create_team_title,
-            expanded: false,
-            onPressed: () => AppRoute.addTeam().push(context),
+          SizedBox(
+            height: 36,
+            child: PrimaryButton(
+              context.l10n.search_team_create_team_title,
+              expanded: false,
+              onPressed: () => AppRoute.addTeam().push(context),
+            ),
           ),
         ],
       ),
