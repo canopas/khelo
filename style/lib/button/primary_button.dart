@@ -51,8 +51,8 @@ class PrimaryButton extends StatelessWidget {
       enabled: tappable,
       child: Container(
         width: expanded ? double.infinity : null,
-        constraints: BoxConstraints(
-          minHeight: expanded ? 48 : 36,
+        constraints: const BoxConstraints(
+          minHeight: 48,
           minWidth: 88,
         ),
         padding: edgeInsets,
