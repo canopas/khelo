@@ -91,7 +91,20 @@ class SearchUserBottomSheet extends ConsumerWidget {
                 child: UserDetailCell(
                   user: user,
                   trailing: _addButton(context, user),
-                  onTap: () => UserDetailSheet.show(context, user),
+                  onTap: () => UserDetailSheet.show(
+                    context,
+                    user,
+                    actionButtonTitle: context.l10n.common_add_title,
+                    onButtonTap: () async {
+                      if (user.phone != null) {
+                        final res = await VerifyTeamMemberSheet.show(context,
+                            phoneNumber: user.phone!);
+                        if (res != null && res && context.mounted) {
+                          context.pop(user);
+                        }
+                      }
+                    },
+                  ),
                 ),
               );
             },

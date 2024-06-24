@@ -116,7 +116,12 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                   member: member,
                   isRemove: true,
                 ),
-                onTap: () => UserDetailSheet.show(context, member.player),
+                onTap: () => UserDetailSheet.show(
+                  context,
+                  member.player,
+                  actionButtonTitle: context.l10n.common_remove_title,
+                  onButtonTap: () => notifier.removeFromSquad(member.player),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -153,7 +158,13 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                   member: MatchPlayer(player: member),
                   isRemove: false,
                 ),
-                onTap: () => UserDetailSheet.show(context, member),
+                onTap: () => UserDetailSheet.show(
+                  context,
+                  member,
+                  actionButtonTitle: context.l10n.common_add_title,
+                  onButtonTap: () =>
+                      notifier.addToSquad(MatchPlayer(player: member)),
+                ),
               ),
             ),
             const SizedBox(height: 8),

@@ -69,12 +69,16 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
       ],
       body: Builder(builder: (context) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: context.mediaQueryPadding +
+              const EdgeInsets.symmetric(vertical: 8),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _searchField(context, state),
+              if (state.selectedUsers.isNotEmpty) ...[
+                _selectedPlayerList(context, state),
+              ],
               _content(context, state),
-              _selectedPlayerList(context, state),
             ],
           ),
         );
@@ -98,23 +102,31 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               child: Text(
                 context.l10n.add_team_member_search_hint_text,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.subtitle1.copyWith(
-                    color: context.colorScheme.textDisabled, fontSize: 20),
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.textDisabled),
               ),
             )
           : ListView.separated(
-              padding: context.mediaQueryPadding +
-                  const EdgeInsets.symmetric(vertical: 16),
               itemCount: state.searchedUsers.length,
               itemBuilder: (context, index) {
                 UserModel user = state.searchedUsers[index];
-                return UserDetailCell(
-                  user: user,
-                  onTap: () => UserDetailSheet.show(context, user),
-                  trailing: OnTapScale(
-                    onTap: widget.team.players?.contains(user) != true &&
-                            !state.selectedUsers.contains(user)
-                        ? () async {
+                return Column(
+                  children: [
+                    if (index == 0) ...[
+                      Divider(
+                        height: 32,
+                        color: context.colorScheme.outline,
+                      )
+                    ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: UserDetailCell(
+                        user: user,
+                        onTap: () => UserDetailSheet.show(
+                          context,
+                          user,
+                          actionButtonTitle: context.l10n.common_select_title,
+                          onButtonTap: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
                                   context,
@@ -123,27 +135,48 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                                 notifier.selectUser(user);
                               }
                             }
-                          }
-                        : null,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                          color: context.colorScheme.containerLow,
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        widget.team.players?.contains(user) == true ||
-                                state.selectedUsers.contains(user)
-                            ? context.l10n.add_team_member_added_text
-                            : context.l10n.common_add_title.toUpperCase(),
-                        style: AppTextStyle.body2
-                            .copyWith(color: context.colorScheme.textDisabled),
+                          },
+                        ),
+                        trailing: OnTapScale(
+                          onTap: widget.team.players?.contains(user) != true &&
+                                  !state.selectedUsers.contains(user)
+                              ? () async {
+                                  if (user.phone != null) {
+                                    final res =
+                                        await VerifyTeamMemberSheet.show(
+                                            context,
+                                            phoneNumber: user.phone!);
+                                    if (res != null && res && context.mounted) {
+                                      notifier.selectUser(user);
+                                    }
+                                  }
+                                }
+                              : null,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                                color: context.colorScheme.containerLow,
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Text(
+                              widget.team.players?.contains(user) == true ||
+                                      state.selectedUsers.contains(user)
+                                  ? context.l10n.add_team_member_added_text
+                                  : context.l10n.common_add_title.toUpperCase(),
+                              style: AppTextStyle.body2.copyWith(
+                                  color: context.colorScheme.textDisabled),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 );
               },
-              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              separatorBuilder: (context, index) => Divider(
+                height: 32,
+                color: context.colorScheme.outline,
+              ),
             ),
     );
   }
@@ -152,31 +185,34 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     BuildContext context,
     AddTeamMemberState state,
   ) {
-    return AppTextField(
-      controller: state.searchController,
-      borderRadius: BorderRadius.circular(30),
-      contentPadding: const EdgeInsets.all(16),
-      borderType: AppTextFieldBorderType.outline,
-      onChanged: (value) => notifier.onSearchChanged(),
-      backgroundColor: context.colorScheme.containerLowOnSurface,
-      hintText: context.l10n.add_team_member_search_placeholder_text,
-      style: AppTextStyle.body2.copyWith(
-        color: context.colorScheme.textPrimary,
-      ),
-      hintStyle: AppTextStyle.subtitle2.copyWith(
-        color: context.colorScheme.textDisabled,
-      ),
-      borderColor: BorderColor(
-        focusColor: Colors.transparent,
-        unFocusColor: Colors.transparent,
-      ),
-      onTapOutside: (event) {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      prefixIcon: Icon(
-        Icons.search,
-        color: context.colorScheme.textDisabled,
-        size: 24,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: AppTextField(
+        controller: state.searchController,
+        borderRadius: BorderRadius.circular(30),
+        contentPadding: const EdgeInsets.all(16),
+        borderType: AppTextFieldBorderType.outline,
+        onChanged: (value) => notifier.onSearchChanged(),
+        backgroundColor: context.colorScheme.containerLowOnSurface,
+        hintText: context.l10n.add_team_member_search_placeholder_text,
+        style: AppTextStyle.body2.copyWith(
+          color: context.colorScheme.textPrimary,
+        ),
+        hintStyle: AppTextStyle.subtitle2.copyWith(
+          color: context.colorScheme.textDisabled,
+        ),
+        borderColor: BorderColor(
+          focusColor: Colors.transparent,
+          unFocusColor: Colors.transparent,
+        ),
+        onTapOutside: (event) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        },
+        prefixIcon: Icon(
+          Icons.search,
+          color: context.colorScheme.textDisabled,
+          size: 24,
+        ),
       ),
     );
   }
@@ -185,37 +221,75 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     BuildContext context,
     AddTeamMemberState state,
   ) {
-    return SizedBox(
-      height: 60,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        itemCount: state.selectedUsers.length,
-        itemBuilder: (context, index) {
-          final user = state.selectedUsers[index];
-          return SizedBox(
-            height: 60,
-            width: 65,
-            child: Stack(
-              children: [
-                ImageAvatar(
-                  initial: user.nameInitial,
-                  imageUrl: user.profile_img_url,
-                  size: 60,
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: OnTapScale(
-                      onTap: () => notifier.unSelectUser(user),
-                      child: Icon(
-                        Icons.cancel_rounded,
-                        color: context.colorScheme.textPrimary,
-                      )),
-                ),
-              ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          for (final user in state.selectedUsers) ...[
+            SizedBox(
+              width: 58,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 8),
+                  _selectedProfileView(context, user),
+                  const SizedBox(height: 4),
+                  Text(
+                    user.name ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textPrimary),
+                  ),
+                ],
+              ),
             ),
-          );
-        },
-        separatorBuilder: (context, index) => const SizedBox(width: 20),
+            const SizedBox(width: 16),
+          ]
+        ],
+      ),
+    );
+  }
+
+  Widget _selectedProfileView(BuildContext context, UserModel user) {
+    return SizedBox(
+      height: 58,
+      width: 58,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 2),
+            child: ImageAvatar(
+              initial: user.nameInitial,
+              imageUrl: user.profile_img_url,
+              size: 56,
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: OnTapScale(
+                onTap: () => notifier.unSelectUser(user),
+                child: _crossIcon(context)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _crossIcon(BuildContext context) {
+    return Container(
+      height: 24,
+      width: 24,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: context.colorScheme.textInversePrimary,
+          border: Border.all(color: context.colorScheme.outline)),
+      child: Icon(
+        Icons.close,
+        size: 16,
+        color: context.colorScheme.textPrimary,
       ),
     );
   }
