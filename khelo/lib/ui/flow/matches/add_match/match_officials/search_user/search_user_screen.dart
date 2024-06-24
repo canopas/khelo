@@ -9,7 +9,7 @@ import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
-import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
+import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
@@ -135,7 +135,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
     return OnTapScale(
       onTap: () async {
         if (user.phone != null) {
-          final res = await VerifyAddTeamMemberDialog.show(context,
+          final res = await VerifyTeamMemberSheet.show(context,
               phoneNumber: user.phone!);
           if (res != null && res && context.mounted) {
             context.pop(user);
