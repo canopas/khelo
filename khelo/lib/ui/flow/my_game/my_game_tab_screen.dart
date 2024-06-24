@@ -133,6 +133,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                   ? AppRoute.addTeam().push(context)
                   : AppRoute.addMatch().push(context),
               icon: Icon(Icons.add, color: context.colorScheme.primary)),
+          const SizedBox(width: 8),
         ],
       ),
     );

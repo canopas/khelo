@@ -25,7 +25,8 @@ const textPrimaryDarkColor = Color(0xFFFFFFFF);
 const textSecondaryDarkColor = Color(0xDEFFFFFF);
 const textDisabledDarkColor = Color(0x99FFFFFF);
 
-const outlineColor = Color(0xFFEBEBEB);
+const outlineLightColor = Color(0x14000000);
+const outlineDarkColor = Color(0x1FFFFFFF);
 
 const surfaceLightColor = Color(0xFFFFFFFF);
 const surfaceDarkColor = Color(0xFF212121);
@@ -40,11 +41,11 @@ final ThemeData _materialDarkTheme = ThemeData.dark(useMaterial3: true);
 
 final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
   primaryColor: primaryColor,
-  dividerColor: outlineColor,
+  dividerColor: outlineLightColor,
   datePickerTheme: _materialLightTheme.datePickerTheme.copyWith(
     backgroundColor: surfaceLightColor,
     headerForegroundColor: textPrimaryLightColor,
-    dividerColor: outlineColor,
+    dividerColor: outlineLightColor,
     inputDecorationTheme:
         _materialLightTheme.datePickerTheme.inputDecorationTheme?.copyWith(
       errorBorder: const OutlineInputBorder(
@@ -83,11 +84,11 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
 
 final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
   primaryColor: primaryColor,
-  dividerColor: outlineColor,
+  dividerColor: outlineDarkColor,
   datePickerTheme: _materialDarkTheme.datePickerTheme.copyWith(
     backgroundColor: surfaceDarkColor,
     headerForegroundColor: textPrimaryDarkColor,
-    dividerColor: outlineColor,
+    dividerColor: outlineDarkColor,
     inputDecorationTheme:
         _materialDarkTheme.datePickerTheme.inputDecorationTheme?.copyWith(
       errorBorder: const OutlineInputBorder(
@@ -191,7 +192,7 @@ final appColorSchemeLight = AppColorScheme(
   primaryVariant: primaryVariantLightColor,
   secondary: secondaryColor,
   surface: surfaceLightColor,
-  outline: outlineColor,
+  outline: outlineLightColor,
   textPrimary: textPrimaryLightColor,
   textSecondary: textSecondaryLightColor,
   textDisabled: textDisabledLightColor,
@@ -217,7 +218,7 @@ final appColorSchemeDark = AppColorScheme(
   primaryVariant: primaryVariantDarkColor,
   secondary: secondaryColor,
   surface: surfaceDarkColor,
-  outline: outlineColor,
+  outline: outlineDarkColor,
   textPrimary: textPrimaryDarkColor,
   textSecondary: textSecondaryDarkColor,
   textDisabled: textDisabledDarkColor,
