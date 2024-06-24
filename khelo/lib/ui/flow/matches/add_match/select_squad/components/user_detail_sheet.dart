@@ -29,20 +29,20 @@ class UserDetailSheet extends StatelessWidget {
       builder: (context) => UserDetailSheet(
         user: user,
         actionButtonTitle: actionButtonTitle,
-        onSelectButtonTap: onButtonTap,
+        onButtonTap: onButtonTap,
       ),
     );
   }
 
   final UserModel user;
   final String? actionButtonTitle;
-  final Function()? onSelectButtonTap;
+  final Function()? onButtonTap;
 
   const UserDetailSheet({
     super.key,
     required this.user,
     this.actionButtonTitle,
-    this.onSelectButtonTap,
+    this.onButtonTap,
   });
 
   @override
@@ -97,8 +97,8 @@ class UserDetailSheet extends StatelessWidget {
                 actionButtonTitle!,
                 onPressed: () {
                   context.pop();
-                  if (onSelectButtonTap != null) {
-                    onSelectButtonTap!();
+                  if (onButtonTap != null) {
+                    onButtonTap!();
                   }
                 },
               ),
