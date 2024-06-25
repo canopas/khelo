@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -81,8 +83,8 @@ class TeamMemberSheet extends StatelessWidget {
       expanded: false,
       onPressed: () async {
         if (user.phone != null) {
-          final res = await VerifyAddTeamMemberDialog.show(context,
-              phoneNumber: user.phone!.substring(user.phone!.length - 5));
+          final res = await VerifyTeamMemberSheet.show(context,
+              phoneNumber: user.phone!);
           if (res != null && res && context.mounted) {
             context.pop(res);
           }

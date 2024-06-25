@@ -26,7 +26,7 @@ void showConfirmationDialog(
         content: Text(message ?? context.l10n.alert_confirm_default_title),
         actions: [
           adaptiveAction(
-            context: context,
+            context,
             onPressed: () async {
               context.pop();
               onCancel?.call();
@@ -34,7 +34,7 @@ void showConfirmationDialog(
             child: Text(cancelBtnText ?? context.l10n.common_cancel_title),
           ),
           adaptiveAction(
-            context: context,
+            context,
             isDestructiveAction: isDestructiveAction,
             onPressed: () async {
               context.pop();
@@ -50,9 +50,9 @@ void showConfirmationDialog(
   );
 }
 
-Widget adaptiveAction({
-  required BuildContext context,
-  required VoidCallback onPressed,
+Widget adaptiveAction(
+  BuildContext context, {
+  VoidCallback? onPressed,
   required Widget child,
   bool isDestructiveAction = false,
 }) {

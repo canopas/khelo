@@ -5,11 +5,13 @@ import 'package:style/extensions/context_extensions.dart';
 class BottomSheetWrapper extends StatelessWidget {
   final Widget content;
   final bool showDragHandle;
+  final double contentBottomSpacing;
   final List<Widget> action;
 
   const BottomSheetWrapper({
     super.key,
     this.showDragHandle = true,
+    this.contentBottomSpacing = 70,
     required this.content,
     required this.action,
   });
@@ -26,7 +28,7 @@ class BottomSheetWrapper extends StatelessWidget {
               padding: EdgeInsets.only(top: showDragHandle ? 44 : 0),
               child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0) +
-                      const EdgeInsets.only(bottom: 70) +
+                      EdgeInsets.only(bottom: contentBottomSpacing) +
                       context.mediaQueryPadding +
                       BottomStickyOverlay.padding,
                   child: content),

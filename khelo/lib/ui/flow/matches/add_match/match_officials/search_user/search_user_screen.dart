@@ -1,5 +1,4 @@
 import 'package:data/api/user/user_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,11 +8,11 @@ import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
-import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
+import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/text/search_text_field.dart';
 
 class SearchUserBottomSheet extends ConsumerWidget {
   static Future<T?> show<T>(BuildContext context) {
@@ -91,7 +90,20 @@ class SearchUserBottomSheet extends ConsumerWidget {
                 child: UserDetailCell(
                   user: user,
                   trailing: _addButton(context, user),
-                  onTap: () => UserDetailSheet.show(context, user),
+                  onTap: () => UserDetailSheet.show(
+                    context,
+                    user,
+                    actionButtonTitle: context.l10n.common_add_title,
+                    onButtonTap: () async {
+                      if (user.phone != null) {
+                        final res = await VerifyTeamMemberSheet.show(context,
+                            phoneNumber: user.phone!);
+                        if (res != null && res && context.mounted) {
+                          context.pop(user);
+                        }
+                      }
+                    },
+                  ),
                 ),
               );
             },
@@ -104,29 +116,11 @@ class SearchUserBottomSheet extends ConsumerWidget {
     SearchUserViewState state,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: AppTextField(
+      padding: const EdgeInsets.all(16),
+      child: SearchTextField(
         controller: state.searchController,
         hintText: context.l10n.search_user_hint_title,
-        hintStyle: AppTextStyle.subtitle3
-            .copyWith(color: context.colorScheme.textDisabled),
-        style: AppTextStyle.subtitle3
-            .copyWith(color: context.colorScheme.textPrimary),
-        borderRadius: BorderRadius.circular(30),
-        borderType: AppTextFieldBorderType.outline,
-        backgroundColor: context.colorScheme.containerLowOnSurface,
-        borderColor: BorderColor(
-          focusColor: Colors.transparent,
-          unFocusColor: Colors.transparent,
-        ),
-        prefixIcon: Icon(
-          CupertinoIcons.search,
-          color: context.colorScheme.textDisabled,
-        ),
-        onChanged: (value) => notifier.onSearchChanged(),
-        onTapOutside: (event) {
-          FocusManager.instance.primaryFocus?.unfocus();
-        },
+        onChange: notifier.onSearchChanged,
       ),
     );
   }
@@ -135,8 +129,8 @@ class SearchUserBottomSheet extends ConsumerWidget {
     return OnTapScale(
       onTap: () async {
         if (user.phone != null) {
-          final res = await VerifyAddTeamMemberDialog.show(context,
-              phoneNumber: user.phone!.substring(user.phone!.length - 5));
+          final res = await VerifyTeamMemberSheet.show(context,
+              phoneNumber: user.phone!);
           if (res != null && res && context.mounted) {
             context.pop(user);
           }

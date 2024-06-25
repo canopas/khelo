@@ -1,10 +1,12 @@
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/domain/formatter/string_formatter.dart';
+import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -12,8 +14,10 @@ import 'package:style/text/app_text_style.dart';
 class UserDetailSheet extends StatelessWidget {
   static Future<T?> show<T>(
     BuildContext context,
-    UserModel user,
-  ) {
+    UserModel user, {
+    String? actionButtonTitle,
+    Function()? onButtonTap,
+  }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
@@ -22,17 +26,24 @@ class UserDetailSheet extends StatelessWidget {
       showDragHandle: true,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
-      builder: (context) {
-        return UserDetailSheet(
-          user: user,
-        );
-      },
+      builder: (context) => UserDetailSheet(
+        user: user,
+        actionButtonTitle: actionButtonTitle,
+        onButtonTap: onButtonTap,
+      ),
     );
   }
 
   final UserModel user;
+  final String? actionButtonTitle;
+  final Function()? onButtonTap;
 
-  const UserDetailSheet({super.key, required this.user});
+  const UserDetailSheet({
+    super.key,
+    required this.user,
+    this.actionButtonTitle,
+    this.onButtonTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +89,20 @@ class UserDetailSheet extends StatelessWidget {
             label: context.l10n.edit_profile_bowling_style_placeholder,
             value: user.bowling_style?.getString(context),
           ),
+          if (actionButtonTitle != null) ...[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: PrimaryButton(
+                actionButtonTitle!,
+                onPressed: () {
+                  context.pop();
+                  if (onButtonTap != null) {
+                    onButtonTap!();
+                  }
+                },
+              ),
+            )
+          ],
         ],
       ),
     );
