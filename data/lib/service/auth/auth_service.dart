@@ -93,7 +93,7 @@ class AuthService {
     }
   }
 
-  Future<void> reauthenticateAndDeleteAccount() async {
+  Future<void> reAuthenticateAndDeleteAccount() async {
     try {
       final providerData = _auth.currentUser?.providerData.first;
       if (PhoneAuthProvider().providerId == providerData?.providerId) {
@@ -117,8 +117,8 @@ class AuthService {
 
   Future<void> deleteAccount() async {
     try {
-      await _auth.currentUser?.delete();
       await _userService.deleteUser();
+      await _auth.currentUser?.delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

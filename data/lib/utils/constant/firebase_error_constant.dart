@@ -6,3 +6,4 @@ const String errorNetworkRequestFailed = "network-request-failed";
 const String errorUserNotFound = "user-not-found";
 const String errorUnauthenticated = "unauthenticated";
 const String errorTooManyRequest = "too-many-requests";
+const String errorRequiresRecentLogin = "requires-recent-login";

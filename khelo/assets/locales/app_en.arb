@@ -652,6 +652,8 @@
   "edit_profile_gender_male_title": "Male",
   "edit_profile_gender_female_title": "Female",
   "edit_profile_gender_prefer_not_to_say_title": "Prefer not to say",
+  "edit_profile_delete_account_btn_title": "Delete account",
+  "edit_profile_delete_account_description_text": "This can not undone. if you delete your account, your data will be gone forever.",
 
   "profile_settings_title": "Settings",
   "profile_setting_privacy_policy_title": "Privacy policy",
