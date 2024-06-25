@@ -157,20 +157,20 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       if (userProfileImageUrl != null) {
         await deleteUnusedImage(userProfileImageUrl);
       }
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "requires-recent-login") {
-        await _reauthenticateAndDelete();
-      }
     } catch (e) {
+      if (e is RequiresRecentLoginError) {
+        await _reAuthenticateAndDelete();
+      }
       state = state.copyWith(actionError: e);
+
       debugPrint("EditProfileViewNotifier: error while delete account -> $e");
     }
   }
 
-  Future<void> _reauthenticateAndDelete() async {
+  Future<void> _reAuthenticateAndDelete() async {
     try {
       final userProfileImageUrl = state.currentUser!.profile_img_url;
-      _authService.reauthenticateAndDeleteAccount();
+      _authService.reAuthenticateAndDeleteAccount();
       if (userProfileImageUrl != null) {
         await deleteUnusedImage(userProfileImageUrl);
       }
