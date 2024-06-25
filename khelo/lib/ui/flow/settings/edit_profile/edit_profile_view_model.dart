@@ -158,12 +158,11 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
         await deleteUnusedImage(userProfileImageUrl);
       }
     } catch (e) {
-      if (e is SomethingWentWrongError) {
-        if (e.l10nCode == "requires-recent-login") {
-          await _reAuthenticateAndDelete();
-        }
+      if (e is RequiresRecentLoginError) {
+        await _reAuthenticateAndDelete();
       }
       state = state.copyWith(actionError: e);
+
       debugPrint("EditProfileViewNotifier: error while delete account -> $e");
     }
   }

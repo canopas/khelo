@@ -61,6 +61,8 @@ class AppError implements Exception {
             stackTrace: error.stackTrace);
       case errorNetworkRequestFailed:
         return const NoConnectionError();
+      case errorRequiresRecentLogin:
+        return const RequiresRecentLoginError();
       default:
         return SomethingWentWrongError(
             statusCode: error.code,
@@ -92,4 +94,9 @@ class LargeAttachmentUploadError extends AppError {
             l10nCode: AppErrorL10nCodes.largeAttachmentUpload,
             message:
                 "Oops! Your file exceeds the maximum allowed size of 25 MB. Please choose a smaller file and try again.");
+}
+
+class RequiresRecentLoginError extends AppError {
+  const RequiresRecentLoginError()
+      : super(l10nCode: AppErrorL10nCodes.requiresRecentLogin);
 }
