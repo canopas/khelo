@@ -16,7 +16,6 @@ import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
 import 'package:style/button/action_button.dart';
-import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
@@ -44,56 +43,68 @@ class EditProfileScreen extends ConsumerWidget {
     return AppPage(
       title: context.l10n.edit_profile_screen_title,
       actions: [
-        if (!isToCreateAccount) ...[
-          actionButton(context,
-              onPressed: () => showConfirmationDialog(context,
-                  title: context.l10n.common_delete_title,
-                  message: context.l10n.alert_confirm_default_message(
-                      context.l10n.common_delete_title.toLowerCase()),
-                  confirmBtnText: context.l10n.common_delete_title,
-                  onConfirm: notifier.onDeleteTap),
-              icon: SvgPicture.asset(
-                Assets.images.icBin,
-                height: 24,
-                width: 24,
-                fit: BoxFit.contain,
-                colorFilter: ColorFilter.mode(
-                    context.colorScheme.primary, BlendMode.srcATop),
-              )),
-        ]
+        actionButton(context,
+            onPressed: (state.isButtonEnable && !state.isImageUploading)
+                ? () => notifier.onSubmitTap()
+                : null,
+            icon: SvgPicture.asset(
+              Assets.images.icCheck,
+              height: 24,
+              width: 24,
+              fit: BoxFit.contain,
+              colorFilter: ColorFilter.mode(
+                  state.isButtonEnable && !state.isImageUploading
+                      ? context.colorScheme.primary
+                      : context.colorScheme.textDisabled,
+                  BlendMode.srcATop),
+            )),
       ],
       body: Builder(
         builder: (context) {
-          return Stack(
+          return ListView(
+            padding: context.mediaQueryPadding + const EdgeInsets.all(16.0),
             children: [
-              ListView(
-                padding: context.mediaQueryPadding +
-                    const EdgeInsets.all(16.0) +
-                    BottomStickyOverlay.padding,
-                children: [
-                  ProfileImageAvatar(
-                      size: profileViewHeight,
-                      placeHolderImage: Assets.images.icProfileThin,
-                      imageUrl: state.imageUrl,
-                      filePath: state.filePath,
-                      isLoading: state.isImageUploading,
-                      onEditButtonTap: () async {
-                        final imagePath =
-                            await ImagePickerSheet.show<String>(context, true);
-                        if (imagePath != null) {
-                          notifier.onImageChange(imagePath);
-                        }
-                      }),
-                  const SizedBox(height: 24),
-                  _userContactDetailsView(context, notifier, state),
-                  const SizedBox(height: 24),
-                  _userPersonalDetailsView(context, notifier, state),
-                  const SizedBox(height: 24),
-                  _userPlayStyleView(context, notifier, state),
-                  const SizedBox(height: 24),
-                ],
-              ),
-              _stickyButton(context, notifier, state)
+              ProfileImageAvatar(
+                  size: profileViewHeight,
+                  placeHolderImage: Assets.images.icProfileThin,
+                  imageUrl: state.imageUrl,
+                  filePath: state.filePath,
+                  isLoading: state.isImageUploading,
+                  onEditButtonTap: () async {
+                    final imagePath =
+                        await ImagePickerSheet.show<String>(context, true);
+                    if (imagePath != null) {
+                      notifier.onImageChange(imagePath);
+                    }
+                  }),
+              const SizedBox(height: 24),
+              _userContactDetailsView(context, notifier, state),
+              const SizedBox(height: 24),
+              _userPersonalDetailsView(context, notifier, state),
+              const SizedBox(height: 24),
+              _userPlayStyleView(context, notifier, state),
+              const SizedBox(height: 24),
+              if (!isToCreateAccount) ...[
+                _deleteButton(
+                  context,
+                  onDelete: () => showConfirmationDialog(context,
+                      title: context.l10n.common_delete_title,
+                      message: context.l10n.alert_confirm_default_message(
+                          context.l10n.common_delete_title.toLowerCase()),
+                      confirmBtnText: context.l10n.common_delete_title,
+                      onConfirm: notifier.onDeleteTap),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                  child: Text(
+                    context.l10n.edit_profile_delete_account_description_text,
+                    style: AppTextStyle.body2.copyWith(
+                      color: context.colorScheme.textDisabled,
+                    ),
+                  ),
+                ),
+              ],
             ],
           );
         },
@@ -311,18 +322,15 @@ class EditProfileScreen extends ConsumerWidget {
     }
   }
 
-  Widget _stickyButton(
-    BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-  ) {
-    return BottomStickyOverlay(
-      child: PrimaryButton(
-        context.l10n.common_save_title,
-        progress: state.isSaveInProgress,
-        enabled: state.isButtonEnable && !state.isImageUploading,
-        onPressed: () => notifier.onSubmitTap(),
-      ),
+  Widget _deleteButton(
+    BuildContext context, {
+    required Function() onDelete,
+  }) {
+    return PrimaryButton(
+      onPressed: onDelete,
+      context.l10n.edit_profile_delete_account_btn_title,
+      background: context.colorScheme.containerLow,
+      foreground: context.colorScheme.alert,
     );
   }
 
