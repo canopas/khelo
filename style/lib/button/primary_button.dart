@@ -12,7 +12,6 @@ class PrimaryButton extends StatelessWidget {
   final bool expanded;
   final bool progress;
   final bool enabled;
-  final bool secondaryTint;
   final Color? foreground;
   final Color? background;
   final Function()? onPressed;
@@ -26,7 +25,6 @@ class PrimaryButton extends StatelessWidget {
     this.expanded = true,
     this.enabled = true,
     this.progress = false,
-    this.secondaryTint = false,
     this.background,
     this.foreground,
   });
@@ -36,14 +34,12 @@ class PrimaryButton extends StatelessWidget {
     final AppColorScheme colorScheme = appColorSchemeOf(context);
     final tappable = !progress && enabled;
 
-    final bg = background ??
-        (secondaryTint ? colorScheme.containerLow : colorScheme.primary);
-    final bgColor = tappable || secondaryTint
+    final bg = background ?? colorScheme.primary;
+    final bgColor = tappable
         ? bg
         : Color.alphaBlend(bg.withOpacity(0.4), colorScheme.surface);
 
-    final fg = foreground ??
-        (secondaryTint ? colorScheme.primary : colorScheme.onPrimary);
+    final fg = foreground ?? colorScheme.onPrimary;
     final fgColor = tappable
         ? fg
         : Color.alphaBlend(fg.withOpacity(0.5), colorScheme.surface);

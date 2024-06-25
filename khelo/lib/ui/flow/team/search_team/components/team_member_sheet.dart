@@ -6,9 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
-import 'package:style/animations/on_tap_scale.dart';
-import 'package:khelo/ui/flow/team/add_team_member/components/verify_add_team_member_dialog.dart';
-import 'package:style/button/primary_button.dart';
+import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -77,10 +75,8 @@ class TeamMemberSheet extends StatelessWidget {
   }
 
   Widget _selectButton(BuildContext context, UserModel user) {
-    return PrimaryButton(
+    return SecondaryButton(
       context.l10n.common_select_title,
-      secondaryTint: true,
-      expanded: false,
       onPressed: () async {
         if (user.phone != null) {
           final res = await VerifyTeamMemberSheet.show(context,
