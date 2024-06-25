@@ -18,11 +18,11 @@ extension StringExtension on String? {
               this!.substring(0, 3), this!.substring(this!.length - 2));
         } else {
           final countryCode = splitString.first;
-          final lastTwoDigit = splitString
-              .elementAt(1)
-              .substring(splitString.elementAt(1).length - 2);
-          return context.l10n
-              .common_obscure_phone_number_text(countryCode, lastTwoDigit);
+          final phoneNumber = splitString.elementAt(1);
+          final lengthWithoutLastTwoDigit = phoneNumber.length - 2;
+          final formattedNumber = phoneNumber.replaceRange(
+              0, lengthWithoutLastTwoDigit, '*' * lengthWithoutLastTwoDigit);
+          return "$countryCode $formattedNumber";
         }
     }
   }

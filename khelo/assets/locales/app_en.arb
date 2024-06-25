@@ -35,7 +35,6 @@
   "common_matches_title": "Matches",
   "common_edit_team_title": "Edit Team",
   "common_location_title": "Location",
-  "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "common_camera_text": "Camera",
   "common_gallery_text": "Gallery",
   "common_versus_short_title": "VS",
@@ -51,6 +50,7 @@
   "common_run_out_title": "Run Out",
   "common_wickets_text": "Wickets",
   "common_end_match_title": "End Match",
+  "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
     "placeholders": {

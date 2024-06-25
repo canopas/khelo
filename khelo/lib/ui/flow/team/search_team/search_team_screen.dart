@@ -16,8 +16,8 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/text/search_text_field.dart';
 
 import '../../../../gen/assets.gen.dart';
 
@@ -101,30 +101,10 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     BuildContext context,
     SearchTeamState state,
   ) {
-    return AppTextField(
+    return SearchTextField(
       controller: state.searchController,
-      borderRadius: BorderRadius.circular(30),
-      contentPadding: const EdgeInsets.all(16),
-      borderType: AppTextFieldBorderType.outline,
-      onChanged: (value) => notifier.onSearchChanged(),
-      backgroundColor: context.colorScheme.containerLowOnSurface,
+      onChange: notifier.onSearchChanged,
       hintText: context.l10n.search_team_search_placeholder_title,
-      style: AppTextStyle.body2.copyWith(
-        color: context.colorScheme.textPrimary,
-      ),
-      hintStyle: AppTextStyle.subtitle2.copyWith(
-        color: context.colorScheme.textDisabled,
-      ),
-      borderColor: BorderColor(
-        focusColor: Colors.transparent,
-        unFocusColor: Colors.transparent,
-      ),
-      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-      prefixIcon: Icon(
-        Icons.search,
-        color: context.colorScheme.textDisabled,
-        size: 24,
-      ),
       suffixIcon: state.searchInProgress
           ? const UnconstrainedBox(child: AppProgressIndicator(radius: 8))
           : const SizedBox(),
