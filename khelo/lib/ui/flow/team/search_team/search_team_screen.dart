@@ -9,13 +9,15 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/text/search_text_field.dart';
 
 import '../../../../gen/assets.gen.dart';
 
@@ -76,7 +78,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               state.selectedTeam != null
                   ? context.colorScheme.primary
                   : context.colorScheme.textDisabled,
-              BlendMode.srcATop,
+              BlendMode.srcIn,
             ),
           ),
         ),
@@ -99,30 +101,10 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     BuildContext context,
     SearchTeamState state,
   ) {
-    return AppTextField(
+    return SearchTextField(
       controller: state.searchController,
-      borderRadius: BorderRadius.circular(30),
-      contentPadding: const EdgeInsets.all(16),
-      borderType: AppTextFieldBorderType.outline,
-      onChanged: (value) => notifier.onSearchChanged(),
-      backgroundColor: context.colorScheme.containerLowOnSurface,
+      onChange: notifier.onSearchChanged,
       hintText: context.l10n.search_team_search_placeholder_title,
-      style: AppTextStyle.body2.copyWith(
-        color: context.colorScheme.textPrimary,
-      ),
-      hintStyle: AppTextStyle.subtitle2.copyWith(
-        color: context.colorScheme.textDisabled,
-      ),
-      borderColor: BorderColor(
-        focusColor: Colors.transparent,
-        unFocusColor: Colors.transparent,
-      ),
-      onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-      prefixIcon: Icon(
-        Icons.search,
-        color: context.colorScheme.textDisabled,
-        size: 24,
-      ),
       suffixIcon: state.searchInProgress
           ? const UnconstrainedBox(child: AppProgressIndicator(radius: 8))
           : const SizedBox(),
@@ -150,18 +132,21 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           _teamProfileCell(context, state, team),
           Divider(color: context.colorScheme.outline),
         ],
-        if (state.userTeams.isNotEmpty) ...[
-          const SizedBox(height: 24),
-          Text(
-            context.l10n.search_team_your_teams_title,
-            style: AppTextStyle.header2
-                .copyWith(color: context.colorScheme.textSecondary),
-          ),
-          for (final team in state.userTeams) ...[
-            _teamProfileCell(context, state, team),
+        const SizedBox(height: 24),
+        Text(
+          context.l10n.search_team_your_teams_title,
+          style: AppTextStyle.header2
+              .copyWith(color: context.colorScheme.textSecondary),
+        ),
+        for (int index = 0; index < state.userTeams.length; index++) ...[
+          _teamProfileCell(context, state, state.userTeams[index]),
+          if (index != state.userTeams.length - 1) ...[
             Divider(color: context.colorScheme.outline),
+          ] else ...[
+            const SizedBox(height: 16),
           ],
         ],
+        _createTeamCell(context)
       ],
     );
   }
@@ -223,12 +208,44 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     );
   }
 
+  Widget _createTeamCell(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+          color: context.colorScheme.containerLow,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: context.colorScheme.outline)),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              context.l10n.search_team_create_team_description,
+              style: AppTextStyle.body2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+          ),
+          const SizedBox(width: 16),
+          SizedBox(
+            height: 36,
+            child: PrimaryButton(
+              context.l10n.search_team_create_team_title,
+              expanded: false,
+              onPressed: () => AppRoute.addTeam().push(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _observeActionError() {
     ref.listen(
-      searchTeamViewStateProvider.select((value) => value.actionError),
+      searchTeamViewStateProvider.select((value) => value.showSelectionError),
       (previous, next) {
-        if (next != null) {
-          showErrorSnackBar(context: context, error: next);
+        if (next) {
+          showErrorSnackBar(
+              context: context,
+              error: context.l10n.search_team_selection_error_text);
         }
       },
     );
