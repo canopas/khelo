@@ -125,7 +125,11 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                         onTap: () => UserDetailSheet.show(
                           context,
                           user,
-                          actionButtonTitle: context.l10n.common_select_title,
+                          actionButtonTitle:
+                              widget.team.players?.contains(user) == true ||
+                                      state.selectedUsers.contains(user)
+                                  ? null
+                                  : context.l10n.common_select_title,
                           onButtonTap: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(

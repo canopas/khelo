@@ -90,9 +90,8 @@ class UserDetailSheet extends StatelessWidget {
             value: user.bowling_style?.getString(context),
           ),
           if (actionButtonTitle != null) ...[
-            const SizedBox(height: 16),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
                 actionButtonTitle!,
                 onPressed: () {

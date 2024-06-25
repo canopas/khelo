@@ -22,7 +22,11 @@ class VerifyTeamMemberSheet extends StatefulWidget {
       isScrollControlled: true,
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
-      builder: (context) => VerifyTeamMemberSheet(phoneNumber: phoneNumber),
+      builder: (context) => Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: VerifyTeamMemberSheet(phoneNumber: phoneNumber),
+      ),
     );
   }
 
@@ -42,6 +46,7 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
   @override
   Widget build(BuildContext context) {
     return BottomSheetWrapper(
+      contentBottomSpacing: 30,
       content: _verifyMemberContent(context),
       action: [
         PrimaryButton(
