@@ -468,7 +468,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     ref.listen(addMatchViewStateProvider.select((value) => value.pop),
         (previous, next) {
       if (next != null && next) {
-        context.pop();
+        context.pop(true);
       }
     });
   }

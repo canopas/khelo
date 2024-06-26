@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +71,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
                         ? Icons.more_horiz_rounded
                         : Icons.more_vert_rounded,
                     color: context.colorScheme.textPrimary),
-                onPressed: () => _moreActionButton(context, state),
+                onPressed: () => _moreActionButton(context, notifier, state),
               ),
             ]
           : null,
@@ -185,32 +186,45 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
 
   void _moreActionButton(
     BuildContext context,
+    TeamDetailViewNotifier notifier,
     TeamDetailState state,
   ) async {
     return showActionBottomSheet(context: context, items: [
       BottomSheetAction(
         title: context.l10n.common_edit_team_title,
-        onTap: () {
+        onTap: () async {
           context.pop();
-          AppRoute.addTeam(team: state.team).push(context);
+          bool? isUpdated =
+              await AppRoute.addTeam(team: state.team).push<bool>(context);
+          if (isUpdated == true && context.mounted) {
+            notifier.loadTeamById();
+          }
         },
       ),
       BottomSheetAction(
         title: context.l10n.add_match_screen_title,
-        onTap: () {
+        onTap: () async {
           context.pop();
-          AppRoute.addMatch(
+          bool? isUpdated = await AppRoute.addMatch(
                   defaultTeam: (state.team?.players?.length ?? 0) >= 2
                       ? state.team
                       : null)
-              .push(context);
+              .push<bool>(context);
+          if (isUpdated == true && context.mounted) {
+            notifier.loadTeamById();
+          }
         },
       ),
       BottomSheetAction(
         title: context.l10n.team_list_add_members_title,
-        onTap: () {
+        onTap: () async {
           context.pop();
-          AppRoute.addTeamMember(team: state.team!).push(context);
+          List<UserModel>? memberList =
+              await AppRoute.addTeamMember(team: state.team!)
+                  .push<List<UserModel>>(context);
+          if (memberList != null && context.mounted) {
+            notifier.updateTeamMember(memberList);
+          }
         },
       ),
     ]);

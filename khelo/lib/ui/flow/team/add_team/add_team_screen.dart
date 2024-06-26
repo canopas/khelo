@@ -296,7 +296,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       addTeamStateProvider.select((value) => value.isPop),
       (previous, current) async {
         if (current && context.mounted) {
-          context.pop();
+          context.pop(current);
         }
       },
     );
