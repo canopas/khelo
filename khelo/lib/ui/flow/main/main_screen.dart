@@ -21,7 +21,7 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   static final List<Widget> _widgets = <Widget>[
     const HomeScreen(),
     const MyGameTabScreen(),
@@ -31,10 +31,6 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   final _materialPageController = PageController();
   final _cupertinoTabController = CupertinoTabController();
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -44,15 +40,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       // deallocate resources
       _materialPageController.dispose();
       _cupertinoTabController.dispose();
@@ -62,7 +50,6 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     if (Platform.isIOS) {
       return _cupertinoTabs(context);
     }

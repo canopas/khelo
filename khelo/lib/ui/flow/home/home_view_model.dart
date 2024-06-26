@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -9,7 +10,12 @@ part 'home_view_model.freezed.dart';
 
 final homeViewStateProvider =
     StateNotifierProvider.autoDispose<HomeViewNotifier, HomeViewState>(
-  (ref) => HomeViewNotifier(ref.read(matchServiceProvider)),
+  (ref) {
+    final notifier = HomeViewNotifier(ref.read(matchServiceProvider));
+    ref.listen(
+        hasUserSession, (_, next) => notifier._onUserSessionUpdate(next));
+    return notifier;
+  },
 );
 
 class HomeViewNotifier extends StateNotifier<HomeViewState> {
@@ -18,6 +24,12 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
 
   HomeViewNotifier(this._matchService) : super(const HomeViewState()) {
     _loadMatches();
+  }
+
+  void _onUserSessionUpdate(bool hasSession) {
+    if (!hasSession) {
+      _streamSubscription.cancel();
+    }
   }
 
   void _loadMatches() async {

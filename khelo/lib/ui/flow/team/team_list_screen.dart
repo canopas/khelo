@@ -26,12 +26,8 @@ class TeamListScreen extends ConsumerStatefulWidget {
 }
 
 class _TeamListScreenState extends ConsumerState<TeamListScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   late TeamListViewNotifier notifier;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -41,15 +37,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -58,7 +46,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     notifier = ref.watch(teamListViewStateProvider.notifier);
     _observeShowFilterOptionSheet(context, ref);
 

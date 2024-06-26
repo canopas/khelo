@@ -17,7 +17,7 @@ class MyStatsTabScreen extends ConsumerStatefulWidget {
 }
 
 class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   final List<Widget> _tabs = [
     const UserMatchListScreen(),
     const UserStatScreen(),
@@ -28,11 +28,6 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
-
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -45,15 +40,7 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       // deallocate resources
       _controller.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -63,7 +50,6 @@ class _MyStatsTabScreenState extends ConsumerState<MyStatsTabScreen>
   @override
   Widget build(BuildContext context) {
     final notifier = ref.watch(myStatsTabStateProvider.notifier);
-    super.build(context);
     return AppPage(
       body: Builder(
         builder: (context) {
