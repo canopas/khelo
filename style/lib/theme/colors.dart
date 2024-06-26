@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../text/app_text_style.dart';
 
-const primaryColor = Color(0xFF01579B);
+const primaryLightColor = Color(0xFF01579B);
+const primaryDarkColor = Color(0xFF0075D1);
 
 const primaryVariantLightColor = Color(0x4D01579B);
 const primaryVariantDarkColor = Color(0x6601579B);
@@ -13,9 +14,9 @@ const containerHighLightColor = Color(0x1401345D);
 const containerNormalLightColor = Color(0x0F01345D);
 const containerLowLightColor = Color(0x0A01345D);
 
-const containerHighDarkColor = Color(0x14D1E1ED);
-const containerNormalDarkColor = Color(0x0FD1E1ED);
-const containerLowDarkColor = Color(0x0AD1E1ED);
+const containerHighDarkColor = Color(0x3DD1E1ED);
+const containerNormalDarkColor = Color(0x29D1E1ED);
+const containerLowDarkColor = Color(0x14D1E1ED);
 
 const textPrimaryLightColor = Color(0xDE000000);
 const textSecondaryLightColor = Color(0x99000000);
@@ -40,7 +41,7 @@ final ThemeData _materialLightTheme = ThemeData.light(useMaterial3: true);
 final ThemeData _materialDarkTheme = ThemeData.dark(useMaterial3: true);
 
 final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
-  primaryColor: primaryColor,
+  primaryColor: primaryLightColor,
   dividerColor: outlineLightColor,
   datePickerTheme: _materialLightTheme.datePickerTheme.copyWith(
     backgroundColor: surfaceLightColor,
@@ -55,7 +56,7 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
   timePickerTheme: _materialLightTheme.timePickerTheme.copyWith(
     backgroundColor: surfaceLightColor,
     dialBackgroundColor: containerLowLightColor,
-    dayPeriodColor: primaryColor,
+    dayPeriodColor: primaryLightColor,
     hourMinuteColor: containerLowLightColor,
     inputDecorationTheme:
         _materialLightTheme.timePickerTheme.inputDecorationTheme?.copyWith(
@@ -64,7 +65,7 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
     ),
   ),
   colorScheme: _materialLightTheme.colorScheme.copyWith(
-    primary: primaryColor,
+    primary: primaryLightColor,
     secondary: secondaryColor,
     surface: surfaceLightColor,
     onPrimary: textPrimaryDarkColor,
@@ -83,7 +84,7 @@ final ThemeData materialThemeDataLight = _materialLightTheme.copyWith(
 );
 
 final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
-  primaryColor: primaryColor,
+  primaryColor: primaryDarkColor,
   dividerColor: outlineDarkColor,
   datePickerTheme: _materialDarkTheme.datePickerTheme.copyWith(
     backgroundColor: surfaceDarkColor,
@@ -98,7 +99,7 @@ final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
   timePickerTheme: _materialDarkTheme.timePickerTheme.copyWith(
     backgroundColor: surfaceDarkColor,
     dialBackgroundColor: containerLowDarkColor,
-    dayPeriodColor: primaryColor,
+    dayPeriodColor: primaryDarkColor,
     hourMinuteColor: containerLowDarkColor,
     inputDecorationTheme:
         _materialDarkTheme.timePickerTheme.inputDecorationTheme?.copyWith(
@@ -107,7 +108,7 @@ final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
     ),
   ),
   colorScheme: _materialDarkTheme.colorScheme.copyWith(
-    primary: primaryColor,
+    primary: primaryDarkColor,
     secondary: secondaryColor,
     surface: surfaceDarkColor,
     onPrimary: textPrimaryDarkColor,
@@ -188,7 +189,7 @@ class AppColorScheme {
 }
 
 final appColorSchemeLight = AppColorScheme(
-  primary: primaryColor,
+  primary: primaryLightColor,
   primaryVariant: primaryVariantLightColor,
   secondary: secondaryColor,
   surface: surfaceLightColor,
@@ -214,7 +215,7 @@ final appColorSchemeLight = AppColorScheme(
 );
 
 final appColorSchemeDark = AppColorScheme(
-  primary: primaryColor,
+  primary: primaryDarkColor,
   primaryVariant: primaryVariantDarkColor,
   secondary: secondaryColor,
   surface: surfaceDarkColor,

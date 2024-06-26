@@ -126,13 +126,13 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                     .read(teamListViewStateProvider.notifier)
                     .onFilterButtonTap(),
                 icon: Icon(CupertinoIcons.slider_horizontal_3,
-                    color: context.colorScheme.primary)),
+                    color: context.colorScheme.textPrimary)),
           ],
           actionButton(context,
               onPressed: () => _selectedTab == 1
                   ? AppRoute.addTeam().push(context)
                   : AppRoute.addMatch().push(context),
-              icon: Icon(Icons.add, color: context.colorScheme.primary)),
+              icon: Icon(Icons.add, color: context.colorScheme.textPrimary)),
           const SizedBox(width: 8),
         ],
       ),

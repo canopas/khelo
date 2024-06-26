@@ -51,22 +51,21 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     return AppPage(
       title: context.l10n.add_team_member_screen_title,
       actions: [
-        Visibility(
-          visible: state.selectedUsers.isNotEmpty,
-          child: state.isAddInProgress
-              ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
-              : actionButton(
-                  context,
-                  onPressed: () => notifier.addPlayersToTeam(widget.team.id),
-                  icon: SvgPicture.asset(
-                    Assets.images.icCheck,
-                    colorFilter: ColorFilter.mode(
-                      context.colorScheme.primary,
-                      BlendMode.srcATop,
-                    ),
+        state.isAddInProgress
+            ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
+            : actionButton(
+                context,
+                onPressed: () => notifier.addPlayersToTeam(widget.team.id),
+                icon: SvgPicture.asset(
+                  Assets.images.icCheck,
+                  colorFilter: ColorFilter.mode(
+                    state.selectedUsers.isNotEmpty
+                        ? context.colorScheme.textPrimary
+                        : context.colorScheme.textDisabled,
+                    BlendMode.srcIn,
                   ),
                 ),
-        ),
+              ),
       ],
       body: Builder(builder: (context) {
         return Padding(

@@ -22,6 +22,7 @@ import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.d
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
+import 'package:style/button/more_option_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/theme/colors.dart';
@@ -96,28 +97,25 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    return IconButton(
-        onPressed: () async {
-          showActionBottomSheet(
-              context: context,
-              items: MatchOption.values
-                  .map(
-                    (option) => BottomSheetAction(
-                      title: option.getTitle(context),
-                      onTap: () {
-                        if (option != MatchOption.continueWithInjuredPlayer) {
-                          context.pop();
-                          notifier.onMatchOptionSelect(option, true);
-                        }
-                      },
-                      child: option == MatchOption.continueWithInjuredPlayer
-                          ? _toggleButton(context, state)
-                          : null,
-                    ),
-                  )
-                  .toList());
-        },
-        icon: const Icon(Icons.more_horiz));
+    return moreOptionButton(
+      context,
+      onPressed: () => showActionBottomSheet(
+          context: context,
+          items: MatchOption.values
+              .map((option) => BottomSheetAction(
+                    title: option.getTitle(context),
+                    onTap: () {
+                      if (option != MatchOption.continueWithInjuredPlayer) {
+                        context.pop();
+                        notifier.onMatchOptionSelect(option, true);
+                      }
+                    },
+                    child: option == MatchOption.continueWithInjuredPlayer
+                        ? _toggleButton(context, state)
+                        : null,
+                  ))
+              .toList()),
+    );
   }
 
   Widget _toggleButton(

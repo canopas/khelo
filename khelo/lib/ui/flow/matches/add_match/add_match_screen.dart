@@ -66,13 +66,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           ? context.l10n.add_match_screen_edit_match_title
           : context.l10n.add_match_screen_title,
       actions: [
-        if (widget.matchId != null)
-          _deleteMatchButton(context, onDelete: notifier.deleteMatch),
         _scheduleMatchButton(
           context,
           saveBtnError: state.saveBtnError,
           onSchedule: () => notifier.addMatch(),
         ),
+        if (widget.matchId != null)
+          _deleteMatchButton(context, onDelete: notifier.deleteMatch),
       ],
       body: Builder(builder: (context) {
         return Stack(
@@ -104,7 +104,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         height: 24,
         colorFilter: ColorFilter.mode(
             saveBtnError == null
-                ? context.colorScheme.primary
+                ? context.colorScheme.textPrimary
                 : context.colorScheme.textDisabled,
             BlendMode.srcIn),
       ),
@@ -126,7 +126,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           width: 24,
           fit: BoxFit.contain,
           colorFilter:
-              ColorFilter.mode(context.colorScheme.primary, BlendMode.srcATop),
+              ColorFilter.mode(context.colorScheme.alert, BlendMode.srcATop),
         ));
   }
 

@@ -6,6 +6,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/power_play/power_play_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/back_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -56,6 +57,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
 
     return AppPage(
       title: context.l10n.common_power_play_title,
+      leading: backButton(context, onPressed: context.pop),
       body: Builder(builder: (context) {
         return Stack(
           children: [

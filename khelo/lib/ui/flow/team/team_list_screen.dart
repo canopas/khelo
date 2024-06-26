@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +11,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/action_button.dart';
+import 'package:style/button/more_option_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -153,14 +151,10 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
                 )
               : null,
           trailing: showMoreOptionButton
-              ? actionButton(context,
+              ? moreOptionButton(
+                  context,
                   onPressed: () => _moreActionButton(context, team),
-                  icon: Icon(
-                    Platform.isIOS
-                        ? Icons.more_horiz_rounded
-                        : Icons.more_vert_rounded,
-                    color: context.colorScheme.textPrimary,
-                  ))
+                )
               : null,
         ),
       ),
