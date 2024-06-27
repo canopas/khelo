@@ -17,7 +17,7 @@ class TeamDetailMatchContent extends ConsumerWidget {
 
     if (state.matches != null && state.matches!.isNotEmpty) {
       return ListView.separated(
-        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+        padding: const EdgeInsets.all(16),
         itemCount: state.matches?.length ?? 0,
         itemBuilder: (context, index) {
           final match = state.matches![index];

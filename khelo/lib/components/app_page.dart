@@ -1,8 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/widgets/custom_cupertino_navigation_bar.dart';
 
 class AppPage extends StatelessWidget {
   final String? title;
@@ -11,9 +11,10 @@ class AppPage extends StatelessWidget {
   final Widget? leading;
   final Widget? floatingActionButton;
   final Widget? body;
+  final EdgeInsets? padding;
   final bool automaticallyImplyLeading;
   final bool resizeToAvoidBottomInset;
-  final Color? backgroundColor;
+  final Color? appBarBackgroundColor;
 
   const AppPage({
     super.key,
@@ -22,10 +23,11 @@ class AppPage extends StatelessWidget {
     this.actions,
     this.leading,
     this.body,
+    this.padding,
     this.automaticallyImplyLeading = true,
     this.resizeToAvoidBottomInset = true,
     this.floatingActionButton,
-    this.backgroundColor,
+    this.appBarBackgroundColor,
   });
 
   @override
@@ -38,16 +40,16 @@ class AppPage extends StatelessWidget {
   }
 
   Widget _cupertino(BuildContext context) => CupertinoPageScaffold(
-        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         navigationBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null
             ? null
-            : CupertinoNavigationBar(
+            : CustomCupertinoNavigationBar(
                 leading: leading,
+                padding: padding ?? const EdgeInsets.symmetric(horizontal: 8),
+                backgroundColor: appBarBackgroundColor,
                 middle: titleWidget ?? _title(),
-                border: null,
                 trailing: actions == null
                     ? null
                     : actions!.length == 1
@@ -76,14 +78,18 @@ class AppPage extends StatelessWidget {
       );
 
   Widget _material() => Scaffold(
-        backgroundColor: backgroundColor,
         resizeToAvoidBottomInset: resizeToAvoidBottomInset,
         appBar: (title == null && titleWidget == null) &&
                 actions == null &&
                 leading == null
             ? null
             : AppBar(
-                title: titleWidget ?? _title(),
+                backgroundColor: appBarBackgroundColor,
+                toolbarHeight: kToolbarHeight + (padding?.vertical ?? 0),
+                title: Padding(
+                    padding:
+                        padding ?? const EdgeInsets.symmetric(horizontal: 8),
+                    child: titleWidget ?? _title()),
                 actions: actions,
                 leading: leading,
                 automaticallyImplyLeading: automaticallyImplyLeading,
