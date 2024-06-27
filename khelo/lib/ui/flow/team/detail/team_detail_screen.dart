@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:data/api/user/user_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +61,17 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(teamDetailStateProvider);
     return AppPage(
-      title: state.team?.name ?? context.l10n.team_detail_screen_title,
+      automaticallyImplyLeading: false,
+      padding: const EdgeInsets.symmetric(vertical: 24),
+      appBarBackgroundColor: context.colorScheme.containerLow,
+      titleWidget: _teamProfileView(context, state),
+      leading: actionButton(context,
+          onPressed: context.pop,
+          icon: Icon(
+            CupertinoIcons.chevron_back,
+            size: 24,
+            color: context.colorScheme.textPrimary,
+          )),
       actions: (state.currentUserId == state.team?.created_by)
           ? [
               actionButton(
@@ -81,6 +91,35 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     );
   }
 
+  Widget _teamProfileView(BuildContext context, TeamDetailState state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        // profile view
+        ImageAvatar(
+          initial: state.team?.name[0].toUpperCase() ?? "?",
+          imageUrl: state.team?.profile_img_url,
+          size: 48,
+        ),
+        const SizedBox(width: 16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(state.team?.name ?? "",
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.textPrimary)),
+            const SizedBox(height: 4),
+            Text(
+                (state.team?.created_at ?? DateTime.now())
+                    .format(context, DateFormatType.dayMonthYear),
+                style: AppTextStyle.body2
+                    .copyWith(color: context.colorScheme.textSecondary)),
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _body(BuildContext context, TeamDetailState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
@@ -93,52 +132,14 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     }
 
     return Padding(
-      padding:
-          context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 16),
+      padding: context.mediaQueryPadding,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _teamProfileView(context, state),
           const SizedBox(height: 16),
           _tabView(context),
+          const SizedBox(height: 16),
           _content(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _teamProfileView(BuildContext context, TeamDetailState state) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: context.colorScheme.containerNormal,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // profile view
-          ImageAvatar(
-            initial: state.team?.name[0].toUpperCase() ?? "?",
-            imageUrl: state.team?.profile_img_url,
-            size: 80,
-          ),
-          const SizedBox(width: 16),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(state.team?.name ?? "",
-                  style: AppTextStyle.subtitle1
-                      .copyWith(color: context.colorScheme.textPrimary)),
-              const SizedBox(height: 4),
-              Text(
-                  (state.team?.created_at ?? DateTime.now())
-                      .format(context, DateFormatType.dayMonthYear),
-                  style: AppTextStyle.body2
-                      .copyWith(color: context.colorScheme.textSecondary)),
-            ],
-          ),
         ],
       ),
     );
@@ -189,45 +190,36 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     TeamDetailViewNotifier notifier,
     TeamDetailState state,
   ) async {
-    return showActionBottomSheet(context: context, items: [
-      BottomSheetAction(
-        title: context.l10n.common_edit_team_title,
-        onTap: () async {
-          context.pop();
-          bool? isUpdated =
-              await AppRoute.addTeam(team: state.team).push<bool>(context);
-          if (isUpdated == true && context.mounted) {
-            notifier.loadTeamById();
-          }
-        },
-      ),
-      BottomSheetAction(
-        title: context.l10n.add_match_screen_title,
-        onTap: () async {
-          context.pop();
-          bool? isUpdated = await AppRoute.addMatch(
-                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
-                      ? state.team
-                      : null)
-              .push<bool>(context);
-          if (isUpdated == true && context.mounted) {
-            notifier.loadTeamById();
-          }
-        },
-      ),
-      BottomSheetAction(
-        title: context.l10n.team_list_add_members_title,
-        onTap: () async {
-          context.pop();
-          List<UserModel>? memberList =
-              await AppRoute.addTeamMember(team: state.team!)
-                  .push<List<UserModel>>(context);
-          if (memberList != null && context.mounted) {
-            notifier.updateTeamMember(memberList);
-          }
-        },
-      ),
-    ]);
+    return showActionBottomSheet(
+        context: context,
+        showDragHandle: true,
+        items: [
+          BottomSheetAction(
+            title: context.l10n.common_edit_team_title,
+            onTap: () async {
+              context.pop();
+              bool? isUpdated =
+                  await AppRoute.addTeam(team: state.team).push<bool>(context);
+              if (isUpdated == true && context.mounted) {
+                notifier.loadTeamById();
+              }
+            },
+          ),
+          BottomSheetAction(
+            title: context.l10n.add_match_screen_title,
+            onTap: () async {
+              context.pop();
+              bool? isUpdated = await AppRoute.addMatch(
+                      defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                          ? state.team
+                          : null)
+                  .push<bool>(context);
+              if (isUpdated == true && context.mounted) {
+                notifier.loadTeamById();
+              }
+            },
+          ),
+        ]);
   }
 
   @override
