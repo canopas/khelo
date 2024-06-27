@@ -312,6 +312,7 @@
   "match_detail_overs_tab_title": "Overs",
   "match_detail_match_not_started_error_title": "Match has not started yet.",
   "match_detail_error_description_text": "A detailed will be available after the start of the match.",
+  "match_detail_highlight_empty_title": "No highlights currently available.",
 
   "match_info_match_title": "Match",
   "match_info_date_title": "Date",
