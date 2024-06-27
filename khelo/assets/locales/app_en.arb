@@ -123,8 +123,8 @@
   "add_team_member_verify_title": "Verify",
   "add_team_member_empty_title": "Your cricket crew awaits!",
   "add_team_member_empty_description_text": "The pitch is set, but you need your players. Find them with a quick search.",
-  "add_team_member_search_no_result_title": "Result not found",
-  "add_team_member_search_description_text": "We couldn't find anything matching your search.",
+  "add_team_member_search_no_result_title": "Oops! No User Found",
+  "add_team_member_search_description_text": "It seems we don't have anyone by that name. Give another name a go!",
   "add_team_member_added_text": "ADDED",
   "add_team_member_verify_error_text": "Please enter correct digits",
   "add_team_member_verify_placeholder_text": "Enter the last {count} digits of the phone number of the selected player.",
@@ -314,6 +314,7 @@
   "match_detail_match_not_started_error_title": "Match has not started yet.",
   "match_detail_error_description_text": "A detailed will be available after the start of the match.",
   "match_detail_highlight_empty_title": "No highlights currently available.",
+  "match_detail_highlight_empty_description_text": "No events recorded yet. Check back later for updates and highlights.",
 
   "match_info_match_title": "Match",
   "match_info_date_title": "Date",

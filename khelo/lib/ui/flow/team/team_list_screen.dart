@@ -108,7 +108,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
             },
           )
         : EmptyScreen(
-            title: context.l10n.team_detail_empty_member_title,
+            title: context.l10n.team_list_no_teams_created_title,
             description: context.l10n.team_list_empty_list_description,
             buttonTitle: context.l10n.add_team_screen_title,
             onTap: () => AppRoute.addTeam().push(context),

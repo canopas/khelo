@@ -41,7 +41,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
       );
     } else {
       return EmptyScreen(
-        title: context.l10n.team_list_no_teams_created_title,
+        title: context.l10n.team_detail_empty_member_title,
         description: context.l10n.team_detail_empty_member_description_text,
         buttonTitle: context.l10n.team_list_add_members_title,
         onTap: () => AppRoute.addTeamMember(team: state.team!).push(context),
