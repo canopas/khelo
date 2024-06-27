@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
@@ -57,12 +56,11 @@ class _PhoneVerificationScreenState
     _observeActionError(context, ref);
     _observeVerificationComplete();
 
-    return PopScope(
-      canPop: false,
-      child: IntroGradientBackground(
-        child: AppPage(
-          backgroundColor: Colors.transparent,
-          body: Builder(builder: (context) {
+    return AppPage(
+      body: IntroGradientBackground(
+        child: PopScope(
+          canPop: false,
+          child: Builder(builder: (context) {
             return Padding(
               padding: context.mediaQueryPadding +
                   const EdgeInsets.symmetric(horizontal: 16.0),

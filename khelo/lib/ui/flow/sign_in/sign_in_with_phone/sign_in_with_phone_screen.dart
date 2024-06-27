@@ -1,6 +1,5 @@
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
@@ -27,10 +26,9 @@ class SignInWithPhoneScreen extends ConsumerWidget {
     _observeOtp(context: context, ref: ref);
     _observeSignInSuccess(context: context, ref: ref);
 
-    return IntroGradientBackground(
-      child: AppPage(
-        backgroundColor: Colors.transparent,
-        body: PopScope(
+    return AppPage(
+      body: IntroGradientBackground(
+        child: PopScope(
           canPop: false,
           child: Builder(builder: (context) {
             return Padding(

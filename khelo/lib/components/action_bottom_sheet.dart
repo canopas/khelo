@@ -80,7 +80,7 @@ class BottomSheetAction extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: AppTextStyle.body1
+                style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
             ),

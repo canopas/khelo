@@ -152,22 +152,25 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     BuildContext context,
     TeamModel team,
   ) async {
-    return await showActionBottomSheet(context: context, items: [
-      BottomSheetAction(
-        title: context.l10n.team_list_add_members_title,
-        onTap: () {
-          context.pop();
-          AppRoute.addTeamMember(team: team).push(context);
-        },
-      ),
-      BottomSheetAction(
-        title: context.l10n.common_edit_team_title,
-        onTap: () {
-          context.pop();
-          AppRoute.addTeam(team: team).push(context);
-        },
-      ),
-    ]);
+    return await showActionBottomSheet(
+        context: context,
+        showDragHandle: true,
+        items: [
+          BottomSheetAction(
+            title: context.l10n.team_list_add_members_title,
+            onTap: () {
+              context.pop();
+              AppRoute.addTeamMember(team: team).push(context);
+            },
+          ),
+          BottomSheetAction(
+            title: context.l10n.common_edit_team_title,
+            onTap: () {
+              context.pop();
+              AppRoute.addTeam(team: team).push(context);
+            },
+          ),
+        ]);
   }
 
   void _filterActionSheet(

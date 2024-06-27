@@ -234,6 +234,7 @@
   "team_detail_empty_match_title": "Team hasn't compete with opponent till now.",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_empty_stat_title": "Team's analysis will be shown here based on it's previous matches.",
+  "team_detail_add_member_title": "Add member",
   "team_detail_won_title": "Won({win})",
   "@team_detail_won_title": {
     "description": "Won({win})",
