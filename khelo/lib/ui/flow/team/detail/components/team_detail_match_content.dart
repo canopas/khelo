@@ -6,7 +6,6 @@ import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
-import 'package:style/extensions/context_extensions.dart';
 
 class TeamDetailMatchContent extends ConsumerWidget {
   const TeamDetailMatchContent({super.key});
