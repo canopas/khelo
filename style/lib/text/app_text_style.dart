@@ -5,8 +5,9 @@ class AppTextStyle {
 
   static const TextStyle header1 = TextStyle(
     fontFamily: poppinsFontFamily,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     fontSize: 26,
+    letterSpacing: -0.64,
     height: 1.2,
     package: 'style',
   );
@@ -16,7 +17,7 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     fontSize: 22,
     height: 1.2,
-    letterSpacing: -4,
+    letterSpacing: -0.64,
     package: 'style',
   );
 
@@ -25,7 +26,7 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     fontSize: 20,
     height: 1.2,
-    letterSpacing: -4,
+    letterSpacing: -0.64,
     package: 'style',
   );
 
@@ -34,7 +35,7 @@ class AppTextStyle {
     fontWeight: FontWeight.w600,
     fontSize: 18,
     height: 1.2,
-    letterSpacing: -4,
+    letterSpacing: -0.64,
     package: 'style',
   );
 
@@ -51,7 +52,7 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
     fontSize: 16,
     height: 1.3,
-    letterSpacing: -2,
+    letterSpacing: -0.32,
     package: 'style',
   );
 
@@ -60,7 +61,7 @@ class AppTextStyle {
     fontWeight: FontWeight.normal,
     fontSize: 16,
     height: 1.3,
-    letterSpacing: -2,
+    letterSpacing: -0.32,
     package: 'style',
   );
 
