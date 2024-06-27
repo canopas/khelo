@@ -7,8 +7,8 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_style.dart';
 
-import '../../../../app_route.dart';
 import '../../../matches/add_match/select_squad/components/user_detail_sheet.dart';
 
 class TeamDetailMemberContent extends ConsumerWidget {
