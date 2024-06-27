@@ -396,7 +396,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     state = state.copyWith(showStrikerSelectionSheet: DateTime.now());
   }
 
-  void onScoreButtonTap(ScoreButton btn) {
+  void onScoreButtonTap(ScoreButton btn, bool isLongTap) {
     if (state.isActionInProgress) {
       return;
     }
@@ -410,11 +410,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       case ScoreButton.three:
         addBall(run: 3);
       case ScoreButton.four:
-        state = state.copyWith(
-            showBoundaryConfirmationDialogForFour: DateTime.now());
+        addBall(run: 4, isFour: !isLongTap);
       case ScoreButton.six:
-        state = state.copyWith(
-            showBoundaryConfirmationDialogForSix: DateTime.now());
+        addBall(run: 6, isSix: !isLongTap);
       case ScoreButton.fiveOrSeven:
         state = state.copyWith(showAddExtraSheetForFiveSeven: DateTime.now());
       case ScoreButton.undo:
@@ -1174,8 +1172,6 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showOverCompleteSheet,
     DateTime? showInningCompleteSheet,
     DateTime? showMatchCompleteSheet,
-    DateTime? showBoundaryConfirmationDialogForSix,
-    DateTime? showBoundaryConfirmationDialogForFour,
     DateTime? showAddExtraSheetForNoBall,
     DateTime? showAddExtraSheetForLegBye,
     DateTime? showAddExtraSheetForBye,

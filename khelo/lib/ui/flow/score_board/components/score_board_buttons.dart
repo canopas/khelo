@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
@@ -8,7 +9,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class ScoreBoardButtons extends StatelessWidget {
-  final Function(ScoreButton) onTap;
+  final Function(ScoreButton, bool) onTap;
 
   const ScoreBoardButtons({super.key, required this.onTap});
 
@@ -117,7 +118,11 @@ class ScoreBoardButtons extends StatelessWidget {
     Color? backgroundColor,
   }) {
     return OnTapScale(
-      onTap: () => onTap(btn),
+      onTap: () => onTap(btn, false),
+      onLongTap: () {
+        HapticFeedback.mediumImpact();
+        onTap(btn, true);
+      },
       child: Container(
         alignment: Alignment.center,
         margin: const EdgeInsets.only(bottom: 8, right: 8),
