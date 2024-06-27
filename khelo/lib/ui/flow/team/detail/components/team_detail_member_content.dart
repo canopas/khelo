@@ -58,13 +58,9 @@ class TeamDetailMemberContent extends ConsumerWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              color: context.colorScheme.containerLow,
-              shape: BoxShape.circle,
-            ),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: context.colorScheme.containerLow,
             child: Icon(
               Icons.add,
               size: 24,
