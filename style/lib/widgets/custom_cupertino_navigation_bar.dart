@@ -66,7 +66,7 @@ class CustomCupertinoNavigationBar extends StatelessWidget
   Widget middleWidget(BuildContext context) {
     return DefaultTextStyle(
       style: CupertinoTheme.of(context).textTheme.navTitleTextStyle,
-      child: middle ?? const SizedBox(), // Ensure middle is never null
+      child: middle ?? const SizedBox(),
     );
   }
 
