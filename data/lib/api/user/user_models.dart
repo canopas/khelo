@@ -39,6 +39,27 @@ class UserModel with _$UserModel {
       UserModel.fromJson(jsonDecode(json));
 }
 
+extension ProfileCompleteExtension on UserModel {
+  double get progress {
+    const totalFields = 9;
+    double completedFields = 0.0;
+
+    if (profile_img_url != null && profile_img_url!.isNotEmpty) {
+      completedFields++;
+    }
+    if (name != null && name!.isNotEmpty) completedFields++;
+    if (email != null && email!.isNotEmpty) completedFields++;
+    if (location != null && location!.isNotEmpty) completedFields++;
+    if (dob != null) completedFields++;
+    if (gender != null) completedFields++;
+    if (player_role != null) completedFields++;
+    if (batting_style != null) completedFields++;
+    if (bowling_style != null) completedFields++;
+
+    return completedFields / totalFields;
+  }
+}
+
 @JsonEnum(valueField: "value")
 enum UserGender {
   unknown(0),

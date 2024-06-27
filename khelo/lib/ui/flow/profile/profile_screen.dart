@@ -1,4 +1,3 @@
-import 'package:data/api/user/user_models.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +9,9 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:khelo/ui/flow/profile/components/complete_profile_progress.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -39,7 +38,7 @@ class ProfileScreen extends ConsumerWidget {
               _userProfileView(context, state),
               if (state.currentUser != null) ...[
                 const SizedBox(height: 24),
-                _inCompleteProfileView(context, state.currentUser!)
+                CompleteProfileProgress(user: state.currentUser!)
               ],
               const SizedBox(height: 24),
               Text(
@@ -96,42 +95,6 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Widget _inCompleteProfileView(BuildContext context, UserModel currentUser) {
-    if (currentUser.profile_img_url == null ||
-        currentUser.batting_style == null ||
-        currentUser.bowling_style == null) {
-      return Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-            border: Border.all(color: context.colorScheme.outline),
-            borderRadius: BorderRadius.circular(16)),
-        child: Column(
-          children: [
-            Text(
-              context.l10n.profile_complete_your_profile_title,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.header4
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              context.l10n.profile_complete_profile_description,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.body1
-                  .copyWith(color: context.colorScheme.textSecondary),
-            ),
-            const SizedBox(height: 16),
-            PrimaryButton(
-                onPressed: () => AppRoute.editProfile().push(context),
-                context.l10n.profile_complete_profile_btn_title)
-          ],
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
   }
 
   Widget _settingsView(
