@@ -20,6 +20,7 @@ import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/button/action_button.dart';
+import 'package:style/button/back_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/widgets/rounded_check_box.dart';
 
@@ -56,13 +57,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
           ? context.l10n.common_edit_team_title
           : context.l10n.add_team_screen_title,
       automaticallyImplyLeading: false,
-      leading: actionButton(
+      leading: backButton(
         context,
         onPressed: context.pop,
-        icon: Icon(
-          Icons.arrow_back,
-          color: context.colorScheme.textPrimary,
-        ),
       ),
       actions: [
         if (widget.editTeam != null) ...[
@@ -151,6 +148,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   Text(context.l10n.add_team_players_text,
                       style: AppTextStyle.header4
                           .copyWith(color: context.colorScheme.textPrimary)),
+                  const SizedBox(width: 16),
                   actionButton(
                     context,
                     onPressed: () =>
@@ -159,7 +157,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                     icon: Icon(
                       CupertinoIcons.add,
                       color: context.colorScheme.textPrimary,
-                      size: 20,
+                      size: 24,
                     ),
                   )
                 ],
@@ -184,7 +182,13 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                     user: player,
                     trailing: actionButton(context,
                         onPressed: () => notifier.onRemoveUserFromTeam(player),
-                        icon: const Icon(Icons.close)),
+                        padding: const EdgeInsets.only(
+                            left: 10, top: 10, bottom: 10),
+                        icon: Icon(
+                          Icons.close,
+                          size: 16,
+                          color: context.colorScheme.textDisabled,
+                        )),
                   ),
                 ),
               ),

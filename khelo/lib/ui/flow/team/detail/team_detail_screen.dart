@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
@@ -15,6 +12,7 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/button/action_button.dart';
+import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -74,13 +72,8 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
           )),
       actions: (state.currentUserId == state.team?.created_by)
           ? [
-              actionButton(
+              moreOptionButton(
                 context,
-                icon: Icon(
-                    Platform.isIOS
-                        ? Icons.more_horiz_rounded
-                        : Icons.more_vert_rounded,
-                    color: context.colorScheme.textPrimary),
                 onPressed: () => _moreActionButton(context, notifier, state),
               ),
             ]

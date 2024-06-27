@@ -52,6 +52,8 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
         PrimaryButton(
           context.l10n.common_cancel_title,
           expanded: false,
+          background: context.colorScheme.containerLow,
+          foreground: context.colorScheme.primary,
           onPressed: context.pop,
         ),
         PrimaryButton(

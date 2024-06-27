@@ -10,6 +10,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/components/officials_cell_view.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_screen.dart';
+import 'package:style/button/back_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -43,6 +44,7 @@ class _AddMatchOfficialsScreenState
 
     return AppPage(
       title: context.l10n.add_match_officials_screen_title,
+      leading: backButton(context, onPressed: context.pop),
       body: Builder(builder: (context) {
         return Stack(
           children: [

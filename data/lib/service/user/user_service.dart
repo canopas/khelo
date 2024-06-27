@@ -80,13 +80,23 @@ class UserService {
       for (final tenIds in ids.chunked(10)) {
         QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
             .collection(FireStoreConst.usersCollection)
-            .where('id', whereIn: tenIds)
+            .where(FireStoreConst.id, whereIn: tenIds)
             .get();
 
         users.addAll(snapshot.docs.map((doc) {
           final data = doc.data();
           return UserModel.fromJson(data).copyWith(id: doc.id);
         }).toList());
+
+        final deactivatedUserIds =
+            tenIds.where((id) => !users.map((user) => user.id).contains(id));
+        users.addAll(deactivatedUserIds.map(
+          (id) => UserModel(
+              id: id,
+              name: "Deactivated User",
+              created_at: DateTime(1950),
+              location: "--"),
+        ));
       }
 
       return users;

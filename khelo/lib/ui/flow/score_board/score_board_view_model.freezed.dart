@@ -36,10 +36,6 @@ mixin _$ScoreBoardViewState {
   DateTime? get showOverCompleteSheet => throw _privateConstructorUsedError;
   DateTime? get showInningCompleteSheet => throw _privateConstructorUsedError;
   DateTime? get showMatchCompleteSheet => throw _privateConstructorUsedError;
-  DateTime? get showBoundaryConfirmationDialogForSix =>
-      throw _privateConstructorUsedError;
-  DateTime? get showBoundaryConfirmationDialogForFour =>
-      throw _privateConstructorUsedError;
   DateTime? get showAddExtraSheetForNoBall =>
       throw _privateConstructorUsedError;
   DateTime? get showAddExtraSheetForLegBye =>
@@ -95,8 +91,6 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showOverCompleteSheet,
       DateTime? showInningCompleteSheet,
       DateTime? showMatchCompleteSheet,
-      DateTime? showBoundaryConfirmationDialogForSix,
-      DateTime? showBoundaryConfirmationDialogForFour,
       DateTime? showAddExtraSheetForNoBall,
       DateTime? showAddExtraSheetForLegBye,
       DateTime? showAddExtraSheetForBye,
@@ -154,8 +148,6 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showOverCompleteSheet = freezed,
     Object? showInningCompleteSheet = freezed,
     Object? showMatchCompleteSheet = freezed,
-    Object? showBoundaryConfirmationDialogForSix = freezed,
-    Object? showBoundaryConfirmationDialogForFour = freezed,
     Object? showAddExtraSheetForNoBall = freezed,
     Object? showAddExtraSheetForLegBye = freezed,
     Object? showAddExtraSheetForBye = freezed,
@@ -243,16 +235,6 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       showMatchCompleteSheet: freezed == showMatchCompleteSheet
           ? _value.showMatchCompleteSheet
           : showMatchCompleteSheet // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      showBoundaryConfirmationDialogForSix: freezed ==
-              showBoundaryConfirmationDialogForSix
-          ? _value.showBoundaryConfirmationDialogForSix
-          : showBoundaryConfirmationDialogForSix // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      showBoundaryConfirmationDialogForFour: freezed ==
-              showBoundaryConfirmationDialogForFour
-          ? _value.showBoundaryConfirmationDialogForFour
-          : showBoundaryConfirmationDialogForFour // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showAddExtraSheetForNoBall: freezed == showAddExtraSheetForNoBall
           ? _value.showAddExtraSheetForNoBall
@@ -409,8 +391,6 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showOverCompleteSheet,
       DateTime? showInningCompleteSheet,
       DateTime? showMatchCompleteSheet,
-      DateTime? showBoundaryConfirmationDialogForSix,
-      DateTime? showBoundaryConfirmationDialogForFour,
       DateTime? showAddExtraSheetForNoBall,
       DateTime? showAddExtraSheetForLegBye,
       DateTime? showAddExtraSheetForBye,
@@ -470,8 +450,6 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showOverCompleteSheet = freezed,
     Object? showInningCompleteSheet = freezed,
     Object? showMatchCompleteSheet = freezed,
-    Object? showBoundaryConfirmationDialogForSix = freezed,
-    Object? showBoundaryConfirmationDialogForFour = freezed,
     Object? showAddExtraSheetForNoBall = freezed,
     Object? showAddExtraSheetForLegBye = freezed,
     Object? showAddExtraSheetForBye = freezed,
@@ -559,16 +537,6 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
       showMatchCompleteSheet: freezed == showMatchCompleteSheet
           ? _value.showMatchCompleteSheet
           : showMatchCompleteSheet // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      showBoundaryConfirmationDialogForSix: freezed ==
-              showBoundaryConfirmationDialogForSix
-          ? _value.showBoundaryConfirmationDialogForSix
-          : showBoundaryConfirmationDialogForSix // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      showBoundaryConfirmationDialogForFour: freezed ==
-              showBoundaryConfirmationDialogForFour
-          ? _value.showBoundaryConfirmationDialogForFour
-          : showBoundaryConfirmationDialogForFour // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       showAddExtraSheetForNoBall: freezed == showAddExtraSheetForNoBall
           ? _value.showAddExtraSheetForNoBall
@@ -672,8 +640,6 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showOverCompleteSheet,
       this.showInningCompleteSheet,
       this.showMatchCompleteSheet,
-      this.showBoundaryConfirmationDialogForSix,
-      this.showBoundaryConfirmationDialogForFour,
       this.showAddExtraSheetForNoBall,
       this.showAddExtraSheetForLegBye,
       this.showAddExtraSheetForBye,
@@ -742,10 +708,6 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   @override
   final DateTime? showMatchCompleteSheet;
   @override
-  final DateTime? showBoundaryConfirmationDialogForSix;
-  @override
-  final DateTime? showBoundaryConfirmationDialogForFour;
-  @override
   final DateTime? showAddExtraSheetForNoBall;
   @override
   final DateTime? showAddExtraSheetForLegBye;
@@ -811,7 +773,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showBoundaryConfirmationDialogForSix: $showBoundaryConfirmationDialogForSix, showBoundaryConfirmationDialogForFour: $showBoundaryConfirmationDialogForFour, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -853,12 +815,6 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                 other.showInningCompleteSheet == showInningCompleteSheet) &&
             (identical(other.showMatchCompleteSheet, showMatchCompleteSheet) ||
                 other.showMatchCompleteSheet == showMatchCompleteSheet) &&
-            (identical(other.showBoundaryConfirmationDialogForSix, showBoundaryConfirmationDialogForSix) ||
-                other.showBoundaryConfirmationDialogForSix ==
-                    showBoundaryConfirmationDialogForSix) &&
-            (identical(other.showBoundaryConfirmationDialogForFour, showBoundaryConfirmationDialogForFour) ||
-                other.showBoundaryConfirmationDialogForFour ==
-                    showBoundaryConfirmationDialogForFour) &&
             (identical(other.showAddExtraSheetForNoBall, showAddExtraSheetForNoBall) ||
                 other.showAddExtraSheetForNoBall ==
                     showAddExtraSheetForNoBall) &&
@@ -868,10 +824,14 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.showAddExtraSheetForBye, showAddExtraSheetForBye) ||
                 other.showAddExtraSheetForBye == showAddExtraSheetForBye) &&
             (identical(other.showAddExtraSheetForFiveSeven, showAddExtraSheetForFiveSeven) ||
-                other.showAddExtraSheetForFiveSeven == showAddExtraSheetForFiveSeven) &&
-            (identical(other.showPauseScoringSheet, showPauseScoringSheet) || other.showPauseScoringSheet == showPauseScoringSheet) &&
-            (identical(other.showAddPenaltyRunSheet, showAddPenaltyRunSheet) || other.showAddPenaltyRunSheet == showAddPenaltyRunSheet) &&
-            (identical(other.showEndMatchSheet, showEndMatchSheet) || other.showEndMatchSheet == showEndMatchSheet) &&
+                other.showAddExtraSheetForFiveSeven ==
+                    showAddExtraSheetForFiveSeven) &&
+            (identical(other.showPauseScoringSheet, showPauseScoringSheet) ||
+                other.showPauseScoringSheet == showPauseScoringSheet) &&
+            (identical(other.showAddPenaltyRunSheet, showAddPenaltyRunSheet) ||
+                other.showAddPenaltyRunSheet == showAddPenaltyRunSheet) &&
+            (identical(other.showEndMatchSheet, showEndMatchSheet) ||
+                other.showEndMatchSheet == showEndMatchSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
@@ -907,8 +867,6 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showOverCompleteSheet,
         showInningCompleteSheet,
         showMatchCompleteSheet,
-        showBoundaryConfirmationDialogForSix,
-        showBoundaryConfirmationDialogForFour,
         showAddExtraSheetForNoBall,
         showAddExtraSheetForLegBye,
         showAddExtraSheetForBye,
@@ -958,8 +916,6 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showOverCompleteSheet,
       final DateTime? showInningCompleteSheet,
       final DateTime? showMatchCompleteSheet,
-      final DateTime? showBoundaryConfirmationDialogForSix,
-      final DateTime? showBoundaryConfirmationDialogForFour,
       final DateTime? showAddExtraSheetForNoBall,
       final DateTime? showAddExtraSheetForLegBye,
       final DateTime? showAddExtraSheetForBye,
@@ -1016,10 +972,6 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   DateTime? get showInningCompleteSheet;
   @override
   DateTime? get showMatchCompleteSheet;
-  @override
-  DateTime? get showBoundaryConfirmationDialogForSix;
-  @override
-  DateTime? get showBoundaryConfirmationDialogForFour;
   @override
   DateTime? get showAddExtraSheetForNoBall;
   @override

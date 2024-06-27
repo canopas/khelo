@@ -13,7 +13,6 @@ import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/select_admin_and_captain_dialog.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -70,7 +69,7 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
               Assets.images.icCheck,
               colorFilter: ColorFilter.mode(
                   state.isDoneBtnEnable
-                      ? context.colorScheme.primary
+                      ? context.colorScheme.textPrimary
                       : context.colorScheme.textDisabled,
                   BlendMode.srcIn),
             )),
@@ -224,17 +223,17 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     required MatchPlayer member,
     required bool isRemove,
   }) {
-    return OnTapScale(
-        onTap: () => isRemove
-            ? notifier.removeFromSquad(member.player)
-            : notifier.addToSquad(member),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Icon(
-            isRemove ? Icons.close : Icons.add,
-            size: 16,
-            color: context.colorScheme.textDisabled,
-          ),
-        ));
+    return actionButton(
+      context,
+      onPressed: () => isRemove
+          ? notifier.removeFromSquad(member.player)
+          : notifier.addToSquad(member),
+      padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+      icon: Icon(
+        isRemove ? Icons.close : Icons.add,
+        size: 16,
+        color: context.colorScheme.textDisabled,
+      ),
+    );
   }
 }
