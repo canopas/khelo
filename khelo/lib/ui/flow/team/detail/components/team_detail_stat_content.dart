@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/team/detail/components/primer_progress_bar.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
@@ -20,16 +21,10 @@ class TeamDetailStatContent extends ConsumerWidget {
             ?.where((element) => element.match_status == MatchStatus.finish)
             .isEmpty ??
         true) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.team_detail_empty_stat_title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
+      return EmptyScreen(
+        title: context.l10n.team_detail_empty_stat_title,
+        description: context.l10n.team_detail_empty_stat_description_text,
+        isShowButton: false,
       );
     }
 

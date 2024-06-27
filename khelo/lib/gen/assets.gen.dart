@@ -49,6 +49,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_edit.svg
   String get icEdit => 'assets/images/ic_edit.svg';
 
+  /// File path: assets/images/ic_error.svg
+  String get icError => 'assets/images/ic_error.svg';
+
   /// File path: assets/images/ic_gallery.svg
   String get icGallery => 'assets/images/ic_gallery.svg';
 
@@ -60,6 +63,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_location.svg
   String get icLocation => 'assets/images/ic_location.svg';
+
+  /// File path: assets/images/ic_no_internet.svg
+  String get icNoInternet => 'assets/images/ic_no_internet.svg';
 
   /// File path: assets/images/ic_privacy_policy.svg
   String get icPrivacyPolicy => 'assets/images/ic_privacy_policy.svg';
@@ -130,10 +136,12 @@ class $AssetsImagesGen {
         icContactSupport,
         icCricket,
         icEdit,
+        icError,
         icGallery,
         icGroup,
         icHome,
         icLocation,
+        icNoInternet,
         icPrivacyPolicy,
         icProfile,
         icProfileThin,

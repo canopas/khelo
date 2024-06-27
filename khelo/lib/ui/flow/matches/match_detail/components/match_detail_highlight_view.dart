@@ -11,9 +11,9 @@ import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_su
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
+import '../../../../../components/empty_screen.dart';
 import '../../../../../gen/assets.gen.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
@@ -126,29 +126,23 @@ class MatchDetailHighlightView extends ConsumerWidget {
     final highlight = state.filteredHighlight;
 
     if (highlight.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            context.l10n.match_highlight_empty_highlight_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
+      return EmptyScreen(
+        title: context.l10n.match_detail_match_not_started_error_title,
+        description: context.l10n.match_detail_error_description_text,
+        isShowButton: false,
+      );
+    } else {
+      return ListView.separated(
+        itemCount: highlight.length,
+        padding: const EdgeInsets.only(top: 24),
+        separatorBuilder: (context, index) =>
+            Divider(color: context.colorScheme.outline, height: 32),
+        itemBuilder: (context, index) {
+          final overSummary = highlight[index];
+          return Column(children: _buildHighlightList(context, overSummary));
+        },
       );
     }
-
-    return ListView.separated(
-      itemCount: highlight.length,
-      padding: const EdgeInsets.only(top: 24),
-      separatorBuilder: (context, index) =>
-          Divider(color: context.colorScheme.outline, height: 32),
-      itemBuilder: (context, index) {
-        final overSummary = highlight[index];
-        return Column(children: _buildHighlightList(context, overSummary));
-      },
-    );
   }
 
   List<Widget> _buildHighlightList(
