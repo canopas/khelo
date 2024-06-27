@@ -240,6 +240,7 @@
   "team_detail_empty_member_description_text": "Invite your friends to build your dream team and start tracking matches together.",
   "team_detail_empty_stat_title": "No stats available yet!",
   "team_detail_empty_stat_description_text": "The players are warming up! Stay tuned for exciting stats as the team progresses.",
+  "team_detail_add_member_title": "Add member",
   "team_detail_match_tab_title": "Match",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_won_title": "Won({win})",

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 
 import '../../../../app_route.dart';
@@ -19,10 +21,17 @@ class TeamDetailMemberContent extends ConsumerWidget {
     if (state.team?.players != null &&
         state.team?.players?.isNotEmpty == true) {
       return ListView.separated(
-        padding: context.mediaQueryPadding + const EdgeInsets.all(16),
-        itemCount: state.team!.players!.length,
+        padding: const EdgeInsets.all(16),
+        itemCount: state.team!.players!.length + 1,
         itemBuilder: (context, index) {
-          final member = state.team!.players![index];
+          if (index == 0) {
+            return _addMemberButton(
+              context,
+              onTap: () =>
+                  AppRoute.addTeamMember(team: state.team!).push(context),
+            );
+          }
+          final member = state.team!.players![index - 1];
           return UserDetailCell(
               user: member,
               onTap: () => UserDetailSheet.show(context, member),
@@ -38,5 +47,30 @@ class TeamDetailMemberContent extends ConsumerWidget {
         onTap: () => AppRoute.addTeamMember(team: state.team!).push(context),
       );
     }
+  }
+
+  Widget _addMemberButton(BuildContext context, {required Function() onTap}) {
+    return OnTapScale(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: context.colorScheme.containerLow,
+            child: Icon(
+              Icons.add,
+              size: 24,
+              color: context.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            context.l10n.team_detail_add_member_title,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.primary),
+          )
+        ],
+      ),
+    );
   }
 }
