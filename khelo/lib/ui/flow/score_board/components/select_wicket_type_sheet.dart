@@ -42,18 +42,15 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
     final state = ref.watch(scoreBoardStateProvider);
 
     return BottomSheetWrapper(
-        content: _wicketTypeContent(context, state),
-        action: [
-          PrimaryButton(
-            context.l10n.common_okay_title,
-            enabled: selectedType != null,
-            onPressed: () => context.pop(selectedType),
-          )
-        ]);
-  }
-
-  Widget _wicketTypeContent(BuildContext context, ScoreBoardViewState state) {
-    return _typeList(context, state);
+      content: _typeList(context, state),
+      action: [
+        PrimaryButton(
+          context.l10n.common_okay_title,
+          enabled: selectedType != null,
+          onPressed: () => context.pop(selectedType),
+        )
+      ],
+    );
   }
 
   Widget _typeList(
@@ -81,7 +78,8 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               side: const BorderSide(color: Colors.transparent),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),),
+                borderRadius: BorderRadius.circular(30),
+              ),
               backgroundColor: isSelected
                   ? context.colorScheme.primary
                   : context.colorScheme.containerLowOnSurface,
