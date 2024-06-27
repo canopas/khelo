@@ -105,79 +105,79 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               description: context.l10n.add_team_member_empty_description_text,
               isShowButton: false,
             )
-        (state.searchedUsers.isEmpty &&
-          state.searchController.text.isNotEmpty)
-          ? EmptyScreen(
-        title: context.l10n.add_team_member_search_no_result_title,
-        description:
-        context.l10n.add_team_member_search_description_text,
-        isShowButton: false,
-      )
-          : ListView.separated(
-              itemCount: state.searchedUsers.length,
-              itemBuilder: (context, index) {
-                UserModel user = state.searchedUsers[index];
-                return Column(
-                  children: [
-                    if (index == 0) ...[
-                      Divider(
-                        height: 32,
-                        color: context.colorScheme.outline,
-                      )
-                    ],
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: UserDetailCell(
-                        user: user,
-                        onTap: () => UserDetailSheet.show(
-                          context,
-                          user,
-                          actionButtonTitle:
+          : (state.searchedUsers.isEmpty &&
+                  state.searchController.text.isNotEmpty)
+              ? EmptyScreen(
+                  title: context.l10n.add_team_member_search_no_result_title,
+                  description:
+                      context.l10n.add_team_member_search_description_text,
+                  isShowButton: false,
+                )
+              : ListView.separated(
+                  itemCount: state.searchedUsers.length,
+                  itemBuilder: (context, index) {
+                    UserModel user = state.searchedUsers[index];
+                    return Column(
+                      children: [
+                        if (index == 0) ...[
+                          Divider(
+                            height: 32,
+                            color: context.colorScheme.outline,
+                          )
+                        ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: UserDetailCell(
+                            user: user,
+                            onTap: () => UserDetailSheet.show(
+                              context,
+                              user,
+                              actionButtonTitle:
+                                  widget.team.players?.contains(user) == true ||
+                                          state.selectedUsers.contains(user)
+                                      ? null
+                                      : context.l10n.common_select_title,
+                              onButtonTap: () async {
+                                if (user.phone != null) {
+                                  final res = await VerifyTeamMemberSheet.show(
+                                      context,
+                                      phoneNumber: user.phone!);
+                                  if (res != null && res && context.mounted) {
+                                    notifier.selectUser(user);
+                                  }
+                                }
+                              },
+                            ),
+                            trailing: SecondaryButton(
                               widget.team.players?.contains(user) == true ||
                                       state.selectedUsers.contains(user)
-                                  ? null
-                                  : context.l10n.common_select_title,
-                          onButtonTap: () async {
-                            if (user.phone != null) {
-                              final res = await VerifyTeamMemberSheet.show(
-                                  context,
-                                  phoneNumber: user.phone!);
-                              if (res != null && res && context.mounted) {
-                                notifier.selectUser(user);
-                              }
-                            }
-                          },
+                                  ? context.l10n.add_team_member_added_text
+                                  : context.l10n.common_add_title.toUpperCase(),
+                              enabled:
+                                  widget.team.players?.contains(user) != true &&
+                                      !state.selectedUsers.contains(user),
+                              onPressed: () async {
+                                if (user.phone != null) {
+                                  final res = await VerifyTeamMemberSheet.show(
+                                      context,
+                                      phoneNumber: user.phone!
+                                          .substring(user.phone!.length - 5));
+                                  if (res != null && res && context.mounted) {
+                                    notifier.selectUser(user);
+                                  }
+                                }
+                              },
+                            ),
+                          ),
                         ),
-                        trailing: SecondaryButton(
-                          widget.team.players?.contains(user) == true ||
-                                  state.selectedUsers.contains(user)
-                              ? context.l10n.add_team_member_added_text
-                              : context.l10n.common_add_title.toUpperCase(),
-                          enabled:
-                              widget.team.players?.contains(user) != true &&
-                                  !state.selectedUsers.contains(user),
-                          onPressed: () async {
-                            if (user.phone != null) {
-                              final res = await VerifyTeamMemberSheet.show(
-                                  context,
-                                  phoneNumber: user.phone!
-                                      .substring(user.phone!.length - 5));
-                              if (res != null && res && context.mounted) {
-                                notifier.selectUser(user);
-                              }
-                            }
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
-              separatorBuilder: (context, index) => Divider(
-                height: 32,
-                color: context.colorScheme.outline,
-              ),
-            ),
+                      ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                    height: 32,
+                    color: context.colorScheme.outline,
+                  ),
+                ),
     );
   }
 
