@@ -22,6 +22,7 @@ import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.d
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
+import 'package:style/button/more_option_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/theme/colors.dart';
@@ -66,8 +67,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowOverCompleteSheet(context, ref);
     _observeShowInningCompleteSheet(context, ref);
     _observeShowMatchCompleteSheet(context, ref);
-    _observeShowBoundaryConfirmationDialogForSix(context, ref);
-    _observeShowBoundaryConfirmationDialogForFour(context, ref);
     _observeShowAddExtraSheetForNoBall(context, ref);
     _observeShowAddExtraSheetForLegBye(context, ref);
     _observeShowAddExtraSheetForBye(context, ref);
@@ -96,28 +95,25 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    return IconButton(
-        onPressed: () async {
-          showActionBottomSheet(
-              context: context,
-              items: MatchOption.values
-                  .map(
-                    (option) => BottomSheetAction(
-                      title: option.getTitle(context),
-                      onTap: () {
-                        if (option != MatchOption.continueWithInjuredPlayer) {
-                          context.pop();
-                          notifier.onMatchOptionSelect(option, true);
-                        }
-                      },
-                      child: option == MatchOption.continueWithInjuredPlayer
-                          ? _toggleButton(context, state)
-                          : null,
-                    ),
-                  )
-                  .toList());
-        },
-        icon: const Icon(Icons.more_horiz));
+    return moreOptionButton(
+      context,
+      onPressed: () => showActionBottomSheet(
+          context: context,
+          items: MatchOption.values
+              .map((option) => BottomSheetAction(
+                    title: option.getTitle(context),
+                    onTap: () {
+                      if (option != MatchOption.continueWithInjuredPlayer) {
+                        context.pop();
+                        notifier.onMatchOptionSelect(option, true);
+                      }
+                    },
+                    child: option == MatchOption.continueWithInjuredPlayer
+                        ? _toggleButton(context, state)
+                        : null,
+                  ))
+              .toList()),
+    );
   }
 
   Widget _toggleButton(
@@ -294,21 +290,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         notifier.undoLastBall();
       }
     }
-  }
-
-  Future<void> _showBoundaryConfirmationDialog(
-      BuildContext context, int run) async {
-    showConfirmationDialog(
-      context,
-      title: context.l10n.score_board_boundary_text,
-      message: context.l10n.score_board_is_boundary_text,
-      isDestructiveAction: true,
-      confirmBtnText: context.l10n.common_yes_title,
-      cancelBtnText: context.l10n.common_no_title,
-      onConfirm: () =>
-          notifier.addBall(run: run, isSix: run == 6, isFour: run == 4),
-      onCancel: () => notifier.addBall(run: run),
-    );
   }
 
   Future<void> _showAddExtraSheet(
@@ -503,30 +484,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         (previous, next) {
       if (next != null) {
         _showMatchCompleteSheet(context);
-      }
-    });
-  }
-
-  void _observeShowBoundaryConfirmationDialogForSix(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider
-            .select((value) => value.showBoundaryConfirmationDialogForSix),
-        (previous, next) {
-      if (next != null) {
-        _showBoundaryConfirmationDialog(context, 6);
-      }
-    });
-  }
-
-  void _observeShowBoundaryConfirmationDialogForFour(
-      BuildContext context, WidgetRef ref) {
-    ref.listen(
-        scoreBoardStateProvider
-            .select((value) => value.showBoundaryConfirmationDialogForFour),
-        (previous, next) {
-      if (next != null) {
-        _showBoundaryConfirmationDialog(context, 4);
       }
     });
   }

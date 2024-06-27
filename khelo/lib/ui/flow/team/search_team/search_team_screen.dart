@@ -76,7 +76,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
             Assets.images.icCheck,
             colorFilter: ColorFilter.mode(
               state.selectedTeam != null
-                  ? context.colorScheme.primary
+                  ? context.colorScheme.textPrimary
                   : context.colorScheme.textDisabled,
               BlendMode.srcIn,
             ),

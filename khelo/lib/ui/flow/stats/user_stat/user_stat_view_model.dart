@@ -30,6 +30,9 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
   }
 
   void setUserId(String? userId) {
+    if (userId == null) {
+      _cancelStreamSubscription();
+    }
     state = state.copyWith(currentUserId: userId);
   }
 

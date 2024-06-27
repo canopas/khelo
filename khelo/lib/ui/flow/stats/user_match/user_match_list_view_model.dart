@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -9,9 +10,9 @@ part 'user_match_list_view_model.freezed.dart';
 
 final userMatchListStateProvider =
     StateNotifierProvider<UserMatchListViewNotifier, UserMatchListState>((ref) {
-  return UserMatchListViewNotifier(
-    ref.read(matchServiceProvider),
-  );
+  final notifier = UserMatchListViewNotifier(ref.read(matchServiceProvider));
+  ref.listen(hasUserSession, (_, next) => notifier._onUserSessionUpdate(next));
+  return notifier;
 });
 
 class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
@@ -21,6 +22,12 @@ class UserMatchListViewNotifier extends StateNotifier<UserMatchListState> {
   UserMatchListViewNotifier(this._matchService)
       : super(const UserMatchListState()) {
     _loadUserMatches();
+  }
+
+  void _onUserSessionUpdate(bool hasSession) {
+    if (!hasSession) {
+      _cancelStreamSubscription();
+    }
   }
 
   Future<void> _loadUserMatches() async {

@@ -32,6 +32,9 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   }
 
   void setUserId(String? userId) {
+    if (userId == null) {
+      _cancelStreamSubscription();
+    }
     state = state.copyWith(currentUserId: userId);
   }
 
