@@ -72,7 +72,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
             separatorBuilder: (context, index) => const SizedBox(height: 16),
           )
         : EmptyScreen(
-            title: context.l10n.team_detail_empty_matches_title,
+            title: context.l10n.match_list_no_match_here_title,
             description:
                 context.l10n.team_detail_empty_matches_description_text,
             buttonTitle: context.l10n.add_match_screen_title,

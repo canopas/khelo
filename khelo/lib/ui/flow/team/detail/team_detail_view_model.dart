@@ -67,8 +67,8 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   }
 
   TeamStat _calculateTeamStat(List<MatchModel> matches) {
-    if (matches.isEmpty) return const TeamStat();
     final finishedMatches = _filterFinishedMatches(matches);
+    if (finishedMatches.isEmpty) return const TeamStat();
     return TeamStat(
       played: finishedMatches.length,
       status: _teamMatchStatus(finishedMatches),
