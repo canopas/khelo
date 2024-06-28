@@ -98,19 +98,15 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
       );
     }
     return Expanded(
-      child: (state.searchedUsers.isEmpty &&
-              state.searchController.text.isEmpty)
-          ? EmptyScreen(
-              title: context.l10n.add_team_member_empty_title,
-              description: context.l10n.add_team_member_empty_description_text,
-              isShowButton: false,
-            )
-          : (state.searchedUsers.isEmpty &&
-                  state.searchController.text.isNotEmpty)
+      child:
+          (state.searchedUsers.isEmpty && state.searchController.text.isEmpty)
               ? EmptyScreen(
-                  title: context.l10n.add_team_member_search_no_result_title,
-                  description:
-                      context.l10n.add_team_member_search_description_text,
+                  title: (state.searchController.text.isNotEmpty)
+                      ? context.l10n.add_team_member_search_no_result_title
+                      : context.l10n.add_team_member_empty_title,
+                  description: (state.searchController.text.isNotEmpty)
+                      ? context.l10n.add_team_member_search_description_text
+                      : context.l10n.add_team_member_empty_description_text,
                   isShowButton: false,
                 )
               : ListView.separated(

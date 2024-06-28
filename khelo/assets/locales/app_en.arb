@@ -197,7 +197,8 @@
   "add_match_invalid_squad_error": "Please select valid squad",
 
   "search_user_hint_title": "Search user name",
-  "search_user_empty_text": "Search the person name in above input area.",
+  "search_user_empty_title": "Time to gather your officials!",
+  "search_user_empty_description_text": "Search and assign officials for your next match. Get ready for cricket action!",
   "search_team_screen_title": "Search Team",
   "search_team_your_teams_title": "Your Teams",
   "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",

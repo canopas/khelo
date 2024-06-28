@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -11,7 +12,6 @@ import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_det
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
 import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
 import 'package:style/text/search_text_field.dart';
 
 class SearchUserBottomSheet extends ConsumerWidget {
@@ -63,17 +63,14 @@ class SearchUserBottomSheet extends ConsumerWidget {
     }
 
     return state.searchedUsers.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Center(
-              child: Text(
-                context.l10n.search_user_empty_text,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.body1.copyWith(
-                  color: context.colorScheme.textPrimary,
-                ),
-              ),
-            ),
+        ? EmptyScreen(
+            title: (state.searchController.text.isNotEmpty)
+                ? context.l10n.add_team_member_search_no_result_title
+                : context.l10n.search_user_empty_title,
+            description: (state.searchController.text.isNotEmpty)
+                ? context.l10n.add_team_member_search_description_text
+                : context.l10n.search_user_empty_description_text,
+            isShowButton: false,
           )
         : ListView.separated(
             separatorBuilder: (context, index) {
