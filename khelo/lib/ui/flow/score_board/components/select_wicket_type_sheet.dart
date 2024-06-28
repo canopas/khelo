@@ -42,27 +42,13 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
     final state = ref.watch(scoreBoardStateProvider);
 
     return BottomSheetWrapper(
-        content: _wicketTypeContent(context, state),
-        action: [
-          PrimaryButton(
-            context.l10n.common_okay_title,
-            enabled: selectedType != null,
-            onPressed: () => context.pop(selectedType),
-          )
-        ]);
-  }
-
-  Widget _wicketTypeContent(BuildContext context, ScoreBoardViewState state) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.l10n.score_board_inning_complete_title,
-          style: AppTextStyle.header3
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-        const SizedBox(height: 16),
-        _typeList(context, state),
+      content: _typeList(context, state),
+      action: [
+        PrimaryButton(
+          context.l10n.common_okay_title,
+          enabled: selectedType != null,
+          onPressed: () => context.pop(selectedType),
+        )
       ],
     );
   }
@@ -86,21 +72,17 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
                 style: AppTextStyle.body2.copyWith(
                   color: isSelected
                       ? context.colorScheme.onPrimary
-                      : context.colorScheme.textPrimary,
+                      : context.colorScheme.textSecondary,
                 ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              side: BorderSide(
-                color: isSelected
-                    ? context.colorScheme.primary
-                    : context.colorScheme.outline,
-              ),
+              side: const BorderSide(color: Colors.transparent),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),
               backgroundColor: isSelected
                   ? context.colorScheme.primary
-                  : context.colorScheme.surface,
+                  : context.colorScheme.containerLowOnSurface,
             ),
           );
         },
