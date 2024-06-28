@@ -96,8 +96,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
         : EmptyScreen(
             title: context.l10n.match_list_no_match_here_title,
             description: context.l10n.match_list_empty_list_description,
-            buttonTitle: context.l10n.add_match_screen_title,
-            onTap: () => AppRoute.addMatch().push(context),
+            isShowButton: false,
           );
   }
 }

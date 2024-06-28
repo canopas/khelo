@@ -106,7 +106,8 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
             },
           ),
           const Spacer(),
-          if (_selectedTab == 1) ...[
+          if (_selectedTab == 1 &&
+              ref.watch(teamListViewStateProvider).teams.isNotEmpty) ...[
             actionButton(context,
                 onPressed: () => ref
                     .read(teamListViewStateProvider.notifier)
