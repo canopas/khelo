@@ -131,7 +131,6 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         children: [
           const SizedBox(height: 16),
           _tabView(context),
-          const SizedBox(height: 16),
           _content(context),
         ],
       ),
