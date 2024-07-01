@@ -112,11 +112,12 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                 UserModel user = state.searchedUsers[index];
                 return Column(
                   children: [
-                    if (index == 0) ...[
+                    if (index == 0 && state.selectedUsers.isNotEmpty) ...[
                       Divider(
-                        height: 32,
+                        height: 1,
                         color: context.colorScheme.outline,
-                      )
+                      ),
+                      const SizedBox(height: 16),
                     ],
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -179,7 +180,8 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     AddTeamMemberState state,
   ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: 16.0, vertical: state.selectedUsers.isNotEmpty ? 0 : 8),
       child: SearchTextField(
         controller: state.searchController,
         onChange: notifier.onSearchChanged,
@@ -194,7 +196,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
   ) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: state.selectedUsers
