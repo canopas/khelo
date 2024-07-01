@@ -13,6 +13,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../../../components/empty_screen.dart';
+
 class MatchDetailScorecardView extends ConsumerWidget {
   const MatchDetailScorecardView({super.key});
 
@@ -36,19 +38,20 @@ class MatchDetailScorecardView extends ConsumerWidget {
       );
     }
 
-    if (state.overList.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            context.l10n.match_scorecard_empty_scorecard_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
-      );
-    }
+    return (state.overList.isNotEmpty)
+        ? _content(context, notifier, state)
+        : EmptyScreen(
+            title: context.l10n.match_detail_match_not_started_error_title,
+            description: context.l10n.match_detail_error_description_text,
+            isShowButton: false,
+          );
+  }
+
+  Widget _content(
+    BuildContext context,
+    MatchDetailTabViewNotifier notifier,
+    MatchDetailTabState state,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

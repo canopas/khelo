@@ -10,6 +10,8 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../../../components/empty_screen.dart';
+
 class MatchDetailOversView extends ConsumerWidget {
   const MatchDetailOversView({super.key});
 
@@ -34,29 +36,21 @@ class MatchDetailOversView extends ConsumerWidget {
       );
     }
 
-    if (state.overList.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.match_overs_empty_over_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
-      );
-    }
-
-    return ListView(
-      padding: context.mediaQueryPadding,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: FinalScoreView(),
-        ),
-        ..._buildOverList(context, state),
-      ],
+    return (state.overList.isNotEmpty)
+        ? ListView(
+            padding: context.mediaQueryPadding,
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: FinalScoreView(),
+              ),
+              ..._buildOverList(context, state),
+            ],
+          )
+        : EmptyScreen(
+      title: context.l10n.match_detail_match_not_started_error_title,
+      description: context.l10n.match_detail_error_description_text,
+      isShowButton: false,
     );
   }
 

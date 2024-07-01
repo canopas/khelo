@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
@@ -67,26 +68,11 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                 ),
               ),
       ],
-      body: Builder(builder: (context) {
-        return Padding(
-          padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _searchField(context, state),
-              if (state.selectedUsers.isNotEmpty) ...[
-                _selectedPlayerList(context, state),
-              ],
-              _content(context, state),
-            ],
-          ),
-        );
-      }),
+      body: Builder(builder: (context) => _body(context, state)),
     );
   }
 
-  Widget _content(
+  Widget _body(
     BuildContext context,
     AddTeamMemberState state,
   ) {
@@ -96,15 +82,37 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
         onRetryTap: notifier.onSearchChanged,
       );
     }
+
+    return Padding(
+      padding:
+          context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _searchField(context, state),
+          if (state.selectedUsers.isNotEmpty) ...[
+            _selectedPlayerList(context, state),
+          ],
+          _searchedPlayerList(context, state),
+        ],
+      ),
+    );
+  }
+
+  Widget _searchedPlayerList(
+    BuildContext context,
+    AddTeamMemberState state,
+  ) {
     return Expanded(
-      child: state.searchedUsers.isEmpty
-          ? Center(
-              child: Text(
-                context.l10n.add_team_member_search_hint_text,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textDisabled),
-              ),
+      child: (state.searchedUsers.isEmpty)
+          ? EmptyScreen(
+              title: (state.searchController.text.isNotEmpty)
+                  ? context.l10n.add_team_member_search_no_result_title
+                  : context.l10n.add_team_member_empty_title,
+              description: (state.searchController.text.isNotEmpty)
+                  ? context.l10n.add_team_member_search_description_text
+                  : context.l10n.add_team_member_empty_description_text,
+              isShowButton: false,
             )
           : ListView.separated(
               itemCount: state.searchedUsers.length,

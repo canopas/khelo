@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../../gen/assets.gen.dart';
@@ -126,29 +126,23 @@ class MatchDetailHighlightView extends ConsumerWidget {
     final highlight = state.filteredHighlight;
 
     if (highlight.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            context.l10n.match_highlight_empty_highlight_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
+      return EmptyScreen(
+        title: context.l10n.match_detail_highlight_empty_title,
+        description: context.l10n.match_detail_highlight_empty_description_text,
+        isShowButton: false,
+      );
+    } else {
+      return ListView.separated(
+        itemCount: highlight.length,
+        padding: const EdgeInsets.only(top: 24),
+        separatorBuilder: (context, index) =>
+            Divider(color: context.colorScheme.outline, height: 32),
+        itemBuilder: (context, index) {
+          final overSummary = highlight[index];
+          return Column(children: _buildHighlightList(context, overSummary));
+        },
       );
     }
-
-    return ListView.separated(
-      itemCount: highlight.length,
-      padding: const EdgeInsets.only(top: 24),
-      separatorBuilder: (context, index) =>
-          Divider(color: context.colorScheme.outline, height: 32),
-      itemBuilder: (context, index) {
-        final overSummary = highlight[index];
-        return Column(children: _buildHighlightList(context, overSummary));
-      },
-    );
   }
 
   List<Widget> _buildHighlightList(
