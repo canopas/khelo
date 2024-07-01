@@ -46,7 +46,10 @@ class TeamDetailMatchContent extends ConsumerWidget {
     } else {
       return EmptyScreen(
           title: context.l10n.team_detail_empty_matches_title,
-          description: context.l10n.team_detail_empty_matches_description_text,
+          description: (state.team?.created_by == state.currentUserId)
+              ? context.l10n.team_detail_empty_matches_description_text
+              : context.l10n.team_detail_visitor_empty_matches_description_text,
+          isShowButton: state.team?.created_by == state.currentUserId,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
             bool? isUpdated = await AppRoute.addMatch(

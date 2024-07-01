@@ -20,29 +20,38 @@ class TeamDetailMemberContent extends ConsumerWidget {
 
     if (state.team?.players != null &&
         state.team?.players?.isNotEmpty == true) {
-      return ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: state.team!.players!.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return _addMemberButton(
+      return Column(
+        children: [
+          if (state.team!.created_by == state.currentUserId) ...[
+            _addMemberButton(
               context,
               onTap: () =>
                   AppRoute.addTeamMember(team: state.team!).push(context),
-            );
-          }
-          final member = state.team!.players![index - 1];
-          return UserDetailCell(
-              user: member,
-              onTap: () => UserDetailSheet.show(context, member),
-              showPhoneNumber: false);
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
+            ),
+          ],
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              itemCount: state.team!.players!.length,
+              itemBuilder: (context, index) {
+                final member = state.team!.players![index];
+                return UserDetailCell(
+                    user: member,
+                    onTap: () => UserDetailSheet.show(context, member),
+                    showPhoneNumber: false);
+              },
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
+            ),
+          ),
+        ],
       );
     } else {
       return EmptyScreen(
         title: context.l10n.team_detail_empty_member_title,
-        description: context.l10n.team_detail_empty_member_description_text,
+        description: state.team!.created_by == state.currentUserId
+            ? context.l10n.team_detail_empty_member_description_text
+            : context.l10n.team_detail_visitor_empty_member_description_text,
+        isShowButton: state.team!.created_by == state.currentUserId,
         buttonTitle: context.l10n.team_list_add_members_title,
         onTap: () => AppRoute.addTeamMember(team: state.team!).push(context),
       );
@@ -52,24 +61,27 @@ class TeamDetailMemberContent extends ConsumerWidget {
   Widget _addMemberButton(BuildContext context, {required Function() onTap}) {
     return OnTapScale(
       onTap: onTap,
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: context.colorScheme.containerLow,
-            child: Icon(
-              Icons.add,
-              size: 24,
-              color: context.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: context.colorScheme.containerLow,
+              child: Icon(
+                Icons.add,
+                size: 24,
+                color: context.colorScheme.primary,
+              ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Text(
-            context.l10n.team_detail_add_member_title,
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.primary),
-          )
-        ],
+            const SizedBox(width: 10),
+            Text(
+              context.l10n.team_detail_add_member_title,
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.primary),
+            )
+          ],
+        ),
       ),
     );
   }
