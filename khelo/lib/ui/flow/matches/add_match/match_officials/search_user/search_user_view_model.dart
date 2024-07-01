@@ -24,7 +24,10 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
 
   Future<void> search(String searchKey) async {
     try {
-      state = state.copyWith(error: null);
+      if (searchKey.isEmpty) {
+        state = state.copyWith(searchedUsers: [], error: null);
+        return;
+      }
       final users = await _userService.searchUser(searchKey);
       state = state.copyWith(searchedUsers: users);
     } catch (e) {
@@ -39,9 +42,7 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (state.searchController.text.isNotEmpty) {
-        search(state.searchController.text.trim());
-      }
+      search(state.searchController.text.trim());
     });
   }
 

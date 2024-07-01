@@ -21,35 +21,40 @@ class EmptyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: AppTextStyle.header2
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              description,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textDisabled),
-              textAlign: TextAlign.center,
-            ),
-            if (isShowButton) ...[
-              const SizedBox(height: 24),
-              PrimaryButton(
-                buttonTitle ?? '',
-                edgeInsets:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                expanded: false,
-                onPressed: onTap,
+    return SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(minHeight: context.mediaQuerySize.height / 1.4),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                title,
+                style: AppTextStyle.header2
+                    .copyWith(color: context.colorScheme.textPrimary),
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 8),
+              Text(
+                description,
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.textDisabled),
+                textAlign: TextAlign.center,
+              ),
+              if (isShowButton) ...[
+                const SizedBox(height: 24),
+                PrimaryButton(
+                  buttonTitle ?? '',
+                  edgeInsets:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  expanded: false,
+                  onPressed: onTap,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

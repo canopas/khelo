@@ -45,11 +45,19 @@ class TeamDetailMatchContent extends ConsumerWidget {
       );
     } else {
       return EmptyScreen(
-        title: context.l10n.team_detail_empty_matches_title,
-        description: context.l10n.team_detail_empty_matches_description_text,
-        buttonTitle: context.l10n.add_match_screen_title,
-        onTap: () => AppRoute.addMatch(defaultTeam: state.team).push(context),
-      );
+          title: context.l10n.team_detail_empty_matches_title,
+          description: context.l10n.team_detail_empty_matches_description_text,
+          buttonTitle: context.l10n.add_match_screen_title,
+          onTap: () async {
+            bool? isUpdated = await AppRoute.addMatch(
+                    defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                        ? state.team
+                        : null)
+                .push<bool>(context);
+            if (isUpdated == true && context.mounted) {
+              ref.read(teamDetailStateProvider.notifier).loadTeamById();
+            }
+          });
     }
   }
 }
