@@ -22,11 +22,13 @@ class TeamDetailMemberContent extends ConsumerWidget {
         state.team?.players?.isNotEmpty == true) {
       return Column(
         children: [
-          _addMemberButton(
-            context,
-            onTap: () =>
-                AppRoute.addTeamMember(team: state.team!).push(context),
-          ),
+          if (state.team!.created_by == state.currentUserId) ...[
+            _addMemberButton(
+              context,
+              onTap: () =>
+                  AppRoute.addTeamMember(team: state.team!).push(context),
+            ),
+          ],
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -46,7 +48,10 @@ class TeamDetailMemberContent extends ConsumerWidget {
     } else {
       return EmptyScreen(
         title: context.l10n.team_detail_empty_member_title,
-        description: context.l10n.team_detail_empty_member_description_text,
+        description: state.team!.created_by == state.currentUserId
+            ? context.l10n.team_detail_empty_member_description_text
+            : context.l10n.team_detail_visitor_empty_member_description_text,
+        isShowButton: state.team!.created_by == state.currentUserId,
         buttonTitle: context.l10n.team_list_add_members_title,
         onTap: () => AppRoute.addTeamMember(team: state.team!).push(context),
       );
