@@ -54,7 +54,7 @@ class EditProfileScreen extends ConsumerWidget {
               fit: BoxFit.contain,
               colorFilter: ColorFilter.mode(
                   state.isButtonEnable && !state.isImageUploading
-                      ? context.colorScheme.primary
+                      ? context.colorScheme.textPrimary
                       : context.colorScheme.textDisabled,
                   BlendMode.srcIn),
             )),
