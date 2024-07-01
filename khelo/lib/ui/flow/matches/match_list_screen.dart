@@ -1,13 +1,13 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 
 import 'match_list_view_model.dart';
 
@@ -60,45 +60,41 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
       );
     }
 
-    if (state.matches != null && state.matches!.isNotEmpty) {
-      return ListView.separated(
-        padding: context.mediaQueryPadding + const EdgeInsets.all(16),
-        itemCount: state.matches!.length,
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: 16);
-        },
-        itemBuilder: (context, index) {
-          final match = state.matches![index];
-          return MatchDetailCell(
-            match: match,
-            showActionButtons: match.created_by == state.currentUserId,
-            onTap: () =>
-                AppRoute.matchDetailTab(matchId: match.id ?? "").push(context),
-            onActionTap: () {
-              if (match.match_status == MatchStatus.yetToStart) {
-                AppRoute.addMatch(matchId: match.id).push(context);
-              } else {
-                if (match.toss_decision == null ||
-                    match.toss_winner_id == null) {
-                  AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
-                      .push(context);
-                } else {
-                  AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
-                      .push(context);
-                }
-              }
+    return (state.matches != null && state.matches!.isNotEmpty)
+        ? ListView.separated(
+            padding: context.mediaQueryPadding + const EdgeInsets.all(16),
+            itemCount: state.matches!.length,
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 16);
             },
+            itemBuilder: (context, index) {
+              final match = state.matches![index];
+              return MatchDetailCell(
+                match: match,
+                showActionButtons: match.created_by == state.currentUserId,
+                onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "")
+                    .push(context),
+                onActionTap: () {
+                  if (match.match_status == MatchStatus.yetToStart) {
+                    AppRoute.addMatch(matchId: match.id).push(context);
+                  } else {
+                    if (match.toss_decision == null ||
+                        match.toss_winner_id == null) {
+                      AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                          .push(context);
+                    } else {
+                      AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                          .push(context);
+                    }
+                  }
+                },
+              );
+            },
+          )
+        : EmptyScreen(
+            title: context.l10n.match_list_no_match_here_title,
+            description: context.l10n.match_list_empty_list_description,
+            isShowButton: false,
           );
-        },
-      );
-    } else {
-      return Center(
-        child: Text(
-          context.l10n.match_list_no_match_yet_title,
-          style: AppTextStyle.body1
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-      );
-    }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -75,35 +76,27 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     BuildContext context,
     TeamListViewState state,
   ) {
-    if (state.filteredTeams.isEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Text(
-            context.l10n.team_list_empty_list_description,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
-      );
-    }
-
-    return ListView.separated(
-      itemCount: state.filteredTeams.length,
-      padding: const EdgeInsets.symmetric(horizontal: 16) +
-          context.mediaQueryPadding,
-      separatorBuilder: (context, index) =>
-          Divider(color: context.colorScheme.outline),
-      itemBuilder: (context, index) {
-        final team = state.filteredTeams[index];
-        return _teamListCell(
-          context,
-          team: team,
-          showMoreOptionButton: state.currentUserId == team.created_by,
-        );
-      },
-    );
+    return (state.filteredTeams.isNotEmpty)
+        ? ListView.separated(
+            itemCount: state.filteredTeams.length,
+            padding: const EdgeInsets.symmetric(horizontal: 16) +
+                context.mediaQueryPadding,
+            separatorBuilder: (context, index) =>
+                Divider(color: context.colorScheme.outline),
+            itemBuilder: (context, index) {
+              final team = state.filteredTeams[index];
+              return _teamListCell(
+                context,
+                team: team,
+                showMoreOptionButton: state.currentUserId == team.created_by,
+              );
+            },
+          )
+        : EmptyScreen(
+            title: context.l10n.team_list_no_teams_created_title,
+            description: context.l10n.team_list_empty_list_description,
+            isShowButton: false,
+          );
   }
 
   Widget _teamListCell(
