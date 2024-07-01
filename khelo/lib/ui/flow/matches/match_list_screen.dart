@@ -62,9 +62,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
 
     return (state.matches != null && state.matches!.isNotEmpty)
         ? ListView.separated(
-            padding: context.mediaQueryPadding +
-                const EdgeInsets.all(16) +
-                const EdgeInsets.only(bottom: 70),
+            padding: context.mediaQueryPadding + const EdgeInsets.all(16),
             itemCount: state.matches!.length,
             separatorBuilder: (context, index) {
               return const SizedBox(height: 16);

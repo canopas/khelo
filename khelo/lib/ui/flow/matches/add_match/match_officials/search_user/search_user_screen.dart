@@ -113,7 +113,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
     SearchUserViewState state,
   ) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SearchTextField(
         controller: state.searchController,
         hintText: context.l10n.search_user_hint_title,

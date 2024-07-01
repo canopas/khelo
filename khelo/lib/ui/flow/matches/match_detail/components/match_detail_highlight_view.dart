@@ -93,7 +93,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
             child: Row(
               children: [
                 Expanded(
@@ -134,7 +134,6 @@ class MatchDetailHighlightView extends ConsumerWidget {
     } else {
       return ListView.separated(
         itemCount: highlight.length,
-        padding: const EdgeInsets.only(top: 24),
         separatorBuilder: (context, index) =>
             Divider(color: context.colorScheme.outline, height: 32),
         itemBuilder: (context, index) {

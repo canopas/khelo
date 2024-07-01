@@ -95,7 +95,7 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
     return SingleChildScrollView(
       controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.only(left: 16, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
       child: Row(
           children: MatchDetailTab.values
               .map(
