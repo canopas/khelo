@@ -37,7 +37,6 @@ class ProfileScreen extends ConsumerWidget {
             children: [
               _userProfileView(context, state),
               if (state.currentUser != null) ...[
-                const SizedBox(height: 24),
                 CompleteProfileProgress(user: state.currentUser!)
               ],
               const SizedBox(height: 24),
