@@ -133,6 +133,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
       );
     } else {
       return ListView.separated(
+        padding: const EdgeInsets.only(bottom: 24),
         itemCount: highlight.length,
         separatorBuilder: (context, index) =>
             Divider(color: context.colorScheme.outline, height: 32),

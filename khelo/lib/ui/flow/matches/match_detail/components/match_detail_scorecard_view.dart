@@ -61,8 +61,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
         Expanded(
           child: ListView.separated(
             padding: context.mediaQueryPadding +
-                EdgeInsets.symmetric(
-                    vertical: state.match?.matchResult == null ? 16 : 0),
+                EdgeInsets.only(
+                    top: state.match?.matchResult == null ? 16 : 0, bottom: 16),
             itemCount: groupOversByInning(state.overList).length,
             itemBuilder: (context, index) {
               final inningOvers = groupOversByInning(state.overList)[index];

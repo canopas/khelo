@@ -41,7 +41,8 @@ class MatchDetailCommentaryView extends ConsumerWidget {
 
     return (state.overList.isNotEmpty)
         ? ListView(
-            padding: context.mediaQueryPadding,
+            padding:
+                context.mediaQueryPadding + const EdgeInsets.only(bottom: 24),
             children: _buildCommentaryList(context, state),
           )
         : EmptyScreen(
