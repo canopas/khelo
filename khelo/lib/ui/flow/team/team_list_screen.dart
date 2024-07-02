@@ -147,7 +147,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
   ) async {
     return await showActionBottomSheet(
         context: context,
-        showDragHandle: true,
         items: [
           BottomSheetAction(
             title: context.l10n.team_list_add_members_title,
@@ -170,8 +169,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
       BuildContext context, TeamFilterOption selectedFilter) async {
     return await showActionBottomSheet(
         context: context,
-        useRootNavigator: true,
-        showDragHandle: true,
         items: TeamFilterOption.values
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
