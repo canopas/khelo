@@ -184,7 +184,6 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   ) async {
     return showActionBottomSheet(
         context: context,
-        showDragHandle: true,
         items: [
           BottomSheetAction(
             title: context.l10n.common_edit_team_title,

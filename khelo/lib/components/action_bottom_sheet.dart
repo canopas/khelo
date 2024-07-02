@@ -9,7 +9,7 @@ Future<T?> showActionBottomSheet<T>({
   required BuildContext context,
   required List<BottomSheetAction> items,
   bool useRootNavigator = true,
-  bool? showDragHandle,
+  bool showDragHandle = true,
 }) async {
   HapticFeedback.mediumImpact();
   return await showModalBottomSheet<T>(
