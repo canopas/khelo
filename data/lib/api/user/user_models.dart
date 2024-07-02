@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_models.freezed.dart';
+
 part 'user_models.g.dart';
 
 @freezed
@@ -41,22 +42,23 @@ class UserModel with _$UserModel {
 
 extension ProfileCompleteExtension on UserModel {
   double get progress {
-    const totalFields = 9;
-    double completedFields = 0.0;
+    final fields = [
+      profile_img_url,
+      name,
+      email,
+      location,
+      dob,
+      gender,
+      player_role,
+      batting_style,
+      bowling_style
+    ];
 
-    if (profile_img_url != null && profile_img_url!.isNotEmpty) {
-      completedFields++;
-    }
-    if (name != null && name!.isNotEmpty) completedFields++;
-    if (email != null && email!.isNotEmpty) completedFields++;
-    if (location != null && location!.isNotEmpty) completedFields++;
-    if (dob != null) completedFields++;
-    if (gender != null) completedFields++;
-    if (player_role != null) completedFields++;
-    if (batting_style != null) completedFields++;
-    if (bowling_style != null) completedFields++;
+    final completedFields = fields
+        .where((field) => field != null && field.toString().isNotEmpty)
+        .length;
 
-    return completedFields / totalFields;
+    return completedFields / fields.length;
   }
 }
 
