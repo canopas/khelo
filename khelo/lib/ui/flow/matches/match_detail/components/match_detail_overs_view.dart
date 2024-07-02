@@ -38,7 +38,7 @@ class MatchDetailOversView extends ConsumerWidget {
 
     return (state.overList.isNotEmpty)
         ? ListView(
-            padding: context.mediaQueryPadding,
+            padding: context.mediaQueryPadding+const EdgeInsets.only(bottom: 24),
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
