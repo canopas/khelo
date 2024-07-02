@@ -61,11 +61,11 @@ class _CompleteProfileProgressState
           if (widget.user?.profile_img_url == null) ...[
             _fieldStatus(context.l10n.profile_complete_add_profile_picture),
           ],
-          if (widget.user?.dob == null && widget.user?.gender == null) ...[
+          if (widget.user?.dob == null || widget.user?.gender == null) ...[
             _fieldStatus(context.l10n.profile_complete_add_personal_details),
           ],
-          if (widget.user?.player_role == null &&
-              widget.user?.batting_style == null &&
+          if (widget.user?.player_role == null ||
+              widget.user?.batting_style == null ||
               widget.user?.bowling_style == null) ...[
             _fieldStatus(context.l10n.profile_complete_add_playing_style),
           ],
