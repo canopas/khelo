@@ -84,21 +84,21 @@
 
   "@_ONBOARDING": {
   },
-  "intro_register_btn_text": "Register/Login",
-  "intro_get_start_text": "Getting started with us",
-  "intro_description_text": "get started with Khelo, create your team, start the match, score your match, get your stats and much more.\n\nEmbark on a journey beyond imagination, where every move is a new adventure!\nPlay. Thrive. Conquer.",
+  "intro_get_your_cricket_title": "Get Your Cricket On!",
+  "intro_get_your_cricket_description": "Turn backyard games into pro matches with our app. Create matches, manage teams, and track stats!",
+  "intro_continue_btn_text": "Continue",
 
-  "sign_in_enter_your_phone_number_text": "Enter your mobile number",
-  "sign_in_enter_phone_number_text": "Enter Mobile Number",
-  "sign_in_verify_phone_number_title": "What’s your phone number?",
-  "sign_in_verify_phone_number_description": "We will send you a one time password on your mobile number",
-  "sign_in_continue_btn_text": "Continue",
+  "sign_in_verify_phone_number_title": "Enter phone number",
+  "sign_in_verify_phone_number_description": "We’ll verify your phone number with a verification code.",
+  "sign_in_phone_number_placeholder": "00000 00000",
+  "sign_in_get_otp_btn_text": "Get OTP",
   "sign_in_invalid_phone_number_text": "Please enter valid phone number",
-  "otp_verification_verify_otp_text": "Verify OTP",
-  "otp_verification_enter_otp_text": "Enter OTP you received",
-  "otp_verification_description": "We've sent a verification code to your phone.",
-  "otp_verification_resend_code_text": "Resend Code",
+
+  "otp_verification_verification_title": "Verification code",
   "otp_verification_incorrect_otp_error_text": "*Please enter correct OTP",
+  "otp_verification_verify_btn_text": "Verify",
+  "otp_verification_verify_placeholder": "0 0 0 0 0 0",
+  "otp_verification_verification_description": "We've sent a verification code to your phone {phone}",
 
   "@_HOME": {
   },

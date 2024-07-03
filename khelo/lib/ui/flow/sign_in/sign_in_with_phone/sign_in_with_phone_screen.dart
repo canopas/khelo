@@ -1,15 +1,16 @@
 import 'package:data/storage/app_preferences.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
-import 'package:khelo/components/intro_gradient_background.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/sign_in/sign_in_with_phone/sign_in_with_phone_view_model.dart';
+import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 
 import 'components/sign_in_with_phone_country_picker.dart';
@@ -27,45 +28,39 @@ class SignInWithPhoneScreen extends ConsumerWidget {
     _observeSignInSuccess(context: context, ref: ref);
 
     return AppPage(
-      body: IntroGradientBackground(
-        child: PopScope(
-          canPop: false,
-          child: Builder(builder: (context) {
-            return Padding(
+      title: "",
+      body: Builder(builder: (context) {
+        return Stack(
+          children: [
+            ListView(
               padding: context.mediaQueryPadding +
-                  const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(
-                        context.l10n.sign_in_verify_phone_number_title,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.header1
-                            .copyWith(color: context.colorScheme.textPrimary),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        context.l10n.sign_in_verify_phone_number_description,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyle.body1
-                            .copyWith(color: context.colorScheme.textSecondary),
-                      ),
-                      _phoneInputField(context, notifier, state),
-                      PrimaryButton(
-                        context.l10n.sign_in_continue_btn_text,
-                        enabled: state.enableBtn && !state.verifying,
-                        progress: state.verifying,
-                        onPressed: notifier.verifyPhoneNumber,
-                      ),
-                    ],
-                  ),
+                  const EdgeInsets.symmetric(horizontal: 16) + BottomStickyOverlay.padding,
+              children: [
+                Text(
+                  context.l10n.sign_in_verify_phone_number_title,
+                  style: AppTextStyle.header1
+                      .copyWith(color: context.colorScheme.textPrimary),
                 ),
+                const SizedBox(height: 16),
+                Text(
+                  context.l10n.sign_in_verify_phone_number_description,
+                  style: AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textDisabled),
+                ),
+                _phoneInputField(context, notifier, state),
+              ],
+            ),
+            BottomStickyOverlay(
+              child: PrimaryButton(
+                context.l10n.sign_in_get_otp_btn_text,
+                enabled: state.enableBtn && !state.verifying,
+                progress: state.verifying,
+                onPressed: notifier.verifyPhoneNumber,
               ),
-            );
-          }),
-        ),
-      ),
+            ),
+          ],
+        );
+      }),
     );
   }
 
@@ -74,33 +69,72 @@ class SignInWithPhoneScreen extends ConsumerWidget {
     SignInWithPhoneViewNotifier notifier,
     SignInWithPhoneState state,
   ) {
+    return MediaQuery.withNoTextScaling(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SignInWithPhoneCountryPicker(),
+            const SizedBox(width: 8),
+            Expanded(
+              child: AppTextField(
+                controller: state.phoneController,
+                keyboardType: TextInputType.phone,
+                autoFocus: true,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
+                style: AppTextStyle.header2.copyWith(
+                  color: context.colorScheme.textSecondary,
+                ),
+                hintStyle: AppTextStyle.header2.copyWith(
+                  color: context.colorScheme.outline,
+                ),
+                hintText: context.l10n.sign_in_phone_number_placeholder,
+                backgroundColor: context.colorScheme.containerLowOnSurface,
+                borderRadius: BorderRadius.circular(40),
+                borderType: AppTextFieldBorderType.outline,
+                borderColor: BorderColor(
+                    focusColor: Colors.transparent,
+                    unFocusColor: Colors.transparent),
+                prefixIcon: _inputFieldPrefix(context, state),
+                prefixIconConstraints: const BoxConstraints.tightFor(),
+                onChanged: (phone) => notifier.onPhoneChange(phone),
+                onSubmitted: (value) => (!state.verifying && state.enableBtn)
+                    ? notifier.verifyPhoneNumber()
+                    : null,
+                onTapOutside: (event) =>
+                    FocusManager.instance.primaryFocus?.unfocus(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _inputFieldPrefix(
+    BuildContext context,
+    SignInWithPhoneState state,
+  ) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 40),
-      child: CupertinoTextField(
-        controller: state.phoneController,
-        keyboardType: TextInputType.phone,
-        autofocus: true,
-        inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-        ],
-        style: AppTextStyle.subtitle2.copyWith(
-          color: context.colorScheme.textSecondary,
+      padding: const EdgeInsets.only(left: 12.0),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              state.code.dialCode,
+              style: AppTextStyle.header2
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+            VerticalDivider(
+              width: 24,
+              color: context.colorScheme.outline,
+            ),
+          ],
         ),
-        placeholderStyle: AppTextStyle.body2.copyWith(
-          color: context.colorScheme.textSecondary,
-        ),
-        placeholder: context.l10n.sign_in_enter_phone_number_text,
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: context.colorScheme.containerLowOnSurface,
-          borderRadius: BorderRadius.circular(40),
-        ),
-        prefix: const SignInWithPhoneCountryPicker(),
-        onChanged: (phone) => notifier.onPhoneChange(phone),
-        onSubmitted: (value) => (!state.verifying && state.enableBtn)
-            ? notifier.verifyPhoneNumber()
-            : null,
-        onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
       ),
     );
   }
