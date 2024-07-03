@@ -18,29 +18,13 @@ final phoneVerificationStateProvider = StateNotifierProvider.autoDispose<
 class PhoneVerificationViewNotifier
     extends StateNotifier<PhoneVerificationState> {
   final AuthService _authService;
-  late Timer timer;
   late String phoneNumber;
   late String countryCode;
 
   bool firstAutoVerificationComplete = false;
 
   PhoneVerificationViewNotifier(this._authService)
-      : super(const PhoneVerificationState()) {
-    updateResendCodeTimerDuration();
-  }
-
-  void updateResendCodeTimerDuration() {
-    state = state.copyWith(activeResendDuration: const Duration(seconds: 30));
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(
-        activeResendDuration:
-            Duration(seconds: state.activeResendDuration.inSeconds - 1),
-      );
-      if (state.activeResendDuration.inSeconds < 1) {
-        timer.cancel();
-      }
-    });
-  }
+      : super(const PhoneVerificationState());
 
   void updateOTP(String otp) {
     state = state.copyWith(
@@ -62,32 +46,6 @@ class PhoneVerificationViewNotifier
     state = state.copyWith(verificationId: verificationId);
     phoneNumber = phone;
     countryCode = code;
-  }
-
-  Future<void> resendCode(
-      {required String countryCode, required String phone}) async {
-    try {
-      state = state.copyWith(
-          showErrorVerificationCodeText: false, actionError: null);
-      updateResendCodeTimerDuration();
-      _authService.verifyPhoneNumber(
-        countryCode: countryCode,
-        phoneNumber: phone,
-        onVerificationCompleted: (phoneCredential, _) {
-          state =
-              state.copyWith(verifying: false, isVerificationComplete: true);
-        },
-        onVerificationFailed: (error) {
-          state = state.copyWith(actionError: error);
-        },
-        onCodeSent: (verificationId, _) {
-          state = state.copyWith(verificationId: verificationId);
-        },
-      );
-    } catch (e) {
-      state = state.copyWith(actionError: e);
-      debugPrint("PhoneVerificationViewNotifier: error in resend otp -> $e");
-    }
   }
 
   Future<void> verifyOTP() async {
@@ -113,12 +71,6 @@ class PhoneVerificationViewNotifier
       state = state.copyWith(verifying: false, actionError: e);
       debugPrint("PhoneVerificationViewNotifier: error in verifyOTP -> $e");
     }
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
   }
 }
 
