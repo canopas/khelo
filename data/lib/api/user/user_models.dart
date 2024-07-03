@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_models.freezed.dart';
+
 part 'user_models.g.dart';
 
 @freezed
@@ -37,6 +38,28 @@ class UserModel with _$UserModel {
 
   static UserModel? fromJsonString(String json) =>
       UserModel.fromJson(jsonDecode(json));
+}
+
+extension ProfileCompleteExtension on UserModel {
+  double get progress {
+    final fields = [
+      profile_img_url,
+      name,
+      email,
+      location,
+      dob,
+      gender,
+      player_role,
+      batting_style,
+      bowling_style
+    ];
+
+    final completedFields = fields
+        .where((field) => field != null && field.toString().isNotEmpty)
+        .length;
+
+    return completedFields / fields.length;
+  }
 }
 
 @JsonEnum(valueField: "value")

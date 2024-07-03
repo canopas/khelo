@@ -680,9 +680,11 @@
   "contact_support_attachment": "Attachment (if any)",
   "large_attachment_upload_error_text": "Oops! Your file exceeds the maximum allowed size of 25 MB. Please choose a smaller file and try again.",
 
-  "profile_complete_profile_btn_title": "Complete Profile",
   "profile_complete_your_profile_title": "Complete your profile",
-  "profile_complete_profile_description": "Enhance your profile by filling in the remaining details. Let's make it more comprehensive and appealing.",
+  "profile_complete_description_title": "Enhance your profile with more details to make it better!",
+  "profile_complete_add_profile_picture": "Add profile picture",
+  "profile_complete_add_personal_details": "Add personal details",
+  "profile_complete_add_playing_style": "Add playing style",
 
   "image_picker_choose_option_title": "Choose an option",
   "image_picker_camera_option_text": "Camera",
