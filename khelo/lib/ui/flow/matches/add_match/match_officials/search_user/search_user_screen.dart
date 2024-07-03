@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_view_model.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
-import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
 import 'package:style/text/search_text_field.dart';
 
 class SearchUserBottomSheet extends ConsumerWidget {
@@ -63,17 +63,14 @@ class SearchUserBottomSheet extends ConsumerWidget {
     }
 
     return state.searchedUsers.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Center(
-              child: Text(
-                context.l10n.search_user_empty_text,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.body1.copyWith(
-                  color: context.colorScheme.textPrimary,
-                ),
-              ),
-            ),
+        ? EmptyScreen(
+            title: (state.searchController.text.isNotEmpty)
+                ? context.l10n.add_team_member_search_no_result_title
+                : context.l10n.search_user_empty_title,
+            description: (state.searchController.text.isNotEmpty)
+                ? context.l10n.add_team_member_search_description_text
+                : context.l10n.search_user_empty_description_text,
+            isShowButton: false,
           )
         : ListView.separated(
             separatorBuilder: (context, index) {
@@ -116,7 +113,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
     SearchUserViewState state,
   ) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: SearchTextField(
         controller: state.searchController,
         hintText: context.l10n.search_user_hint_title,
@@ -126,8 +123,9 @@ class SearchUserBottomSheet extends ConsumerWidget {
   }
 
   Widget _addButton(BuildContext context, UserModel user) {
-    return OnTapScale(
-      onTap: () async {
+    return SecondaryButton(
+      context.l10n.common_add_title,
+      onPressed: () async {
         if (user.phone != null) {
           final res = await VerifyTeamMemberSheet.show(context,
               phoneNumber: user.phone!);
@@ -136,17 +134,6 @@ class SearchUserBottomSheet extends ConsumerWidget {
           }
         }
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: context.colorScheme.containerLow,
-            borderRadius: BorderRadius.circular(30)),
-        child: Text(
-          context.l10n.common_add_title,
-          style: AppTextStyle.body2
-              .copyWith(color: context.colorScheme.textDisabled),
-        ),
-      ),
     );
   }
 }

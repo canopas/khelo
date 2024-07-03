@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
+
 import 'package:khelo/ui/flow/stats/user_match/user_match_list_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 
 class UserMatchListScreen extends ConsumerStatefulWidget {
   const UserMatchListScreen({super.key});
@@ -17,12 +18,8 @@ class UserMatchListScreen extends ConsumerStatefulWidget {
 }
 
 class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   late UserMatchListViewNotifier notifier;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -33,15 +30,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       // deallocate resources
       notifier.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -50,7 +39,6 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Builder(builder: (context) {
       return _body(context);
     });
@@ -69,27 +57,26 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
       );
     }
 
-    if (state.matches.isNotEmpty) {
-      return ListView.separated(
-        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
-        itemCount: state.matches.length,
-        itemBuilder: (context, index) => MatchDetailCell(
-          match: state.matches.elementAt(index),
-          showStatusTag: false,
-          onTap: () => AppRoute.matchDetailTab(
-                  matchId: state.matches.elementAt(index).id ?? "INVALID ID")
-              .push(context),
-        ),
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-      );
-    } else {
-      return Center(
-        child: Text(
-          context.l10n.match_list_no_match_yet_title,
-          style: AppTextStyle.body1
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-      );
-    }
+    return (state.matches.isNotEmpty)
+        ? ListView.separated(
+            padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+            itemCount: state.matches.length,
+            itemBuilder: (context, index) => MatchDetailCell(
+              match: state.matches.elementAt(index),
+              showStatusTag: false,
+              onTap: () => AppRoute.matchDetailTab(
+                      matchId:
+                          state.matches.elementAt(index).id ?? "INVALID ID")
+                  .push(context),
+            ),
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+          )
+        : EmptyScreen(
+            title: context.l10n.match_list_no_match_here_title,
+            description:
+                context.l10n.team_detail_empty_matches_description_text,
+            buttonTitle: context.l10n.add_match_screen_title,
+            onTap: () => AppRoute.addMatch().push(context),
+          );
   }
 }

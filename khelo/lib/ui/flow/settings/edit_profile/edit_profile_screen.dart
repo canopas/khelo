@@ -54,9 +54,9 @@ class EditProfileScreen extends ConsumerWidget {
               fit: BoxFit.contain,
               colorFilter: ColorFilter.mode(
                   state.isButtonEnable && !state.isImageUploading
-                      ? context.colorScheme.primary
+                      ? context.colorScheme.textPrimary
                       : context.colorScheme.textDisabled,
-                  BlendMode.srcATop),
+                  BlendMode.srcIn),
             )),
       ],
       body: Builder(
@@ -95,8 +95,7 @@ class EditProfileScreen extends ConsumerWidget {
                       onConfirm: notifier.onDeleteTap),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+                  padding: const EdgeInsets.all(16),
                   child: Text(
                     context.l10n.edit_profile_delete_account_description_text,
                     style: AppTextStyle.body2.copyWith(

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_summary.dart';
@@ -38,24 +39,16 @@ class MatchDetailCommentaryView extends ConsumerWidget {
       );
     }
 
-    if (state.overList.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.match_commentary_empty_commentary_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
-      );
-    }
-
-    return ListView(
-      padding: context.mediaQueryPadding,
-      children: _buildCommentaryList(context, state),
-    );
+    return (state.overList.isNotEmpty)
+        ? ListView(
+            padding: context.mediaQueryPadding,
+            children: _buildCommentaryList(context, state),
+          )
+        : EmptyScreen(
+            title: context.l10n.match_detail_match_not_started_error_title,
+            description: context.l10n.match_detail_error_description_text,
+            isShowButton: false,
+          );
   }
 
   List<Widget> _buildCommentaryList(

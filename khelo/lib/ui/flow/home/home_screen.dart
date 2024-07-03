@@ -38,7 +38,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return AppPage(
       title: context.l10n.common_matches_title,
-      body: _body(context, notifier, state),
+      body: Builder(builder: (context) {
+        return _body(context, notifier, state);
+      }),
     );
   }
 

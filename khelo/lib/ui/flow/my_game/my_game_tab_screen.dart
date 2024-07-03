@@ -20,7 +20,7 @@ class MyGameTabScreen extends ConsumerStatefulWidget {
 }
 
 class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+    with WidgetsBindingObserver {
   final List<Widget> _tabs = [
     const MatchListScreen(),
     const TeamListScreen(),
@@ -31,10 +31,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
   int get _selectedTab => _controller.hasClients
       ? _controller.page?.round() ?? 0
       : _controller.initialPage;
-  bool _wantKeepAlive = true;
-
-  @override
-  bool get wantKeepAlive => _wantKeepAlive;
 
   @override
   void initState() {
@@ -48,15 +44,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      setState(() {
-        _wantKeepAlive = false;
-      });
-    } else if (state == AppLifecycleState.resumed) {
-      setState(() {
-        _wantKeepAlive = true;
-      });
-    } else if (state == AppLifecycleState.detached) {
+    if (state == AppLifecycleState.detached) {
       // deallocate resources
       _controller.dispose();
       WidgetsBinding.instance.removeObserver(this);
@@ -65,8 +53,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     final notifier = ref.watch(myGameTabViewStateProvider.notifier);
 
     return AppPage(
@@ -120,19 +106,21 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
             },
           ),
           const Spacer(),
-          if (_selectedTab == 1) ...[
+          if (_selectedTab == 1 &&
+              ref.watch(teamListViewStateProvider).teams.isNotEmpty) ...[
             actionButton(context,
                 onPressed: () => ref
                     .read(teamListViewStateProvider.notifier)
                     .onFilterButtonTap(),
                 icon: Icon(CupertinoIcons.slider_horizontal_3,
-                    color: context.colorScheme.primary)),
+                    color: context.colorScheme.textPrimary)),
           ],
           actionButton(context,
               onPressed: () => _selectedTab == 1
                   ? AppRoute.addTeam().push(context)
                   : AppRoute.addMatch().push(context),
-              icon: Icon(Icons.add, color: context.colorScheme.primary)),
+              icon: Icon(Icons.add, color: context.colorScheme.textPrimary)),
+          const SizedBox(width: 8),
         ],
       ),
     );

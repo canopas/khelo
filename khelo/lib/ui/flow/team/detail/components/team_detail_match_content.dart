@@ -1,12 +1,11 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
-import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
 
 class TeamDetailMatchContent extends ConsumerWidget {
   const TeamDetailMatchContent({super.key});
@@ -17,7 +16,7 @@ class TeamDetailMatchContent extends ConsumerWidget {
 
     if (state.matches != null && state.matches!.isNotEmpty) {
       return ListView.separated(
-        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
+        padding: const EdgeInsets.all(16),
         itemCount: state.matches?.length ?? 0,
         itemBuilder: (context, index) {
           final match = state.matches![index];
@@ -45,17 +44,23 @@ class TeamDetailMatchContent extends ConsumerWidget {
         separatorBuilder: (context, index) => const SizedBox(height: 16),
       );
     } else {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            context.l10n.team_detail_empty_match_title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-        ),
-      );
+      return EmptyScreen(
+          title: context.l10n.team_detail_empty_matches_title,
+          description: (state.team?.created_by == state.currentUserId)
+              ? context.l10n.team_detail_empty_matches_description_text
+              : context.l10n.team_detail_visitor_empty_matches_description_text,
+          isShowButton: state.team?.created_by == state.currentUserId,
+          buttonTitle: context.l10n.add_match_screen_title,
+          onTap: () async {
+            bool? isUpdated = await AppRoute.addMatch(
+                    defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                        ? state.team
+                        : null)
+                .push<bool>(context);
+            if (isUpdated == true && context.mounted) {
+              ref.read(teamDetailStateProvider.notifier).loadTeamById();
+            }
+          });
     }
   }
 }
