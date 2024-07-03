@@ -92,13 +92,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SmoothPageIndicator(
             controller: _controller,
             count: state.matches.length,
-            effect: ExpandingDotsEffect(
-              expansionFactor: 2,
-              dotHeight: 8,
-              dotWidth: 8,
-              dotColor: context.colorScheme.containerHigh,
-              activeDotColor: context.colorScheme.secondary,
-            ),
+            effect: WormEffect(
+                dotHeight: 8,
+                dotWidth: 8,
+                dotColor: context.colorScheme.containerHigh,
+                activeDotColor: context.colorScheme.primary,
+                type: WormType.underground),
           )
         ],
       ],
@@ -109,32 +108,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return OnTapScale(
       onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
           .push(context),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          color: context.colorScheme.containerLow,
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _matchDetailView(context, match),
-            const SizedBox(height: 24),
-            _teamScore(
-              context,
-              match.teams.first,
-              match.teams.elementAt(1).wicket,
-            ),
-            const SizedBox(height: 16),
-            _teamScore(
-              context,
-              match.teams.elementAt(1),
-              match.teams.first.wicket,
-            ),
-          ],
+      child: MediaQuery.withNoTextScaling(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            border: Border.all(color: context.colorScheme.outline),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _matchDetailView(context, match),
+              const SizedBox(height: 24),
+              _teamScore(
+                context,
+                match.teams.first,
+                match.teams.elementAt(1).wicket,
+              ),
+              const SizedBox(height: 16),
+              _teamScore(
+                context,
+                match.teams.elementAt(1),
+                match.teams.first.wicket,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -156,25 +157,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Expanded(
           child: Text(matchTeam.team.name,
               overflow: TextOverflow.ellipsis,
-              textScaler: TextScaler.noScaling,
               maxLines: 2,
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary)),
         ),
         if (matchTeam.over != 0) ...[
-          Text.rich(
-              textScaler: TextScaler.noScaling,
-              TextSpan(
-                  text: "${matchTeam.run}-$wicket",
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textPrimary),
-                  children: [
-                    TextSpan(
-                      text: " ${matchTeam.over}",
-                      style: AppTextStyle.body2
-                          .copyWith(color: context.colorScheme.textSecondary),
-                    )
-                  ])),
+          Text.rich(TextSpan(
+              text: "${matchTeam.run}-$wicket",
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
+              children: [
+                TextSpan(
+                  text: " ${matchTeam.over}",
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.textSecondary),
+                )
+              ])),
         ],
       ],
     );
@@ -186,7 +184,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     return Text.rich(
         overflow: TextOverflow.ellipsis,
-        textScaler: TextScaler.noScaling,
         TextSpan(
             text: match.start_time.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.body2
