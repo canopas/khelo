@@ -112,6 +112,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/intro_cricket_light.svg
   String get introCricketLight => 'assets/images/intro_cricket_light.svg';
 
+  /// File path: assets/images/intro_graphic_dark.svg
+  String get introGraphicDark => 'assets/images/intro_graphic_dark.svg';
+
+  /// File path: assets/images/intro_graphic_light.svg
+  String get introGraphicLight => 'assets/images/intro_graphic_light.svg';
+
   /// File path: assets/images/leather_ball.svg
   String get leatherBall => 'assets/images/leather_ball.svg';
 
@@ -157,6 +163,8 @@ class $AssetsImagesGen {
         icUmpire,
         introCricketDark,
         introCricketLight,
+        introGraphicDark,
+        introGraphicLight,
         leatherBall,
         otherBall,
         tennisBall

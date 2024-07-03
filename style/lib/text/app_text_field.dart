@@ -29,11 +29,13 @@ class AppTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final TextStyle? errorStyle;
   final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
   final bool autoFocus;
   final TextInputType? keyboardType;
   final FocusNode? focusNode;
   final TextAlign textAlign;
   final Widget? prefixIcon;
+  final BoxConstraints? prefixIconConstraints;
   final List<TextInputFormatter>? inputFormatters;
   final Function(PointerDownEvent)? onTapOutside;
 
@@ -51,6 +53,7 @@ class AppTextField extends StatelessWidget {
     this.enabled = true,
     this.suffixIcon,
     this.onChanged,
+    this.onSubmitted,
     this.borderType = AppTextFieldBorderType.underline,
     this.borderColor,
     this.borderWidth = 1,
@@ -68,6 +71,7 @@ class AppTextField extends StatelessWidget {
     this.focusNode,
     this.inputFormatters,
     this.prefixIcon,
+    this.prefixIconConstraints,
     this.textAlign = TextAlign.start,
     this.onTapOutside,
   });
@@ -110,6 +114,7 @@ class AppTextField extends StatelessWidget {
           autofocus: autoFocus,
           keyboardType: keyboardType,
           focusNode: focusNode,
+          onSubmitted: onSubmitted,
           textAlign: textAlign,
           style: style ??
               AppTextStyle.subtitle2.copyWith(
@@ -136,6 +141,7 @@ class AppTextField extends StatelessWidget {
             hintStyle: hintStyle,
             fillColor: backgroundColor,
             suffixIcon: suffixIcon,
+            prefixIconConstraints: prefixIconConstraints,
             filled: backgroundColor != null,
             focusedBorder: _border(context, true),
             enabledBorder: _border(context, false),
@@ -143,10 +149,7 @@ class AppTextField extends StatelessWidget {
             errorBorder: _border(context, false, isError: true),
             contentPadding: contentPadding ??
                 (borderType == AppTextFieldBorderType.outline
-                    ? const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 12,
-                      )
+                    ? const EdgeInsets.all(12)
                     : null),
           ),
         ),
