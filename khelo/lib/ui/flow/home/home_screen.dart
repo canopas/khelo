@@ -10,9 +10,11 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/widgets/ground_layout_view.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -101,6 +103,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           )
         ],
+        const SizedBox(height: 16),
+        PrimaryButton(
+          "show ground",
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.only(top: 24),
+                    child: GroundLayoutView());
+              },
+            );
+          },
+        )
       ],
     );
   }
