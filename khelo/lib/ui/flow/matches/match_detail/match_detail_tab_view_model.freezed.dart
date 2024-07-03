@@ -316,7 +316,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       this.highlightTeamId,
       this.showTeamSelectionSheet,
       this.showHighlightOptionSelectionSheet,
-      this.selectedTab = 0,
+      this.selectedTab = 1,
       final List<OverSummary> overList = const [],
       final List<OverSummary> filteredHighlight = const [],
       final List<String> expandedTeamScorecard = const [],

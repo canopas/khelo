@@ -417,7 +417,7 @@ class MatchDetailTabState with _$MatchDetailTabState {
     String? highlightTeamId,
     DateTime? showTeamSelectionSheet,
     DateTime? showHighlightOptionSelectionSheet,
-    @Default(0) int selectedTab,
+    @Default(1) int selectedTab,
     @Default([]) List<OverSummary> overList,
     @Default([]) List<OverSummary> filteredHighlight,
     @Default([]) List<String> expandedTeamScorecard,
@@ -429,23 +429,23 @@ class MatchDetailTabState with _$MatchDetailTabState {
 }
 
 enum MatchDetailTab {
+  matchInfo,
   commentary,
   scorecard,
   overs,
   squad,
-  matchInfo,
   highlight;
 
   String getString(BuildContext context) {
     switch (this) {
+      case MatchDetailTab.matchInfo:
+        return context.l10n.match_detail_match_info_tab_title;
       case MatchDetailTab.commentary:
         return context.l10n.match_detail_commentary_tab_title;
       case MatchDetailTab.scorecard:
         return context.l10n.match_detail_scorecard_tab_title;
       case MatchDetailTab.squad:
         return context.l10n.match_detail_squad_tab_title;
-      case MatchDetailTab.matchInfo:
-        return context.l10n.match_detail_match_info_tab_title;
       case MatchDetailTab.highlight:
         return context.l10n.match_detail_highlight_tab_title;
       case MatchDetailTab.overs:
@@ -455,14 +455,14 @@ enum MatchDetailTab {
 
   Widget getTabScreen() {
     switch (this) {
+      case MatchDetailTab.matchInfo:
+        return const MatchDetailInfoView();
       case MatchDetailTab.commentary:
         return const MatchDetailCommentaryView();
       case MatchDetailTab.scorecard:
         return const MatchDetailScorecardView();
       case MatchDetailTab.squad:
         return const MatchDetailSquadView();
-      case MatchDetailTab.matchInfo:
-        return const MatchDetailInfoView();
       case MatchDetailTab.highlight:
         return const MatchDetailHighlightView();
       case MatchDetailTab.overs:
