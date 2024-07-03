@@ -10,6 +10,8 @@ import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../matches/add_match/select_squad/components/user_detail_sheet.dart';
+
 class TeamMemberSheet extends StatelessWidget {
   static Future<T?> show<T>(
     BuildContext context, {
@@ -63,6 +65,7 @@ class TeamMemberSheet extends StatelessWidget {
                 children: (team.players ?? [])
                     .map((member) => UserDetailCell(
                           user: member,
+                  onTap: () => UserDetailSheet.show(context, member),
                           trailing: isForVerification
                               ? _selectButton(context, member)
                               : null,
