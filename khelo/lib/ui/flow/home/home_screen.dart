@@ -73,7 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 187,
+          height: 176,
           child: state.matches.length == 1
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -113,7 +113,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.secondary),
+          color: context.colorScheme.containerLow,
+          border: Border.all(color: context.colorScheme.outline),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -126,16 +127,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               context,
               match.teams.first,
               match.teams.elementAt(1).wicket,
-              match.current_playing_team_id == match.teams.first.team.id,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             _teamScore(
-                context,
-                match.teams.elementAt(1),
-                match.teams.first.wicket,
-                match.current_playing_team_id ==
-                    match.teams.elementAt(1).team.id),
-            const SizedBox(height: 8),
+              context,
+              match.teams.elementAt(1),
+              match.teams.first.wicket,
+            ),
           ],
         ),
       ),
@@ -144,38 +142,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _teamScore(
     BuildContext context,
-    MatchTeamModel team,
+    MatchTeamModel matchTeam,
     int wicket,
-    bool isCurrentlyPlaying,
   ) {
     return Row(
       children: [
         ImageAvatar(
-          initial: team.team.name[0].toUpperCase(),
-          imageUrl: team.team.profile_img_url,
+          initial: matchTeam.team.name[0].toUpperCase(),
+          imageUrl: matchTeam.team.profile_img_url,
           size: 32,
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(team.team.name,
+          child: Text(matchTeam.team.name,
               overflow: TextOverflow.ellipsis,
+              textScaler: TextScaler.noScaling,
               maxLines: 2,
-              style: AppTextStyle.subtitle1.copyWith(
-                  color: isCurrentlyPlaying
-                      ? context.colorScheme.primary
-                      : context.colorScheme.textSecondary)),
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary)),
         ),
-        Text.rich(TextSpan(
-            text: "${team.run}-$wicket",
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-            children: [
+        if (matchTeam.over != 0) ...[
+          Text.rich(
+              textScaler: TextScaler.noScaling,
               TextSpan(
-                text: " ${team.over}",
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]))
+                  text: "${matchTeam.run}-$wicket",
+                  style: AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary),
+                  children: [
+                    TextSpan(
+                      text: " ${matchTeam.over}",
+                      style: AppTextStyle.body2
+                          .copyWith(color: context.colorScheme.textSecondary),
+                    )
+                  ])),
+        ],
       ],
     );
   }
@@ -186,6 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     return Text.rich(
         overflow: TextOverflow.ellipsis,
+        textScaler: TextScaler.noScaling,
         TextSpan(
             text: match.start_time.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.body2
