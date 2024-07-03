@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:data/api/user/user_models.dart';
 import 'package:data/extensions/double_extensions.dart';
 import 'package:data/extensions/int_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -151,7 +152,7 @@ class OverSummary with _$OverSummary {
 @freezed
 class BatsmanSummary with _$BatsmanSummary {
   const factory BatsmanSummary({
-    @Default(Player()) Player player,
+    @Default(UserModel(id: '')) UserModel player,
     Player? ballBy,
     Player? catchBy,
     WicketType? wicketType,
@@ -166,7 +167,7 @@ class BatsmanSummary with _$BatsmanSummary {
 @freezed
 class BowlerSummary with _$BowlerSummary {
   const factory BowlerSummary({
-    @Default(Player()) Player player,
+    @Default(UserModel(id: '')) UserModel player,
     @Default(0) int runsConceded,
     @Default(0) int maiden,
     @Default(0) double overDelivered,
@@ -294,12 +295,15 @@ extension OverSummaryMetaData on OverSummary {
     ballScores.sort((a, b) => a.time.compareTo(b.time));
 
     final configuredStriker = striker.addBall(ball,
-        ballBy: ball.player_out_id == striker.player.id ? bowler.player : null,
+        ballBy: ball.player_out_id == striker.player.id
+            ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
+            : null,
         catchBy: ball.player_out_id == striker.player.id ? catchBy : null);
 
     final configuredNonStriker = nonStriker.addBall(ball,
-        ballBy:
-            ball.player_out_id == nonStriker.player.id ? bowler.player : null,
+        ballBy: ball.player_out_id == nonStriker.player.id
+            ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
+            : null,
         catchBy: ball.player_out_id == nonStriker.player.id ? catchBy : null);
 
     final outPlayersList = outPlayers.toList();

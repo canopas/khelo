@@ -69,8 +69,8 @@ class MatchDetailOversView extends ConsumerWidget {
         children.add(Divider(height: 32, color: context.colorScheme.outline));
       }
 
-      children.add(_overCellView(context, over.balls, over.bowler.player.name,
-          over.striker.player.name, over.nonStriker.player.name));
+      children.add(_overCellView(context, over.balls, over.bowler.player.name ?? '',
+          over.striker.player.name ?? '', over.nonStriker.player.name ?? ''));
     }
     return children;
   }
