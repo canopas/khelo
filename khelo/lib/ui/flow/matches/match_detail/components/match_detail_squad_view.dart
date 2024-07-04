@@ -146,6 +146,7 @@ class MatchDetailSquadView extends ConsumerWidget {
               child: _playerProfileView(context,
                   user: secondTeamPlayer,
                   isFirstCell: false,
+                  isSecondTeam: true,
                   captainId: secondTeamCaptainId))
         ],
       ));
@@ -176,6 +177,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     BuildContext context, {
     UserModel? user,
     bool isFirstCell = true,
+    bool isSecondTeam = false,
     String? captainId,
   }) {
     if (user == null) {
@@ -183,7 +185,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     }
     bool isCaptain = user.id == captainId;
     return Container(
-      padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           border: BorderDirectional(
               end: BorderSide(
@@ -192,15 +194,19 @@ class MatchDetailSquadView extends ConsumerWidget {
                       : Colors.transparent))),
       child: Row(
         children: [
-          ImageAvatar(
-            initial: user.nameInitial,
-            imageUrl: user.profile_img_url,
-            size: 40,
-          ),
-          const SizedBox(width: 8),
+          if (!isSecondTeam) ...[
+            ImageAvatar(
+              initial: user.nameInitial,
+              imageUrl: user.profile_img_url,
+              size: 40,
+            ),
+            const SizedBox(width: 8),
+          ],
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: isSecondTeam
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               children: [
                 Text(
                   user.name == null
@@ -208,6 +214,7 @@ class MatchDetailSquadView extends ConsumerWidget {
                       : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
                   style: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textPrimary),
+                  textAlign: isSecondTeam ? TextAlign.end : null,
                 ),
                 Text(
                     user.player_role != null
@@ -218,6 +225,14 @@ class MatchDetailSquadView extends ConsumerWidget {
               ],
             ),
           ),
+          if (isSecondTeam) ...[
+            const SizedBox(width: 8),
+            ImageAvatar(
+              initial: user.nameInitial,
+              imageUrl: user.profile_img_url,
+              size: 40,
+            ),
+          ],
         ],
       ),
     );
