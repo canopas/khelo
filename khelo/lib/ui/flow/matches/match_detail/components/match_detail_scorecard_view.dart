@@ -234,34 +234,33 @@ class MatchDetailScorecardView extends ConsumerWidget {
   }) {
     return Container(
       color: context.colorScheme.surface,
-      child: OnTapScale(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: highlightRow
-                ? context.colorScheme.containerLowOnSurface
-                : context.colorScheme.surface,
-          ),
-          child: Row(
-            children: [
-              if (header != null) ...[
-                Expanded(flex: (data.length + 1) ~/ 1.5, child: header),
-              ],
-              for (int i = 0; i < data.length; i++) ...[
-                Expanded(
-                    child: Text(
-                  data[i],
-                  style: i == highlightColumnNumber
-                      ? AppTextStyle.caption
-                          .copyWith(color: context.colorScheme.textPrimary)
-                      : AppTextStyle.caption
-                          .copyWith(color: context.colorScheme.textDisabled),
-                  textAlign: TextAlign.center,
-                )),
-              ]
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: highlightRow
+              ? context.colorScheme.containerLowOnSurface
+              : context.colorScheme.surface,
+        ),
+        child: Row(
+          children: [
+            if (header != null) ...[
+              Expanded(
+                  flex: (data.length + 1) ~/ 1.5,
+                  child: OnTapScale(onTap: onTap, child: header)),
             ],
-          ),
+            for (int i = 0; i < data.length; i++) ...[
+              Expanded(
+                  child: Text(
+                data[i],
+                style: i == highlightColumnNumber
+                    ? AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textPrimary)
+                    : AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textDisabled),
+                textAlign: TextAlign.center,
+              )),
+            ]
+          ],
         ),
       ),
     );

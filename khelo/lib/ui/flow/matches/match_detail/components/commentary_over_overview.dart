@@ -120,30 +120,30 @@ class CommentaryOverOverview extends StatelessWidget {
     BuildContext context,
     BatsmanSummary batsmanSummary,
   ) {
-    return OnTapScale(
-      onTap: () => UserDetailSheet.show(context, batsmanSummary.player),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-              child: Text(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Flexible(
+            child: OnTapScale(
+          onTap: () => UserDetailSheet.show(context, batsmanSummary.player),
+          child: Text(
             batsmanSummary.player.name ?? '',
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
-          )),
-          Text.rich(TextSpan(
-              text: batsmanSummary.runs.toString(),
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
-              children: [
-                TextSpan(
-                  text: "(${batsmanSummary.ballFaced})",
-                  style: AppTextStyle.body2
-                      .copyWith(color: context.colorScheme.textSecondary),
-                )
-              ])),
-        ],
-      ),
+          ),
+        )),
+        Text.rich(TextSpan(
+            text: batsmanSummary.runs.toString(),
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+            children: [
+              TextSpan(
+                text: "(${batsmanSummary.ballFaced})",
+                style: AppTextStyle.body2
+                    .copyWith(color: context.colorScheme.textSecondary),
+              )
+            ])),
+      ],
     );
   }
 }
