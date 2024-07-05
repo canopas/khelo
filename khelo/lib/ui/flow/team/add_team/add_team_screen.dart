@@ -25,6 +25,7 @@ import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/widgets/rounded_check_box.dart';
 
 import '../../../../gen/assets.gen.dart';
+import '../../matches/add_match/select_squad/components/user_detail_sheet.dart';
 
 class AddTeamScreen extends ConsumerStatefulWidget {
   final TeamModel? editTeam;
@@ -180,6 +181,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   padding: const EdgeInsets.only(top: 16),
                   child: UserDetailCell(
                     user: player,
+                    onTap: () => UserDetailSheet.show(context, player),
                     trailing: actionButton(context,
                         onPressed: () => notifier.onRemoveUserFromTeam(player),
                         padding: const EdgeInsets.only(
@@ -192,6 +194,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 24),
             ],
           ],
         ),

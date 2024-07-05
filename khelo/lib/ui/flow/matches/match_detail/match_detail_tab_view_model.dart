@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
@@ -190,10 +191,11 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         lastPlayerSummary: lastPlayerSummary);
     Player? catchBy;
     if (ball.wicket_taker_id != null) {
-      catchBy = _getPlayerByInningId(
+      final player = _getPlayerByInningId(
           inningId: ball.inning_id,
           playerId: ball.wicket_taker_id!,
           isFieldingTeam: true);
+      catchBy = Player(id: player.id, name: player.name ?? '');
     }
 
     final currentOver = overList
@@ -291,7 +293,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           .firstWhere((element) => element.player.id == playerId);
     }
     if (lastBatsman == null) {
-      Player player =
+      UserModel player =
           _getPlayerByInningId(inningId: inningId, playerId: playerId);
       lastBatsman = BatsmanSummary(player: player);
     }
@@ -299,7 +301,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     return lastBatsman;
   }
 
-  Player _getPlayerByInningId({
+  UserModel _getPlayerByInningId({
     required String inningId,
     required String playerId,
     bool isFieldingTeam = false,
@@ -318,7 +320,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         .firstOrNull
         ?.player;
 
-    return Player(id: player?.id ?? "", name: player?.name ?? "");
+    return player ?? const UserModel(id: '');
   }
 
   void showHighlightTeamSelectionDialog() {

@@ -8,7 +8,9 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -96,7 +98,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                     _dataTable(context, batsmen: batsmen),
                     ..._buildMatchTotalView(context,
                         inningLastOver: overs ?? const OverSummary(),
-                        didNotBatPlayers: yetToPlayPlayers ?? ""),
+                        didNotBatPlayers: yetToPlayPlayers ?? []),
                     _fallOfWicketView(context, inningOvers),
                     _dataTable(context, bowler: bowler),
                     _powerPlayView(context, powerPlays, inningOvers),
@@ -230,32 +232,38 @@ class MatchDetailScorecardView extends ConsumerWidget {
     bool highlightRow = false,
     int? highlightColumnNumber,
     required List<String> data,
+    Function()? onTap,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: highlightRow
-            ? context.colorScheme.containerLowOnSurface
-            : context.colorScheme.surface,
-      ),
-      child: Row(
-        children: [
-          if (header != null) ...[
-            Expanded(flex: (data.length + 1) ~/ 1.5, child: header),
+      color: context.colorScheme.surface,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: highlightRow
+              ? context.colorScheme.containerLowOnSurface
+              : context.colorScheme.surface,
+        ),
+        child: Row(
+          children: [
+            if (header != null) ...[
+              Expanded(
+                  flex: (data.length + 1) ~/ 1.5,
+                  child: OnTapScale(onTap: onTap, child: header)),
+            ],
+            for (int i = 0; i < data.length; i++) ...[
+              Expanded(
+                  child: Text(
+                data[i],
+                style: i == highlightColumnNumber
+                    ? AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textPrimary)
+                    : AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textDisabled),
+                textAlign: TextAlign.center,
+              )),
+            ]
           ],
-          for (int i = 0; i < data.length; i++) ...[
-            Expanded(
-                child: Text(
-              data[i],
-              style: i == highlightColumnNumber
-                  ? AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textPrimary)
-                  : AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textDisabled),
-              textAlign: TextAlign.center,
-            )),
-          ]
-        ],
+        ),
       ),
     );
   }
@@ -292,12 +300,13 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.sixes.toString(),
             player.strikeRate.toString(),
           ],
+          onTap: () => UserDetailSheet.show(context, player.player),
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                player.player.name,
+                player.player.name ?? '',
                 style: AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
@@ -343,8 +352,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.wideBalls.toString(),
             bowler.economy.toString(),
           ],
+          onTap: () => UserDetailSheet.show(context, bowler.player),
           header: Text(
-            bowler.player.name,
+            bowler.player.name ?? '',
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           )));
@@ -355,7 +365,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
   List<Widget> _buildMatchTotalView(
     BuildContext context, {
     required OverSummary inningLastOver,
-    required String didNotBatPlayers,
+    required List<MatchPlayer> didNotBatPlayers,
   }) {
     List<Widget> children = [];
     // Extra Summary
@@ -423,7 +433,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     );
   }
 
-  Widget _didNotBatView(BuildContext context, String players) {
+  Widget _didNotBatView(BuildContext context, List<MatchPlayer> players) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       color: context.colorScheme.surface,
@@ -436,9 +446,19 @@ class MatchDetailScorecardView extends ConsumerWidget {
                 .copyWith(color: context.colorScheme.textPrimary),
           )),
           Expanded(
-              child: Text(players,
+              child: Text.rich(TextSpan(
+                  children: players.map((player) {
+            bool isLastName = players.last.player.id == player.player.id;
+            String name = player.player.name ?? '';
+            if (!isLastName) name += ", ";
+            return WidgetSpan(
+                child: OnTapScale(
+              onTap: () => UserDetailSheet.show(context, player.player),
+              child: Text(name,
                   style: AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textPrimary))),
+                      .copyWith(color: context.colorScheme.textPrimary)),
+            ));
+          }).toList()))),
         ],
       ),
     );
@@ -478,19 +498,21 @@ class MatchDetailScorecardView extends ConsumerWidget {
     );
   }
 
-  List<TextSpan> _buildFallOfWicketText(
+  List<InlineSpan> _buildFallOfWicketText(
     BuildContext context,
     List<BatsmanSummary> oversWithWicket,
   ) {
-    List<TextSpan> children = [];
+    List<InlineSpan> children = [];
 
     for (int index = 0; index < oversWithWicket.length; index++) {
       final batsmen = oversWithWicket[index];
       children.add(TextSpan(text: "${batsmen.runs} ("));
-      children.add(TextSpan(
-          text: batsmen.player.name,
-          style: AppTextStyle.caption
-              .copyWith(color: context.colorScheme.secondary)));
+      children.add(WidgetSpan(
+          child: OnTapScale(
+              onTap: () => UserDetailSheet.show(context, batsmen.player),
+              child: Text(batsmen.player.name ?? '',
+                  style: AppTextStyle.caption
+                      .copyWith(color: context.colorScheme.secondary)))));
       children.add(TextSpan(
           text:
               ", ${batsmen.outAtOver})${index == oversWithWicket.length - 1 ? "" : ", "}"));

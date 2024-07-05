@@ -5,7 +5,9 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -146,7 +148,6 @@ class MatchDetailSquadView extends ConsumerWidget {
               child: _playerProfileView(context,
                   user: secondTeamPlayer,
                   isFirstCell: false,
-                  isSecondTeam: true,
                   captainId: secondTeamCaptainId))
         ],
       ));
@@ -181,7 +182,9 @@ class MatchDetailSquadView extends ConsumerWidget {
     String? captainId,
   }) {
     if (user == null) {
-      return const SizedBox();
+      return const SizedBox(
+        height: 0,
+      );
     }
     bool isCaptain = user.id == captainId;
     return Container(
