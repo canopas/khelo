@@ -92,7 +92,8 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           CommentaryBallSummary(
             ball: ball,
             overSummary: overSummary,
-            showBallScore: false,
+            showBallScore:
+                ball.is_four || ball.is_six || ball.wicket_taker_id != null,
           ),
           Divider(color: context.colorScheme.outline, height: 32)
         ]);
