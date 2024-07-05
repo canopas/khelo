@@ -28,13 +28,18 @@ class MatchService {
   final TeamService _teamService;
   final UserService _userService;
   String? _currentUserId;
+  final CollectionReference<AddEditMatchRequest> _matchCollection;
 
   MatchService(
     this._firestore,
     this._teamService,
     this._userService,
     this._currentUserId,
-  );
+  ) : _matchCollection = _firestore
+            .collection(FireStoreConst.matchesCollection)
+            .withConverter(
+                fromFirestore: AddEditMatchRequest.fromFireStore,
+                toFirestore: (AddEditMatchRequest match, _) => match.toJson());
 
   Stream<List<MatchModel>> getCurrentUserPlayedMatches() {
     if (_currentUserId == null) {
@@ -46,14 +51,12 @@ class MatchService {
       Filter(FireStoreConst.players, arrayContains: _currentUserId),
     );
 
-    return _firestore
-        .collection(FireStoreConst.matchesCollection)
+    return _matchCollection
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
-        Map<String, dynamic> mainDocData = mainDoc.data();
-        AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+        final match = mainDoc.data();
         List<MatchTeamModel> teams = await getTeamsList(match.teams);
         return MatchModel(
           id: match.id,
@@ -89,14 +92,12 @@ class MatchService {
         Filter(FireStoreConst.players, arrayContains: _currentUserId),
         Filter(FireStoreConst.teamCreatorIds, arrayContains: _currentUserId));
 
-    return _firestore
-        .collection(FireStoreConst.matchesCollection)
+    return _matchCollection
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
-        Map<String, dynamic> mainDocData = mainDoc.data();
-        AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+        final match = mainDoc.data();
         List<MatchTeamModel> teams = await getTeamsList(match.teams);
         return MatchModel(
           id: match.id,
@@ -123,13 +124,9 @@ class MatchService {
   }
 
   Stream<List<MatchModel>> getMatchesByTeamId(String teamId) {
-    return _firestore
-        .collection(FireStoreConst.matchesCollection)
-        .snapshots()
-        .asyncMap((snapshot) async {
+    return _matchCollection.snapshots().asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
-        Map<String, dynamic> mainDocData = mainDoc.data();
-        AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+        final match = mainDoc.data();
         List<MatchTeamModel> teams = await getTeamsList(match.teams);
         return MatchModel(
           id: match.id,
@@ -156,18 +153,14 @@ class MatchService {
   }
 
   Stream<List<MatchModel>> getRunningMatches() {
-    return _firestore
-        .collection(FireStoreConst.matchesCollection)
+    return _matchCollection
         .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
         .snapshots()
         .asyncMap((snapshot) async {
       List<MatchModel> matches = [];
-      for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
-        Map<String, dynamic> mainDocData =
-            mainDoc.data() as Map<String, dynamic>;
-        if (mainDocData[FireStoreConst.matchStatus] ==
-            MatchStatus.running.value) {
-          AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
+      for (final mainDoc in snapshot.docs) {
+        if (mainDoc.data().match_status == MatchStatus.running) {
+          final match = mainDoc.data();
 
           List<MatchTeamModel> teams = await getTeamsList(match.teams);
           matches.add(MatchModel(
@@ -197,13 +190,22 @@ class MatchService {
   }
 
   Stream<MatchModel> getMatchStreamById(String id) {
-    return _firestore
-        .collection(FireStoreConst.matchesCollection)
-        .doc(id)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      AddEditMatchRequest match =
-          AddEditMatchRequest.fromJson(snapshot.data() as Map<String, dynamic>);
+    return _matchCollection.doc(id).snapshots().asyncMap((snapshot) async {
+      final match = snapshot.data();
+      if (match == null) {
+        return MatchModel(
+            teams: [],
+            match_type: MatchType.limitedOvers,
+            number_of_over: 0,
+            over_per_bowler: 0,
+            city: '',
+            ground: '',
+            start_time: DateTime.now(),
+            ball_type: BallType.leather,
+            pitch_type: PitchType.turf,
+            created_by: '',
+            match_status: MatchStatus.running);
+      }
 
       List<MatchTeamModel> teams = await getTeamsList(match.teams);
       List<UserModel>? umpires = await getUserListFromUserIds(match.umpire_ids);
@@ -248,12 +250,23 @@ class MatchService {
 
   Future<MatchModel> getMatchById(String id) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(id);
-      DocumentSnapshot snapshot = await matchRef.get();
+      final snapshot = await _matchCollection.doc(id).get();
 
-      AddEditMatchRequest match =
-          AddEditMatchRequest.fromJson(snapshot.data() as Map<String, dynamic>);
+      final match = snapshot.data();
+      if (match == null) {
+        return MatchModel(
+            teams: [],
+            match_type: MatchType.limitedOvers,
+            number_of_over: 0,
+            over_per_bowler: 0,
+            city: '',
+            ground: '',
+            start_time: DateTime.now(),
+            ball_type: BallType.leather,
+            pitch_type: PitchType.turf,
+            created_by: '',
+            match_status: MatchStatus.running);
+      }
 
       List<MatchTeamModel> teams = await getTeamsList(match.teams);
       List<UserModel>? umpires = await getUserListFromUserIds(match.umpire_ids);
@@ -302,8 +315,7 @@ class MatchService {
 
   Future<String> updateMatch(AddEditMatchRequest match) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(match.id);
+      DocumentReference matchRef = _matchCollection.doc(match.id);
       WriteBatch batch = _firestore.batch();
 
       Map<String, dynamic> matchJson = match.toJson();
@@ -338,8 +350,7 @@ class MatchService {
   Future<void> updateTossDetails(String matchId, String tossWinnerId,
       TossDecision tossDecision, String currentPlayingTeam) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       Map<String, dynamic> tossDetails = {
         FireStoreConst.tossWinnerId: tossWinnerId,
@@ -355,8 +366,7 @@ class MatchService {
 
   Future<void> updateMatchStatus(String matchId, MatchStatus status) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       Map<String, dynamic> matchStatus = {
         FireStoreConst.matchStatus: status.value,
@@ -378,8 +388,7 @@ class MatchService {
     int? runs,
   }) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       await _firestore.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(matchRef);
@@ -421,8 +430,7 @@ class MatchService {
     List<MatchPlayerRequest>? updatedMatchPlayer,
   }) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       DocumentSnapshot snapshot = await transaction.get(matchRef);
 
@@ -472,8 +480,7 @@ class MatchService {
   Future<void> updateCurrentPlayingTeam(
       {required String matchId, required String teamId}) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       await matchRef.update({FireStoreConst.currentPlayingTeamId: teamId});
     } catch (error, stack) {
@@ -484,8 +491,7 @@ class MatchService {
   Future<void> updateTeamsSquad(
       String matchId, AddMatchTeamRequest teamRequest) async {
     try {
-      DocumentReference matchRef =
-          _firestore.collection(FireStoreConst.matchesCollection).doc(matchId);
+      DocumentReference matchRef = _matchCollection.doc(matchId);
 
       await _firestore.runTransaction((transaction) async {
         DocumentSnapshot snapshot = await transaction.get(matchRef);
@@ -524,10 +530,7 @@ class MatchService {
 
   Future<void> deleteMatch(String matchId) async {
     try {
-      await _firestore
-          .collection(FireStoreConst.matchesCollection)
-          .doc(matchId)
-          .delete();
+      await _matchCollection.doc(matchId).delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

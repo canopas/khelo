@@ -11,14 +11,19 @@ final supportServiceProvider = Provider(
 
 class SupportService {
   final FirebaseFirestore _firestore;
+  final CollectionReference<AddSupportCaseRequest> _supportCollection;
 
-  SupportService(this._firestore);
+  SupportService(this._firestore)
+      : _supportCollection = _firestore
+            .collection(FireStoreConst.supportCollection)
+            .withConverter(
+                fromFirestore: AddSupportCaseRequest.fromFireStore,
+                toFirestore: (AddSupportCaseRequest support, _) =>
+                    support.toJson());
 
   Future<String> addSupportCase(AddSupportCaseRequest supportCase) async {
     try {
-      DocumentReference supportCaseRef = _firestore
-          .collection(FireStoreConst.supportCollection)
-          .doc(supportCase.id);
+      DocumentReference supportCaseRef = _supportCollection.doc(supportCase.id);
       WriteBatch batch = _firestore.batch();
 
       batch.set(supportCaseRef, supportCase.toJson(), SetOptions(merge: true));

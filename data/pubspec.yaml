@@ -23,14 +23,14 @@ dependencies:
 
   # io
   dio: ^5.0.2
-  json_annotation: ^4.8.1
+  json_annotation: ^4.9.0
   json_serializable: ^6.7.1
   freezed_annotation: ^2.4.1
 
   # device + package info
   device_info_plus: ^10.1.0
   package_info_plus: ^8.0.0
-  flutter_timezone: ^1.0.8
+  flutter_timezone: ^2.0.0
   path: ^1.8.3
 
   # state management

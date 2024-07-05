@@ -25,18 +25,25 @@ class TeamService {
   String? _currentUserId;
   final FirebaseFirestore _firestore;
   final UserService _userService;
+  final CollectionReference<AddTeamRequestModel> _teamsCollection;
 
-  TeamService(this._currentUserId, this._firestore, this._userService);
+  TeamService(this._currentUserId, this._firestore, this._userService)
+      : _teamsCollection = _firestore
+            .collection(FireStoreConst.teamsCollection)
+            .withConverter(
+                fromFirestore: AddTeamRequestModel.fromFireStore,
+                toFirestore: (AddTeamRequestModel team, _) => team.toJson());
 
   Future<TeamModel> getTeamById(String teamId) async {
     try {
-      CollectionReference teamsCollection =
-          _firestore.collection(FireStoreConst.teamsCollection);
+      final teamDoc = await _teamsCollection.doc(teamId).get();
 
-      DocumentSnapshot teamDoc = await teamsCollection.doc(teamId).get();
+      final teamRequestModel = teamDoc.data();
 
-      AddTeamRequestModel teamRequestModel =
-          AddTeamRequestModel.fromJson(teamDoc.data() as Map<String, dynamic>);
+      if (teamRequestModel == null) {
+        return TeamModel(
+            id: teamId, name: "Deleted Team", name_lowercase: "deletedteam");
+      }
 
       final member = (teamRequestModel.players?.isNotEmpty ?? false)
           ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
@@ -59,14 +66,12 @@ class TeamService {
   }
 
   Stream<TeamModel> getTeamStreamById(String teamId) {
-    return _firestore
-        .collection(FireStoreConst.teamsCollection)
-        .doc(teamId)
-        .snapshots()
-        .asyncMap((teamDoc) async {
-      AddTeamRequestModel teamRequestModel =
-          AddTeamRequestModel.fromJson(teamDoc.data() as Map<String, dynamic>);
-
+    return _teamsCollection.doc(teamId).snapshots().asyncMap((teamDoc) async {
+      final teamRequestModel = teamDoc.data();
+      if (teamRequestModel == null) {
+        return TeamModel(
+            id: teamId, name: "Deleted Team", name_lowercase: "deletedteam");
+      }
       final member = (teamRequestModel.players?.isNotEmpty ?? false)
           ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
           : null;
@@ -92,14 +97,12 @@ class TeamService {
       Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
       Filter(FireStoreConst.players, arrayContains: _currentUserId),
     );
-    return _firestore
-        .collection(FireStoreConst.teamsCollection)
+    return _teamsCollection
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
-        AddTeamRequestModel teamRequestModel =
-            AddTeamRequestModel.fromJson(mainDoc.data());
+        AddTeamRequestModel teamRequestModel = mainDoc.data();
 
         final member = (teamRequestModel.players?.isNotEmpty ?? false)
             ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
@@ -121,14 +124,12 @@ class TeamService {
   }
 
   Stream<List<TeamModel>> getUserOwnedTeams() {
-    return _firestore
-        .collection(FireStoreConst.teamsCollection)
+    return _teamsCollection
         .where(FireStoreConst.createdBy, isEqualTo: _currentUserId)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
-        AddTeamRequestModel teamRequestModel =
-            AddTeamRequestModel.fromJson(mainDoc.data());
+        AddTeamRequestModel teamRequestModel = mainDoc.data();
 
         final member = (teamRequestModel.players?.isNotEmpty ?? false)
             ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
@@ -150,8 +151,7 @@ class TeamService {
 
   Future<String> updateTeam(AddTeamRequestModel team) async {
     try {
-      DocumentReference teamRef =
-          _firestore.collection(FireStoreConst.teamsCollection).doc(team.id);
+      DocumentReference teamRef = _teamsCollection.doc(team.id);
       WriteBatch batch = _firestore.batch();
 
       batch.set(teamRef, team.toJson(), SetOptions(merge: true));
@@ -169,8 +169,7 @@ class TeamService {
 
   Future<void> updateProfileImageUrl(String teamId, String? imageUrl) async {
     try {
-      DocumentReference teamRef =
-          _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
+      DocumentReference teamRef = _teamsCollection.doc(teamId);
 
       await teamRef.set({
         FireStoreConst.profileImageUrl: imageUrl,
@@ -182,8 +181,7 @@ class TeamService {
 
   Future<void> addPlayersToTeam(String teamId, List<String> players) async {
     try {
-      DocumentReference teamRef =
-          _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
+      DocumentReference teamRef = _teamsCollection.doc(teamId);
 
       await teamRef.set(
           {FireStoreConst.players: FieldValue.arrayUnion(players)},
@@ -196,8 +194,7 @@ class TeamService {
   Future<void> removePlayersFromTeam(
       String teamId, List<String> playerIds) async {
     try {
-      DocumentReference teamRef =
-          _firestore.collection(FireStoreConst.teamsCollection).doc(teamId);
+      DocumentReference teamRef = _teamsCollection.doc(teamId);
 
       await teamRef
           .update({FireStoreConst.players: FieldValue.arrayRemove(playerIds)});
@@ -208,8 +205,7 @@ class TeamService {
 
   Future<bool> isTeamNameAvailable(String teamName) async {
     try {
-      QuerySnapshot teamSnap = await _firestore
-          .collection(FireStoreConst.teamsCollection)
+      QuerySnapshot teamSnap = await _teamsCollection
           .where(FireStoreConst.nameLowercase,
               isEqualTo: teamName.caseAndSpaceInsensitive)
           .get();
@@ -222,8 +218,7 @@ class TeamService {
 
   Future<List<TeamModel>> searchTeam(String searchKey) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(FireStoreConst.teamsCollection)
+      final snapshot = await _teamsCollection
           .where(FireStoreConst.nameLowercase,
               isGreaterThanOrEqualTo: searchKey.caseAndSpaceInsensitive)
           .where(FireStoreConst.nameLowercase,
@@ -232,9 +227,8 @@ class TeamService {
 
       List<TeamModel> teams = [];
 
-      for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
-        AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
-            mainDoc.data() as Map<String, dynamic>);
+      for (final mainDoc in snapshot.docs) {
+        AddTeamRequestModel teamRequestModel = mainDoc.data();
 
         final member = (teamRequestModel.players?.isNotEmpty ?? false)
             ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
@@ -261,10 +255,7 @@ class TeamService {
 
   Future<void> deleteTeam(String teamId) async {
     try {
-      await _firestore
-          .collection(FireStoreConst.teamsCollection)
-          .doc(teamId)
-          .delete();
+      await _teamsCollection.doc(teamId).delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

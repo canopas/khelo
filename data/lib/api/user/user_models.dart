@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_models.freezed.dart';
@@ -31,6 +32,11 @@ class UserModel with _$UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+
+  factory UserModel.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      UserModel.fromJson(snapshot.data()!);
 
   String toJsonString() => jsonEncode(toJson());
 
