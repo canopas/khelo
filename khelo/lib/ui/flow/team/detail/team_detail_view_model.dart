@@ -21,6 +21,7 @@ final teamDetailStateProvider =
 
 class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   late StreamSubscription _teamStreamSubscription;
+  late StreamSubscription _matchListStreamSubscription;
   final TeamService _teamService;
   final MatchService _matchService;
   String? teamId;
@@ -49,20 +50,19 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   }
 
   Future<void> loadTeamMatches() async {
-    if (state.team == null) {
-      return;
-    }
-    try {
-      state = state.copyWith(loading: state.matches == null);
-      final matches = await _matchService
-          .getMatchesByTeamId(state.team!.id ?? "INVALID ID");
+    if (state.team == null) return;
+
+    state = state.copyWith(loading: state.matches == null);
+    _matchListStreamSubscription = _matchService
+        .getMatchesByTeamId(state.team!.id ?? "INVALID ID")
+        .listen((matches) {
       final teamStat = _calculateTeamStat(matches);
       state =
           state.copyWith(matches: matches, teamStat: teamStat, loading: false);
-    } catch (e) {
+    }, onError: (e) {
       debugPrint(
           "TeamDetailViewNotifier: error while loading team matches -> $e");
-    }
+    });
   }
 
   TeamStat _calculateTeamStat(List<MatchModel> matches) {
@@ -195,12 +195,14 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
   onResume() {
     _teamStreamSubscription.cancel();
+    _matchListStreamSubscription.cancel();
     loadTeamById();
   }
 
   @override
   void dispose() {
     _teamStreamSubscription.cancel();
+    _matchListStreamSubscription.cancel();
     super.dispose();
   }
 }

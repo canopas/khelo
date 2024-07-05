@@ -85,43 +85,28 @@ class BallScoreService {
 
   Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
       List<String> inningIds) {
-    StreamController<List<BallScoreChange>> controller =
-        StreamController<List<BallScoreChange>>();
-
-    _firestore
+    return _firestore
         .collection(FireStoreConst.ballScoresCollection)
         .where(FireStoreConst.inningId, whereIn: inningIds)
         .snapshots()
-        .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-      try {
-        List<BallScoreChange> changes = [];
-        for (var doc in snapshot.docChanges) {
-          final data = doc.doc.data();
-          if (data != null) {
-            changes
-                .add(BallScoreChange(doc.type, BallScoreModel.fromJson(data)));
-          }
+        .asyncMap((snapshot) async {
+      List<BallScoreChange> changes = [];
+      for (var doc in snapshot.docChanges) {
+        final data = doc.doc.data();
+        if (data != null) {
+          changes.add(BallScoreChange(doc.type, BallScoreModel.fromJson(data)));
         }
-        controller.add(changes);
-      } catch (error, stack) {
-        controller.addError(AppError.fromError(error, stack));
-        controller.close();
       }
-    }, onError: (error, stack) {
-      controller.addError(AppError.fromError(error, stack));
-      controller.close();
-    });
-
-    return controller.stream;
+      return changes;
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Stream<List<BallScoreModel>> getCurrentUserRelatedBalls() {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
-    StreamController<List<BallScoreModel>> controller =
-        StreamController<List<BallScoreModel>>();
-    _firestore
+
+    return _firestore
         .collection(FireStoreConst.ballScoresCollection)
         .where(Filter.or(
             Filter(FireStoreConst.bowlerId, isEqualTo: _currentUserId),
@@ -129,24 +114,12 @@ class BallScoreService {
             Filter(FireStoreConst.wicketTakerId, isEqualTo: _currentUserId),
             Filter(FireStoreConst.playerOutId, isEqualTo: _currentUserId)))
         .snapshots()
-        .listen((snapshot) {
-      try {
-        final ballList = snapshot.docs.map((doc) {
-          final data = doc.data();
-          return BallScoreModel.fromJson(data).copyWith(id: doc.id);
-        }).toList();
-
-        controller.add(ballList);
-      } catch (error, stack) {
-        controller.addError(AppError.fromError(error, stack));
-        controller.close();
-      }
-    }, onError: (error, stack) {
-      controller.addError(AppError.fromError(error, stack));
-      controller.close();
-    });
-
-    return controller.stream;
+        .asyncMap((snapshot) async {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return BallScoreModel.fromJson(data).copyWith(id: doc.id);
+      }).toList();
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<void> deleteBallAndUpdateTeamDetails({

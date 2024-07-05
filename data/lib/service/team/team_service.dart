@@ -59,73 +59,47 @@ class TeamService {
   }
 
   Stream<TeamModel> getTeamStreamById(String teamId) {
-    StreamController<TeamModel> controller = StreamController<TeamModel>();
-    StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? subscription;
-    removeResources() {
-      controller.close();
-      subscription?.cancel();
-    }
-
-    catchError(Object error, StackTrace stack) {
-      controller.addError(AppError.fromError(error, stack));
-      removeResources();
-    }
-
-    subscription = _firestore
+    return _firestore
         .collection(FireStoreConst.teamsCollection)
         .doc(teamId)
         .snapshots()
-        .listen((teamDoc) async {
-      if (teamDoc.exists) {
-        try {
-          AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
-              teamDoc.data() as Map<String, dynamic>);
+        .asyncMap((teamDoc) async {
+      AddTeamRequestModel teamRequestModel =
+          AddTeamRequestModel.fromJson(teamDoc.data() as Map<String, dynamic>);
 
-          final member = (teamRequestModel.players?.isNotEmpty ?? false)
-              ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
-              : null;
+      final member = (teamRequestModel.players?.isNotEmpty ?? false)
+          ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+          : null;
 
-          final team = TeamModel(
-              name: teamRequestModel.name,
-              name_lowercase: teamRequestModel.name_lowercase,
-              id: teamRequestModel.id,
-              city: teamRequestModel.city,
-              created_at: teamRequestModel.created_at,
-              created_by: teamRequestModel.created_by,
-              profile_img_url: teamRequestModel.profile_img_url,
-              players: member);
-
-          controller.add(team);
-        } catch (e, stack) {
-          catchError(e, stack);
-        }
-      } else {
-        removeResources();
-      }
-    }, onError: catchError);
-
-    return controller.stream;
+      final team = TeamModel(
+          name: teamRequestModel.name,
+          name_lowercase: teamRequestModel.name_lowercase,
+          id: teamRequestModel.id,
+          city: teamRequestModel.city,
+          created_at: teamRequestModel.created_at,
+          created_by: teamRequestModel.created_by,
+          profile_img_url: teamRequestModel.profile_img_url,
+          players: member);
+      return team;
+    }).handleError((error, stack) => AppError.fromError(error, stack));
   }
 
   Stream<List<TeamModel>> getUserRelatedTeams() {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
-
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.players, arrayContains: _currentUserId),
+    );
     return _firestore
         .collection(FireStoreConst.teamsCollection)
-        .where(
-          Filter.or(
-            Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
-            Filter(FireStoreConst.players, arrayContains: _currentUserId),
-          ),
-        )
+        .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
-      List<TeamModel> teams = [];
-      for (QueryDocumentSnapshot mainDoc in snapshot.docs) {
-        AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
-            mainDoc.data() as Map<String, dynamic>);
+      return await Future.wait(snapshot.docs.map((mainDoc) async {
+        AddTeamRequestModel teamRequestModel =
+            AddTeamRequestModel.fromJson(mainDoc.data());
 
         final member = (teamRequestModel.players?.isNotEmpty ?? false)
             ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
@@ -141,60 +115,37 @@ class TeamService {
           profile_img_url: teamRequestModel.profile_img_url,
           players: member,
         );
-
-        teams.add(team);
-      }
-      return teams;
-    }).handleError((error, stack) {
-      throw AppError.fromError(error, stack);
-    });
+        return team;
+      }));
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Stream<List<TeamModel>> getUserOwnedTeams() {
-    StreamController<List<TeamModel>> controller =
-        StreamController<List<TeamModel>>();
-    StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? subscription;
-
-    catchError(Object error, StackTrace stack) {
-      controller.addError(AppError.fromError(error, stack));
-      controller.close();
-      subscription?.cancel();
-    }
-
-    subscription = _firestore
+    return _firestore
         .collection(FireStoreConst.teamsCollection)
         .where(FireStoreConst.createdBy, isEqualTo: _currentUserId)
         .snapshots()
-        .listen((snapshot) async {
-      try {
-        List<TeamModel> teams =
-            await Future.wait(snapshot.docs.map((mainDoc) async {
-          AddTeamRequestModel teamRequestModel =
-              AddTeamRequestModel.fromJson(mainDoc.data());
+        .asyncMap((snapshot) async {
+      return await Future.wait(snapshot.docs.map((mainDoc) async {
+        AddTeamRequestModel teamRequestModel =
+            AddTeamRequestModel.fromJson(mainDoc.data());
 
-          final member = (teamRequestModel.players?.isNotEmpty ?? false)
-              ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
-              : null;
+        final member = (teamRequestModel.players?.isNotEmpty ?? false)
+            ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+            : null;
 
-          final team = TeamModel(
-              name: teamRequestModel.name,
-              name_lowercase: teamRequestModel.name_lowercase,
-              id: teamRequestModel.id,
-              city: teamRequestModel.city,
-              created_at: teamRequestModel.created_at,
-              created_by: teamRequestModel.created_by,
-              profile_img_url: teamRequestModel.profile_img_url,
-              players: member);
-          return team;
-        }).toList());
-
-        controller.add(teams);
-      } catch (e, stack) {
-        catchError(e, stack);
-      }
-    }, onError: catchError);
-
-    return controller.stream;
+        final team = TeamModel(
+            name: teamRequestModel.name,
+            name_lowercase: teamRequestModel.name_lowercase,
+            id: teamRequestModel.id,
+            city: teamRequestModel.city,
+            created_at: teamRequestModel.created_at,
+            created_by: teamRequestModel.created_by,
+            profile_img_url: teamRequestModel.profile_img_url,
+            players: member);
+        return team;
+      }).toList());
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<String> updateTeam(AddTeamRequestModel team) async {

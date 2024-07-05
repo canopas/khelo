@@ -17,27 +17,6 @@ class InningsService {
 
   InningsService(this._firestore);
 
-  Future<String> updateInning(InningModel inning) async {
-    try {
-      DocumentReference inningRef = _firestore
-          .collection(FireStoreConst.inningsCollection)
-          .doc(inning.id);
-      WriteBatch batch = _firestore.batch();
-
-      batch.set(inningRef, inning.toJson(), SetOptions(merge: true));
-      String newInningId = inningRef.id;
-
-      if (inning.id == null) {
-        batch.update(inningRef, {FireStoreConst.id: newInningId});
-      }
-
-      await batch.commit();
-      return newInningId;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   Future<void> createInnings({
     required String matchId,
     required String teamId,
@@ -91,30 +70,16 @@ class InningsService {
   Stream<List<InningModel>> getInningsStreamByMatchId({
     required String matchId,
   }) {
-    StreamController<List<InningModel>> controller =
-        StreamController<List<InningModel>>();
-
-    _firestore
+    return _firestore
         .collection(FireStoreConst.inningsCollection)
         .where(FireStoreConst.matchId, isEqualTo: matchId)
         .snapshots()
-        .listen((QuerySnapshot<Map<String, dynamic>> snapshot) {
-      try {
-        List<InningModel> innings = snapshot.docs.map((doc) {
-          final data = doc.data();
-          return InningModel.fromJson(data).copyWith(id: doc.id);
-        }).toList();
-        controller.add(innings);
-      } catch (error, stack) {
-        controller.addError(AppError.fromError(error, stack));
-        controller.close();
-      }
-    }, onError: (error, stack) {
-      controller.addError(AppError.fromError(error, stack));
-      controller.close();
-    });
-
-    return controller.stream;
+        .asyncMap((snapshot) async {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return InningModel.fromJson(data).copyWith(id: doc.id);
+      }).toList();
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<void> updateInningScoreDetail({
