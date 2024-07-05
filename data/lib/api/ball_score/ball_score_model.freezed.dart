@@ -1992,7 +1992,7 @@ abstract class _OverSummary implements OverSummary {
 
 /// @nodoc
 mixin _$BatsmanSummary {
-  Player get player => throw _privateConstructorUsedError;
+  UserModel get player => throw _privateConstructorUsedError;
   Player? get ballBy => throw _privateConstructorUsedError;
   Player? get catchBy => throw _privateConstructorUsedError;
   WicketType? get wicketType => throw _privateConstructorUsedError;
@@ -2014,7 +2014,7 @@ abstract class $BatsmanSummaryCopyWith<$Res> {
       _$BatsmanSummaryCopyWithImpl<$Res, BatsmanSummary>;
   @useResult
   $Res call(
-      {Player player,
+      {UserModel player,
       Player? ballBy,
       Player? catchBy,
       WicketType? wicketType,
@@ -2024,7 +2024,7 @@ abstract class $BatsmanSummaryCopyWith<$Res> {
       int sixes,
       int fours});
 
-  $PlayerCopyWith<$Res> get player;
+  $UserModelCopyWith<$Res> get player;
   $PlayerCopyWith<$Res>? get ballBy;
   $PlayerCopyWith<$Res>? get catchBy;
 }
@@ -2056,7 +2056,7 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player,
+              as UserModel,
       ballBy: freezed == ballBy
           ? _value.ballBy
           : ballBy // ignore: cast_nullable_to_non_nullable
@@ -2094,8 +2094,8 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
 
   @override
   @pragma('vm:prefer-inline')
-  $PlayerCopyWith<$Res> get player {
-    return $PlayerCopyWith<$Res>(_value.player, (value) {
+  $UserModelCopyWith<$Res> get player {
+    return $UserModelCopyWith<$Res>(_value.player, (value) {
       return _then(_value.copyWith(player: value) as $Val);
     });
   }
@@ -2134,7 +2134,7 @@ abstract class _$$BatsmanSummaryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Player player,
+      {UserModel player,
       Player? ballBy,
       Player? catchBy,
       WicketType? wicketType,
@@ -2145,7 +2145,7 @@ abstract class _$$BatsmanSummaryImplCopyWith<$Res>
       int fours});
 
   @override
-  $PlayerCopyWith<$Res> get player;
+  $UserModelCopyWith<$Res> get player;
   @override
   $PlayerCopyWith<$Res>? get ballBy;
   @override
@@ -2177,7 +2177,7 @@ class __$$BatsmanSummaryImplCopyWithImpl<$Res>
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player,
+              as UserModel,
       ballBy: freezed == ballBy
           ? _value.ballBy
           : ballBy // ignore: cast_nullable_to_non_nullable
@@ -2218,7 +2218,7 @@ class __$$BatsmanSummaryImplCopyWithImpl<$Res>
 
 class _$BatsmanSummaryImpl implements _BatsmanSummary {
   const _$BatsmanSummaryImpl(
-      {this.player = const Player(),
+      {this.player = const UserModel(id: ''),
       this.ballBy,
       this.catchBy,
       this.wicketType,
@@ -2230,7 +2230,7 @@ class _$BatsmanSummaryImpl implements _BatsmanSummary {
 
   @override
   @JsonKey()
-  final Player player;
+  final UserModel player;
   @override
   final Player? ballBy;
   @override
@@ -2290,7 +2290,7 @@ class _$BatsmanSummaryImpl implements _BatsmanSummary {
 
 abstract class _BatsmanSummary implements BatsmanSummary {
   const factory _BatsmanSummary(
-      {final Player player,
+      {final UserModel player,
       final Player? ballBy,
       final Player? catchBy,
       final WicketType? wicketType,
@@ -2301,7 +2301,7 @@ abstract class _BatsmanSummary implements BatsmanSummary {
       final int fours}) = _$BatsmanSummaryImpl;
 
   @override
-  Player get player;
+  UserModel get player;
   @override
   Player? get ballBy;
   @override
@@ -2326,7 +2326,7 @@ abstract class _BatsmanSummary implements BatsmanSummary {
 
 /// @nodoc
 mixin _$BowlerSummary {
-  Player get player => throw _privateConstructorUsedError;
+  UserModel get player => throw _privateConstructorUsedError;
   int get runsConceded => throw _privateConstructorUsedError;
   int get maiden => throw _privateConstructorUsedError;
   double get overDelivered => throw _privateConstructorUsedError;
@@ -2346,7 +2346,7 @@ abstract class $BowlerSummaryCopyWith<$Res> {
       _$BowlerSummaryCopyWithImpl<$Res, BowlerSummary>;
   @useResult
   $Res call(
-      {Player player,
+      {UserModel player,
       int runsConceded,
       int maiden,
       double overDelivered,
@@ -2354,7 +2354,7 @@ abstract class $BowlerSummaryCopyWith<$Res> {
       int noBalls,
       int wideBalls});
 
-  $PlayerCopyWith<$Res> get player;
+  $UserModelCopyWith<$Res> get player;
 }
 
 /// @nodoc
@@ -2382,7 +2382,7 @@ class _$BowlerSummaryCopyWithImpl<$Res, $Val extends BowlerSummary>
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player,
+              as UserModel,
       runsConceded: null == runsConceded
           ? _value.runsConceded
           : runsConceded // ignore: cast_nullable_to_non_nullable
@@ -2412,8 +2412,8 @@ class _$BowlerSummaryCopyWithImpl<$Res, $Val extends BowlerSummary>
 
   @override
   @pragma('vm:prefer-inline')
-  $PlayerCopyWith<$Res> get player {
-    return $PlayerCopyWith<$Res>(_value.player, (value) {
+  $UserModelCopyWith<$Res> get player {
+    return $UserModelCopyWith<$Res>(_value.player, (value) {
       return _then(_value.copyWith(player: value) as $Val);
     });
   }
@@ -2428,7 +2428,7 @@ abstract class _$$BowlerSummaryImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Player player,
+      {UserModel player,
       int runsConceded,
       int maiden,
       double overDelivered,
@@ -2437,7 +2437,7 @@ abstract class _$$BowlerSummaryImplCopyWith<$Res>
       int wideBalls});
 
   @override
-  $PlayerCopyWith<$Res> get player;
+  $UserModelCopyWith<$Res> get player;
 }
 
 /// @nodoc
@@ -2463,7 +2463,7 @@ class __$$BowlerSummaryImplCopyWithImpl<$Res>
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
-              as Player,
+              as UserModel,
       runsConceded: null == runsConceded
           ? _value.runsConceded
           : runsConceded // ignore: cast_nullable_to_non_nullable
@@ -2496,7 +2496,7 @@ class __$$BowlerSummaryImplCopyWithImpl<$Res>
 
 class _$BowlerSummaryImpl implements _BowlerSummary {
   const _$BowlerSummaryImpl(
-      {this.player = const Player(),
+      {this.player = const UserModel(id: ''),
       this.runsConceded = 0,
       this.maiden = 0,
       this.overDelivered = 0,
@@ -2506,7 +2506,7 @@ class _$BowlerSummaryImpl implements _BowlerSummary {
 
   @override
   @JsonKey()
-  final Player player;
+  final UserModel player;
   @override
   @JsonKey()
   final int runsConceded;
@@ -2561,7 +2561,7 @@ class _$BowlerSummaryImpl implements _BowlerSummary {
 
 abstract class _BowlerSummary implements BowlerSummary {
   const factory _BowlerSummary(
-      {final Player player,
+      {final UserModel player,
       final int runsConceded,
       final int maiden,
       final double overDelivered,
@@ -2570,7 +2570,7 @@ abstract class _BowlerSummary implements BowlerSummary {
       final int wideBalls}) = _$BowlerSummaryImpl;
 
   @override
-  Player get player;
+  UserModel get player;
   @override
   int get runsConceded;
   @override
