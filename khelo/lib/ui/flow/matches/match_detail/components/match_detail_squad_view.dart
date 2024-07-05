@@ -148,6 +148,7 @@ class MatchDetailSquadView extends ConsumerWidget {
               child: _playerProfileView(context,
                   user: secondTeamPlayer,
                   isFirstCell: false,
+                  isSecondTeam: true,
                   captainId: secondTeamCaptainId))
         ],
       ));
