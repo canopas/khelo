@@ -88,36 +88,6 @@ class InningsService {
     }
   }
 
-  Future<InningModel> getInningById(String id) async {
-    try {
-      DocumentReference inningRef =
-          _firestore.collection(FireStoreConst.inningsCollection).doc(id);
-      DocumentSnapshot snapshot = await inningRef.get();
-      Map<String, dynamic> inningData = snapshot.data() as Map<String, dynamic>;
-      var inningModel = InningModel.fromJson(inningData);
-      return inningModel;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<List<InningModel>> getInningsByMatchId(
-      {required String matchId}) async {
-    try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(FireStoreConst.inningsCollection)
-          .where(FireStoreConst.matchId, isEqualTo: matchId)
-          .get();
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return InningModel.fromJson(data).copyWith(id: doc.id);
-      }).toList();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   Stream<List<InningModel>> getInningsStreamByMatchId({
     required String matchId,
   }) {

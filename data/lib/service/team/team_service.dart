@@ -28,25 +28,6 @@ class TeamService {
 
   TeamService(this._currentUserId, this._firestore, this._userService);
 
-  Future<String> updateTeam(AddTeamRequestModel team) async {
-    try {
-      DocumentReference teamRef =
-          _firestore.collection(FireStoreConst.teamsCollection).doc(team.id);
-      WriteBatch batch = _firestore.batch();
-
-      batch.set(teamRef, team.toJson(), SetOptions(merge: true));
-      String newTeamId = teamRef.id;
-
-      if (team.id == null) {
-        batch.update(teamRef, {FireStoreConst.id: newTeamId});
-      }
-      await batch.commit();
-      return newTeamId;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   Future<TeamModel> getTeamById(String teamId) async {
     try {
       CollectionReference teamsCollection =
@@ -75,6 +56,55 @@ class TeamService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  Stream<TeamModel> getTeamStreamById(String teamId) {
+    StreamController<TeamModel> controller = StreamController<TeamModel>();
+    StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? subscription;
+    removeResources() {
+      controller.close();
+      subscription?.cancel();
+    }
+
+    catchError(Object error, StackTrace stack) {
+      controller.addError(AppError.fromError(error, stack));
+      removeResources();
+    }
+
+    subscription = _firestore
+        .collection(FireStoreConst.teamsCollection)
+        .doc(teamId)
+        .snapshots()
+        .listen((teamDoc) async {
+      if (teamDoc.exists) {
+        try {
+          AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
+              teamDoc.data() as Map<String, dynamic>);
+
+          final member = (teamRequestModel.players?.isNotEmpty ?? false)
+              ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+              : null;
+
+          final team = TeamModel(
+              name: teamRequestModel.name,
+              name_lowercase: teamRequestModel.name_lowercase,
+              id: teamRequestModel.id,
+              city: teamRequestModel.city,
+              created_at: teamRequestModel.created_at,
+              created_by: teamRequestModel.created_by,
+              profile_img_url: teamRequestModel.profile_img_url,
+              players: member);
+
+          controller.add(team);
+        } catch (e, stack) {
+          catchError(e, stack);
+        }
+      } else {
+        removeResources();
+      }
+    }, onError: catchError);
+
+    return controller.stream;
   }
 
   Stream<List<TeamModel>> getUserRelatedTeams() {
@@ -120,37 +150,67 @@ class TeamService {
     });
   }
 
-  Future<List<TeamModel>> getUserOwnedTeams() async {
-    try {
-      QuerySnapshot mainCollectionSnapshot = await _firestore
-          .collection(FireStoreConst.teamsCollection)
-          .where(FireStoreConst.createdBy, isEqualTo: _currentUserId)
-          .get();
+  Stream<List<TeamModel>> getUserOwnedTeams() {
+    StreamController<List<TeamModel>> controller =
+        StreamController<List<TeamModel>>();
+    StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? subscription;
 
-      List<TeamModel> teams = [];
+    catchError(Object error, StackTrace stack) {
+      controller.addError(AppError.fromError(error, stack));
+      controller.close();
+      subscription?.cancel();
+    }
 
-      for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
-        AddTeamRequestModel teamRequestModel = AddTeamRequestModel.fromJson(
-            mainDoc.data() as Map<String, dynamic>);
+    subscription = _firestore
+        .collection(FireStoreConst.teamsCollection)
+        .where(FireStoreConst.createdBy, isEqualTo: _currentUserId)
+        .snapshots()
+        .listen((snapshot) async {
+      try {
+        List<TeamModel> teams =
+            await Future.wait(snapshot.docs.map((mainDoc) async {
+          AddTeamRequestModel teamRequestModel =
+              AddTeamRequestModel.fromJson(mainDoc.data());
 
-        final member = (teamRequestModel.players?.isNotEmpty ?? false)
-            ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
-            : null;
+          final member = (teamRequestModel.players?.isNotEmpty ?? false)
+              ? await getMemberListFromUserIds(teamRequestModel.players ?? [])
+              : null;
 
-        final team = TeamModel(
-            name: teamRequestModel.name,
-            name_lowercase: teamRequestModel.name_lowercase,
-            id: teamRequestModel.id,
-            city: teamRequestModel.city,
-            created_at: teamRequestModel.created_at,
-            created_by: teamRequestModel.created_by,
-            profile_img_url: teamRequestModel.profile_img_url,
-            players: member);
+          final team = TeamModel(
+              name: teamRequestModel.name,
+              name_lowercase: teamRequestModel.name_lowercase,
+              id: teamRequestModel.id,
+              city: teamRequestModel.city,
+              created_at: teamRequestModel.created_at,
+              created_by: teamRequestModel.created_by,
+              profile_img_url: teamRequestModel.profile_img_url,
+              players: member);
+          return team;
+        }).toList());
 
-        teams.add(team);
+        controller.add(teams);
+      } catch (e, stack) {
+        catchError(e, stack);
       }
+    }, onError: catchError);
 
-      return teams;
+    return controller.stream;
+  }
+
+  Future<String> updateTeam(AddTeamRequestModel team) async {
+    try {
+      DocumentReference teamRef =
+          _firestore.collection(FireStoreConst.teamsCollection).doc(team.id);
+      WriteBatch batch = _firestore.batch();
+
+      batch.set(teamRef, team.toJson(), SetOptions(merge: true));
+      String newTeamId = teamRef.id;
+
+      if (team.id == null) {
+        batch.update(teamRef, {FireStoreConst.id: newTeamId});
+      }
+      await batch.commit();
+      return newTeamId;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -164,17 +224,6 @@ class TeamService {
       await teamRef.set({
         FireStoreConst.profileImageUrl: imageUrl,
       }, SetOptions(merge: true));
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> deleteTeam(String teamId) async {
-    try {
-      await _firestore
-          .collection(FireStoreConst.teamsCollection)
-          .doc(teamId)
-          .delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -254,6 +303,17 @@ class TeamService {
       }
 
       return teams;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> deleteTeam(String teamId) async {
+    try {
+      await _firestore
+          .collection(FireStoreConst.teamsCollection)
+          .doc(teamId)
+          .delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

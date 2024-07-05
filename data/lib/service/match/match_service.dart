@@ -36,45 +36,6 @@ class MatchService {
     this._currentUserId,
   );
 
-  Future<List<MatchModel>> getMatches() async {
-    try {
-      CollectionReference matchCollection =
-          _firestore.collection(FireStoreConst.matchesCollection);
-
-      QuerySnapshot mainCollectionSnapshot = await matchCollection.get();
-      List<MatchModel> matches = [];
-
-      for (QueryDocumentSnapshot mainDoc in mainCollectionSnapshot.docs) {
-        Map<String, dynamic> mainDocData =
-            mainDoc.data() as Map<String, dynamic>;
-        AddEditMatchRequest match = AddEditMatchRequest.fromJson(mainDocData);
-
-        List<MatchTeamModel> teams = await getTeamsList(match.teams);
-        matches.add(MatchModel(
-          id: match.id,
-          teams: teams,
-          match_type: match.match_type,
-          number_of_over: match.number_of_over,
-          over_per_bowler: match.over_per_bowler,
-          city: match.city,
-          ground: match.ground,
-          start_time: match.start_time,
-          created_by: match.created_by,
-          ball_type: match.ball_type,
-          pitch_type: match.pitch_type,
-          match_status: match.match_status,
-          toss_winner_id: match.toss_winner_id,
-          toss_decision: match.toss_decision,
-          current_playing_team_id: match.current_playing_team_id,
-        ));
-      }
-
-      return matches;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   Stream<List<MatchModel>> getCurrentUserPlayedMatches() {
     if (_currentUserId == null) {
       return Stream.value([]);
