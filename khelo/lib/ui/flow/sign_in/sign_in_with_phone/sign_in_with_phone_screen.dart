@@ -34,7 +34,8 @@ class SignInWithPhoneScreen extends ConsumerWidget {
           children: [
             ListView(
               padding: context.mediaQueryPadding +
-                  const EdgeInsets.symmetric(horizontal: 16) + BottomStickyOverlay.padding,
+                  const EdgeInsets.symmetric(horizontal: 16) +
+                  BottomStickyOverlay.padding,
               children: [
                 Text(
                   context.l10n.sign_in_verify_phone_number_title,

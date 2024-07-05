@@ -19,6 +19,8 @@ class FireStoreConst {
   static const String matchStatus = "match_status";
   static const String tossWinnerId = "toss_winner_id";
   static const String tossDecision = "toss_decision";
+  static const String teamIds = "team_ids";
+  static const String teamCreatorIds = "team_creator_ids";
 
   // innings field const
   static const String matchId = "match_id";

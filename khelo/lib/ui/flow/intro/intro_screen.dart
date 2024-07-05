@@ -26,7 +26,8 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
         return Stack(
           children: [
             ListView(
-              padding: BottomStickyOverlay.padding + EdgeInsets.only(top: context.mediaQueryPadding.top),
+              padding: BottomStickyOverlay.padding +
+                  EdgeInsets.only(top: context.mediaQueryPadding.top),
               children: [
                 Padding(
                   padding: EdgeInsets.only(
