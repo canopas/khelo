@@ -60,7 +60,7 @@ class CommentaryBallSummary extends StatelessWidget {
 
     String batsManSummary = " ";
     if (outPlayerSummary != null && outPlayerSummary.wicketType != null) {
-      batsManSummary += outPlayerSummary.player.name;
+      batsManSummary += outPlayerSummary.player.name ?? '';
 
       if (outPlayerSummary.wicketType != WicketType.retired &&
           outPlayerSummary.wicketType != WicketType.retiredHurt &&
@@ -83,8 +83,8 @@ class CommentaryBallSummary extends StatelessWidget {
       style:
           AppTextStyle.body1.copyWith(color: context.colorScheme.textDisabled),
       TextSpan(
-          text: context.l10n
-              .match_commentary_bowler_to_batsman_text(bowlerName, batsmanName),
+          text: context.l10n.match_commentary_bowler_to_batsman_text(
+              bowlerName ?? '', batsmanName),
           children: [
             TextSpan(
               text: " ${_getBallResult(context)}",
@@ -105,16 +105,17 @@ class CommentaryBallSummary extends StatelessWidget {
 
   String _getBatsmanNameById(String batsmanId) {
     if (overSummary.striker.player.id == batsmanId) {
-      return overSummary.striker.player.name;
+      return overSummary.striker.player.name ?? '';
     } else if (overSummary.nonStriker.player.id == batsmanId) {
-      return overSummary.nonStriker.player.name;
+      return overSummary.nonStriker.player.name ?? '';
     } else if (overSummary.outPlayers
         .map((e) => e.player.id)
         .contains(batsmanId)) {
       return overSummary.outPlayers
-          .firstWhere((e) => e.player.id == batsmanId)
-          .player
-          .name;
+              .firstWhere((e) => e.player.id == batsmanId)
+              .player
+              .name ??
+          '';
     } else {
       return "";
     }

@@ -15,6 +15,18 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
       number_of_over: (json['number_of_over'] as num).toInt(),
       over_per_bowler: (json['over_per_bowler'] as num).toInt(),
+      players: (json['players'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      team_ids: (json['team_ids'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      team_creator_ids: (json['team_creator_ids'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       power_play_overs1: (json['power_play_overs1'] as List<dynamic>?)
               ?.map((e) => (e as num).toInt())
               .toList() ??
@@ -59,6 +71,9 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'match_type': _$MatchTypeEnumMap[instance.match_type]!,
       'number_of_over': instance.number_of_over,
       'over_per_bowler': instance.over_per_bowler,
+      'players': instance.players,
+      'team_ids': instance.team_ids,
+      'team_creator_ids': instance.team_creator_ids,
       'power_play_overs1': instance.power_play_overs1,
       'power_play_overs2': instance.power_play_overs2,
       'power_play_overs3': instance.power_play_overs3,
@@ -171,6 +186,18 @@ _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(
           .toList(),
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
       number_of_over: (json['number_of_over'] as num).toInt(),
+      players: (json['players'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      team_ids: (json['team_ids'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      team_creator_ids: (json['team_creator_ids'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       over_per_bowler: (json['over_per_bowler'] as num).toInt(),
       power_play_overs1: (json['power_play_overs1'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
@@ -211,6 +238,9 @@ Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
       'teams': instance.teams,
       'match_type': _$MatchTypeEnumMap[instance.match_type]!,
       'number_of_over': instance.number_of_over,
+      'players': instance.players,
+      'team_ids': instance.team_ids,
+      'team_creator_ids': instance.team_creator_ids,
       'over_per_bowler': instance.over_per_bowler,
       'power_play_overs1': instance.power_play_overs1,
       'power_play_overs2': instance.power_play_overs2,
