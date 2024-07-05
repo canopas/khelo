@@ -22,6 +22,7 @@ class CommentaryOverOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 16),
       color: context.colorScheme.containerLow,
       child: Column(
         children: [
