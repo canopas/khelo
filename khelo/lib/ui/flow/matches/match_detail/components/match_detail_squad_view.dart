@@ -187,56 +187,61 @@ class MatchDetailSquadView extends ConsumerWidget {
       );
     }
     bool isCaptain = user.id == captainId;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          border: BorderDirectional(
-              end: BorderSide(
-                  color: isFirstCell
-                      ? context.colorScheme.outline
-                      : Colors.transparent))),
-      child: Row(
-        children: [
-          if (!isSecondTeam) ...[
-            ImageAvatar(
-              initial: user.nameInitial,
-              imageUrl: user.profile_img_url,
-              size: 40,
-            ),
-            const SizedBox(width: 8),
-          ],
-          Expanded(
-            child: Column(
-              crossAxisAlignment: isSecondTeam
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user.name == null
-                      ? context.l10n.common_anonymous_title
-                      : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textPrimary),
-                  textAlign: isSecondTeam ? TextAlign.end : null,
+    return IntrinsicHeight(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+            border: BorderDirectional(
+                end: BorderSide(
+                    color: isFirstCell
+                        ? context.colorScheme.outline
+                        : Colors.transparent))),
+        child: OnTapScale(
+          onTap: () => UserDetailSheet.show(context, user),
+          child: Row(
+            children: [
+              if (!isSecondTeam) ...[
+                ImageAvatar(
+                  initial: user.nameInitial,
+                  imageUrl: user.profile_img_url,
+                  size: 40,
                 ),
-                Text(
-                    user.player_role != null
-                        ? user.player_role!.getString(context)
-                        : context.l10n.common_not_specified_title,
-                    style: AppTextStyle.caption
-                        .copyWith(color: context.colorScheme.textDisabled)),
+                const SizedBox(width: 8),
               ],
-            ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: isSecondTeam
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.name == null
+                          ? context.l10n.common_anonymous_title
+                          : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textPrimary),
+                      textAlign: isSecondTeam ? TextAlign.end : null,
+                    ),
+                    Text(
+                        user.player_role != null
+                            ? user.player_role!.getString(context)
+                            : context.l10n.common_not_specified_title,
+                        style: AppTextStyle.caption
+                            .copyWith(color: context.colorScheme.textDisabled)),
+                  ],
+                ),
+              ),
+              if (isSecondTeam) ...[
+                const SizedBox(width: 8),
+                ImageAvatar(
+                  initial: user.nameInitial,
+                  imageUrl: user.profile_img_url,
+                  size: 40,
+                ),
+              ],
+            ],
           ),
-          if (isSecondTeam) ...[
-            const SizedBox(width: 8),
-            ImageAvatar(
-              initial: user.nameInitial,
-              imageUrl: user.profile_img_url,
-              size: 40,
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

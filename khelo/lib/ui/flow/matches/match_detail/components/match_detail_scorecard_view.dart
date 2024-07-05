@@ -82,11 +82,10 @@ class MatchDetailScorecardView extends ConsumerWidget {
               final bowler = _getBowlers(inningOvers);
 
               final yetToPlayPlayers = state.match?.teams
-                  .firstWhere((element) => element.team.id == overs?.team_id)
-                  .squad
-                  .where((element) => element.index == null)
-                  .map((e) => e.player.name)
-                  .join(", ");
+                  .where((element) => element.team.id == overs?.team_id)
+                  .firstOrNull
+                  ?.squad
+                  .toList();
 
               return _teamTitleView(context,
                   teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
