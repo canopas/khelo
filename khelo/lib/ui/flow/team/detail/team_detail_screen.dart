@@ -139,7 +139,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
 
   Widget _tabView(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
       child: Row(
         children: [
           TabButton(
