@@ -30,7 +30,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late StreamSubscription<MatchModel?> _matchStreamSubscription;
-  late StreamSubscription<List<BallScoreChange>> _ballScoreStreamSubscription;
+  late StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
   final StreamController<MatchModel> _matchStreamController =
       StreamController<MatchModel>();
   String? matchId;
@@ -1135,7 +1135,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   _cancelStreamSubscription() async {
     await _matchStreamSubscription.cancel();
-    await _ballScoreStreamSubscription.cancel();
+    await _ballScoreStreamSubscription?.cancel();
     await _matchStreamController.close();
   }
 

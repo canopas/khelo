@@ -23,6 +23,8 @@ final teamServiceProvider = Provider((ref) {
 
 class TeamService {
   String? _currentUserId;
+
+  // ignore: unused_field
   final FirebaseFirestore _firestore;
   final UserService _userService;
   final CollectionReference<AddTeamRequestModel> _teamsCollection;
@@ -151,17 +153,9 @@ class TeamService {
 
   Future<String> updateTeam(AddTeamRequestModel team) async {
     try {
-      DocumentReference teamRef = _teamsCollection.doc(team.id);
-      WriteBatch batch = _firestore.batch();
-
-      batch.set(teamRef, team.toJson(), SetOptions(merge: true));
-      String newTeamId = teamRef.id;
-
-      if (team.id == null) {
-        batch.update(teamRef, {FireStoreConst.id: newTeamId});
-      }
-      await batch.commit();
-      return newTeamId;
+      final teamRef = _teamsCollection.doc(team.id);
+      await teamRef.set(team.copyWith(id: teamRef.id), SetOptions(merge: true));
+      return teamRef.id;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -169,11 +163,10 @@ class TeamService {
 
   Future<void> updateProfileImageUrl(String teamId, String? imageUrl) async {
     try {
-      DocumentReference teamRef = _teamsCollection.doc(teamId);
-
-      await teamRef.set({
+      final teamRef = _teamsCollection.doc(teamId);
+      await teamRef.update({
         FireStoreConst.profileImageUrl: imageUrl,
-      }, SetOptions(merge: true));
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -181,11 +174,9 @@ class TeamService {
 
   Future<void> addPlayersToTeam(String teamId, List<String> players) async {
     try {
-      DocumentReference teamRef = _teamsCollection.doc(teamId);
-
-      await teamRef.set(
-          {FireStoreConst.players: FieldValue.arrayUnion(players)},
-          SetOptions(merge: true));
+      final teamRef = _teamsCollection.doc(teamId);
+      await teamRef
+          .update({FireStoreConst.players: FieldValue.arrayUnion(players)});
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -194,8 +185,7 @@ class TeamService {
   Future<void> removePlayersFromTeam(
       String teamId, List<String> playerIds) async {
     try {
-      DocumentReference teamRef = _teamsCollection.doc(teamId);
-
+      final teamRef = _teamsCollection.doc(teamId);
       await teamRef
           .update({FireStoreConst.players: FieldValue.arrayRemove(playerIds)});
     } catch (error, stack) {

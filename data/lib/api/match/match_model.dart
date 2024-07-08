@@ -138,6 +138,8 @@ class MatchPlayer with _$MatchPlayer {
 
 @freezed
 class AddEditMatchRequest with _$AddEditMatchRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddEditMatchRequest({
     String? id,
     required List<AddMatchTeamRequest> teams,
@@ -177,6 +179,8 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
 
 @freezed
 class AddMatchTeamRequest with _$AddMatchTeamRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddMatchTeamRequest({
     required String team_id,
     String? captain_id,
@@ -193,6 +197,8 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
 
 @freezed
 class MatchPlayerRequest with _$MatchPlayerRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchPlayerRequest({
     required String id,
     required PlayerStatus status,

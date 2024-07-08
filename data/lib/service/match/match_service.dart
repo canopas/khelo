@@ -4,6 +4,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
+import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
@@ -124,9 +125,13 @@ class MatchService {
   }
 
   Stream<List<MatchModel>> getMatchesByTeamId(String teamId) {
-    return _matchCollection.snapshots().asyncMap((snapshot) async {
+    return _matchCollection
+        .where(FireStoreConst.teamIds, arrayContains: teamId)
+        .snapshots()
+        .asyncMap((snapshot) async {
       return await Future.wait(snapshot.docs.map((mainDoc) async {
         final match = mainDoc.data();
+
         List<MatchTeamModel> teams = await getTeamsList(match.teams);
         return MatchModel(
           id: match.id,
@@ -315,33 +320,10 @@ class MatchService {
 
   Future<String> updateMatch(AddEditMatchRequest match) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(match.id);
-      WriteBatch batch = _firestore.batch();
-
-      Map<String, dynamic> matchJson = match.toJson();
-
-      final teamsJson = (matchJson[FireStoreConst.teams] as List).map((team) {
-        final teamRequest = (team as AddMatchTeamRequest).toJson();
-        final squadJson = (team)
-            .squad
-            .map((playerRequest) => playerRequest.toJson())
-            .toList();
-        teamRequest[FireStoreConst.squad] = squadJson;
-
-        return teamRequest;
-      }).toList();
-
-      matchJson[FireStoreConst.teams] = teamsJson;
-
-      batch.set(matchRef, matchJson, SetOptions(merge: true));
-      String newMatchId = matchRef.id;
-
-      if (match.id == null) {
-        batch.update(matchRef, {FireStoreConst.id: newMatchId});
-      }
-
-      await batch.commit();
-      return newMatchId;
+      final matchRef = _matchCollection.doc(match.id);
+      await matchRef.set(
+          match.copyWith(id: matchRef.id), SetOptions(merge: true));
+      return matchRef.id;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -350,7 +332,7 @@ class MatchService {
   Future<void> updateTossDetails(String matchId, String tossWinnerId,
       TossDecision tossDecision, String currentPlayingTeam) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
+      final matchRef = _matchCollection.doc(matchId);
 
       Map<String, dynamic> tossDetails = {
         FireStoreConst.tossWinnerId: tossWinnerId,
@@ -366,53 +348,13 @@ class MatchService {
 
   Future<void> updateMatchStatus(String matchId, MatchStatus status) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
+      final matchRef = _matchCollection.doc(matchId);
 
       Map<String, dynamic> matchStatus = {
         FireStoreConst.matchStatus: status.value,
       };
 
       await matchRef.update(matchStatus);
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> updateTeamScore({
-    required String matchId,
-    required String battingTeamId,
-    required int totalRun,
-    required double over,
-    required String bowlingTeamId,
-    required int wicket,
-    int? runs,
-  }) async {
-    try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
-
-      await _firestore.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(matchRef);
-
-        List<Map<String, dynamic>> existingTeams =
-            List<Map<String, dynamic>>.from(
-                snapshot.get(FireStoreConst.teams) ?? []);
-
-        int battingTeamIndex = existingTeams
-            .indexWhere((team) => team[FireStoreConst.teamId] == battingTeamId);
-        int bowlingTeamIndex = existingTeams
-            .indexWhere((team) => team[FireStoreConst.teamId] == bowlingTeamId);
-
-        if (battingTeamIndex != -1 && bowlingTeamIndex != -1) {
-          existingTeams[battingTeamIndex][FireStoreConst.run] = totalRun;
-          existingTeams[battingTeamIndex][FireStoreConst.over] = over;
-          existingTeams[bowlingTeamIndex][FireStoreConst.wicket] = wicket;
-          if (runs != null) {
-            existingTeams[bowlingTeamIndex][FireStoreConst.run] = runs;
-          }
-        }
-
-        transaction.update(matchRef, {FireStoreConst.teams: existingTeams});
-      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -430,48 +372,48 @@ class MatchService {
     List<MatchPlayerRequest>? updatedMatchPlayer,
   }) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
+      final matchRef = _matchCollection.doc(matchId);
 
-      DocumentSnapshot snapshot = await transaction.get(matchRef);
+      final snapshot = await transaction.get(matchRef);
 
-      List<Map<String, dynamic>> existingTeams =
-          List<Map<String, dynamic>>.from(
-              snapshot.get(FireStoreConst.teams) ?? []);
+      final existingTeams = snapshot.data()?.teams ?? [];
 
-      int battingTeamIndex = existingTeams
-          .indexWhere((team) => team[FireStoreConst.teamId] == battingTeamId);
-      int bowlingTeamIndex = existingTeams
-          .indexWhere((team) => team[FireStoreConst.teamId] == bowlingTeamId);
+      int battingTeamIndex =
+          existingTeams.indexWhere((team) => team.team_id == battingTeamId);
+      int bowlingTeamIndex =
+          existingTeams.indexWhere((team) => team.team_id == bowlingTeamId);
 
+      var battingTeam = existingTeams[battingTeamIndex];
+      var bowlingTeam = existingTeams[bowlingTeamIndex];
       if (battingTeamIndex != -1 && bowlingTeamIndex != -1) {
         if (updatedMatchPlayer != null) {
-          List<Map<String, dynamic>> updatedSquad =
-              List<Map<String, dynamic>>.from(
-                  existingTeams[battingTeamIndex][FireStoreConst.squad] ?? []);
+          var updatedSquad = existingTeams[battingTeamIndex].squad.toList();
 
           for (final matchPlayer in updatedMatchPlayer) {
-            int existingPlayerIndex = updatedSquad.indexWhere(
-                (player) => player[FireStoreConst.id] == matchPlayer.id);
+            int existingPlayerIndex = updatedSquad
+                .indexWhere((player) => player.id == matchPlayer.id);
             if (existingPlayerIndex != -1) {
-              updatedSquad[existingPlayerIndex] = matchPlayer.toJson();
+              updatedSquad[existingPlayerIndex] = matchPlayer;
             } else {
-              updatedSquad.add(matchPlayer.toJson());
+              updatedSquad.add(matchPlayer);
             }
           }
-          existingTeams[battingTeamIndex][FireStoreConst.squad] = updatedSquad;
+          battingTeam = battingTeam.copyWith(squad: updatedSquad);
         }
 
-        existingTeams[battingTeamIndex][FireStoreConst.run] = totalRun;
+        battingTeam = battingTeam.copyWith(run: totalRun);
         if (over != null) {
-          existingTeams[battingTeamIndex][FireStoreConst.over] = over;
+          battingTeam = battingTeam.copyWith(over: over);
         }
-        existingTeams[bowlingTeamIndex][FireStoreConst.wicket] = wicket;
+        bowlingTeam = bowlingTeam.copyWith(wicket: wicket);
         if (runs != null) {
-          existingTeams[bowlingTeamIndex][FireStoreConst.run] = runs;
+          bowlingTeam = bowlingTeam.copyWith(run: runs);
         }
       }
 
-      transaction.update(matchRef, {FireStoreConst.teams: existingTeams});
+      transaction.update(matchRef, {
+        FireStoreConst.teams: [battingTeam.toJson(), bowlingTeam.toJson()]
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -480,7 +422,7 @@ class MatchService {
   Future<void> updateCurrentPlayingTeam(
       {required String matchId, required String teamId}) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
+      final matchRef = _matchCollection.doc(matchId);
 
       await matchRef.update({FireStoreConst.currentPlayingTeamId: teamId});
     } catch (error, stack) {
@@ -491,37 +433,38 @@ class MatchService {
   Future<void> updateTeamsSquad(
       String matchId, AddMatchTeamRequest teamRequest) async {
     try {
-      DocumentReference matchRef = _matchCollection.doc(matchId);
+      final matchRef = _matchCollection.doc(matchId);
 
       await _firestore.runTransaction((transaction) async {
-        DocumentSnapshot snapshot = await transaction.get(matchRef);
+        final snapshot = await transaction.get(matchRef);
 
-        List<Map<String, dynamic>> existingTeams =
-            List<Map<String, dynamic>>.from(
-                snapshot.get(FireStoreConst.teams) ?? []);
-
-        int teamIndex = existingTeams.indexWhere(
-            (team) => team[FireStoreConst.teamId] == teamRequest.team_id);
+        final existingTeams = snapshot.data()?.teams ?? [];
+        var updatedTeams = existingTeams;
+        int teamIndex = existingTeams
+            .indexWhere((team) => team.team_id == teamRequest.team_id);
 
         if (teamIndex != -1) {
-          List<Map<String, dynamic>> updatedSquad =
-              List<Map<String, dynamic>>.from(
-                  existingTeams[teamIndex][FireStoreConst.squad] ?? []);
+          var team = existingTeams[teamIndex];
+          var updatedSquad = existingTeams[teamIndex].squad.toList();
 
           for (var updatedPlayer in teamRequest.squad) {
-            int existingPlayerIndex = updatedSquad.indexWhere(
-                (player) => player[FireStoreConst.id] == updatedPlayer.id);
+            int existingPlayerIndex = updatedSquad
+                .indexWhere((player) => player.id == updatedPlayer.id);
             if (existingPlayerIndex != -1) {
-              updatedSquad[existingPlayerIndex] = updatedPlayer.toJson();
+              updatedSquad[existingPlayerIndex] = updatedPlayer;
             } else {
-              updatedSquad.add(updatedPlayer.toJson());
+              updatedSquad.add(updatedPlayer);
             }
           }
 
-          existingTeams[teamIndex][FireStoreConst.squad] = updatedSquad;
+          team = team.copyWith(squad: updatedSquad);
+          updatedTeams = updatedTeams.updateWhere(
+              where: (element) => element.team_id == team.team_id,
+              updated: (oldElement) => team);
         }
 
-        transaction.update(matchRef, {FireStoreConst.teams: existingTeams});
+        transaction.update(matchRef,
+            {FireStoreConst.teams: updatedTeams.map((e) => e.toJson())});
       });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

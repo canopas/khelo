@@ -32,11 +32,11 @@ class InningsService {
   }) async {
     try {
       WriteBatch batch = _firestore.batch();
-
-      DocumentReference firstInningRef = _inningCollection.doc();
-      DocumentReference secondInningRef = _inningCollection.doc();
+      final firstInningRef = _inningCollection.doc();
+      final secondInningRef = _inningCollection.doc();
 
       final firstInning = InningModel(
+        id: firstInningRef.id,
         match_id: matchId,
         team_id: teamId,
         innings_status: firstInningStatus,
@@ -46,6 +46,7 @@ class InningsService {
       );
 
       final secondInning = InningModel(
+        id: secondInningRef.id,
         match_id: matchId,
         team_id: opponentTeamId,
         innings_status: secondInningStatus,
@@ -54,17 +55,9 @@ class InningsService {
         total_wickets: 0,
       );
 
-      // Set data for both innings using their respective references
-      batch.set(
-          firstInningRef,
-          firstInning.copyWith(id: firstInningRef.id).toJson(),
-          SetOptions(merge: true));
-      batch.set(
-          secondInningRef,
-          secondInning.copyWith(id: secondInningRef.id).toJson(),
-          SetOptions(merge: true));
+      batch.set(firstInningRef, firstInning, SetOptions(merge: true));
+      batch.set(secondInningRef, secondInning , SetOptions(merge: true));
 
-      // Commit the batch
       await batch.commit();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -81,41 +74,6 @@ class InningsService {
         .handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Future<void> updateInningScoreDetail({
-    required String battingTeamInningId,
-    required double over,
-    required int totalRun,
-    required String bowlingTeamInningId,
-    required int wicketCount,
-    int? runs,
-  }) async {
-    try {
-      DocumentReference batInningRef =
-          _inningCollection.doc(battingTeamInningId);
-
-      DocumentReference bowlInningRef =
-          _inningCollection.doc(bowlingTeamInningId);
-      WriteBatch batch = _firestore.batch();
-
-      batch.update(batInningRef, {
-        FireStoreConst.overs: over,
-        FireStoreConst.totalRuns: totalRun,
-      });
-      if (runs != null) {
-        batch.update(bowlInningRef, {
-          FireStoreConst.totalWickets: wicketCount,
-          FireStoreConst.totalRuns: runs
-        });
-      } else {
-        batch.update(bowlInningRef, {FireStoreConst.totalWickets: wicketCount});
-      }
-
-      await batch.commit();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   void updateInningScoreDetailViaTransaction(
     Transaction transaction, {
     required String battingTeamInningId,
@@ -126,10 +84,10 @@ class InningsService {
     int? runs,
   }) {
     try {
-      DocumentReference batInningRef =
+      final batInningRef =
           _inningCollection.doc(battingTeamInningId);
 
-      DocumentReference bowlInningRef =
+      final bowlInningRef =
           _inningCollection.doc(bowlingTeamInningId);
 
       Map<String, dynamic> battingUpdates = {
@@ -155,7 +113,7 @@ class InningsService {
     required InningStatus status,
   }) async {
     try {
-      DocumentReference batInningRef = _inningCollection.doc(inningId);
+      final batInningRef = _inningCollection.doc(inningId);
       await batInningRef.update({FireStoreConst.inningsStatus: status.value});
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
