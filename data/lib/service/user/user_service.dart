@@ -42,9 +42,9 @@ class UserService {
 
   Future<void> updateUser(UserModel user) async {
     try {
-      DocumentReference userRef = _userCollection.doc(user.id);
+      final userRef = _userCollection.doc(user.id);
 
-      await userRef.set(user.toJson(), SetOptions(merge: true));
+      await userRef.set(user, SetOptions(merge: true));
 
       _currentUserJsonController.state = user.toJsonString();
     } catch (error, stack) {

@@ -10,11 +10,11 @@ final supportServiceProvider = Provider(
 );
 
 class SupportService {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
   final CollectionReference<AddSupportCaseRequest> _supportCollection;
 
-  SupportService(this._firestore)
-      : _supportCollection = _firestore
+  SupportService(this.firestore)
+      : _supportCollection = firestore
             .collection(FireStoreConst.supportCollection)
             .withConverter(
                 fromFirestore: AddSupportCaseRequest.fromFireStore,
@@ -23,17 +23,10 @@ class SupportService {
 
   Future<String> addSupportCase(AddSupportCaseRequest supportCase) async {
     try {
-      DocumentReference supportCaseRef = _supportCollection.doc(supportCase.id);
-      WriteBatch batch = _firestore.batch();
-
-      batch.set(supportCaseRef, supportCase.toJson(), SetOptions(merge: true));
-      String newSupportCaseId = supportCaseRef.id;
-
-      if (supportCase.id == null) {
-        batch.update(supportCaseRef, {FireStoreConst.id: newSupportCaseId});
-      }
-      await batch.commit();
-      return newSupportCaseId;
+      final supportCaseRef = _supportCollection.doc(supportCase.id);
+      await supportCaseRef.set(
+          supportCase.copyWith(id: supportCaseRef.id), SetOptions(merge: true));
+      return supportCaseRef.id;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
