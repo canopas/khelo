@@ -24,13 +24,12 @@ final teamServiceProvider = Provider((ref) {
 class TeamService {
   String? _currentUserId;
 
-  // ignore: unused_field
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore firestore;
   final UserService _userService;
   final CollectionReference<AddTeamRequestModel> _teamsCollection;
 
-  TeamService(this._currentUserId, this._firestore, this._userService)
-      : _teamsCollection = _firestore
+  TeamService(this._currentUserId, this.firestore, this._userService)
+      : _teamsCollection = firestore
             .collection(FireStoreConst.teamsCollection)
             .withConverter(
                 fromFirestore: AddTeamRequestModel.fromFireStore,

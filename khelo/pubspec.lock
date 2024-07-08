@@ -1109,7 +1109,7 @@ packages:
     source: hosted
     version: "2.3.10"
   rxdart:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: rxdart
       sha256: "0c7c0cedd93788d996e33041ffecda924cc54389199cde4e6a34b440f50044cb"

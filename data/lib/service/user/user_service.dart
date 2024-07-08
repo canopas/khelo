@@ -18,13 +18,13 @@ final userServiceProvider = Provider((ref) {
 class UserService {
   UserModel? _currentUser;
   final StateController<String?> _currentUserJsonController;
-  // ignore: unused_field
-  final FirebaseFirestore _firestore;
+
+  final FirebaseFirestore firestore;
   final CollectionReference<UserModel> _userCollection;
 
   UserService(
-      this._currentUser, this._currentUserJsonController, this._firestore)
-      : _userCollection = _firestore
+      this._currentUser, this._currentUserJsonController, this.firestore)
+      : _userCollection = firestore
             .collection(FireStoreConst.usersCollection)
             .withConverter(
                 fromFirestore: UserModel.fromFireStore,

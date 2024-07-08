@@ -8,6 +8,7 @@ import 'package:data/errors/app_error.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +20,6 @@ import 'package:khelo/ui/flow/matches/match_detail/components/match_detail_info_
 import 'package:khelo/ui/flow/matches/match_detail/components/match_detail_overs_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/match_detail_scorecard_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/match_detail_squad_view.dart';
-import 'package:rxdart/rxdart.dart';
 
 part 'match_detail_tab_view_model.freezed.dart';
 
@@ -54,15 +54,13 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   void _loadMatchesAndInning() {
     try {
       state = state.copyWith(loading: true);
-      final matchInningStream = Rx.combineLatest2(
+      final matchInningStream = combineLatest2(
         _matchService.getMatchStreamById(_matchId),
         _inningService.getInningsStreamByMatchId(matchId: _matchId),
-        (match, innings) => (match: match, innings: innings),
       );
-
       matchStreamSubscription = matchInningStream.listen((data) {
-        final match = data.match;
-        final innings = data.innings;
+        final match = data.$1;
+        final innings = data.$2;
         state = state.copyWith(match: match);
         final firstInning = innings
             .where((element) =>
