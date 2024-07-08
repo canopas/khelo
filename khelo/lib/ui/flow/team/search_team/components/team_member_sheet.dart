@@ -66,7 +66,7 @@ class TeamMemberSheet extends StatelessWidget {
                     .map((member) => UserDetailCell(
                           user: member,
                           onTap: () => UserDetailSheet.show(context, member),
-                          trailing: isForVerification
+                          trailing: isForVerification && member.isActive
                               ? _selectButton(context, member)
                               : null,
                         ))

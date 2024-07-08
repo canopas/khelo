@@ -36,6 +36,8 @@ class UserModel with _$UserModel {
 
   String get nameInitial => name?[0].toUpperCase() ?? '?';
 
+  bool get isActive => name != "Deactivated User";
+
   static UserModel? fromJsonString(String json) =>
       UserModel.fromJson(jsonDecode(json));
 }
