@@ -94,6 +94,7 @@ class UserService {
           (id) => UserModel(
               id: id,
               name: "Deactivated User",
+              isActive: false,
               created_at: DateTime(1950),
               location: "--"),
         ));

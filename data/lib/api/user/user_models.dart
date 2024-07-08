@@ -27,6 +27,7 @@ class UserModel with _$UserModel {
     PlayerRole? player_role,
     BattingStyle? batting_style,
     BowlingStyle? bowling_style,
+    @Default(true) bool isActive,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -35,8 +36,6 @@ class UserModel with _$UserModel {
   String toJsonString() => jsonEncode(toJson());
 
   String get nameInitial => name?[0].toUpperCase() ?? '?';
-
-  bool get isActive => name != "Deactivated User";
 
   static UserModel? fromJsonString(String json) =>
       UserModel.fromJson(jsonDecode(json));

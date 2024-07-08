@@ -29,6 +29,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$BattingStyleEnumMap, json['batting_style']),
       bowling_style:
           $enumDecodeNullable(_$BowlingStyleEnumMap, json['bowling_style']),
+      isActive: json['isActive'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -47,6 +48,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'player_role': _$PlayerRoleEnumMap[instance.player_role],
       'batting_style': _$BattingStyleEnumMap[instance.batting_style],
       'bowling_style': _$BowlingStyleEnumMap[instance.bowling_style],
+      'isActive': instance.isActive,
     };
 
 const _$UserGenderEnumMap = {
