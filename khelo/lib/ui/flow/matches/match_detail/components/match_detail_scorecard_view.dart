@@ -90,9 +90,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
               return _teamTitleView(context,
                   teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
                   over: overs ?? const OverSummary(),
-                  initiallyExpanded: groupOversByInnings.length == 1 ||
-                      state.expandedTeamScorecard
-                          .contains(overs?.team_id ?? ""),
+                  initiallyExpanded: state.expandedTeamScorecard
+                      .contains(inningOvers.first.team_id),
                   children: [
                     _dataTable(context, batsmen: batsmen),
                     ..._buildMatchTotalView(context,
