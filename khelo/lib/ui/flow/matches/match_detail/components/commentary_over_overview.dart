@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -122,10 +124,13 @@ class CommentaryOverOverview extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Flexible(
-            child: Text(
-          batsmanSummary.player.name,
-          style: AppTextStyle.subtitle2
-              .copyWith(color: context.colorScheme.textPrimary),
+            child: OnTapScale(
+          onTap: () => UserDetailSheet.show(context, batsmanSummary.player),
+          child: Text(
+            batsmanSummary.player.name ?? '',
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
         )),
         Text.rich(TextSpan(
             text: batsmanSummary.runs.toString(),
@@ -162,25 +167,31 @@ class BowlerSummaryView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),
-          child: Text.rich(TextSpan(
-              text: bowlerSummary.player.name,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
-              children: [
-                TextSpan(
-                  text:
-                      " [${bowlerSummary.overDelivered} - ${bowlerSummary.maiden} - ${bowlerSummary.runsConceded} - ${bowlerSummary.wicket}]",
-                  style: AppTextStyle.subtitle3
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                if (isForBowlerIntro) ...[
+        OnTapScale(
+          onTap: isForBowlerIntro
+              ? null
+              : () => UserDetailSheet.show(context, bowlerSummary.player),
+          child: Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),
+            child: Text.rich(TextSpan(
+                text: bowlerSummary.player.name,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+                children: [
                   TextSpan(
-                    text: context.l10n.match_commentary_back_to_attack_text,
+                    text:
+                        " [${bowlerSummary.overDelivered} - ${bowlerSummary.maiden} - ${bowlerSummary.runsConceded} - ${bowlerSummary.wicket}]",
+                    style: AppTextStyle.subtitle3
+                        .copyWith(color: context.colorScheme.textPrimary),
                   ),
-                ]
-              ])),
+                  if (isForBowlerIntro) ...[
+                    TextSpan(
+                      text: context.l10n.match_commentary_back_to_attack_text,
+                    ),
+                  ]
+                ])),
+          ),
         ),
       ],
     );

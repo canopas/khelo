@@ -25,6 +25,9 @@ mixin _$MatchModel {
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
   int get over_per_bowler => throw _privateConstructorUsedError;
+  List<String> get players => throw _privateConstructorUsedError;
+  List<String> get team_ids => throw _privateConstructorUsedError;
+  List<String> get team_creator_ids => throw _privateConstructorUsedError;
   List<int> get power_play_overs1 => throw _privateConstructorUsedError;
   List<int> get power_play_overs2 => throw _privateConstructorUsedError;
   List<int> get power_play_overs3 => throw _privateConstructorUsedError;
@@ -61,6 +64,9 @@ abstract class $MatchModelCopyWith<$Res> {
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
+      List<String> players,
+      List<String> team_ids,
+      List<String> team_creator_ids,
       List<int> power_play_overs1,
       List<int> power_play_overs2,
       List<int> power_play_overs3,
@@ -100,6 +106,9 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
+    Object? players = null,
+    Object? team_ids = null,
+    Object? team_creator_ids = null,
     Object? power_play_overs1 = null,
     Object? power_play_overs2 = null,
     Object? power_play_overs3 = null,
@@ -139,6 +148,18 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_ids: null == team_ids
+          ? _value.team_ids
+          : team_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_creator_ids: null == team_creator_ids
+          ? _value.team_creator_ids
+          : team_creator_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       power_play_overs1: null == power_play_overs1
           ? _value.power_play_overs1
           : power_play_overs1 // ignore: cast_nullable_to_non_nullable
@@ -237,6 +258,9 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
+      List<String> players,
+      List<String> team_ids,
+      List<String> team_creator_ids,
       List<int> power_play_overs1,
       List<int> power_play_overs2,
       List<int> power_play_overs3,
@@ -275,6 +299,9 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
+    Object? players = null,
+    Object? team_ids = null,
+    Object? team_creator_ids = null,
     Object? power_play_overs1 = null,
     Object? power_play_overs2 = null,
     Object? power_play_overs3 = null,
@@ -314,6 +341,18 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value._players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_ids: null == team_ids
+          ? _value._team_ids
+          : team_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_creator_ids: null == team_creator_ids
+          ? _value._team_creator_ids
+          : team_creator_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       power_play_overs1: null == power_play_overs1
           ? _value._power_play_overs1
           : power_play_overs1 // ignore: cast_nullable_to_non_nullable
@@ -395,6 +434,9 @@ class _$MatchModelImpl implements _MatchModel {
       required this.match_type,
       required this.number_of_over,
       required this.over_per_bowler,
+      final List<String> players = const [],
+      final List<String> team_ids = const [],
+      final List<String> team_creator_ids = const [],
       final List<int> power_play_overs1 = const [],
       final List<int> power_play_overs2 = const [],
       final List<int> power_play_overs3 = const [],
@@ -413,6 +455,9 @@ class _$MatchModelImpl implements _MatchModel {
       this.toss_winner_id,
       this.current_playing_team_id})
       : _teams = teams,
+        _players = players,
+        _team_ids = team_ids,
+        _team_creator_ids = team_creator_ids,
         _power_play_overs1 = power_play_overs1,
         _power_play_overs2 = power_play_overs2,
         _power_play_overs3 = power_play_overs3,
@@ -439,6 +484,34 @@ class _$MatchModelImpl implements _MatchModel {
   final int number_of_over;
   @override
   final int over_per_bowler;
+  final List<String> _players;
+  @override
+  @JsonKey()
+  List<String> get players {
+    if (_players is EqualUnmodifiableListView) return _players;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_players);
+  }
+
+  final List<String> _team_ids;
+  @override
+  @JsonKey()
+  List<String> get team_ids {
+    if (_team_ids is EqualUnmodifiableListView) return _team_ids;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_team_ids);
+  }
+
+  final List<String> _team_creator_ids;
+  @override
+  @JsonKey()
+  List<String> get team_creator_ids {
+    if (_team_creator_ids is EqualUnmodifiableListView)
+      return _team_creator_ids;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_team_creator_ids);
+  }
+
   final List<int> _power_play_overs1;
   @override
   @JsonKey()
@@ -524,7 +597,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
+    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
   }
 
   @override
@@ -540,6 +613,10 @@ class _$MatchModelImpl implements _MatchModel {
                 other.number_of_over == number_of_over) &&
             (identical(other.over_per_bowler, over_per_bowler) ||
                 other.over_per_bowler == over_per_bowler) &&
+            const DeepCollectionEquality().equals(other._players, _players) &&
+            const DeepCollectionEquality().equals(other._team_ids, _team_ids) &&
+            const DeepCollectionEquality()
+                .equals(other._team_creator_ids, _team_creator_ids) &&
             const DeepCollectionEquality()
                 .equals(other._power_play_overs1, _power_play_overs1) &&
             const DeepCollectionEquality()
@@ -581,6 +658,9 @@ class _$MatchModelImpl implements _MatchModel {
         match_type,
         number_of_over,
         over_per_bowler,
+        const DeepCollectionEquality().hash(_players),
+        const DeepCollectionEquality().hash(_team_ids),
+        const DeepCollectionEquality().hash(_team_creator_ids),
         const DeepCollectionEquality().hash(_power_play_overs1),
         const DeepCollectionEquality().hash(_power_play_overs2),
         const DeepCollectionEquality().hash(_power_play_overs3),
@@ -621,6 +701,9 @@ abstract class _MatchModel implements MatchModel {
       required final MatchType match_type,
       required final int number_of_over,
       required final int over_per_bowler,
+      final List<String> players,
+      final List<String> team_ids,
+      final List<String> team_creator_ids,
       final List<int> power_play_overs1,
       final List<int> power_play_overs2,
       final List<int> power_play_overs3,
@@ -652,6 +735,12 @@ abstract class _MatchModel implements MatchModel {
   int get number_of_over;
   @override
   int get over_per_bowler;
+  @override
+  List<String> get players;
+  @override
+  List<String> get team_ids;
+  @override
+  List<String> get team_creator_ids;
   @override
   List<int> get power_play_overs1;
   @override
@@ -1173,6 +1262,9 @@ mixin _$AddEditMatchRequest {
   List<AddMatchTeamRequest> get teams => throw _privateConstructorUsedError;
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
+  List<String> get players => throw _privateConstructorUsedError;
+  List<String> get team_ids => throw _privateConstructorUsedError;
+  List<String> get team_creator_ids => throw _privateConstructorUsedError;
   int get over_per_bowler => throw _privateConstructorUsedError;
   List<int>? get power_play_overs1 => throw _privateConstructorUsedError;
   List<int>? get power_play_overs2 => throw _privateConstructorUsedError;
@@ -1209,6 +1301,9 @@ abstract class $AddEditMatchRequestCopyWith<$Res> {
       List<AddMatchTeamRequest> teams,
       MatchType match_type,
       int number_of_over,
+      List<String> players,
+      List<String> team_ids,
+      List<String> team_creator_ids,
       int over_per_bowler,
       List<int>? power_play_overs1,
       List<int>? power_play_overs2,
@@ -1246,6 +1341,9 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
     Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
+    Object? players = null,
+    Object? team_ids = null,
+    Object? team_creator_ids = null,
     Object? over_per_bowler = null,
     Object? power_play_overs1 = freezed,
     Object? power_play_overs2 = freezed,
@@ -1282,6 +1380,18 @@ class _$AddEditMatchRequestCopyWithImpl<$Res, $Val extends AddEditMatchRequest>
           ? _value.number_of_over
           : number_of_over // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_ids: null == team_ids
+          ? _value.team_ids
+          : team_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_creator_ids: null == team_creator_ids
+          ? _value.team_creator_ids
+          : team_creator_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       over_per_bowler: null == over_per_bowler
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
@@ -1371,6 +1481,9 @@ abstract class _$$AddEditMatchRequestImplCopyWith<$Res>
       List<AddMatchTeamRequest> teams,
       MatchType match_type,
       int number_of_over,
+      List<String> players,
+      List<String> team_ids,
+      List<String> team_creator_ids,
       int over_per_bowler,
       List<int>? power_play_overs1,
       List<int>? power_play_overs2,
@@ -1406,6 +1519,9 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
     Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
+    Object? players = null,
+    Object? team_ids = null,
+    Object? team_creator_ids = null,
     Object? over_per_bowler = null,
     Object? power_play_overs1 = freezed,
     Object? power_play_overs2 = freezed,
@@ -1442,6 +1558,18 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
           ? _value.number_of_over
           : number_of_over // ignore: cast_nullable_to_non_nullable
               as int,
+      players: null == players
+          ? _value._players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_ids: null == team_ids
+          ? _value._team_ids
+          : team_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      team_creator_ids: null == team_creator_ids
+          ? _value._team_creator_ids
+          : team_creator_ids // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       over_per_bowler: null == over_per_bowler
           ? _value.over_per_bowler
           : over_per_bowler // ignore: cast_nullable_to_non_nullable
@@ -1526,6 +1654,9 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
       required final List<AddMatchTeamRequest> teams,
       required this.match_type,
       required this.number_of_over,
+      final List<String> players = const [],
+      final List<String> team_ids = const [],
+      final List<String> team_creator_ids = const [],
       required this.over_per_bowler,
       final List<int>? power_play_overs1,
       final List<int>? power_play_overs2,
@@ -1545,6 +1676,9 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
       this.toss_winner_id,
       this.current_playing_team_id})
       : _teams = teams,
+        _players = players,
+        _team_ids = team_ids,
+        _team_creator_ids = team_creator_ids,
         _power_play_overs1 = power_play_overs1,
         _power_play_overs2 = power_play_overs2,
         _power_play_overs3 = power_play_overs3,
@@ -1569,6 +1703,34 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
   final MatchType match_type;
   @override
   final int number_of_over;
+  final List<String> _players;
+  @override
+  @JsonKey()
+  List<String> get players {
+    if (_players is EqualUnmodifiableListView) return _players;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_players);
+  }
+
+  final List<String> _team_ids;
+  @override
+  @JsonKey()
+  List<String> get team_ids {
+    if (_team_ids is EqualUnmodifiableListView) return _team_ids;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_team_ids);
+  }
+
+  final List<String> _team_creator_ids;
+  @override
+  @JsonKey()
+  List<String> get team_creator_ids {
+    if (_team_creator_ids is EqualUnmodifiableListView)
+      return _team_creator_ids;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_team_creator_ids);
+  }
+
   @override
   final int over_per_bowler;
   final List<int>? _power_play_overs1;
@@ -1659,7 +1821,7 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
 
   @override
   String toString() {
-    return 'AddEditMatchRequest(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
+    return 'AddEditMatchRequest(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, over_per_bowler: $over_per_bowler, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id)';
   }
 
   @override
@@ -1673,6 +1835,10 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
                 other.match_type == match_type) &&
             (identical(other.number_of_over, number_of_over) ||
                 other.number_of_over == number_of_over) &&
+            const DeepCollectionEquality().equals(other._players, _players) &&
+            const DeepCollectionEquality().equals(other._team_ids, _team_ids) &&
+            const DeepCollectionEquality()
+                .equals(other._team_creator_ids, _team_creator_ids) &&
             (identical(other.over_per_bowler, over_per_bowler) ||
                 other.over_per_bowler == over_per_bowler) &&
             const DeepCollectionEquality()
@@ -1718,6 +1884,9 @@ class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
         const DeepCollectionEquality().hash(_teams),
         match_type,
         number_of_over,
+        const DeepCollectionEquality().hash(_players),
+        const DeepCollectionEquality().hash(_team_ids),
+        const DeepCollectionEquality().hash(_team_creator_ids),
         over_per_bowler,
         const DeepCollectionEquality().hash(_power_play_overs1),
         const DeepCollectionEquality().hash(_power_play_overs2),
@@ -1759,6 +1928,9 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
       required final List<AddMatchTeamRequest> teams,
       required final MatchType match_type,
       required final int number_of_over,
+      final List<String> players,
+      final List<String> team_ids,
+      final List<String> team_creator_ids,
       required final int over_per_bowler,
       final List<int>? power_play_overs1,
       final List<int>? power_play_overs2,
@@ -1789,6 +1961,12 @@ abstract class _AddEditMatchRequest implements AddEditMatchRequest {
   MatchType get match_type;
   @override
   int get number_of_over;
+  @override
+  List<String> get players;
+  @override
+  List<String> get team_ids;
+  @override
+  List<String> get team_creator_ids;
   @override
   int get over_per_bowler;
   @override

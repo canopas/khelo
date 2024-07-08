@@ -75,7 +75,7 @@ class AppTextStyle {
 
   static const TextStyle body2 = TextStyle(
     fontFamily: poppinsFontFamily,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.w500,
     fontSize: 14,
     height: 1.5,
     package: 'style',
@@ -92,7 +92,7 @@ class AppTextStyle {
   static const TextStyle caption = TextStyle(
     fontFamily: poppinsFontFamily,
     fontWeight: FontWeight.w500,
-    fontSize: 12,
+    fontSize: 13,
     height: 1.5,
     package: 'style',
   );

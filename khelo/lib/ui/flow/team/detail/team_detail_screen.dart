@@ -182,36 +182,33 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     TeamDetailViewNotifier notifier,
     TeamDetailState state,
   ) async {
-    return showActionBottomSheet(
-        context: context,
-        showDragHandle: true,
-        items: [
-          BottomSheetAction(
-            title: context.l10n.common_edit_team_title,
-            onTap: () async {
-              context.pop();
-              bool? isUpdated =
-                  await AppRoute.addTeam(team: state.team).push<bool>(context);
-              if (isUpdated == true && context.mounted) {
-                notifier.loadTeamById();
-              }
-            },
-          ),
-          BottomSheetAction(
-            title: context.l10n.add_match_screen_title,
-            onTap: () async {
-              context.pop();
-              bool? isUpdated = await AppRoute.addMatch(
-                      defaultTeam: (state.team?.players?.length ?? 0) >= 2
-                          ? state.team
-                          : null)
-                  .push<bool>(context);
-              if (isUpdated == true && context.mounted) {
-                notifier.loadTeamById();
-              }
-            },
-          ),
-        ]);
+    return showActionBottomSheet(context: context, items: [
+      BottomSheetAction(
+        title: context.l10n.common_edit_team_title,
+        onTap: () async {
+          context.pop();
+          bool? isUpdated =
+              await AppRoute.addTeam(team: state.team).push<bool>(context);
+          if (isUpdated == true && context.mounted) {
+            notifier.loadTeamById();
+          }
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.add_match_screen_title,
+        onTap: () async {
+          context.pop();
+          bool? isUpdated = await AppRoute.addMatch(
+                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                      ? state.team
+                      : null)
+              .push<bool>(context);
+          if (isUpdated == true && context.mounted) {
+            notifier.loadTeamById();
+          }
+        },
+      ),
+    ]);
   }
 
   @override

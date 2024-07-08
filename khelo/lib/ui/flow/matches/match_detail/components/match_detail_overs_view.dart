@@ -38,7 +38,8 @@ class MatchDetailOversView extends ConsumerWidget {
 
     return (state.overList.isNotEmpty)
         ? ListView(
-            padding: context.mediaQueryPadding,
+            padding:
+                context.mediaQueryPadding + const EdgeInsets.only(bottom: 24),
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -48,10 +49,10 @@ class MatchDetailOversView extends ConsumerWidget {
             ],
           )
         : EmptyScreen(
-      title: context.l10n.match_detail_match_not_started_error_title,
-      description: context.l10n.match_detail_error_description_text,
-      isShowButton: false,
-    );
+            title: context.l10n.match_detail_match_not_started_error_title,
+            description: context.l10n.match_detail_error_description_text,
+            isShowButton: false,
+          );
   }
 
   List<Widget> _buildOverList(BuildContext context, MatchDetailTabState state) {
@@ -69,8 +70,12 @@ class MatchDetailOversView extends ConsumerWidget {
         children.add(Divider(height: 32, color: context.colorScheme.outline));
       }
 
-      children.add(_overCellView(context, over.balls, over.bowler.player.name,
-          over.striker.player.name, over.nonStriker.player.name));
+      children.add(_overCellView(
+          context,
+          over.balls,
+          over.bowler.player.name ?? '',
+          over.striker.player.name ?? '',
+          over.nonStriker.player.name ?? ''));
     }
     return children;
   }

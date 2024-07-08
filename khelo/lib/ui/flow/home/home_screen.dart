@@ -75,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 187,
+          height: 176,
           child: state.matches.length == 1
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -94,13 +94,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           SmoothPageIndicator(
             controller: _controller,
             count: state.matches.length,
-            effect: ExpandingDotsEffect(
-              expansionFactor: 2,
-              dotHeight: 8,
-              dotWidth: 8,
-              dotColor: context.colorScheme.containerHigh,
-              activeDotColor: context.colorScheme.secondary,
-            ),
+            effect: WormEffect(
+                dotHeight: 8,
+                dotWidth: 8,
+                dotColor: context.colorScheme.containerHigh,
+                activeDotColor: context.colorScheme.primary,
+                type: WormType.underground),
           )
         ],
         const SizedBox(height: 16),
@@ -126,34 +125,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return OnTapScale(
       onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
           .push(context),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.secondary),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _matchDetailView(context, match),
-            const SizedBox(height: 24),
-            _teamScore(
-              context,
-              match.teams.first,
-              match.teams.elementAt(1).wicket,
-              match.current_playing_team_id == match.teams.first.team.id,
-            ),
-            const SizedBox(height: 8),
-            _teamScore(
+      child: MediaQuery.withNoTextScaling(
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            border: Border.all(color: context.colorScheme.outline),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _matchDetailView(context, match),
+              const SizedBox(height: 24),
+              _teamScore(
+                context,
+                match.teams.first,
+                match.teams.elementAt(1).wicket,
+              ),
+              const SizedBox(height: 16),
+              _teamScore(
                 context,
                 match.teams.elementAt(1),
                 match.teams.first.wicket,
-                match.current_playing_team_id ==
-                    match.teams.elementAt(1).team.id),
-            const SizedBox(height: 8),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -161,38 +160,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _teamScore(
     BuildContext context,
-    MatchTeamModel team,
+    MatchTeamModel matchTeam,
     int wicket,
-    bool isCurrentlyPlaying,
   ) {
     return Row(
       children: [
         ImageAvatar(
-          initial: team.team.name[0].toUpperCase(),
-          imageUrl: team.team.profile_img_url,
+          initial: matchTeam.team.name[0].toUpperCase(),
+          imageUrl: matchTeam.team.profile_img_url,
           size: 32,
         ),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(team.team.name,
+          child: Text(matchTeam.team.name,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
-              style: AppTextStyle.subtitle1.copyWith(
-                  color: isCurrentlyPlaying
-                      ? context.colorScheme.primary
-                      : context.colorScheme.textSecondary)),
+              style: AppTextStyle.subtitle1
+                  .copyWith(color: context.colorScheme.textPrimary)),
         ),
-        Text.rich(TextSpan(
-            text: "${team.run}-$wicket",
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-            children: [
-              TextSpan(
-                text: " ${team.over}",
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.textSecondary),
-              )
-            ]))
+        if (matchTeam.over != 0) ...[
+          Text.rich(TextSpan(
+              text: "${matchTeam.run}-$wicket",
+              style: AppTextStyle.subtitle2
+                  .copyWith(color: context.colorScheme.textPrimary),
+              children: [
+                TextSpan(
+                  text: " ${matchTeam.over}",
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.textSecondary),
+                )
+              ])),
+        ],
       ],
     );
   }

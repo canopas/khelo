@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
@@ -77,6 +78,7 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: UserDetailCell(
             user: member.player,
+            onTap: () => UserDetailSheet.show(context, member.player),
             trailing: _selectButtons(context, notifier, state, member),
           ),
         );
