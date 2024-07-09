@@ -65,7 +65,16 @@ class TeamMemberSheet extends StatelessWidget {
                 children: (team.players ?? [])
                     .map((member) => UserDetailCell(
                           user: member,
-                          onTap: () => UserDetailSheet.show(context, member),
+                          onTap: () => UserDetailSheet.show(
+                            context,
+                            member,
+                            actionButtonTitle:
+                                isForVerification && member.isActive
+                                    ? context.l10n.common_select_title
+                                    : null,
+                            onButtonTap: () =>
+                                _onSelectButtonTap(context, member),
+                          ),
                           trailing: isForVerification && member.isActive
                               ? _selectButton(context, member)
                               : null,
@@ -80,15 +89,17 @@ class TeamMemberSheet extends StatelessWidget {
   Widget _selectButton(BuildContext context, UserModel user) {
     return SecondaryButton(
       context.l10n.common_select_title,
-      onPressed: () async {
-        if (user.phone != null) {
-          final res = await VerifyTeamMemberSheet.show(context,
-              phoneNumber: user.phone!);
-          if (res != null && res && context.mounted) {
-            context.pop(res);
-          }
-        }
-      },
+      onPressed: () => _onSelectButtonTap(context, user),
     );
+  }
+
+  Future<void> _onSelectButtonTap(BuildContext context, UserModel user) async {
+    if (user.phone != null) {
+      final res =
+          await VerifyTeamMemberSheet.show(context, phoneNumber: user.phone!);
+      if (res != null && res && context.mounted) {
+        context.pop(res);
+      }
+    }
   }
 }
