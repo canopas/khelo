@@ -1647,7 +1647,8 @@ class __$$AddEditMatchRequestImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
 class _$AddEditMatchRequestImpl implements _AddEditMatchRequest {
   const _$AddEditMatchRequestImpl(
       {this.id,
@@ -2170,7 +2171,8 @@ class __$$AddMatchTeamRequestImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
 class _$AddMatchTeamRequestImpl implements _AddMatchTeamRequest {
   const _$AddMatchTeamRequestImpl(
       {required this.team_id,
@@ -2386,7 +2388,8 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
 class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
   const _$MatchPlayerRequestImpl(
       {required this.id, required this.status, this.index});

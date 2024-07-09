@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -19,6 +20,8 @@ final teamDetailStateProvider =
             ));
 
 class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
+  late StreamSubscription _teamStreamSubscription;
+  late StreamSubscription _matchListStreamSubscription;
   final TeamService _teamService;
   final MatchService _matchService;
   String? teamId;
@@ -32,38 +35,34 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   }
 
   Future<void> loadTeamById() async {
-    if (teamId == null) {
-      return;
-    }
+    if (teamId == null) return;
 
-    try {
-      state = state.copyWith(loading: state.team == null);
-
-      final team = await _teamService.getTeamById(teamId!);
+    state = state.copyWith(loading: state.team == null);
+    _teamStreamSubscription =
+        _teamService.getTeamStreamById(teamId!).listen((team) {
       state = state.copyWith(team: team, loading: false);
       loadTeamMatches();
-    } catch (e) {
+    }, onError: (e) {
       state = state.copyWith(loading: false, error: e);
       debugPrint(
           "TeamDetailViewNotifier: error while loading team by id -> $e");
-    }
+    });
   }
 
   Future<void> loadTeamMatches() async {
-    if (state.team == null) {
-      return;
-    }
-    try {
-      state = state.copyWith(loading: state.matches == null);
-      final matches = await _matchService
-          .getMatchesByTeamId(state.team!.id ?? "INVALID ID");
+    if (state.team == null) return;
+
+    state = state.copyWith(loading: state.matches == null);
+    _matchListStreamSubscription = _matchService
+        .getMatchesByTeamId(state.team!.id ?? "INVALID ID")
+        .listen((matches) {
       final teamStat = _calculateTeamStat(matches);
       state =
           state.copyWith(matches: matches, teamStat: teamStat, loading: false);
-    } catch (e) {
+    }, onError: (e) {
       debugPrint(
           "TeamDetailViewNotifier: error while loading team matches -> $e");
-    }
+    });
   }
 
   TeamStat _calculateTeamStat(List<MatchModel> matches) {
@@ -188,16 +187,23 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     );
   }
 
-  void updateTeamMember(List<UserModel> members) {
-    state = state.copyWith(
-        team: state.team
-            ?.copyWith(players: [...state.team?.players ?? [], ...members]));
-  }
-
   void onTabChange(int tab) {
     if (state.selectedTab != tab) {
       state = state.copyWith(selectedTab: tab);
     }
+  }
+
+  onResume() {
+    _teamStreamSubscription.cancel();
+    _matchListStreamSubscription.cancel();
+    loadTeamById();
+  }
+
+  @override
+  void dispose() {
+    _teamStreamSubscription.cancel();
+    _matchListStreamSubscription.cancel();
+    super.dispose();
   }
 }
 

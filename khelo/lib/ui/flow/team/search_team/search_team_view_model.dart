@@ -15,6 +15,7 @@ final searchTeamViewStateProvider =
 });
 
 class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
+  late StreamSubscription _streamSubscription;
   final TeamService _teamService;
   Timer? _debounce;
   List<String> excludedIds = [];
@@ -32,18 +33,17 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
 
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
-    try {
-      final res = await _teamService.getUserOwnedTeams();
 
+    _streamSubscription = _teamService.getUserOwnedTeams().listen((teams) {
       final filteredResult =
-          res.where((element) => !excludedIds.contains(element.id)).toList();
+          teams.where((element) => !excludedIds.contains(element.id)).toList();
 
       state = state.copyWith(
           userTeams: filteredResult, loading: false, error: null);
-    } catch (e) {
+    }, onError: (e) {
       state = state.copyWith(loading: false, error: e);
       debugPrint("SearchTeamViewNotifier: error while loading team list -> $e");
-    }
+    });
   }
 
   Future<void> search(String searchKey) async {
@@ -104,6 +104,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   @override
   void dispose() {
     _debounce?.cancel();
+    _streamSubscription.cancel();
     super.dispose();
   }
 }

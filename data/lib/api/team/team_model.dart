@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -39,4 +40,9 @@ class AddTeamRequestModel with _$AddTeamRequestModel {
 
   factory AddTeamRequestModel.fromJson(Map<String, dynamic> json) =>
       _$AddTeamRequestModelFromJson(json);
+
+  factory AddTeamRequestModel.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      AddTeamRequestModel.fromJson(snapshot.data()!);
 }
