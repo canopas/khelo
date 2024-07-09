@@ -184,8 +184,10 @@ class MatchDetailSquadView extends ConsumerWidget {
     String? captainId,
   }) {
     if (user == null) {
-      return const SizedBox(
-        height: 0,
+      return const Expanded(
+        child: SizedBox(
+          height: 0,
+        ),
       );
     }
     bool isCaptain = user.id == captainId;
@@ -222,11 +224,13 @@ class MatchDetailSquadView extends ConsumerWidget {
                       textAlign: isSecondTeam ? TextAlign.end : null,
                     ),
                     Text(
-                        user.player_role != null
-                            ? user.player_role!.getString(context)
-                            : context.l10n.common_not_specified_title,
-                        style: AppTextStyle.caption
-                            .copyWith(color: context.colorScheme.textDisabled)),
+                      user.player_role != null
+                          ? user.player_role!.getString(context)
+                          : context.l10n.common_not_specified_title,
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.textDisabled),
+                      textAlign: isSecondTeam ? TextAlign.end : null,
+                    ),
                   ],
                 ),
               ),
