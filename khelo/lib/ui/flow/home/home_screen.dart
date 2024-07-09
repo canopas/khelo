@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/ground_layout_view.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
@@ -14,7 +16,6 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/widgets/ground_layout_view.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -113,7 +114,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 return SingleChildScrollView(
                     child: Column(
                   children: [
-                    const GroundLayoutView(),
+                    GroundLayoutView(
+                      onPositionSelect: (p0) =>
+                          debugPrint(p0.type.getString(context)),
+                    ),
                   ],
                 ));
               },

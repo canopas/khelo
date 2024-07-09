@@ -1,12 +1,13 @@
 import 'dart:math';
-import 'dart:ui';
+import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:khelo/components/custom_painters.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/widgets/custom_painters.dart';
 
 class GroundLayoutView extends StatefulWidget {
-  const GroundLayoutView({super.key});
+  final Function(FieldingPosition) onPositionSelect;
+
+  const GroundLayoutView({super.key, required this.onPositionSelect});
 
   @override
   State<GroundLayoutView> createState() => _GroundLayoutViewState();
@@ -21,9 +22,27 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
 
   late AnimationController _controller;
   late Animation<double> _animation;
-  late Offset _startOffset; // Center of the ground (imaginary batsman position)
+  late Offset _startOffset;
   Offset? _endOffset;
-  bool _isAnimating = false;
+
+  List<FieldingPosition> positions = [
+    FieldingPosition(FieldingPositionType.deepMidWicket,
+        startAngle: 0, endAngle: 45, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.longOn,
+        startAngle: 45, endAngle: 90, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.longOff,
+        startAngle: 90, endAngle: 135, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.deepCover,
+        startAngle: 135, endAngle: 180, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.deepPoint,
+        startAngle: 180, endAngle: 225, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.thirdMan,
+        startAngle: 225, endAngle: 270, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.deepFineLeg,
+        startAngle: 270, endAngle: 315, distance: Distance.boundary),
+    FieldingPosition(FieldingPositionType.deepSquareLeg,
+        startAngle: 315, endAngle: 360, distance: Distance.boundary),
+  ];
 
   @override
   void initState() {
@@ -37,18 +56,32 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
       ..addListener(() {
         setState(() {});
       });
-
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _isAnimating = false;
-      }
-    });
   }
 
-  void _onTapUp(TapUpDetails details) {
+  void _onTapUp(TapUpDetails details, Size size) {
+    final localPosition = details.localPosition;
+    final double dx = localPosition.dx - size.width / 2;
+    final double dy = localPosition.dy - size.height / 2;
+    final double distance = sqrt(dx * dx + dy * dy);
+    final double angle = (atan2(dy, dx) + 2 * pi) % (2 * pi);
+
+    final double radius = min(size.width / 2, size.height / 2);
+    final double boundary = radius;
+    final double thirtyYards = radius * 0.6;
+
+    for (var position in positions) {
+      final double effectiveRadius =
+          position.distance == Distance.boundary ? boundary : thirtyYards;
+      if (distance <= effectiveRadius &&
+          angle >= position.startAngle &&
+          angle < position.endAngle) {
+        widget.onPositionSelect(position);
+        break;
+      }
+    }
+
     setState(() {
       _endOffset = details.localPosition;
-      _isAnimating = true;
       _controller.reset();
       _controller.forward();
     });
@@ -64,51 +97,8 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: groundRadius,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          _groundCircle(),
-          // AnimatedPositioned(
-          //   width: positionIndicatorSize / 2,
-          //   height: positionIndicatorSize / 2,
-          //   left: (position?.dx ?? groundRadius),
-          //   top: (position?.dy ?? groundRadius),
-          //   duration: const Duration(milliseconds: 500),
-          //   curve: Curves.fastOutSlowIn,
-          //   child: CircleAvatar(
-          //     backgroundColor: context.colorScheme.primary,
-          //   ),
-          // )
-        ],
-      ),
+      child: _groundCircle(),
     );
-  }
-
-  void _handleTap(Offset localPosition, Size size) {
-    final double dx = localPosition.dx - size.width / 2;
-    final double dy = localPosition.dy - size.height / 2;
-    final double distance = sqrt(dx * dx + dy * dy);
-    final double angle = (atan2(dy, dx) + 2 * pi) % (2 * pi);
-
-    final double radius = min(size.width / 2, size.height / 2);
-    final double boundary = radius;
-    final double thirtyYards = radius * 0.6;
-    setState(() {
-      position = localPosition;
-      _controller.forward();
-    });
-    // for (var position in widget.fieldingPositions) {
-    //   final double effectiveRadius =
-    //       position.isInside30Meters ? thirtyYards : boundary;
-    //   if (distance <= effectiveRadius &&
-    //       angle >= position.startAngle &&
-    //       angle < position.endAngle) {
-    //     setState(() {
-    //       tappedPosition = position.name;
-    //     });
-    //     break;
-    //   }
-    // }
   }
 
   Widget _groundCircle() {
@@ -122,11 +112,12 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
             height: (groundRadius * 2),
             width: (groundRadius * 2),
             child: CustomPaint(
-              painter: CircleDividerPainter(divisions: 8),
+              painter: FieldingPositionsPainter(context,
+                  positions: positions, divisions: 8, radius: groundRadius),
             ),
           ),
           GestureDetector(
-            onTapUp: _onTapUp,
+            onTapUp: (details) => _onTapUp(details, context.size!),
             child: CustomPaint(
                 painter: LinePainter(
                     startOffset: _startOffset,

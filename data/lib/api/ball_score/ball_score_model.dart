@@ -69,6 +69,42 @@ enum WicketType {
   const WicketType(this.value);
 }
 
+@JsonEnum(valueField: "value")
+enum FieldingPositionType {
+  deepMidWicket(1),
+  longOn(2),
+  longOff(3),
+  deepCover(4),
+  deepPoint(5),
+  thirdMan(6),
+  deepFineLeg(7),
+  deepSquareLeg(8);
+
+  final int value;
+  const FieldingPositionType(this.value);
+}
+
+enum Distance {
+  short,
+  mid,
+  afterMid,
+  boundary;
+}
+
+class FieldingPosition {
+  FieldingPositionType type;
+  double startAngle;
+  double endAngle;
+  Distance distance;
+
+  FieldingPosition(
+    this.type, {
+    required this.startAngle,
+    required this.endAngle,
+    required this.distance,
+  });
+}
+
 @freezed
 class UserStat with _$UserStat {
   const factory UserStat({
