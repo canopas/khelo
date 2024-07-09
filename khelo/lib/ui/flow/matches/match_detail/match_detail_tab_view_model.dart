@@ -81,7 +81,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
             .firstOrNull;
 
         onScorecardExpansionChange(
-          match.matchResult?.teamId ?? match.teams.last.team.id ?? "",
+          match.matchResult?.teamId ?? match.current_playing_team_id?? "",
           true,
         );
         state = state.copyWith(
