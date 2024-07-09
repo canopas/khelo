@@ -148,7 +148,15 @@ class TeamSelectionView extends StatelessWidget {
         onTap: () async {
           final squad = await AppRoute.selectSquad(
             team: team,
-            squad: type == TeamType.a ? state.squadA : state.squadB,
+            squad: type == TeamType.a
+                ? state.squadA
+                    ?.where(
+                      (element) => element.player.isActive,
+                    )
+                    .toList()
+                : state.squadB
+                    ?.where((element) => element.player.isActive)
+                    .toList(),
             captainId: type == TeamType.a
                 ? state.teamACaptainId
                 : state.teamBCaptainId,
