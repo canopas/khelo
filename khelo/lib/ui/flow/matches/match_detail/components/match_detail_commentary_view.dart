@@ -67,9 +67,12 @@ class MatchDetailCommentaryView extends ConsumerWidget {
       final nextOverSummary = state.overList.elementAtOrNull(index + 1);
       if (nextOverSummary != null &&
           nextOverSummary.overNumber != overSummary.overNumber) {
-        children.add(BowlerSummaryView(
-          bowlerSummary: nextOverSummary.bowlerStatAtStart,
-          isForBowlerIntro: true,
+        children.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: BowlerSummaryView(
+            bowlerSummary: nextOverSummary.bowlerStatAtStart,
+            isForBowlerIntro: true,
+          ),
         ));
       }
 
@@ -95,7 +98,9 @@ class MatchDetailCommentaryView extends ConsumerWidget {
             showBallScore:
                 ball.is_four || ball.is_six || ball.wicket_taker_id != null,
           ),
-          Divider(color: context.colorScheme.outline, height: 32)
+          if (ball != overSummary.balls.first) ...[
+            Divider(color: context.colorScheme.outline),
+          ],
         ]);
       }
     }
