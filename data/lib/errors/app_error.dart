@@ -31,7 +31,7 @@ class AppError implements Exception {
     } else if (error is FirebaseException) {
       return _handleFirebaseError(error);
     } else if (error is TypeError) {
-      return SomethingWentWrongError(stackTrace: error.stackTrace);
+      return SomethingWentWrongError(message: error.toString(), stackTrace: error.stackTrace);
     } else if (error is LargeAttachmentUploadError) {
       return const LargeAttachmentUploadError();
     } else {

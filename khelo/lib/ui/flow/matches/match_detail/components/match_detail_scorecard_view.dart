@@ -553,6 +553,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
             )));
+        if (index != powerPlays.length) {
+          children.add(Divider(height: 0, color: context.colorScheme.outline));
+        }
       }
       return Column(
         children: children,

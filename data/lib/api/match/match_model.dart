@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -137,6 +138,8 @@ class MatchPlayer with _$MatchPlayer {
 
 @freezed
 class AddEditMatchRequest with _$AddEditMatchRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddEditMatchRequest({
     String? id,
     required List<AddMatchTeamRequest> teams,
@@ -167,10 +170,17 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
 
   factory AddEditMatchRequest.fromJson(Map<String, dynamic> json) =>
       _$AddEditMatchRequestFromJson(json);
+
+  factory AddEditMatchRequest.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      AddEditMatchRequest.fromJson(snapshot.data()!);
 }
 
 @freezed
 class AddMatchTeamRequest with _$AddMatchTeamRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddMatchTeamRequest({
     required String team_id,
     String? captain_id,
@@ -187,6 +197,8 @@ class AddMatchTeamRequest with _$AddMatchTeamRequest {
 
 @freezed
 class MatchPlayerRequest with _$MatchPlayerRequest {
+  // ignore: invalid_annotation_target
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchPlayerRequest({
     required String id,
     required PlayerStatus status,

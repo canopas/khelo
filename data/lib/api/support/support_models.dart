@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'support_models.freezed.dart';
@@ -17,6 +18,11 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
 
   factory AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =>
       _$AddSupportCaseRequestFromJson(json);
+
+  factory AddSupportCaseRequest.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      AddSupportCaseRequest.fromJson(snapshot.data()!);
 }
 
 enum AttachmentUploadStatus {
