@@ -6,6 +6,7 @@ import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
+import 'package:data/utils/dummy_deactivated_account.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../storage/app_preferences.dart';
@@ -42,8 +43,7 @@ class TeamService {
       final teamRequestModel = teamDoc.data();
 
       if (teamRequestModel == null) {
-        return TeamModel(
-            id: teamId, name: "Deleted Team", name_lowercase: "deletedteam");
+        return deActiveDummyTeamModel(teamId);
       }
 
       final member = (teamRequestModel.players?.isNotEmpty ?? false)
@@ -70,8 +70,7 @@ class TeamService {
     return _teamsCollection.doc(teamId).snapshots().asyncMap((teamDoc) async {
       final teamRequestModel = teamDoc.data();
       if (teamRequestModel == null) {
-        return TeamModel(
-            id: teamId, name: "Deleted Team", name_lowercase: "deletedteam");
+        return deActiveDummyTeamModel(teamId);
       }
       final member = (teamRequestModel.players?.isNotEmpty ?? false)
           ? await getMemberListFromUserIds(teamRequestModel.players ?? [])

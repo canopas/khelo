@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
+import 'package:data/utils/dummy_deactivated_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
@@ -66,11 +67,7 @@ class UserService {
       final snapshot = await _userCollection.doc(id).get();
       var userModel = snapshot.data();
       if (userModel == null) {
-        return UserModel(
-            id: id,
-            name: "Deactivated User",
-            created_at: DateTime(1950),
-            location: "--");
+        return deActiveDummyUserAccount(id);
       }
       return userModel;
     } catch (error, stack) {
@@ -93,12 +90,7 @@ class UserService {
         final deactivatedUserIds =
             tenIds.where((id) => !users.map((user) => user.id).contains(id));
         users.addAll(deactivatedUserIds.map(
-          (id) => UserModel(
-              id: id,
-              name: "Deactivated User",
-              isActive: false,
-              created_at: DateTime(1950),
-              location: "--"),
+          (id) => deActiveDummyUserAccount(id),
         ));
       }
 
