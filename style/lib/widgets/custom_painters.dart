@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-
 class CircleDividerPainter extends CustomPainter {
   final int divisions;
   final Paint _linePaint;
 
   CircleDividerPainter({required this.divisions})
       : _linePaint = Paint()
-    ..color = Colors.white
-    ..strokeWidth = 0.7
-    ..style = PaintingStyle.stroke;
+          ..color = Colors.white
+          ..strokeWidth = 0.7
+          ..style = PaintingStyle.stroke;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -31,6 +30,42 @@ class CircleDividerPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class LinePainter extends CustomPainter {
+  final Offset startOffset;
+  Offset? endOffset;
+  final double progress;
+  final Color strokeColor;
+
+  LinePainter({
+    required this.startOffset,
+    this.endOffset,
+    required this.progress,
+    required this.strokeColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (endOffset != null) {
+      final paint = Paint()
+        ..color = strokeColor
+        ..strokeCap = StrokeCap.round
+        ..strokeWidth = 3.0;
+
+      final currentOffset = Offset(
+        startOffset.dx + (endOffset!.dx - startOffset.dx) * progress,
+        startOffset.dy + (endOffset!.dy - startOffset.dy) * progress,
+      );
+
+      canvas.drawLine(startOffset, currentOffset, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
 }

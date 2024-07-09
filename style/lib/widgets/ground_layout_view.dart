@@ -1,34 +1,86 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:style/widgets/circle_divider_painter.dart';
+import 'package:flutter/rendering.dart';
+import 'package:style/extensions/context_extensions.dart';
+import 'package:style/widgets/custom_painters.dart';
 
-class GroundLayoutView extends StatelessWidget {
-  final double size = 184;
-  final double groundRadius = 184;
-  final double pitchWidth = 25;
-
+class GroundLayoutView extends StatefulWidget {
   const GroundLayoutView({super.key});
 
   @override
+  State<GroundLayoutView> createState() => _GroundLayoutViewState();
+}
+
+class _GroundLayoutViewState extends State<GroundLayoutView>
+    with SingleTickerProviderStateMixin {
+  final double groundRadius = 184;
+  final double pitchWidth = 25;
+  final double positionIndicatorSize = 10;
+  Offset? position;
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  late Offset _startOffset; // Center of the ground (imaginary batsman position)
+  Offset? _endOffset;
+  bool _isAnimating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _startOffset = Offset(groundRadius, groundRadius);
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _isAnimating = false;
+      }
+    });
+  }
+
+  void _onTapUp(TapUpDetails details) {
+    setState(() {
+      _endOffset = details.localPosition;
+      _isAnimating = true;
+      _controller.reset();
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        _groundCircle(),
-        SizedBox(
-          height: (groundRadius * 2) - 27,
-          width: (groundRadius * 2) - 27,
-          child: GestureDetector(
-            onTapUp: (details) {
-              print("detail: ${details.localPosition}");
-              _handleTap(details.localPosition, context.size!);
-            },
-            child: CustomPaint(
-              painter: CircleDividerPainter(divisions: 8),
-            ),
-          ),
-        ),
-      ],
+    return CircleAvatar(
+      radius: groundRadius,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          _groundCircle(),
+          // AnimatedPositioned(
+          //   width: positionIndicatorSize / 2,
+          //   height: positionIndicatorSize / 2,
+          //   left: (position?.dx ?? groundRadius),
+          //   top: (position?.dy ?? groundRadius),
+          //   duration: const Duration(milliseconds: 500),
+          //   curve: Curves.fastOutSlowIn,
+          //   child: CircleAvatar(
+          //     backgroundColor: context.colorScheme.primary,
+          //   ),
+          // )
+        ],
+      ),
     );
   }
 
@@ -41,7 +93,10 @@ class GroundLayoutView extends StatelessWidget {
     final double radius = min(size.width / 2, size.height / 2);
     final double boundary = radius;
     final double thirtyYards = radius * 0.6;
-
+    setState(() {
+      position = localPosition;
+      _controller.forward();
+    });
     // for (var position in widget.fieldingPositions) {
     //   final double effectiveRadius =
     //       position.isInside30Meters ? thirtyYards : boundary;
@@ -60,7 +115,31 @@ class GroundLayoutView extends StatelessWidget {
     return CircleAvatar(
       radius: groundRadius,
       backgroundColor: Colors.green,
-      child: _boundaryCircle(),
+      child: Stack(
+        children: [
+          _boundaryCircle(),
+          SizedBox(
+            height: (groundRadius * 2),
+            width: (groundRadius * 2),
+            child: CustomPaint(
+              painter: CircleDividerPainter(divisions: 8),
+            ),
+          ),
+          GestureDetector(
+            onTapUp: _onTapUp,
+            child: CustomPaint(
+                painter: LinePainter(
+                    startOffset: _startOffset,
+                    endOffset: _endOffset,
+                    progress: _animation.value,
+                    strokeColor: context.colorScheme.primary),
+                child: CircleAvatar(
+                  radius: groundRadius,
+                  backgroundColor: Colors.transparent,
+                )),
+          ),
+        ],
+      ),
     );
   }
 

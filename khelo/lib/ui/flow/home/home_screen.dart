@@ -108,11 +108,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           onPressed: () {
             showModalBottomSheet(
               context: context,
+              isScrollControlled: true,
               builder: (context) {
-                return Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.only(top: 24),
-                    child: GroundLayoutView());
+                return SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    const GroundLayoutView(),
+                  ],
+                ));
               },
             );
           },
