@@ -1085,9 +1085,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
             : state.otherInning?.team_id) ??
         "INVALID ID";
     final teamPlayers = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
-        ?.squad;
+        .firstWhere((element) => element.team.id == teamId)
+        .squad
+        .where((element) => element.player.isActive)
+        .toList();
 
     if (type == PlayerSelectionType.bowler) {
       return teamPlayers ?? [];
@@ -1113,7 +1114,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final teamId = state.otherInning?.team_id ?? "INVALID ID";
     final teamPlayers = state.match?.teams
         .firstWhere((element) => element.team.id == teamId)
-        .squad;
+        .squad
+        .where((element) => element.player.isActive)
+        .toList();
 
     return teamPlayers ?? [];
   }

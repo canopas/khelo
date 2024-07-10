@@ -187,7 +187,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
   List<UserModel> getFilteredList(SelectSquadViewState state) {
     return state.team?.players
             ?.where((element) =>
-                !state.squad.map((e) => e.player.id).contains(element.id))
+                !state.squad.map((e) => e.player.id).contains(element.id) &&
+                element.isActive)
             .toList() ??
         [];
   }

@@ -41,19 +41,28 @@ class MatchDetailSquadView extends ConsumerWidget {
   Widget _listView(BuildContext context, MatchDetailTabState state) {
     final firstTeam = state.match!.teams.firstOrNull;
     final secondTeam = state.match!.teams.elementAtOrNull(1);
-    final firstTeamSquad = firstTeam?.squad.map((e) => e.player).toList() ?? [];
-    final secondTeamSquad =
-        secondTeam?.squad.map((e) => e.player).toList() ?? [];
+    final firstTeamSquad = firstTeam?.squad
+            .where((element) => element.player.isActive)
+            .map((e) => e.player)
+            .toList() ??
+        [];
+    final secondTeamSquad = secondTeam?.squad
+            .where((element) => element.player.isActive)
+            .map((e) => e.player)
+            .toList() ??
+        [];
 
     final firstTeamBench = firstTeam?.team.players
             ?.where((element) =>
-                !firstTeamSquad.map((e) => e.id).contains(element.id))
+                !firstTeamSquad.map((e) => e.id).contains(element.id) &&
+                element.isActive)
             .toList() ??
         [];
 
     final secondTeamBench = secondTeam?.team.players
             ?.where((element) =>
-                !secondTeamSquad.map((e) => e.id).contains(element.id))
+                !secondTeamSquad.map((e) => e.id).contains(element.id) &&
+                element.isActive)
             .toList() ??
         [];
 

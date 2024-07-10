@@ -28,6 +28,7 @@ class UserModel with _$UserModel {
     PlayerRole? player_role,
     BattingStyle? batting_style,
     BowlingStyle? bowling_style,
+    @Default(true) bool isActive,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

@@ -26,7 +26,7 @@ class UserDetailCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onTap,
+      onTap: user.isActive ? onTap : null,
       child: Row(
         children: [
           ImageAvatar(
