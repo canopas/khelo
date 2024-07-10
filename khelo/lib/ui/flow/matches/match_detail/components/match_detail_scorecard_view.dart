@@ -85,6 +85,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                   .where((element) => element.team.id == overs?.team_id)
                   .firstOrNull
                   ?.squad
+                  .where((element) => element.player.isActive)
                   .toList();
 
               return _teamTitleView(context,

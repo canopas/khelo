@@ -222,7 +222,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .firstOrNull
         ?.squad;
     final currentPlayingBatsMan = battingTeamSquad
-        ?.where((element) => element.status == PlayerStatus.playing)
+        ?.where((element) =>
+            element.player.isActive && element.status == PlayerStatus.playing)
         .toList();
 
     int lastPlayerIndex = battingTeamSquad?.map((e) => e.index).reduce(
@@ -252,7 +253,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
             .firstWhere(
                 (element) => state.otherInning?.team_id == element.team.id)
             .squad
-            .where((element) => element.player.id == bowlerId)
+            .where((element) =>
+                element.player.isActive && element.player.id == bowlerId)
             .firstOrNull
         : null;
 
@@ -623,7 +625,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final battingSquad = state.match?.teams
         .where((element) => element.team.id == state.currentInning?.team_id)
         .firstOrNull
-        ?.squad;
+        ?.squad
+        .where((element) => element.player.isActive);
 
     int yetToPlayCount = 0;
     int playingCount = 0;
@@ -751,7 +754,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ?.squad;
 
     final outPlayer = battingTeam
-        ?.where((element) => element.player.id == lastBall.player_out_id)
+        ?.where((element) =>
+            element.player.isActive &&
+            element.player.id == lastBall.player_out_id)
         .firstOrNull;
 
     if (outPlayer == null) {
@@ -977,10 +982,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           .where((element) => element.teamId == state.otherInning?.team_id)
           .firstOrNull
           ?.players
+          .where((element) => element.player.isActive)
           .firstOrNull;
 
       if (battingPlayer != null) {
-        final statusUpdatedSquad = battingPlayer.players;
+        final statusUpdatedSquad = battingPlayer.players
+            .where((element) => element.player.isActive)
+            .toList();
         for (int index = 0; index < statusUpdatedSquad.length; index++) {
           int batsManIndex = state.lastAssignedIndex + 1;
 
