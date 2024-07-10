@@ -26,22 +26,46 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
   Offset? _endOffset;
 
   List<FieldingPosition> positions = [
-    FieldingPosition(FieldingPositionType.deepMidWicket,
-        startAngle: 0, endAngle: 45, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.longOn,
-        startAngle: 45, endAngle: 90, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.longOff,
-        startAngle: 90, endAngle: 135, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.deepCover,
-        startAngle: 135, endAngle: 180, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.deepPoint,
-        startAngle: 180, endAngle: 225, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.thirdMan,
-        startAngle: 225, endAngle: 270, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.deepFineLeg,
-        startAngle: 270, endAngle: 315, distance: Distance.boundary),
-    FieldingPosition(FieldingPositionType.deepSquareLeg,
-        startAngle: 315, endAngle: 360, distance: Distance.boundary),
+    FieldingPosition(
+      FieldingPositionType.deepMidWicket,
+      startAngle: 0,
+      endAngle: 45,
+    ),
+    FieldingPosition(
+      FieldingPositionType.longOn,
+      startAngle: 45,
+      endAngle: 90,
+    ),
+    FieldingPosition(
+      FieldingPositionType.longOff,
+      startAngle: 90,
+      endAngle: 135,
+    ),
+    FieldingPosition(
+      FieldingPositionType.deepCover,
+      startAngle: 135,
+      endAngle: 180,
+    ),
+    FieldingPosition(
+      FieldingPositionType.deepPoint,
+      startAngle: 180,
+      endAngle: 225,
+    ),
+    FieldingPosition(
+      FieldingPositionType.thirdMan,
+      startAngle: 225,
+      endAngle: 270,
+    ),
+    FieldingPosition(
+      FieldingPositionType.deepFineLeg,
+      startAngle: 270,
+      endAngle: 315,
+    ),
+    FieldingPosition(
+      FieldingPositionType.deepSquareLeg,
+      startAngle: 315,
+      endAngle: 360,
+    ),
   ];
 
   @override
@@ -63,21 +87,31 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
     final double dx = localPosition.dx - size.width / 2;
     final double dy = localPosition.dy - size.height / 2;
     final double distance = sqrt(dx * dx + dy * dy);
-    final double angle = (atan2(dy, dx) + 2 * pi) % (2 * pi);
+    final double angle = (atan2(dy, dx) * (180 / pi) + 360) % 360;
 
-    final double radius = min(size.width / 2, size.height / 2);
-    final double boundary = radius;
-    final double thirtyYards = radius * 0.6;
+    final filteredPositions = positions
+        .where((position) =>
+            angle >= position.startAngle && angle < position.endAngle)
+        .toList();
+    FieldingPosition? selectedPosition;
+    double smallestDistanceDifference = double.infinity;
+    filteredPositions
+        .sort((a, b) => a.distance.index.compareTo(b.distance.index));
+    for (var position in filteredPositions) {
+      final double effectiveRadius = groundRadius / position.distance.divisor;
+      final double distanceDifference = (effectiveRadius - distance).abs();
 
-    for (var position in positions) {
-      final double effectiveRadius =
-          position.distance == Distance.boundary ? boundary : thirtyYards;
-      if (distance <= effectiveRadius &&
-          angle >= position.startAngle &&
-          angle < position.endAngle) {
-        widget.onPositionSelect(position);
+      if (distance <= effectiveRadius) {
+        selectedPosition = position;
         break;
+      } else if (distanceDifference < smallestDistanceDifference) {
+        selectedPosition = position;
+        smallestDistanceDifference = distanceDifference;
       }
+    }
+
+    if (selectedPosition != null) {
+      widget.onPositionSelect(selectedPosition);
     }
 
     setState(() {
@@ -102,23 +136,20 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
   }
 
   Widget _groundCircle() {
-    return CircleAvatar(
-      radius: groundRadius,
-      backgroundColor: Colors.green,
-      child: Stack(
-        children: [
-          _boundaryCircle(),
-          SizedBox(
-            height: (groundRadius * 2),
-            width: (groundRadius * 2),
-            child: CustomPaint(
+    return GestureDetector(
+      onTapUp: (details) => _onTapUp(details, context.size!),
+      child: CircleAvatar(
+        radius: groundRadius,
+        backgroundColor: Colors.green,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _boundaryCircle(),
+            CustomPaint(
               painter: FieldingPositionsPainter(context,
                   positions: positions, divisions: 8, radius: groundRadius),
             ),
-          ),
-          GestureDetector(
-            onTapUp: (details) => _onTapUp(details, context.size!),
-            child: CustomPaint(
+            CustomPaint(
                 painter: LinePainter(
                     startOffset: _startOffset,
                     endOffset: _endOffset,
@@ -128,8 +159,8 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
                   radius: groundRadius,
                   backgroundColor: Colors.transparent,
                 )),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

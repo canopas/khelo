@@ -81,14 +81,29 @@ enum FieldingPositionType {
   deepSquareLeg(8);
 
   final int value;
+
   const FieldingPositionType(this.value);
 }
 
 enum Distance {
-  short,
-  mid,
-  afterMid,
-  boundary;
+  // do not change the order as position calculation depends on distance index
+  short(3),
+  mid(2),
+  afterMid(1.4),
+  boundary(1.15);
+
+  final double divisor;
+
+  const Distance(this.divisor);
+}
+
+enum Side {
+  off(180),
+  leg(0);
+
+  final double angle;
+
+  const Side(this.angle);
 }
 
 class FieldingPosition {
@@ -96,12 +111,14 @@ class FieldingPosition {
   double startAngle;
   double endAngle;
   Distance distance;
+  bool showOnScreen;
 
   FieldingPosition(
     this.type, {
     required this.startAngle,
     required this.endAngle,
-    required this.distance,
+    this.distance = Distance.boundary,
+    this.showOnScreen = true,
   });
 }
 

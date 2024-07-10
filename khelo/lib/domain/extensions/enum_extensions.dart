@@ -125,6 +125,17 @@ extension FieldingPositionString on FieldingPositionType {
   }
 }
 
+extension SideString on Side {
+  String getString(BuildContext context) {
+    switch (this) {
+      case Side.off:
+        return "OFF";
+      case Side.leg:
+        return "LEG";
+    }
+  }
+}
+
 extension BattingStyleString on BattingStyle {
   String getString(BuildContext context) {
     switch (this) {

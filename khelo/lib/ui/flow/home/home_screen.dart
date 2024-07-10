@@ -110,15 +110,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
+              backgroundColor: context.colorScheme.surface,
               builder: (context) {
                 return SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    GroundLayoutView(
-                      onPositionSelect: (p0) =>
-                          debugPrint(p0.type.getString(context)),
-                    ),
-                  ],
+                    child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      GroundLayoutView(
+                        onPositionSelect: (p0) =>
+                            debugPrint(p0.type.getString(context)),
+                      ),
+                    ],
+                  ),
                 ));
               },
             );

@@ -80,36 +80,79 @@ class FieldingPositionsPainter extends CustomPainter {
       ..color = context.colorScheme.secondary
       ..style = PaintingStyle.fill;
 
-    final textStyle =
-        AppTextStyle.caption.copyWith(color: context.colorScheme.textPrimary, fontWeight: FontWeight.normal);
     final textPainter = TextPainter(
-      textAlign: TextAlign.right,
-      textDirection: TextDirection.rtl,
-      maxLines: 2,
+      textAlign: TextAlign.center,
+      textDirection: TextDirection.ltr,
     );
+
+    // Draw side labels
+    for (var side in Side.values) {
+      textPainter.text = TextSpan(
+        text: side.getString(context),
+        style:
+            AppTextStyle.caption.copyWith(color: context.colorScheme.textPrimary),
+      );
+
+      drawLabelsAndPosition(
+        canvas,
+        paint,
+        textPainter,
+        centerX,
+        centerY,
+        angle: side.angle,
+        distance: radius / 2,
+        isHeader: true,
+      );
+    }
 
     // Draw fielding positions and labels
     for (var position in positions) {
-      final positionAngle = (position.startAngle + position.endAngle) / 2;
-      final angleRadians = positionAngle * pi / 180;
-      double distance = radius;
+      if (position.showOnScreen) {
+        final positionAngle = (position.startAngle + position.endAngle) / 2;
+        double distance = radius / position.distance.divisor;
 
-      distance = radius - 50.0;
+        textPainter.text = TextSpan(
+          text: position.type.getString(context),
+          style: AppTextStyle.caption
+              .copyWith(color: context.colorScheme.textSecondary),
+        );
 
-      final x = centerX + distance * cos(angleRadians);
-      final y = centerY + distance * sin(angleRadians);
-
-      // if (!position.isHeader) {
-      canvas.drawCircle(Offset(x, y), 3, paint);
-      // }
-
-      textPainter.text = TextSpan(
-        text: position.type.getString(context),
-        style: textStyle,
-      );
-      textPainter.layout();
-      textPainter.paint(canvas, Offset(x - textPainter.width / 2, y + 10));
+        drawLabelsAndPosition(
+          canvas,
+          paint,
+          textPainter,
+          centerX,
+          centerY,
+          angle: positionAngle,
+          distance: distance,
+          isHeader: false,
+        );
+      }
     }
+  }
+
+  void drawLabelsAndPosition(
+    Canvas canvas,
+    Paint paint,
+    TextPainter textPainter,
+    double centerX,
+    double centerY, {
+    required double distance,
+    required double angle,
+    required bool isHeader,
+  }) {
+    final angleRadians = angle * pi / 180;
+
+    final x = centerX + distance * cos(angleRadians);
+    final y = centerY + distance * sin(angleRadians);
+
+    if (!isHeader) {
+      // draw position indicator
+      canvas.drawCircle(Offset(x, y), 3, paint);
+    }
+
+    textPainter.layout(maxWidth: 70);
+    textPainter.paint(canvas, Offset(x - textPainter.width / 2, y + 1));
   }
 
   @override
