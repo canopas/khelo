@@ -1,8 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/team/team_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
@@ -69,11 +67,13 @@ class MatchDetailCommentaryView extends ConsumerWidget {
       final nextOverSummary = state.overList.elementAtOrNull(index + 1);
       if (nextOverSummary != null &&
           nextOverSummary.overNumber != overSummary.overNumber) {
-        children.add(BowlerSummaryView(
-          bowlerSummary: nextOverSummary.bowlerStatAtStart,
-          isForBowlerIntro: true,
+        children.add(Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: BowlerSummaryView(
+            bowlerSummary: nextOverSummary.bowlerStatAtStart,
+            isForBowlerIntro: true,
+          ),
         ));
-        children.add(const SizedBox(height: 24));
       }
 
       if ((overSummary.balls.lastOrNull?.isLegalDelivery() ?? false) &&
@@ -81,20 +81,27 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           nextOverSummary?.inning_id == overSummary.inning_id) {
         children
             .add(CommentaryOverOverview(overSummary: overSummary, team: team));
-        children.add(const SizedBox(height: 24));
       } else if (nextOverSummary != null &&
           nextOverSummary.inning_id != overSummary.inning_id) {
-        children.add(_inningOverview(context,
-            teamName: team?.name ?? "", targetRun: overSummary.totalRuns + 1));
+        children.addAll([
+          _inningOverview(context,
+              teamName: team?.name ?? "", targetRun: overSummary.totalRuns + 1),
+          CommentaryOverOverview(overSummary: overSummary, team: team),
+        ]);
       }
 
       for (final ball in overSummary.balls.reversed) {
-        children.add(CommentaryBallSummary(
-          ball: ball,
-          overSummary: overSummary,
-          showBallScore: false,
-        ));
-        children.add(const SizedBox(height: 8));
+        children.addAll([
+          CommentaryBallSummary(
+            ball: ball,
+            overSummary: overSummary,
+            showBallScore:
+                ball.is_four || ball.is_six || ball.wicket_taker_id != null,
+          ),
+          if (ball != overSummary.balls.first) ...[
+            Divider(color: context.colorScheme.outline),
+          ],
+        ]);
       }
     }
     return children;

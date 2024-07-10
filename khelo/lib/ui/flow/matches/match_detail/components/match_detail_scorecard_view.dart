@@ -54,6 +54,15 @@ class MatchDetailScorecardView extends ConsumerWidget {
     MatchDetailTabViewNotifier notifier,
     MatchDetailTabState state,
   ) {
+    List<List<int>> powerPlays = [
+      if (state.match?.power_play_overs1.isNotEmpty ?? false)
+        state.match!.power_play_overs1,
+      if (state.match?.power_play_overs2.isNotEmpty ?? false)
+        state.match!.power_play_overs2,
+      if (state.match?.power_play_overs3.isNotEmpty ?? false)
+        state.match!.power_play_overs3,
+    ];
+    final groupOversByInnings = groupOversByInning(state.overList);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,9 +74,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             padding: context.mediaQueryPadding +
                 EdgeInsets.only(
                     top: state.match?.matchResult == null ? 16 : 0, bottom: 16),
-            itemCount: groupOversByInning(state.overList).length,
+            itemCount: groupOversByInnings.length,
             itemBuilder: (context, index) {
-              final inningOvers = groupOversByInning(state.overList)[index];
+              final inningOvers = groupOversByInnings[index];
               final overs = inningOvers.lastOrNull;
               final batsmen = _getBatsmen(inningOvers);
               final bowler = _getBowlers(inningOvers);
@@ -78,20 +87,11 @@ class MatchDetailScorecardView extends ConsumerWidget {
                   ?.squad
                   .toList();
 
-              List<List<int>> powerPlays = [
-                if (state.match?.power_play_overs1.isNotEmpty ?? false)
-                  state.match!.power_play_overs1,
-                if (state.match?.power_play_overs2.isNotEmpty ?? false)
-                  state.match!.power_play_overs2,
-                if (state.match?.power_play_overs3.isNotEmpty ?? false)
-                  state.match!.power_play_overs3,
-              ];
-
               return _teamTitleView(context,
                   teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
                   over: overs ?? const OverSummary(),
                   initiallyExpanded: state.expandedTeamScorecard
-                      .contains(overs?.team_id ?? ""),
+                      .contains(inningOvers.first.team_id),
                   children: [
                     _dataTable(context, batsmen: batsmen),
                     ..._buildMatchTotalView(context,
