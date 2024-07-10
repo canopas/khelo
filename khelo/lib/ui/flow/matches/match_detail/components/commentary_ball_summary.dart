@@ -22,7 +22,7 @@ class CommentaryBallSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           _ballNumberView(context),
@@ -42,7 +42,10 @@ class CommentaryBallSummary extends StatelessWidget {
                     .copyWith(color: context.colorScheme.textDisabled)
                 : AppTextStyle.body1
                     .copyWith(color: context.colorScheme.textDisabled)),
-        if (showBallScore) ...[BallScoreView(ball: ball, size: 24)]
+        if (showBallScore) ...[
+          const SizedBox(height: 4),
+          BallScoreView(ball: ball, size: 24)
+        ]
       ],
     );
   }

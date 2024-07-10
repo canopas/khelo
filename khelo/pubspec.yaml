@@ -40,8 +40,6 @@ dependencies:
     path: ../data
 
   shared_preferences: ^2.2.2
-  rxdart: ^0.27.7
-  dotted_border: ^2.1.0
   collection: any
 
   # UI

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
+import 'package:data/utils/dummy_deactivated_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
@@ -18,19 +19,23 @@ final userServiceProvider = Provider((ref) {
 class UserService {
   UserModel? _currentUser;
   final StateController<String?> _currentUserJsonController;
-  final FirebaseFirestore _firestore;
+
+  final FirebaseFirestore firestore;
+  final CollectionReference<UserModel> _userCollection;
 
   UserService(
-      this._currentUser, this._currentUserJsonController, this._firestore);
+      this._currentUser, this._currentUserJsonController, this.firestore)
+      : _userCollection = firestore
+            .collection(FireStoreConst.usersCollection)
+            .withConverter(
+                fromFirestore: UserModel.fromFireStore,
+                toFirestore: (UserModel user, _) => user.toJson());
 
   Future<void> getUser(String id) async {
     try {
-      DocumentReference userRef =
-          _firestore.collection(FireStoreConst.usersCollection).doc(id);
-      DocumentSnapshot snapshot = await userRef.get();
-      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-      var userModel = UserModel.fromJson(userData);
-      _currentUserJsonController.state = userModel.toJsonString();
+      final snapshot = await _userCollection.doc(id).get();
+      var userModel = snapshot.data();
+      _currentUserJsonController.state = userModel?.toJsonString();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -38,10 +43,9 @@ class UserService {
 
   Future<void> updateUser(UserModel user) async {
     try {
-      DocumentReference userRef =
-          _firestore.collection(FireStoreConst.usersCollection).doc(user.id);
+      final userRef = _userCollection.doc(user.id);
 
-      await userRef.set(user.toJson(), SetOptions(merge: true));
+      await userRef.set(user, SetOptions(merge: true));
 
       _currentUserJsonController.state = user.toJsonString();
     } catch (error, stack) {
@@ -51,10 +55,7 @@ class UserService {
 
   Future<void> deleteUser() async {
     try {
-      await _firestore
-          .collection(FireStoreConst.usersCollection)
-          .doc(_currentUser?.id)
-          .delete();
+      await _userCollection.doc(_currentUser?.id).delete();
       _currentUserJsonController.state = null;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -63,11 +64,11 @@ class UserService {
 
   Future<UserModel> getUserById(String id) async {
     try {
-      DocumentReference userRef =
-          _firestore.collection(FireStoreConst.usersCollection).doc(id);
-      DocumentSnapshot snapshot = await userRef.get();
-      Map<String, dynamic> userData = snapshot.data() as Map<String, dynamic>;
-      var userModel = UserModel.fromJson(userData);
+      final snapshot = await _userCollection.doc(id).get();
+      var userModel = snapshot.data();
+      if (userModel == null) {
+        return deActiveDummyUserAccount(id);
+      }
       return userModel;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -78,24 +79,18 @@ class UserService {
     List<UserModel> users = [];
     try {
       for (final tenIds in ids.chunked(10)) {
-        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-            .collection(FireStoreConst.usersCollection)
+        final snapshot = await _userCollection
             .where(FireStoreConst.id, whereIn: tenIds)
             .get();
 
         users.addAll(snapshot.docs.map((doc) {
-          final data = doc.data();
-          return UserModel.fromJson(data).copyWith(id: doc.id);
+          return doc.data();
         }).toList());
 
         final deactivatedUserIds =
             tenIds.where((id) => !users.map((user) => user.id).contains(id));
         users.addAll(deactivatedUserIds.map(
-          (id) => UserModel(
-              id: id,
-              name: "Deactivated User",
-              created_at: DateTime(1950),
-              location: "--"),
+          (id) => deActiveDummyUserAccount(id),
         ));
       }
 
@@ -107,8 +102,7 @@ class UserService {
 
   Future<List<UserModel>> searchUser(String searchKey) async {
     try {
-      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
-          .collection(FireStoreConst.usersCollection)
+      final snapshot = await _userCollection
           .where(FireStoreConst.nameLowercase,
               isGreaterThanOrEqualTo: searchKey.toLowerCase())
           .where(FireStoreConst.nameLowercase,
@@ -116,8 +110,7 @@ class UserService {
           .get();
 
       return snapshot.docs.map((doc) {
-        final data = doc.data();
-        return UserModel.fromJson(data).copyWith(id: doc.id);
+        return doc.data();
       }).toList();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

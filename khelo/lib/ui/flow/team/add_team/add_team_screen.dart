@@ -1,4 +1,5 @@
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,9 +153,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   const SizedBox(width: 16),
                   actionButton(
                     context,
-                    onPressed: () =>
-                        AppRoute.addTeamMember(team: widget.editTeam!)
-                            .push(context),
+                    onPressed: () async {
+                      final members = await AppRoute.addTeamMember(
+                              team: widget.editTeam!
+                                  .copyWith(players: state.teamMembers))
+                          .push<List<UserModel>>(context);
+                      if (context.mounted && (members ?? []).isNotEmpty) {
+                        notifier.updatePlayersList(members!);
+                      }
+                    },
                     icon: Icon(
                       CupertinoIcons.add,
                       color: context.colorScheme.textPrimary,

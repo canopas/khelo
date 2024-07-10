@@ -28,47 +28,47 @@ class PlaceHolderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(minHeight: context.mediaQuerySize.height / 1.3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            image,
-            SizedBox(
-              height: 40,
-              width: context.mediaQuerySize.width,
-            ),
-            Text(
-              title,
-              style: AppTextStyle.header1.copyWith(
-                color: context.colorScheme.textPrimary,
+    return Center(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              image,
+              SizedBox(
+                height: 40,
+                width: context.mediaQuerySize.width,
               ),
-            ),
-            const SizedBox(height: 16),
-            Visibility(
-              visible: messageWidget != null,
-              replacement: Text(
-                message ?? '',
-                style: AppTextStyle.subtitle1.copyWith(
-                  color: context.colorScheme.textSecondary,
+              Text(
+                title,
+                style: AppTextStyle.header1.copyWith(
+                  color: context.colorScheme.textPrimary,
                 ),
-                textAlign: TextAlign.center,
               ),
-              child: messageWidget ?? const SizedBox(),
-            ),
-            const SizedBox(height: 40),
-            if (actionBtnTitle != null) ...[
-              PrimaryButton(
-                edgeInsets:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                actionBtnTitle ?? '',
-                onPressed: onActionBtnTap,
-                expanded: false,
+              const SizedBox(height: 16),
+              Visibility(
+                visible: messageWidget != null,
+                replacement: Text(
+                  message ?? '',
+                  style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textSecondary,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                child: messageWidget ?? const SizedBox(),
               ),
+              const SizedBox(height: 40),
+              if (actionBtnTitle != null) ...[
+                PrimaryButton(
+                  edgeInsets:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                  actionBtnTitle ?? '',
+                  onPressed: onActionBtnTap,
+                  expanded: false,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

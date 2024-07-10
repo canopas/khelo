@@ -76,7 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 176,
+          height: 165,
           child: state.matches.length == 1
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -156,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 match.teams.first,
                 match.teams.elementAt(1).wicket,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 22),
               _teamScore(
                 context,
                 match.teams.elementAt(1),
@@ -185,8 +185,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Expanded(
           child: Text(matchTeam.team.name,
               overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: AppTextStyle.subtitle1
+              maxLines: 1,
+              style: AppTextStyle.subtitle3
                   .copyWith(color: context.colorScheme.textPrimary)),
         ),
         if (matchTeam.over != 0) ...[
@@ -214,8 +214,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         overflow: TextOverflow.ellipsis,
         TextSpan(
             text: match.start_time.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textPrimary),
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textSecondary),
             children: [
               WidgetSpan(
                   alignment: PlaceholderAlignment.middle,
@@ -225,7 +225,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: context.colorScheme.textPrimary,
+                      color: context.colorScheme.textSecondary,
                     ),
                   )),
               TextSpan(text: match.ground)

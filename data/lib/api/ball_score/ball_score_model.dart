@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/extensions/double_extensions.dart';
 import 'package:data/extensions/int_extensions.dart';
@@ -32,6 +33,11 @@ class BallScoreModel with _$BallScoreModel {
 
   factory BallScoreModel.fromJson(Map<String, dynamic> json) =>
       _$BallScoreModelFromJson(json);
+
+  factory BallScoreModel.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      BallScoreModel.fromJson(snapshot.data()!);
 }
 
 @JsonEnum(valueField: "value")
