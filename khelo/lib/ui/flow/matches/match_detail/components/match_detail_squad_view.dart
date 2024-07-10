@@ -148,17 +148,19 @@ class MatchDetailSquadView extends ConsumerWidget {
           color: context.colorScheme.outline,
         ),
       ));
-      children.add(Row(
-        children: [
-          Expanded(
-              child: _playerProfileView(context,
-                  user: firstTeamPlayer, captainId: firstTeamCaptainId)),
-          Expanded(
-              child: _playerProfileView(context,
-                  user: secondTeamPlayer,
-                  isFirstCell: false,
-                  captainId: secondTeamCaptainId))
-        ],
+      children.add(IntrinsicHeight(
+        child: Row(
+          children: [
+            _playerProfileView(context,
+                user: firstTeamPlayer, captainId: firstTeamCaptainId),
+            VerticalDivider(color: context.colorScheme.outline),
+            _playerProfileView(context,
+                user: secondTeamPlayer,
+                isFirstCell: false,
+                isSecondTeam: true,
+                captainId: secondTeamCaptainId)
+          ],
+        ),
       ));
     }
     return children;
@@ -187,56 +189,68 @@ class MatchDetailSquadView extends ConsumerWidget {
     BuildContext context, {
     UserModel? user,
     bool isFirstCell = true,
+    bool isSecondTeam = false,
     String? captainId,
   }) {
     if (user == null) {
-      return const SizedBox(
-        height: 0,
+      return const Expanded(
+        child: SizedBox(
+          height: 0,
+        ),
       );
     }
     bool isCaptain = user.id == captainId;
-    return IntrinsicHeight(
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, top: 16, bottom: 16),
-        decoration: BoxDecoration(
-            border: BorderDirectional(
-                end: BorderSide(
-                    color: isFirstCell
-                        ? context.colorScheme.outline
-                        : Colors.transparent))),
-        child: OnTapScale(
-          onTap: () => UserDetailSheet.show(context, user),
+    return Expanded(
+      child: OnTapScale(
+        onTap: () => UserDetailSheet.show(context, user),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
-              ImageAvatar(
-                initial: user.nameInitial,
-                imageUrl: user.profile_img_url,
-                size: 40,
-              ),
-              const SizedBox(width: 8),
+              if (!isSecondTeam) ...[
+                ImageAvatar(
+                  initial: user.nameInitial,
+                  imageUrl: user.profile_img_url,
+                  size: 40,
+                ),
+                const SizedBox(width: 8),
+              ],
               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user.name == null
-                            ? context.l10n.common_anonymous_title
-                            : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
-                        style: AppTextStyle.subtitle2
-                            .copyWith(color: context.colorScheme.textPrimary),
-                      ),
-                      Text(
-                          user.player_role != null
-                              ? user.player_role!.getString(context)
-                              : context.l10n.common_not_specified_title,
-                          style: AppTextStyle.caption.copyWith(
-                              color: context.colorScheme.textDisabled)),
-                    ],
-                  ),
+                child: Column(
+                  crossAxisAlignment: isSecondTeam
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      user.name == null
+                          ? context.l10n.common_anonymous_title
+                          : "${user.name}${isCaptain ? context.l10n.match_info_captain_short_title : ""}",
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textPrimary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: isSecondTeam ? TextAlign.end : null,
+                    ),
+                    Text(
+                      user.player_role != null
+                          ? user.player_role!.getString(context)
+                          : context.l10n.common_not_specified_title,
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.textDisabled),
+                      textAlign: isSecondTeam ? TextAlign.end : null,
+                    ),
+                  ],
                 ),
               ),
+              if (isSecondTeam) ...[
+                const SizedBox(width: 8),
+                ImageAvatar(
+                  initial: user.nameInitial,
+                  imageUrl: user.profile_img_url,
+                  size: 40,
+                ),
+              ],
             ],
           ),
         ),
