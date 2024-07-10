@@ -49,7 +49,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     state = state.copyWith(currentUser: user);
   }
 
-  Future<void> updatePlayersList(List<UserModel> players) async {
+  void updatePlayersList(List<UserModel> players) {
     if (state.editTeam == null) {
       return;
     }
