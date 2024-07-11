@@ -7,6 +7,7 @@ class BottomSheetWrapper extends StatelessWidget {
   final bool showDragHandle;
   final double contentBottomSpacing;
   final List<Widget> action;
+  final List<Widget>? options;
 
   const BottomSheetWrapper({
     super.key,
@@ -14,6 +15,7 @@ class BottomSheetWrapper extends StatelessWidget {
     this.contentBottomSpacing = 70,
     required this.content,
     required this.action,
+    this.options,
   });
 
   @override
@@ -47,12 +49,18 @@ class BottomSheetWrapper extends StatelessWidget {
               ),
             ],
             BottomStickyOverlay(
-              child: Row(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  for (int i = 0; i < action.length; i++) ...[
-                    Expanded(child: action[i]),
-                    if (i < action.length - 1) const SizedBox(width: 16),
-                  ]
+                  ...?options,
+                  Row(
+                    children: [
+                      for (int i = 0; i < action.length; i++) ...[
+                        Expanded(child: action[i]),
+                        if (i < action.length - 1) const SizedBox(width: 16),
+                      ]
+                    ],
+                  ),
                 ],
               ),
             ),

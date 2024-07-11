@@ -23,9 +23,8 @@ import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.da
 import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/more_option_button.dart';
-import 'package:style/extensions/context_extensions.dart';
+import 'package:style/button/toggle_button.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/theme/colors.dart';
 
 import 'components/inning_complete_sheet.dart';
 
@@ -109,42 +108,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
                       }
                     },
                     child: option == MatchOption.continueWithInjuredPlayer
-                        ? _toggleButton(context, state)
+                        ? toggleButton(
+                            context,
+                            defaultEnabled: state.continueWithInjuredPlayers,
+                            onTap: notifier.onContinueWithInjuredPlayersChange,
+                          )
                         : null,
                   ))
               .toList()),
-    );
-  }
-
-  Widget _toggleButton(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    bool isContinue = state.continueWithInjuredPlayers;
-
-    return StatefulBuilder(
-      builder: (context, setStateSwitch) {
-        return Theme(
-          data: context.brightness == Brightness.dark
-              ? materialThemeDataDark
-              : materialThemeDataLight,
-          child: SizedBox(
-            height: 22,
-            child: Switch(
-              inactiveTrackColor: context.colorScheme.containerHigh,
-              trackOutlineColor: WidgetStateColor.transparent,
-              thumbColor: WidgetStatePropertyAll(context.colorScheme.onPrimary),
-              value: isContinue,
-              onChanged: (value) {
-                setStateSwitch(() {
-                  isContinue = value;
-                  notifier.onContinueWithInjuredPlayersChange(value);
-                });
-              },
-            ),
-          ),
-        );
-      },
     );
   }
 

@@ -21,6 +21,8 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
       extras_awarded: (json['extras_awarded'] as num?)?.toInt(),
       wicket_type:
           $enumDecodeNullable(_$WicketTypeEnumMap, json['wicket_type']),
+      fielding_position: $enumDecodeNullable(
+          _$FieldingPositionTypeEnumMap, json['fielding_position']),
       player_out_id: json['player_out_id'] as String?,
       wicket_taker_id: json['wicket_taker_id'] as String?,
       is_four: json['is_four'] as bool,
@@ -42,6 +44,8 @@ Map<String, dynamic> _$$BallScoreModelImplToJson(
       'extras_type': _$ExtrasTypeEnumMap[instance.extras_type],
       'extras_awarded': instance.extras_awarded,
       'wicket_type': _$WicketTypeEnumMap[instance.wicket_type],
+      'fielding_position':
+          _$FieldingPositionTypeEnumMap[instance.fielding_position],
       'player_out_id': instance.player_out_id,
       'wicket_taker_id': instance.wicket_taker_id,
       'is_four': instance.is_four,
@@ -72,6 +76,17 @@ const _$WicketTypeEnumMap = {
   WicketType.timedOut: 12,
   WicketType.retired: 13,
   WicketType.retiredHurt: 14,
+};
+
+const _$FieldingPositionTypeEnumMap = {
+  FieldingPositionType.deepMidWicket: 1,
+  FieldingPositionType.longOn: 2,
+  FieldingPositionType.longOff: 3,
+  FieldingPositionType.deepCover: 4,
+  FieldingPositionType.deepPoint: 5,
+  FieldingPositionType.thirdMan: 6,
+  FieldingPositionType.deepFineLeg: 7,
+  FieldingPositionType.deepSquareLeg: 8,
 };
 
 _$OverStatModelImpl _$$OverStatModelImplFromJson(Map<String, dynamic> json) =>

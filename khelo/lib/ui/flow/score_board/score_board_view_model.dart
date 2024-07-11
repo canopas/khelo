@@ -444,6 +444,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String? playerOutId,
     String? wicketTakerId,
     WicketType? wicketType,
+    FieldingPositionType? position,
   }) async {
     state = state.copyWith(actionError: null, isActionInProgress: true);
     try {
@@ -496,6 +497,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           runs_scored: run,
           wicket_taker_id: wicketTakerId,
           wicket_type: wicketType,
+          fielding_position: position,
           time: DateTime.now());
       int wicketCount = state.otherInning!.total_wickets;
       if (wicketType != WicketType.retiredHurt && wicketType != null) {

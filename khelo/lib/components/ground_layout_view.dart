@@ -72,7 +72,7 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     _startOffset = Offset(groundRadius, groundRadius);

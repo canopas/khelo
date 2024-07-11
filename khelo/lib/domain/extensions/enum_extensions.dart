@@ -106,21 +106,21 @@ extension FieldingPositionString on FieldingPositionType {
   String getString(BuildContext context) {
     switch (this) {
       case FieldingPositionType.deepMidWicket:
-        return "Deep Mid Wicket";
+        return context.l10n.fielding_position_deep_mid_wicket_title;
       case FieldingPositionType.longOn:
-        return "Long On";
+        return context.l10n.fielding_position_long_on_title;
       case FieldingPositionType.longOff:
-        return "Long Off";
+        return context.l10n.fielding_position_long_off_title;
       case FieldingPositionType.deepCover:
-        return "Deep Cover";
+        return context.l10n.fielding_position_deep_cover_title;
       case FieldingPositionType.deepPoint:
-        return "Deep Point";
+        return context.l10n.fielding_position_deep_point_title;
       case FieldingPositionType.thirdMan:
-        return "Third Man";
+        return context.l10n.fielding_position_third_man_title;
       case FieldingPositionType.deepFineLeg:
-        return "Deep Fine Leg";
+        return context.l10n.fielding_position_deep_fine_leg_title;
       case FieldingPositionType.deepSquareLeg:
-        return "Deep Square Leg";
+        return context.l10n.fielding_position_deep_square_leg_title;
     }
   }
 }
@@ -129,9 +129,9 @@ extension SideString on Side {
   String getString(BuildContext context) {
     switch (this) {
       case Side.off:
-        return "OFF";
+        return context.l10n.side_off_title;
       case Side.leg:
-        return "LEG";
+        return context.l10n.side_leg_title;
     }
   }
 }

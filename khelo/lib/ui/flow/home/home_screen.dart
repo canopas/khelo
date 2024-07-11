@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/ground_layout_view.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -103,31 +100,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 type: WormType.underground),
           )
         ],
-        const SizedBox(height: 16),
-        PrimaryButton(
-          "show ground",
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              backgroundColor: context.colorScheme.surface,
-              builder: (context) {
-                return SingleChildScrollView(
-                    child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: [
-                      GroundLayoutView(
-                        onPositionSelect: (p0) =>
-                            debugPrint(p0.type.getString(context)),
-                      ),
-                    ],
-                  ),
-                ));
-              },
-            );
-          },
-        )
       ],
     );
   }

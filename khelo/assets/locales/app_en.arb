@@ -583,6 +583,9 @@
   "score_board_penalty_run_title": "Penalty Run",
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
+  "score_board_not_show_for_less_run_title": "Don't show for 1s, 2s and 3s",
+  "score_board_not_show_for_dot_ball_title": "Don't show for dot balls",
+  "score_board_select_fielding_position_title": "Select fielding position",
   "score_board_pause_title": "Pause",
   "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
   "score_board_end_match_description_text": "are you sure you want to end match?",
@@ -635,6 +638,18 @@
       }
     }
   },
+
+  "fielding_position_deep_mid_wicket_title": "Deep Mid Wicket",
+  "fielding_position_long_on_title": "Long On",
+  "fielding_position_long_off_title": "Long Off",
+  "fielding_position_deep_cover_title": "Deep Cover",
+  "fielding_position_deep_point_title": "Deep Point",
+  "fielding_position_third_man_title": "Third Man",
+  "fielding_position_deep_fine_leg_title": "Deep Fine Leg",
+  "fielding_position_deep_square_leg_title": "Deep Square Leg",
+
+  "side_off_title": "OFF",
+  "side_leg_title": "LEG",
 
   "@_STATS": {
   },

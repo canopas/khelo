@@ -24,6 +24,7 @@ class BallScoreModel with _$BallScoreModel {
     ExtrasType? extras_type,
     int? extras_awarded,
     WicketType? wicket_type,
+    FieldingPositionType? fielding_position,
     String? player_out_id,
     String? wicket_taker_id,
     required bool is_four,
