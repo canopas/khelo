@@ -82,21 +82,14 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
       });
   }
 
-  void _onTapUp(TapUpDetails details, Size size) {
-    final localPosition = details.localPosition;
-    final double dx = localPosition.dx - size.width / 2;
-    final double dy = localPosition.dy - size.height / 2;
-    final double distance = sqrt(dx * dx + dy * dy);
-    final double angle = (atan2(dy, dx) * (180 / pi) + 360) % 360;
-
+  FieldingPosition? _getSelectedPosition(double angle, double distance) {
     final filteredPositions = positions
-        .where((position) =>
-            angle >= position.startAngle && angle < position.endAngle)
+        .where((position) => angle >= position.startAngle && angle < position.endAngle)
         .toList();
+
     FieldingPosition? selectedPosition;
     double smallestDistanceDifference = double.infinity;
-    filteredPositions
-        .sort((a, b) => a.distance.index.compareTo(b.distance.index));
+    filteredPositions.sort((a, b) => a.distance.index.compareTo(b.distance.index));
     for (var position in filteredPositions) {
       final double effectiveRadius = groundRadius / position.distance.divisor;
       final double distanceDifference = (effectiveRadius - distance).abs();
@@ -109,6 +102,17 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
         smallestDistanceDifference = distanceDifference;
       }
     }
+    return selectedPosition;
+  }
+
+  void _onTapUp(TapUpDetails details, Size size) {
+    final localPosition = details.localPosition;
+    final double dx = localPosition.dx - size.width / 2;
+    final double dy = localPosition.dy - size.height / 2;
+    final double distance = sqrt(dx * dx + dy * dy);
+    final double angle = (atan2(dy, dx) * (180 / pi) + 360) % 360;
+
+    FieldingPosition? selectedPosition = _getSelectedPosition(angle, distance);
 
     if (selectedPosition != null) {
       widget.onPositionSelect(selectedPosition);
