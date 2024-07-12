@@ -89,8 +89,8 @@ class FieldingPositionsPainter extends CustomPainter {
     for (var side in Side.values) {
       textPainter.text = TextSpan(
         text: side.getString(context),
-        style:
-            AppTextStyle.caption.copyWith(color: context.colorScheme.textPrimary),
+        style: AppTextStyle.caption
+            .copyWith(color: context.colorScheme.textPrimary),
       );
 
       drawLabelsAndPosition(

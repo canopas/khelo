@@ -85,7 +85,8 @@ class _SelectFieldingPositionSheetState
         const SizedBox(height: 24),
         Center(
           child: GroundLayoutView(
-            onPositionSelect: (position) => fieldingPosition = position.type,
+            onPositionSelect: (position) =>
+                setState(() => fieldingPosition = position.type),
           ),
         ),
         const SizedBox(height: 24),

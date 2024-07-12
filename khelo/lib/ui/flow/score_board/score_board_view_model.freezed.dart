@@ -24,6 +24,8 @@ mixin _$ScoreBoardViewState {
   MatchPlayer? get bowler => throw _privateConstructorUsedError;
   String? get strikerId => throw _privateConstructorUsedError;
   List<MatchPlayer>? get batsMans => throw _privateConstructorUsedError;
+  DateTime? get showSelectFieldingPositionSheet =>
+      throw _privateConstructorUsedError;
   DateTime? get showSelectBatsManSheet => throw _privateConstructorUsedError;
   DateTime? get showSelectBowlerSheet => throw _privateConstructorUsedError;
   DateTime? get showSelectBowlerAndBatsManSheet =>
@@ -47,6 +49,9 @@ mixin _$ScoreBoardViewState {
   DateTime? get showAddPenaltyRunSheet => throw _privateConstructorUsedError;
   DateTime? get showEndMatchSheet => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
+  ScoreButton? get tappedButton => throw _privateConstructorUsedError;
+  bool? get isLongTap => throw _privateConstructorUsedError;
+  FieldingPositionType? get position => throw _privateConstructorUsedError;
   List<BallScoreModel> get currentScoresList =>
       throw _privateConstructorUsedError;
   List<BallScoreModel> get previousScoresList =>
@@ -57,6 +62,8 @@ mixin _$ScoreBoardViewState {
   bool get ballScoreQueryListenerSet => throw _privateConstructorUsedError;
   bool get isMatchUpdated => throw _privateConstructorUsedError;
   bool get isActionInProgress => throw _privateConstructorUsedError;
+  bool get showForLessRun => throw _privateConstructorUsedError;
+  bool get showForDotBall => throw _privateConstructorUsedError;
   int get ballCount => throw _privateConstructorUsedError;
   int get overCount => throw _privateConstructorUsedError;
   int get lastAssignedIndex => throw _privateConstructorUsedError;
@@ -81,6 +88,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       MatchPlayer? bowler,
       String? strikerId,
       List<MatchPlayer>? batsMans,
+      DateTime? showSelectFieldingPositionSheet,
       DateTime? showSelectBatsManSheet,
       DateTime? showSelectBowlerSheet,
       DateTime? showSelectBowlerAndBatsManSheet,
@@ -99,6 +107,9 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
+      ScoreButton? tappedButton,
+      bool? isLongTap,
+      FieldingPositionType? position,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -107,6 +118,8 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       bool ballScoreQueryListenerSet,
       bool isMatchUpdated,
       bool isActionInProgress,
+      bool showForLessRun,
+      bool showForDotBall,
       int ballCount,
       int overCount,
       int lastAssignedIndex});
@@ -138,6 +151,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? bowler = freezed,
     Object? strikerId = freezed,
     Object? batsMans = freezed,
+    Object? showSelectFieldingPositionSheet = freezed,
     Object? showSelectBatsManSheet = freezed,
     Object? showSelectBowlerSheet = freezed,
     Object? showSelectBowlerAndBatsManSheet = freezed,
@@ -156,6 +170,9 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? tappedButton = freezed,
+    Object? isLongTap = freezed,
+    Object? position = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -164,6 +181,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? ballScoreQueryListenerSet = null,
     Object? isMatchUpdated = null,
     Object? isActionInProgress = null,
+    Object? showForLessRun = null,
+    Object? showForDotBall = null,
     Object? ballCount = null,
     Object? overCount = null,
     Object? lastAssignedIndex = null,
@@ -195,6 +214,11 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.batsMans
           : batsMans // ignore: cast_nullable_to_non_nullable
               as List<MatchPlayer>?,
+      showSelectFieldingPositionSheet: freezed ==
+              showSelectFieldingPositionSheet
+          ? _value.showSelectFieldingPositionSheet
+          : showSelectFieldingPositionSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       showSelectBatsManSheet: freezed == showSelectBatsManSheet
           ? _value.showSelectBatsManSheet
           : showSelectBatsManSheet // ignore: cast_nullable_to_non_nullable
@@ -268,6 +292,18 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      tappedButton: freezed == tappedButton
+          ? _value.tappedButton
+          : tappedButton // ignore: cast_nullable_to_non_nullable
+              as ScoreButton?,
+      isLongTap: freezed == isLongTap
+          ? _value.isLongTap
+          : isLongTap // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
       currentScoresList: null == currentScoresList
           ? _value.currentScoresList
           : currentScoresList // ignore: cast_nullable_to_non_nullable
@@ -299,6 +335,14 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       isActionInProgress: null == isActionInProgress
           ? _value.isActionInProgress
           : isActionInProgress // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showForLessRun: null == showForLessRun
+          ? _value.showForLessRun
+          : showForLessRun // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showForDotBall: null == showForDotBall
+          ? _value.showForDotBall
+          : showForDotBall // ignore: cast_nullable_to_non_nullable
               as bool,
       ballCount: null == ballCount
           ? _value.ballCount
@@ -381,6 +425,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       MatchPlayer? bowler,
       String? strikerId,
       List<MatchPlayer>? batsMans,
+      DateTime? showSelectFieldingPositionSheet,
       DateTime? showSelectBatsManSheet,
       DateTime? showSelectBowlerSheet,
       DateTime? showSelectBowlerAndBatsManSheet,
@@ -399,6 +444,9 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
+      ScoreButton? tappedButton,
+      bool? isLongTap,
+      FieldingPositionType? position,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -407,6 +455,8 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       bool ballScoreQueryListenerSet,
       bool isMatchUpdated,
       bool isActionInProgress,
+      bool showForLessRun,
+      bool showForDotBall,
       int ballCount,
       int overCount,
       int lastAssignedIndex});
@@ -440,6 +490,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? bowler = freezed,
     Object? strikerId = freezed,
     Object? batsMans = freezed,
+    Object? showSelectFieldingPositionSheet = freezed,
     Object? showSelectBatsManSheet = freezed,
     Object? showSelectBowlerSheet = freezed,
     Object? showSelectBowlerAndBatsManSheet = freezed,
@@ -458,6 +509,9 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? tappedButton = freezed,
+    Object? isLongTap = freezed,
+    Object? position = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -466,6 +520,8 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? ballScoreQueryListenerSet = null,
     Object? isMatchUpdated = null,
     Object? isActionInProgress = null,
+    Object? showForLessRun = null,
+    Object? showForDotBall = null,
     Object? ballCount = null,
     Object? overCount = null,
     Object? lastAssignedIndex = null,
@@ -497,6 +553,11 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value._batsMans
           : batsMans // ignore: cast_nullable_to_non_nullable
               as List<MatchPlayer>?,
+      showSelectFieldingPositionSheet: freezed ==
+              showSelectFieldingPositionSheet
+          ? _value.showSelectFieldingPositionSheet
+          : showSelectFieldingPositionSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       showSelectBatsManSheet: freezed == showSelectBatsManSheet
           ? _value.showSelectBatsManSheet
           : showSelectBatsManSheet // ignore: cast_nullable_to_non_nullable
@@ -570,6 +631,18 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      tappedButton: freezed == tappedButton
+          ? _value.tappedButton
+          : tappedButton // ignore: cast_nullable_to_non_nullable
+              as ScoreButton?,
+      isLongTap: freezed == isLongTap
+          ? _value.isLongTap
+          : isLongTap // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      position: freezed == position
+          ? _value.position
+          : position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
       currentScoresList: null == currentScoresList
           ? _value._currentScoresList
           : currentScoresList // ignore: cast_nullable_to_non_nullable
@@ -602,6 +675,14 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.isActionInProgress
           : isActionInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
+      showForLessRun: null == showForLessRun
+          ? _value.showForLessRun
+          : showForLessRun // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showForDotBall: null == showForDotBall
+          ? _value.showForDotBall
+          : showForDotBall // ignore: cast_nullable_to_non_nullable
+              as bool,
       ballCount: null == ballCount
           ? _value.ballCount
           : ballCount // ignore: cast_nullable_to_non_nullable
@@ -630,6 +711,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.bowler,
       this.strikerId,
       final List<MatchPlayer>? batsMans,
+      this.showSelectFieldingPositionSheet,
       this.showSelectBatsManSheet,
       this.showSelectBowlerSheet,
       this.showSelectBowlerAndBatsManSheet,
@@ -648,6 +730,9 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showAddPenaltyRunSheet,
       this.showEndMatchSheet,
       this.invalidUndoToast,
+      this.tappedButton,
+      this.isLongTap,
+      this.position,
       final List<BallScoreModel> currentScoresList = const [],
       final List<BallScoreModel> previousScoresList = const [],
       this.loading = false,
@@ -656,6 +741,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.ballScoreQueryListenerSet = false,
       this.isMatchUpdated = true,
       this.isActionInProgress = false,
+      this.showForLessRun = true,
+      this.showForDotBall = true,
       this.ballCount = 0,
       this.overCount = 1,
       this.lastAssignedIndex = 0})
@@ -687,6 +774,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
     return EqualUnmodifiableListView(value);
   }
 
+  @override
+  final DateTime? showSelectFieldingPositionSheet;
   @override
   final DateTime? showSelectBatsManSheet;
   @override
@@ -723,6 +812,12 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final DateTime? showEndMatchSheet;
   @override
   final DateTime? invalidUndoToast;
+  @override
+  final ScoreButton? tappedButton;
+  @override
+  final bool? isLongTap;
+  @override
+  final FieldingPositionType? position;
   final List<BallScoreModel> _currentScoresList;
   @override
   @JsonKey()
@@ -763,6 +858,12 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final bool isActionInProgress;
   @override
   @JsonKey()
+  final bool showForLessRun;
+  @override
+  @JsonKey()
+  final bool showForDotBall;
+  @override
+  @JsonKey()
   final int ballCount;
   @override
   @JsonKey()
@@ -773,7 +874,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectFieldingPositionSheet: $showSelectFieldingPositionSheet, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, tappedButton: $tappedButton, isLongTap: $isLongTap, position: $position, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, showForLessRun: $showForLessRun, showForDotBall: $showForDotBall, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -793,6 +894,9 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.strikerId, strikerId) ||
                 other.strikerId == strikerId) &&
             const DeepCollectionEquality().equals(other._batsMans, _batsMans) &&
+            (identical(other.showSelectFieldingPositionSheet, showSelectFieldingPositionSheet) ||
+                other.showSelectFieldingPositionSheet ==
+                    showSelectFieldingPositionSheet) &&
             (identical(other.showSelectBatsManSheet, showSelectBatsManSheet) ||
                 other.showSelectBatsManSheet == showSelectBatsManSheet) &&
             (identical(other.showSelectBowlerSheet, showSelectBowlerSheet) ||
@@ -830,9 +934,11 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                 other.showPauseScoringSheet == showPauseScoringSheet) &&
             (identical(other.showAddPenaltyRunSheet, showAddPenaltyRunSheet) ||
                 other.showAddPenaltyRunSheet == showAddPenaltyRunSheet) &&
-            (identical(other.showEndMatchSheet, showEndMatchSheet) ||
-                other.showEndMatchSheet == showEndMatchSheet) &&
+            (identical(other.showEndMatchSheet, showEndMatchSheet) || other.showEndMatchSheet == showEndMatchSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
+            (identical(other.tappedButton, tappedButton) || other.tappedButton == tappedButton) &&
+            (identical(other.isLongTap, isLongTap) || other.isLongTap == isLongTap) &&
+            (identical(other.position, position) || other.position == position) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
             (identical(other.loading, loading) || other.loading == loading) &&
@@ -841,6 +947,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.ballScoreQueryListenerSet, ballScoreQueryListenerSet) || other.ballScoreQueryListenerSet == ballScoreQueryListenerSet) &&
             (identical(other.isMatchUpdated, isMatchUpdated) || other.isMatchUpdated == isMatchUpdated) &&
             (identical(other.isActionInProgress, isActionInProgress) || other.isActionInProgress == isActionInProgress) &&
+            (identical(other.showForLessRun, showForLessRun) || other.showForLessRun == showForLessRun) &&
+            (identical(other.showForDotBall, showForDotBall) || other.showForDotBall == showForDotBall) &&
             (identical(other.ballCount, ballCount) || other.ballCount == ballCount) &&
             (identical(other.overCount, overCount) || other.overCount == overCount) &&
             (identical(other.lastAssignedIndex, lastAssignedIndex) || other.lastAssignedIndex == lastAssignedIndex));
@@ -857,6 +965,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         bowler,
         strikerId,
         const DeepCollectionEquality().hash(_batsMans),
+        showSelectFieldingPositionSheet,
         showSelectBatsManSheet,
         showSelectBowlerSheet,
         showSelectBowlerAndBatsManSheet,
@@ -875,6 +984,9 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showAddPenaltyRunSheet,
         showEndMatchSheet,
         invalidUndoToast,
+        tappedButton,
+        isLongTap,
+        position,
         const DeepCollectionEquality().hash(_currentScoresList),
         const DeepCollectionEquality().hash(_previousScoresList),
         loading,
@@ -883,6 +995,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         ballScoreQueryListenerSet,
         isMatchUpdated,
         isActionInProgress,
+        showForLessRun,
+        showForDotBall,
         ballCount,
         overCount,
         lastAssignedIndex
@@ -906,6 +1020,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final MatchPlayer? bowler,
       final String? strikerId,
       final List<MatchPlayer>? batsMans,
+      final DateTime? showSelectFieldingPositionSheet,
       final DateTime? showSelectBatsManSheet,
       final DateTime? showSelectBowlerSheet,
       final DateTime? showSelectBowlerAndBatsManSheet,
@@ -924,6 +1039,9 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showAddPenaltyRunSheet,
       final DateTime? showEndMatchSheet,
       final DateTime? invalidUndoToast,
+      final ScoreButton? tappedButton,
+      final bool? isLongTap,
+      final FieldingPositionType? position,
       final List<BallScoreModel> currentScoresList,
       final List<BallScoreModel> previousScoresList,
       final bool loading,
@@ -932,6 +1050,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final bool ballScoreQueryListenerSet,
       final bool isMatchUpdated,
       final bool isActionInProgress,
+      final bool showForLessRun,
+      final bool showForDotBall,
       final int ballCount,
       final int overCount,
       final int lastAssignedIndex}) = _$ScoreBoardViewStateImpl;
@@ -952,6 +1072,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   String? get strikerId;
   @override
   List<MatchPlayer>? get batsMans;
+  @override
+  DateTime? get showSelectFieldingPositionSheet;
   @override
   DateTime? get showSelectBatsManSheet;
   @override
@@ -989,6 +1111,12 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   @override
   DateTime? get invalidUndoToast;
   @override
+  ScoreButton? get tappedButton;
+  @override
+  bool? get isLongTap;
+  @override
+  FieldingPositionType? get position;
+  @override
   List<BallScoreModel> get currentScoresList;
   @override
   List<BallScoreModel> get previousScoresList;
@@ -1004,6 +1132,10 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   bool get isMatchUpdated;
   @override
   bool get isActionInProgress;
+  @override
+  bool get showForLessRun;
+  @override
+  bool get showForDotBall;
   @override
   int get ballCount;
   @override
