@@ -20,7 +20,7 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
   <tr>
   <th width="32%" >Matches Record</th>
   <th  width="32%" >Teams List</th>
-   <th  width="32%" >Start new Match</th>
+   <th  width="32%" >Start New Match</th>
   </tr>
     <tr>
   <td><img src="./screenshots/screen_shot_1.png" /></td>
