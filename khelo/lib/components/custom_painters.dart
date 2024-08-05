@@ -141,18 +141,40 @@ class FieldingPositionsPainter extends CustomPainter {
     required double angle,
     required bool isHeader,
   }) {
+    final radius = this.radius - 12;
     final angleRadians = angle * pi / 180;
 
     final x = centerX + distance * cos(angleRadians);
     final y = centerY + distance * sin(angleRadians);
+
+    textPainter.layout(maxWidth: 70);
+
+    final textWidth = textPainter.width;
+    final textHeight = textPainter.height;
+
+    // Adjust the position to ensure the text is inside the circle
+    double adjustedX = x;
+    double adjustedY = y;
+
+    // Calculate the boundary check offsets
+    if (adjustedX + textWidth / 2 > centerX + radius) {
+      adjustedX = centerX + radius - textWidth / 2;
+    } else if (adjustedX - textWidth / 2 < centerX - radius) {
+      adjustedX = centerX - radius + textWidth / 2;
+    }
+
+    if (adjustedY + textHeight / 2 > centerY + radius) {
+      adjustedY = centerY + radius - textHeight / 2;
+    } else if (adjustedY - textHeight / 2 < centerY - radius) {
+      adjustedY = centerY - radius + textHeight / 2;
+    }
 
     if (!isHeader) {
       // draw position indicator
       canvas.drawCircle(Offset(x, y), 3, paint);
     }
 
-    textPainter.layout(maxWidth: 70);
-    textPainter.paint(canvas, Offset(x - textPainter.width / 2, y + 1));
+    textPainter.paint(canvas, Offset(adjustedX - textWidth / 2, adjustedY + 1));
   }
 
   @override

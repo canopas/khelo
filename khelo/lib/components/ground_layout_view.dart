@@ -84,12 +84,14 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
 
   FieldingPosition? _getSelectedPosition(double angle, double distance) {
     final filteredPositions = positions
-        .where((position) => angle >= position.startAngle && angle < position.endAngle)
+        .where((position) =>
+            angle >= position.startAngle && angle < position.endAngle)
         .toList();
 
     FieldingPosition? selectedPosition;
     double smallestDistanceDifference = double.infinity;
-    filteredPositions.sort((a, b) => a.distance.index.compareTo(b.distance.index));
+    filteredPositions
+        .sort((a, b) => a.distance.index.compareTo(b.distance.index));
     for (var position in filteredPositions) {
       final double effectiveRadius = groundRadius / position.distance.divisor;
       final double distanceDifference = (effectiveRadius - distance).abs();
@@ -151,7 +153,9 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
             _boundaryCircle(),
             CustomPaint(
               painter: FieldingPositionsPainter(context,
-                  positions: positions, divisions: 8, radius: groundRadius),
+                  positions: positions,
+                  divisions: 8,
+                  radius: groundRadius - 15),
             ),
             CustomPaint(
                 painter: LinePainter(
@@ -189,7 +193,7 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
       radius: groundRadius / 2,
       backgroundColor: Colors.lightGreen,
       child: Container(
-        margin: EdgeInsets.only(top: (groundRadius / 3) * 0.4),
+        margin: EdgeInsets.only(top: (groundRadius / 3) * 0.7),
         width: pitchWidth,
         height: groundRadius / 3,
         child: ColoredBox(color: Colors.orange.shade100),

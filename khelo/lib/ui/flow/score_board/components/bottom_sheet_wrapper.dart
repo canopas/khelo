@@ -23,6 +23,10 @@ class BottomSheetWrapper extends StatelessWidget {
     return Container(
       constraints:
           BoxConstraints(maxHeight: context.mediaQuerySize.height * 0.8),
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
       child: IntrinsicHeight(
         child: Stack(
           children: [
