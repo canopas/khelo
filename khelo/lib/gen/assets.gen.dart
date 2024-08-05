@@ -67,6 +67,12 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_no_internet.svg
   String get icNoInternet => 'assets/images/ic_no_internet.svg';
 
+  /// File path: assets/images/ic_notification_dark.svg
+  String get icNotificationDark => 'assets/images/ic_notification_dark.svg';
+
+  /// File path: assets/images/ic_notification_light.svg
+  String get icNotificationLight => 'assets/images/ic_notification_light.svg';
+
   /// File path: assets/images/ic_privacy_policy.svg
   String get icPrivacyPolicy => 'assets/images/ic_privacy_policy.svg';
 
@@ -148,6 +154,8 @@ class $AssetsImagesGen {
         icHome,
         icLocation,
         icNoInternet,
+        icNotificationDark,
+        icNotificationLight,
         icPrivacyPolicy,
         icProfile,
         icProfileThin,

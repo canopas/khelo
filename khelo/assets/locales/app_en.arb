@@ -17,6 +17,7 @@
   "common_no_title": "No",
   "common_retry_title": "Retry",
   "common_submit_title": "Submit",
+  "common_not_now": "Not now",
   "common_not_specified_title": "Not Specified",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
@@ -105,6 +106,11 @@
   "home_screen_title": "Home",
   "home_screen_no_matches_title": "No matches are running currently",
   "home_screen_no_matches_description_text": "Running matches will be shown here, Stay tuned for some intense matches.",
+
+  "@_NOTIFICATION_POPUP": {
+  },
+  "notification_popup_title": "Turn on notifications?",
+  "notification_popup_description": "Never miss a moment of your matches. \nTurn on notifications for real-time updates and important match information.",
 
   "@_MY_CRICKET": {
   },

@@ -1,20 +1,45 @@
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/user/user_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
 
 final authServiceProvider = Provider((ref) {
-  return AuthService(FirebaseAuth.instance, ref.read(userServiceProvider));
+  return AuthService(
+    FirebaseAuth.instance,
+    ref.read(userServiceProvider),
+    ref.read(currentUserJsonPod.notifier),
+    ref.read(currentUserSessionJsonPod.notifier),
+  );
 });
 
 class AuthService {
   final FirebaseAuth _auth;
   final UserService _userService;
 
-  AuthService(this._auth, this._userService);
+  final StateController<String?> _currantUserNotifier;
+  final StateController<String?> _userSessionNotifier;
+
+  AuthService(
+    this._auth,
+    this._userService,
+    this._currantUserNotifier,
+    this._userSessionNotifier,
+  ) {
+    _auth.authStateChanges().listen(
+      (user) {
+        if (user == null) {
+          _currantUserNotifier.state = null;
+          _userSessionNotifier.state = null;
+        }
+      },
+    );
+  }
 
   Stream<User?> get user => _auth.authStateChanges();
 
@@ -63,6 +88,12 @@ class AuthService {
 
       final userCredential = await _auth.signInWithCredential(credential);
       await _onVerificationSuccess(countryCode, phoneNumber, userCredential);
+      final deviceToken = await FirebaseMessaging.instance.getToken();
+      if (deviceToken == null) {
+        debugPrint("AuthService: FCMToken is null");
+        return;
+      }
+      await registerDevice(deviceToken);
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -71,23 +102,18 @@ class AuthService {
   Future<void> _onVerificationSuccess(
       String countryCode, String phoneNumber, UserCredential credential) async {
     try {
-      if (credential.additionalUserInfo?.isNewUser ?? false) {
-        if (_auth.currentUser == null) {
-          return;
-        }
-        final phone = "$countryCode ${phoneNumber.caseAndSpaceInsensitive}";
-        UserModel user = UserModel(
-            id: _auth.currentUser!.uid,
-            phone: phone,
-            created_at: DateTime.now());
-        await _userService.updateUser(user);
-      } else {
-        final uid = credential.user?.uid;
-        if (uid == null) {
-          return;
-        }
-        await _userService.getUser(uid);
+      if (credential.user == null) {
+        _currantUserNotifier.state = null;
+        _userSessionNotifier.state = null;
+        return;
       }
+      final phone = "$countryCode ${phoneNumber.caseAndSpaceInsensitive}";
+
+      final (user, session) = await _userService.upsertUser(
+          uid: credential.user!.uid, phone: phone);
+
+      _currantUserNotifier.state = user.toJsonString();
+      _userSessionNotifier.state = session.toJsonString();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -106,10 +132,40 @@ class AuthService {
     }
   }
 
+  Future<void> clearSession() async {
+    final session = ApiSession.fromJsonString(_userSessionNotifier.state!);
+    final userId = _auth.currentUser?.uid;
+
+    if (session == null || userId == null) return;
+    await _userService.clearSession(uid: userId, sessionId: session.id);
+    _userSessionNotifier.state = null;
+  }
+
+  Future<void> registerDevice(String fcmToken) async {
+    if (_userSessionNotifier.state == null) return;
+
+    try {
+      final session = ApiSession.fromJsonString(_userSessionNotifier.state!);
+      if (session == null) return;
+
+      if (session.device_fcm_token == fcmToken) return;
+
+      await _userService.registerDevice(
+        session.id,
+        userId: session.user_id,
+        deviceToken: fcmToken,
+      );
+      debugPrint('AuthService: registerDevice succeed with token $fcmToken');
+    } catch (error) {
+      debugPrint('AuthService: registerDevice error $error');
+    }
+  }
+
   Future<void> signOut() async {
     try {
+      await clearSession();
       await _auth.signOut();
-      _userService.signOutUser();
+      _currantUserNotifier.state = null;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -118,6 +174,7 @@ class AuthService {
   Future<void> deleteAccount() async {
     try {
       await _userService.deleteUser();
+      _currantUserNotifier.state = null;
       await _auth.currentUser?.delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

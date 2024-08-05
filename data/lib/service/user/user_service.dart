@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
+import 'package:data/service/device/device_service.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:data/utils/dummy_deactivated_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,7 @@ import '../../storage/app_preferences.dart';
 
 final userServiceProvider = Provider((ref) {
   final service = UserService(ref.read(currentUserPod),
-      ref.read(currentUserJsonPod.notifier), FirebaseFirestore.instance);
+      FirebaseFirestore.instance, ref.read(deviceServiceProvider));
 
   ref.listen(currentUserPod, (_, next) => service._currentUser = next);
   return service;
@@ -18,24 +19,67 @@ final userServiceProvider = Provider((ref) {
 
 class UserService {
   UserModel? _currentUser;
-  final StateController<String?> _currentUserJsonController;
 
   final FirebaseFirestore firestore;
-  final CollectionReference<UserModel> _userCollection;
+  final DeviceService deviceService;
 
   UserService(
-      this._currentUser, this._currentUserJsonController, this.firestore)
-      : _userCollection = firestore
-            .collection(FireStoreConst.usersCollection)
-            .withConverter(
-                fromFirestore: UserModel.fromFireStore,
-                toFirestore: (UserModel user, _) => user.toJson());
+    this._currentUser,
+    this.firestore,
+    this.deviceService,
+  );
 
-  Future<void> getUser(String id) async {
+  CollectionReference<UserModel> get _userRef => firestore
+      .collection(FireStoreConst.usersCollection)
+      .withConverter<UserModel>(
+          fromFirestore: UserModel.fromFireStore,
+          toFirestore: (user, options) => user.toJson());
+
+  CollectionReference _sessionRef(String userId) => _userRef
+      .doc(userId)
+      .collection(FireStoreConst.userSessionCollection)
+      .withConverter<ApiSession>(
+          fromFirestore: ApiSession.fromFireStore,
+          toFirestore: (session, _) => session.toJson());
+
+  Future<void> clearSession({
+    required String uid,
+    required String sessionId,
+  }) async {
+    await _sessionRef(uid).doc(sessionId).delete();
+  }
+
+  Future<ApiSession> _createSession(String userId) async {
+    final sessionDocRef = _sessionRef(userId).doc();
+    final session = ApiSession(
+      id: sessionDocRef.id,
+      user_id: userId,
+      device_type: deviceService.currantPlatformType(),
+      device_id: deviceService.deviceId,
+      device_name: await deviceService.deviceName,
+      app_version: await deviceService.appVersion,
+      os_version: await deviceService.osVersion,
+      created_at: DateTime.now(),
+    );
+
+    await sessionDocRef.set(session);
+    return session;
+  }
+
+  Future<(UserModel, ApiSession)> upsertUser({
+    required String uid,
+    required String phone,
+  }) async {
+    var user = await getUser(uid);
+    user ??= await _createUser(uid, phone);
+    final session = await _createSession(uid);
+    return (user, session);
+  }
+
+  Future<UserModel?> getUser(String id) async {
     try {
-      final snapshot = await _userCollection.doc(id).get();
-      var userModel = snapshot.data();
-      _currentUserJsonController.state = userModel?.toJsonString();
+      final snapshot = await _userRef.doc(id).get();
+      return (snapshot.exists) ? snapshot.data() : deActiveDummyUserAccount(id);
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -43,33 +87,23 @@ class UserService {
 
   Future<void> updateUser(UserModel user) async {
     try {
-      final userRef = _userCollection.doc(user.id);
-
+      final userRef = _userRef.doc(user.id);
       await userRef.set(user, SetOptions(merge: true));
-
-      _currentUserJsonController.state = user.toJsonString();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  Future<UserModel> _createUser(String userId, String phone) async {
+    final user =
+        UserModel(id: userId, phone: phone, created_at: DateTime.now());
+    await _userRef.doc(userId).set(user);
+    return user;
   }
 
   Future<void> deleteUser() async {
     try {
-      await _userCollection.doc(_currentUser?.id).delete();
-      _currentUserJsonController.state = null;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<UserModel> getUserById(String id) async {
-    try {
-      final snapshot = await _userCollection.doc(id).get();
-      var userModel = snapshot.data();
-      if (userModel == null) {
-        return deActiveDummyUserAccount(id);
-      }
-      return userModel;
+      await _userRef.doc(_currentUser?.id).delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -79,13 +113,10 @@ class UserService {
     List<UserModel> users = [];
     try {
       for (final tenIds in ids.chunked(10)) {
-        final snapshot = await _userCollection
-            .where(FireStoreConst.id, whereIn: tenIds)
-            .get();
+        final snapshot =
+            await _userRef.where(FireStoreConst.id, whereIn: tenIds).get();
 
-        users.addAll(snapshot.docs.map((doc) {
-          return doc.data();
-        }).toList());
+        users.addAll(snapshot.docs.map((user) => user.data()).toList());
 
         final deactivatedUserIds =
             tenIds.where((id) => !users.map((user) => user.id).contains(id));
@@ -102,7 +133,7 @@ class UserService {
 
   Future<List<UserModel>> searchUser(String searchKey) async {
     try {
-      final snapshot = await _userCollection
+      final snapshot = await _userRef
           .where(FireStoreConst.nameLowercase,
               isGreaterThanOrEqualTo: searchKey.toLowerCase())
           .where(FireStoreConst.nameLowercase,
@@ -117,7 +148,13 @@ class UserService {
     }
   }
 
-  void signOutUser() {
-    _currentUserJsonController.state = null;
+  Future<void> registerDevice(
+    String sessionId, {
+    required String userId,
+    required String deviceToken,
+  }) async {
+    await _sessionRef(userId).doc(sessionId).update({
+      "device_fcm_token": deviceToken,
+    });
   }
 }
