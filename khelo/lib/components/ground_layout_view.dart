@@ -22,7 +22,6 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
 
   late AnimationController _controller;
   late Animation<double> _animation;
-  late Offset _startOffset;
   Offset? _endOffset;
 
   List<FieldingPosition> positions = [
@@ -75,7 +74,6 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _startOffset = Offset(groundRadius, groundRadius);
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
       ..addListener(() {
         setState(() {});
@@ -159,7 +157,6 @@ class _GroundLayoutViewState extends State<GroundLayoutView>
             ),
             CustomPaint(
                 painter: LinePainter(
-                    startOffset: _startOffset,
                     endOffset: _endOffset,
                     progress: _animation.value,
                     strokeColor: context.colorScheme.primary),

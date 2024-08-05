@@ -7,13 +7,11 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class LinePainter extends CustomPainter {
-  final Offset startOffset;
-  Offset? endOffset;
+  final Offset? endOffset;
   final double progress;
   final Color strokeColor;
 
   LinePainter({
-    required this.startOffset,
     this.endOffset,
     required this.progress,
     required this.strokeColor,
@@ -21,17 +19,22 @@ class LinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    // Calculate the center of the widget
+    final startOffset = Offset(size.width / 2, size.height / 2);
+
     if (endOffset != null) {
       final paint = Paint()
         ..color = strokeColor
         ..strokeCap = StrokeCap.round
         ..strokeWidth = 3.0;
 
+      // Calculate the currentOffset based on the progress
       final currentOffset = Offset(
         startOffset.dx + (endOffset!.dx - startOffset.dx) * progress,
         startOffset.dy + (endOffset!.dy - startOffset.dy) * progress,
       );
 
+      // Draw the line from startOffset to currentOffset
       canvas.drawLine(startOffset, currentOffset, paint);
     }
   }
