@@ -171,7 +171,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
               ),
               const SizedBox(width: 16),
               IntrinsicWidth(
-                child: Container(
+                child: ConstrainedBox(
                   constraints: const BoxConstraints(minWidth: 70),
                   child: AppTextField(
                     controller: runController,
@@ -187,9 +187,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
                     borderColor: BorderColor(
                         focusColor: Colors.transparent,
                         unFocusColor: Colors.transparent),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
+                    inputFormatters: TextValidationType.numberOnly,
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textPrimary),
                     onChanged: (_) => setState(() {}),

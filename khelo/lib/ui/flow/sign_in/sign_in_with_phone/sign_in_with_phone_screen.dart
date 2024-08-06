@@ -1,6 +1,5 @@
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_snackbar.dart';
@@ -83,9 +82,7 @@ class SignInWithPhoneScreen extends ConsumerWidget {
                 controller: state.phoneController,
                 keyboardType: TextInputType.phone,
                 autoFocus: true,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                ],
+                inputFormatters: TextValidationType.numberOnly,
                 style: AppTextStyle.header2.copyWith(
                   color: context.colorScheme.textSecondary,
                 ),

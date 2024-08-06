@@ -584,8 +584,23 @@
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
   "score_board_pause_title": "Pause",
+  "score_board_revised_target_title": "Revised target",
+  "score_board_built_in_dls_text": "Apply in-built DLS method",
+  "score_board_manual_target_text": "Add manually calculated target",
+  "score_board_confirm_target_text": "Confirm target",
+  "score_board_enter_lost_over_description_text": "Enter the over's lost for the inning",
+  "score_board_enter_manual_target_description_text": "Enter your manually calculated target",
+  "score_board_runs_in_text": "Runs in",
+  "score_board_overs_text": "Overs",
   "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
   "score_board_end_match_description_text": "are you sure you want to end match?",
+  "score_board_revised_target_summary_text": "*Revised Target is {run} Runs in {over} overs",
+  "@score_board_revised_target_summary_text": {
+      "placeholders": {
+        "run": {},
+        "over": {}
+      }
+    },
   "score_board_run_sup_script_text": "{run, select, 1{{extra}} 2{{extra}²} 3{{extra}³} 4{{extra}⁴} 5{{extra}⁵} 6{{extra}⁶} 7{{extra}⁷} 8{{extra}⁸} 9{{extra}⁹} other{{extra}}}",
   "@score_board_run_sup_script_text": {
     "placeholders": {

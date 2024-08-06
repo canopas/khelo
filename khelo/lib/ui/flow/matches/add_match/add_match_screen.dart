@@ -1,6 +1,5 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -264,11 +263,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           focusColor: context.colorScheme.outline,
           unFocusColor: context.colorScheme.outline,
         ),
-        inputFormatters: allowNumberOnly
-            ? [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-              ]
-            : null,
+        inputFormatters: allowNumberOnly ? TextValidationType.numberOnly : null,
         onChanged: (value) => onChange(),
       ),
     );

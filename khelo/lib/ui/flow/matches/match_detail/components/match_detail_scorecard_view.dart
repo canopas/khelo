@@ -141,6 +141,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
         iconColor: context.colorScheme.onPrimary,
         initiallyExpanded: initiallyExpanded,
         onExpansionChanged: onExpansionChanged,
+        collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
+        shape: const RoundedRectangleBorder(side: BorderSide.none),
         trailing: AnimatedRotation(
           turns: initiallyExpanded ? 0.5 : 0,
           duration: const Duration(milliseconds: 300),
@@ -150,8 +152,6 @@ class MatchDetailScorecardView extends ConsumerWidget {
             color: context.colorScheme.onPrimary,
           ),
         ),
-        collapsedShape: const RoundedRectangleBorder(side: BorderSide.none),
-        shape: const RoundedRectangleBorder(side: BorderSide.none),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -47,6 +47,7 @@ mixin _$ScoreBoardViewState {
   DateTime? get showAddPenaltyRunSheet => throw _privateConstructorUsedError;
   DateTime? get showEndMatchSheet => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
+  DateTime? get showReviseTargetSheet => throw _privateConstructorUsedError;
   List<BallScoreModel> get currentScoresList =>
       throw _privateConstructorUsedError;
   List<BallScoreModel> get previousScoresList =>
@@ -99,6 +100,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
+      DateTime? showReviseTargetSheet,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -156,6 +158,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? showReviseTargetSheet = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -267,6 +270,10 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showReviseTargetSheet: freezed == showReviseTargetSheet
+          ? _value.showReviseTargetSheet
+          : showReviseTargetSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       currentScoresList: null == currentScoresList
           ? _value.currentScoresList
@@ -399,6 +406,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
       DateTime? invalidUndoToast,
+      DateTime? showReviseTargetSheet,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -458,6 +466,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? showReviseTargetSheet = freezed,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -570,6 +579,10 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      showReviseTargetSheet: freezed == showReviseTargetSheet
+          ? _value.showReviseTargetSheet
+          : showReviseTargetSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       currentScoresList: null == currentScoresList
           ? _value._currentScoresList
           : currentScoresList // ignore: cast_nullable_to_non_nullable
@@ -648,6 +661,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showAddPenaltyRunSheet,
       this.showEndMatchSheet,
       this.invalidUndoToast,
+      this.showReviseTargetSheet,
       final List<BallScoreModel> currentScoresList = const [],
       final List<BallScoreModel> previousScoresList = const [],
       this.loading = false,
@@ -723,6 +737,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final DateTime? showEndMatchSheet;
   @override
   final DateTime? invalidUndoToast;
+  @override
+  final DateTime? showReviseTargetSheet;
   final List<BallScoreModel> _currentScoresList;
   @override
   @JsonKey()
@@ -773,7 +789,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, showReviseTargetSheet: $showReviseTargetSheet, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -833,6 +849,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.showEndMatchSheet, showEndMatchSheet) ||
                 other.showEndMatchSheet == showEndMatchSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
+            (identical(other.showReviseTargetSheet, showReviseTargetSheet) || other.showReviseTargetSheet == showReviseTargetSheet) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
             (identical(other.loading, loading) || other.loading == loading) &&
@@ -875,6 +892,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showAddPenaltyRunSheet,
         showEndMatchSheet,
         invalidUndoToast,
+        showReviseTargetSheet,
         const DeepCollectionEquality().hash(_currentScoresList),
         const DeepCollectionEquality().hash(_previousScoresList),
         loading,
@@ -924,6 +942,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showAddPenaltyRunSheet,
       final DateTime? showEndMatchSheet,
       final DateTime? invalidUndoToast,
+      final DateTime? showReviseTargetSheet,
       final List<BallScoreModel> currentScoresList,
       final List<BallScoreModel> previousScoresList,
       final bool loading,
@@ -988,6 +1007,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   DateTime? get showEndMatchSheet;
   @override
   DateTime? get invalidUndoToast;
+  @override
+  DateTime? get showReviseTargetSheet;
   @override
   List<BallScoreModel> get currentScoresList;
   @override

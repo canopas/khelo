@@ -36,7 +36,7 @@ class AppTextField extends StatelessWidget {
   final TextAlign textAlign;
   final Widget? prefixIcon;
   final BoxConstraints? prefixIconConstraints;
-  final List<TextInputFormatter>? inputFormatters;
+  final TextValidationType? inputFormatters;
   final Function(PointerDownEvent)? onTapOutside;
 
   const AppTextField({
@@ -108,7 +108,7 @@ class AppTextField extends StatelessWidget {
           enabled: enabled,
           maxLines: maxLines,
           minLines: minLines,
-          inputFormatters: inputFormatters,
+          inputFormatters: inputFormatters?.getFormat(),
           expands: expands,
           textInputAction: textInputAction,
           autofocus: autoFocus,
@@ -200,4 +200,18 @@ class BorderColor {
   Color? unFocusColor;
 
   BorderColor({this.focusColor, this.unFocusColor});
+}
+
+enum TextValidationType {
+  numberOnly,
+  noSpecialCharacter;
+
+  List<TextInputFormatter> getFormat() {
+    switch (this) {
+      case numberOnly:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))];
+      case noSpecialCharacter:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))];
+    }
+  }
 }

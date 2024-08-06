@@ -13,6 +13,7 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -54,7 +55,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     return AppPage(
       title: context.l10n.search_team_screen_title,
       actions: [
-        IconButton(
+        actionButton(
+          context,
           onPressed: state.selectedTeam != null
               ? () async {
                   if (state.userTeams

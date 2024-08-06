@@ -381,6 +381,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showAddPenaltyRunSheet: DateTime.now());
       case MatchOption.endMatch:
         state = state.copyWith(showEndMatchSheet: DateTime.now());
+      case MatchOption.reviseTarget:
+        state = state.copyWith(showReviseTargetSheet: DateTime.now());
       default:
         return;
     }
@@ -1177,6 +1179,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showAddPenaltyRunSheet,
     DateTime? showEndMatchSheet,
     DateTime? invalidUndoToast,
+    DateTime? showReviseTargetSheet,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,
     @Default(false) bool loading,
@@ -1242,6 +1245,7 @@ enum MatchOption {
   changeStriker,
   penaltyRun,
   pauseScoring,
+  reviseTarget,
   continueWithInjuredPlayer,
   endMatch;
 
@@ -1257,6 +1261,22 @@ enum MatchOption {
         return context.l10n.score_board_continue_with_injured_player_title;
       case MatchOption.endMatch:
         return context.l10n.common_end_match_title;
+      case MatchOption.reviseTarget:
+        return context.l10n.score_board_revised_target_title;
+    }
+  }
+}
+
+enum ReviseTargetOption {
+  builtInDLS,
+  manual;
+
+  String getTitle(BuildContext context) {
+    switch (this) {
+      case ReviseTargetOption.builtInDLS:
+        return context.l10n.score_board_built_in_dls_text;
+      case ReviseTargetOption.manual:
+        return context.l10n.score_board_manual_target_text;
     }
   }
 }

@@ -112,9 +112,7 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
             color: context.colorScheme.textPrimary,
           ),
           textAlign: TextAlign.center,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          ],
+          inputFormatters: TextValidationType.numberOnly,
           onChanged: (value) => setState(() {
             verificationNumber = value;
             errorString = null;

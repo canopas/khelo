@@ -108,9 +108,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
                     borderColor: BorderColor(
                         focusColor: Colors.transparent,
                         unFocusColor: Colors.transparent),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
+                    inputFormatters: TextValidationType.numberOnly,
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textPrimary),
                     onChanged: (value) => setState(() => isButtonEnable =

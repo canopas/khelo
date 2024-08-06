@@ -2,7 +2,6 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -109,9 +108,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
             _textInputField(
                 onChanged: (value) => notifier.onNameTextChanged(),
                 controller: state.nameController,
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9 ]'))
-                ],
+                inputFormatters: TextValidationType.noSpecialCharacter,
                 suffixIcon: state.checkingForAvailability
                     ? const UnconstrainedBox(
                         child: AppProgressIndicator(
@@ -214,7 +211,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     required TextEditingController controller,
     required String hintText,
     required Function(String)? onChanged,
-    List<TextInputFormatter>? inputFormatters,
+    TextValidationType? inputFormatters,
     Widget? suffixIcon,
   }) {
     return AppTextField(

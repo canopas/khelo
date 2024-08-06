@@ -15,6 +15,7 @@ import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
+import 'package:khelo/ui/flow/score_board/components/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
@@ -67,6 +68,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowOverCompleteSheet(context, ref);
     _observeShowInningCompleteSheet(context, ref);
     _observeShowMatchCompleteSheet(context, ref);
+    _observeShowReviseTargetSheet(context, ref);
     _observeShowAddExtraSheetForNoBall(context, ref);
     _observeShowAddExtraSheetForLegBye(context, ref);
     _observeShowAddExtraSheetForBye(context, ref);
@@ -484,6 +486,19 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         (previous, next) {
       if (next != null) {
         _showMatchCompleteSheet(context);
+      }
+    });
+  }
+
+  void _observeShowReviseTargetSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showReviseTargetSheet),
+        (previous, next) {
+      if (next != null) {
+        ReviseTargetSheet.show(context);
       }
     });
   }

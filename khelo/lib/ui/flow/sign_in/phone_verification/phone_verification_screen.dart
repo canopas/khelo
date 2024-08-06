@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
@@ -106,9 +105,7 @@ class _PhoneVerificationScreenState
           maxLength: 6,
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-          ],
+          inputFormatters: TextValidationType.numberOnly,
           onChanged: notifier.updateOTP,
           style: AppTextStyle.header2.copyWith(
             color: context.colorScheme.textSecondary,

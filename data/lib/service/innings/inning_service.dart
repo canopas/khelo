@@ -56,7 +56,7 @@ class InningsService {
       );
 
       batch.set(firstInningRef, firstInning, SetOptions(merge: true));
-      batch.set(secondInningRef, secondInning , SetOptions(merge: true));
+      batch.set(secondInningRef, secondInning, SetOptions(merge: true));
 
       await batch.commit();
     } catch (error, stack) {
@@ -84,11 +84,9 @@ class InningsService {
     int? runs,
   }) {
     try {
-      final batInningRef =
-          _inningCollection.doc(battingTeamInningId);
+      final batInningRef = _inningCollection.doc(battingTeamInningId);
 
-      final bowlInningRef =
-          _inningCollection.doc(bowlingTeamInningId);
+      final bowlInningRef = _inningCollection.doc(bowlingTeamInningId);
 
       Map<String, dynamic> battingUpdates = {
         FireStoreConst.totalRuns: totalRun,
