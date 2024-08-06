@@ -21,8 +21,9 @@ Widget toggleButton(
           width: 52,
           child: FittedBox(
             fit: BoxFit.fitWidth,
-            child: Switch(
+            child: Switch.adaptive(
               inactiveTrackColor: context.colorScheme.containerHigh,
+              activeColor: context.colorScheme.primary,
               trackOutlineColor: WidgetStateColor.transparent,
               thumbColor: WidgetStatePropertyAll(context.colorScheme.onPrimary),
               value: defaultValue,
