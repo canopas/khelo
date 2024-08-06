@@ -31,7 +31,7 @@ class MatchStatusTag extends StatelessWidget {
         child: Row(
           children: [
             if (onTap != null) ...[
-              status == MatchStatus.yetToStart
+              status == MatchStatus.running
                   ? Icon(
                       CupertinoIcons.play,
                       size: 16,

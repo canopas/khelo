@@ -10,9 +10,9 @@ import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/components/user_cell_view.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/primary_button.dart';
+import 'package:style/button/toggle_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/widgets/rounded_check_box.dart';
 
 class SelectPlayerSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(
@@ -93,9 +93,14 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
           batsManList: widget.batsManList,
           bowlerList: widget.bowlerList,
         ),
+        options: [
+          if (showCheckBox) ...[
+            _contWithInjPlayerOption(context, notifier),
+            const SizedBox(height: 16)
+          ],
+        ],
         action: [
-          _stickyButton(
-              context, notifier, state, showCheckBox, injuredPlayerRemained)
+          _stickyButton(context, state, injuredPlayerRemained)
         ]);
   }
 
@@ -231,35 +236,22 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
 
   Widget _stickyButton(
     BuildContext context,
-    ScoreBoardViewNotifier notifier,
     ScoreBoardViewState state,
-    bool showContWithInjPlayerOption,
     bool injuredPlayerRemained,
   ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (showContWithInjPlayerOption) ...[
-          _contWithInjPlayerOption(context, notifier),
-          const SizedBox(height: 16)
-        ],
-        PrimaryButton(
-          _getButtonTitle(
-              state.otherInning?.innings_status == InningStatus.finish,
-              injuredPlayerRemained),
-          enabled: _isStickyButtonEnable(injuredPlayerRemained),
-          onPressed: () =>
-              _onSelectButton(context, state, injuredPlayerRemained),
-        ),
-      ],
+    return PrimaryButton(
+      _getButtonTitle(state.otherInning?.innings_status == InningStatus.finish,
+          injuredPlayerRemained),
+      enabled: _isStickyButtonEnable(injuredPlayerRemained),
+      onPressed: () => _onSelectButton(context, state, injuredPlayerRemained),
     );
   }
 
   Widget _contWithInjPlayerOption(
       BuildContext context, ScoreBoardViewNotifier notifier) {
-    return RoundedCheckBoxTile(
+    return ToggleButtonTile(
       title: context.l10n.score_board_continue_with_injured_player_title,
-      isSelected: isEnabled,
+      defaultEnabled: isEnabled,
       onTap: (value) => setState(() {
         isEnabled = !isEnabled;
         notifier.onContinueWithInjuredPlayersChange(isEnabled);

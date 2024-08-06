@@ -102,6 +102,40 @@ extension BowlingStyleString on BowlingStyle {
   }
 }
 
+extension FieldingPositionString on FieldingPositionType {
+  String getString(BuildContext context) {
+    switch (this) {
+      case FieldingPositionType.deepMidWicket:
+        return context.l10n.fielding_position_deep_mid_wicket_title;
+      case FieldingPositionType.longOn:
+        return context.l10n.fielding_position_long_on_title;
+      case FieldingPositionType.longOff:
+        return context.l10n.fielding_position_long_off_title;
+      case FieldingPositionType.deepCover:
+        return context.l10n.fielding_position_deep_cover_title;
+      case FieldingPositionType.deepPoint:
+        return context.l10n.fielding_position_deep_point_title;
+      case FieldingPositionType.thirdMan:
+        return context.l10n.fielding_position_third_man_title;
+      case FieldingPositionType.deepFineLeg:
+        return context.l10n.fielding_position_deep_fine_leg_title;
+      case FieldingPositionType.deepSquareLeg:
+        return context.l10n.fielding_position_deep_square_leg_title;
+    }
+  }
+}
+
+extension SideString on Side {
+  String getString(BuildContext context) {
+    switch (this) {
+      case Side.off:
+        return context.l10n.side_off_title;
+      case Side.leg:
+        return context.l10n.side_leg_title;
+    }
+  }
+}
+
 extension BattingStyleString on BattingStyle {
   String getString(BuildContext context) {
     switch (this) {
