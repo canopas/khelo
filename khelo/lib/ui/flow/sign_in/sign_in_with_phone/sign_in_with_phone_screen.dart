@@ -80,9 +80,9 @@ class SignInWithPhoneScreen extends ConsumerWidget {
             Expanded(
               child: AppTextField(
                 controller: state.phoneController,
-                keyboardType: TextInputType.phone,
                 autoFocus: true,
                 inputFormatters: TextValidationType.numberOnly,
+                keyboardType: TextInputType.number,
                 style: AppTextStyle.header2.copyWith(
                   color: context.colorScheme.textSecondary,
                 ),

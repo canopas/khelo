@@ -245,7 +245,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     required BuildContext context,
     required TextEditingController controller,
     required String hintText,
-    bool allowNumberOnly = false,
     required Function() onChange,
   }) {
     return Padding(
@@ -263,7 +262,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           focusColor: context.colorScheme.outline,
           unFocusColor: context.colorScheme.outline,
         ),
-        inputFormatters: allowNumberOnly ? TextValidationType.numberOnly : null,
         onChanged: (value) => onChange(),
       ),
     );

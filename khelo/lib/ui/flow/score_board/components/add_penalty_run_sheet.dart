@@ -102,13 +102,14 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
                     maxLength: 2,
                     autoFocus: true,
                     borderRadius: BorderRadius.circular(8),
-                    keyboardType: TextInputType.number,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     borderColor: BorderColor(
-                        focusColor: Colors.transparent,
-                        unFocusColor: Colors.transparent),
+                      focusColor: Colors.transparent,
+                      unFocusColor: Colors.transparent,
+                    ),
                     inputFormatters: TextValidationType.numberOnly,
+                    keyboardType: TextInputType.number,
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textPrimary),
                     onChanged: (value) => setState(() => isButtonEnable =

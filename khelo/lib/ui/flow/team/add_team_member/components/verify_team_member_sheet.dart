@@ -95,7 +95,8 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
         AppTextField(
           maxLength: verifyNumberCount,
           autoFocus: true,
-          keyboardType: TextInputType.phone,
+          inputFormatters: TextValidationType.numberOnly,
+          keyboardType: TextInputType.number,
           borderType: AppTextFieldBorderType.outline,
           borderColor: BorderColor(
             focusColor: Colors.transparent,
@@ -108,11 +109,10 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
           backgroundColor: context.colorScheme.containerLow,
           borderRadius: BorderRadius.circular(12),
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
+          textAlign: TextAlign.center,
           style: AppTextStyle.header4.copyWith(
             color: context.colorScheme.textPrimary,
           ),
-          textAlign: TextAlign.center,
-          inputFormatters: TextValidationType.numberOnly,
           onChanged: (value) => setState(() {
             verificationNumber = value;
             errorString = null;

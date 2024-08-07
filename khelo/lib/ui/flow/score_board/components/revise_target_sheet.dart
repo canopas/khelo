@@ -164,6 +164,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
       borderRadius: BorderRadius.circular(8),
       backgroundColor: context.colorScheme.surface,
       inputFormatters: TextValidationType.numberOnly,
+      keyboardType: TextInputType.number,
       borderColor: BorderColor(
         focusColor: Colors.transparent,
         unFocusColor: Colors.transparent,
@@ -316,7 +317,7 @@ class CustomExpansionTile extends StatelessWidget {
           secondChild: child,
           crossFadeState:
               isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 300),
         ),
       ],
     );

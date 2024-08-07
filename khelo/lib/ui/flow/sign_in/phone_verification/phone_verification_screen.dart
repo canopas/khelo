@@ -104,8 +104,8 @@ class _PhoneVerificationScreenState
           autoFocus: true,
           maxLength: 6,
           textAlign: TextAlign.center,
-          keyboardType: TextInputType.number,
           inputFormatters: TextValidationType.numberOnly,
+          keyboardType: TextInputType.number,
           onChanged: notifier.updateOTP,
           style: AppTextStyle.header2.copyWith(
             color: context.colorScheme.textSecondary,
