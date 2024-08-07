@@ -63,7 +63,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
     _errorObserve();
     _popObserve();
     return PopScope(
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!state.pop) return notifier.discardAttachments();
       },
       child: AppPage(
