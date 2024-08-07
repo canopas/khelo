@@ -1,3 +1,4 @@
+import 'package:data/utils/dls_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -126,7 +127,22 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
           const SizedBox(width: 8),
           actionButton(
             context,
-            onPressed: () {},
+            onPressed: () {
+              // get minimum over played to apply DLS
+              // calculateMinRequiredOvers(totalOvers)
+              // get Resource
+              // get G50
+              DLSCalculator dls = DLSCalculator();
+
+              int originalTarget = 250; // Example target
+              int totalOvers = 50; // Total overs at the start
+              int wicketsLost = 2; // Wickets lost
+              int oversLeft = 30; // Overs left after interruption
+
+              double revisedTarget = dls.calculateTarget(
+                  originalTarget, totalOvers, wicketsLost, oversLeft);
+              print("Revised Target: ${revisedTarget}");
+            },
             icon: SvgPicture.asset(
               Assets.images.icCheck,
               height: 24,
@@ -211,6 +227,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
           _subTitleView(context, context.l10n.score_board_runs_in_text)
         ],
       ),
+      const SizedBox(height: 16),
       Row(
         children: [
           IntrinsicWidth(
@@ -226,7 +243,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
           const SizedBox(width: 16),
           _subTitleView(context, context.l10n.score_board_overs_text)
         ],
-      )
+      ),
     ];
   }
 

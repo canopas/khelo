@@ -72,6 +72,7 @@ class UserCellView extends StatelessWidget {
               title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary),
             ),

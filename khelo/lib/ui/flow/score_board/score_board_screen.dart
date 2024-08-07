@@ -97,11 +97,15 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
+    final matchOptions = MatchOption.values.toList();
+    if (!(state.match?.isRevisedTargetApplicable ?? true))
+      matchOptions.remove(MatchOption.reviseTarget);
+
     return moreOptionButton(
       context,
       onPressed: () => showActionBottomSheet(
           context: context,
-          items: MatchOption.values
+          items: matchOptions
               .map((option) => BottomSheetAction(
                     title: option.getTitle(context),
                     onTap: () {

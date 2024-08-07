@@ -37,7 +37,7 @@ class DLSCalculator {
     return resources;
   }
 
-  int calculateTarget(
+  double calculateTarget(
       int originalTarget, int totalOvers, int wicketsLost, int oversLeft) {
     double resourceAtStart = getResourcePercentage(
         totalOvers, 0); // Assuming 0 wickets lost at start
@@ -46,7 +46,7 @@ class DLSCalculator {
     double resourceUsed = resourceAtStart - resourceNow;
     double proportionUsed = resourceUsed / resourceAtStart;
 
-    int revisedTarget = (originalTarget * proportionUsed).round();
+    final revisedTarget = originalTarget * proportionUsed;
 
     return revisedTarget;
   }

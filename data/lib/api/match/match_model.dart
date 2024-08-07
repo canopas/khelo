@@ -37,10 +37,23 @@ class MatchModel with _$MatchModel {
     TossDecision? toss_decision,
     String? toss_winner_id,
     String? current_playing_team_id,
+    RevisedTarget? revisedTarget,
   }) = _MatchModel;
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>
       _$MatchModelFromJson(json);
+}
+
+@freezed
+class RevisedTarget with _$RevisedTarget {
+  const factory RevisedTarget({
+    @Default(0) int runs,
+    @Default(0) double overs,
+    DateTime? time,
+  }) = _RevisedTarget;
+
+  factory RevisedTarget.fromJson(Map<String, dynamic> json) =>
+      _$RevisedTargetFromJson(json);
 }
 
 @freezed
@@ -101,6 +114,24 @@ extension DataMatchModel on MatchModel {
         winType: WinnerByType.wicket,
       );
     }
+  }
+
+  bool get isRevisedTargetApplicable {
+    final secondInningTeam = toss_decision == TossDecision.bat
+        ? teams.firstWhere((element) => element.team.id != toss_winner_id)
+        : teams.firstWhere((element) => element.team.id == toss_winner_id);
+
+    // TODO: Use MinRequiredOversForDLS here
+    return match_status == MatchStatus.running &&
+        current_playing_team_id == secondInningTeam.team.id &&
+        revisedTarget == null &&
+        match_type == MatchType.limitedOvers;
+  }
+
+  int calculateMinRequiredOversForDLS() {
+    final percentage = number_of_over >= 50 ? 40 : 25;
+    double minRequiredOvers = (number_of_over * percentage) / 100.0;
+    return minRequiredOvers.round();
   }
 }
 
@@ -166,6 +197,7 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
     TossDecision? toss_decision,
     String? toss_winner_id,
     String? current_playing_team_id,
+    RevisedTarget? revisedTarget,
   }) = _AddEditMatchRequest;
 
   factory AddEditMatchRequest.fromJson(Map<String, dynamic> json) =>

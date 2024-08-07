@@ -62,6 +62,10 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
           $enumDecodeNullable(_$TossDecisionEnumMap, json['toss_decision']),
       toss_winner_id: json['toss_winner_id'] as String?,
       current_playing_team_id: json['current_playing_team_id'] as String?,
+      revisedTarget: json['revisedTarget'] == null
+          ? null
+          : RevisedTarget.fromJson(
+              json['revisedTarget'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
@@ -91,6 +95,7 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'toss_decision': _$TossDecisionEnumMap[instance.toss_decision],
       'toss_winner_id': instance.toss_winner_id,
       'current_playing_team_id': instance.current_playing_team_id,
+      'revisedTarget': instance.revisedTarget,
     };
 
 const _$MatchTypeEnumMap = {
@@ -126,6 +131,21 @@ const _$TossDecisionEnumMap = {
   TossDecision.bat: 1,
   TossDecision.bowl: 2,
 };
+
+_$RevisedTargetImpl _$$RevisedTargetImplFromJson(Map<String, dynamic> json) =>
+    _$RevisedTargetImpl(
+      runs: (json['runs'] as num?)?.toInt() ?? 0,
+      overs: (json['overs'] as num?)?.toDouble() ?? 0,
+      time:
+          json['time'] == null ? null : DateTime.parse(json['time'] as String),
+    );
+
+Map<String, dynamic> _$$RevisedTargetImplToJson(_$RevisedTargetImpl instance) =>
+    <String, dynamic>{
+      'runs': instance.runs,
+      'overs': instance.overs,
+      'time': instance.time?.toIso8601String(),
+    };
 
 _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map<String, dynamic> json) =>
     _$MatchTeamModelImpl(
@@ -229,6 +249,10 @@ _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(Map json) =>
           $enumDecodeNullable(_$TossDecisionEnumMap, json['toss_decision']),
       toss_winner_id: json['toss_winner_id'] as String?,
       current_playing_team_id: json['current_playing_team_id'] as String?,
+      revisedTarget: json['revisedTarget'] == null
+          ? null
+          : RevisedTarget.fromJson(
+              Map<String, dynamic>.from(json['revisedTarget'] as Map)),
     );
 
 Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
@@ -259,6 +283,7 @@ Map<String, dynamic> _$$AddEditMatchRequestImplToJson(
       'toss_decision': _$TossDecisionEnumMap[instance.toss_decision],
       'toss_winner_id': instance.toss_winner_id,
       'current_playing_team_id': instance.current_playing_team_id,
+      'revisedTarget': instance.revisedTarget?.toJson(),
     };
 
 _$AddMatchTeamRequestImpl _$$AddMatchTeamRequestImplFromJson(Map json) =>
