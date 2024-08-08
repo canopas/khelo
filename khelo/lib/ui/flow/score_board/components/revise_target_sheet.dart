@@ -132,16 +132,16 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
               // calculateMinRequiredOvers(totalOvers)
               // get Resource
               // get G50
-              DLSCalculator dls = DLSCalculator();
 
-              int originalTarget = 250; // Example target
-              int totalOvers = 50; // Total overs at the start
-              int wicketsLost = 2; // Wickets lost
-              int oversLeft = 30; // Overs left after interruption
+              DLSCalculator dlsCalculator = DLSCalculator();
 
-              double revisedTarget = dls.calculateTarget(
-                  originalTarget, totalOvers, wicketsLost, oversLeft);
-              print("Revised Target: ${revisedTarget}");
+              // Example usage
+              int team1Score = 250;
+              int initialOvers = 50;
+              int remainingOvers = 25;
+              int wicketsLost = 3;
+
+              dlsCalculator.calculateTargetScore(team1Score, initialOvers, remainingOvers, wicketsLost);
             },
             icon: SvgPicture.asset(
               Assets.images.icCheck,

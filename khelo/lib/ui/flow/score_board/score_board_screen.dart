@@ -98,8 +98,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     ScoreBoardViewState state,
   ) {
     final matchOptions = MatchOption.values.toList();
-    if (!(state.match?.isRevisedTargetApplicable ?? true))
+    if (!(state.match?.isRevisedTargetApplicable ?? true)) {
       matchOptions.remove(MatchOption.reviseTarget);
+    }
 
     return moreOptionButton(
       context,
