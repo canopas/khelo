@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
@@ -50,7 +51,9 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   }
 
   void selectUser(UserModel user) {
-    state = state.copyWith(selectedUsers: [...state.selectedUsers, user]);
+    final player =
+        TeamPlayer(id: user.id, role: TeamPlayerRole.player, detail: user);
+    state = state.copyWith(selectedUsers: [...state.selectedUsers, player]);
   }
 
   void unSelectUser(UserModel user) {
@@ -66,10 +69,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
 
     state = state.copyWith(isAddInProgress: true, actionError: null);
     try {
-      await _teamService.addPlayersToTeam(
-        id,
-        state.selectedUsers.map((e) => e.id).toList(),
-      );
+      await _teamService.addPlayersToTeam(id, state.selectedUsers);
       state = state.copyWith(isAddInProgress: false, isAdded: true);
     } catch (e) {
       state = state.copyWith(isAddInProgress: false, actionError: e);
@@ -92,7 +92,7 @@ class AddTeamMemberState with _$AddTeamMemberState {
     Object? error,
     Object? actionError,
     @Default([]) List<UserModel> searchedUsers,
-    @Default([]) List<UserModel> selectedUsers,
+    @Default([]) List<TeamPlayer> selectedUsers,
     @Default(false) bool isAdded,
     @Default(false) bool isAddInProgress,
   }) = _AddTeamMemberState;

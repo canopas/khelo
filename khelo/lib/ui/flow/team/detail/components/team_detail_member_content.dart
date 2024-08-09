@@ -1,3 +1,4 @@
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -22,12 +23,13 @@ class TeamDetailMemberContent extends ConsumerWidget {
         state.team?.players?.isNotEmpty == true) {
       return Column(
         children: [
-          if (state.team!.created_by == state.currentUserId) ...[
-            _addMemberButton(
-              context,
-              onTap: () =>
-                  AppRoute.addTeamMember(team: state.team!).push(context),
-            ),
+          if (state.team?.players?.any((element) =>
+                  element.id == state.currentUserId &&
+                  element.role == TeamPlayerRole.admin) ==
+              true) ...[
+            _addMemberButton(context,
+                onTap: () =>
+                    AppRoute.addTeamMember(team: state.team!).push(context)),
           ],
           Expanded(
             child: ListView.separated(
@@ -36,8 +38,8 @@ class TeamDetailMemberContent extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final member = state.team!.players![index];
                 return UserDetailCell(
-                    user: member,
-                    onTap: () => UserDetailSheet.show(context, member),
+                    user: member.detail!,
+                    onTap: () => UserDetailSheet.show(context, member.detail!),
                     showPhoneNumber: false);
               },
               separatorBuilder: (context, index) => const SizedBox(height: 16),

@@ -1,3 +1,4 @@
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +71,10 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.currentUserId == state.team?.created_by)
+      actions: (state.team?.players?.any((element) =>
+                  element.id == state.currentUserId &&
+                  element.role == TeamPlayerRole.admin) ==
+              true)
           ? [
               moreOptionButton(
                 context,

@@ -1,5 +1,4 @@
 import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -157,7 +156,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                       final members = await AppRoute.addTeamMember(
                               team: widget.editTeam!
                                   .copyWith(players: state.teamMembers))
-                          .push<List<UserModel>>(context);
+                          .push<List<TeamPlayer>>(context);
                       if (context.mounted && (members ?? []).isNotEmpty) {
                         notifier.updatePlayersList(members!);
                       }
@@ -187,10 +186,11 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                 (player) => Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: UserDetailCell(
-                    user: player,
-                    onTap: () => UserDetailSheet.show(context, player),
+                    user: player.detail!,
+                    onTap: () => UserDetailSheet.show(context, player.detail!),
                     trailing: actionButton(context,
-                        onPressed: () => notifier.onRemoveUserFromTeam(player),
+                        onPressed: () =>
+                            notifier.onRemoveUserFromTeam(player.detail!),
                         padding: const EdgeInsets.only(
                             left: 10, top: 10, bottom: 10),
                         icon: Icon(

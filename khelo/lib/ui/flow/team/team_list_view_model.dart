@@ -41,7 +41,7 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
       _teamsStreamSubscription =
-          _teamService.getUserRelatedTeams().listen((teams) {
+          _teamService.streamUserRelatedTeams().listen((teams) {
         state = state.copyWith(teams: teams, loading: false, error: null);
         _filterTeamList();
       }, onError: (e) {

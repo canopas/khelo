@@ -2,6 +2,7 @@ class FireStoreConst {
   // collection
   static const String matchesCollection = "matches";
   static const String teamsCollection = "teams";
+  static const String playersCollection="team_players";
   static const String inningsCollection = "innings";
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";

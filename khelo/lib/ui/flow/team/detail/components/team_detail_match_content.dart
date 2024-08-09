@@ -1,4 +1,5 @@
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -49,7 +50,10 @@ class TeamDetailMatchContent extends ConsumerWidget {
           description: (state.team?.created_by == state.currentUserId)
               ? context.l10n.team_detail_empty_matches_description_text
               : context.l10n.team_detail_visitor_empty_matches_description_text,
-          isShowButton: state.team?.created_by == state.currentUserId,
+          isShowButton: state.team?.players?.any((element) =>
+          element.id == state.currentUserId &&
+              element.role == TeamPlayerRole.admin) ==
+              true,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
             bool? isUpdated = await AppRoute.addMatch(

@@ -18,31 +18,42 @@ class TeamModel with _$TeamModel {
     String? profile_img_url,
     String? created_by,
     DateTime? created_at,
-    List<UserModel>? players,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    List<TeamPlayer>? players,
   }) = _TeamModel;
 
   factory TeamModel.fromJson(Map<String, dynamic> json) =>
       _$TeamModelFromJson(json);
+
+  factory TeamModel.fromFireStore(
+          DocumentSnapshot<Map<String, dynamic>> snapshot,
+          SnapshotOptions? options) =>
+      TeamModel.fromJson(snapshot.data()!);
+}
+
+enum TeamPlayerRole {
+  admin,
+  player;
+
+  bool get isAdmin => this == TeamPlayerRole.admin;
+
+  bool get isMember => this == TeamPlayerRole.player;
 }
 
 @freezed
-class AddTeamRequestModel with _$AddTeamRequestModel {
-  const factory AddTeamRequestModel({
-    String? id,
-    required String name,
-    required String name_lowercase,
-    String? city,
-    String? profile_img_url,
-    String? created_by,
-    DateTime? created_at,
-    List<String>? players,
-  }) = _AddTeamRequestModel;
+class TeamPlayer with _$TeamPlayer {
+  const factory TeamPlayer({
+    required String id,
+    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? detail,
+    @Default(TeamPlayerRole.player) TeamPlayerRole role,
+  }) = _TeamPlayer;
 
-  factory AddTeamRequestModel.fromJson(Map<String, dynamic> json) =>
-      _$AddTeamRequestModelFromJson(json);
+  factory TeamPlayer.fromJson(Map<String, dynamic> json) =>
+      _$TeamPlayerFromJson(json);
 
-  factory AddTeamRequestModel.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
-      AddTeamRequestModel.fromJson(snapshot.data()!);
+  factory TeamPlayer.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      TeamPlayer.fromJson(snapshot.data()!);
 }

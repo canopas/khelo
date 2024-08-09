@@ -27,7 +27,8 @@ mixin _$TeamModel {
   String? get profile_img_url => throw _privateConstructorUsedError;
   String? get created_by => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
-  List<UserModel>? get players => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  List<TeamPlayer>? get players => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +49,8 @@ abstract class $TeamModelCopyWith<$Res> {
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
-      List<UserModel>? players});
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      List<TeamPlayer>? players});
 }
 
 /// @nodoc
@@ -105,7 +107,7 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
       players: freezed == players
           ? _value.players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>?,
+              as List<TeamPlayer>?,
     ) as $Val);
   }
 }
@@ -126,7 +128,8 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
-      List<UserModel>? players});
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      List<TeamPlayer>? players});
 }
 
 /// @nodoc
@@ -181,7 +184,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
       players: freezed == players
           ? _value._players
           : players // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>?,
+              as List<TeamPlayer>?,
     ));
   }
 }
@@ -197,7 +200,8 @@ class _$TeamModelImpl implements _TeamModel {
       this.profile_img_url,
       this.created_by,
       this.created_at,
-      final List<UserModel>? players})
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final List<TeamPlayer>? players})
       : _players = players;
 
   factory _$TeamModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -217,9 +221,10 @@ class _$TeamModelImpl implements _TeamModel {
   final String? created_by;
   @override
   final DateTime? created_at;
-  final List<UserModel>? _players;
+  final List<TeamPlayer>? _players;
   @override
-  List<UserModel>? get players {
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  List<TeamPlayer>? get players {
     final value = _players;
     if (value == null) return null;
     if (_players is EqualUnmodifiableListView) return _players;
@@ -287,7 +292,8 @@ abstract class _TeamModel implements TeamModel {
       final String? profile_img_url,
       final String? created_by,
       final DateTime? created_at,
-      final List<UserModel>? players}) = _$TeamModelImpl;
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final List<TeamPlayer>? players}) = _$TeamModelImpl;
 
   factory _TeamModel.fromJson(Map<String, dynamic> json) =
       _$TeamModelImpl.fromJson;
@@ -307,55 +313,49 @@ abstract class _TeamModel implements TeamModel {
   @override
   DateTime? get created_at;
   @override
-  List<UserModel>? get players;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  List<TeamPlayer>? get players;
   @override
   @JsonKey(ignore: true)
   _$$TeamModelImplCopyWith<_$TeamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
-AddTeamRequestModel _$AddTeamRequestModelFromJson(Map<String, dynamic> json) {
-  return _AddTeamRequestModel.fromJson(json);
+TeamPlayer _$TeamPlayerFromJson(Map<String, dynamic> json) {
+  return _TeamPlayer.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AddTeamRequestModel {
-  String? get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get name_lowercase => throw _privateConstructorUsedError;
-  String? get city => throw _privateConstructorUsedError;
-  String? get profile_img_url => throw _privateConstructorUsedError;
-  String? get created_by => throw _privateConstructorUsedError;
-  DateTime? get created_at => throw _privateConstructorUsedError;
-  List<String>? get players => throw _privateConstructorUsedError;
+mixin _$TeamPlayer {
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel? get detail => throw _privateConstructorUsedError;
+  TeamPlayerRole get role => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AddTeamRequestModelCopyWith<AddTeamRequestModel> get copyWith =>
+  $TeamPlayerCopyWith<TeamPlayer> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AddTeamRequestModelCopyWith<$Res> {
-  factory $AddTeamRequestModelCopyWith(
-          AddTeamRequestModel value, $Res Function(AddTeamRequestModel) then) =
-      _$AddTeamRequestModelCopyWithImpl<$Res, AddTeamRequestModel>;
+abstract class $TeamPlayerCopyWith<$Res> {
+  factory $TeamPlayerCopyWith(
+          TeamPlayer value, $Res Function(TeamPlayer) then) =
+      _$TeamPlayerCopyWithImpl<$Res, TeamPlayer>;
   @useResult
   $Res call(
-      {String? id,
-      String name,
-      String name_lowercase,
-      String? city,
-      String? profile_img_url,
-      String? created_by,
-      DateTime? created_at,
-      List<String>? players});
+      {String id,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel? detail,
+      TeamPlayerRole role});
+
+  $UserModelCopyWith<$Res>? get detail;
 }
 
 /// @nodoc
-class _$AddTeamRequestModelCopyWithImpl<$Res, $Val extends AddTeamRequestModel>
-    implements $AddTeamRequestModelCopyWith<$Res> {
-  _$AddTeamRequestModelCopyWithImpl(this._value, this._then);
+class _$TeamPlayerCopyWithImpl<$Res, $Val extends TeamPlayer>
+    implements $TeamPlayerCopyWith<$Res> {
+  _$TeamPlayerCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -365,253 +365,160 @@ class _$AddTeamRequestModelCopyWithImpl<$Res, $Val extends AddTeamRequestModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = null,
-    Object? name_lowercase = null,
-    Object? city = freezed,
-    Object? profile_img_url = freezed,
-    Object? created_by = freezed,
-    Object? created_at = freezed,
-    Object? players = freezed,
+    Object? id = null,
+    Object? detail = freezed,
+    Object? role = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
               as String,
-      name_lowercase: null == name_lowercase
-          ? _value.name_lowercase
-          : name_lowercase // ignore: cast_nullable_to_non_nullable
-              as String,
-      city: freezed == city
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      profile_img_url: freezed == profile_img_url
-          ? _value.profile_img_url
-          : profile_img_url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      created_by: freezed == created_by
-          ? _value.created_by
-          : created_by // ignore: cast_nullable_to_non_nullable
-              as String?,
-      created_at: freezed == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      players: freezed == players
-          ? _value.players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      detail: freezed == detail
+          ? _value.detail
+          : detail // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as TeamPlayerRole,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res>? get detail {
+    if (_value.detail == null) {
+      return null;
+    }
+
+    return $UserModelCopyWith<$Res>(_value.detail!, (value) {
+      return _then(_value.copyWith(detail: value) as $Val);
+    });
   }
 }
 
 /// @nodoc
-abstract class _$$AddTeamRequestModelImplCopyWith<$Res>
-    implements $AddTeamRequestModelCopyWith<$Res> {
-  factory _$$AddTeamRequestModelImplCopyWith(_$AddTeamRequestModelImpl value,
-          $Res Function(_$AddTeamRequestModelImpl) then) =
-      __$$AddTeamRequestModelImplCopyWithImpl<$Res>;
+abstract class _$$TeamPlayerImplCopyWith<$Res>
+    implements $TeamPlayerCopyWith<$Res> {
+  factory _$$TeamPlayerImplCopyWith(
+          _$TeamPlayerImpl value, $Res Function(_$TeamPlayerImpl) then) =
+      __$$TeamPlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String? id,
-      String name,
-      String name_lowercase,
-      String? city,
-      String? profile_img_url,
-      String? created_by,
-      DateTime? created_at,
-      List<String>? players});
+      {String id,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel? detail,
+      TeamPlayerRole role});
+
+  @override
+  $UserModelCopyWith<$Res>? get detail;
 }
 
 /// @nodoc
-class __$$AddTeamRequestModelImplCopyWithImpl<$Res>
-    extends _$AddTeamRequestModelCopyWithImpl<$Res, _$AddTeamRequestModelImpl>
-    implements _$$AddTeamRequestModelImplCopyWith<$Res> {
-  __$$AddTeamRequestModelImplCopyWithImpl(_$AddTeamRequestModelImpl _value,
-      $Res Function(_$AddTeamRequestModelImpl) _then)
+class __$$TeamPlayerImplCopyWithImpl<$Res>
+    extends _$TeamPlayerCopyWithImpl<$Res, _$TeamPlayerImpl>
+    implements _$$TeamPlayerImplCopyWith<$Res> {
+  __$$TeamPlayerImplCopyWithImpl(
+      _$TeamPlayerImpl _value, $Res Function(_$TeamPlayerImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? name = null,
-    Object? name_lowercase = null,
-    Object? city = freezed,
-    Object? profile_img_url = freezed,
-    Object? created_by = freezed,
-    Object? created_at = freezed,
-    Object? players = freezed,
+    Object? id = null,
+    Object? detail = freezed,
+    Object? role = null,
   }) {
-    return _then(_$AddTeamRequestModelImpl(
-      id: freezed == id
+    return _then(_$TeamPlayerImpl(
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
               as String,
-      name_lowercase: null == name_lowercase
-          ? _value.name_lowercase
-          : name_lowercase // ignore: cast_nullable_to_non_nullable
-              as String,
-      city: freezed == city
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as String?,
-      profile_img_url: freezed == profile_img_url
-          ? _value.profile_img_url
-          : profile_img_url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      created_by: freezed == created_by
-          ? _value.created_by
-          : created_by // ignore: cast_nullable_to_non_nullable
-              as String?,
-      created_at: freezed == created_at
-          ? _value.created_at
-          : created_at // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      players: freezed == players
-          ? _value._players
-          : players // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      detail: freezed == detail
+          ? _value.detail
+          : detail // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as TeamPlayerRole,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$AddTeamRequestModelImpl implements _AddTeamRequestModel {
-  const _$AddTeamRequestModelImpl(
-      {this.id,
-      required this.name,
-      required this.name_lowercase,
-      this.city,
-      this.profile_img_url,
-      this.created_by,
-      this.created_at,
-      final List<String>? players})
-      : _players = players;
+class _$TeamPlayerImpl implements _TeamPlayer {
+  const _$TeamPlayerImpl(
+      {required this.id,
+      @JsonKey(includeToJson: false, includeFromJson: false) this.detail,
+      this.role = TeamPlayerRole.player});
 
-  factory _$AddTeamRequestModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AddTeamRequestModelImplFromJson(json);
+  factory _$TeamPlayerImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TeamPlayerImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   @override
-  final String name;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final UserModel? detail;
   @override
-  final String name_lowercase;
-  @override
-  final String? city;
-  @override
-  final String? profile_img_url;
-  @override
-  final String? created_by;
-  @override
-  final DateTime? created_at;
-  final List<String>? _players;
-  @override
-  List<String>? get players {
-    final value = _players;
-    if (value == null) return null;
-    if (_players is EqualUnmodifiableListView) return _players;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
+  @JsonKey()
+  final TeamPlayerRole role;
 
   @override
   String toString() {
-    return 'AddTeamRequestModel(id: $id, name: $name, name_lowercase: $name_lowercase, city: $city, profile_img_url: $profile_img_url, created_by: $created_by, created_at: $created_at, players: $players)';
+    return 'TeamPlayer(id: $id, detail: $detail, role: $role)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddTeamRequestModelImpl &&
+            other is _$TeamPlayerImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.name_lowercase, name_lowercase) ||
-                other.name_lowercase == name_lowercase) &&
-            (identical(other.city, city) || other.city == city) &&
-            (identical(other.profile_img_url, profile_img_url) ||
-                other.profile_img_url == profile_img_url) &&
-            (identical(other.created_by, created_by) ||
-                other.created_by == created_by) &&
-            (identical(other.created_at, created_at) ||
-                other.created_at == created_at) &&
-            const DeepCollectionEquality().equals(other._players, _players));
+            (identical(other.detail, detail) || other.detail == detail) &&
+            (identical(other.role, role) || other.role == role));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      name,
-      name_lowercase,
-      city,
-      profile_img_url,
-      created_by,
-      created_at,
-      const DeepCollectionEquality().hash(_players));
+  int get hashCode => Object.hash(runtimeType, id, detail, role);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddTeamRequestModelImplCopyWith<_$AddTeamRequestModelImpl> get copyWith =>
-      __$$AddTeamRequestModelImplCopyWithImpl<_$AddTeamRequestModelImpl>(
-          this, _$identity);
+  _$$TeamPlayerImplCopyWith<_$TeamPlayerImpl> get copyWith =>
+      __$$TeamPlayerImplCopyWithImpl<_$TeamPlayerImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AddTeamRequestModelImplToJson(
+    return _$$TeamPlayerImplToJson(
       this,
     );
   }
 }
 
-abstract class _AddTeamRequestModel implements AddTeamRequestModel {
-  const factory _AddTeamRequestModel(
-      {final String? id,
-      required final String name,
-      required final String name_lowercase,
-      final String? city,
-      final String? profile_img_url,
-      final String? created_by,
-      final DateTime? created_at,
-      final List<String>? players}) = _$AddTeamRequestModelImpl;
+abstract class _TeamPlayer implements TeamPlayer {
+  const factory _TeamPlayer(
+      {required final String id,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final UserModel? detail,
+      final TeamPlayerRole role}) = _$TeamPlayerImpl;
 
-  factory _AddTeamRequestModel.fromJson(Map<String, dynamic> json) =
-      _$AddTeamRequestModelImpl.fromJson;
+  factory _TeamPlayer.fromJson(Map<String, dynamic> json) =
+      _$TeamPlayerImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
-  String get name;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel? get detail;
   @override
-  String get name_lowercase;
-  @override
-  String? get city;
-  @override
-  String? get profile_img_url;
-  @override
-  String? get created_by;
-  @override
-  DateTime? get created_at;
-  @override
-  List<String>? get players;
+  TeamPlayerRole get role;
   @override
   @JsonKey(ignore: true)
-  _$$AddTeamRequestModelImplCopyWith<_$AddTeamRequestModelImpl> get copyWith =>
+  _$$TeamPlayerImplCopyWith<_$TeamPlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

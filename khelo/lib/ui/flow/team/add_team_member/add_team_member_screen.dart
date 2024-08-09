@@ -135,8 +135,8 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           context,
                           user,
                           actionButtonTitle:
-                              widget.team.players?.contains(user) == true ||
-                                      state.selectedUsers.contains(user)
+                              widget.team.players?.contains(user.id) == true ||
+                                      state.selectedUsers.contains(user.id)
                                   ? null
                                   : context.l10n.common_select_title,
                           onButtonTap: () async {
@@ -151,13 +151,18 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           },
                         ),
                         trailing: SecondaryButton(
-                          widget.team.players?.contains(user) == true ||
-                                  state.selectedUsers.contains(user)
+                          widget.team.players?.any((element) =>
+                                          element.detail == user) ==
+                                      true ||
+                                  state.selectedUsers
+                                      .any((element) => element.detail == user)
                               ? context.l10n.add_team_member_added_text
                               : context.l10n.common_add_title.toUpperCase(),
-                          enabled:
-                              widget.team.players?.contains(user) != true &&
-                                  !state.selectedUsers.contains(user),
+                          enabled: widget.team.players?.any(
+                                      (element) => element.id == user.id) !=
+                                  true &&
+                              !state.selectedUsers
+                                  .any((element) => element.id == user.id),
                           onPressed: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
@@ -216,9 +221,10 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 8),
-                          _selectedProfileView(context, user),
+                          if (user.detail != null)
+                            _selectedProfileView(context, user.detail!),
                           const SizedBox(height: 4),
-                          Text(user.name ?? "",
+                          Text(user.detail?.name ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyle.caption.copyWith(
