@@ -187,7 +187,8 @@ class __$$TeamModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$TeamModelImpl implements _TeamModel {
   const _$TeamModelImpl(
       {this.id,

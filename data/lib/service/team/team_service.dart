@@ -181,7 +181,6 @@ class TeamService {
 
       return teamSnap.docs.isEmpty;
     } catch (error, stack) {
-      print(error);
       throw AppError.fromError(error, stack);
     }
   }

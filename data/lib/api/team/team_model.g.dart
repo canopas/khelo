@@ -32,7 +32,7 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       'profile_img_url': instance.profile_img_url,
       'created_by': instance.created_by,
       'created_at': instance.created_at?.toIso8601String(),
-      'players': instance.players,
+      'players': instance.players.map((e) => e.toJson()).toList(),
     };
 
 _$TeamPlayerImpl _$$TeamPlayerImplFromJson(Map<String, dynamic> json) =>

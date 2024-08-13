@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/user/user_models.dart';
+import '../user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team_model.freezed.dart';
@@ -9,7 +9,8 @@ part 'team_model.freezed.dart';
 part 'team_model.g.dart';
 
 @freezed
-class TeamModel with _$TeamModel {
+abstract class TeamModel with _$TeamModel {
+  @JsonSerializable(explicitToJson: true)
   const factory TeamModel({
     String? id,
     required String name,
@@ -25,8 +26,9 @@ class TeamModel with _$TeamModel {
       _$TeamModelFromJson(json);
 
   factory TeamModel.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       TeamModel.fromJson(snapshot.data()!);
 }
 
