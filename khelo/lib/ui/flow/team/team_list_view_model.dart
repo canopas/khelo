@@ -41,7 +41,7 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
       _teamsStreamSubscription =
-          _teamService.streamUserRelatedTeams().listen((teams) {
+          _teamService.getUserRelatedTeams().listen((teams) {
         state = state.copyWith(teams: teams, loading: false, error: null);
         _filterTeamList();
       }, onError: (e) {
@@ -66,9 +66,8 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
             .where((element) =>
                 element.created_by == state.currentUserId ||
                 (element.players
-                        ?.map((e) => e.id)
-                        .contains(state.currentUserId) ??
-                    false))
+                    .map((e) => e.id)
+                    .contains(state.currentUserId)))
             .toList();
       default:
         filteredTeams = state.teams;

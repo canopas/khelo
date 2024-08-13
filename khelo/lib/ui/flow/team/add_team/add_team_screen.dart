@@ -153,12 +153,12 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   actionButton(
                     context,
                     onPressed: () async {
-                      final members = await AppRoute.addTeamMember(
+                      final players = await AppRoute.addTeamMember(
                               team: widget.editTeam!
                                   .copyWith(players: state.teamMembers))
                           .push<List<TeamPlayer>>(context);
-                      if (context.mounted && (members ?? []).isNotEmpty) {
-                        notifier.updatePlayersList(members!);
+                      if (context.mounted && (players ?? []).isNotEmpty) {
+                        notifier.updatePlayersList(players!);
                       }
                     },
                     icon: Icon(
@@ -182,15 +182,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   ),
                 ),
               ],
-              ...state.teamMembers.map(
-                (player) => Padding(
+              ...state.teamMembers.map((player) {
+                final detail = player.user!;
+                return Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: UserDetailCell(
-                    user: player.detail!,
-                    onTap: () => UserDetailSheet.show(context, player.detail!),
+                    user: detail,
+                    onTap: () => UserDetailSheet.show(context, detail),
                     trailing: actionButton(context,
-                        onPressed: () =>
-                            notifier.onRemoveUserFromTeam(player.detail!),
+                        onPressed: () => notifier.onRemoveUserFromTeam(detail),
                         padding: const EdgeInsets.only(
                             left: 10, top: 10, bottom: 10),
                         icon: Icon(
@@ -199,8 +199,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                           color: context.colorScheme.textDisabled,
                         )),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 24),
             ],
           ],

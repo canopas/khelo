@@ -50,14 +50,14 @@ class TeamDetailMatchContent extends ConsumerWidget {
           description: (state.team?.created_by == state.currentUserId)
               ? context.l10n.team_detail_empty_matches_description_text
               : context.l10n.team_detail_visitor_empty_matches_description_text,
-          isShowButton: state.team?.players?.any((element) =>
-          element.id == state.currentUserId &&
-              element.role == TeamPlayerRole.admin) ==
+          isShowButton: state.team?.players.any((element) =>
+                  element.id == state.currentUserId &&
+                  element.role == TeamPlayerRole.admin) ==
               true,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
             bool? isUpdated = await AppRoute.addMatch(
-                    defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                    defaultTeam: (state.team?.players.length ?? 0) >= 2
                         ? state.team
                         : null)
                 .push<bool>(context);

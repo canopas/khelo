@@ -118,6 +118,11 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               itemCount: state.searchedUsers.length,
               itemBuilder: (context, index) {
                 UserModel user = state.searchedUsers[index];
+                final isAdded = widget.team.players
+                            .any((element) => element.user == user) ==
+                        true ||
+                    state.selectedUsers.any((element) => element.user == user);
+
                 return Column(
                   children: [
                     if (index == 0 && state.selectedUsers.isNotEmpty) ...[
@@ -135,10 +140,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           context,
                           user,
                           actionButtonTitle:
-                              widget.team.players?.contains(user.id) == true ||
-                                      state.selectedUsers.contains(user.id)
-                                  ? null
-                                  : context.l10n.common_select_title,
+                              isAdded ? null : context.l10n.common_select_title,
                           onButtonTap: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
@@ -151,18 +153,10 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           },
                         ),
                         trailing: SecondaryButton(
-                          widget.team.players?.any((element) =>
-                                          element.detail == user) ==
-                                      true ||
-                                  state.selectedUsers
-                                      .any((element) => element.detail == user)
+                          isAdded
                               ? context.l10n.add_team_member_added_text
                               : context.l10n.common_add_title.toUpperCase(),
-                          enabled: widget.team.players?.any(
-                                      (element) => element.id == user.id) !=
-                                  true &&
-                              !state.selectedUsers
-                                  .any((element) => element.id == user.id),
+                          enabled: !isAdded,
                           onPressed: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
@@ -213,7 +207,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: state.selectedUsers
-              .map((user) => Padding(
+              .map((player) => Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: SizedBox(
                     width: 58,
@@ -221,10 +215,9 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 8),
-                          if (user.detail != null)
-                            _selectedProfileView(context, user.detail!),
+                          _selectedProfileView(context, player.user!),
                           const SizedBox(height: 4),
-                          Text(user.detail?.name ?? "",
+                          Text(player.user?.name ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyle.caption.copyWith(

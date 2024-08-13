@@ -17,6 +17,10 @@ _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
+      players: (json['players'] as List<dynamic>?)
+              ?.map((e) => TeamPlayer.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
@@ -28,6 +32,7 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       'profile_img_url': instance.profile_img_url,
       'created_by': instance.created_by,
       'created_at': instance.created_at?.toIso8601String(),
+      'players': instance.players,
     };
 
 _$TeamPlayerImpl _$$TeamPlayerImplFromJson(Map<String, dynamic> json) =>

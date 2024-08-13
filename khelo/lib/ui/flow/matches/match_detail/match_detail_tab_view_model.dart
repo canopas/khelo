@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
@@ -291,7 +292,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           .firstWhere((element) => element.player.id == playerId);
     }
     if (lastBatsman == null) {
-      UserModel player =
+      final player =
           _getPlayerByInningId(inningId: inningId, playerId: playerId);
       lastBatsman = BatsmanSummary(player: player);
     }

@@ -62,26 +62,23 @@ class TeamMemberSheet extends StatelessWidget {
             const SizedBox(height: 16),
             Wrap(
                 runSpacing: 16,
-                children: (team.players ?? [])
-                    .map((member) => (member.detail != null)
-                        ? UserDetailCell(
-                            user: member.detail!,
-                            onTap: () => UserDetailSheet.show(
-                              context,
-                              member.detail!,
-                              actionButtonTitle:
-                                  isForVerification && member.detail!.isActive
-                                      ? context.l10n.common_select_title
-                                      : null,
-                              onButtonTap: () =>
-                                  _onSelectButtonTap(context, member.detail!),
-                            ),
-                            trailing:
-                                isForVerification && member.detail!.isActive
-                                    ? _selectButton(context, member.detail!)
+                children: (team.players)
+                    .map((player) => UserDetailCell(
+                          user: player.user!,
+                          onTap: () => UserDetailSheet.show(
+                            context,
+                            player.user!,
+                            actionButtonTitle:
+                                isForVerification && player.user!.isActive
+                                    ? context.l10n.common_select_title
                                     : null,
-                          )
-                        : SizedBox())
+                            onButtonTap: () =>
+                                _onSelectButtonTap(context, player.user!),
+                          ),
+                          trailing: isForVerification && player.user!.isActive
+                              ? _selectButton(context, player.user!)
+                              : null,
+                        ))
                     .toList()),
           ],
         ),

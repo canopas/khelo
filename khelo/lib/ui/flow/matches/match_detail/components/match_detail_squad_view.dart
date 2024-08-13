@@ -53,18 +53,18 @@ class MatchDetailSquadView extends ConsumerWidget {
         [];
 
     final firstTeamBench = firstTeam?.team.players
-            ?.where((element) =>
+            .where((element) =>
                 !firstTeamSquad.map((e) => e.id).contains(element.id) &&
-                element.detail!.isActive)
-            .map((e) => e.detail!)
+                element.user!.isActive)
+            .map((e) => e.user!)
             .toList() ??
         [];
 
     final secondTeamBench = secondTeam?.team.players
-            ?.where((element) =>
+            .where((element) =>
                 !secondTeamSquad.map((e) => e.id).contains(element.id) &&
-                element.detail!.isActive)
-            .map((e) => e.detail!)
+                element.user!.isActive)
+            .map((e) => e.user!)
             .toList() ??
         [];
 

@@ -19,27 +19,28 @@ class TeamDetailMemberContent extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
 
-    if (state.team?.players != null &&
-        state.team?.players?.isNotEmpty == true) {
+    if (state.team?.players != null && state.team?.players.isNotEmpty == true) {
       return Column(
         children: [
-          if (state.team?.players?.any((element) =>
+          if (state.team?.players.any((element) =>
                   element.id == state.currentUserId &&
                   element.role == TeamPlayerRole.admin) ==
               true) ...[
-            _addMemberButton(context,
-                onTap: () =>
-                    AppRoute.addTeamMember(team: state.team!).push(context)),
+            _addMemberButton(
+              context,
+              onTap: () =>
+                  AppRoute.addTeamMember(team: state.team!).push(context),
+            ),
           ],
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: state.team!.players!.length,
+              itemCount: state.team!.players.length,
               itemBuilder: (context, index) {
-                final member = state.team!.players![index];
+                final member = state.team!.players[index].user!;
                 return UserDetailCell(
-                    user: member.detail!,
-                    onTap: () => UserDetailSheet.show(context, member.detail!),
+                    user: member,
+                    onTap: () => UserDetailSheet.show(context, member),
                     showPhoneNumber: false);
               },
               separatorBuilder: (context, index) => const SizedBox(height: 16),

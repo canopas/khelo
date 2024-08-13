@@ -94,7 +94,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         final player = TeamPlayer(
             id: state.currentUser!.id,
             role: TeamPlayerRole.admin,
-            detail: state.currentUser);
+            user: state.currentUser);
         players.add(player);
       }
 
@@ -108,15 +108,11 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
           name_lowercase: name.caseAndSpaceInsensitive,
           profile_img_url: imageUrl,
           city: location.toLowerCase(),
-          created_by: state.currentUser?.id,
+          created_by: state.currentUser!.id,
+          players: players,
           created_at: state.editTeam?.created_at ?? DateTime.now());
 
       final newTeamId = await _teamService.updateTeam(team);
-      if (newTeamId.isNotEmpty &&
-          state.editTeam == null &&
-          state.isAddMeCheckBoxEnable) {
-        await _teamService.addPlayersToTeam(newTeamId, players);
-      }
       if (state.filePath != null) {
         imageUrl = await _fileUploadService.uploadProfileImage(
           filePath: state.filePath!,
@@ -127,9 +123,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       }
 
       if (state.editTeam != null) {
-        final filterList = (state.editTeam!.players ?? [])
+        final filterList = (state.editTeam!.players)
             .where((element) => !state.teamMembers.contains(element))
-            .map((e) => e.id)
             .toList();
 
         await _teamService.removePlayersFromTeam(
@@ -144,6 +139,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
             created_by: state.currentUser!.id,
+            players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now());
         state = state.copyWith(isAddInProgress: false, team: teamModel);
       }

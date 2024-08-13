@@ -88,7 +88,10 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
               return _teamListCell(
                 context,
                 team: team,
-                showMoreOptionButton: state.currentUserId == team.created_by,
+                showMoreOptionButton: team.players.any((element) =>
+                        element.id == state.currentUserId &&
+                        element.role == TeamPlayerRole.admin) ==
+                    true,
               );
             },
           )
@@ -121,11 +124,11 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
-          subtitle: team.players != null
+          subtitle: team.players.isNotEmpty
               ? Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                      '${team.players!.length} ${context.l10n.add_team_players_text}',
+                      '${team.players.length} ${context.l10n.add_team_players_text}',
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary)),
                 )

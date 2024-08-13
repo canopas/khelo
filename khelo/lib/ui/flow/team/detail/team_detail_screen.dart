@@ -71,7 +71,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.team?.players?.any((element) =>
+      actions: (state.team?.players.any((element) =>
                   element.id == state.currentUserId &&
                   element.role == TeamPlayerRole.admin) ==
               true)
@@ -199,10 +199,26 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         onTap: () {
           context.pop();
           AppRoute.addMatch(
-                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                  defaultTeam: (state.team?.players.length ?? 0) >= 2
                       ? state.team
                       : null)
               .push(context);
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.team_detail_make_admin,
+        child: Text(context.l10n.team_detail_admin(state.team!.players
+            .where((element) => element.role == TeamPlayerRole.admin)
+            .toList()
+            .length)),
+        onTap: () {
+          context.pop();
+          if (state.team!.players.isNotEmpty) {
+            AppRoute.makeTeamAdmin(
+                    teamId: state.team!.id ?? 'INVALID ID',
+                    players: state.team!.players)
+                .push(context);
+          }
         },
       ),
     ]);

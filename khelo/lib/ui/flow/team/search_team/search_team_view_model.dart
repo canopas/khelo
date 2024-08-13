@@ -91,9 +91,8 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   void onTeamCellTap(TeamModel team) {
     state = state.copyWith(showSelectionError: false);
     final playersCount = (team.players
-                ?.where((player) => player.detail?.isActive ?? false)
-                .toList() ??
-            [])
+            .where((player) => player.user?.isActive ?? false)
+            .toList())
         .length;
     if (playersCount >= 2) {
       final isAlreadySelected = state.selectedTeam?.id == team.id;

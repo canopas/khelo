@@ -139,11 +139,10 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
 
     return Wrap(
       children: [
-        if (memberList.isNotEmpty ||
-            (state.team?.players?.isEmpty ?? true)) ...[
+        if (memberList.isNotEmpty || (state.team?.players.isEmpty ?? true)) ...[
           _sectionTitle(context, context.l10n.select_squad_rest_of_team_title),
         ],
-        if (state.team?.players?.isEmpty ?? true) ...[
+        if (state.team?.players.isEmpty ?? true) ...[
           _emptyList(context.l10n.select_squad_empty_team_member_text)
         ] else ...[
           for (final member in memberList) ...[
@@ -186,10 +185,10 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
 
   List<UserModel> getFilteredList(SelectSquadViewState state) {
     return state.team?.players
-            ?.where((element) =>
+            .where((element) =>
                 !state.squad.map((e) => e.player.id).contains(element.id) &&
-                element.detail!.isActive)
-            .map((e) => e.detail!)
+                element.user!.isActive)
+            .map((e) => e.user!)
             .toList() ??
         [];
   }

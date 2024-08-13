@@ -18,8 +18,7 @@ class TeamModel with _$TeamModel {
     String? profile_img_url,
     String? created_by,
     DateTime? created_at,
-    @JsonKey(includeToJson: false, includeFromJson: false)
-    List<TeamPlayer>? players,
+    @Default([]) List<TeamPlayer> players,
   }) = _TeamModel;
 
   factory TeamModel.fromJson(Map<String, dynamic> json) =>
@@ -42,18 +41,13 @@ enum TeamPlayerRole {
 
 @freezed
 class TeamPlayer with _$TeamPlayer {
+  @JsonSerializable(explicitToJson: true)
   const factory TeamPlayer({
     required String id,
-    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? detail,
     @Default(TeamPlayerRole.player) TeamPlayerRole role,
+    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? user,
   }) = _TeamPlayer;
 
   factory TeamPlayer.fromJson(Map<String, dynamic> json) =>
       _$TeamPlayerFromJson(json);
-
-  factory TeamPlayer.fromFireStore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) =>
-      TeamPlayer.fromJson(snapshot.data()!);
 }

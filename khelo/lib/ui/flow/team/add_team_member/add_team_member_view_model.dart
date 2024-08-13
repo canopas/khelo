@@ -52,7 +52,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
 
   void selectUser(UserModel user) {
     final player =
-        TeamPlayer(id: user.id, role: TeamPlayerRole.player, detail: user);
+        TeamPlayer(id: user.id, role: TeamPlayerRole.player, user: user);
     state = state.copyWith(selectedUsers: [...state.selectedUsers, player]);
   }
 
