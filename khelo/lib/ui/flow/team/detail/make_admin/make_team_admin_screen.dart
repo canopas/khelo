@@ -105,9 +105,9 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                   onTap: (_) => notifier.selectAdmin(player),
                 ),
               )
-            : SizedBox();
+            : const SizedBox();
       },
-      separatorBuilder: (context, index) => SizedBox(height: 16),
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
     );
   }
 }

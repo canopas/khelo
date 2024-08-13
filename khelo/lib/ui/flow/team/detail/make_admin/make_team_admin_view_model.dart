@@ -13,7 +13,8 @@ final makeTeamAdminStateProvider = StateNotifierProvider.autoDispose<
 class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
   final TeamService _teamService;
 
-  MakeTeamAdminViewNotifier(this._teamService) : super(MakeTeamAdminState());
+  MakeTeamAdminViewNotifier(this._teamService)
+      : super(const MakeTeamAdminState());
 
   late String _teamId;
   late List<TeamPlayer> _players;
