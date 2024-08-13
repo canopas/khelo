@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/innings/inning_model.dart';
-import 'package:data/errors/app_error.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
+import '../../api/innings/inning_model.dart';
+import '../../errors/app_error.dart';
+import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final inningServiceProvider = Provider((ref) {
@@ -31,7 +31,7 @@ class InningsService {
     required InningStatus secondInningStatus,
   }) async {
     try {
-      WriteBatch batch = _firestore.batch();
+      final WriteBatch batch = _firestore.batch();
       final firstInningRef = _inningCollection.doc();
       final secondInningRef = _inningCollection.doc();
 
@@ -88,14 +88,14 @@ class InningsService {
 
       final bowlInningRef = _inningCollection.doc(bowlingTeamInningId);
 
-      Map<String, dynamic> battingUpdates = {
+      final Map<String, dynamic> battingUpdates = {
         FireStoreConst.totalRuns: totalRun,
       };
       if (over != null) battingUpdates.addAll({FireStoreConst.overs: over});
 
       transaction.update(batInningRef, battingUpdates);
 
-      Map<String, dynamic> bowlingUpdates = {
+      final Map<String, dynamic> bowlingUpdates = {
         FireStoreConst.totalWickets: wicketCount
       };
       if (runs != null) bowlingUpdates.addAll({FireStoreConst.totalRuns: runs});

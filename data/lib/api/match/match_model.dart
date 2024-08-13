@@ -77,10 +77,11 @@ extension DataMatchModel on MatchModel {
 
       final runDifference = firstTeam.run - secondTeam.run;
       return MatchResult(
-          teamId: firstTeam.team.id ?? "",
-          teamName: teamName,
-          difference: runDifference,
-          winType: WinnerByType.run);
+        teamId: firstTeam.team.id ?? "",
+        teamName: teamName,
+        difference: runDifference,
+        winType: WinnerByType.run,
+      );
     } else if (firstTeam.run == secondTeam.run) {
       return MatchResult(
         teamId: "",
@@ -172,8 +173,9 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
       _$AddEditMatchRequestFromJson(json);
 
   factory AddEditMatchRequest.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       AddEditMatchRequest.fromJson(snapshot.data()!);
 }
 

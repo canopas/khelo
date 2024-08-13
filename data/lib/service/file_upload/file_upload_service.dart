@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:data/errors/app_error.dart';
+import '../../errors/app_error.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +16,12 @@ class FileUploadService {
     required String filePath,
     required String uploadPath,
   }) async {
-    var file = File(filePath);
+    final file = File(filePath);
     if (await file.exists()) {
       try {
-        var snapshot =
+        final snapshot =
             await _firebaseStorage.ref().child(uploadPath).putFile(file);
-        var downloadUrl = await snapshot.ref.getDownloadURL();
+        final downloadUrl = await snapshot.ref.getDownloadURL();
         return downloadUrl;
       } catch (error, stack) {
         throw AppError.fromError(error, stack);

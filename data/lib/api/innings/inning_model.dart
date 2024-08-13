@@ -23,8 +23,9 @@ class InningModel with _$InningModel {
       _$InningModelFromJson(json);
 
   factory InningModel.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       InningModel.fromJson(snapshot.data()!);
 }
 
