@@ -20,8 +20,9 @@ class InningsService {
       : _inningCollection = _firestore
             .collection(FireStoreConst.inningsCollection)
             .withConverter(
-                fromFirestore: InningModel.fromFireStore,
-                toFirestore: (InningModel inning, _) => inning.toJson());
+              fromFirestore: InningModel.fromFireStore,
+              toFirestore: (InningModel inning, _) => inning.toJson(),
+            );
 
   Future<void> createInnings({
     required String matchId,
@@ -96,7 +97,7 @@ class InningsService {
       transaction.update(batInningRef, battingUpdates);
 
       final Map<String, dynamic> bowlingUpdates = {
-        FireStoreConst.totalWickets: wicketCount
+        FireStoreConst.totalWickets: wicketCount,
       };
       if (runs != null) bowlingUpdates.addAll({FireStoreConst.totalRuns: runs});
 

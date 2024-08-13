@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
+import '../team/team_model.dart';
+import '../user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'match_model.freezed.dart';
