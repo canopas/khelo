@@ -61,7 +61,8 @@ class MatchDetailCell extends StatelessWidget {
                   MatchStatusTag(
                     status: match.match_status,
                     onTap: showActionButtons &&
-                            match.match_status != MatchStatus.finish
+                            match.match_status != MatchStatus.finish &&
+                            match.match_status != MatchStatus.abandoned
                         ? onActionTap
                         : null,
                   )
