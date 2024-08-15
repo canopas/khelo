@@ -91,8 +91,11 @@ class MatchCompleteSheet extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // passing match_status as finish because matchResult is calculated based on match_status.
               WonByMessageText(
-                  matchResult: state.match?.matchResult,
+                  matchResult: state.match
+                      ?.copyWith(match_status: MatchStatus.finish)
+                      .matchResult,
                   textStyle: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textPrimary)),
               const SizedBox(height: 16),

@@ -3,11 +3,16 @@ extension ListExtension<E> on List<E> {
   List<E> updateWhere({
     required bool Function(E element) where,
     required E Function(E oldElement) updated,
+    E Function()? onNotFound,
   }) {
     final newList = toList();
     final int index = newList.indexWhere(where);
     if (index >= 0) {
       newList[index] = updated(newList[index]);
+    } else {
+      if (onNotFound != null) {
+        newList.add(onNotFound());
+      }
     }
     return newList;
   }

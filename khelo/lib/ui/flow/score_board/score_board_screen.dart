@@ -157,8 +157,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       context,
       type: type,
       continueWithInjPlayer: continueWithInjuredPlayers,
-      batsManList: notifier.getFilteredPlayerList(PlayerSelectionType.batsMan),
-      bowlerList: notifier.getFilteredPlayerList(PlayerSelectionType.bowler),
     );
     if (result != null && context.mounted) {
       if (result.selectedPlayer != null) {

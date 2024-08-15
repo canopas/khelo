@@ -156,13 +156,31 @@ Map<String, dynamic> _$$MatchTeamModelImplToJson(
 _$MatchPlayerImpl _$$MatchPlayerImplFromJson(Map<String, dynamic> json) =>
     _$MatchPlayerImpl(
       player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
-      status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']),
-      index: (json['index'] as num?)?.toInt(),
+      performance: (json['performance'] as List<dynamic>?)
+              ?.map(
+                  (e) => PlayerPerformance.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$MatchPlayerImplToJson(_$MatchPlayerImpl instance) =>
     <String, dynamic>{
       'player': instance.player,
+      'performance': instance.performance,
+    };
+
+_$PlayerPerformanceImpl _$$PlayerPerformanceImplFromJson(
+        Map<String, dynamic> json) =>
+    _$PlayerPerformanceImpl(
+      inning_id: json['inning_id'] as String,
+      status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']),
+      index: (json['index'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$PlayerPerformanceImplToJson(
+        _$PlayerPerformanceImpl instance) =>
+    <String, dynamic>{
+      'inning_id': instance.inning_id,
       'status': _$PlayerStatusEnumMap[instance.status],
       'index': instance.index,
     };
@@ -291,14 +309,16 @@ Map<String, dynamic> _$$AddMatchTeamRequestImplToJson(
 _$MatchPlayerRequestImpl _$$MatchPlayerRequestImplFromJson(Map json) =>
     _$MatchPlayerRequestImpl(
       id: json['id'] as String,
-      status: $enumDecode(_$PlayerStatusEnumMap, json['status']),
-      index: (json['index'] as num?)?.toInt(),
+      performance: (json['performance'] as List<dynamic>?)
+              ?.map((e) => PlayerPerformance.fromJson(
+                  Map<String, dynamic>.from(e as Map)))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$MatchPlayerRequestImplToJson(
         _$MatchPlayerRequestImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'status': _$PlayerStatusEnumMap[instance.status]!,
-      'index': instance.index,
+      'performance': instance.performance.map((e) => e.toJson()).toList(),
     };

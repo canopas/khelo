@@ -27,8 +27,10 @@ class InningsService {
     required String matchId,
     required String teamId,
     required InningStatus firstInningStatus,
+    required int firstInningIndex,
     required String opponentTeamId,
     required InningStatus secondInningStatus,
+    required int secondInningIndex,
   }) async {
     try {
       WriteBatch batch = _firestore.batch();
@@ -40,6 +42,7 @@ class InningsService {
         match_id: matchId,
         team_id: teamId,
         innings_status: firstInningStatus,
+        index: firstInningIndex,
         total_runs: 0,
         overs: 0,
         total_wickets: 0,
@@ -50,6 +53,7 @@ class InningsService {
         match_id: matchId,
         team_id: opponentTeamId,
         innings_status: secondInningStatus,
+        index: secondInningIndex,
         total_runs: 0,
         overs: 0,
         total_wickets: 0,
@@ -85,7 +89,6 @@ class InningsService {
   }) {
     try {
       final batInningRef = _inningCollection.doc(battingTeamInningId);
-
       final bowlInningRef = _inningCollection.doc(bowlingTeamInningId);
 
       Map<String, dynamic> battingUpdates = {
@@ -113,6 +116,21 @@ class InningsService {
     try {
       final batInningRef = _inningCollection.doc(inningId);
       await batInningRef.update({FireStoreConst.inningsStatus: status.value});
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future updateInningsStatuses(Map<String, InningStatus> innings) async {
+    try {
+      WriteBatch batch = _firestore.batch();
+
+      for (final inning in innings.entries) {
+        final inningRef = _inningCollection.doc(inning.key);
+        batch.update(inningRef, {FireStoreConst.inningsStatus: inning.value});
+      }
+
+      await batch.commit();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

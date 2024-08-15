@@ -19,8 +19,6 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
     BuildContext context, {
     required PlayerSelectionType type,
     required bool continueWithInjPlayer,
-    required List<MatchPlayer> batsManList,
-    required List<MatchPlayer> bowlerList,
   }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
@@ -35,8 +33,6 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
         return SelectPlayerSheet(
           playerSelectionType: type,
           continueWithInjPlayer: continueWithInjPlayer,
-          batsManList: batsManList,
-          bowlerList: bowlerList,
         );
       },
     );
@@ -44,15 +40,11 @@ class SelectPlayerSheet extends ConsumerStatefulWidget {
 
   final PlayerSelectionType playerSelectionType;
   final bool continueWithInjPlayer;
-  final List<MatchPlayer> batsManList;
-  final List<MatchPlayer> bowlerList;
 
   const SelectPlayerSheet({
     super.key,
     required this.playerSelectionType,
     required this.continueWithInjPlayer,
-    required this.batsManList,
-    required this.bowlerList,
   });
 
   @override
@@ -64,38 +56,51 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   MatchPlayer? batsMan2;
   MatchPlayer? bowler;
   bool isEnabled = false;
+  late List<MatchPlayer> batsManList;
+  late List<MatchPlayer> bowlerList;
+  late ScoreBoardViewNotifier notifier;
 
   @override
   void initState() {
     super.initState();
+    notifier = ref.read(scoreBoardStateProvider.notifier);
     isEnabled = widget.continueWithInjPlayer;
+
+    batsManList = notifier.getFilteredPlayerList(PlayerSelectionType.batsMan);
+    bowlerList = notifier.getFilteredPlayerList(PlayerSelectionType.bowler);
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(scoreBoardStateProvider);
-    final notifier = ref.watch(scoreBoardStateProvider.notifier);
 
     final showCheckBox =
         widget.playerSelectionType != PlayerSelectionType.bowler
-            ? widget.batsManList
-                .any((element) => element.status == PlayerStatus.injured)
+            ? batsManList.any((element) => element.performance.any(
+                  (element) =>
+                      element.inning_id == state.currentInning?.id &&
+                      element.status == PlayerStatus.injured,
+                ))
             : false;
 
     final injuredPlayerRemained =
         widget.playerSelectionType != PlayerSelectionType.bowler
-            ? widget.batsManList.every((e) => e.status == PlayerStatus.injured)
+            ? batsManList.every((e) => e.performance.any(
+                  (element) =>
+                      element.inning_id == state.currentInning?.id &&
+                      element.status == PlayerStatus.injured,
+                ))
             : false;
     return BottomSheetWrapper(
         content: _selectPlayerContent(
           context,
           state,
-          batsManList: widget.batsManList,
-          bowlerList: widget.bowlerList,
+          batsManList: batsManList,
+          bowlerList: bowlerList,
         ),
         options: [
           if (showCheckBox) ...[
-            _contWithInjPlayerOption(context, notifier),
+            _contWithInjPlayerOption(context, notifier, state),
             const SizedBox(height: 16)
           ],
         ],
@@ -172,51 +177,53 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
     return Wrap(
       spacing: 16,
       runSpacing: 16,
-      children: [
-        for (final player in list) ...[
-          UserCellView(
-            title: player.player.name ?? context.l10n.common_anonymous_title,
-            imageUrl: player.player.profile_img_url,
-            initial: player.player.nameInitial,
-            subtitle: showOverCount
-                ? "(${context.l10n.match_list_overs_title(_getOverCount(state, player.player.id))})"
-                : null,
-            isSelected: type == PlayerSelectionType.batsMan
-                ? [batsMan1?.player.id, batsMan2?.player.id]
-                    .contains(player.player.id)
-                : bowler?.player.id == player.player.id,
-            tag: player.status == PlayerStatus.injured &&
-                    type == PlayerSelectionType.batsMan
-                ? context.l10n.score_board_injured_tag_title
-                : null,
-            disableCell: player.status == PlayerStatus.injured &&
-                type == PlayerSelectionType.batsMan &&
-                !isEnabled,
-            onTap: () => setState(() {
-              if (type == PlayerSelectionType.batsMan) {
-                if (widget.playerSelectionType == PlayerSelectionType.all) {
-                  if (batsMan1?.player.id == player.player.id) {
-                    batsMan1 = null;
-                  } else if (batsMan2?.player.id == player.player.id) {
-                    batsMan2 = null;
-                  } else if (batsMan1 == null) {
-                    batsMan1 = player;
-                  } else if (batsMan2 == null) {
-                    batsMan2 = player;
-                  } else {
-                    return;
-                    // extra else to suppress lint suggestion of using ??= for batsMan2 assignment
-                  }
-                } else {
+      children: list.map((player) {
+        final status = player.performance
+            .where((element) => element.inning_id == state.currentInning?.id)
+            .firstOrNull
+            ?.status;
+        return UserCellView(
+          title: player.player.name ?? context.l10n.common_anonymous_title,
+          imageUrl: player.player.profile_img_url,
+          initial: player.player.nameInitial,
+          subtitle: showOverCount
+              ? "(${context.l10n.match_list_overs_title(_getOverCount(state, player.player.id))})"
+              : null,
+          isSelected: type == PlayerSelectionType.batsMan
+              ? [batsMan1?.player.id, batsMan2?.player.id]
+                  .contains(player.player.id)
+              : bowler?.player.id == player.player.id,
+          tag: status == PlayerStatus.injured &&
+                  type == PlayerSelectionType.batsMan
+              ? context.l10n.score_board_injured_tag_title
+              : null,
+          disableCell: status == PlayerStatus.injured &&
+              type == PlayerSelectionType.batsMan &&
+              !isEnabled,
+          onTap: () => setState(() {
+            if (type == PlayerSelectionType.batsMan) {
+              if (widget.playerSelectionType == PlayerSelectionType.all) {
+                if (batsMan1?.player.id == player.player.id) {
+                  batsMan1 = null;
+                } else if (batsMan2?.player.id == player.player.id) {
+                  batsMan2 = null;
+                } else if (batsMan1 == null) {
                   batsMan1 = player;
+                } else if (batsMan2 == null) {
+                  batsMan2 = player;
+                } else {
+                  return;
+                  // extra else to suppress lint suggestion of using ??= for batsMan2 assignment
                 }
               } else {
-                bowler = player;
+                batsMan1 = player;
               }
-            }),
-          )
-        ],
-      ],
+            } else {
+              bowler = player;
+            }
+          }),
+        );
+      }).toList(),
     );
   }
 
@@ -248,7 +255,10 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
   }
 
   Widget _contWithInjPlayerOption(
-      BuildContext context, ScoreBoardViewNotifier notifier) {
+    BuildContext context,
+    ScoreBoardViewNotifier notifier,
+    ScoreBoardViewState state,
+  ) {
     return ToggleButtonTile(
       title: context.l10n.score_board_continue_with_injured_player_title,
       defaultEnabled: isEnabled,
@@ -256,10 +266,20 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         isEnabled = !isEnabled;
         notifier.onContinueWithInjuredPlayersChange(isEnabled);
         if (!isEnabled) {
-          if (batsMan1?.status == PlayerStatus.injured) {
+          if (batsMan1?.performance
+                  .where(
+                      (element) => element.inning_id == state.currentInning?.id)
+                  .firstOrNull
+                  ?.status ==
+              PlayerStatus.injured) {
             batsMan1 = null;
           }
-          if (batsMan2?.status == PlayerStatus.injured) {
+          if (batsMan2?.performance
+                  .where(
+                      (element) => element.inning_id == state.currentInning?.id)
+                  .firstOrNull
+                  ?.status ==
+              PlayerStatus.injured) {
             batsMan2 = null;
           }
         }

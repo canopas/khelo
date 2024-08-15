@@ -71,6 +71,7 @@ class UserCellView extends StatelessWidget {
             Text(
               title,
               maxLines: 2,
+              textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary),
@@ -78,6 +79,7 @@ class UserCellView extends StatelessWidget {
             if (subtitle != null) ...[
               Text(
                 subtitle!,
+                textAlign: TextAlign.center,
                 style: AppTextStyle.body1
                     .copyWith(color: context.colorScheme.textDisabled),
               )
@@ -85,6 +87,7 @@ class UserCellView extends StatelessWidget {
             if (tag != null) ...[
               Text(
                 tag!,
+                textAlign: TextAlign.center,
                 style: AppTextStyle.body1
                     .copyWith(color: context.colorScheme.alert),
               ),

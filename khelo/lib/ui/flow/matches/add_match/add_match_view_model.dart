@@ -140,16 +140,16 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
       final firstSquad = state.squadA
               ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id,
-                  status: e.status ?? PlayerStatus.yetToPlay,
-                  index: e.index))
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final secondSquad = state.squadB
               ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id,
-                  status: e.status ?? PlayerStatus.yetToPlay,
-                  index: e.index))
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final allPlayers = firstSquad.map((e) => e.id).toList();
@@ -234,7 +234,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   void onTeamSelect(TeamModel team, TeamType type) {
     final matchPlayer = team.players
         ?.take(11)
-        .map((e) => MatchPlayer(player: e, status: PlayerStatus.yetToPlay))
+        .map((e) => MatchPlayer(player: e))
         .toList();
 
     final captainAndAdminId = matchPlayer?.firstOrNull?.player.id;
