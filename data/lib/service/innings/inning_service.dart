@@ -127,7 +127,9 @@ class InningsService {
 
       for (final inning in innings.entries) {
         final inningRef = _inningCollection.doc(inning.key);
-        batch.update(inningRef, {FireStoreConst.inningsStatus: inning.value});
+        batch.update(inningRef, {
+          FireStoreConst.inningsStatus: inning.value.value,
+        });
       }
 
       await batch.commit();

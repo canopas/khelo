@@ -1,5 +1,4 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
-import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,11 +41,16 @@ class ScoreDisplayView extends ConsumerWidget {
   }
 
   Widget _teamName(
-    BuildContext context,
-    bool batting,
-  ) {
+    BuildContext context, {
+    required bool batting,
+    String? inningString,
+  }) {
+    final teamName = batting
+        ? (battingTeamName ?? "") +
+            (inningString != null ? " - $inningString" : "")
+        : bowlingTeamName ?? "";
     return Text(
-      (batting ? battingTeamName : bowlingTeamName) ?? "",
+      teamName,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyle.subtitle1
@@ -58,6 +62,12 @@ class ScoreDisplayView extends ConsumerWidget {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
+    final inningString = state.match?.match_type == MatchType.testMatch
+        ? (state.currentInning?.index == 1 || state.currentInning?.index == 2)
+            ? context.l10n.common_first_inning_title
+            : context.l10n.common_second_inning_title
+        : null;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -67,7 +77,7 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _teamName(context, true),
+          _teamName(context, batting: true, inningString: inningString),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -132,7 +142,7 @@ class ScoreDisplayView extends ConsumerWidget {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    if (state.otherInning?.innings_status == InningStatus.finish) {
+    if (state.nextInning == null) {
       final requiredRun = ((state.otherInning?.total_runs ?? 0) + 1) -
           (state.currentInning?.total_runs ?? 0);
       final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
@@ -247,7 +257,7 @@ class ScoreDisplayView extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _teamName(context, false),
+            child: _teamName(context, batting: false),
           ),
           const SizedBox(height: 8),
           _bowlerNameView(

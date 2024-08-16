@@ -104,6 +104,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               inningSecond != state.otherInning ||
               nextInning != state.nextInning) {
             state = state.copyWith(
+                allInnings: innings,
                 currentInning: inningFirst,
                 otherInning: inningSecond,
                 nextInning: nextInning,
@@ -595,16 +596,31 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       final updatedPlayer = _getUpdatedOutPlayerStatus(wicketType, playerOutId);
       state = state.copyWith(isMatchUpdated: false);
+
+      final otherBattingInning = state.allInnings
+          .where((element) =>
+              element.team_id == battingTeamId &&
+              element.id != battingTeamInningId)
+          .firstOrNull;
+      final otherBowlingInning = state.allInnings
+          .where((element) =>
+              element.team_id == bowlingTeamId &&
+              element.id != bowlingTeamInningId)
+          .firstOrNull;
       await _ballScoreService.addBallScoreAndUpdateTeamDetails(
         score: ball,
         matchId: matchId,
         battingTeamId: battingTeamId,
         battingTeamInningId: battingTeamInningId,
         totalRuns: totalRuns,
+        otherInningOver: otherBattingInning?.overs ?? 0,
+        otherTotalRuns: otherBattingInning?.total_runs ?? 0,
         bowlingTeamId: bowlingTeamId,
         bowlingTeamInningId: bowlingTeamInningId,
         totalWicketTaken: wicketCount,
         totalBowlingTeamRuns: bowlingTeamRuns,
+        otherTotalWicketTaken: otherBowlingInning?.total_wickets ?? 0,
+        otherTotalBowlingTeamRuns: otherBowlingInning?.total_runs ?? 0,
         updatedPlayer: updatedPlayer,
       );
     } catch (e) {
@@ -773,7 +789,36 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   bool _isTargetAchieved() {
     switch (state.match?.match_type) {
       case MatchType.testMatch:
-      // TODO: Handle this case -> check in 3rd and 4th inning till then false
+        if (state.currentInning?.index == 3 ||
+            state.currentInning?.index == 4) {
+          final secondPlayingTeamId = state.currentInning?.index == 3
+              ? state.otherInning?.team_id
+              : state.currentInning?.team_id;
+
+          final secondPlayingTeam = state.match?.teams
+              .where(
+                (element) => element.team.id == secondPlayingTeamId,
+              )
+              .firstOrNull;
+
+          final firstPlayingTeam = state.match?.teams
+              .where(
+                (element) => element.team.id != secondPlayingTeamId,
+              )
+              .firstOrNull;
+          if (firstPlayingTeam == null || secondPlayingTeam == null) {
+            return false;
+          }
+
+          final isThirdInningAllOut =
+              state.currentInning?.index == 3 && _isAllOut();
+          final isFourthInningRunning = state.currentInning?.index == 4;
+
+          return (isThirdInningAllOut || isFourthInningRunning) &&
+              secondPlayingTeam.run > firstPlayingTeam.run;
+        } else {
+          return false;
+        }
       default:
         // run >= target_run (other_teams_run + 1)
         if (state.otherInning?.innings_status == InningStatus.yetToStart ||
@@ -790,7 +835,28 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   bool _isMatchTied() {
     switch (state.match?.match_type) {
       case MatchType.testMatch:
-      // TODO: Handle this case -> check in 4th inning till then false
+        if (state.currentInning?.index == 4 && _isAllOut()) {
+          final secondPlayingTeamId = state.currentInning?.team_id;
+
+          final secondPlayingTeam = state.match?.teams
+              .where(
+                (element) => element.team.id == secondPlayingTeamId,
+              )
+              .firstOrNull;
+
+          final firstPlayingTeam = state.match?.teams
+              .where(
+                (element) => element.team.id != secondPlayingTeamId,
+              )
+              .firstOrNull;
+          if (firstPlayingTeam == null || secondPlayingTeam == null) {
+            return false;
+          }
+
+          return secondPlayingTeam.run == firstPlayingTeam.run;
+        } else {
+          return false;
+        }
       default:
         // inning_complete and run == other_teams_run
         final isInningComplete = _isAllOut() || _isAllDeliveryDelivered();
@@ -846,6 +912,18 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       final updatedPlayers = _getUndoPlayerStatus(lastBall);
       state = state.copyWith(isMatchUpdated: false);
+
+      final otherBattingInning = state.allInnings
+          .where((element) =>
+              element.team_id == battingTeamId &&
+              element.id != battingTeamInningId)
+          .firstOrNull;
+      final otherBowlingInning = state.allInnings
+          .where((element) =>
+              element.team_id == bowlingTeamId &&
+              element.id != bowlingTeamInningId)
+          .firstOrNull;
+
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
           ballId: lastBall.id!,
           matchId: matchId,
@@ -853,9 +931,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           battingTeamInningId: battingTeamInningId,
           overCount: overCount,
           totalRuns: totalRuns,
+          otherInningOver: otherBattingInning?.overs ?? 0,
+          otherTotalRuns: otherBattingInning?.total_runs ?? 0,
           bowlingTeamId: bowlingTeamId,
           bowlingTeamInningId: bowlingTeamInningId,
           totalWicketTaken: wicketCount,
+          otherTotalWicketTaken: otherBowlingInning?.total_wickets ?? 0,
+          otherTotalBowlingTeamRuns: otherBowlingInning?.total_runs ?? 0,
           updatedPlayer: updatedPlayers);
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
@@ -1028,6 +1110,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           showSelectPlayerSheet: DateTime.now(),
           isActionInProgress: false);
     } catch (e) {
+      debugPrint("ScoreBoardViewNotifier: error while start next inning -> $e");
       state = state.copyWith(actionError: e, isActionInProgress: false);
     }
   }
@@ -1180,6 +1263,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       _configureStrikerId();
     } catch (e) {
+      debugPrint("ScoreBoardViewNotifier: error while set players -> $e");
       state = state.copyWith(actionError: e, isActionInProgress: false);
     }
   }
@@ -1378,6 +1462,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     ScoreButton? tappedButton,
     bool? isLongTap,
     FieldingPositionType? position,
+    @Default([]) List<InningModel> allInnings,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,
     @Default(false) bool loading,

@@ -50,6 +50,8 @@
   "common_run_out_title": "Run Out",
   "common_wickets_text": "Wickets",
   "common_end_match_title": "End Match",
+  "common_first_inning_title": "First inning",
+  "common_second_inning_title": "Second inning",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",

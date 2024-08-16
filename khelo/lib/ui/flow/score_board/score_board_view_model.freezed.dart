@@ -53,6 +53,7 @@ mixin _$ScoreBoardViewState {
   ScoreButton? get tappedButton => throw _privateConstructorUsedError;
   bool? get isLongTap => throw _privateConstructorUsedError;
   FieldingPositionType? get position => throw _privateConstructorUsedError;
+  List<InningModel> get allInnings => throw _privateConstructorUsedError;
   List<BallScoreModel> get currentScoresList =>
       throw _privateConstructorUsedError;
   List<BallScoreModel> get previousScoresList =>
@@ -112,6 +113,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       ScoreButton? tappedButton,
       bool? isLongTap,
       FieldingPositionType? position,
+      List<InningModel> allInnings,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -177,6 +179,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? tappedButton = freezed,
     Object? isLongTap = freezed,
     Object? position = freezed,
+    Object? allInnings = null,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -312,6 +315,10 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as FieldingPositionType?,
+      allInnings: null == allInnings
+          ? _value.allInnings
+          : allInnings // ignore: cast_nullable_to_non_nullable
+              as List<InningModel>,
       currentScoresList: null == currentScoresList
           ? _value.currentScoresList
           : currentScoresList // ignore: cast_nullable_to_non_nullable
@@ -468,6 +475,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       ScoreButton? tappedButton,
       bool? isLongTap,
       FieldingPositionType? position,
+      List<InningModel> allInnings,
       List<BallScoreModel> currentScoresList,
       List<BallScoreModel> previousScoresList,
       bool loading,
@@ -536,6 +544,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? tappedButton = freezed,
     Object? isLongTap = freezed,
     Object? position = freezed,
+    Object? allInnings = null,
     Object? currentScoresList = null,
     Object? previousScoresList = null,
     Object? loading = null,
@@ -671,6 +680,10 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as FieldingPositionType?,
+      allInnings: null == allInnings
+          ? _value._allInnings
+          : allInnings // ignore: cast_nullable_to_non_nullable
+              as List<InningModel>,
       currentScoresList: null == currentScoresList
           ? _value._currentScoresList
           : currentScoresList // ignore: cast_nullable_to_non_nullable
@@ -762,6 +775,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.tappedButton,
       this.isLongTap,
       this.position,
+      final List<InningModel> allInnings = const [],
       final List<BallScoreModel> currentScoresList = const [],
       final List<BallScoreModel> previousScoresList = const [],
       this.loading = false,
@@ -776,6 +790,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.overCount = 1,
       this.lastAssignedIndex = 0})
       : _batsMans = batsMans,
+        _allInnings = allInnings,
         _currentScoresList = currentScoresList,
         _previousScoresList = previousScoresList;
 
@@ -849,6 +864,15 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final bool? isLongTap;
   @override
   final FieldingPositionType? position;
+  final List<InningModel> _allInnings;
+  @override
+  @JsonKey()
+  List<InningModel> get allInnings {
+    if (_allInnings is EqualUnmodifiableListView) return _allInnings;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_allInnings);
+  }
+
   final List<BallScoreModel> _currentScoresList;
   @override
   @JsonKey()
@@ -905,7 +929,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, nextInning: $nextInning, showSelectFieldingPositionSheet: $showSelectFieldingPositionSheet, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, tappedButton: $tappedButton, isLongTap: $isLongTap, position: $position, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, showForLessRun: $showForLessRun, showForDotBall: $showForDotBall, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, nextInning: $nextInning, showSelectFieldingPositionSheet: $showSelectFieldingPositionSheet, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, invalidUndoToast: $invalidUndoToast, tappedButton: $tappedButton, isLongTap: $isLongTap, position: $position, allInnings: $allInnings, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, showForLessRun: $showForLessRun, showForDotBall: $showForDotBall, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -971,6 +995,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.tappedButton, tappedButton) || other.tappedButton == tappedButton) &&
             (identical(other.isLongTap, isLongTap) || other.isLongTap == isLongTap) &&
             (identical(other.position, position) || other.position == position) &&
+            const DeepCollectionEquality().equals(other._allInnings, _allInnings) &&
             const DeepCollectionEquality().equals(other._currentScoresList, _currentScoresList) &&
             const DeepCollectionEquality().equals(other._previousScoresList, _previousScoresList) &&
             (identical(other.loading, loading) || other.loading == loading) &&
@@ -1020,6 +1045,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         tappedButton,
         isLongTap,
         position,
+        const DeepCollectionEquality().hash(_allInnings),
         const DeepCollectionEquality().hash(_currentScoresList),
         const DeepCollectionEquality().hash(_previousScoresList),
         loading,
@@ -1076,6 +1102,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final ScoreButton? tappedButton,
       final bool? isLongTap,
       final FieldingPositionType? position,
+      final List<InningModel> allInnings,
       final List<BallScoreModel> currentScoresList,
       final List<BallScoreModel> previousScoresList,
       final bool loading,
@@ -1152,6 +1179,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   bool? get isLongTap;
   @override
   FieldingPositionType? get position;
+  @override
+  List<InningModel> get allInnings;
   @override
   List<BallScoreModel> get currentScoresList;
   @override
