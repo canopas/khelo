@@ -62,30 +62,23 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         final match = data.$1;
         final innings = data.$2;
         state = state.copyWith(match: match);
-        final firstInning = innings
-            .where((element) =>
-                (state.match?.toss_decision == TossDecision.bat &&
-                    element.team_id == state.match?.toss_winner_id) ||
-                (state.match?.toss_decision == TossDecision.bowl &&
-                    element.team_id != state.match?.toss_winner_id))
-            .firstOrNull;
 
-        final secondInning = innings
-            .where((element) =>
-                (state.match?.toss_decision == TossDecision.bowl &&
-                    element.team_id == state.match?.toss_winner_id) ||
-                (state.match?.toss_decision == TossDecision.bat &&
-                    element.team_id != state.match?.toss_winner_id))
-            .firstOrNull;
-
+        // expand by default: winner team's last inning or currently running innings, all innings.first
+        final winnerInningId = innings
+            .where((element) => element.team_id == match.matchResult?.teamId)
+            .lastOrNull
+            ?.id;
+        final runningInningId = innings
+            .where((element) => element.innings_status == InningStatus.running)
+            .firstOrNull
+            ?.id;
         onScorecardExpansionChange(
-          match.matchResult?.teamId ?? match.current_playing_team_id ?? "",
+          winnerInningId ?? runningInningId ?? innings.firstOrNull?.id ?? '',
           true,
         );
         state = state.copyWith(
             highlightTeamId: state.highlightTeamId ?? match.teams.first.team.id,
-            firstInning: firstInning,
-            secondInning: secondInning,
+            allInnings: innings,
             error: null);
 
         if (!state.ballScoreQueryListenerSet) {
@@ -104,17 +97,16 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   void _loadBallScores() {
-    if (state.firstInning == null || state.secondInning == null) {
+    if (state.allInnings.isEmpty) {
       state = state.copyWith(loading: false);
       return;
     }
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
     ballScoreStreamSubscription = _ballScoreService
-        .getBallScoresStreamByInningIds([
-      state.firstInning?.id ?? "INVALID ID",
-      state.secondInning?.id ?? "INVALID ID"
-    ]).listen(
+        .getBallScoresStreamByInningIds(
+            state.allInnings.map((e) => e.id).toList())
+        .listen(
       (scores) {
         final sortedList = scores.toList();
         sortedList.sort((a, b) => a.ballScore.time.compareTo(b.ballScore.time));
@@ -230,9 +222,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   String _getTeamIdByInningId(String inningId) {
-    final teamId = state.firstInning?.id == inningId
-        ? state.firstInning?.team_id
-        : state.secondInning?.team_id;
+    final teamId = state.allInnings
+        .where((element) => element.id == inningId)
+        .firstOrNull
+        ?.team_id;
     return teamId ?? "";
   }
 
@@ -304,14 +297,13 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     required String playerId,
     bool isFieldingTeam = false,
   }) {
-    final teamId = [state.firstInning, state.secondInning]
-        .where((element) =>
-            isFieldingTeam ? element?.id != inningId : element?.id == inningId)
+    final teamId = state.allInnings
+        .where((element) => element.id == inningId)
         .firstOrNull
         ?.team_id;
 
     final player = state.match?.teams
-        .where((element) => teamId == element.team.id)
+        .where((element) => isFieldingTeam ? teamId != element.team.id : teamId == element.team.id)
         .firstOrNull
         ?.squad
         .where((element) => element.player.id == playerId)
@@ -384,15 +376,15 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
   }
 
-  void onScorecardExpansionChange(String teamId, bool isExpanded) {
-    List<String> expandedList = state.expandedTeamScorecard.toList();
+  void onScorecardExpansionChange(String inningId, bool isExpanded) {
+    List<String> expandedList = state.expandedInningsScorecard.toList();
     if (isExpanded) {
-      expandedList.add(teamId);
+      expandedList.add(inningId);
     } else {
-      expandedList.remove(teamId);
+      expandedList.remove(inningId);
     }
     state =
-        state.copyWith(expandedTeamScorecard: expandedList.toSet().toList());
+        state.copyWith(expandedInningsScorecard: expandedList.toSet().toList());
   }
 
   Future<void> onResume() async {
@@ -412,15 +404,14 @@ class MatchDetailTabState with _$MatchDetailTabState {
   const factory MatchDetailTabState({
     Object? error,
     MatchModel? match,
-    InningModel? firstInning,
-    InningModel? secondInning,
+    @Default([]) List<InningModel> allInnings,
     String? highlightTeamId,
     DateTime? showTeamSelectionSheet,
     DateTime? showHighlightOptionSelectionSheet,
     @Default(1) int selectedTab,
     @Default([]) List<OverSummary> overList,
     @Default([]) List<OverSummary> filteredHighlight,
-    @Default([]) List<String> expandedTeamScorecard,
+    @Default([]) List<String> expandedInningsScorecard,
     @Default(false) bool loading,
     @Default(false) bool ballScoreQueryListenerSet,
     @Default(HighlightFilterOption.all)
