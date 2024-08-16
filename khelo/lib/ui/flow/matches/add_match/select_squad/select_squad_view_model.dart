@@ -33,8 +33,12 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
     final updatedList = state.squad.toList();
     updatedList.removeWhere((element) => element.player.id == user.id);
     final captainId =
-        updatedList.contains(state.captainId) ? state.captainId : null;
-    final adminId = updatedList.contains(state.adminId) ? state.adminId : null;
+        updatedList.map((e) => e.player.id).contains(state.captainId)
+            ? state.captainId
+            : null;
+    final adminId = updatedList.map((e) => e.player.id).contains(state.adminId)
+        ? state.adminId
+        : null;
     state = state.copyWith(
         squad: updatedList, captainId: captainId, adminId: adminId);
     onSquadChange();
