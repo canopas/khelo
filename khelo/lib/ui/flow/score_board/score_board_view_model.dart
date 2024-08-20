@@ -70,10 +70,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         final isMatchChanged = state.match != match;
         state = state.copyWith(match: match, error: null);
         if (innings.isEmpty) {
-          await _createInnings();
-          if (match.match_type == MatchType.testMatch) {
-            await _createInnings(isRepeatingForTestMatch: true);
-          }
+          await _createInnings(
+              isForTestMatch: match.match_type == MatchType.testMatch);
         } else {
           final inningFirst = innings
               .where(
@@ -161,6 +159,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final currentInningId = state.currentInning?.id;
     final otherInningId = state.otherInning?.id;
     if (currentInningId == null || otherInningId == null) {
+      print("return $currentInningId & $otherInningId");
       return;
     }
     if (_ballScoreStreamSubscription != null) {
@@ -333,8 +332,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 !showSelectAllPlayerSheet
             ? DateTime.now()
             : null,
-        isActionInProgress: false,
       );
+      state = state.copyWith(isActionInProgress: false);
     }
   }
 
@@ -385,7 +384,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   Future<void> _createInnings({
-    bool isRepeatingForTestMatch = false,
+    bool isForTestMatch = false,
   }) async {
     final matchId = state.match?.id;
     final tossWinnerId = state.match?.toss_winner_id;
@@ -402,29 +401,43 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return;
     }
 
-    final firstBattingIndex = isRepeatingForTestMatch ? 3 : 1;
-    final firstBowlingIndex = isRepeatingForTestMatch ? 4 : 2;
-
     try {
-      await _inningService.createInnings(
-        matchId: matchId,
-        teamId: tossWinnerId,
-        firstInningStatus:
-            tossDecision == TossDecision.bat && !isRepeatingForTestMatch
-                ? InningStatus.running
-                : InningStatus.yetToStart,
-        firstInningIndex: tossDecision == TossDecision.bat
-            ? firstBattingIndex
-            : firstBowlingIndex,
-        opponentTeamId: opponentTeamId,
-        secondInningStatus:
-            tossDecision == TossDecision.bat || isRepeatingForTestMatch
-                ? InningStatus.yetToStart
-                : InningStatus.running,
-        secondInningIndex: tossDecision == TossDecision.bat
-            ? firstBowlingIndex
-            : firstBattingIndex,
-      );
+      final List<InningModel> innings = [];
+      innings.add(InningModel(
+        id: _inningService.generateInningId,
+        match_id: matchId,
+        team_id: tossWinnerId,
+        index: tossDecision == TossDecision.bat ? 1 : 2,
+        innings_status: tossDecision == TossDecision.bat
+            ? InningStatus.running
+            : InningStatus.yetToStart,
+      ));
+      innings.add(InningModel(
+        id: _inningService.generateInningId,
+        match_id: matchId,
+        team_id: opponentTeamId,
+        index: tossDecision == TossDecision.bat ? 2 : 1,
+        innings_status: tossDecision == TossDecision.bat
+            ? InningStatus.yetToStart
+            : InningStatus.running,
+      ));
+      if (isForTestMatch) {
+        innings.add(InningModel(
+          id: _inningService.generateInningId,
+          match_id: matchId,
+          team_id: tossWinnerId,
+          index: tossDecision == TossDecision.bat ? 3 : 4,
+          innings_status: InningStatus.running,
+        ));
+        innings.add(InningModel(
+          id: _inningService.generateInningId,
+          match_id: matchId,
+          team_id: opponentTeamId,
+          index: tossDecision == TossDecision.bat ? 4 : 3,
+          innings_status: InningStatus.running,
+        ));
+      }
+      await _inningService.createInnings(innings: innings);
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while create innings -> $e");
       state = state.copyWith(error: e, loading: false);

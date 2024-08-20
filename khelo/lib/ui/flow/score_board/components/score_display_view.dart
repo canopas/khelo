@@ -143,14 +143,16 @@ class ScoreDisplayView extends ConsumerWidget {
     ScoreBoardViewState state,
   ) {
     if (state.nextInning == null) {
-      final requiredRun = ((state.otherInning?.total_runs ?? 0) + 1) -
-          (state.currentInning?.total_runs ?? 0);
+      final requiredRun = getRequiredRun(state);
       final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
       final pendingBall = (pendingOver * 6) + (6 - state.ballCount);
       return Text(
-        context.l10n.score_board_need_run_text(
-            requiredRun < 0 ? 0 : requiredRun,
-            pendingBall < 0 ? 0 : pendingBall),
+        state.match?.match_type == MatchType.testMatch
+            ? context.l10n
+                .score_board_need_run_text(requiredRun < 0 ? 0 : requiredRun)
+            : context.l10n.score_board_run_need_in_ball_text(
+                requiredRun < 0 ? 0 : requiredRun,
+                pendingBall < 0 ? 0 : pendingBall),
         textAlign: TextAlign.center,
         style:
             AppTextStyle.caption.copyWith(color: context.colorScheme.secondary),
@@ -158,6 +160,17 @@ class ScoreDisplayView extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
+  }
+
+  int getRequiredRun(ScoreBoardViewState state) {
+    final currentPlayingTeam = state.match?.teams
+        .where((element) => element.team.id == state.currentInning?.team_id)
+        .firstOrNull;
+    final otherTeam = state.match?.teams
+        .where((element) => element.team.id != currentPlayingTeam?.team.id)
+        .firstOrNull;
+
+    return ((otherTeam?.run ?? 0) + 1) - (currentPlayingTeam?.run ?? 0);
   }
 
   Widget _batsManDetailsView(BuildContext context, ScoreBoardViewState state) {
