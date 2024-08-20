@@ -585,7 +585,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     return MatchPlayerRequest(
         id: updatedPlayer.player.id,
-        status: updatedPlayer.status ?? PlayerStatus.played,
+        status: updatedPlayer.status,
         index: updatedPlayer.index);
   }
 
@@ -834,9 +834,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           team_id: team.teamId,
           squad: team.players
               .map((e) => MatchPlayerRequest(
-                  id: e.player.id,
-                  status: e.status ?? PlayerStatus.yetToPlay,
-                  index: e.index))
+                  id: e.player.id, status: e.status, index: e.index))
               .toList());
 
       await _matchService.updateTeamsSquad(
