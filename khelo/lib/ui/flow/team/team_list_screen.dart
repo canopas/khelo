@@ -173,6 +173,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         items: TeamFilterOption.values
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
+                enabled: selectedFilter != option,
                 child: selectedFilter == option
                     ? SvgPicture.asset(
                         Assets.images.icCheck,

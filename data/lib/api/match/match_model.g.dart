@@ -156,14 +156,15 @@ Map<String, dynamic> _$$MatchTeamModelImplToJson(
 _$MatchPlayerImpl _$$MatchPlayerImplFromJson(Map<String, dynamic> json) =>
     _$MatchPlayerImpl(
       player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
-      status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']),
+      status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']) ??
+          PlayerStatus.yetToPlay,
       index: (json['index'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$MatchPlayerImplToJson(_$MatchPlayerImpl instance) =>
     <String, dynamic>{
       'player': instance.player,
-      'status': _$PlayerStatusEnumMap[instance.status],
+      'status': _$PlayerStatusEnumMap[instance.status]!,
       'index': instance.index,
     };
 

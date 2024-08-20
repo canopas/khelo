@@ -180,6 +180,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
         items: HighlightFilterOption.values
             .map((option) => BottomSheetAction(
                   title: option.getString(context),
+                  enabled: highlightFilterOption != option,
                   child: _checkWidget(
                     context,
                     isShowCheck: highlightFilterOption == option,
@@ -203,6 +204,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
       items: teams
               ?.map((match) => BottomSheetAction(
                     title: match.team.name,
+                    enabled: highlightTeamId != match.team.id,
                     child: _checkWidget(
                       context,
                       isShowCheck: highlightTeamId == match.team.id,

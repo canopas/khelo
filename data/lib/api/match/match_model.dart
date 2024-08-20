@@ -129,7 +129,7 @@ class MatchResult {
 class MatchPlayer with _$MatchPlayer {
   const factory MatchPlayer({
     required UserModel player,
-    PlayerStatus? status,
+    @Default(PlayerStatus.yetToPlay) PlayerStatus status,
     int? index,
   }) = _MatchPlayer;
 

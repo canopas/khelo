@@ -1075,7 +1075,7 @@ MatchPlayer _$MatchPlayerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayer {
   UserModel get player => throw _privateConstructorUsedError;
-  PlayerStatus? get status => throw _privateConstructorUsedError;
+  PlayerStatus get status => throw _privateConstructorUsedError;
   int? get index => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1090,7 +1090,7 @@ abstract class $MatchPlayerCopyWith<$Res> {
           MatchPlayer value, $Res Function(MatchPlayer) then) =
       _$MatchPlayerCopyWithImpl<$Res, MatchPlayer>;
   @useResult
-  $Res call({UserModel player, PlayerStatus? status, int? index});
+  $Res call({UserModel player, PlayerStatus status, int? index});
 
   $UserModelCopyWith<$Res> get player;
 }
@@ -1109,7 +1109,7 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
   @override
   $Res call({
     Object? player = null,
-    Object? status = freezed,
+    Object? status = null,
     Object? index = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1117,10 +1117,10 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as PlayerStatus?,
+              as PlayerStatus,
       index: freezed == index
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
@@ -1145,7 +1145,7 @@ abstract class _$$MatchPlayerImplCopyWith<$Res>
       __$$MatchPlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UserModel player, PlayerStatus? status, int? index});
+  $Res call({UserModel player, PlayerStatus status, int? index});
 
   @override
   $UserModelCopyWith<$Res> get player;
@@ -1163,7 +1163,7 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? player = null,
-    Object? status = freezed,
+    Object? status = null,
     Object? index = freezed,
   }) {
     return _then(_$MatchPlayerImpl(
@@ -1171,10 +1171,10 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
-              as PlayerStatus?,
+              as PlayerStatus,
       index: freezed == index
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
@@ -1186,7 +1186,8 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MatchPlayerImpl implements _MatchPlayer {
-  const _$MatchPlayerImpl({required this.player, this.status, this.index});
+  const _$MatchPlayerImpl(
+      {required this.player, this.status = PlayerStatus.yetToPlay, this.index});
 
   factory _$MatchPlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$MatchPlayerImplFromJson(json);
@@ -1194,7 +1195,8 @@ class _$MatchPlayerImpl implements _MatchPlayer {
   @override
   final UserModel player;
   @override
-  final PlayerStatus? status;
+  @JsonKey()
+  final PlayerStatus status;
   @override
   final int? index;
 
@@ -1234,7 +1236,7 @@ class _$MatchPlayerImpl implements _MatchPlayer {
 abstract class _MatchPlayer implements MatchPlayer {
   const factory _MatchPlayer(
       {required final UserModel player,
-      final PlayerStatus? status,
+      final PlayerStatus status,
       final int? index}) = _$MatchPlayerImpl;
 
   factory _MatchPlayer.fromJson(Map<String, dynamic> json) =
@@ -1243,7 +1245,7 @@ abstract class _MatchPlayer implements MatchPlayer {
   @override
   UserModel get player;
   @override
-  PlayerStatus? get status;
+  PlayerStatus get status;
   @override
   int? get index;
   @override
