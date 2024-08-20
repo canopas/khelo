@@ -37,8 +37,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late String _matchId;
-  late StreamSubscription matchStreamSubscription;
-  late StreamSubscription ballScoreStreamSubscription;
+  StreamSubscription? matchStreamSubscription;
+  StreamSubscription? ballScoreStreamSubscription;
 
   MatchDetailTabViewNotifier(
     this._matchService,
@@ -303,7 +303,9 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         ?.team_id;
 
     final player = state.match?.teams
-        .where((element) => isFieldingTeam ? teamId != element.team.id : teamId == element.team.id)
+        .where((element) => isFieldingTeam
+            ? teamId != element.team.id
+            : teamId == element.team.id)
         .firstOrNull
         ?.squad
         .where((element) => element.player.id == playerId)
@@ -366,8 +368,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 
   Future<void> cancelStreamSubscription() async {
     state = state.copyWith(ballScoreQueryListenerSet: false);
-    await matchStreamSubscription.cancel();
-    await ballScoreStreamSubscription.cancel();
+    await matchStreamSubscription?.cancel();
+    await ballScoreStreamSubscription?.cancel();
   }
 
   void onTabChange(int tab) {

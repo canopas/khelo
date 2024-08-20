@@ -30,10 +30,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final MatchService _matchService;
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
-  late StreamSubscription<MatchModel?> _matchStreamSubscription;
-  late StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
+  StreamSubscription<MatchModel?>? _matchStreamSubscription;
+  StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
   final StreamController<MatchModel> _matchStreamController =
-      StreamController<MatchModel>();
+      StreamController<MatchModel>.broadcast();
   String? matchId;
 
   ScoreBoardViewNotifier(
@@ -157,12 +157,16 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         index == inning.index;
   }
 
-  void _loadBallScore() {
+  Future<void> _loadBallScore() async {
     final currentInningId = state.currentInning?.id;
     final otherInningId = state.otherInning?.id;
     if (currentInningId == null || otherInningId == null) {
       return;
     }
+    if (_ballScoreStreamSubscription != null) {
+      await _ballScoreStreamSubscription!.cancel();
+    }
+
     try {
       state = state.copyWith(ballScoreQueryListenerSet: true);
       final ballScoreStream = combineLatest2(_matchStreamController.stream,
@@ -329,8 +333,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                 !showSelectAllPlayerSheet
             ? DateTime.now()
             : null,
+        isActionInProgress: false,
       );
-      state = state.copyWith(isActionInProgress: false);
     }
   }
 
@@ -1057,13 +1061,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   Future<void> startNextInning() async {
     final currentInningId = state.currentInning?.id;
     final currentInningTeamId = state.currentInning?.team_id;
-    final otherInningId = state.otherInning?.id;
-    final otherInningTeamId = state.otherInning?.team_id;
+    final otherInning = state.otherInning;
     final matchId = state.match?.id;
     if (currentInningId == null ||
         currentInningTeamId == null ||
-        otherInningId == null ||
-        otherInningTeamId == null ||
+        otherInning == null ||
         matchId == null) {
       return;
     }
@@ -1082,20 +1084,17 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       await _updateMatchPlayerStatus(
           (teamId: currentInningTeamId, players: batsMan));
 
-      final runningInningId =
-          state.nextInning != null ? state.nextInning!.id : otherInningId;
-      final runningTeamId = state.nextInning != null
-          ? state.nextInning!.team_id
-          : otherInningTeamId;
+      final runningInning =
+          state.nextInning != null ? state.nextInning! : otherInning;
 
       await _inningService.updateInningsStatuses({
         currentInningId: InningStatus.finish,
-        runningInningId: InningStatus.running
+        runningInning.id: InningStatus.running
       });
 
       await _matchService.updateCurrentPlayingTeam(
         matchId: matchId,
-        teamId: runningTeamId,
+        teamId: runningInning.team_id,
       );
 
       state = state.copyWith(
@@ -1104,10 +1103,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           ballCount: 0,
           bowler: null,
           batsMans: List.empty(),
-          previousScoresList: state.currentScoresList,
+          previousScoresList:
+              runningInning.index == 3 ? List.empty() : state.currentScoresList,
           currentScoresList: List.empty(),
           continueWithInjuredPlayers: true,
           showSelectPlayerSheet: DateTime.now(),
+          ballScoreQueryListenerSet: runningInning.index == 3
+              ? false
+              : state.ballScoreQueryListenerSet,
           isActionInProgress: false);
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while start next inning -> $e");
@@ -1411,7 +1414,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   _cancelStreamSubscription() async {
-    await _matchStreamSubscription.cancel();
+    await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
     await _matchStreamController.close();
   }

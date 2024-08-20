@@ -232,10 +232,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   }
 
   void onTeamSelect(TeamModel team, TeamType type) {
-    final matchPlayer = team.players
-        ?.take(11)
-        .map((e) => MatchPlayer(player: e))
-        .toList();
+    final matchPlayer =
+        team.players?.take(11).map((e) => MatchPlayer(player: e)).toList();
 
     final captainAndAdminId = matchPlayer?.firstOrNull?.player.id;
     switch (type) {
