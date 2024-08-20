@@ -2460,6 +2460,8 @@ MatchPlayerRequest _$MatchPlayerRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayerRequest {
   String get id => throw _privateConstructorUsedError;
+  PlayerStatus get status =>
+      throw _privateConstructorUsedError; // TODO: Remove after release
   List<PlayerPerformance> get performance => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -2474,7 +2476,8 @@ abstract class $MatchPlayerRequestCopyWith<$Res> {
           MatchPlayerRequest value, $Res Function(MatchPlayerRequest) then) =
       _$MatchPlayerRequestCopyWithImpl<$Res, MatchPlayerRequest>;
   @useResult
-  $Res call({String id, List<PlayerPerformance> performance});
+  $Res call(
+      {String id, PlayerStatus status, List<PlayerPerformance> performance});
 }
 
 /// @nodoc
@@ -2491,6 +2494,7 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
   @override
   $Res call({
     Object? id = null,
+    Object? status = null,
     Object? performance = null,
   }) {
     return _then(_value.copyWith(
@@ -2498,6 +2502,10 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PlayerStatus,
       performance: null == performance
           ? _value.performance
           : performance // ignore: cast_nullable_to_non_nullable
@@ -2514,7 +2522,8 @@ abstract class _$$MatchPlayerRequestImplCopyWith<$Res>
       __$$MatchPlayerRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, List<PlayerPerformance> performance});
+  $Res call(
+      {String id, PlayerStatus status, List<PlayerPerformance> performance});
 }
 
 /// @nodoc
@@ -2529,6 +2538,7 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? status = null,
     Object? performance = null,
   }) {
     return _then(_$MatchPlayerRequestImpl(
@@ -2536,6 +2546,10 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PlayerStatus,
       performance: null == performance
           ? _value._performance
           : performance // ignore: cast_nullable_to_non_nullable
@@ -2549,7 +2563,9 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
   const _$MatchPlayerRequestImpl(
-      {required this.id, final List<PlayerPerformance> performance = const []})
+      {required this.id,
+      this.status = PlayerStatus.played,
+      final List<PlayerPerformance> performance = const []})
       : _performance = performance;
 
   factory _$MatchPlayerRequestImpl.fromJson(Map<String, dynamic> json) =>
@@ -2557,7 +2573,12 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 
   @override
   final String id;
+  @override
+  @JsonKey()
+  final PlayerStatus status;
+// TODO: Remove after release
   final List<PlayerPerformance> _performance;
+// TODO: Remove after release
   @override
   @JsonKey()
   List<PlayerPerformance> get performance {
@@ -2568,7 +2589,7 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 
   @override
   String toString() {
-    return 'MatchPlayerRequest(id: $id, performance: $performance)';
+    return 'MatchPlayerRequest(id: $id, status: $status, performance: $performance)';
   }
 
   @override
@@ -2577,14 +2598,15 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
         (other.runtimeType == runtimeType &&
             other is _$MatchPlayerRequestImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.status, status) || other.status == status) &&
             const DeepCollectionEquality()
                 .equals(other._performance, _performance));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, const DeepCollectionEquality().hash(_performance));
+  int get hashCode => Object.hash(runtimeType, id, status,
+      const DeepCollectionEquality().hash(_performance));
 
   @JsonKey(ignore: true)
   @override
@@ -2604,6 +2626,7 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   const factory _MatchPlayerRequest(
       {required final String id,
+      final PlayerStatus status,
       final List<PlayerPerformance> performance}) = _$MatchPlayerRequestImpl;
 
   factory _MatchPlayerRequest.fromJson(Map<String, dynamic> json) =
@@ -2612,6 +2635,8 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   @override
   String get id;
   @override
+  PlayerStatus get status;
+  @override // TODO: Remove after release
   List<PlayerPerformance> get performance;
   @override
   @JsonKey(ignore: true)

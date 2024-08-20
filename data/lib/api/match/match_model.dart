@@ -212,6 +212,8 @@ class MatchPlayerRequest with _$MatchPlayerRequest {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchPlayerRequest({
     required String id,
+    @Default(PlayerStatus.played)
+    PlayerStatus status, // TODO: Remove after release
     @Default([]) List<PlayerPerformance> performance,
   }) = _MatchPlayerRequest;
 

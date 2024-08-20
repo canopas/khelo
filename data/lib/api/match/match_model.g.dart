@@ -309,6 +309,8 @@ Map<String, dynamic> _$$AddMatchTeamRequestImplToJson(
 _$MatchPlayerRequestImpl _$$MatchPlayerRequestImplFromJson(Map json) =>
     _$MatchPlayerRequestImpl(
       id: json['id'] as String,
+      status: $enumDecodeNullable(_$PlayerStatusEnumMap, json['status']) ??
+          PlayerStatus.played,
       performance: (json['performance'] as List<dynamic>?)
               ?.map((e) => PlayerPerformance.fromJson(
                   Map<String, dynamic>.from(e as Map)))
@@ -320,5 +322,6 @@ Map<String, dynamic> _$$MatchPlayerRequestImplToJson(
         _$MatchPlayerRequestImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'status': _$PlayerStatusEnumMap[instance.status]!,
       'performance': instance.performance.map((e) => e.toJson()).toList(),
     };
