@@ -27,6 +27,7 @@ mixin _$TeamModel {
   String? get profile_img_url => throw _privateConstructorUsedError;
   String? get created_by => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
+  @JsonKey(name: FireStoreConst.teamPlayers)
   List<TeamPlayer> get players => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -48,7 +49,7 @@ abstract class $TeamModelCopyWith<$Res> {
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
-      List<TeamPlayer> players});
+      @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
 }
 
 /// @nodoc
@@ -126,7 +127,7 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
-      List<TeamPlayer> players});
+      @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
 }
 
 /// @nodoc
@@ -198,6 +199,7 @@ class _$TeamModelImpl implements _TeamModel {
       this.profile_img_url,
       this.created_by,
       this.created_at,
+      @JsonKey(name: FireStoreConst.teamPlayers)
       final List<TeamPlayer> players = const []})
       : _players = players;
 
@@ -220,7 +222,7 @@ class _$TeamModelImpl implements _TeamModel {
   final DateTime? created_at;
   final List<TeamPlayer> _players;
   @override
-  @JsonKey()
+  @JsonKey(name: FireStoreConst.teamPlayers)
   List<TeamPlayer> get players {
     if (_players is EqualUnmodifiableListView) return _players;
     // ignore: implicit_dynamic_type
@@ -287,6 +289,7 @@ abstract class _TeamModel implements TeamModel {
       final String? profile_img_url,
       final String? created_by,
       final DateTime? created_at,
+      @JsonKey(name: FireStoreConst.teamPlayers)
       final List<TeamPlayer> players}) = _$TeamModelImpl;
 
   factory _TeamModel.fromJson(Map<String, dynamic> json) =
@@ -307,6 +310,7 @@ abstract class _TeamModel implements TeamModel {
   @override
   DateTime? get created_at;
   @override
+  @JsonKey(name: FireStoreConst.teamPlayers)
   List<TeamPlayer> get players;
   @override
   @JsonKey(ignore: true)

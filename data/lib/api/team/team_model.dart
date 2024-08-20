@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../utils/constant/firestore_constant.dart';
 import '../user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -19,6 +20,7 @@ abstract class TeamModel with _$TeamModel {
     String? profile_img_url,
     String? created_by,
     DateTime? created_at,
+    @JsonKey(name: FireStoreConst.teamPlayers)
     @Default([]) List<TeamPlayer> players,
   }) = _TeamModel;
 

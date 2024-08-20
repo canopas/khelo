@@ -153,7 +153,7 @@ class TeamService {
   Future<void> addPlayersToTeam(String teamId, List<TeamPlayer> players) async {
     try {
       await _teamsCollection.doc(teamId).update({
-        FireStoreConst.players:
+        FireStoreConst.teamPlayers:
             FieldValue.arrayUnion(players.map((e) => e.toJson()).toList()),
       });
     } catch (error, stack) {
@@ -167,7 +167,7 @@ class TeamService {
   ) async {
     try {
       await _teamsCollection.doc(teamId).update(
-        {FireStoreConst.players: players.map((e) => e.toJson()).toList()},
+        {FireStoreConst.teamPlayers: players.map((e) => e.toJson()).toList()},
       );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
