@@ -42,10 +42,10 @@ class ScoreDisplayView extends ConsumerWidget {
 
   Widget _teamName(
     BuildContext context, {
-    required bool batting,
+    required bool isBatting,
     String? inningString,
   }) {
-    final teamName = batting
+    final teamName = isBatting
         ? (battingTeamName ?? "") +
             (inningString != null ? " - $inningString" : "")
         : bowlingTeamName ?? "";
@@ -77,7 +77,7 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _teamName(context, batting: true, inningString: inningString),
+          _teamName(context, isBatting: true, inningString: inningString),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,7 +270,7 @@ class ScoreDisplayView extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _teamName(context, batting: false),
+            child: _teamName(context, isBatting: false),
           ),
           const SizedBox(height: 8),
           _bowlerNameView(

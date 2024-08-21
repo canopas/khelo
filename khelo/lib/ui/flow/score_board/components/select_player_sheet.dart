@@ -182,6 +182,21 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
             .where((element) => element.inning_id == state.currentInning?.id)
             .firstOrNull
             ?.status;
+
+        final isSelected = type == PlayerSelectionType.batsMan
+            ? [batsMan1?.player.id, batsMan2?.player.id]
+                .contains(player.player.id)
+            : bowler?.player.id == player.player.id;
+
+        final tag = status == PlayerStatus.injured &&
+                type == PlayerSelectionType.batsMan
+            ? context.l10n.score_board_injured_tag_title
+            : null;
+
+        final disableCell = status == PlayerStatus.injured &&
+            type == PlayerSelectionType.batsMan &&
+            !isEnabled;
+
         return UserCellView(
           title: player.player.name ?? context.l10n.common_anonymous_title,
           imageUrl: player.player.profile_img_url,
@@ -189,17 +204,9 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
           subtitle: showOverCount
               ? "(${context.l10n.match_list_overs_title(_getOverCount(state, player.player.id))})"
               : null,
-          isSelected: type == PlayerSelectionType.batsMan
-              ? [batsMan1?.player.id, batsMan2?.player.id]
-                  .contains(player.player.id)
-              : bowler?.player.id == player.player.id,
-          tag: status == PlayerStatus.injured &&
-                  type == PlayerSelectionType.batsMan
-              ? context.l10n.score_board_injured_tag_title
-              : null,
-          disableCell: status == PlayerStatus.injured &&
-              type == PlayerSelectionType.batsMan &&
-              !isEnabled,
+          isSelected: isSelected,
+          tag: tag,
+          disableCell: disableCell,
           onTap: () => setState(() {
             if (type == PlayerSelectionType.batsMan) {
               if (widget.playerSelectionType == PlayerSelectionType.all) {
