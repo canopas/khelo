@@ -10,10 +10,11 @@ part 'inning_model.g.dart';
 @freezed
 class InningModel with _$InningModel {
   const factory InningModel({
-    String? id,
+    required String id,
     required String match_id,
     required String team_id,
     @Default(0) double overs,
+    @Default(0) int index,
     @Default(0) int total_runs,
     @Default(0) int total_wickets,
     InningStatus? innings_status,

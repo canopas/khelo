@@ -63,8 +63,17 @@ class MatchDetailOversView extends ConsumerWidget {
       final nextOver = state.overList.elementAtOrNull(i + 1);
       if (nextOver?.inning_id != over.inning_id) {
         children.add(
-          _teamNameTitleView(context, state, over.inning_id,
-              state.firstInning?.id == over.inning_id ? 1 : 2),
+          _teamNameTitleView(
+              context,
+              state,
+              over.inning_id,
+              state.allInnings
+                      .where(
+                        (element) => element.id == over.inning_id,
+                      )
+                      .firstOrNull
+                      ?.index ??
+                  1),
         );
       } else {
         children.add(Divider(height: 32, color: context.colorScheme.outline));
@@ -133,9 +142,12 @@ class MatchDetailOversView extends ConsumerWidget {
   }
 
   String _getTeamNameByInningId(MatchDetailTabState state, String inningId) {
-    final teamId = state.firstInning?.id == inningId
-        ? state.firstInning?.team_id
-        : state.secondInning?.team_id;
+    final teamId = state.allInnings
+        .where(
+          (element) => element.id == inningId,
+        )
+        .firstOrNull
+        ?.team_id;
 
     final teamName = state.match?.teams
         .where((element) => element.team.id == teamId)

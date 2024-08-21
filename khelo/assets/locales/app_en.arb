@@ -50,6 +50,8 @@
   "common_run_out_title": "Run Out",
   "common_wickets_text": "Wickets",
   "common_end_match_title": "End Match",
+  "common_first_inning_title": "First inning",
+  "common_second_inning_title": "Second inning",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -626,8 +628,10 @@
       }
     }
   },
-  "score_board_need_run_text": "Need {run} in {ball}",
-  "@score_board_need_run_text": {
+  "score_board_need_run_text": "Need {count, plural, =0{{count} Runs} =1{{count} Run} other{{count} Runs}}",
+
+  "score_board_run_need_in_ball_text": "Need {run} in {ball}",
+  "@score_board_run_need_in_ball_text": {
     "description": "Need {run} in {ball}",
     "placeholders": {
       "run": {
