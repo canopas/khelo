@@ -20,8 +20,8 @@ final teamDetailStateProvider =
             ));
 
 class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
-  late StreamSubscription _teamStreamSubscription;
-  late StreamSubscription _matchListStreamSubscription;
+   StreamSubscription? _teamStreamSubscription;
+   StreamSubscription? _matchListStreamSubscription;
   final TeamService _teamService;
   final MatchService _matchService;
   String? teamId;
@@ -194,15 +194,15 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   }
 
   onResume() {
-    _teamStreamSubscription.cancel();
-    _matchListStreamSubscription.cancel();
+    _teamStreamSubscription?.cancel();
+    _matchListStreamSubscription?.cancel();
     loadTeamById();
   }
 
   @override
   void dispose() {
-    _teamStreamSubscription.cancel();
-    _matchListStreamSubscription.cancel();
+    _teamStreamSubscription?.cancel();
+    _matchListStreamSubscription?.cancel();
     super.dispose();
   }
 }

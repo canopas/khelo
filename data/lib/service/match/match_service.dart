@@ -565,8 +565,7 @@ class MatchService {
 
         return MatchPlayer(
           player: user,
-          status: matchPlayer.status,
-          index: matchPlayer.index,
+          performance: matchPlayer.performance,
         );
       }).toList();
 

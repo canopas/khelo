@@ -1075,8 +1075,7 @@ MatchPlayer _$MatchPlayerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayer {
   UserModel get player => throw _privateConstructorUsedError;
-  PlayerStatus get status => throw _privateConstructorUsedError;
-  int? get index => throw _privateConstructorUsedError;
+  List<PlayerPerformance> get performance => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1090,7 +1089,7 @@ abstract class $MatchPlayerCopyWith<$Res> {
           MatchPlayer value, $Res Function(MatchPlayer) then) =
       _$MatchPlayerCopyWithImpl<$Res, MatchPlayer>;
   @useResult
-  $Res call({UserModel player, PlayerStatus status, int? index});
+  $Res call({UserModel player, List<PlayerPerformance> performance});
 
   $UserModelCopyWith<$Res> get player;
 }
@@ -1109,22 +1108,17 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
   @override
   $Res call({
     Object? player = null,
-    Object? status = null,
-    Object? index = freezed,
+    Object? performance = null,
   }) {
     return _then(_value.copyWith(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PlayerStatus,
-      index: freezed == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int?,
+      performance: null == performance
+          ? _value.performance
+          : performance // ignore: cast_nullable_to_non_nullable
+              as List<PlayerPerformance>,
     ) as $Val);
   }
 
@@ -1145,7 +1139,7 @@ abstract class _$$MatchPlayerImplCopyWith<$Res>
       __$$MatchPlayerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UserModel player, PlayerStatus status, int? index});
+  $Res call({UserModel player, List<PlayerPerformance> performance});
 
   @override
   $UserModelCopyWith<$Res> get player;
@@ -1163,22 +1157,17 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? player = null,
-    Object? status = null,
-    Object? index = freezed,
+    Object? performance = null,
   }) {
     return _then(_$MatchPlayerImpl(
       player: null == player
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as PlayerStatus,
-      index: freezed == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int?,
+      performance: null == performance
+          ? _value._performance
+          : performance // ignore: cast_nullable_to_non_nullable
+              as List<PlayerPerformance>,
     ));
   }
 }
@@ -1187,22 +1176,27 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MatchPlayerImpl implements _MatchPlayer {
   const _$MatchPlayerImpl(
-      {required this.player, this.status = PlayerStatus.yetToPlay, this.index});
+      {required this.player,
+      final List<PlayerPerformance> performance = const []})
+      : _performance = performance;
 
   factory _$MatchPlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$MatchPlayerImplFromJson(json);
 
   @override
   final UserModel player;
+  final List<PlayerPerformance> _performance;
   @override
   @JsonKey()
-  final PlayerStatus status;
-  @override
-  final int? index;
+  List<PlayerPerformance> get performance {
+    if (_performance is EqualUnmodifiableListView) return _performance;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_performance);
+  }
 
   @override
   String toString() {
-    return 'MatchPlayer(player: $player, status: $status, index: $index)';
+    return 'MatchPlayer(player: $player, performance: $performance)';
   }
 
   @override
@@ -1211,13 +1205,14 @@ class _$MatchPlayerImpl implements _MatchPlayer {
         (other.runtimeType == runtimeType &&
             other is _$MatchPlayerImpl &&
             (identical(other.player, player) || other.player == player) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.index, index) || other.index == index));
+            const DeepCollectionEquality()
+                .equals(other._performance, _performance));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, player, status, index);
+  int get hashCode => Object.hash(
+      runtimeType, player, const DeepCollectionEquality().hash(_performance));
 
   @JsonKey(ignore: true)
   @override
@@ -1236,8 +1231,7 @@ class _$MatchPlayerImpl implements _MatchPlayer {
 abstract class _MatchPlayer implements MatchPlayer {
   const factory _MatchPlayer(
       {required final UserModel player,
-      final PlayerStatus status,
-      final int? index}) = _$MatchPlayerImpl;
+      final List<PlayerPerformance> performance}) = _$MatchPlayerImpl;
 
   factory _MatchPlayer.fromJson(Map<String, dynamic> json) =
       _$MatchPlayerImpl.fromJson;
@@ -1245,12 +1239,184 @@ abstract class _MatchPlayer implements MatchPlayer {
   @override
   UserModel get player;
   @override
-  PlayerStatus get status;
+  List<PlayerPerformance> get performance;
+  @override
+  @JsonKey(ignore: true)
+  _$$MatchPlayerImplCopyWith<_$MatchPlayerImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+PlayerPerformance _$PlayerPerformanceFromJson(Map<String, dynamic> json) {
+  return _PlayerPerformance.fromJson(json);
+}
+
+/// @nodoc
+mixin _$PlayerPerformance {
+  String get inning_id => throw _privateConstructorUsedError;
+  PlayerStatus? get status => throw _privateConstructorUsedError;
+  int? get index => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $PlayerPerformanceCopyWith<PlayerPerformance> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $PlayerPerformanceCopyWith<$Res> {
+  factory $PlayerPerformanceCopyWith(
+          PlayerPerformance value, $Res Function(PlayerPerformance) then) =
+      _$PlayerPerformanceCopyWithImpl<$Res, PlayerPerformance>;
+  @useResult
+  $Res call({String inning_id, PlayerStatus? status, int? index});
+}
+
+/// @nodoc
+class _$PlayerPerformanceCopyWithImpl<$Res, $Val extends PlayerPerformance>
+    implements $PlayerPerformanceCopyWith<$Res> {
+  _$PlayerPerformanceCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? inning_id = null,
+    Object? status = freezed,
+    Object? index = freezed,
+  }) {
+    return _then(_value.copyWith(
+      inning_id: null == inning_id
+          ? _value.inning_id
+          : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PlayerStatus?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$PlayerPerformanceImplCopyWith<$Res>
+    implements $PlayerPerformanceCopyWith<$Res> {
+  factory _$$PlayerPerformanceImplCopyWith(_$PlayerPerformanceImpl value,
+          $Res Function(_$PlayerPerformanceImpl) then) =
+      __$$PlayerPerformanceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String inning_id, PlayerStatus? status, int? index});
+}
+
+/// @nodoc
+class __$$PlayerPerformanceImplCopyWithImpl<$Res>
+    extends _$PlayerPerformanceCopyWithImpl<$Res, _$PlayerPerformanceImpl>
+    implements _$$PlayerPerformanceImplCopyWith<$Res> {
+  __$$PlayerPerformanceImplCopyWithImpl(_$PlayerPerformanceImpl _value,
+      $Res Function(_$PlayerPerformanceImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? inning_id = null,
+    Object? status = freezed,
+    Object? index = freezed,
+  }) {
+    return _then(_$PlayerPerformanceImpl(
+      inning_id: null == inning_id
+          ? _value.inning_id
+          : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as PlayerStatus?,
+      index: freezed == index
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$PlayerPerformanceImpl implements _PlayerPerformance {
+  const _$PlayerPerformanceImpl(
+      {required this.inning_id, this.status, this.index});
+
+  factory _$PlayerPerformanceImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerPerformanceImplFromJson(json);
+
+  @override
+  final String inning_id;
+  @override
+  final PlayerStatus? status;
+  @override
+  final int? index;
+
+  @override
+  String toString() {
+    return 'PlayerPerformance(inning_id: $inning_id, status: $status, index: $index)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$PlayerPerformanceImpl &&
+            (identical(other.inning_id, inning_id) ||
+                other.inning_id == inning_id) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.index, index) || other.index == index));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, inning_id, status, index);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PlayerPerformanceImplCopyWith<_$PlayerPerformanceImpl> get copyWith =>
+      __$$PlayerPerformanceImplCopyWithImpl<_$PlayerPerformanceImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PlayerPerformanceImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _PlayerPerformance implements PlayerPerformance {
+  const factory _PlayerPerformance(
+      {required final String inning_id,
+      final PlayerStatus? status,
+      final int? index}) = _$PlayerPerformanceImpl;
+
+  factory _PlayerPerformance.fromJson(Map<String, dynamic> json) =
+      _$PlayerPerformanceImpl.fromJson;
+
+  @override
+  String get inning_id;
+  @override
+  PlayerStatus? get status;
   @override
   int? get index;
   @override
   @JsonKey(ignore: true)
-  _$$MatchPlayerImplCopyWith<_$MatchPlayerImpl> get copyWith =>
+  _$$PlayerPerformanceImplCopyWith<_$PlayerPerformanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -2294,8 +2460,9 @@ MatchPlayerRequest _$MatchPlayerRequestFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MatchPlayerRequest {
   String get id => throw _privateConstructorUsedError;
-  PlayerStatus get status => throw _privateConstructorUsedError;
-  int? get index => throw _privateConstructorUsedError;
+  PlayerStatus get status =>
+      throw _privateConstructorUsedError; // TODO: Remove after release
+  List<PlayerPerformance> get performance => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -2309,7 +2476,8 @@ abstract class $MatchPlayerRequestCopyWith<$Res> {
           MatchPlayerRequest value, $Res Function(MatchPlayerRequest) then) =
       _$MatchPlayerRequestCopyWithImpl<$Res, MatchPlayerRequest>;
   @useResult
-  $Res call({String id, PlayerStatus status, int? index});
+  $Res call(
+      {String id, PlayerStatus status, List<PlayerPerformance> performance});
 }
 
 /// @nodoc
@@ -2327,7 +2495,7 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
   $Res call({
     Object? id = null,
     Object? status = null,
-    Object? index = freezed,
+    Object? performance = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -2338,10 +2506,10 @@ class _$MatchPlayerRequestCopyWithImpl<$Res, $Val extends MatchPlayerRequest>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PlayerStatus,
-      index: freezed == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int?,
+      performance: null == performance
+          ? _value.performance
+          : performance // ignore: cast_nullable_to_non_nullable
+              as List<PlayerPerformance>,
     ) as $Val);
   }
 }
@@ -2354,7 +2522,8 @@ abstract class _$$MatchPlayerRequestImplCopyWith<$Res>
       __$$MatchPlayerRequestImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, PlayerStatus status, int? index});
+  $Res call(
+      {String id, PlayerStatus status, List<PlayerPerformance> performance});
 }
 
 /// @nodoc
@@ -2370,7 +2539,7 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? status = null,
-    Object? index = freezed,
+    Object? performance = null,
   }) {
     return _then(_$MatchPlayerRequestImpl(
       id: null == id
@@ -2381,10 +2550,10 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as PlayerStatus,
-      index: freezed == index
-          ? _value.index
-          : index // ignore: cast_nullable_to_non_nullable
-              as int?,
+      performance: null == performance
+          ? _value._performance
+          : performance // ignore: cast_nullable_to_non_nullable
+              as List<PlayerPerformance>,
     ));
   }
 }
@@ -2394,7 +2563,10 @@ class __$$MatchPlayerRequestImplCopyWithImpl<$Res>
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
   const _$MatchPlayerRequestImpl(
-      {required this.id, required this.status, this.index});
+      {required this.id,
+      this.status = PlayerStatus.played,
+      final List<PlayerPerformance> performance = const []})
+      : _performance = performance;
 
   factory _$MatchPlayerRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$MatchPlayerRequestImplFromJson(json);
@@ -2402,13 +2574,22 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
   @override
   final String id;
   @override
+  @JsonKey()
   final PlayerStatus status;
+// TODO: Remove after release
+  final List<PlayerPerformance> _performance;
+// TODO: Remove after release
   @override
-  final int? index;
+  @JsonKey()
+  List<PlayerPerformance> get performance {
+    if (_performance is EqualUnmodifiableListView) return _performance;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_performance);
+  }
 
   @override
   String toString() {
-    return 'MatchPlayerRequest(id: $id, status: $status, index: $index)';
+    return 'MatchPlayerRequest(id: $id, status: $status, performance: $performance)';
   }
 
   @override
@@ -2418,12 +2599,14 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
             other is _$MatchPlayerRequestImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.index, index) || other.index == index));
+            const DeepCollectionEquality()
+                .equals(other._performance, _performance));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, status, index);
+  int get hashCode => Object.hash(runtimeType, id, status,
+      const DeepCollectionEquality().hash(_performance));
 
   @JsonKey(ignore: true)
   @override
@@ -2443,8 +2626,8 @@ class _$MatchPlayerRequestImpl implements _MatchPlayerRequest {
 abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   const factory _MatchPlayerRequest(
       {required final String id,
-      required final PlayerStatus status,
-      final int? index}) = _$MatchPlayerRequestImpl;
+      final PlayerStatus status,
+      final List<PlayerPerformance> performance}) = _$MatchPlayerRequestImpl;
 
   factory _MatchPlayerRequest.fromJson(Map<String, dynamic> json) =
       _$MatchPlayerRequestImpl.fromJson;
@@ -2453,8 +2636,8 @@ abstract class _MatchPlayerRequest implements MatchPlayerRequest {
   String get id;
   @override
   PlayerStatus get status;
-  @override
-  int? get index;
+  @override // TODO: Remove after release
+  List<PlayerPerformance> get performance;
   @override
   @JsonKey(ignore: true)
   _$$MatchPlayerRequestImplCopyWith<_$MatchPlayerRequestImpl> get copyWith =>

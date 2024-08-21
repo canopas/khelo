@@ -81,17 +81,26 @@ class MatchDetailScorecardView extends ConsumerWidget {
               final batsmen = _getBatsmen(inningOvers);
               final bowler = _getBowlers(inningOvers);
 
-              final yetToPlayPlayers = state.match?.teams
+              final teamSquad = state.match?.teams
                   .where((element) => element.team.id == overs?.team_id)
                   .firstOrNull
-                  ?.squad
+                  ?.squad;
+
+              final yetToPlayPlayers = teamSquad
+                  ?.where((element) => element.performance
+                      .where((element) =>
+                          element.inning_id == overs?.inning_id &&
+                          element.status == PlayerStatus.yetToPlay)
+                      .isNotEmpty)
                   .toList();
 
               return _teamTitleView(context,
                   teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
+                  inningString: _getInningStringByInningId(
+                      context, state, overs?.inning_id ?? ""),
                   over: overs ?? const OverSummary(),
-                  initiallyExpanded: state.expandedTeamScorecard
-                      .contains(inningOvers.first.team_id),
+                  initiallyExpanded: state.expandedInningsScorecard
+                      .contains(inningOvers.first.inning_id),
                   children: [
                     _dataTable(context, batsmen: batsmen),
                     ..._buildMatchTotalView(context,
@@ -103,7 +112,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                   ],
                   onExpansionChanged: (isExpanded) =>
                       notifier.onScorecardExpansionChange(
-                          overs?.team_id ?? "", isExpanded));
+                          overs?.inning_id ?? "", isExpanded));
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),
           ),
@@ -126,6 +135,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _teamTitleView(
     BuildContext context, {
     required String teamName,
+    String? inningString,
     required OverSummary over,
     required bool initiallyExpanded,
     required List<Widget> children,
@@ -156,12 +166,25 @@ class MatchDetailScorecardView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                teamName,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.onPrimary),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    teamName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.subtitle1
+                        .copyWith(color: context.colorScheme.onPrimary),
+                  ),
+                  if (inningString != null)
+                    Text(
+                      inningString,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.onPrimary),
+                    ),
+                ],
               ),
             ),
             Text.rich(
@@ -584,6 +607,24 @@ class MatchDetailScorecardView extends ConsumerWidget {
             ?.team
             .name ??
         "";
+  }
+
+  String? _getInningStringByInningId(
+      BuildContext context, MatchDetailTabState state, String inningId) {
+    if (state.match?.match_type != MatchType.testMatch) {
+      return null;
+    }
+
+    final inningIndex = state.allInnings
+        .where((element) => element.id == inningId)
+        .firstOrNull
+        ?.index;
+
+    if (inningIndex == 1 || inningIndex == 2) {
+      return context.l10n.common_first_inning_title;
+    } else {
+      return context.l10n.common_second_inning_title;
+    }
   }
 
   List<BatsmanSummary> _getBatsmen(List<OverSummary> inningOvers) {

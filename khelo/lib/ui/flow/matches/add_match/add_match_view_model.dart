@@ -140,12 +140,16 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
       final firstSquad = state.squadA
               ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id, status: e.status, index: e.index))
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final secondSquad = state.squadB
               ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id, status: e.status, index: e.index))
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final allPlayers = firstSquad.map((e) => e.id).toList();

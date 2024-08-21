@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../api/ball_score/ball_score_model.dart';
-import '../../errors/app_error.dart';
-import '../innings/inning_service.dart';
-import '../match/match_service.dart';
-import '../../storage/app_preferences.dart';
-import '../../utils/constant/firestore_constant.dart';
+import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/errors/app_error.dart';
+import 'package:data/extensions/double_extensions.dart';
+import 'package:data/service/innings/inning_service.dart';
+import 'package:data/service/match/match_service.dart';
+import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/match/match_model.dart';
@@ -51,6 +52,10 @@ class BallScoreService {
     required String bowlingTeamInningId,
     required int totalWicketTaken,
     int? totalBowlingTeamRuns,
+    double otherInningOver = 0,
+    int otherTotalRuns = 0,
+    int otherTotalWicketTaken = 0,
+    int otherTotalBowlingTeamRuns = 0,
     MatchPlayerRequest? updatedPlayer,
   }) async {
     try {
@@ -60,17 +65,17 @@ class BallScoreService {
             double.parse("${score.over_number - 1}.${score.ball_number}");
 
         // update matchTeamScore and squad(if needed)
-        await _matchService.updateTeamScoreAndSquadViaTransaction(
-          transaction,
-          matchId: matchId,
-          battingTeamId: battingTeamId,
-          totalRun: totalRuns,
-          over: overCount,
-          bowlingTeamId: bowlingTeamId,
-          wicket: totalWicketTaken,
-          runs: totalBowlingTeamRuns,
-          updatedMatchPlayer: updatedPlayer != null ? [updatedPlayer] : null,
-        );
+        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
+            matchId: matchId,
+            battingTeamId: battingTeamId,
+            totalRun: otherTotalRuns + totalRuns,
+            over: overCount.add(otherInningOver.toBalls()),
+            bowlingTeamId: bowlingTeamId,
+            wicket: otherTotalWicketTaken + totalWicketTaken,
+            runs: totalBowlingTeamRuns != null
+                ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
+                : null,
+            updatedMatchPlayer: updatedPlayer != null ? [updatedPlayer] : null);
         // update innings score detail
         _inningsService.updateInningScoreDetailViaTransaction(
           transaction,
@@ -140,22 +145,26 @@ class BallScoreService {
     required int totalWicketTaken,
     double? overCount,
     int? totalBowlingTeamRuns,
+    double otherInningOver = 0,
+    int otherTotalRuns = 0,
+    int otherTotalWicketTaken = 0,
+    int otherTotalBowlingTeamRuns = 0,
     List<MatchPlayerRequest>? updatedPlayer,
   }) async {
     try {
       _firestore.runTransaction((transaction) async {
         // update matchTeamScore and squad(if needed)
-        await _matchService.updateTeamScoreAndSquadViaTransaction(
-          transaction,
-          matchId: matchId,
-          battingTeamId: battingTeamId,
-          totalRun: totalRuns,
-          over: overCount,
-          bowlingTeamId: bowlingTeamId,
-          wicket: totalWicketTaken,
-          runs: totalBowlingTeamRuns,
-          updatedMatchPlayer: updatedPlayer,
-        );
+        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
+            matchId: matchId,
+            battingTeamId: battingTeamId,
+            totalRun: otherTotalRuns + totalRuns,
+            over: overCount?.add(otherInningOver.toBalls()),
+            bowlingTeamId: bowlingTeamId,
+            wicket: otherTotalWicketTaken + totalWicketTaken,
+            runs: totalBowlingTeamRuns != null
+                ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
+                : null,
+            updatedMatchPlayer: updatedPlayer);
 
         // update innings score detail
         _inningsService.updateInningScoreDetailViaTransaction(

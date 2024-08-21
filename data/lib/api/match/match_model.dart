@@ -129,12 +129,23 @@ class MatchResult {
 class MatchPlayer with _$MatchPlayer {
   const factory MatchPlayer({
     required UserModel player,
-    @Default(PlayerStatus.yetToPlay) PlayerStatus status,
-    int? index,
+    @Default([]) List<PlayerPerformance> performance,
   }) = _MatchPlayer;
 
   factory MatchPlayer.fromJson(Map<String, dynamic> json) =>
       _$MatchPlayerFromJson(json);
+}
+
+@freezed
+class PlayerPerformance with _$PlayerPerformance {
+  const factory PlayerPerformance({
+    required String inning_id,
+    PlayerStatus? status,
+    int? index,
+  }) = _PlayerPerformance;
+
+  factory PlayerPerformance.fromJson(Map<String, dynamic> json) =>
+      _$PlayerPerformanceFromJson(json);
 }
 
 @freezed
@@ -203,8 +214,9 @@ class MatchPlayerRequest with _$MatchPlayerRequest {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchPlayerRequest({
     required String id,
-    required PlayerStatus status,
-    int? index,
+    @Default(PlayerStatus.played)
+    PlayerStatus status, // TODO: Remove after release
+    @Default([]) List<PlayerPerformance> performance,
   }) = _MatchPlayerRequest;
 
   factory MatchPlayerRequest.fromJson(Map<String, dynamic> json) =>
