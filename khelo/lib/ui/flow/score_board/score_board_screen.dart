@@ -247,11 +247,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showMatchCompleteSheet(BuildContext context) async {
-    final endMatch = await MatchCompleteSheet.show<bool>(
-      context,
-      firstTeamRunStat: notifier.getTeamRunDetails(true),
-      secondTeamRunStat: notifier.getTeamRunDetails(false),
-    );
+    final endMatch = await MatchCompleteSheet.show<bool>(context);
     if (endMatch != null && context.mounted) {
       if (endMatch) {
         notifier.endMatch();
