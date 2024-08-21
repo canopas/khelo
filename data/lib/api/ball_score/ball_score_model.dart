@@ -24,6 +24,7 @@ class BallScoreModel with _$BallScoreModel {
     ExtrasType? extras_type,
     int? extras_awarded,
     WicketType? wicket_type,
+    FieldingPositionType? fielding_position,
     String? player_out_id,
     String? wicket_taker_id,
     required bool is_four,
@@ -73,6 +74,59 @@ enum WicketType {
   final int value;
 
   const WicketType(this.value);
+}
+
+@JsonEnum(valueField: "value")
+enum FieldingPositionType {
+  deepMidWicket(1),
+  longOn(2),
+  longOff(3),
+  deepCover(4),
+  deepPoint(5),
+  thirdMan(6),
+  deepFineLeg(7),
+  deepSquareLeg(8);
+
+  final int value;
+
+  const FieldingPositionType(this.value);
+}
+
+enum Distance {
+  // do not change the order as position calculation depends on distance index
+  short(3),
+  mid(2),
+  afterMid(1.4),
+  boundary(1.15);
+
+  final double divisor;
+
+  const Distance(this.divisor);
+}
+
+enum Side {
+  off(180),
+  leg(0);
+
+  final double angle;
+
+  const Side(this.angle);
+}
+
+class FieldingPosition {
+  FieldingPositionType type;
+  double startAngle;
+  double endAngle;
+  Distance distance;
+  bool showOnScreen;
+
+  FieldingPosition(
+    this.type, {
+    required this.startAngle,
+    required this.endAngle,
+    this.distance = Distance.boundary,
+    this.showOnScreen = true,
+  });
 }
 
 @freezed

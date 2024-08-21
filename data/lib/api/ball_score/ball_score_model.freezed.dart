@@ -31,6 +31,8 @@ mixin _$BallScoreModel {
   ExtrasType? get extras_type => throw _privateConstructorUsedError;
   int? get extras_awarded => throw _privateConstructorUsedError;
   WicketType? get wicket_type => throw _privateConstructorUsedError;
+  FieldingPositionType? get fielding_position =>
+      throw _privateConstructorUsedError;
   String? get player_out_id => throw _privateConstructorUsedError;
   String? get wicket_taker_id => throw _privateConstructorUsedError;
   bool get is_four => throw _privateConstructorUsedError;
@@ -61,6 +63,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
       ExtrasType? extras_type,
       int? extras_awarded,
       WicketType? wicket_type,
+      FieldingPositionType? fielding_position,
       String? player_out_id,
       String? wicket_taker_id,
       bool is_four,
@@ -92,6 +95,7 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
     Object? wicket_type = freezed,
+    Object? fielding_position = freezed,
     Object? player_out_id = freezed,
     Object? wicket_taker_id = freezed,
     Object? is_four = null,
@@ -143,6 +147,10 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
           ? _value.wicket_type
           : wicket_type // ignore: cast_nullable_to_non_nullable
               as WicketType?,
+      fielding_position: freezed == fielding_position
+          ? _value.fielding_position
+          : fielding_position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
       player_out_id: freezed == player_out_id
           ? _value.player_out_id
           : player_out_id // ignore: cast_nullable_to_non_nullable
@@ -187,6 +195,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
       ExtrasType? extras_type,
       int? extras_awarded,
       WicketType? wicket_type,
+      FieldingPositionType? fielding_position,
       String? player_out_id,
       String? wicket_taker_id,
       bool is_four,
@@ -216,6 +225,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
     Object? extras_type = freezed,
     Object? extras_awarded = freezed,
     Object? wicket_type = freezed,
+    Object? fielding_position = freezed,
     Object? player_out_id = freezed,
     Object? wicket_taker_id = freezed,
     Object? is_four = null,
@@ -267,6 +277,10 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
           ? _value.wicket_type
           : wicket_type // ignore: cast_nullable_to_non_nullable
               as WicketType?,
+      fielding_position: freezed == fielding_position
+          ? _value.fielding_position
+          : fielding_position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
       player_out_id: freezed == player_out_id
           ? _value.player_out_id
           : player_out_id // ignore: cast_nullable_to_non_nullable
@@ -306,6 +320,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       this.extras_type,
       this.extras_awarded,
       this.wicket_type,
+      this.fielding_position,
       this.player_out_id,
       this.wicket_taker_id,
       required this.is_four,
@@ -338,6 +353,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   @override
   final WicketType? wicket_type;
   @override
+  final FieldingPositionType? fielding_position;
+  @override
   final String? player_out_id;
   @override
   final String? wicket_taker_id;
@@ -350,7 +367,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
 
   @override
   String toString() {
-    return 'BallScoreModel(id: $id, inning_id: $inning_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
+    return 'BallScoreModel(id: $id, inning_id: $inning_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, fielding_position: $fielding_position, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
   }
 
   @override
@@ -379,6 +396,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
                 other.extras_awarded == extras_awarded) &&
             (identical(other.wicket_type, wicket_type) ||
                 other.wicket_type == wicket_type) &&
+            (identical(other.fielding_position, fielding_position) ||
+                other.fielding_position == fielding_position) &&
             (identical(other.player_out_id, player_out_id) ||
                 other.player_out_id == player_out_id) &&
             (identical(other.wicket_taker_id, wicket_taker_id) ||
@@ -403,6 +422,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       extras_type,
       extras_awarded,
       wicket_type,
+      fielding_position,
       player_out_id,
       wicket_taker_id,
       is_four,
@@ -437,6 +457,7 @@ abstract class _BallScoreModel implements BallScoreModel {
       final ExtrasType? extras_type,
       final int? extras_awarded,
       final WicketType? wicket_type,
+      final FieldingPositionType? fielding_position,
       final String? player_out_id,
       final String? wicket_taker_id,
       required final bool is_four,
@@ -468,6 +489,8 @@ abstract class _BallScoreModel implements BallScoreModel {
   int? get extras_awarded;
   @override
   WicketType? get wicket_type;
+  @override
+  FieldingPositionType? get fielding_position;
   @override
   String? get player_out_id;
   @override

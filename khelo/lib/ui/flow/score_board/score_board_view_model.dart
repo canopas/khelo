@@ -259,6 +259,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     state = state.copyWith(
       bowler: bowler,
       overCount: isAfterUndo ? state.overCount : lastBall?.over_number ?? 1,
+      position: null,
+      tappedButton: null,
+      isLongTap: null,
       ballCount: isAfterUndo && lastBall?.ball_number == 6
           ? 0
           : lastBall?.ball_number ?? 0,
@@ -391,22 +394,33 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   }
 
   void onScoreButtonTap(ScoreButton btn, bool isLongTap) {
-    if (state.isActionInProgress) {
+    if (state.isActionInProgress) return;
+    state = state.copyWith(
+      tappedButton: btn,
+      isLongTap: isLongTap,
+    );
+    if (showFieldingPositionSheet(btn)) {
+      state = state.copyWith(showSelectFieldingPositionSheet: DateTime.now());
       return;
     }
+
+    _handleAddingBall(btn, isLongTap);
+  }
+
+  void _handleAddingBall(ScoreButton btn, bool isLongTap) {
     switch (btn) {
       case ScoreButton.zero:
-        addBall(run: 0);
+        addBall(run: 0, position: state.position);
       case ScoreButton.one:
-        addBall(run: 1);
+        addBall(run: 1, position: state.position);
       case ScoreButton.two:
-        addBall(run: 2);
+        addBall(run: 2, position: state.position);
       case ScoreButton.three:
-        addBall(run: 3);
+        addBall(run: 3, position: state.position);
       case ScoreButton.four:
-        addBall(run: 4, isFour: !isLongTap);
+        addBall(run: 4, isFour: !isLongTap, position: state.position);
       case ScoreButton.six:
-        addBall(run: 6, isSix: !isLongTap);
+        addBall(run: 6, isSix: !isLongTap, position: state.position);
       case ScoreButton.fiveOrSeven:
         state = state.copyWith(showAddExtraSheetForFiveSeven: DateTime.now());
       case ScoreButton.undo:
@@ -423,15 +437,27 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showAddExtraSheetForNoBall: DateTime.now());
       case ScoreButton.wideBall:
         addBall(
-          run: 0,
-          extrasType: ExtrasType.wide,
-          extra: 1,
-        );
+            run: 0,
+            extrasType: ExtrasType.wide,
+            extra: 1,
+            position: state.position);
       case ScoreButton.bye:
         state = state.copyWith(showAddExtraSheetForBye: DateTime.now());
       case ScoreButton.legBye:
         state = state.copyWith(showAddExtraSheetForLegBye: DateTime.now());
     }
+  }
+
+  bool showFieldingPositionSheet(ScoreButton tapped) {
+    bool isDotBall = tapped == ScoreButton.zero;
+    bool isLessRuns = tapped == ScoreButton.one ||
+        tapped == ScoreButton.two ||
+        tapped == ScoreButton.three;
+
+    return (tapped != ScoreButton.undo &&
+        ((isDotBall && state.showForDotBall) ||
+            (isLessRuns && state.showForLessRun) ||
+            (!isDotBall && !isLessRuns)));
   }
 
   Future<void> addBall({
@@ -444,6 +470,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String? playerOutId,
     String? wicketTakerId,
     WicketType? wicketType,
+    FieldingPositionType? position,
   }) async {
     state = state.copyWith(actionError: null, isActionInProgress: true);
     try {
@@ -496,6 +523,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           runs_scored: run,
           wicket_taker_id: wicketTakerId,
           wicket_type: wicketType,
+          fielding_position: position,
           time: DateTime.now());
       int wicketCount = state.otherInning!.total_wickets;
       if (wicketType != WicketType.retiredHurt && wicketType != null) {
@@ -939,13 +967,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void handlePenaltyRun(({int runs, String teamId}) penalty) {
     addBall(
-      run: 0,
-      inningId: state.otherInning?.team_id == penalty.teamId
-          ? state.otherInning?.team_id
-          : null,
-      extra: penalty.runs,
-      extrasType: ExtrasType.penaltyRun,
-    );
+        run: 0,
+        inningId: state.otherInning?.team_id == penalty.teamId
+            ? state.otherInning?.team_id
+            : null,
+        extra: penalty.runs,
+        extrasType: ExtrasType.penaltyRun,
+        position: null);
   }
 
   void onReviewMatchResult(bool contWithInjPlayer) {
@@ -1121,6 +1149,20 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     return teamPlayers ?? [];
   }
 
+  void onFieldingPositionSelected(
+    ScoreButton tapped,
+    bool isLongTapped,
+    FieldingPositionType position,
+    bool showForLessRun,
+    bool showForDotBall,
+  ) {
+    state = state.copyWith(
+        position: position,
+        showForDotBall: showForDotBall,
+        showForLessRun: showForLessRun);
+    _handleAddingBall(tapped, isLongTapped);
+  }
+
   List<BallScoreModel> getCurrentOverBall() {
     final list = state.currentScoresList
         .where((element) =>
@@ -1159,6 +1201,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     MatchPlayer? bowler,
     String? strikerId,
     List<MatchPlayer>? batsMans,
+    DateTime? showSelectFieldingPositionSheet,
     DateTime? showSelectBatsManSheet,
     DateTime? showSelectBowlerSheet,
     DateTime? showSelectBowlerAndBatsManSheet,
@@ -1177,6 +1220,9 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showAddPenaltyRunSheet,
     DateTime? showEndMatchSheet,
     DateTime? invalidUndoToast,
+    ScoreButton? tappedButton,
+    bool? isLongTap,
+    FieldingPositionType? position,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,
     @Default(false) bool loading,
@@ -1185,6 +1231,8 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     @Default(false) bool ballScoreQueryListenerSet,
     @Default(true) bool isMatchUpdated,
     @Default(false) bool isActionInProgress,
+    @Default(true) bool showForLessRun,
+    @Default(true) bool showForDotBall,
     @Default(0) int ballCount,
     @Default(1) int overCount,
     @Default(0) int lastAssignedIndex,

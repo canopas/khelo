@@ -17,15 +17,15 @@ import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
+import 'package:khelo/ui/flow/score_board/components/select_fielding_position_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/more_option_button.dart';
-import 'package:style/extensions/context_extensions.dart';
+import 'package:style/button/toggle_button.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/theme/colors.dart';
 
 import 'components/inning_complete_sheet.dart';
 
@@ -53,14 +53,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     final state = ref.watch(scoreBoardStateProvider);
 
     _observeActionError(context, ref);
-    _observeShowSelectBatsManSheet(
-        context, ref, state.continueWithInjuredPlayers);
-    _observeShowSelectBowlerSheet(
-        context, ref, state.continueWithInjuredPlayers);
-    _observeShowSelectBowlerAndBatsManSheet(
-        context, ref, state.continueWithInjuredPlayers);
-    _observeShowSelectPlayerSheet(
-        context, ref, state.continueWithInjuredPlayers);
+    _observeShowSelectFieldingPositionSheet(context, ref);
+    _observeShowSelectBatsManSheet(context, ref);
+    _observeShowSelectBowlerSheet(context, ref);
+    _observeShowSelectBowlerAndBatsManSheet(context, ref);
+    _observeShowSelectPlayerSheet(context, ref);
     _observeShowSelectWicketTypeSheet(context, ref);
     _observeShowStrikerSelectionSheet(context, ref);
     _observeShowUndoBallConfirmationDialog(context, ref);
@@ -109,42 +106,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
                       }
                     },
                     child: option == MatchOption.continueWithInjuredPlayer
-                        ? _toggleButton(context, state)
+                        ? toggleButton(
+                            context,
+                            defaultEnabled: state.continueWithInjuredPlayers,
+                            onTap: notifier.onContinueWithInjuredPlayersChange,
+                          )
                         : null,
                   ))
               .toList()),
-    );
-  }
-
-  Widget _toggleButton(
-    BuildContext context,
-    ScoreBoardViewState state,
-  ) {
-    bool isContinue = state.continueWithInjuredPlayers;
-
-    return StatefulBuilder(
-      builder: (context, setStateSwitch) {
-        return Theme(
-          data: context.brightness == Brightness.dark
-              ? materialThemeDataDark
-              : materialThemeDataLight,
-          child: SizedBox(
-            height: 22,
-            child: Switch(
-              inactiveTrackColor: context.colorScheme.containerHigh,
-              trackOutlineColor: WidgetStateColor.transparent,
-              thumbColor: WidgetStatePropertyAll(context.colorScheme.onPrimary),
-              value: isContinue,
-              onChanged: (value) {
-                setStateSwitch(() {
-                  isContinue = value;
-                  notifier.onContinueWithInjuredPlayersChange(value);
-                });
-              },
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -202,15 +171,16 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     }
   }
 
-  Future<void> _showSelectWicketTypeSheet(BuildContext context) async {
+  Future<void> _showSelectWicketTypeSheet(
+      BuildContext context, FieldingPositionType? position) async {
     final type = await SelectWicketTypeSheet.show<WicketType>(context);
     if (type != null && context.mounted) {
-      _onWicketTypeSelect(context, type);
+      _onWicketTypeSelect(context, type, position);
     }
   }
 
-  Future<void> _onWicketTypeSelect(
-      BuildContext context, WicketType type) async {
+  Future<void> _onWicketTypeSelect(BuildContext context, WicketType type,
+      FieldingPositionType? position) async {
     final outBatsMan = await StrikerSelectionSheet.show<UserModel>(
       context,
       isForStrikerSelection: false,
@@ -240,7 +210,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         extra: extra,
         playerOutId: outBatsMan?.id,
         wicketTakerId: wicketTakerId,
-        wicketType: type);
+        wicketType: type,
+        position: position);
   }
 
   Future<void> _showStrikerSelectionSheet(BuildContext context) async {
@@ -295,6 +266,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   Future<void> _showAddExtraSheet(
     BuildContext context,
     ExtrasType? extra,
+    FieldingPositionType? position,
   ) async {
     final extraData = await AddExtraSheet.show<(int, bool, bool)>(
       context,
@@ -308,20 +280,17 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
 
       if (extra == ExtrasType.noBall) {
         notifier.addBall(
-          run: notFromBat ? 0 : runs,
-          extrasType: ExtrasType.noBall,
-          extra: notFromBat ? 1 + runs : 1,
-          isFour: isBoundary && runs == 4,
-          isSix: isBoundary && runs == 6,
-        );
+            run: notFromBat ? 0 : runs,
+            extrasType: ExtrasType.noBall,
+            extra: notFromBat ? 1 + runs : 1,
+            isFour: isBoundary && runs == 4,
+            isSix: isBoundary && runs == 6,
+            position: position);
       } else if (extra == ExtrasType.legBye || extra == ExtrasType.bye) {
         notifier.addBall(
-          run: 0,
-          extrasType: extra,
-          extra: runs,
-        );
+            run: 0, extrasType: extra, extra: runs, position: position);
       } else {
-        notifier.addBall(run: runs);
+        notifier.addBall(run: runs, position: position);
       }
     }
   }
@@ -344,15 +313,39 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowSelectBatsManSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
+  void _observeShowSelectFieldingPositionSheet(
+      BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider
+            .select((value) => value.showSelectFieldingPositionSheet),
+        (previous, next) async {
+      if (next != null) {
+        final showForLessRun = ref.read(
+            scoreBoardStateProvider.select((value) => value.showForLessRun));
+        final showForDotBall = ref.read(
+            scoreBoardStateProvider.select((value) => value.showForDotBall));
+        final tappedButton = ref.read(
+            scoreBoardStateProvider.select((value) => value.tappedButton));
+        final isLongTapped = ref
+            .read(scoreBoardStateProvider.select((value) => value.isLongTap));
+        final result = await SelectFieldingPositionSheet.show<
+                (FieldingPositionType, bool, bool)>(context,
+            showForLessRun: !showForLessRun, showForDotBall: !showForDotBall);
+        if (context.mounted && result != null && tappedButton != null) {
+          notifier.onFieldingPositionSelected(tappedButton,
+              isLongTapped ?? false, result.$1, !result.$2, !result.$3);
+        }
+      }
+    });
+  }
+
+  void _observeShowSelectBatsManSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectBatsManSheet),
         (previous, next) {
       if (next != null) {
+        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
+            .select((value) => value.continueWithInjuredPlayers));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -362,15 +355,13 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowSelectBowlerSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
+  void _observeShowSelectBowlerSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectBowlerSheet),
         (previous, next) {
       if (next != null) {
+        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
+            .select((value) => value.continueWithInjuredPlayers));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -381,15 +372,14 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   void _observeShowSelectBowlerAndBatsManSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
+      BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider
             .select((value) => value.showSelectBowlerAndBatsManSheet),
         (previous, next) {
       if (next != null) {
+        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
+            .select((value) => value.continueWithInjuredPlayers));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -399,15 +389,13 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
-  void _observeShowSelectPlayerSheet(
-    BuildContext context,
-    WidgetRef ref,
-    bool continueWithInjuredPlayers,
-  ) {
+  void _observeShowSelectPlayerSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
         (previous, next) {
       if (next != null) {
+        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
+            .select((value) => value.continueWithInjuredPlayers));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -422,7 +410,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showSelectWicketTypeSheet), (previous, next) {
       if (next != null) {
-        _showSelectWicketTypeSheet(context);
+        final position =
+            ref.read(scoreBoardStateProvider.select((value) => value.position));
+        _showSelectWicketTypeSheet(context, position);
       }
     });
   }
@@ -493,7 +483,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showAddExtraSheetForNoBall), (previous, next) {
       if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.noBall);
+        final position =
+            ref.read(scoreBoardStateProvider.select((value) => value.position));
+        _showAddExtraSheet(context, ExtrasType.noBall, position);
       }
     });
   }
@@ -503,7 +495,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showAddExtraSheetForLegBye), (previous, next) {
       if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.legBye);
+        final position =
+            ref.read(scoreBoardStateProvider.select((value) => value.position));
+        _showAddExtraSheet(context, ExtrasType.legBye, position);
       }
     });
   }
@@ -513,7 +507,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showAddExtraSheetForBye), (previous, next) {
       if (next != null) {
-        _showAddExtraSheet(context, ExtrasType.bye);
+        final position =
+            ref.read(scoreBoardStateProvider.select((value) => value.position));
+        _showAddExtraSheet(context, ExtrasType.bye, position);
       }
     });
   }
@@ -524,7 +520,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select(
             (value) => value.showAddExtraSheetForFiveSeven), (previous, next) {
       if (next != null) {
-        _showAddExtraSheet(context, null);
+        final position =
+            ref.read(scoreBoardStateProvider.select((value) => value.position));
+        _showAddExtraSheet(context, null, position);
       }
     });
   }
