@@ -96,7 +96,7 @@ class InningsService {
 
   Future updateInningsStatuses(Map<String, InningStatus> innings) async {
     try {
-      WriteBatch batch = _firestore.batch();
+      final WriteBatch batch = _firestore.batch();
 
       for (final inning in innings.entries) {
         final inningRef = _inningCollection.doc(inning.key);

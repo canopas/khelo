@@ -65,17 +65,19 @@ class BallScoreService {
             double.parse("${score.over_number - 1}.${score.ball_number}");
 
         // update matchTeamScore and squad(if needed)
-        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
-            matchId: matchId,
-            battingTeamId: battingTeamId,
-            totalRun: otherTotalRuns + totalRuns,
-            over: overCount.add(otherInningOver.toBalls()),
-            bowlingTeamId: bowlingTeamId,
-            wicket: otherTotalWicketTaken + totalWicketTaken,
-            runs: totalBowlingTeamRuns != null
-                ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
-                : null,
-            updatedMatchPlayer: updatedPlayer != null ? [updatedPlayer] : null);
+        await _matchService.updateTeamScoreAndSquadViaTransaction(
+          transaction,
+          matchId: matchId,
+          battingTeamId: battingTeamId,
+          totalRun: otherTotalRuns + totalRuns,
+          over: overCount.add(otherInningOver.toBalls()),
+          bowlingTeamId: bowlingTeamId,
+          wicket: otherTotalWicketTaken + totalWicketTaken,
+          runs: totalBowlingTeamRuns != null
+              ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
+              : null,
+          updatedMatchPlayer: updatedPlayer != null ? [updatedPlayer] : null,
+        );
         // update innings score detail
         _inningsService.updateInningScoreDetailViaTransaction(
           transaction,
@@ -154,17 +156,19 @@ class BallScoreService {
     try {
       _firestore.runTransaction((transaction) async {
         // update matchTeamScore and squad(if needed)
-        await _matchService.updateTeamScoreAndSquadViaTransaction(transaction,
-            matchId: matchId,
-            battingTeamId: battingTeamId,
-            totalRun: otherTotalRuns + totalRuns,
-            over: overCount?.add(otherInningOver.toBalls()),
-            bowlingTeamId: bowlingTeamId,
-            wicket: otherTotalWicketTaken + totalWicketTaken,
-            runs: totalBowlingTeamRuns != null
-                ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
-                : null,
-            updatedMatchPlayer: updatedPlayer);
+        await _matchService.updateTeamScoreAndSquadViaTransaction(
+          transaction,
+          matchId: matchId,
+          battingTeamId: battingTeamId,
+          totalRun: otherTotalRuns + totalRuns,
+          over: overCount?.add(otherInningOver.toBalls()),
+          bowlingTeamId: bowlingTeamId,
+          wicket: otherTotalWicketTaken + totalWicketTaken,
+          runs: totalBowlingTeamRuns != null
+              ? otherTotalBowlingTeamRuns + totalBowlingTeamRuns
+              : null,
+          updatedMatchPlayer: updatedPlayer,
+        );
 
         // update innings score detail
         _inningsService.updateInningScoreDetailViaTransaction(
