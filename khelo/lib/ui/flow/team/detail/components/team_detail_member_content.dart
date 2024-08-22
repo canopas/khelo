@@ -37,7 +37,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               itemCount: state.team!.players.length,
               itemBuilder: (context, index) {
-                final member = state.team!.players[index].user!;
+                final member = state.team!.players[index].user;
                 return UserDetailCell(
                     user: member,
                     onTap: () => UserDetailSheet.show(context, member),

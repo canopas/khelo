@@ -187,8 +187,8 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
     return state.team?.players
             .where((element) =>
                 !state.squad.map((e) => e.player.id).contains(element.id) &&
-                element.user!.isActive)
-            .map((e) => e.user!)
+                element.user.isActive)
+            .map((e) => e.user)
             .toList() ??
         [];
   }

@@ -215,9 +215,9 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 8),
-                          _selectedProfileView(context, player.user!),
+                          _selectedProfileView(context, player.user),
                           const SizedBox(height: 4),
-                          Text(player.user?.name ?? "",
+                          Text(player.user.name ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyle.caption.copyWith(

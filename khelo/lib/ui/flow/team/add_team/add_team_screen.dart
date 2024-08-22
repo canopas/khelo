@@ -183,14 +183,14 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                 ),
               ],
               ...state.teamMembers.map((player) {
-                final detail = player.user!;
                 return Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: UserDetailCell(
-                    user: detail,
-                    onTap: () => UserDetailSheet.show(context, detail),
+                    user: player.user,
+                    onTap: () => UserDetailSheet.show(context, player.user),
                     trailing: actionButton(context,
-                        onPressed: () => notifier.onRemoveUserFromTeam(detail),
+                        onPressed: () =>
+                            notifier.onRemoveUserFromTeam(player.user),
                         padding: const EdgeInsets.only(
                             left: 10, top: 10, bottom: 10),
                         icon: Icon(

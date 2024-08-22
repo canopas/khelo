@@ -16,16 +16,11 @@ class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
   MakeTeamAdminViewNotifier(this._teamService)
       : super(const MakeTeamAdminState());
 
-  late String _teamId;
-  late List<TeamPlayer> _players;
+  late TeamModel _team;
 
-  void setData({
-    required String teamId,
-    required List<TeamPlayer> players,
-  }) {
-    _teamId = teamId;
-    _players = players;
-    final admins = players
+  void setData(TeamModel team) {
+    _team = team;
+    final admins = _team.players
         .where((element) => element.role == TeamPlayerRole.admin)
         .toList();
     state = state.copyWith(selectedPlayers: admins);
@@ -39,14 +34,15 @@ class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
 
   void onSave() async {
     try {
-      final players = _players.map((player) {
+      state = state.copyWith(actionError: null);
+      final players = _team.players.map((player) {
         final role = state.selectedPlayers.contains(player)
             ? TeamPlayerRole.admin
             : TeamPlayerRole.player;
         return player.copyWith(role: role);
       }).toList();
 
-      await _teamService.editPlayersToTeam(_teamId, players);
+      await _teamService.editPlayersToTeam(_team.id ?? 'INVALID ID', players);
       state = state.copyWith(pop: true, actionError: null);
     } catch (e) {
       state = state.copyWith(pop: false, actionError: e);

@@ -78,36 +78,52 @@ class TeamService {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
-    return _teamsCollection.snapshots().asyncMap((snapshot) async {
-      final teams = await Future.wait(
+    final currentPlayer = TeamPlayer(id: _currentUserId ?? 'INVALID ID');
+
+    final playerContains = [
+      currentPlayer.copyWith(role: TeamPlayerRole.admin).toJson(),
+      currentPlayer.copyWith(role: TeamPlayerRole.player).toJson(),
+    ];
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.teamPlayers, arrayContainsAny: playerContains),
+    );
+    return _teamsCollection
+        .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final team = mainDoc.data();
-          final isUserInTeam =
-              team.players.any((element) => element.id == _currentUserId);
-          if (isUserInTeam) {
-            final users = await getMemberListFromUserIds(
-              team.players.map((e) => e.id).toList(),
-            );
 
-            final players = team.players.map((player) {
-              final user =
-                  users.firstWhere((element) => element.id == player.id);
-              return player.copyWith(user: user);
-            }).toList();
+          final users = await getMemberListFromUserIds(
+            team.players.map((e) => e.id).toList(),
+          );
 
-            return team.copyWith(players: players);
-          } else {
-            return null;
-          }
-        }),
+          final players = team.players.map((player) {
+            final user = users.firstWhere((element) => element.id == player.id);
+            return player.copyWith(user: user);
+          }).toList();
+
+          return team.copyWith(players: players);
+        }).toList(),
       );
-      return teams.whereType<TeamModel>().toList();
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Stream<List<TeamModel>> getUserOwnedTeams() {
+    final currentPlayer = TeamPlayer(
+      id: _currentUserId ?? 'INVALID ID',
+      role: TeamPlayerRole.admin,
+    );
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.teamPlayers, arrayContains: currentPlayer.toJson()),
+    );
     return _teamsCollection
-        .where(FireStoreConst.createdBy, isEqualTo: _currentUserId)
+        .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(

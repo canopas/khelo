@@ -327,7 +327,7 @@ mixin _$TeamPlayer {
   String get id => throw _privateConstructorUsedError;
   TeamPlayerRole get role => throw _privateConstructorUsedError;
   @JsonKey(includeToJson: false, includeFromJson: false)
-  UserModel? get user => throw _privateConstructorUsedError;
+  UserModel get user => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -344,9 +344,9 @@ abstract class $TeamPlayerCopyWith<$Res> {
   $Res call(
       {String id,
       TeamPlayerRole role,
-      @JsonKey(includeToJson: false, includeFromJson: false) UserModel? user});
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel user});
 
-  $UserModelCopyWith<$Res>? get user;
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -364,7 +364,7 @@ class _$TeamPlayerCopyWithImpl<$Res, $Val extends TeamPlayer>
   $Res call({
     Object? id = null,
     Object? role = null,
-    Object? user = freezed,
+    Object? user = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -375,21 +375,17 @@ class _$TeamPlayerCopyWithImpl<$Res, $Val extends TeamPlayer>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as TeamPlayerRole,
-      user: freezed == user
+      user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
+              as UserModel,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res>? get user {
-    if (_value.user == null) {
-      return null;
-    }
-
-    return $UserModelCopyWith<$Res>(_value.user!, (value) {
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
       return _then(_value.copyWith(user: value) as $Val);
     });
   }
@@ -406,10 +402,10 @@ abstract class _$$TeamPlayerImplCopyWith<$Res>
   $Res call(
       {String id,
       TeamPlayerRole role,
-      @JsonKey(includeToJson: false, includeFromJson: false) UserModel? user});
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel user});
 
   @override
-  $UserModelCopyWith<$Res>? get user;
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -425,7 +421,7 @@ class __$$TeamPlayerImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? role = null,
-    Object? user = freezed,
+    Object? user = null,
   }) {
     return _then(_$TeamPlayerImpl(
       id: null == id
@@ -436,10 +432,10 @@ class __$$TeamPlayerImplCopyWithImpl<$Res>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as TeamPlayerRole,
-      user: freezed == user
+      user: null == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
+              as UserModel,
     ));
   }
 }
@@ -451,7 +447,8 @@ class _$TeamPlayerImpl implements _TeamPlayer {
   const _$TeamPlayerImpl(
       {required this.id,
       this.role = TeamPlayerRole.player,
-      @JsonKey(includeToJson: false, includeFromJson: false) this.user});
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      this.user = const UserModel(id: '')});
 
   factory _$TeamPlayerImpl.fromJson(Map<String, dynamic> json) =>
       _$$TeamPlayerImplFromJson(json);
@@ -463,7 +460,7 @@ class _$TeamPlayerImpl implements _TeamPlayer {
   final TeamPlayerRole role;
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
-  final UserModel? user;
+  final UserModel user;
 
   @override
   String toString() {
@@ -503,7 +500,7 @@ abstract class _TeamPlayer implements TeamPlayer {
       {required final String id,
       final TeamPlayerRole role,
       @JsonKey(includeToJson: false, includeFromJson: false)
-      final UserModel? user}) = _$TeamPlayerImpl;
+      final UserModel user}) = _$TeamPlayerImpl;
 
   factory _TeamPlayer.fromJson(Map<String, dynamic> json) =
       _$TeamPlayerImpl.fromJson;
@@ -514,7 +511,7 @@ abstract class _TeamPlayer implements TeamPlayer {
   TeamPlayerRole get role;
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
-  UserModel? get user;
+  UserModel get user;
   @override
   @JsonKey(ignore: true)
   _$$TeamPlayerImplCopyWith<_$TeamPlayerImpl> get copyWith =>

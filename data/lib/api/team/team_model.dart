@@ -21,7 +21,8 @@ abstract class TeamModel with _$TeamModel {
     String? created_by,
     DateTime? created_at,
     @JsonKey(name: FireStoreConst.teamPlayers)
-    @Default([]) List<TeamPlayer> players,
+    @Default([])
+    List<TeamPlayer> players,
   }) = _TeamModel;
 
   factory TeamModel.fromJson(Map<String, dynamic> json) =>
@@ -49,7 +50,9 @@ class TeamPlayer with _$TeamPlayer {
   const factory TeamPlayer({
     required String id,
     @Default(TeamPlayerRole.player) TeamPlayerRole role,
-    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? user,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(UserModel(id: ''))
+    UserModel user,
   }) = _TeamPlayer;
 
   factory TeamPlayer.fromJson(Map<String, dynamic> json) =>

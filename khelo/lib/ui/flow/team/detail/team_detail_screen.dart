@@ -213,11 +213,8 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             .length)),
         onTap: () {
           context.pop();
-          if (state.team!.players.isNotEmpty) {
-            AppRoute.makeTeamAdmin(
-                    teamId: state.team!.id ?? 'INVALID ID',
-                    players: state.team!.players)
-                .push(context);
+          if (state.team != null) {
+            AppRoute.makeTeamAdmin(team: state.team!).push(context);
           }
         },
       ),

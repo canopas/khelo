@@ -94,7 +94,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         final player = TeamPlayer(
             id: state.currentUser!.id,
             role: TeamPlayerRole.admin,
-            user: state.currentUser);
+            user: state.currentUser!);
         players.add(player);
       }
 
