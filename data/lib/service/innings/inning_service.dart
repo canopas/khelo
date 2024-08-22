@@ -23,41 +23,17 @@ class InningsService {
                 fromFirestore: InningModel.fromFireStore,
                 toFirestore: (InningModel inning, _) => inning.toJson());
 
+  String get generateInningId => _inningCollection.doc().id;
+
   Future<void> createInnings({
-    required String matchId,
-    required String teamId,
-    required InningStatus firstInningStatus,
-    required String opponentTeamId,
-    required InningStatus secondInningStatus,
+    required List<InningModel> innings,
   }) async {
     try {
       WriteBatch batch = _firestore.batch();
-      final firstInningRef = _inningCollection.doc();
-      final secondInningRef = _inningCollection.doc();
-
-      final firstInning = InningModel(
-        id: firstInningRef.id,
-        match_id: matchId,
-        team_id: teamId,
-        innings_status: firstInningStatus,
-        total_runs: 0,
-        overs: 0,
-        total_wickets: 0,
-      );
-
-      final secondInning = InningModel(
-        id: secondInningRef.id,
-        match_id: matchId,
-        team_id: opponentTeamId,
-        innings_status: secondInningStatus,
-        total_runs: 0,
-        overs: 0,
-        total_wickets: 0,
-      );
-
-      batch.set(firstInningRef, firstInning, SetOptions(merge: true));
-      batch.set(secondInningRef, secondInning, SetOptions(merge: true));
-
+      for (final inning in innings) {
+        final inningRef = _inningCollection.doc(inning.id);
+        batch.set(inningRef, inning, SetOptions(merge: true));
+      }
       await batch.commit();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -85,7 +61,6 @@ class InningsService {
   }) {
     try {
       final batInningRef = _inningCollection.doc(battingTeamInningId);
-
       final bowlInningRef = _inningCollection.doc(bowlingTeamInningId);
 
       Map<String, dynamic> battingUpdates = {
@@ -113,6 +88,23 @@ class InningsService {
     try {
       final batInningRef = _inningCollection.doc(inningId);
       await batInningRef.update({FireStoreConst.inningsStatus: status.value});
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future updateInningsStatuses(Map<String, InningStatus> innings) async {
+    try {
+      WriteBatch batch = _firestore.batch();
+
+      for (final inning in innings.entries) {
+        final inningRef = _inningCollection.doc(inning.key);
+        batch.update(inningRef, {
+          FireStoreConst.inningsStatus: inning.value.value,
+        });
+      }
+
+      await batch.commit();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

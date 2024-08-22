@@ -32,7 +32,15 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
   void removeFromSquad(UserModel user) {
     final updatedList = state.squad.toList();
     updatedList.removeWhere((element) => element.player.id == user.id);
-    state = state.copyWith(squad: updatedList);
+    final captainId =
+        updatedList.map((e) => e.player.id).contains(state.captainId)
+            ? state.captainId
+            : null;
+    final adminId = updatedList.map((e) => e.player.id).contains(state.adminId)
+        ? state.adminId
+        : null;
+    state = state.copyWith(
+        squad: updatedList, captainId: captainId, adminId: adminId);
     onSquadChange();
   }
 
@@ -53,6 +61,7 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
 
   void onSquadChange() {
     state = state.copyWith(isDoneBtnEnable: state.squad.length >= 2);
+    onSelectionChange();
   }
 
   void onSelectionChange() {

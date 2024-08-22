@@ -8,10 +8,11 @@ part of 'inning_model.dart';
 
 _$InningModelImpl _$$InningModelImplFromJson(Map<String, dynamic> json) =>
     _$InningModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       match_id: json['match_id'] as String,
       team_id: json['team_id'] as String,
       overs: (json['overs'] as num?)?.toDouble() ?? 0,
+      index: (json['index'] as num?)?.toInt() ?? 0,
       total_runs: (json['total_runs'] as num?)?.toInt() ?? 0,
       total_wickets: (json['total_wickets'] as num?)?.toInt() ?? 0,
       innings_status:
@@ -24,6 +25,7 @@ Map<String, dynamic> _$$InningModelImplToJson(_$InningModelImpl instance) =>
       'match_id': instance.match_id,
       'team_id': instance.team_id,
       'overs': instance.overs,
+      'index': instance.index,
       'total_runs': instance.total_runs,
       'total_wickets': instance.total_wickets,
       'innings_status': _$InningStatusEnumMap[instance.innings_status],

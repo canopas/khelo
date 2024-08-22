@@ -77,7 +77,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
                 onActionTap: () {
                   if (match.match_status == MatchStatus.yetToStart) {
                     AppRoute.addMatch(matchId: match.id).push(context);
-                  } else {
+                  } else if (match.match_status == MatchStatus.running) {
                     if (match.toss_decision == null ||
                         match.toss_winner_id == null) {
                       AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
