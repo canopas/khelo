@@ -39,7 +39,9 @@ class AppError implements Exception {
       return const LargeAttachmentUploadError();
     } else {
       return SomethingWentWrongError(
-          message: error.toString(), stackTrace: stack);
+        message: error.toString(),
+        stackTrace: stack,
+      );
     }
   }
 

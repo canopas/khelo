@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/ball_score/ball_score_model.dart';
-import 'package:data/errors/app_error.dart';
-import 'package:data/extensions/double_extensions.dart';
-import 'package:data/service/innings/inning_service.dart';
-import 'package:data/service/match/match_service.dart';
-import 'package:data/storage/app_preferences.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
+import '../../api/ball_score/ball_score_model.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/double_extensions.dart';
+import '../innings/inning_service.dart';
+import '../match/match_service.dart';
+import '../../storage/app_preferences.dart';
+import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/match/match_model.dart';
