@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/match/match_service.dart';
@@ -452,6 +453,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showPauseScoringSheet: DateTime.now());
       case MatchOption.penaltyRun:
         state = state.copyWith(showAddPenaltyRunSheet: DateTime.now());
+      case MatchOption.addSubstitute:
+        state = state.copyWith(showAddSubstituteSheet: DateTime.now());
       case MatchOption.endMatch:
         state = state.copyWith(showEndMatchSheet: DateTime.now());
       default:
@@ -1365,6 +1368,38 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
+  List<UserModel> getNonPlayingTeamMembers() {
+    if (state.match == null) {
+      return [];
+    }
+
+    final team = state.match?.teams
+        .where((element) => element.team.id != state.currentInning?.team_id)
+        .firstOrNull;
+    final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
+    final teamPlayers = team?.team.players
+        ?.where(
+            (element) => element.isActive && !teamSquadIds.contains(element.id))
+        .toList();
+    return teamPlayers ?? [];
+  }
+
+  List<String> getPlayingSquadIds() {
+    if (state.match == null) {
+      return [];
+    }
+
+    final team = state.match?.teams
+        .where((element) => element.team.id != state.currentInning?.team_id)
+        .firstOrNull;
+    final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
+    return teamSquadIds;
+  }
+
+  void addSubstitute(UserModel player) {
+    // TODO: add player as substitute
+  }
+
   bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
     return (status != PlayerStatus.played &&
             status != PlayerStatus.playing &&
@@ -1458,6 +1493,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showPauseScoringSheet,
     DateTime? showAddPenaltyRunSheet,
     DateTime? showEndMatchSheet,
+    DateTime? showAddSubstituteSheet,
     DateTime? invalidUndoToast,
     ScoreButton? tappedButton,
     bool? isLongTap,
@@ -1531,6 +1567,7 @@ enum MatchOption {
   penaltyRun,
   pauseScoring,
   continueWithInjuredPlayer,
+  addSubstitute,
   endMatch;
 
   String getTitle(BuildContext context) {
@@ -1543,6 +1580,8 @@ enum MatchOption {
         return context.l10n.score_board_pause_scoring_title;
       case MatchOption.continueWithInjuredPlayer:
         return context.l10n.score_board_continue_with_injured_player_title;
+      case MatchOption.addSubstitute:
+        return context.l10n.score_board_add_substitute_title;
       case MatchOption.endMatch:
         return context.l10n.common_end_match_title;
     }

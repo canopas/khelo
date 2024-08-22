@@ -229,11 +229,15 @@
   "select_squad_rest_of_team_title": "Rest of The Team",
   "select_squad_empty_squad_text": "Select squad via adding it from team members list.",
   "select_squad_empty_team_member_text": "No team member added in this team, try to add people you know as a team member.",
+
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Batting",
   "add_toss_detail_bowl_text": "Bowling",
+
+  "add_substitute_search_substitute_title":"Who’s ready to step in?",
+  "add_substitute_search_substitute_description":"Search and assign a substitute fielder to maintain your fielding edge.",
 
   "team_detail_screen_title": "Team Detail",
   "team_detail_member_tab_title": "Member",
@@ -582,6 +586,7 @@
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
   "score_board_pause_scoring_title": "Pause Scoring",
+  "score_board_add_substitute_title": "Add Substitute",
   "score_board_penalty_run_title": "Penalty Run",
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
