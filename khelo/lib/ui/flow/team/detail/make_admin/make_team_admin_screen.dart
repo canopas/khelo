@@ -95,7 +95,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
           return UserDetailCell(
             user: player.user,
             showPhoneNumber: false,
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             onTap: () => UserDetailSheet.show(context, player.user),
             trailing: Text(context.l10n.team_detail_make_admin_owner_title,
                 style: AppTextStyle.body2
@@ -105,7 +105,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
         return UserDetailCell(
             user: player.user,
             showPhoneNumber: false,
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             onTap: () => UserDetailSheet.show(context, player.user),
             trailing: RoundedCheckBox(
               isSelected: state.selectedPlayers
