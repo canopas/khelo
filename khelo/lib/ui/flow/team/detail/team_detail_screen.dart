@@ -71,10 +71,11 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.team?.players.any((element) =>
-                  element.id == state.currentUserId &&
-                  element.role == TeamPlayerRole.admin) ==
-              true)
+      actions: (state.team?.created_by == state.currentUserId ||
+              state.team?.players.any((element) =>
+                      element.id == state.currentUserId &&
+                      element.role == TeamPlayerRole.admin) ==
+                  true)
           ? [
               moreOptionButton(
                 context,
@@ -205,19 +206,18 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               .push(context);
         },
       ),
-      BottomSheetAction(
-        title: context.l10n.team_detail_make_admin,
-        child: Text(context.l10n.team_detail_admin(state.team!.players
-            .where((element) => element.role == TeamPlayerRole.admin)
-            .toList()
-            .length)),
-        onTap: () {
-          context.pop();
-          if (state.team != null) {
+      if (state.team?.players.isNotEmpty ?? false)
+        BottomSheetAction(
+          title: context.l10n.team_detail_make_admin,
+          child: Text(context.l10n.team_detail_admin(state.team!.players
+              .where((element) => element.role == TeamPlayerRole.admin)
+              .toList()
+              .length)),
+          onTap: () {
+            context.pop();
             AppRoute.makeTeamAdmin(team: state.team!).push(context);
-          }
-        },
-      ),
+          },
+        ),
     ]);
   }
 

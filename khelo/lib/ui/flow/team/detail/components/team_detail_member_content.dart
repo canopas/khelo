@@ -18,14 +18,16 @@ class TeamDetailMemberContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
+    final isAdminOrOwner = state.team?.created_by == state.currentUserId ||
+        state.team?.players.any((element) =>
+                element.id == state.currentUserId &&
+                element.role == TeamPlayerRole.admin) ==
+            true;
 
     if (state.team?.players != null && state.team?.players.isNotEmpty == true) {
       return Column(
         children: [
-          if (state.team?.players.any((element) =>
-                  element.id == state.currentUserId &&
-                  element.role == TeamPlayerRole.admin) ==
-              true) ...[
+          if (isAdminOrOwner) ...[
             _addMemberButton(
               context,
               onTap: () =>
@@ -54,7 +56,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
         description: state.team!.created_by == state.currentUserId
             ? context.l10n.team_detail_empty_member_description_text
             : context.l10n.team_detail_visitor_empty_member_description_text,
-        isShowButton: state.team!.created_by == state.currentUserId,
+        isShowButton: isAdminOrOwner,
         buttonTitle: context.l10n.team_list_add_members_title,
         onTap: () => AppRoute.addTeamMember(team: state.team!).push(context),
       );

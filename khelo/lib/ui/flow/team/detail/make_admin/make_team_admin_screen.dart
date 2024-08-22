@@ -48,7 +48,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
       title: context.l10n.team_detail_make_admin,
       actions: [
         actionButton(context,
-            onPressed: notifier.onSave,
+            onPressed: state.isButtonEnabled ? notifier.onSave : null,
             icon: SvgPicture.asset(
               Assets.images.icCheck,
               height: 24,
@@ -85,23 +85,29 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
   }
 
   Widget _body(BuildContext context, MakeTeamAdminState state) {
+    final members = widget.team.players
+        .where((element) => element.id != widget.team.created_by)
+        .toList();
+    final owner = widget.team.players
+        .firstWhere((element) => element.id != widget.team.created_by);
+
     return ListView.separated(
       padding:
           const EdgeInsets.symmetric(vertical: 16) + context.mediaQueryPadding,
-      itemCount: widget.team.players.length,
+      itemCount: members.length + 1,
       itemBuilder: (context, index) {
-        final player = widget.team.players[index];
-        if (widget.team.created_by == player.id) {
+        if (index == 0) {
           return UserDetailCell(
-            user: player.user,
+            user: owner.user,
             showPhoneNumber: false,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            onTap: () => UserDetailSheet.show(context, player.user),
+            onTap: () => UserDetailSheet.show(context, owner.user),
             trailing: Text(context.l10n.team_detail_make_admin_owner_title,
                 style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.primary)),
           );
         }
+        final player = members[index - 1];
         return UserDetailCell(
             user: player.user,
             showPhoneNumber: false,
@@ -113,14 +119,13 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
               onTap: (_) => notifier.selectAdmin(player),
             ));
       },
-      separatorBuilder: (context, index) =>
-          (widget.team.created_by == widget.team.players[index].id)
-              ? Divider(
-                  height: 24,
-                  thickness: 1,
-                  color: context.colorScheme.outline,
-                )
-              : const SizedBox(height: 16),
+      separatorBuilder: (context, index) => (index == 0)
+          ? Divider(
+              height: 24,
+              thickness: 1,
+              color: context.colorScheme.outline,
+            )
+          : const SizedBox(height: 16),
     );
   }
 }

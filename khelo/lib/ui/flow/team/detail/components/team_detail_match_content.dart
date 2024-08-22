@@ -14,6 +14,11 @@ class TeamDetailMatchContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
+    final isAdminOrOwner = state.team?.created_by == state.currentUserId ||
+        state.team?.players.any((element) =>
+                element.id == state.currentUserId &&
+                element.role == TeamPlayerRole.admin) ==
+            true;
 
     if (state.matches != null && state.matches!.isNotEmpty) {
       return ListView.separated(
@@ -23,7 +28,7 @@ class TeamDetailMatchContent extends ConsumerWidget {
           final match = state.matches![index];
           return MatchDetailCell(
             match: match,
-            showActionButtons: match.created_by == state.currentUserId,
+            showActionButtons: isAdminOrOwner,
             onTap: () =>
                 AppRoute.matchDetailTab(matchId: match.id ?? "").push(context),
             onActionTap: () {
@@ -50,10 +55,7 @@ class TeamDetailMatchContent extends ConsumerWidget {
           description: (state.team?.created_by == state.currentUserId)
               ? context.l10n.team_detail_empty_matches_description_text
               : context.l10n.team_detail_visitor_empty_matches_description_text,
-          isShowButton: state.team?.players.any((element) =>
-                  element.id == state.currentUserId &&
-                  element.role == TeamPlayerRole.admin) ==
-              true,
+          isShowButton: isAdminOrOwner,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
             bool? isUpdated = await AppRoute.addMatch(
