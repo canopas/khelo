@@ -62,21 +62,21 @@ class TeamMemberSheet extends StatelessWidget {
             const SizedBox(height: 16),
             Wrap(
                 runSpacing: 16,
-                children: (team.players ?? [])
-                    .map((member) => UserDetailCell(
-                          user: member,
+                children: (team.players)
+                    .map((player) => UserDetailCell(
+                          user: player.user,
                           onTap: () => UserDetailSheet.show(
                             context,
-                            member,
+                            player.user,
                             actionButtonTitle:
-                                isForVerification && member.isActive
+                                isForVerification && player.user.isActive
                                     ? context.l10n.common_select_title
                                     : null,
                             onButtonTap: () =>
-                                _onSelectButtonTap(context, member),
+                                _onSelectButtonTap(context, player.user),
                           ),
-                          trailing: isForVerification && member.isActive
-                              ? _selectButton(context, member)
+                          trailing: isForVerification && player.user.isActive
+                              ? _selectButton(context, player.user)
                               : null,
                         ))
                     .toList()),

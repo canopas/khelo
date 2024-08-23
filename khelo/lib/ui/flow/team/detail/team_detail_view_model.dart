@@ -39,7 +39,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
     state = state.copyWith(loading: state.team == null);
     _teamStreamSubscription =
-        _teamService.getTeamStreamById(teamId!).listen((team) {
+        _teamService.streamTeamById(teamId!).listen((team) {
       state = state.copyWith(team: team, loading: false);
       loadTeamMatches();
     }, onError: (e) {

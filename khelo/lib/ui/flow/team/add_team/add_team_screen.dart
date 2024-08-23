@@ -1,5 +1,4 @@
 import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -154,12 +153,12 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   actionButton(
                     context,
                     onPressed: () async {
-                      final members = await AppRoute.addTeamMember(
+                      final players = await AppRoute.addTeamMember(
                               team: widget.editTeam!
                                   .copyWith(players: state.teamMembers))
-                          .push<List<UserModel>>(context);
-                      if (context.mounted && (members ?? []).isNotEmpty) {
-                        notifier.updatePlayersList(members!);
+                          .push<List<TeamPlayer>>(context);
+                      if (context.mounted && (players ?? []).isNotEmpty) {
+                        notifier.updatePlayersList(players!);
                       }
                     },
                     icon: Icon(
@@ -183,14 +182,15 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                   ),
                 ),
               ],
-              ...state.teamMembers.map(
-                (player) => Padding(
+              ...state.teamMembers.map((player) {
+                return Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: UserDetailCell(
-                    user: player,
-                    onTap: () => UserDetailSheet.show(context, player),
+                    user: player.user,
+                    onTap: () => UserDetailSheet.show(context, player.user),
                     trailing: actionButton(context,
-                        onPressed: () => notifier.onRemoveUserFromTeam(player),
+                        onPressed: () =>
+                            notifier.onRemoveUserFromTeam(player.user),
                         padding: const EdgeInsets.only(
                             left: 10, top: 10, bottom: 10),
                         icon: Icon(
@@ -199,8 +199,8 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                           color: context.colorScheme.textDisabled,
                         )),
                   ),
-                ),
-              ),
+                );
+              }),
               const SizedBox(height: 24),
             ],
           ],

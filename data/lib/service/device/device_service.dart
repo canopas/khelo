@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:data/api/network/client.dart';
+import '../../api/network/client.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

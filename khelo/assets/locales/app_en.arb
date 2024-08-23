@@ -143,6 +143,7 @@
   "team_list_all_teams_title": "All teams",
   "team_list_created_by_me_title": "Created by me",
   "team_list_me_as_member_title": "Me as member",
+  "team_list_me_as_admin_title": "Me as admin",
   "team_list_no_teams_created_title": "No teams created",
   "team_list_empty_list_description": "Tap on the “ + ” icon to create a team",
 
@@ -246,6 +247,14 @@
   "team_detail_empty_stat_title": "No stats available yet!",
   "team_detail_empty_stat_description_text": "The players are warming up! Stay tuned for exciting stats as the team progresses.",
   "team_detail_add_member_title": "Add member",
+  "team_detail_make_admin": "Make admin",
+  "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
+  "@team_detail_admin": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "team_detail_make_admin_owner_title": "Owner",
   "team_detail_match_tab_title": "Match",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_won_title": "Won({win})",

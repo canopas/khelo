@@ -1,9 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/user/user_models.dart';
-import 'package:data/extensions/double_extensions.dart';
-import 'package:data/extensions/int_extensions.dart';
+import '../user/user_models.dart';
+import '../../extensions/double_extensions.dart';
+import '../../extensions/int_extensions.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'ball_score_model.freezed.dart';
@@ -36,8 +36,9 @@ class BallScoreModel with _$BallScoreModel {
       _$BallScoreModelFromJson(json);
 
   factory BallScoreModel.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       BallScoreModel.fromJson(snapshot.data()!);
 }
 
@@ -279,7 +280,7 @@ extension OverSummaryMetaData on OverSummary {
       (balls.lastOrNull?.isLegalDelivery() ?? false);
 
   double get overCount {
-    int totalBalls = ((overNumber - 1) * 6) + legalDeliveriesCount;
+    final int totalBalls = ((overNumber - 1) * 6) + legalDeliveriesCount;
     return totalBalls.toOvers();
   }
 
@@ -290,35 +291,43 @@ extension OverSummaryMetaData on OverSummary {
       balls.fold(0, (runCount, element) => runCount += element.runs_scored);
 
   int get extras => balls.fold(
-      0, (extraCount, element) => extraCount += (element.extras_awarded ?? 0));
+        0,
+        (extraCount, element) => extraCount += (element.extras_awarded ?? 0),
+      );
 
   int get wickets => balls.fold(
-      0,
-      (wicketCount, element) => wicketCount += (element.wicket_type != null &&
-              element.wicket_type != WicketType.retiredHurt
-          ? 1
-          : 0));
+        0,
+        (wicketCount, element) => wicketCount += (element.wicket_type != null &&
+                element.wicket_type != WicketType.retiredHurt
+            ? 1
+            : 0),
+      );
 
   DateTime get time => balls.lastOrNull?.time ?? DateTime.now();
 
   BowlerSummary get bowlerStatAtStart {
     final runsInOver = balls
-        .where((ball) =>
-            ball.extras_type == null ||
-            ball.extras_type == ExtrasType.noBall ||
-            ball.extras_type == ExtrasType.wide)
+        .where(
+          (ball) =>
+              ball.extras_type == null ||
+              ball.extras_type == ExtrasType.noBall ||
+              ball.extras_type == ExtrasType.wide,
+        )
         .fold(
-            0,
-            (runCount, ball) =>
-                runCount += (ball.extras_awarded ?? 0) + ball.runs_scored);
+          0,
+          (runCount, ball) =>
+              runCount += (ball.extras_awarded ?? 0) + ball.runs_scored,
+        );
     final runsConceded = bowler.runsConceded - runsInOver;
     final maiden = bowler.maiden - (isMaiden ? 1 : 0);
     final wicketsInOver = balls
-        .where((element) =>
-            element.wicket_type != null &&
-            element.wicket_type != WicketType.retired &&
-            element.wicket_type != WicketType.retiredHurt &&
-            element.wicket_type != WicketType.timedOut)
+        .where(
+          (element) =>
+              element.wicket_type != null &&
+              element.wicket_type != WicketType.retired &&
+              element.wicket_type != WicketType.retiredHurt &&
+              element.wicket_type != WicketType.timedOut,
+        )
         .length;
     final wickets = bowler.wicket - wicketsInOver;
     final noBallInOver = balls
@@ -331,12 +340,13 @@ extension OverSummaryMetaData on OverSummary {
 
     final overDelivered = bowler.overDelivered.remove(legalDeliveriesCount);
     return bowler.copyWith(
-        wideBalls: wideBalls,
-        runsConceded: runsConceded,
-        overDelivered: overDelivered,
-        noBalls: noBalls,
-        maiden: maiden,
-        wicket: wickets);
+      wideBalls: wideBalls,
+      runsConceded: runsConceded,
+      overDelivered: overDelivered,
+      noBalls: noBalls,
+      maiden: maiden,
+      wicket: wickets,
+    );
   }
 
   OverSummary addBall(BallScoreModel ball, {Player? catchBy}) {
@@ -354,17 +364,21 @@ extension OverSummaryMetaData on OverSummary {
     final ballScores = [...balls, ball].toList();
     ballScores.sort((a, b) => a.time.compareTo(b.time));
 
-    final configuredStriker = striker.addBall(ball,
-        ballBy: ball.player_out_id == striker.player.id
-            ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
-            : null,
-        catchBy: ball.player_out_id == striker.player.id ? catchBy : null);
+    final configuredStriker = striker.addBall(
+      ball,
+      ballBy: ball.player_out_id == striker.player.id
+          ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
+          : null,
+      catchBy: ball.player_out_id == striker.player.id ? catchBy : null,
+    );
 
-    final configuredNonStriker = nonStriker.addBall(ball,
-        ballBy: ball.player_out_id == nonStriker.player.id
-            ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
-            : null,
-        catchBy: ball.player_out_id == nonStriker.player.id ? catchBy : null);
+    final configuredNonStriker = nonStriker.addBall(
+      ball,
+      ballBy: ball.player_out_id == nonStriker.player.id
+          ? Player(id: bowler.player.id, name: bowler.player.name ?? "")
+          : null,
+      catchBy: ball.player_out_id == nonStriker.player.id ? catchBy : null,
+    );
 
     final outPlayersList = outPlayers.toList();
     if (ball.player_out_id == configuredStriker.player.id) {
@@ -377,8 +391,10 @@ extension OverSummaryMetaData on OverSummary {
       totalWickets: totalWicketCount,
       extrasSummary: extraSummaryDetail,
       balls: ballScores,
-      bowler: bowler.addBall(ball,
-          isMaidenWithoutTheBall: runs == 0 && wickets == 0 && extras == 0),
+      bowler: bowler.addBall(
+        ball,
+        isMaidenWithoutTheBall: runs == 0 && wickets == 0 && extras == 0,
+      ),
       outPlayers: outPlayersList,
       striker: configuredStriker,
       nonStriker: configuredNonStriker,
@@ -407,10 +423,12 @@ extension OverSummaryMetaData on OverSummary {
     final outPlayersList = outPlayers;
     if (ball.player_out_id == configuredStriker.player.id) {
       outPlayersList.removeWhere(
-          (element) => element.player.id == configuredStriker.player.id);
+        (element) => element.player.id == configuredStriker.player.id,
+      );
     } else if (ball.player_out_id == configuredNonStriker.player.id) {
       outPlayersList.removeWhere(
-          (element) => element.player.id == configuredNonStriker.player.id);
+        (element) => element.player.id == configuredNonStriker.player.id,
+      );
     }
 
     final lastBall = ballScores.lastOrNull;
@@ -439,8 +457,10 @@ extension BowlerSummaryMetaData on BowlerSummary {
     return double.parse((runsConceded / overDelivered).toStringAsFixed(1));
   }
 
-  BowlerSummary addBall(BallScoreModel ball,
-      {required bool isMaidenWithoutTheBall}) {
+  BowlerSummary addBall(
+    BallScoreModel ball, {
+    required bool isMaidenWithoutTheBall,
+  }) {
     if (ball.bowler_id != player.id) {
       return this;
     }
@@ -477,16 +497,19 @@ extension BowlerSummaryMetaData on BowlerSummary {
         : maiden;
 
     return copyWith(
-        wicket: wicketCount,
-        maiden: maidenCount,
-        noBalls: noBallCount,
-        overDelivered: overDeliverCount,
-        runsConceded: runCount,
-        wideBalls: wideBallCount);
+      wicket: wicketCount,
+      maiden: maidenCount,
+      noBalls: noBallCount,
+      overDelivered: overDeliverCount,
+      runsConceded: runCount,
+      wideBalls: wideBallCount,
+    );
   }
 
-  BowlerSummary removeBall(BallScoreModel ball,
-      {required bool isMaidenIncludingBall}) {
+  BowlerSummary removeBall(
+    BallScoreModel ball, {
+    required bool isMaidenIncludingBall,
+  }) {
     if (ball.bowler_id != player.id) {
       return this;
     }
@@ -523,12 +546,13 @@ extension BowlerSummaryMetaData on BowlerSummary {
         : maiden;
 
     return copyWith(
-        wicket: wicketCount,
-        maiden: maidenCount,
-        noBalls: noBallCount,
-        overDelivered: overDeliverCount,
-        runsConceded: runCount,
-        wideBalls: wideBallCount);
+      wicket: wicketCount,
+      maiden: maidenCount,
+      noBalls: noBallCount,
+      overDelivered: overDeliverCount,
+      runsConceded: runCount,
+      wideBalls: wideBallCount,
+    );
   }
 }
 
@@ -537,8 +561,11 @@ extension BatsmanSummaryMetaData on BatsmanSummary {
     return double.parse(((runs / ballFaced) * 100).toStringAsFixed(1));
   }
 
-  BatsmanSummary addBall(BallScoreModel ball,
-      {Player? ballBy, Player? catchBy}) {
+  BatsmanSummary addBall(
+    BallScoreModel ball, {
+    Player? ballBy,
+    Player? catchBy,
+  }) {
     if (ball.batsman_id != player.id && ball.non_striker_id != player.id) {
       return this;
     }
@@ -548,16 +575,17 @@ extension BatsmanSummaryMetaData on BatsmanSummary {
         ? ballFaced + 1
         : ballFaced;
     return copyWith(
-        sixes: ball.batsman_id == player.id && ball.is_six ? sixes + 1 : sixes,
-        fours: ball.batsman_id == player.id && ball.is_four ? fours + 1 : fours,
-        catchBy: catchBy,
-        ballBy: ballBy,
-        ballFaced: ballFacedCount,
-        runs: ball.batsman_id == player.id ? runs + ball.runs_scored : runs,
-        outAtOver: ball.wicket_type != null && ball.player_out_id == player.id
-            ? double.parse("${ball.over_number - 1}.${ball.ball_number}")
-            : outAtOver,
-        wicketType: ball.player_out_id == player.id ? ball.wicket_type : null);
+      sixes: ball.batsman_id == player.id && ball.is_six ? sixes + 1 : sixes,
+      fours: ball.batsman_id == player.id && ball.is_four ? fours + 1 : fours,
+      catchBy: catchBy,
+      ballBy: ballBy,
+      ballFaced: ballFacedCount,
+      runs: ball.batsman_id == player.id ? runs + ball.runs_scored : runs,
+      outAtOver: ball.wicket_type != null && ball.player_out_id == player.id
+          ? double.parse("${ball.over_number - 1}.${ball.ball_number}")
+          : outAtOver,
+      wicketType: ball.player_out_id == player.id ? ball.wicket_type : null,
+    );
   }
 
   BatsmanSummary removeBall(BallScoreModel ball) {
@@ -570,14 +598,15 @@ extension BatsmanSummaryMetaData on BatsmanSummary {
         ? ballFaced - 1
         : ballFaced;
     return copyWith(
-        sixes: ball.batsman_id == player.id && ball.is_six ? sixes - 1 : sixes,
-        fours: ball.batsman_id == player.id && ball.is_four ? fours - 1 : fours,
-        catchBy: null,
-        ballBy: null,
-        ballFaced: ballFacedCount,
-        runs: ball.batsman_id == player.id ? runs - ball.runs_scored : runs,
-        outAtOver: null,
-        wicketType: null);
+      sixes: ball.batsman_id == player.id && ball.is_six ? sixes - 1 : sixes,
+      fours: ball.batsman_id == player.id && ball.is_four ? fours - 1 : fours,
+      catchBy: null,
+      ballBy: null,
+      ballFaced: ballFacedCount,
+      runs: ball.batsman_id == player.id ? runs - ball.runs_scored : runs,
+      outAtOver: null,
+      wicketType: null,
+    );
   }
 }
 

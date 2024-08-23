@@ -1,4 +1,20 @@
 include: package:flutter_lints/flutter.yaml
+analyzer:
+  exclude:
+    - '**.freezed.dart'
+    - '**.g.dart'
+    - '**.gr.dart'
+    - '**/generated_plugin_registrant.dart'
+
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    prefer_relative_imports: true
+    prefer_final_locals: true
+    require_trailing_commas: true
+    always_declare_return_types: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

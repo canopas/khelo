@@ -208,6 +208,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
             items: MatchType.values
                 .map((type) => BottomSheetAction(
                       title: type.getString(context),
+                      enabled: state.matchType != type,
                       child: showCheckMark(
                         context,
                         showCheck: state.matchType == type,

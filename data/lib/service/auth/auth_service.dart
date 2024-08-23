@@ -1,6 +1,6 @@
-import 'package:data/errors/app_error.dart';
-import 'package:data/extensions/string_extensions.dart';
-import 'package:data/service/user/user_service.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/string_extensions.dart';
+import '../user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -53,8 +53,12 @@ class AuthService {
     }
   }
 
-  Future<void> verifyOTP(String countryCode, String phoneNumber,
-      String verificationId, String otp) async {
+  Future<void> verifyOTP(
+    String countryCode,
+    String phoneNumber,
+    String verificationId,
+    String otp,
+  ) async {
     try {
       final credential = PhoneAuthProvider.credential(
         verificationId: verificationId,
@@ -69,17 +73,21 @@ class AuthService {
   }
 
   Future<void> _onVerificationSuccess(
-      String countryCode, String phoneNumber, UserCredential credential) async {
+    String countryCode,
+    String phoneNumber,
+    UserCredential credential,
+  ) async {
     try {
       if (credential.additionalUserInfo?.isNewUser ?? false) {
         if (_auth.currentUser == null) {
           return;
         }
         final phone = "$countryCode ${phoneNumber.caseAndSpaceInsensitive}";
-        UserModel user = UserModel(
-            id: _auth.currentUser!.uid,
-            phone: phone,
-            created_at: DateTime.now());
+        final UserModel user = UserModel(
+          id: _auth.currentUser!.uid,
+          phone: phone,
+          created_at: DateTime.now(),
+        );
         await _userService.updateUser(user);
       } else {
         final uid = credential.user?.uid;
