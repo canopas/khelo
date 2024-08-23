@@ -643,6 +643,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         otherTotalBowlingTeamRuns: otherBowlingInning?.total_runs ?? 0,
         updatedPlayer: updatedPlayer,
       );
+      state = state.copyWith(isActionInProgress: false);
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while adding ball -> $e");
       state = state.copyWith(
@@ -759,10 +760,22 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   bool _isAllOut() {
     // yet_to_play == 0 && playing == 1 && (cont_with_inj ? injured == 0 : true) && wicket_count == (cont_with_inj ? total_wicket : total_wicket - injure_count) - 1
+    final teamId = state.currentInning?.team_id;
+    final bowlingInningOfCurrentBattingTeam = state.allInnings
+        .where((element) => element.team_id != teamId)
+        .map((e) => e.id);
+
     final battingSquad = state.match?.teams
-        .where((element) => element.team.id == state.currentInning?.team_id)
+        .where((element) => element.team.id == teamId)
         .firstOrNull
-        ?.squad;
+        ?.squad
+        .where(
+          (element) => !element.performance.any(
+            (element) =>
+                bowlingInningOfCurrentBattingTeam.contains(element.inning_id) &&
+                element.status == PlayerStatus.substitute,
+          ),
+        );
 
     int yetToPlayCount = 0;
     int playingCount = 0;
@@ -959,6 +972,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           otherTotalWicketTaken: otherBowlingInning?.total_wickets ?? 0,
           otherTotalBowlingTeamRuns: otherBowlingInning?.total_runs ?? 0,
           updatedPlayer: updatedPlayers);
+      state = state.copyWith(isActionInProgress: false);
     } catch (e) {
       debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
       state = state.copyWith(
@@ -1354,15 +1368,43 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .toList();
 
     if (type == PlayerSelectionType.bowler) {
-      return teamPlayers ?? [];
-    } else {
+      // remove substitute to select from bowlers
+      // get bowlingInningIds of currentBowlingTeam
+      final bowlingInningOfCurrentBowlingTeam = state.allInnings
+          .where((element) => element.team_id != teamId)
+          .map((e) => e.id);
+      // if any player is substitute in those innings then remove it else keep them as bowler
       return teamPlayers
-              ?.where((element) => _isPlayerEligibleForBatsman(element
-                  .performance
-                  .where(
-                      (element) => element.inning_id == state.currentInning?.id)
-                  .firstOrNull
-                  ?.status))
+              ?.where(
+                (element) => !element.performance.any(
+                  (element) =>
+                      bowlingInningOfCurrentBowlingTeam
+                          .contains(element.inning_id) &&
+                      element.status == PlayerStatus.substitute,
+                ),
+              )
+              .toList() ??
+          [];
+    } else {
+      // for any bowling innings if player is substitute remove it from batsmen List
+      // get bowlingInningIds of currentBattingTeam
+      final bowlingInningOfCurrentBattingTeam = state.allInnings
+          .where((element) => element.team_id != teamId)
+          .map((e) => e.id);
+      // if any player is substitute in those innings then remove it else keep them as batsman
+      return teamPlayers
+              ?.where((element) =>
+                  !element.performance.any(
+                    (element) =>
+                        bowlingInningOfCurrentBattingTeam
+                            .contains(element.inning_id) &&
+                        element.status == PlayerStatus.substitute,
+                  ) &&
+                  _isPlayerEligibleForBatsman(element.performance
+                      .where((element) =>
+                          element.inning_id == state.currentInning?.id)
+                      .firstOrNull
+                      ?.status))
               .toList() ??
           [];
     }
@@ -1396,8 +1438,32 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     return teamSquadIds;
   }
 
-  void addSubstitute(UserModel player) {
-    // TODO: add player as substitute
+  Future<void> addSubstitute(UserModel player) async {
+    final fieldingTeam = state.match?.teams
+        .where((element) => element.team.id != state.currentInning?.team_id)
+        .firstOrNull;
+    if (fieldingTeam == null) {
+      return;
+    }
+    final substituteStatus = PlayerPerformance(
+        inning_id: state.currentInning?.id ?? '',
+        status: PlayerStatus.substitute);
+
+    final matchPlayer = fieldingTeam.squad
+            .where((element) => element.player.id == player.id)
+            .firstOrNull ??
+        MatchPlayer(player: player);
+
+    final playerPerformance = matchPlayer.performance.toList().updateWhere(
+        where: (element) => element.inning_id == substituteStatus.inning_id,
+        updated: (oldElement) =>
+            oldElement.copyWith(status: PlayerStatus.substitute),
+        onNotFound: () => substituteStatus);
+
+    await _updateMatchPlayerStatus((
+      teamId: fieldingTeam.team.id ?? '',
+      players: [matchPlayer.copyWith(performance: playerPerformance)],
+    ));
   }
 
   bool _isPlayerEligibleForBatsman(PlayerStatus? status) {
