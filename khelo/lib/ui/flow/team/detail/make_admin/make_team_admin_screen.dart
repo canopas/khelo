@@ -88,8 +88,10 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
     final members = widget.team.players
         .where((element) => element.id != widget.team.created_by)
         .toList();
-    final owner = widget.team.players
-        .firstWhere((element) => element.id != widget.team.created_by);
+
+    final TeamPlayer owner = widget.team.players.firstWhere(
+        (element) => element.id == widget.team.created_by,
+        orElse: () => TeamPlayer(id: ''));
 
     return ListView.separated(
       padding:
@@ -97,21 +99,26 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
       itemCount: members.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
-          return UserDetailCell(
-            user: owner.user,
-            showPhoneNumber: false,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            onTap: () => UserDetailSheet.show(context, owner.user),
-            trailing: Text(context.l10n.team_detail_make_admin_owner_title,
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.primary)),
-          );
+          return (owner.id.isNotEmpty)
+              ? UserDetailCell(
+                  user: owner.user,
+                  showPhoneNumber: false,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  onTap: () => UserDetailSheet.show(context, owner.user),
+                  trailing: Text(
+                      context.l10n.team_detail_make_admin_owner_title,
+                      style: AppTextStyle.body2
+                          .copyWith(color: context.colorScheme.primary)),
+                )
+              : SizedBox();
         }
+
         final player = members[index - 1];
         return UserDetailCell(
             user: player.user,
             showPhoneNumber: false,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             onTap: () => UserDetailSheet.show(context, player.user),
             trailing: RoundedCheckBox(
               isSelected: state.selectedPlayers
@@ -119,7 +126,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
               onTap: (_) => notifier.selectAdmin(player),
             ));
       },
-      separatorBuilder: (context, index) => (index == 0)
+      separatorBuilder: (context, index) => (index == 0 && owner.id.isNotEmpty)
           ? Divider(
               height: 24,
               thickness: 1,

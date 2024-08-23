@@ -11,6 +11,7 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
@@ -41,6 +42,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(addTeamMemberStateProvider.notifier);
+    runPostFrame(() => notifier.setData(widget.team));
   }
 
   @override
@@ -56,7 +58,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
             ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
             : actionButton(
                 context,
-                onPressed: () => notifier.addPlayersToTeam(widget.team.id),
+                onPressed: () => notifier.addPlayersToTeam(),
                 icon: SvgPicture.asset(
                   Assets.images.icCheck,
                   colorFilter: ColorFilter.mode(

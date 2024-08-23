@@ -196,8 +196,10 @@ class TeamService {
   ) async {
     try {
       final teamRef = _teamsCollection.doc(teamId);
-      await teamRef
-          .update({FireStoreConst.players: FieldValue.arrayRemove(players)});
+      await teamRef.update({
+        FireStoreConst.teamPlayers:
+            FieldValue.arrayRemove(players.map((e) => e.toJson()).toList())
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
