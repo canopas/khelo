@@ -699,6 +699,8 @@
   "profile_setting_privacy_policy_title": "Privacy policy",
   "profile_setting_terms_and_condition_title": "Terms and condition",
   "profile_setting_app_version_text": "App Version: {version}",
+  "profile_setting_scan_to_play_text": "Scan to play!",
+  "profile_setting_scan_to_play_description": "This QR code allows you to easily add the player to the team.",
 
   "@_CONTACT_SUPPORT": {
   },
