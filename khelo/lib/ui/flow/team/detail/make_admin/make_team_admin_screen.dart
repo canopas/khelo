@@ -91,7 +91,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
 
     final TeamPlayer owner = widget.team.players.firstWhere(
         (element) => element.id == widget.team.created_by,
-        orElse: () => TeamPlayer(id: ''));
+        orElse: () => const TeamPlayer(id: ''));
 
     return ListView.separated(
       padding:
@@ -111,7 +111,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                       style: AppTextStyle.body2
                           .copyWith(color: context.colorScheme.primary)),
                 )
-              : SizedBox();
+              : const SizedBox();
         }
 
         final player = members[index - 1];
