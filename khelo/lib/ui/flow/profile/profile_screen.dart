@@ -50,7 +50,7 @@ class ProfileScreen extends ConsumerWidget {
               _settingsView(context, notifier),
               if (state.currentUser?.id != null) ...[
                 const SizedBox(height: 16),
-                _QRCodeView(context, state.currentUser?.id ?? ""),
+                _qrCodeView(context, state.currentUser?.id ?? ""),
               ],
               const SizedBox(height: 24),
               Visibility(
@@ -182,7 +182,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _QRCodeView(
+  Widget _qrCodeView(
     BuildContext context,
     String userId,
   ) {
@@ -200,13 +200,13 @@ class ProfileScreen extends ConsumerWidget {
             style: AppTextStyle.header4
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             context.l10n.profile_setting_scan_to_play_description,
             style: AppTextStyle.subtitle3
                 .copyWith(color: context.colorScheme.textSecondary),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           Center(
             child: QrImageView(
               data: userId,
