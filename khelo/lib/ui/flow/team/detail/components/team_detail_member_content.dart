@@ -1,4 +1,3 @@
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -18,11 +17,8 @@ class TeamDetailMemberContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
-    final isAdminOrOwner = state.team?.created_by == state.currentUserId ||
-        state.team?.players.any((element) =>
-                element.id == state.currentUserId &&
-                element.role == TeamPlayerRole.admin) ==
-            true;
+    final isAdminOrOwner =
+        state.team?.isAdminOrOwner(state.currentUserId) ?? false;
 
     if (state.team?.players != null && state.team?.players.isNotEmpty == true) {
       return Column(

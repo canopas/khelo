@@ -71,11 +71,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.team?.created_by == state.currentUserId ||
-              state.team?.players.any((element) =>
-                      element.id == state.currentUserId &&
-                      element.role == TeamPlayerRole.admin) ==
-                  true)
+      actions: (state.team?.isAdminOrOwner(state.currentUserId) ?? false)
           ? [
               moreOptionButton(
                 context,

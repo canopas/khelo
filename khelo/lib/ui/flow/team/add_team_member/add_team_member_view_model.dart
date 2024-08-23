@@ -24,12 +24,12 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   final UserService _userService;
   final TeamService _teamService;
   Timer? _debounce;
-  final String? currantUserId;
+  final String? currentUserId;
 
   AddTeamMemberViewNotifier(
     this._userService,
     this._teamService,
-    this.currantUserId,
+    this.currentUserId,
   ) : super(AddTeamMemberState(searchController: TextEditingController()));
 
   late TeamModel _team;
@@ -65,7 +65,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   void selectUser(UserModel user) {
     final player = TeamPlayer(
         id: user.id,
-        role: (_team.created_by == currantUserId)
+        role: (_team.created_by == currentUserId)
             ? TeamPlayerRole.admin
             : TeamPlayerRole.player,
         user: user);

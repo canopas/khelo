@@ -25,6 +25,15 @@ abstract class TeamModel with _$TeamModel {
     List<TeamPlayer> players,
   }) = _TeamModel;
 
+  bool isAdminOrOwner(String? currentUserId) {
+    return created_by == currentUserId ||
+        players.any(
+          (element) =>
+              element.id == currentUserId &&
+              element.role == TeamPlayerRole.admin,
+        );
+  }
+
   factory TeamModel.fromJson(Map<String, dynamic> json) =>
       _$TeamModelFromJson(json);
 

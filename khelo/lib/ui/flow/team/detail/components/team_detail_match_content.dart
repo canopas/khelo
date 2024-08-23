@@ -1,5 +1,4 @@
 import 'package:data/api/match/match_model.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -14,11 +13,8 @@ class TeamDetailMatchContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
-    final isAdminOrOwner = state.team?.created_by == state.currentUserId ||
-        state.team?.players.any((element) =>
-                element.id == state.currentUserId &&
-                element.role == TeamPlayerRole.admin) ==
-            true;
+    final isAdminOrOwner =
+        state.team?.isAdminOrOwner(state.currentUserId) ?? false;
 
     if (state.matches != null && state.matches!.isNotEmpty) {
       return ListView.separated(

@@ -88,11 +88,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
               return _teamListCell(
                 context,
                 team: team,
-                showMoreOptionButton: team.created_by == state.currentUserId ||
-                    team.players.any((element) =>
-                            element.id == state.currentUserId &&
-                            element.role == TeamPlayerRole.admin) ==
-                        true,
+                showMoreOptionButton: team.isAdminOrOwner(state.currentUserId),
               );
             },
           )
