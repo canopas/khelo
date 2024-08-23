@@ -4,7 +4,6 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
-import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -16,7 +15,6 @@ final addTeamMemberStateProvider = StateNotifierProvider.autoDispose<
   return AddTeamMemberViewNotifier(
     ref.read(userServiceProvider),
     ref.read(teamServiceProvider),
-    ref.read(currentUserPod)?.id,
   );
 });
 
@@ -24,12 +22,10 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   final UserService _userService;
   final TeamService _teamService;
   Timer? _debounce;
-  final String? currentUserId;
 
   AddTeamMemberViewNotifier(
     this._userService,
     this._teamService,
-    this.currentUserId,
   ) : super(AddTeamMemberState(searchController: TextEditingController()));
 
   late TeamModel _team;
@@ -63,12 +59,10 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   }
 
   void selectUser(UserModel user) {
-    final player = TeamPlayer(
-        id: user.id,
-        role: (_team.created_by == currentUserId)
-            ? TeamPlayerRole.admin
-            : TeamPlayerRole.player,
-        user: user);
+    final role = (_team.created_by == user.id)
+        ? TeamPlayerRole.admin
+        : TeamPlayerRole.player;
+    final player = TeamPlayer(id: user.id, role: role, user: user);
     state = state.copyWith(selectedUsers: [...state.selectedUsers, player]);
   }
 
