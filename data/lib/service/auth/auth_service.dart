@@ -1,5 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
+
 import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
+import '../../storage/app_preferences.dart';
 import '../user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -101,7 +105,10 @@ class AuthService {
   }
 
   Future<void> _onVerificationSuccess(
-      String countryCode, String phoneNumber, UserCredential credential) async {
+    String countryCode,
+    String phoneNumber,
+    UserCredential credential,
+  ) async {
     try {
       if (credential.user == null) {
         _currantUserNotifier.state = null;
@@ -111,7 +118,9 @@ class AuthService {
       final phone = "$countryCode ${phoneNumber.caseAndSpaceInsensitive}";
 
       final (user, session) = await _userService.upsertUser(
-          uid: credential.user!.uid, phone: phone);
+        uid: credential.user!.uid,
+        phone: phone,
+      );
 
       _currantUserNotifier.state = user.toJsonString();
       _userSessionNotifier.state = session.toJsonString();

@@ -291,13 +291,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     );
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(profileStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
   void handleToggle(Function action) async {
     final isDeniedForever = await Permission.notification.isPermanentlyDenied;
     if (isDeniedForever) {

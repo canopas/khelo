@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/errors/app_error.dart';
-import 'package:data/extensions/list_extensions.dart';
-import 'package:data/service/device/device_service.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
-import 'package:data/utils/dummy_deactivated_account.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/list_extensions.dart';
+import '../device/device_service.dart';
+import '../../utils/constant/firestore_constant.dart';
+import '../../utils/dummy_deactivated_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
 import '../../storage/app_preferences.dart';
 
 final userServiceProvider = Provider((ref) {
-  final service = UserService(ref.read(currentUserPod),
-      FirebaseFirestore.instance, ref.read(deviceServiceProvider));
+  final service = UserService(
+    ref.read(currentUserPod),
+    FirebaseFirestore.instance,
+    ref.read(deviceServiceProvider),
+  );
 
   ref.listen(currentUserPod, (_, next) => service._currentUser = next);
   return service;
@@ -32,15 +35,17 @@ class UserService {
   CollectionReference<UserModel> get _userRef => firestore
       .collection(FireStoreConst.usersCollection)
       .withConverter<UserModel>(
-          fromFirestore: UserModel.fromFireStore,
-          toFirestore: (user, options) => user.toJson());
+        fromFirestore: UserModel.fromFireStore,
+        toFirestore: (user, options) => user.toJson(),
+      );
 
   CollectionReference _sessionRef(String userId) => _userRef
       .doc(userId)
       .collection(FireStoreConst.userSessionCollection)
       .withConverter<ApiSession>(
-          fromFirestore: ApiSession.fromFireStore,
-          toFirestore: (session, _) => session.toJson());
+        fromFirestore: ApiSession.fromFireStore,
+        toFirestore: (session, _) => session.toJson(),
+      );
 
   Future<void> clearSession({
     required String uid,
@@ -110,7 +115,7 @@ class UserService {
   }
 
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
-    List<UserModel> users = [];
+    final List<UserModel> users = [];
     try {
       for (final tenIds in ids.chunked(10)) {
         final snapshot =
@@ -120,9 +125,11 @@ class UserService {
 
         final deactivatedUserIds =
             tenIds.where((id) => !users.map((user) => user.id).contains(id));
-        users.addAll(deactivatedUserIds.map(
-          (id) => deActiveDummyUserAccount(id),
-        ));
+        users.addAll(
+          deactivatedUserIds.map(
+            (id) => deActiveDummyUserAccount(id),
+          ),
+        );
       }
 
       return users;
@@ -134,10 +141,14 @@ class UserService {
   Future<List<UserModel>> searchUser(String searchKey) async {
     try {
       final snapshot = await _userRef
-          .where(FireStoreConst.nameLowercase,
-              isGreaterThanOrEqualTo: searchKey.toLowerCase())
-          .where(FireStoreConst.nameLowercase,
-              isLessThan: '${searchKey.toLowerCase()}z')
+          .where(
+            FireStoreConst.nameLowercase,
+            isGreaterThanOrEqualTo: searchKey.toLowerCase(),
+          )
+          .where(
+            FireStoreConst.nameLowercase,
+            isLessThan: '${searchKey.toLowerCase()}z',
+          )
           .get();
 
       return snapshot.docs.map((doc) {
