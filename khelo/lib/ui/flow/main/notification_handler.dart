@@ -37,7 +37,7 @@ class NotificationHandler {
       }
     });
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      _onTapNotification(context, event.data);
+      if (context.mounted) _onTapNotification(context, event.data);
     });
     if (Platform.isAndroid) {
       FirebaseMessaging.onMessage.listen((event) {
