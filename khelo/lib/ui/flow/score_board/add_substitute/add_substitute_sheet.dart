@@ -10,9 +10,9 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/score_board/add_substitute/add_substitute_view_model.dart';
-import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/components/user_cell_view.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
+import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -80,43 +80,89 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
   Widget build(BuildContext context) {
     final state = ref.watch(addSubstituteStateProvider);
 
-    return BottomSheetWrapper(
-      contentBottomSpacing: 0,
+    return Container(
       height: context.mediaQuerySize.height * 0.8,
-      content: _content(context, state),
-      action: [
-        PrimaryButton(
-          context.l10n.common_select_title,
-          enabled: selectedPlayer != null,
-          onPressed: () => context.pop(selectedPlayer),
-        ),
-      ],
+      decoration: BoxDecoration(
+        color: context.colorScheme.surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(top: 44) +
+                const EdgeInsets.symmetric(horizontal: 16.0) +
+                context.mediaQueryPadding,
+            child: CustomScrollView(
+              slivers: _content(context, state),
+            ),
+          ),
+          _dragHandle(context),
+          if (state.error == null) _stickyButton(context),
+        ],
+      ),
     );
   }
 
-  Widget _content(BuildContext context, AddSubstituteViewState state) {
-    if (state.error != null) {
-      return ErrorScreen(
-        error: state.error,
-        onRetryTap: notifier.onSearchChanged,
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.l10n.score_board_add_substitute_title,
-          style: AppTextStyle.header3
-              .copyWith(color: context.colorScheme.textPrimary),
-        ),
-        const SizedBox(height: 16),
-        _benchPlayerView(context, state.nonPlayingPlayers),
-        _searchTextField(context, notifier, state),
-        const SizedBox(height: 24),
-        _searchResultView(context, notifier, state),
-      ],
+  Widget _dragHandle(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        height: 4,
+        width: 32,
+        margin: const EdgeInsets.symmetric(vertical: 20),
+        decoration: BoxDecoration(
+            color: context.colorScheme.outline,
+            borderRadius: BorderRadius.circular(10)),
+      ),
     );
+  }
+
+  Widget _stickyButton(BuildContext context) {
+    return BottomStickyOverlay(
+      child: PrimaryButton(
+        context.l10n.common_select_title,
+        enabled: selectedPlayer != null,
+        onPressed: () => context.pop(selectedPlayer),
+      ),
+    );
+  }
+
+  List<Widget> _content(BuildContext context, AddSubstituteViewState state) {
+    if (state.error != null) {
+      return [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: BottomStickyOverlay.padding,
+            child: ErrorScreen(
+              error: state.error,
+              onRetryTap: notifier.onSearchChanged,
+            ),
+          ),
+        )
+      ];
+    }
+    return [
+      SliverPadding(
+        padding: BottomStickyOverlay.padding,
+        sliver: SliverMainAxisGroup(slivers: [
+          SliverToBoxAdapter(
+            child: Text(
+              context.l10n.score_board_add_substitute_title,
+              style: AppTextStyle.header3
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
+          ),
+          SliverToBoxAdapter(child: const SizedBox(height: 16)),
+          SliverToBoxAdapter(
+              child: _benchPlayerView(context, state.nonPlayingPlayers)),
+          SliverToBoxAdapter(child: _searchTextField(context, notifier, state)),
+          SliverToBoxAdapter(child: const SizedBox(height: 24)),
+          SliverFillRemaining(
+              hasScrollBody: false,
+              child: _searchResultView(context, notifier, state)),
+        ]),
+      )
+    ];
   }
 
   Widget _benchPlayerView(BuildContext context, List<UserModel> bench) {
@@ -155,7 +201,6 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
             isShowButton: false,
           )
         : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: state.searchedUsers.map(
               (user) {
                 final enableAction = !state.playingSquadIds.contains(user.id);
