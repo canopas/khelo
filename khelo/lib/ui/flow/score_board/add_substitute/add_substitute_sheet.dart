@@ -89,7 +89,7 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 44) +
+            padding: const EdgeInsets.only(top: 44) +
                 const EdgeInsets.symmetric(horizontal: 16.0) +
                 context.mediaQueryPadding,
             child: CustomScrollView(
@@ -152,11 +152,11 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
           ),
-          SliverToBoxAdapter(child: const SizedBox(height: 16)),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverToBoxAdapter(
               child: _benchPlayerView(context, state.nonPlayingPlayers)),
           SliverToBoxAdapter(child: _searchTextField(context, notifier, state)),
-          SliverToBoxAdapter(child: const SizedBox(height: 24)),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
           SliverFillRemaining(
               hasScrollBody: false,
               child: _searchResultView(context, notifier, state)),
