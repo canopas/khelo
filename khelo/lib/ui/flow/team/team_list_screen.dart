@@ -88,7 +88,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
               return _teamListCell(
                 context,
                 team: team,
-                showMoreOptionButton: state.currentUserId == team.created_by,
+                showMoreOptionButton: team.isAdminOrOwner(state.currentUserId),
               );
             },
           )
@@ -121,11 +121,11 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
             style: AppTextStyle.subtitle2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
-          subtitle: team.players != null
+          subtitle: team.players.isNotEmpty
               ? Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
-                      '${team.players!.length} ${context.l10n.add_team_players_text}',
+                      '${team.players.length} ${context.l10n.add_team_players_text}',
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textSecondary)),
                 )
@@ -170,6 +170,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
         items: TeamFilterOption.values
             .map((option) => BottomSheetAction(
                 title: option.getString(context),
+                enabled: selectedFilter != option,
                 child: selectedFilter == option
                     ? SvgPicture.asset(
                         Assets.images.icCheck,

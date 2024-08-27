@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/innings/inning_model.dart';
-import 'package:data/errors/app_error.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
+import '../../api/innings/inning_model.dart';
+import '../../errors/app_error.dart';
+import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final inningServiceProvider = Provider((ref) {
@@ -20,8 +20,9 @@ class InningsService {
       : _inningCollection = _firestore
             .collection(FireStoreConst.inningsCollection)
             .withConverter(
-                fromFirestore: InningModel.fromFireStore,
-                toFirestore: (InningModel inning, _) => inning.toJson());
+              fromFirestore: InningModel.fromFireStore,
+              toFirestore: (InningModel inning, _) => inning.toJson(),
+            );
 
   String get generateInningId => _inningCollection.doc().id;
 
@@ -29,7 +30,7 @@ class InningsService {
     required List<InningModel> innings,
   }) async {
     try {
-      WriteBatch batch = _firestore.batch();
+      final WriteBatch batch = _firestore.batch();
       for (final inning in innings) {
         final inningRef = _inningCollection.doc(inning.id);
         batch.set(inningRef, inning, SetOptions(merge: true));
@@ -63,15 +64,15 @@ class InningsService {
       final batInningRef = _inningCollection.doc(battingTeamInningId);
       final bowlInningRef = _inningCollection.doc(bowlingTeamInningId);
 
-      Map<String, dynamic> battingUpdates = {
+      final Map<String, dynamic> battingUpdates = {
         FireStoreConst.totalRuns: totalRun,
       };
       if (over != null) battingUpdates.addAll({FireStoreConst.overs: over});
 
       transaction.update(batInningRef, battingUpdates);
 
-      Map<String, dynamic> bowlingUpdates = {
-        FireStoreConst.totalWickets: wicketCount
+      final Map<String, dynamic> bowlingUpdates = {
+        FireStoreConst.totalWickets: wicketCount,
       };
       if (runs != null) bowlingUpdates.addAll({FireStoreConst.totalRuns: runs});
 
@@ -95,7 +96,7 @@ class InningsService {
 
   Future updateInningsStatuses(Map<String, InningStatus> innings) async {
     try {
-      WriteBatch batch = _firestore.batch();
+      final WriteBatch batch = _firestore.batch();
 
       for (final inning in innings.entries) {
         final inningRef = _inningCollection.doc(inning.key);

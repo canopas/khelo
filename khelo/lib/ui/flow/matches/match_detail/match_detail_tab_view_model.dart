@@ -284,7 +284,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           .firstWhere((element) => element.player.id == playerId);
     }
     if (lastBatsman == null) {
-      UserModel player =
+      final player =
           _getPlayerByInningId(inningId: inningId, playerId: playerId);
       lastBatsman = BatsmanSummary(player: player);
     }

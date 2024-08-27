@@ -39,6 +39,7 @@ class FireStoreConst {
 
   // teams field const
   static const String players = "players";
+  static const String teamPlayers = "team_players";
   static const String createdBy = "created_by";
   static const String nameLowercase = "name_lowercase";
   static const String profileImageUrl = "profile_img_url";

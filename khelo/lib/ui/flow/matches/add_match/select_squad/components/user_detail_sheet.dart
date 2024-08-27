@@ -94,11 +94,10 @@ class UserDetailSheet extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: PrimaryButton(
                 actionButtonTitle!,
+                enabled: onButtonTap != null,
                 onPressed: () {
                   context.pop();
-                  if (onButtonTap != null) {
-                    onButtonTap!();
-                  }
+                  onButtonTap?.call();
                 },
               ),
             )

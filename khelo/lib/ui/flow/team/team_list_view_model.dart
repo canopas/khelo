@@ -66,9 +66,14 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
             .where((element) =>
                 element.created_by == state.currentUserId ||
                 (element.players
-                        ?.map((e) => e.id)
-                        .contains(state.currentUserId) ??
-                    false))
+                    .map((e) => e.id)
+                    .contains(state.currentUserId)))
+            .toList();
+      case TeamFilterOption.meAsAdmin:
+        filteredTeams = state.teams
+            .where((element) => element.players.any((player) =>
+                player.id == state.currentUserId &&
+                player.role == TeamPlayerRole.admin))
             .toList();
       default:
         filteredTeams = state.teams;
@@ -114,7 +119,8 @@ class TeamListViewState with _$TeamListViewState {
 enum TeamFilterOption {
   all,
   createdByMe,
-  memberMe;
+  memberMe,
+  meAsAdmin;
 
   String getString(BuildContext context) {
     switch (this) {
@@ -124,6 +130,8 @@ enum TeamFilterOption {
         return context.l10n.team_list_created_by_me_title;
       case TeamFilterOption.memberMe:
         return context.l10n.team_list_me_as_member_title;
+      case TeamFilterOption.meAsAdmin:
+        return context.l10n.team_list_me_as_admin_title;
     }
   }
 }

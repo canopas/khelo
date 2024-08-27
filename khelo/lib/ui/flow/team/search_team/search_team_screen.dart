@@ -195,7 +195,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                     )),
                 TextSpan(
                   text: context.l10n
-                      .search_team_player_title(team.players?.length ?? 0),
+                      .search_team_player_title(team.players.length),
                 ),
               ],
             ),

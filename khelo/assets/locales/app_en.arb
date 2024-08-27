@@ -149,6 +149,7 @@
   "team_list_all_teams_title": "All teams",
   "team_list_created_by_me_title": "Created by me",
   "team_list_me_as_member_title": "Me as member",
+  "team_list_me_as_admin_title": "Me as admin",
   "team_list_no_teams_created_title": "No teams created",
   "team_list_empty_list_description": "Tap on the “ + ” icon to create a team",
 
@@ -235,11 +236,15 @@
   "select_squad_rest_of_team_title": "Rest of The Team",
   "select_squad_empty_squad_text": "Select squad via adding it from team members list.",
   "select_squad_empty_team_member_text": "No team member added in this team, try to add people you know as a team member.",
+
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Batting",
   "add_toss_detail_bowl_text": "Bowling",
+
+  "add_substitute_search_substitute_title":"Who’s ready to step in?",
+  "add_substitute_search_substitute_description":"Search and assign a substitute fielder to maintain your fielding edge.",
 
   "team_detail_screen_title": "Team Detail",
   "team_detail_member_tab_title": "Member",
@@ -252,6 +257,14 @@
   "team_detail_empty_stat_title": "No stats available yet!",
   "team_detail_empty_stat_description_text": "The players are warming up! Stay tuned for exciting stats as the team progresses.",
   "team_detail_add_member_title": "Add member",
+  "team_detail_make_admin": "Make admin",
+  "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
+  "@team_detail_admin": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "team_detail_make_admin_owner_title": "Owner",
   "team_detail_match_tab_title": "Match",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_won_title": "Won({win})",
@@ -588,6 +601,8 @@
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
   "score_board_pause_scoring_title": "Pause Scoring",
+  "score_board_add_substitute_title": "Add Substitute",
+  "score_board_substitute_title": "Substitute",
   "score_board_penalty_run_title": "Penalty Run",
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
@@ -696,6 +711,8 @@
   "profile_setting_privacy_policy_title": "Privacy policy",
   "profile_setting_terms_and_condition_title": "Terms and condition",
   "profile_setting_app_version_text": "App Version: {version}",
+  "profile_setting_scan_to_play_text": "Scan to play!",
+  "profile_setting_scan_to_play_description": "This QR code allows you to easily add the player to the team.",
 
   "@_NOTIFICATION": {
   },

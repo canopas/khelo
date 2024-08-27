@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/match/match_model.dart';
-import 'package:data/api/team/team_model.dart';
-import 'package:data/api/user/user_models.dart';
-import 'package:data/errors/app_error.dart';
-import 'package:data/extensions/list_extensions.dart';
-import 'package:data/service/team/team_service.dart';
-import 'package:data/service/user/user_service.dart';
-import 'package:data/utils/constant/firestore_constant.dart';
+import '../../api/match/match_model.dart';
+import '../../api/team/team_model.dart';
+import '../../api/user/user_models.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/list_extensions.dart';
+import '../team/team_service.dart';
+import '../user/user_service.dart';
+import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../storage/app_preferences.dart';
@@ -39,8 +39,9 @@ class MatchService {
   ) : _matchCollection = _firestore
             .collection(FireStoreConst.matchesCollection)
             .withConverter(
-                fromFirestore: AddEditMatchRequest.fromFireStore,
-                toFirestore: (AddEditMatchRequest match, _) => match.toJson());
+              fromFirestore: AddEditMatchRequest.fromFireStore,
+              toFirestore: (AddEditMatchRequest match, _) => match.toJson(),
+            );
 
   Stream<List<MatchModel>> getCurrentUserPlayedMatches() {
     if (_currentUserId == null) {
@@ -56,119 +57,11 @@ class MatchService {
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
-      return await Future.wait(snapshot.docs.map((mainDoc) async {
-        final match = mainDoc.data();
-        List<MatchTeamModel> teams = await getTeamsList(match.teams);
-        return MatchModel(
-          id: match.id,
-          teams: teams,
-          match_type: match.match_type,
-          number_of_over: match.number_of_over,
-          over_per_bowler: match.over_per_bowler,
-          players: match.players,
-          team_ids: match.team_ids,
-          team_creator_ids: match.team_creator_ids,
-          city: match.city,
-          ground: match.ground,
-          start_time: match.start_time,
-          created_by: match.created_by,
-          ball_type: match.ball_type,
-          pitch_type: match.pitch_type,
-          match_status: match.match_status,
-          toss_winner_id: match.toss_winner_id,
-          toss_decision: match.toss_decision,
-          current_playing_team_id: match.current_playing_team_id,
-        );
-      }).toList());
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  Stream<List<MatchModel>> getCurrentUserRelatedMatches() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-
-    final filter = Filter.or(
-        Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
-        Filter(FireStoreConst.players, arrayContains: _currentUserId),
-        Filter(FireStoreConst.teamCreatorIds, arrayContains: _currentUserId));
-
-    return _matchCollection
-        .where(filter)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      return await Future.wait(snapshot.docs.map((mainDoc) async {
-        final match = mainDoc.data();
-        List<MatchTeamModel> teams = await getTeamsList(match.teams);
-        return MatchModel(
-          id: match.id,
-          teams: teams,
-          match_type: match.match_type,
-          number_of_over: match.number_of_over,
-          over_per_bowler: match.over_per_bowler,
-          city: match.city,
-          players: match.players,
-          team_ids: match.team_ids,
-          team_creator_ids: match.team_creator_ids,
-          ground: match.ground,
-          start_time: match.start_time,
-          created_by: match.created_by,
-          ball_type: match.ball_type,
-          pitch_type: match.pitch_type,
-          match_status: match.match_status,
-          toss_winner_id: match.toss_winner_id,
-          toss_decision: match.toss_decision,
-          current_playing_team_id: match.current_playing_team_id,
-        );
-      }).toList());
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  Stream<List<MatchModel>> getMatchesByTeamId(String teamId) {
-    return _matchCollection
-        .where(FireStoreConst.teamIds, arrayContains: teamId)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      return await Future.wait(snapshot.docs.map((mainDoc) async {
-        final match = mainDoc.data();
-
-        List<MatchTeamModel> teams = await getTeamsList(match.teams);
-        return MatchModel(
-          id: match.id,
-          teams: teams,
-          match_type: match.match_type,
-          number_of_over: match.number_of_over,
-          over_per_bowler: match.over_per_bowler,
-          city: match.city,
-          players: match.players,
-          team_ids: match.team_ids,
-          team_creator_ids: match.team_creator_ids,
-          ground: match.ground,
-          start_time: match.start_time,
-          created_by: match.created_by,
-          ball_type: match.ball_type,
-          pitch_type: match.pitch_type,
-          match_status: match.match_status,
-          toss_winner_id: match.toss_winner_id,
-          toss_decision: match.toss_decision,
-          current_playing_team_id: match.current_playing_team_id,
-        );
-      }).toList());
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  Stream<List<MatchModel>> getRunningMatches() {
-    return _matchCollection
-        .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      List<MatchModel> matches = [];
-      for (final mainDoc in snapshot.docs) {
-        if (mainDoc.data().match_status == MatchStatus.running) {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
-
-          List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          matches.add(MatchModel(
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return MatchModel(
             id: match.id,
             teams: teams,
             match_type: match.match_type,
@@ -187,7 +80,124 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
-          ));
+          );
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> getCurrentUserRelatedMatches() {
+    if (_currentUserId == null) {
+      return Stream.value([]);
+    }
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.players, arrayContains: _currentUserId),
+      Filter(FireStoreConst.teamCreatorIds, arrayContains: _currentUserId),
+    );
+
+    return _matchCollection
+        .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final match = mainDoc.data();
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return MatchModel(
+            id: match.id,
+            teams: teams,
+            match_type: match.match_type,
+            number_of_over: match.number_of_over,
+            over_per_bowler: match.over_per_bowler,
+            city: match.city,
+            players: match.players,
+            team_ids: match.team_ids,
+            team_creator_ids: match.team_creator_ids,
+            ground: match.ground,
+            start_time: match.start_time,
+            created_by: match.created_by,
+            ball_type: match.ball_type,
+            pitch_type: match.pitch_type,
+            match_status: match.match_status,
+            toss_winner_id: match.toss_winner_id,
+            toss_decision: match.toss_decision,
+            current_playing_team_id: match.current_playing_team_id,
+          );
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> getMatchesByTeamId(String teamId) {
+    return _matchCollection
+        .where(FireStoreConst.teamIds, arrayContains: teamId)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final match = mainDoc.data();
+
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return MatchModel(
+            id: match.id,
+            teams: teams,
+            match_type: match.match_type,
+            number_of_over: match.number_of_over,
+            over_per_bowler: match.over_per_bowler,
+            city: match.city,
+            players: match.players,
+            team_ids: match.team_ids,
+            team_creator_ids: match.team_creator_ids,
+            ground: match.ground,
+            start_time: match.start_time,
+            created_by: match.created_by,
+            ball_type: match.ball_type,
+            pitch_type: match.pitch_type,
+            match_status: match.match_status,
+            toss_winner_id: match.toss_winner_id,
+            toss_decision: match.toss_decision,
+            current_playing_team_id: match.current_playing_team_id,
+          );
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> getRunningMatches() {
+    return _matchCollection
+        .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      final List<MatchModel> matches = [];
+      for (final mainDoc in snapshot.docs) {
+        if (mainDoc.data().match_status == MatchStatus.running) {
+          final match = mainDoc.data();
+
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          matches.add(
+            MatchModel(
+              id: match.id,
+              teams: teams,
+              match_type: match.match_type,
+              number_of_over: match.number_of_over,
+              over_per_bowler: match.over_per_bowler,
+              players: match.players,
+              team_ids: match.team_ids,
+              team_creator_ids: match.team_creator_ids,
+              city: match.city,
+              ground: match.ground,
+              start_time: match.start_time,
+              created_by: match.created_by,
+              ball_type: match.ball_type,
+              pitch_type: match.pitch_type,
+              match_status: match.match_status,
+              toss_winner_id: match.toss_winner_id,
+              toss_decision: match.toss_decision,
+              current_playing_team_id: match.current_playing_team_id,
+            ),
+          );
         }
       }
       return matches;
@@ -199,24 +209,27 @@ class MatchService {
       final match = snapshot.data();
       if (match == null) {
         return MatchModel(
-            teams: [],
-            match_type: MatchType.limitedOvers,
-            number_of_over: 0,
-            over_per_bowler: 0,
-            city: '',
-            ground: '',
-            start_time: DateTime.now(),
-            ball_type: BallType.leather,
-            pitch_type: PitchType.turf,
-            created_by: '',
-            match_status: MatchStatus.running);
+          teams: [],
+          match_type: MatchType.limitedOvers,
+          number_of_over: 0,
+          over_per_bowler: 0,
+          city: '',
+          ground: '',
+          start_time: DateTime.now(),
+          ball_type: BallType.leather,
+          pitch_type: PitchType.turf,
+          created_by: '',
+          match_status: MatchStatus.running,
+        );
       }
 
-      List<MatchTeamModel> teams = await getTeamsList(match.teams);
-      List<UserModel>? umpires = await getUserListFromUserIds(match.umpire_ids);
-      List<UserModel>? commentators =
+      final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+      final List<UserModel>? umpires =
+          await getUserListFromUserIds(match.umpire_ids);
+      final List<UserModel>? commentators =
           await getUserListFromUserIds(match.commentator_ids);
-      List<UserModel>? scorers = await getUserListFromUserIds(match.scorer_ids);
+      final List<UserModel>? scorers =
+          await getUserListFromUserIds(match.scorer_ids);
 
       UserModel? referee;
       if (match.referee_id != null) {
@@ -260,31 +273,34 @@ class MatchService {
       final match = snapshot.data();
       if (match == null) {
         return MatchModel(
-            teams: [],
-            match_type: MatchType.limitedOvers,
-            number_of_over: 0,
-            over_per_bowler: 0,
-            city: '',
-            ground: '',
-            start_time: DateTime.now(),
-            ball_type: BallType.leather,
-            pitch_type: PitchType.turf,
-            created_by: '',
-            match_status: MatchStatus.running);
+          teams: [],
+          match_type: MatchType.limitedOvers,
+          number_of_over: 0,
+          over_per_bowler: 0,
+          city: '',
+          ground: '',
+          start_time: DateTime.now(),
+          ball_type: BallType.leather,
+          pitch_type: PitchType.turf,
+          created_by: '',
+          match_status: MatchStatus.running,
+        );
       }
 
-      List<MatchTeamModel> teams = await getTeamsList(match.teams);
-      List<UserModel>? umpires = await getUserListFromUserIds(match.umpire_ids);
-      List<UserModel>? commentators =
+      final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+      final List<UserModel>? umpires =
+          await getUserListFromUserIds(match.umpire_ids);
+      final List<UserModel>? commentators =
           await getUserListFromUserIds(match.commentator_ids);
-      List<UserModel>? scorers = await getUserListFromUserIds(match.scorer_ids);
+      final List<UserModel>? scorers =
+          await getUserListFromUserIds(match.scorer_ids);
 
       UserModel? referee;
       if (match.referee_id != null) {
         referee = await _userService.getUser(match.referee_id!);
       }
 
-      var matchModel = MatchModel(
+      final matchModel = MatchModel(
         id: match.id,
         teams: teams,
         match_type: match.match_type,
@@ -322,19 +338,25 @@ class MatchService {
     try {
       final matchRef = _matchCollection.doc(match.id);
       await matchRef.set(
-          match.copyWith(id: matchRef.id), SetOptions(merge: true));
+        match.copyWith(id: matchRef.id),
+        SetOptions(merge: true),
+      );
       return matchRef.id;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
 
-  Future<void> updateTossDetails(String matchId, String tossWinnerId,
-      TossDecision tossDecision, String currentPlayingTeam) async {
+  Future<void> updateTossDetails(
+    String matchId,
+    String tossWinnerId,
+    TossDecision tossDecision,
+    String currentPlayingTeam,
+  ) async {
     try {
       final matchRef = _matchCollection.doc(matchId);
 
-      Map<String, dynamic> tossDetails = {
+      final Map<String, dynamic> tossDetails = {
         FireStoreConst.tossWinnerId: tossWinnerId,
         FireStoreConst.tossDecision: tossDecision.value,
         FireStoreConst.currentPlayingTeamId: currentPlayingTeam,
@@ -350,7 +372,7 @@ class MatchService {
     try {
       final matchRef = _matchCollection.doc(matchId);
 
-      Map<String, dynamic> matchStatus = {
+      final Map<String, dynamic> matchStatus = {
         FireStoreConst.matchStatus: status.value,
       };
 
@@ -378,19 +400,19 @@ class MatchService {
 
       final existingTeams = snapshot.data()?.teams ?? [];
 
-      int battingTeamIndex =
+      final int battingTeamIndex =
           existingTeams.indexWhere((team) => team.team_id == battingTeamId);
-      int bowlingTeamIndex =
+      final int bowlingTeamIndex =
           existingTeams.indexWhere((team) => team.team_id == bowlingTeamId);
 
       var battingTeam = existingTeams[battingTeamIndex];
       var bowlingTeam = existingTeams[bowlingTeamIndex];
       if (battingTeamIndex != -1 && bowlingTeamIndex != -1) {
         if (updatedMatchPlayer != null) {
-          var updatedSquad = existingTeams[battingTeamIndex].squad.toList();
+          final updatedSquad = existingTeams[battingTeamIndex].squad.toList();
 
           for (final matchPlayer in updatedMatchPlayer) {
-            int existingPlayerIndex = updatedSquad
+            final int existingPlayerIndex = updatedSquad
                 .indexWhere((player) => player.id == matchPlayer.id);
             if (existingPlayerIndex != -1) {
               updatedSquad[existingPlayerIndex] = matchPlayer;
@@ -412,15 +434,17 @@ class MatchService {
       }
 
       transaction.update(matchRef, {
-        FireStoreConst.teams: [battingTeam.toJson(), bowlingTeam.toJson()]
+        FireStoreConst.teams: [battingTeam.toJson(), bowlingTeam.toJson()],
       });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
 
-  Future<void> updateCurrentPlayingTeam(
-      {required String matchId, required String teamId}) async {
+  Future<void> updateCurrentPlayingTeam({
+    required String matchId,
+    required String teamId,
+  }) async {
     try {
       final matchRef = _matchCollection.doc(matchId);
 
@@ -431,7 +455,9 @@ class MatchService {
   }
 
   Future<void> updateTeamsSquad(
-      String matchId, AddMatchTeamRequest teamRequest) async {
+    String matchId,
+    AddMatchTeamRequest teamRequest,
+  ) async {
     try {
       final matchRef = _matchCollection.doc(matchId);
 
@@ -440,15 +466,15 @@ class MatchService {
 
         final existingTeams = snapshot.data()?.teams ?? [];
         var updatedTeams = existingTeams;
-        int teamIndex = existingTeams
+        final int teamIndex = existingTeams
             .indexWhere((team) => team.team_id == teamRequest.team_id);
 
         if (teamIndex != -1) {
           var team = existingTeams[teamIndex];
-          var updatedSquad = existingTeams[teamIndex].squad.toList();
+          final updatedSquad = existingTeams[teamIndex].squad.toList();
 
           for (var updatedPlayer in teamRequest.squad) {
-            int existingPlayerIndex = updatedSquad
+            final int existingPlayerIndex = updatedSquad
                 .indexWhere((player) => player.id == updatedPlayer.id);
             if (existingPlayerIndex != -1) {
               updatedSquad[existingPlayerIndex] = updatedPlayer;
@@ -459,12 +485,15 @@ class MatchService {
 
           team = team.copyWith(squad: updatedSquad);
           updatedTeams = updatedTeams.updateWhere(
-              where: (element) => element.team_id == team.team_id,
-              updated: (oldElement) => team);
+            where: (element) => element.team_id == team.team_id,
+            updated: (oldElement) => team,
+          );
         }
 
-        transaction.update(matchRef,
-            {FireStoreConst.teams: updatedTeams.map((e) => e.toJson())});
+        transaction.update(
+          matchRef,
+          {FireStoreConst.teams: updatedTeams.map((e) => e.toJson())},
+        );
       });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -485,7 +514,7 @@ class MatchService {
       return null;
     }
     try {
-      List<UserModel> users = await _userService.getUsersByIds(userIds);
+      final List<UserModel> users = await _userService.getUsersByIds(userIds);
       return users;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -493,22 +522,26 @@ class MatchService {
   }
 
   Future<List<MatchTeamModel>> getTeamsList(
-      List<AddMatchTeamRequest> teamList) async {
+    List<AddMatchTeamRequest> teamList,
+  ) async {
     try {
-      List<MatchTeamModel> teams = [];
+      final List<MatchTeamModel> teams = [];
 
       await Future.forEach(teamList, (e) async {
-        TeamModel team = await _teamService.getTeamById(e.team_id);
-        List<MatchPlayer> squad = await getPlayerListFromPlayerIds(e.squad);
-        teams.add(MatchTeamModel(
-          team: team,
-          squad: squad,
-          over: e.over,
-          run: e.run,
-          wicket: e.wicket,
-          captain_id: e.captain_id,
-          admin_id: e.admin_id,
-        ));
+        final TeamModel team = await _teamService.getTeamById(e.team_id);
+        final List<MatchPlayer> squad =
+            await getPlayerListFromPlayerIds(e.squad);
+        teams.add(
+          MatchTeamModel(
+            team: team,
+            squad: squad,
+            over: e.over,
+            run: e.run,
+            wicket: e.wicket,
+            captain_id: e.captain_id,
+            admin_id: e.admin_id,
+          ),
+        );
       });
 
       return teams;
@@ -518,13 +551,15 @@ class MatchService {
   }
 
   Future<List<MatchPlayer>> getPlayerListFromPlayerIds(
-      List<MatchPlayerRequest> players) async {
+    List<MatchPlayerRequest> players,
+  ) async {
     try {
-      List<String> playerIds = players.map((player) => player.id).toList();
+      final List<String> playerIds =
+          players.map((player) => player.id).toList();
 
-      List<UserModel> users = await _userService.getUsersByIds(playerIds);
+      final List<UserModel> users = await _userService.getUsersByIds(playerIds);
 
-      List<MatchPlayer> squad = users.map((user) {
+      final List<MatchPlayer> squad = users.map((user) {
         final matchPlayer =
             players.firstWhere((element) => element.id == user.id);
 

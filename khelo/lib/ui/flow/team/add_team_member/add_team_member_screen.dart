@@ -11,6 +11,7 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
@@ -41,6 +42,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(addTeamMemberStateProvider.notifier);
+    runPostFrame(() => notifier.setData(widget.team));
   }
 
   @override
@@ -56,7 +58,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
             ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
             : actionButton(
                 context,
-                onPressed: () => notifier.addPlayersToTeam(widget.team.id),
+                onPressed: () => notifier.addPlayersToTeam(),
                 icon: SvgPicture.asset(
                   Assets.images.icCheck,
                   colorFilter: ColorFilter.mode(
@@ -118,6 +120,11 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               itemCount: state.searchedUsers.length,
               itemBuilder: (context, index) {
                 UserModel user = state.searchedUsers[index];
+                final isAdded = widget.team.players
+                            .any((element) => element.user == user) ==
+                        true ||
+                    state.selectedUsers.any((element) => element.user == user);
+
                 return Column(
                   children: [
                     if (index == 0 && state.selectedUsers.isNotEmpty) ...[
@@ -135,10 +142,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           context,
                           user,
                           actionButtonTitle:
-                              widget.team.players?.contains(user) == true ||
-                                      state.selectedUsers.contains(user)
-                                  ? null
-                                  : context.l10n.common_select_title,
+                              isAdded ? null : context.l10n.common_select_title,
                           onButtonTap: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
@@ -151,13 +155,10 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                           },
                         ),
                         trailing: SecondaryButton(
-                          widget.team.players?.contains(user) == true ||
-                                  state.selectedUsers.contains(user)
+                          isAdded
                               ? context.l10n.add_team_member_added_text
                               : context.l10n.common_add_title.toUpperCase(),
-                          enabled:
-                              widget.team.players?.contains(user) != true &&
-                                  !state.selectedUsers.contains(user),
+                          enabled: !isAdded,
                           onPressed: () async {
                             if (user.phone != null) {
                               final res = await VerifyTeamMemberSheet.show(
@@ -208,7 +209,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
       child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: state.selectedUsers
-              .map((user) => Padding(
+              .map((player) => Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: SizedBox(
                     width: 58,
@@ -216,9 +217,9 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const SizedBox(height: 8),
-                          _selectedProfileView(context, user),
+                          _selectedProfileView(context, player.user),
                           const SizedBox(height: 4),
-                          Text(user.name ?? "",
+                          Text(player.user.name ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyle.caption.copyWith(

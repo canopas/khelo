@@ -36,8 +36,9 @@ class UserModel with _$UserModel {
       _$UserModelFromJson(json);
 
   factory UserModel.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       UserModel.fromJson(snapshot.data()!);
 
   String toJsonString() => jsonEncode(toJson());
@@ -93,7 +94,7 @@ extension ProfileCompleteExtension on UserModel {
       gender,
       player_role,
       batting_style,
-      bowling_style
+      bowling_style,
     ];
 
     final completedFields = fields

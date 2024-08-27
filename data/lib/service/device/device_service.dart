@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:data/api/network/client.dart';
+import '../../api/network/client.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
@@ -76,31 +76,5 @@ class DeviceService {
   Future<String> get countryCode async {
     final response = await rawDio.get('http://ip-api.com/json/');
     return response.data['countryCode'];
-  }
-
-  int currantPlatformType() {
-    if (kIsWeb) {
-      return 3;
-    } else if (Platform.isIOS) {
-      return 1;
-    } else if (Platform.isAndroid) {
-      return 2;
-    } else {
-      return 0;
-    }
-  }
-
-  static Future<bool> isNotificationPermissionRequired() async {
-    if (!kIsWeb && Platform.isAndroid) {
-      final androidInfo = await DeviceInfoPlugin().androidInfo;
-      if (androidInfo.version.sdkInt < 33) {
-        return false;
-      }
-      return true;
-    }
-    if (!kIsWeb && Platform.isIOS) {
-      return true;
-    }
-    return false;
   }
 }

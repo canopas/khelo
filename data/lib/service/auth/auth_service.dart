@@ -1,10 +1,7 @@
-import 'package:data/errors/app_error.dart';
-import 'package:data/extensions/string_extensions.dart';
-import 'package:data/service/user/user_service.dart';
-import 'package:data/storage/app_preferences.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/string_extensions.dart';
+import '../user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
@@ -78,8 +75,12 @@ class AuthService {
     }
   }
 
-  Future<void> verifyOTP(String countryCode, String phoneNumber,
-      String verificationId, String otp) async {
+  Future<void> verifyOTP(
+    String countryCode,
+    String phoneNumber,
+    String verificationId,
+    String otp,
+  ) async {
     try {
       final credential = PhoneAuthProvider.credential(
         verificationId: verificationId,

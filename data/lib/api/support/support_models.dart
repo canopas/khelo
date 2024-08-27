@@ -20,8 +20,9 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
       _$AddSupportCaseRequestFromJson(json);
 
   factory AddSupportCaseRequest.fromFireStore(
-          DocumentSnapshot<Map<String, dynamic>> snapshot,
-          SnapshotOptions? options) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       AddSupportCaseRequest.fromJson(snapshot.data()!);
 }
 
