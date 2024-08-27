@@ -11,6 +11,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/components/complete_profile_progress.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -47,6 +48,10 @@ class ProfileScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               _settingsView(context, notifier),
+              if (state.currentUser?.id != null) ...[
+                const SizedBox(height: 16),
+                _qrCodeView(context, state.currentUser?.id ?? ""),
+              ],
               const SizedBox(height: 24),
               Visibility(
                 visible: state.appVersion != null,
@@ -173,6 +178,49 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _qrCodeView(
+    BuildContext context,
+    String userId,
+  ) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: context.colorScheme.outline),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            context.l10n.profile_setting_scan_to_play_text,
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            context.l10n.profile_setting_scan_to_play_description,
+            style: AppTextStyle.subtitle3
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+          const SizedBox(height: 24),
+          Center(
+            child: QrImageView(
+              data: userId,
+              version: QrVersions.auto,
+              size: 120.0,
+              dataModuleStyle: QrDataModuleStyle(
+                  dataModuleShape: QrDataModuleShape.square,
+                  color: context.colorScheme.textPrimary),
+              eyeStyle: QrEyeStyle(
+                  eyeShape: QrEyeShape.square,
+                  color: context.colorScheme.textPrimary),
+            ),
+          ),
+        ],
       ),
     );
   }
