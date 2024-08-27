@@ -697,6 +697,12 @@
   "profile_setting_terms_and_condition_title": "Terms and condition",
   "profile_setting_app_version_text": "App Version: {version}",
 
+  "@_NOTIFICATION": {
+  },
+  "notification_title": "Notifications",
+  "notification_turn_on_title": "It seems that your notifications have been turned off. Turn on notifications to stay updated on your teams and matches.",
+  "notification_turn_on_btn_title": "Turn on",
+
   "@_CONTACT_SUPPORT": {
   },
   "contact_support_title": "Contact support",

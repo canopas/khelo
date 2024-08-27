@@ -35,6 +35,7 @@ mixin _$UserModel {
   BattingStyle? get batting_style => throw _privateConstructorUsedError;
   BowlingStyle? get bowling_style => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  bool get notifications => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -62,7 +63,8 @@ abstract class $UserModelCopyWith<$Res> {
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
-      bool isActive});
+      bool isActive,
+      bool notifications});
 }
 
 /// @nodoc
@@ -93,6 +95,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
     Object? isActive = null,
+    Object? notifications = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -155,6 +158,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -182,7 +189,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
-      bool isActive});
+      bool isActive,
+      bool notifications});
 }
 
 /// @nodoc
@@ -211,6 +219,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
     Object? isActive = null,
+    Object? notifications = null,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -273,6 +282,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
               as bool,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -295,7 +308,8 @@ class _$UserModelImpl extends _UserModel {
       this.player_role,
       this.batting_style,
       this.bowling_style,
-      this.isActive = true})
+      this.isActive = true,
+      this.notifications = true})
       : super._();
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -332,10 +346,13 @@ class _$UserModelImpl extends _UserModel {
   @override
   @JsonKey()
   final bool isActive;
+  @override
+  @JsonKey()
+  final bool notifications;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive)';
+    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive, notifications: $notifications)';
   }
 
   @override
@@ -366,7 +383,9 @@ class _$UserModelImpl extends _UserModel {
             (identical(other.bowling_style, bowling_style) ||
                 other.bowling_style == bowling_style) &&
             (identical(other.isActive, isActive) ||
-                other.isActive == isActive));
+                other.isActive == isActive) &&
+            (identical(other.notifications, notifications) ||
+                other.notifications == notifications));
   }
 
   @JsonKey(ignore: true)
@@ -387,7 +406,8 @@ class _$UserModelImpl extends _UserModel {
       player_role,
       batting_style,
       bowling_style,
-      isActive);
+      isActive,
+      notifications);
 
   @JsonKey(ignore: true)
   @override
@@ -419,7 +439,8 @@ abstract class _UserModel extends UserModel {
       final PlayerRole? player_role,
       final BattingStyle? batting_style,
       final BowlingStyle? bowling_style,
-      final bool isActive}) = _$UserModelImpl;
+      final bool isActive,
+      final bool notifications}) = _$UserModelImpl;
   const _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -455,6 +476,8 @@ abstract class _UserModel extends UserModel {
   BowlingStyle? get bowling_style;
   @override
   bool get isActive;
+  @override
+  bool get notifications;
   @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>

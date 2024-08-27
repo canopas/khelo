@@ -157,4 +157,11 @@ class UserService {
       "device_fcm_token": deviceToken,
     });
   }
+
+  Future<void> updateUserNotificationSettings(
+    String id,
+    bool notifications,
+  ) async {
+    await _userRef.doc(id).update({"notifications": notifications});
+  }
 }
