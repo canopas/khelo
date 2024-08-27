@@ -5,6 +5,7 @@ import 'package:style/extensions/context_extensions.dart';
 class BottomSheetWrapper extends StatelessWidget {
   final Widget content;
   final bool showDragHandle;
+  final double? height;
   final double contentBottomSpacing;
   final List<Widget> action;
   final List<Widget>? options;
@@ -13,6 +14,7 @@ class BottomSheetWrapper extends StatelessWidget {
     super.key,
     this.showDragHandle = true,
     this.contentBottomSpacing = 70,
+    this.height,
     required this.content,
     required this.action,
     this.options,
@@ -21,6 +23,7 @@ class BottomSheetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       constraints:
           BoxConstraints(maxHeight: context.mediaQuerySize.height * 0.8),
       decoration: BoxDecoration(

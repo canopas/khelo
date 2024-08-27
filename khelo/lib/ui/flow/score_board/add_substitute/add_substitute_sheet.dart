@@ -82,14 +82,13 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
 
     return BottomSheetWrapper(
       contentBottomSpacing: 0,
+      height: context.mediaQuerySize.height * 0.8,
       content: _content(context, state),
       action: [
         PrimaryButton(
           context.l10n.common_select_title,
           enabled: selectedPlayer != null,
-          onPressed: () {
-            context.pop(selectedPlayer);
-          },
+          onPressed: () => context.pop(selectedPlayer),
         ),
       ],
     );
@@ -103,24 +102,20 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
       );
     }
 
-    return SizedBox(
-      height: context.mediaQuerySize.height * 0.8,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.score_board_add_substitute_title,
-            style: AppTextStyle.header3
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          const SizedBox(height: 16),
-          _benchPlayerView(context, state.nonPlayingPlayers),
-          const SizedBox(height: 16),
-          _searchTextField(context, notifier, state),
-          const SizedBox(height: 24),
-          _searchResultView(context, notifier, state),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          context.l10n.score_board_add_substitute_title,
+          style: AppTextStyle.header3
+              .copyWith(color: context.colorScheme.textPrimary),
+        ),
+        const SizedBox(height: 16),
+        _benchPlayerView(context, state.nonPlayingPlayers),
+        _searchTextField(context, notifier, state),
+        const SizedBox(height: 24),
+        _searchResultView(context, notifier, state),
+      ],
     );
   }
 
@@ -130,7 +125,7 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
       child: Row(
         children: bench.map((player) {
           return Padding(
-            padding: const EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.only(right: 16, bottom: 16),
             child: UserCellView(
               title: player.name ?? context.l10n.common_anonymous_title,
               imageUrl: player.profile_img_url,
