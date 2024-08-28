@@ -798,7 +798,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       default:
         // fair_deliveries / 6 == number_of_over_decided
         // number_of_total_ball == total_played_ball
-        final totalBalls = (state.match?.number_of_over ?? 0) * 6;
+        final revisedOver = state.match?.revised_target?.overs;
+        final totalBalls =
+            (revisedOver ?? state.match?.number_of_over ?? 0) * 6;
         final playedBalls = ((state.overCount - 1) * 6) + state.ballCount;
 
         return playedBalls == totalBalls;
@@ -846,7 +848,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           return false;
         }
 
-        final targetRun = (state.otherInning!.total_runs) + 1;
+        final targetRun = state.match?.revised_target?.runs ??
+            (state.otherInning!.total_runs) + 1;
         return state.currentInning!.total_runs >= targetRun;
     }
   }
@@ -1431,12 +1434,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   Future<void> setRevisedTarget(int run, int over) async {
     String? matchId = state.match?.id;
-    if(matchId == null){
-      return ;
+    if (matchId == null) {
+      return;
     }
     final revisedTarget =
         RevisedTarget(runs: run, overs: over.toDouble(), time: DateTime.now());
-    await _matchService.setRevisedTarget(matchId: matchId, revisedTarget: revisedTarget);
+    await _matchService.setRevisedTarget(
+        matchId: matchId, revisedTarget: revisedTarget);
   }
 }
 

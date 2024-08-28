@@ -57,39 +57,37 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
             final runs = int.parse(manualRunsTextController.text);
             final overs = double.parse(manualOverTextController.text);
 
-            final actualTarget = (state.match?.teams
-                        .where((element) =>
-                            element.team.id != state.currentInning?.team_id)
-                        .firstOrNull
-                        ?.run ??
-                    0) +
-                1;
-
-            final playedOver = state.match?.teams
-                    .where((element) =>
-                        element.team.id == state.currentInning?.team_id)
-                    .firstOrNull
-                    ?.over ??
-                0;
-
-            final totalOver = state.match?.number_of_over ?? 0;
-
-            final oversRemained =
-                totalOver.toDouble().remove(playedOver.toBalls());
-
-            if (overs.toInt() >= oversRemained.toInt() ||
-                runs >= actualTarget) {
-              setState(() {
-                errorString =
-                    context.l10n.score_board_revised_target_invalid_input_error;
-              });
+            if (_isValidInput(state, runs, overs)) {
+              context.pop({'run': runs, 'over': overs});
             } else {
-              context.pop({"run": runs, "over": overs});
+              setState(() => errorString =
+                  context.l10n.score_board_target_invalid_input_error);
             }
           },
         ),
       ],
     );
+  }
+
+  bool _isValidInput(ScoreBoardViewState state, int runs, double overs) {
+    final actualTarget = (state.match?.teams
+                .where((element) =>
+                    element.team.id != state.currentInning?.team_id)
+                .firstOrNull
+                ?.run ??
+            0) +
+        1;
+
+    final playedOver = state.match?.teams
+            .where((element) => element.team.id == state.currentInning?.team_id)
+            .firstOrNull
+            ?.over ??
+        0;
+
+    final totalOver = state.match?.number_of_over ?? 0;
+    final oversRemained = totalOver.toDouble().remove(playedOver.toBalls());
+
+    return !((overs.toInt() >= oversRemained.toInt()) || runs >= actualTarget);
   }
 
   Widget _content(BuildContext context, ScoreBoardViewState state) {
@@ -130,7 +128,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
                   context,
                   title: context.l10n.score_board_runs_text,
                   controller: manualRunsTextController,
-                  onTextChange: () => _checkIfValidInput(state),
+                  onTextChange: () => _onTextChange(state),
                   autoFocus: true,
                 ),
               ),
@@ -140,7 +138,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
                   context,
                   title: context.l10n.score_board_in_overs_text,
                   controller: manualOverTextController,
-                  onTextChange: () => _checkIfValidInput(state),
+                  onTextChange: () => _onTextChange(state),
                   autoFocus: false,
                 ),
               ),
@@ -202,7 +200,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
     );
   }
 
-  void _checkIfValidInput(ScoreBoardViewState state) {
+  void _onTextChange(ScoreBoardViewState state) {
     setState(() {
       errorString = null;
       isButtonEnabled = manualOverTextController.text.trim().isNotEmpty &&

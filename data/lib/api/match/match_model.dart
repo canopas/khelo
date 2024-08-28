@@ -85,18 +85,21 @@ extension DataMatchModel on MatchModel {
     final secondTeam =
         teams.firstWhere((element) => element.team.id != firstTeam.team.id);
 
-    if (firstTeam.run > secondTeam.run) {
+    final revisedRuns =
+        revised_target?.runs != null ? revised_target!.runs - 1 : null;
+
+    if ((revisedRuns ?? firstTeam.run) > secondTeam.run) {
       // first batting team won
       final teamName = firstTeam.team.name;
+      final runDifference = (revisedRuns ?? firstTeam.run) - secondTeam.run;
 
-      final runDifference = firstTeam.run - secondTeam.run;
       return MatchResult(
         teamId: firstTeam.team.id ?? "",
         teamName: teamName,
         difference: runDifference,
         winType: WinnerByType.run,
       );
-    } else if (firstTeam.run == secondTeam.run) {
+    } else if ((revisedRuns ?? firstTeam.run) == secondTeam.run) {
       return MatchResult(
         teamId: "",
         teamName: "",
@@ -106,7 +109,6 @@ extension DataMatchModel on MatchModel {
     } else {
       // second batting team won
       final teamName = secondTeam.team.name;
-
       final wicketDifference = secondTeam.squad.length - firstTeam.wicket;
 
       return MatchResult(
