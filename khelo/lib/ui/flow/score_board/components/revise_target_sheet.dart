@@ -178,7 +178,9 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
                 borderType: AppTextFieldBorderType.outline,
                 borderRadius: BorderRadius.circular(8),
                 backgroundColor: context.colorScheme.surface,
-                // inputFormatters: TextValidationType.numberOnly,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
                 keyboardType: TextInputType.number,
                 borderColor: BorderColor(
                   focusColor: Colors.transparent,
