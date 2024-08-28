@@ -454,6 +454,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showAddPenaltyRunSheet: DateTime.now());
       case MatchOption.endMatch:
         state = state.copyWith(showEndMatchSheet: DateTime.now());
+      case MatchOption.reviseTarget:
+        state = state.copyWith(showReviseTargetSheet: DateTime.now());
       default:
         return;
     }
@@ -1426,6 +1428,16 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _cancelStreamSubscription();
     super.dispose();
   }
+
+  Future<void> setRevisedTarget(int run, int over) async {
+    String? matchId = state.match?.id;
+    if(matchId == null){
+      return ;
+    }
+    final revisedTarget =
+        RevisedTarget(runs: run, overs: over.toDouble(), time: DateTime.now());
+    await _matchService.setRevisedTarget(matchId: matchId, revisedTarget: revisedTarget);
+  }
 }
 
 @freezed
@@ -1459,6 +1471,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showAddPenaltyRunSheet,
     DateTime? showEndMatchSheet,
     DateTime? invalidUndoToast,
+    DateTime? showReviseTargetSheet,
     ScoreButton? tappedButton,
     bool? isLongTap,
     FieldingPositionType? position,
@@ -1529,6 +1542,7 @@ enum ScoreButton {
 enum MatchOption {
   changeStriker,
   penaltyRun,
+  reviseTarget,
   pauseScoring,
   continueWithInjuredPlayer,
   endMatch;
@@ -1539,6 +1553,8 @@ enum MatchOption {
         return context.l10n.score_board_change_striker_title;
       case MatchOption.penaltyRun:
         return context.l10n.score_board_penalty_run_title;
+      case MatchOption.reviseTarget:
+        return context.l10n.score_board_revised_target_title;
       case MatchOption.pauseScoring:
         return context.l10n.score_board_pause_scoring_title;
       case MatchOption.continueWithInjuredPlayer:

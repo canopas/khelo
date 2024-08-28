@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../extensions/double_extensions.dart';
 import '../team/team_model.dart';
 import '../user/user_models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -37,6 +38,7 @@ class MatchModel with _$MatchModel {
     TossDecision? toss_decision,
     String? toss_winner_id,
     String? current_playing_team_id,
+    RevisedTarget? revised_target,
   }) = _MatchModel;
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>
@@ -57,6 +59,18 @@ class MatchTeamModel with _$MatchTeamModel {
 
   factory MatchTeamModel.fromJson(Map<String, dynamic> json) =>
       _$MatchTeamModelFromJson(json);
+}
+
+@freezed
+class RevisedTarget with _$RevisedTarget {
+  const factory RevisedTarget({
+    @Default(0) int runs,
+    @Default(0) double overs,
+    DateTime? time,
+  }) = _RevisedTarget;
+
+  factory RevisedTarget.fromJson(Map<String, dynamic> json) =>
+      _$RevisedTargetFromJson(json);
 }
 
 extension DataMatchModel on MatchModel {
@@ -102,6 +116,20 @@ extension DataMatchModel on MatchModel {
         winType: WinnerByType.wicket,
       );
     }
+  }
+
+  bool get isRevisedTargetApplicable {
+    final secondInningTeam = toss_decision == TossDecision.bat
+        ? teams.firstWhere((element) => element.team.id != toss_winner_id)
+        : teams.firstWhere((element) => element.team.id == toss_winner_id);
+    final overRemained =
+        number_of_over.toDouble().remove(secondInningTeam.over.toBalls());
+
+    return match_status == MatchStatus.running &&
+        current_playing_team_id == secondInningTeam.team.id &&
+        overRemained >= 2 &&
+        revised_target == null &&
+        match_type == MatchType.limitedOvers;
   }
 }
 
@@ -178,6 +206,7 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
     TossDecision? toss_decision,
     String? toss_winner_id,
     String? current_playing_team_id,
+    RevisedTarget? revised_target,
   }) = _AddEditMatchRequest;
 
   factory AddEditMatchRequest.fromJson(Map<String, dynamic> json) =>

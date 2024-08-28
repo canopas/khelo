@@ -20,7 +20,9 @@ mixin _$PowerPlayViewState {
   List<int> get secondPowerPlay => throw _privateConstructorUsedError;
   List<int> get thirdPowerPlay => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerPlayViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PowerPlayViewStateCopyWith<PowerPlayViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +49,8 @@ class _$PowerPlayViewStateCopyWithImpl<$Res, $Val extends PowerPlayViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PowerPlayViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -93,6 +97,8 @@ class __$$PowerPlayViewStateImplCopyWithImpl<$Res>
       $Res Function(_$PowerPlayViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PowerPlayViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -180,7 +186,9 @@ class _$PowerPlayViewStateImpl implements _PowerPlayViewState {
       const DeepCollectionEquality().hash(_secondPowerPlay),
       const DeepCollectionEquality().hash(_thirdPowerPlay));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PowerPlayViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PowerPlayViewStateImplCopyWith<_$PowerPlayViewStateImpl> get copyWith =>
@@ -200,8 +208,11 @@ abstract class _PowerPlayViewState implements PowerPlayViewState {
   List<int> get secondPowerPlay;
   @override
   List<int> get thirdPowerPlay;
+
+  /// Create a copy of PowerPlayViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PowerPlayViewStateImplCopyWith<_$PowerPlayViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

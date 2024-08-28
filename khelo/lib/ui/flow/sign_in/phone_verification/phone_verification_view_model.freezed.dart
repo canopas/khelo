@@ -25,7 +25,9 @@ mixin _$PhoneVerificationState {
   String get otp => throw _privateConstructorUsedError;
   Duration get activeResendDuration => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PhoneVerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PhoneVerificationStateCopyWith<PhoneVerificationState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -58,6 +60,8 @@ class _$PhoneVerificationStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PhoneVerificationState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -134,6 +138,8 @@ class __$$PhoneVerificationStateImplCopyWithImpl<$Res>
       $Res Function(_$PhoneVerificationStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PhoneVerificationState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -257,7 +263,9 @@ class _$PhoneVerificationStateImpl implements _PhoneVerificationState {
       otp,
       activeResendDuration);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PhoneVerificationState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PhoneVerificationStateImplCopyWith<_$PhoneVerificationStateImpl>
@@ -292,8 +300,11 @@ abstract class _PhoneVerificationState implements PhoneVerificationState {
   String get otp;
   @override
   Duration get activeResendDuration;
+
+  /// Create a copy of PhoneVerificationState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhoneVerificationStateImplCopyWith<_$PhoneVerificationStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

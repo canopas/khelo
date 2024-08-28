@@ -80,6 +80,7 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
+            revised_target: match.revised_target,
           );
         }).toList(),
       );
@@ -124,6 +125,7 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
+            revised_target: match.revised_target,
           );
         }).toList(),
       );
@@ -159,6 +161,7 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
+            revised_target: match.revised_target,
           );
         }).toList(),
       );
@@ -196,6 +199,7 @@ class MatchService {
               toss_winner_id: match.toss_winner_id,
               toss_decision: match.toss_decision,
               current_playing_team_id: match.current_playing_team_id,
+              revised_target: match.revised_target,
             ),
           );
         }
@@ -262,6 +266,7 @@ class MatchService {
         toss_decision: match.toss_decision,
         toss_winner_id: match.toss_winner_id,
         current_playing_team_id: match.current_playing_team_id,
+        revised_target: match.revised_target,
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
@@ -326,6 +331,7 @@ class MatchService {
         toss_decision: match.toss_decision,
         toss_winner_id: match.toss_winner_id,
         current_playing_team_id: match.current_playing_team_id,
+        revised_target: match.revised_target,
       );
 
       return matchModel;
@@ -498,6 +504,15 @@ class MatchService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  Future<void> setRevisedTarget({
+    required String matchId,
+    required RevisedTarget revisedTarget,
+  }) async {
+    await _matchCollection.doc(matchId).update(
+      {FireStoreConst.revisedTarget: revisedTarget},
+    );
   }
 
   Future<void> deleteMatch(String matchId) async {

@@ -20,7 +20,9 @@ mixin _$UserMatchListState {
   bool get loading => throw _privateConstructorUsedError;
   List<MatchModel> get matches => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserMatchListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserMatchListStateCopyWith<UserMatchListState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -44,6 +46,8 @@ class _$UserMatchListStateCopyWithImpl<$Res, $Val extends UserMatchListState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserMatchListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -84,6 +88,8 @@ class __$$UserMatchListStateImplCopyWithImpl<$Res>
       $Res Function(_$UserMatchListStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserMatchListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -150,7 +156,9 @@ class _$UserMatchListStateImpl implements _UserMatchListState {
       loading,
       const DeepCollectionEquality().hash(_matches));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserMatchListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserMatchListStateImplCopyWith<_$UserMatchListStateImpl> get copyWith =>
@@ -170,8 +178,11 @@ abstract class _UserMatchListState implements UserMatchListState {
   bool get loading;
   @override
   List<MatchModel> get matches;
+
+  /// Create a copy of UserMatchListState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserMatchListStateImplCopyWith<_$UserMatchListStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

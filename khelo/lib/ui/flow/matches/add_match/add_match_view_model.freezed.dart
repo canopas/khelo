@@ -52,7 +52,9 @@ mixin _$AddMatchViewState {
   bool? get pushTossDetailScreen => throw _privateConstructorUsedError;
   bool? get pop => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddMatchViewStateCopyWith<AddMatchViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -111,6 +113,8 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -268,6 +272,8 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     ) as $Val);
   }
 
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MatchModelCopyWith<$Res>? get match {
@@ -280,6 +286,8 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     });
   }
 
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get teamA {
@@ -292,6 +300,8 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     });
   }
 
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get teamB {
@@ -362,6 +372,8 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
       $Res Function(_$AddMatchViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -787,7 +799,9 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         pop
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddMatchViewStateImplCopyWith<_$AddMatchViewStateImpl> get copyWith =>
@@ -891,8 +905,11 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   bool? get pushTossDetailScreen;
   @override
   bool? get pop;
+
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddMatchViewStateImplCopyWith<_$AddMatchViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

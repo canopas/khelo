@@ -15,6 +15,7 @@ import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
+import 'package:khelo/ui/flow/score_board/components/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_fielding_position_sheet.dart';
@@ -68,6 +69,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowAddExtraSheetForLegBye(context, ref);
     _observeShowAddExtraSheetForBye(context, ref);
     _observeShowAddExtraSheetForFiveSeven(context, ref);
+    _observeShowReviseTargetSheet(context, ref);
     _observePop(context, ref);
     _observeShowPauseScoringSheet(context, ref);
     _observeShowAddPenaltyRunSheet(context, ref);
@@ -92,11 +94,16 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
+    final matchOptions = MatchOption.values.toList();
+    if (!(state.match?.isRevisedTargetApplicable ?? true)) {
+      matchOptions.remove(MatchOption.reviseTarget);
+    }
+
     return moreOptionButton(
       context,
       onPressed: () => showActionBottomSheet(
           context: context,
-          items: MatchOption.values
+          items: matchOptions
               .map((option) => BottomSheetAction(
                     title: option.getTitle(context),
                     onTap: () {
@@ -517,6 +524,22 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         final position =
             ref.read(scoreBoardStateProvider.select((value) => value.position));
         _showAddExtraSheet(context, null, position);
+      }
+    });
+  }
+
+  void _observeShowReviseTargetSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showReviseTargetSheet),
+        (previous, next) async {
+      if (next != null) {
+        final result = await ReviseTargetSheet.show<Map<String, dynamic>>(context);
+        if(context.mounted && result != null){
+          notifier.setRevisedTarget(result['run'], result['over']);
+        }
       }
     });
   }
