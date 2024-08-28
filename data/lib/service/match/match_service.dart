@@ -511,7 +511,7 @@ class MatchService {
     required RevisedTarget revisedTarget,
   }) async {
     await _matchCollection.doc(matchId).update(
-      {FireStoreConst.revisedTarget: revisedTarget},
+      {FireStoreConst.revisedTarget: revisedTarget.toJson()},
     );
   }
 

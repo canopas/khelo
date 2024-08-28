@@ -1,4 +1,3 @@
-import 'package:data/extensions/double_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,16 +77,9 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
             0) +
         1;
 
-    final playedOver = state.match?.teams
-            .where((element) => element.team.id == state.currentInning?.team_id)
-            .firstOrNull
-            ?.over ??
-        0;
-
-    final totalOver = state.match?.number_of_over ?? 0;
-    final oversRemained = totalOver.toDouble().remove(playedOver.toBalls());
-
-    return !((overs.toInt() >= oversRemained.toInt()) || runs >= actualTarget);
+    return !((overs.toInt() <= 0 &&
+            overs.toInt() >= (state.match?.number_of_over ?? 0)) ||
+        runs >= actualTarget);
   }
 
   Widget _content(BuildContext context, ScoreBoardViewState state) {

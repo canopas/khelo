@@ -174,7 +174,9 @@ class ScoreDisplayView extends ConsumerWidget {
         .where((element) => element.team.id != currentPlayingTeam?.team.id)
         .firstOrNull;
 
-    return ((state.match?.revised_target?.runs ?? otherTeam?.run ?? 0) + 1) -
+    final revisedRun = state.match?.revised_target?.runs;
+
+    return ((revisedRun ?? ((otherTeam?.run ?? 0) + 1))) -
         (currentPlayingTeam?.run ?? 0);
   }
 
