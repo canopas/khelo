@@ -143,6 +143,7 @@ class AuthService {
   }
 
   Future<void> clearSession() async {
+    if (_userSessionNotifier.state == null) return;
     final session = ApiSession.fromJsonString(_userSessionNotifier.state!);
     final userId = _auth.currentUser?.uid;
 

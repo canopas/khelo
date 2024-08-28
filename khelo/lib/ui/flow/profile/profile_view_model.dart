@@ -35,14 +35,19 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     this._userService,
     UserModel? user,
   ) : super(ProfileState(currentUser: user)) {
+    _updateStat();
     refreshNotificationPermissionStatus();
     getAppVersion();
   }
 
   void _updateUser(UserModel? user) {
+    state = state.copyWith(currentUser: user);
+    _updateStat();
+  }
+
+  void _updateStat() {
     state = state.copyWith(
-      currentUser: user,
-      enableUserNotification: user?.notifications ?? true,
+      enableUserNotification: state.currentUser?.notifications ?? true,
     );
   }
 

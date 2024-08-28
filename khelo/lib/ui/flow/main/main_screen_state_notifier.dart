@@ -42,7 +42,7 @@ class MainScreenStateNotifier extends StateNotifier<MainScreenState> {
     final date = lastNotificationPermissionPromptDate.state;
 
     if (date == null ||
-        DateTime.now().difference(DateTime.parse(date)).inDays >= 0) {
+        DateTime.now().difference(DateTime.parse(date)).inDays >= 21) {
       state = state.copyWith(showNotificationPermissionPrompt: DateTime.now());
     }
   }
