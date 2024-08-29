@@ -107,7 +107,7 @@ class _PhoneVerificationScreenState
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            FilteringTextInputFormatter.digitsOnly,
           ],
           onChanged: notifier.updateOTP,
           style: AppTextStyle.header2.copyWith(

@@ -152,8 +152,9 @@ class OverDetailView extends StatelessWidget {
                 maxLength: 3,
                 style: AppTextStyle.header4
                     .copyWith(color: context.colorScheme.primary),
+                keyboardType: TextInputType.number,
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  FilteringTextInputFormatter.digitsOnly,
                 ],
                 decoration: InputDecoration(
                     filled: true,

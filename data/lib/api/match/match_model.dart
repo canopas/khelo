@@ -79,9 +79,11 @@ extension DataMatchModel on MatchModel {
       return null;
     }
 
-    final firstTeam = toss_decision == TossDecision.bat
-        ? teams.firstWhere((element) => element.team.id == toss_winner_id)
-        : teams.firstWhere((element) => element.team.id != toss_winner_id);
+    final firstTeam = teams.firstWhere(
+      (element) => toss_decision == TossDecision.bat
+          ? element.team.id == toss_winner_id
+          : element.team.id != toss_winner_id,
+    );
     final secondTeam =
         teams.firstWhere((element) => element.team.id != firstTeam.team.id);
 
@@ -121,9 +123,11 @@ extension DataMatchModel on MatchModel {
   }
 
   bool get isRevisedTargetApplicable {
-    final secondInningTeam = toss_decision == TossDecision.bat
-        ? teams.firstWhere((element) => element.team.id != toss_winner_id)
-        : teams.firstWhere((element) => element.team.id == toss_winner_id);
+    final secondInningTeam = teams.firstWhere(
+      (element) => toss_decision == TossDecision.bat
+          ? element.team.id != toss_winner_id
+          : element.team.id == toss_winner_id,
+    );
     final overRemained =
         number_of_over.toDouble().remove(secondInningTeam.over.toBalls());
 
