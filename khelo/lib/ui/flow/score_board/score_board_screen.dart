@@ -11,12 +11,12 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/flow/score_board/add_substitute/add_substitute_sheet.dart';
+import 'package:khelo/ui/flow/score_board/add_substitute_sheet/add_substitute_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
-import 'package:khelo/ui/flow/score_board/components/revise_target_sheet.dart';
+import 'package:khelo/ui/flow/score_board/revise_target_sheet/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_fielding_position_sheet.dart';
@@ -538,8 +538,23 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showReviseTargetSheet),
         (previous, next) async {
       if (next != null) {
-        final result = await ReviseTargetSheet.show<Map<String, dynamic>>(context);
-        if(context.mounted && result != null){
+        final actualTarget = ref.read(scoreBoardStateProvider.select((value) =>
+            (value.match?.teams
+                    .where((element) =>
+                        element.team.id != value.currentInning?.team_id)
+                    .firstOrNull
+                    ?.run ??
+                0) +
+            1));
+        final totalOver = ref.read(scoreBoardStateProvider
+            .select((value) => value.match?.number_of_over ?? 0));
+
+        final result = await ReviseTargetSheet.show<Map<String, dynamic>>(
+          context,
+          actualTarget: actualTarget,
+          totalOver: totalOver,
+        );
+        if (context.mounted && result != null) {
           notifier.setRevisedTarget(result['run'], result['over']);
         }
       }

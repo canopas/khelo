@@ -609,6 +609,13 @@
   "score_board_runs_text": "Runs :",
   "score_board_in_overs_text": "in Overs :",
   "score_board_confirm_target_text": "Confirm target",
+  "score_board_current_target_text": "Current target is {run, plural, =0{{run} runs} =1{{run} run} other{{run} runs}} in {over, plural, =0{{over} overs} =1{{over} over} other{{over} overs}}",
+  "@score_board_current_target_text": {
+    "placeholders": {
+      "run": {},
+      "over": {}
+    }
+  },
   "score_board_target_invalid_input_error": "Please enter valid target",
   "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
   "score_board_end_match_description_text": "are you sure you want to end match?",

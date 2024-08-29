@@ -3,16 +3,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
-import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
+import 'package:khelo/ui/flow/score_board/revise_target_sheet/revise_target_view_model.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 
 class ReviseTargetSheet extends ConsumerStatefulWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    required int actualTarget,
+    required int totalOver,
+  }) {
     HapticFeedback.mediumImpact();
+
     return showModalBottomSheet(
       context: context,
       showDragHandle: false,
@@ -24,65 +30,60 @@ class ReviseTargetSheet extends ConsumerStatefulWidget {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: const ReviseTargetSheet(),
+          child: ReviseTargetSheet(
+            actualTarget: actualTarget,
+            totalOver: totalOver,
+          ),
         );
       },
     );
   }
 
-  const ReviseTargetSheet({super.key});
+  final int actualTarget;
+  final int totalOver;
+
+  const ReviseTargetSheet({
+    super.key,
+    required this.actualTarget,
+    required this.totalOver,
+  });
 
   @override
   ConsumerState createState() => _ReviseTargetSheetState();
 }
 
 class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
-  bool isButtonEnabled = false;
-  String? errorString;
+  late ReviseTargetViewNotifier notifier;
 
-  TextEditingController manualOverTextController = TextEditingController();
-  TextEditingController manualRunsTextController = TextEditingController();
+  @override
+  void initState() {
+    notifier = ref.read(reviseTargetStateProvider.notifier);
+
+    runPostFrame(() => notifier.setData(
+          widget.actualTarget,
+          widget.totalOver,
+        ));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(scoreBoardStateProvider);
+    final state = ref.watch(reviseTargetStateProvider);
+    _observeIsPop(context, ref);
+
     return BottomSheetWrapper(
       content: _content(context, state),
       action: [
         PrimaryButton(
           context.l10n.score_board_confirm_target_text,
-          enabled: isButtonEnabled,
-          onPressed: () {
-            final runs = int.parse(manualRunsTextController.text);
-            final overs = double.parse(manualOverTextController.text);
-
-            if (_isValidInput(state, runs, overs)) {
-              context.pop({'run': runs, 'over': overs});
-            } else {
-              setState(() => errorString =
-                  context.l10n.score_board_target_invalid_input_error);
-            }
-          },
+          enabled: state.isButtonEnabled,
+          onPressed: notifier.onConfirmTarget,
         ),
       ],
     );
   }
 
-  bool _isValidInput(ScoreBoardViewState state, int runs, double overs) {
-    final actualTarget = (state.match?.teams
-                .where((element) =>
-                    element.team.id != state.currentInning?.team_id)
-                .firstOrNull
-                ?.run ??
-            0) +
-        1;
-
-    return !((overs.toInt() <= 0 &&
-            overs.toInt() >= (state.match?.number_of_over ?? 0)) ||
-        runs >= actualTarget);
-  }
-
-  Widget _content(BuildContext context, ScoreBoardViewState state) {
+  Widget _content(BuildContext context, ReviseTargetViewState state) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,7 +99,7 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
     );
   }
 
-  Widget _addRunsView(BuildContext context, ScoreBoardViewState state) {
+  Widget _addRunsView(BuildContext context, ReviseTargetViewState state) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -112,6 +113,13 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
             style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textSecondary),
           ),
+          const SizedBox(height: 8),
+          Text(
+            context.l10n.score_board_current_target_text(
+                state.actualTarget, state.totalOvers),
+            style: AppTextStyle.caption
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -119,8 +127,8 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
                 child: _textField(
                   context,
                   title: context.l10n.score_board_runs_text,
-                  controller: manualRunsTextController,
-                  onTextChange: () => _onTextChange(state),
+                  controller: state.manualRunsTextController,
+                  onTextChange: notifier.onTextChange,
                   autoFocus: true,
                 ),
               ),
@@ -129,17 +137,17 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
                 child: _textField(
                   context,
                   title: context.l10n.score_board_in_overs_text,
-                  controller: manualOverTextController,
-                  onTextChange: () => _onTextChange(state),
+                  controller: state.manualOverTextController,
+                  onTextChange: notifier.onTextChange,
                   autoFocus: false,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          if (errorString != null)
+          if (state.showErrorString == true)
             Text(
-              errorString!,
+              context.l10n.score_board_target_invalid_input_error,
               style: AppTextStyle.caption
                   .copyWith(color: context.colorScheme.alert),
             )
@@ -194,18 +202,19 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
     );
   }
 
-  void _onTextChange(ScoreBoardViewState state) {
-    setState(() {
-      errorString = null;
-      isButtonEnabled = manualOverTextController.text.trim().isNotEmpty &&
-          manualRunsTextController.text.trim().isNotEmpty;
+  void _observeIsPop(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(reviseTargetStateProvider.select((value) => value.isPop),
+        (previous, next) async {
+      if (next == true) {
+        final targetRun = ref.read(reviseTargetStateProvider
+            .select((value) => int.parse(value.manualRunsTextController.text)));
+        final targetOver = ref.read(reviseTargetStateProvider
+            .select((value) => int.parse(value.manualOverTextController.text)));
+        context.pop({'run': targetRun, 'over': targetOver});
+      }
     });
-  }
-
-  @override
-  void dispose() {
-    manualRunsTextController.dispose();
-    manualOverTextController.dispose();
-    super.dispose();
   }
 }

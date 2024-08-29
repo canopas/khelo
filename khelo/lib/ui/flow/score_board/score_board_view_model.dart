@@ -1534,7 +1534,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     super.dispose();
   }
 
-  Future<void> setRevisedTarget(int run, double over) async {
+  Future<void> setRevisedTarget(int run, int over) async {
     String? matchId = state.match?.id;
     if (matchId == null) {
       return;

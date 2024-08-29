@@ -227,7 +227,6 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
 
 @freezed
 class AddMatchTeamRequest with _$AddMatchTeamRequest {
-  // ignore: invalid_annotation_target
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddMatchTeamRequest({
     required String team_id,
