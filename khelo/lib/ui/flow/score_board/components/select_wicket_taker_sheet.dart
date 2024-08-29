@@ -77,6 +77,11 @@ class _SelectWicketTakerSheetState
                     title: player.player.name ??
                         context.l10n.common_anonymous_title,
                     imageUrl: player.player.profile_img_url,
+                    subtitle: player.performance.any((element) =>
+                            element.status == PlayerStatus.substitute &&
+                            element.inning_id == state.currentInning?.id)
+                        ? context.l10n.score_board_substitute_title
+                        : null,
                     initial: player.player.nameInitial,
                     isSelected: selectedId == player.player.id,
                     onTap: () {

@@ -49,6 +49,7 @@ mixin _$ScoreBoardViewState {
   DateTime? get showPauseScoringSheet => throw _privateConstructorUsedError;
   DateTime? get showAddPenaltyRunSheet => throw _privateConstructorUsedError;
   DateTime? get showEndMatchSheet => throw _privateConstructorUsedError;
+  DateTime? get showAddSubstituteSheet => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
   DateTime? get showReviseTargetSheet => throw _privateConstructorUsedError;
   ScoreButton? get tappedButton => throw _privateConstructorUsedError;
@@ -112,6 +113,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showPauseScoringSheet,
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
+      DateTime? showAddSubstituteSheet,
       DateTime? invalidUndoToast,
       DateTime? showReviseTargetSheet,
       ScoreButton? tappedButton,
@@ -181,6 +183,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showPauseScoringSheet = freezed,
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
+    Object? showAddSubstituteSheet = freezed,
     Object? invalidUndoToast = freezed,
     Object? showReviseTargetSheet = freezed,
     Object? tappedButton = freezed,
@@ -305,6 +308,10 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
       showEndMatchSheet: freezed == showEndMatchSheet
           ? _value.showEndMatchSheet
           : showEndMatchSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      showAddSubstituteSheet: freezed == showAddSubstituteSheet
+          ? _value.showAddSubstituteSheet
+          : showAddSubstituteSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
@@ -492,6 +499,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showPauseScoringSheet,
       DateTime? showAddPenaltyRunSheet,
       DateTime? showEndMatchSheet,
+      DateTime? showAddSubstituteSheet,
       DateTime? invalidUndoToast,
       DateTime? showReviseTargetSheet,
       ScoreButton? tappedButton,
@@ -564,6 +572,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showPauseScoringSheet = freezed,
     Object? showAddPenaltyRunSheet = freezed,
     Object? showEndMatchSheet = freezed,
+    Object? showAddSubstituteSheet = freezed,
     Object? invalidUndoToast = freezed,
     Object? showReviseTargetSheet = freezed,
     Object? tappedButton = freezed,
@@ -689,6 +698,10 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.showEndMatchSheet
           : showEndMatchSheet // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      showAddSubstituteSheet: freezed == showAddSubstituteSheet
+          ? _value.showAddSubstituteSheet
+          : showAddSubstituteSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       invalidUndoToast: freezed == invalidUndoToast
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
@@ -800,6 +813,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showPauseScoringSheet,
       this.showAddPenaltyRunSheet,
       this.showEndMatchSheet,
+      this.showAddSubstituteSheet,
       this.invalidUndoToast,
       this.showReviseTargetSheet,
       this.tappedButton,
@@ -886,6 +900,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   final DateTime? showAddPenaltyRunSheet;
   @override
   final DateTime? showEndMatchSheet;
+  @override
+  final DateTime? showAddSubstituteSheet;
   @override
   final DateTime? invalidUndoToast;
   @override
@@ -1023,6 +1039,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
                 other.showPauseScoringSheet == showPauseScoringSheet) &&
             (identical(other.showAddPenaltyRunSheet, showAddPenaltyRunSheet) || other.showAddPenaltyRunSheet == showAddPenaltyRunSheet) &&
             (identical(other.showEndMatchSheet, showEndMatchSheet) || other.showEndMatchSheet == showEndMatchSheet) &&
+            (identical(other.showAddSubstituteSheet, showAddSubstituteSheet) || other.showAddSubstituteSheet == showAddSubstituteSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
             (identical(other.showReviseTargetSheet, showReviseTargetSheet) || other.showReviseTargetSheet == showReviseTargetSheet) &&
             (identical(other.tappedButton, tappedButton) || other.tappedButton == tappedButton) &&
@@ -1074,6 +1091,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showPauseScoringSheet,
         showAddPenaltyRunSheet,
         showEndMatchSheet,
+        showAddSubstituteSheet,
         invalidUndoToast,
         showReviseTargetSheet,
         tappedButton,
@@ -1134,6 +1152,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showPauseScoringSheet,
       final DateTime? showAddPenaltyRunSheet,
       final DateTime? showEndMatchSheet,
+      final DateTime? showAddSubstituteSheet,
       final DateTime? invalidUndoToast,
       final DateTime? showReviseTargetSheet,
       final ScoreButton? tappedButton,
@@ -1208,6 +1227,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   DateTime? get showAddPenaltyRunSheet;
   @override
   DateTime? get showEndMatchSheet;
+  @override
+  DateTime? get showAddSubstituteSheet;
   @override
   DateTime? get invalidUndoToast;
   @override

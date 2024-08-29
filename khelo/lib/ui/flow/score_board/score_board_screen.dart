@@ -11,6 +11,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/flow/score_board/add_substitute/add_substitute_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
@@ -73,6 +74,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observePop(context, ref);
     _observeShowPauseScoringSheet(context, ref);
     _observeShowAddPenaltyRunSheet(context, ref);
+    _observeShowAddSubstituteSheet(context, ref);
     _observeEndMatchSheet(context, ref);
     _observeInvalidUndoToast(context, ref);
 
@@ -579,16 +581,35 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeShowAddSubstituteSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showAddSubstituteSheet),
+        (previous, next) async {
+      if (next != null) {
+        final player = await AddSubstituteSheet.show<UserModel>(
+          context,
+          nonPlayingMembers: notifier.getNonPlayingTeamMembers(),
+          playingSquadIds: notifier.getPlayingSquadIds(),
+        );
+        if (context.mounted && player != null) {
+          notifier.addSubstitute(player);
+        }
+      }
+    });
+  }
+
   void _observeEndMatchSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showEndMatchSheet),
         (previous, next) {
       if (next != null) {
-        showConfirmationDialog(context,
-            title: context.l10n.common_end_match_title,
-            message: context.l10n.score_board_end_match_description_text,
-            confirmBtnText: context.l10n.common_okay_title,
-            onConfirm: notifier.abandonMatch);
+        showConfirmationDialog(
+          context,
+          title: context.l10n.common_end_match_title,
+          message: context.l10n.score_board_end_match_description_text,
+          confirmBtnText: context.l10n.common_okay_title,
+          onConfirm: notifier.abandonMatch,
+        );
       }
     });
   }

@@ -1,3 +1,4 @@
+import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,13 +42,22 @@ class MatchDetailSquadView extends ConsumerWidget {
   Widget _listView(BuildContext context, MatchDetailTabState state) {
     final firstTeam = state.match!.teams.firstOrNull;
     final secondTeam = state.match!.teams.elementAtOrNull(1);
+
     final firstTeamSquad = firstTeam?.squad
-            .where((element) => element.player.isActive)
+            .where((element) =>
+                element.player.isActive &&
+                !element.performance.any(
+                  (element) => element.status == PlayerStatus.substitute,
+                ))
             .map((e) => e.player)
             .toList() ??
         [];
     final secondTeamSquad = secondTeam?.squad
-            .where((element) => element.player.isActive)
+            .where((element) =>
+                element.player.isActive &&
+                !element.performance.any(
+                  (element) => element.status == PlayerStatus.substitute,
+                ))
             .map((e) => e.player)
             .toList() ??
         [];
@@ -59,7 +69,6 @@ class MatchDetailSquadView extends ConsumerWidget {
             .map((e) => e.user)
             .toList() ??
         [];
-
     final secondTeamBench = secondTeam?.team.players
             .where((element) =>
                 !secondTeamSquad.map((e) => e.id).contains(element.id) &&
@@ -81,10 +90,12 @@ class MatchDetailSquadView extends ConsumerWidget {
             firstTeamCaptainId: state.match!.teams.firstOrNull?.captain_id,
             secondTeamCaptainId:
                 state.match!.teams.elementAtOrNull(1)?.captain_id),
-        ..._buildTeamList(context,
-            title: context.l10n.match_squad_bench_title,
-            firstTeamPlayers: firstTeamBench,
-            secondPlayers: secondTeamBench)
+        ..._buildTeamList(
+          context,
+          title: context.l10n.match_squad_bench_title,
+          firstTeamPlayers: firstTeamBench,
+          secondPlayers: secondTeamBench,
+        )
       ],
     );
   }
