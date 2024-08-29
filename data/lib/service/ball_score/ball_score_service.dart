@@ -56,7 +56,7 @@ class BallScoreService {
     int otherTotalRuns = 0,
     int otherTotalWicketTaken = 0,
     int otherTotalBowlingTeamRuns = 0,
-    MatchPlayerRequest? updatedPlayer,
+    MatchPlayer? updatedPlayer,
   }) async {
     try {
       final scoreRef = _ballScoreCollection.doc();
@@ -151,7 +151,7 @@ class BallScoreService {
     int otherTotalRuns = 0,
     int otherTotalWicketTaken = 0,
     int otherTotalBowlingTeamRuns = 0,
-    List<MatchPlayerRequest>? updatedPlayer,
+    List<MatchPlayer>? updatedPlayer,
   }) async {
     try {
       _firestore.runTransaction((transaction) async {

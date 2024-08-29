@@ -110,14 +110,14 @@ class _ReviseTargetSheetState extends ConsumerState<ReviseTargetSheet> {
         children: [
           Text(
             context.l10n.score_board_enter_manual_target_text,
-            style: AppTextStyle.body2
-                .copyWith(color: context.colorScheme.textSecondary),
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textPrimary),
           ),
           const SizedBox(height: 8),
           Text(
             context.l10n.score_board_current_target_text(
                 state.actualTarget, state.totalOvers),
-            style: AppTextStyle.caption
+            style: AppTextStyle.body2
                 .copyWith(color: context.colorScheme.textSecondary),
           ),
           const SizedBox(height: 16),

@@ -12,6 +12,7 @@ part 'match_model.g.dart';
 
 @freezed
 class MatchModel with _$MatchModel {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchModel({
     String? id,
     required List<MatchTeamModel> teams,
@@ -30,10 +31,17 @@ class MatchModel with _$MatchModel {
     required BallType ball_type,
     required PitchType pitch_type,
     required String created_by,
+    @JsonKey(includeToJson: false, includeFromJson: false)
     List<UserModel>? umpires,
+    @JsonKey(includeToJson: false, includeFromJson: false)
     List<UserModel>? scorers,
+    @JsonKey(includeToJson: false, includeFromJson: false)
     List<UserModel>? commentators,
-    UserModel? referee,
+    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? referee,
+    List<String>? umpire_ids,
+    List<String>? scorer_ids,
+    List<String>? commentator_ids,
+    String? referee_id,
     required MatchStatus match_status,
     TossDecision? toss_decision,
     String? toss_winner_id,
@@ -43,12 +51,22 @@ class MatchModel with _$MatchModel {
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>
       _$MatchModelFromJson(json);
+
+  factory MatchModel.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      MatchModel.fromJson(snapshot.data()!);
 }
 
 @freezed
 class MatchTeamModel with _$MatchTeamModel {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchTeamModel({
-    required TeamModel team,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(TeamModel(name: '', name_lowercase: ''))
+    TeamModel team,
+    required String team_id,
     String? captain_id,
     String? admin_id,
     @Default(0) double over,
@@ -59,6 +77,35 @@ class MatchTeamModel with _$MatchTeamModel {
 
   factory MatchTeamModel.fromJson(Map<String, dynamic> json) =>
       _$MatchTeamModelFromJson(json);
+}
+
+@freezed
+class MatchPlayer with _$MatchPlayer {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
+  const factory MatchPlayer({
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(UserModel(id: ''))
+    UserModel player,
+    required String id,
+    @Default([]) List<PlayerPerformance> performance,
+    @Default(PlayerStatus.played)
+    PlayerStatus status, // TODO: Remove after release
+  }) = _MatchPlayer;
+
+  factory MatchPlayer.fromJson(Map<String, dynamic> json) =>
+      _$MatchPlayerFromJson(json);
+}
+
+@freezed
+class PlayerPerformance with _$PlayerPerformance {
+  const factory PlayerPerformance({
+    required String inning_id,
+    PlayerStatus? status,
+    int? index,
+  }) = _PlayerPerformance;
+
+  factory PlayerPerformance.fromJson(Map<String, dynamic> json) =>
+      _$PlayerPerformanceFromJson(json);
 }
 
 @freezed
@@ -157,104 +204,6 @@ class MatchResult {
     required this.difference,
     required this.winType,
   });
-}
-
-@freezed
-class MatchPlayer with _$MatchPlayer {
-  const factory MatchPlayer({
-    required UserModel player,
-    @Default([]) List<PlayerPerformance> performance,
-  }) = _MatchPlayer;
-
-  factory MatchPlayer.fromJson(Map<String, dynamic> json) =>
-      _$MatchPlayerFromJson(json);
-}
-
-@freezed
-class PlayerPerformance with _$PlayerPerformance {
-  const factory PlayerPerformance({
-    required String inning_id,
-    PlayerStatus? status,
-    int? index,
-  }) = _PlayerPerformance;
-
-  factory PlayerPerformance.fromJson(Map<String, dynamic> json) =>
-      _$PlayerPerformanceFromJson(json);
-}
-
-@freezed
-class AddEditMatchRequest with _$AddEditMatchRequest {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(anyMap: true, explicitToJson: true)
-  const factory AddEditMatchRequest({
-    String? id,
-    required List<AddMatchTeamRequest> teams,
-    required MatchType match_type,
-    required int number_of_over,
-    @Default([]) List<String> players,
-    @Default([]) List<String> team_ids,
-    @Default([]) List<String> team_creator_ids,
-    required int over_per_bowler,
-    List<int>? power_play_overs1,
-    List<int>? power_play_overs2,
-    List<int>? power_play_overs3,
-    required String city,
-    required String ground,
-    required DateTime start_time,
-    required BallType ball_type,
-    required PitchType pitch_type,
-    required String created_by,
-    List<String>? umpire_ids,
-    List<String>? scorer_ids,
-    List<String>? commentator_ids,
-    String? referee_id,
-    required MatchStatus match_status,
-    TossDecision? toss_decision,
-    String? toss_winner_id,
-    String? current_playing_team_id,
-    RevisedTarget? revised_target,
-  }) = _AddEditMatchRequest;
-
-  factory AddEditMatchRequest.fromJson(Map<String, dynamic> json) =>
-      _$AddEditMatchRequestFromJson(json);
-
-  factory AddEditMatchRequest.fromFireStore(
-    DocumentSnapshot<Map<String, dynamic>> snapshot,
-    SnapshotOptions? options,
-  ) =>
-      AddEditMatchRequest.fromJson(snapshot.data()!);
-}
-
-@freezed
-class AddMatchTeamRequest with _$AddMatchTeamRequest {
-  @JsonSerializable(anyMap: true, explicitToJson: true)
-  const factory AddMatchTeamRequest({
-    required String team_id,
-    String? captain_id,
-    String? admin_id,
-    @Default(0) double over,
-    @Default(0) int run,
-    @Default(0) int wicket,
-    @Default([]) List<MatchPlayerRequest> squad,
-  }) = _AddMatchTeamRequest;
-
-  factory AddMatchTeamRequest.fromJson(Map<String, dynamic> json) =>
-      _$AddMatchTeamRequestFromJson(json);
-}
-
-@freezed
-class MatchPlayerRequest with _$MatchPlayerRequest {
-  // ignore: invalid_annotation_target
-  @JsonSerializable(anyMap: true, explicitToJson: true)
-  const factory MatchPlayerRequest({
-    required String id,
-    @Default(PlayerStatus.played)
-    PlayerStatus status, // TODO: Remove after release
-    @Default([]) List<PlayerPerformance> performance,
-  }) = _MatchPlayerRequest;
-
-  factory MatchPlayerRequest.fromJson(Map<String, dynamic> json) =>
-      _$MatchPlayerRequestFromJson(json);
 }
 
 @JsonEnum(valueField: "value")

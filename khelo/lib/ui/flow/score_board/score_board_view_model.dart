@@ -653,7 +653,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  MatchPlayerRequest? _getUpdatedOutPlayerStatus(
+  MatchPlayer? _getUpdatedOutPlayerStatus(
     WicketType? wicketType,
     String? playerOutId,
   ) {
@@ -680,7 +680,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       performance: outPlayerPerformance,
     );
 
-    return MatchPlayerRequest(
+    return MatchPlayer(
       id: updatedPlayer.player.id,
       performance: updatedPlayer.performance,
     );
@@ -985,7 +985,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  List<MatchPlayerRequest>? _getUndoPlayerStatus(BallScoreModel lastBall) {
+  List<MatchPlayer>? _getUndoPlayerStatus(BallScoreModel lastBall) {
     if (lastBall.wicket_type == null) {
       return null;
     }
@@ -1013,8 +1013,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               status: PlayerStatus.playing,
             ));
 
-    List<MatchPlayerRequest> updateList = [
-      MatchPlayerRequest(
+    List<MatchPlayer> updateList = [
+      MatchPlayer(
         id: outPlayer.player.id,
         performance: getOutPlayersPerformance,
       )
@@ -1029,7 +1029,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               index: oldElement.index == state.lastAssignedIndex
                   ? null
                   : oldElement.index));
-      final newBatsmanRequest = MatchPlayerRequest(
+      final newBatsmanRequest = MatchPlayer(
         id: newBatsMan.player.id,
         performance: getNewBatsMansPerformance,
       );
@@ -1057,10 +1057,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return;
     }
     try {
-      final teamRequest = AddMatchTeamRequest(
+      final teamRequest = MatchTeamModel(
           team_id: team.teamId,
           squad: team.players
-              .map((e) => MatchPlayerRequest(
+              .map((e) => MatchPlayer(
                     id: e.player.id,
                     performance: e.performance,
                   ))
@@ -1458,7 +1458,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final matchPlayer = fieldingTeam.squad
             .where((element) => element.player.id == player.id)
             .firstOrNull ??
-        MatchPlayer(player: player);
+        MatchPlayer(id: player.id, player: player);
 
     final playerPerformance = matchPlayer.performance.toList().updateWhere(
         where: (element) => element.inning_id == substituteStatus.inning_id,
