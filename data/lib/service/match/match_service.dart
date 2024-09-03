@@ -29,7 +29,7 @@ class MatchService {
   final TeamService _teamService;
   final UserService _userService;
   String? _currentUserId;
-  final CollectionReference<AddEditMatchRequest> _matchCollection;
+  final CollectionReference<MatchModel> _matchCollection;
 
   MatchService(
     this._firestore,
@@ -39,8 +39,8 @@ class MatchService {
   ) : _matchCollection = _firestore
             .collection(FireStoreConst.matchesCollection)
             .withConverter(
-              fromFirestore: AddEditMatchRequest.fromFireStore,
-              toFirestore: (AddEditMatchRequest match, _) => match.toJson(),
+              fromFirestore: MatchModel.fromFireStore,
+              toFirestore: (MatchModel match, _) => match.toJson(),
             );
 
   Stream<List<MatchModel>> getCurrentUserPlayedMatches() {
@@ -80,6 +80,7 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
+            revised_target: match.revised_target,
           );
         }).toList(),
       );
@@ -124,6 +125,7 @@ class MatchService {
             toss_winner_id: match.toss_winner_id,
             toss_decision: match.toss_decision,
             current_playing_team_id: match.current_playing_team_id,
+            revised_target: match.revised_target,
           );
         }).toList(),
       );
@@ -140,26 +142,7 @@ class MatchService {
           final match = mainDoc.data();
 
           final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            city: match.city,
-            players: match.players,
-            team_ids: match.team_ids,
-            team_creator_ids: match.team_creator_ids,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            toss_winner_id: match.toss_winner_id,
-            toss_decision: match.toss_decision,
-            current_playing_team_id: match.current_playing_team_id,
-          );
+          return match.copyWith(teams: teams);
         }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
@@ -196,6 +179,7 @@ class MatchService {
               toss_winner_id: match.toss_winner_id,
               toss_decision: match.toss_decision,
               current_playing_team_id: match.current_playing_team_id,
+              revised_target: match.revised_target,
             ),
           );
         }
@@ -236,32 +220,12 @@ class MatchService {
         referee = await _userService.getUserById(match.referee_id!);
       }
 
-      return MatchModel(
-        id: match.id,
+      return match.copyWith(
         teams: teams,
-        match_type: match.match_type,
-        number_of_over: match.number_of_over,
-        over_per_bowler: match.over_per_bowler,
-        players: match.players,
-        team_ids: match.team_ids,
-        team_creator_ids: match.team_creator_ids,
-        city: match.city,
-        ground: match.ground,
-        start_time: match.start_time,
-        created_by: match.created_by,
-        ball_type: match.ball_type,
-        pitch_type: match.pitch_type,
-        match_status: match.match_status,
         commentators: commentators,
         referee: referee,
         scorers: scorers,
         umpires: umpires,
-        power_play_overs1: match.power_play_overs1 ?? [],
-        power_play_overs2: match.power_play_overs2 ?? [],
-        power_play_overs3: match.power_play_overs3 ?? [],
-        toss_decision: match.toss_decision,
-        toss_winner_id: match.toss_winner_id,
-        current_playing_team_id: match.current_playing_team_id,
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
@@ -300,41 +264,19 @@ class MatchService {
         referee = await _userService.getUserById(match.referee_id!);
       }
 
-      final matchModel = MatchModel(
-        id: match.id,
+      return match.copyWith(
         teams: teams,
-        match_type: match.match_type,
-        number_of_over: match.number_of_over,
-        over_per_bowler: match.over_per_bowler,
-        players: match.players,
-        team_ids: match.team_ids,
-        team_creator_ids: match.team_creator_ids,
-        city: match.city,
-        ground: match.ground,
-        start_time: match.start_time,
-        created_by: match.created_by,
-        ball_type: match.ball_type,
-        pitch_type: match.pitch_type,
-        match_status: match.match_status,
         commentators: commentators,
         referee: referee,
         scorers: scorers,
         umpires: umpires,
-        power_play_overs1: match.power_play_overs1 ?? [],
-        power_play_overs2: match.power_play_overs2 ?? [],
-        power_play_overs3: match.power_play_overs3 ?? [],
-        toss_decision: match.toss_decision,
-        toss_winner_id: match.toss_winner_id,
-        current_playing_team_id: match.current_playing_team_id,
       );
-
-      return matchModel;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
 
-  Future<String> updateMatch(AddEditMatchRequest match) async {
+  Future<String> updateMatch(MatchModel match) async {
     try {
       final matchRef = _matchCollection.doc(match.id);
       await matchRef.set(
@@ -391,7 +333,7 @@ class MatchService {
     required int wicket,
     double? over,
     int? runs,
-    List<MatchPlayerRequest>? updatedMatchPlayer,
+    List<MatchPlayer>? updatedMatchPlayer,
   }) async {
     try {
       final matchRef = _matchCollection.doc(matchId);
@@ -456,7 +398,7 @@ class MatchService {
 
   Future<void> updateTeamsSquad(
     String matchId,
-    AddMatchTeamRequest teamRequest,
+    MatchTeamModel teamRequest,
   ) async {
     try {
       final matchRef = _matchCollection.doc(matchId);
@@ -500,6 +442,15 @@ class MatchService {
     }
   }
 
+  Future<void> setRevisedTarget({
+    required String matchId,
+    required RevisedTarget revisedTarget,
+  }) async {
+    await _matchCollection.doc(matchId).update(
+      {FireStoreConst.revisedTarget: revisedTarget.toJson()},
+    );
+  }
+
   Future<void> deleteMatch(String matchId) async {
     try {
       await _matchCollection.doc(matchId).delete();
@@ -522,7 +473,7 @@ class MatchService {
   }
 
   Future<List<MatchTeamModel>> getTeamsList(
-    List<AddMatchTeamRequest> teamList,
+    List<MatchTeamModel> teamList,
   ) async {
     try {
       final List<MatchTeamModel> teams = [];
@@ -532,15 +483,7 @@ class MatchService {
         final List<MatchPlayer> squad =
             await getPlayerListFromPlayerIds(e.squad);
         teams.add(
-          MatchTeamModel(
-            team: team,
-            squad: squad,
-            over: e.over,
-            run: e.run,
-            wicket: e.wicket,
-            captain_id: e.captain_id,
-            admin_id: e.admin_id,
-          ),
+          e.copyWith(team: team, squad: squad),
         );
       });
 
@@ -551,7 +494,7 @@ class MatchService {
   }
 
   Future<List<MatchPlayer>> getPlayerListFromPlayerIds(
-    List<MatchPlayerRequest> players,
+    List<MatchPlayer> players,
   ) async {
     try {
       final List<String> playerIds =
@@ -566,6 +509,7 @@ class MatchService {
         return MatchPlayer(
           player: user,
           performance: matchPlayer.performance,
+          id: user.id,
         );
       }).toList();
 

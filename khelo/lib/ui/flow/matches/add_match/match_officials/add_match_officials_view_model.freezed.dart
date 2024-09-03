@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AddMatchOfficialsState {
   List<Officials> get officials => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddMatchOfficialsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddMatchOfficialsStateCopyWith<AddMatchOfficialsState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$AddMatchOfficialsStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddMatchOfficialsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -79,6 +83,8 @@ class __$$AddMatchOfficialsStateImplCopyWithImpl<$Res>
       $Res Function(_$AddMatchOfficialsStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddMatchOfficialsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -127,7 +133,9 @@ class _$AddMatchOfficialsStateImpl implements _AddMatchOfficialsState {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_officials));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddMatchOfficialsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddMatchOfficialsStateImplCopyWith<_$AddMatchOfficialsStateImpl>
@@ -141,8 +149,11 @@ abstract class _AddMatchOfficialsState implements AddMatchOfficialsState {
 
   @override
   List<Officials> get officials;
+
+  /// Create a copy of AddMatchOfficialsState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddMatchOfficialsStateImplCopyWith<_$AddMatchOfficialsStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

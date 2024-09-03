@@ -34,7 +34,9 @@ mixin _$AddTeamState {
   bool get isPop => throw _privateConstructorUsedError;
   List<TeamPlayer> get teamMembers => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddTeamStateCopyWith<AddTeamState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -77,6 +79,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -157,6 +161,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     ) as $Val);
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get team {
@@ -169,6 +175,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     });
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get editTeam {
@@ -181,6 +189,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     });
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get currentUser {
@@ -235,6 +245,8 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
       _$AddTeamStateImpl _value, $Res Function(_$AddTeamStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -440,7 +452,9 @@ class _$AddTeamStateImpl implements _AddTeamState {
       isPop,
       const DeepCollectionEquality().hash(_teamMembers));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddTeamStateImplCopyWith<_$AddTeamStateImpl> get copyWith =>
@@ -495,8 +509,11 @@ abstract class _AddTeamState implements AddTeamState {
   bool get isPop;
   @override
   List<TeamPlayer> get teamMembers;
+
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddTeamStateImplCopyWith<_$AddTeamStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

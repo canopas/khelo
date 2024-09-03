@@ -33,7 +33,9 @@ mixin _$MatchDetailTabState {
   HighlightFilterOption get highlightFilterOption =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchDetailTabStateCopyWith<MatchDetailTabState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -72,6 +74,8 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -143,6 +147,8 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
     ) as $Val);
   }
 
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MatchModelCopyWith<$Res>? get match {
@@ -191,6 +197,8 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
       $Res Function(_$MatchDetailTabStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -400,7 +408,9 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       ballScoreQueryListenerSet,
       highlightFilterOption);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchDetailTabStateImplCopyWith<_$MatchDetailTabStateImpl> get copyWith =>
@@ -451,8 +461,11 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
   bool get ballScoreQueryListenerSet;
   @override
   HighlightFilterOption get highlightFilterOption;
+
+  /// Create a copy of MatchDetailTabState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchDetailTabStateImplCopyWith<_$MatchDetailTabStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

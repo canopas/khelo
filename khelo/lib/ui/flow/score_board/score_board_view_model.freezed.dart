@@ -51,6 +51,7 @@ mixin _$ScoreBoardViewState {
   DateTime? get showEndMatchSheet => throw _privateConstructorUsedError;
   DateTime? get showAddSubstituteSheet => throw _privateConstructorUsedError;
   DateTime? get invalidUndoToast => throw _privateConstructorUsedError;
+  DateTime? get showReviseTargetSheet => throw _privateConstructorUsedError;
   ScoreButton? get tappedButton => throw _privateConstructorUsedError;
   bool? get isLongTap => throw _privateConstructorUsedError;
   FieldingPositionType? get position => throw _privateConstructorUsedError;
@@ -71,7 +72,9 @@ mixin _$ScoreBoardViewState {
   int get overCount => throw _privateConstructorUsedError;
   int get lastAssignedIndex => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ScoreBoardViewStateCopyWith<ScoreBoardViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -112,6 +115,7 @@ abstract class $ScoreBoardViewStateCopyWith<$Res> {
       DateTime? showEndMatchSheet,
       DateTime? showAddSubstituteSheet,
       DateTime? invalidUndoToast,
+      DateTime? showReviseTargetSheet,
       ScoreButton? tappedButton,
       bool? isLongTap,
       FieldingPositionType? position,
@@ -147,6 +151,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -179,6 +185,7 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     Object? showEndMatchSheet = freezed,
     Object? showAddSubstituteSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? showReviseTargetSheet = freezed,
     Object? tappedButton = freezed,
     Object? isLongTap = freezed,
     Object? position = freezed,
@@ -310,6 +317,10 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      showReviseTargetSheet: freezed == showReviseTargetSheet
+          ? _value.showReviseTargetSheet
+          : showReviseTargetSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       tappedButton: freezed == tappedButton
           ? _value.tappedButton
           : tappedButton // ignore: cast_nullable_to_non_nullable
@@ -381,6 +392,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     ) as $Val);
   }
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MatchModelCopyWith<$Res>? get match {
@@ -393,6 +406,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     });
   }
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $InningModelCopyWith<$Res>? get currentInning {
@@ -405,6 +420,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     });
   }
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $InningModelCopyWith<$Res>? get otherInning {
@@ -417,6 +434,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     });
   }
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MatchPlayerCopyWith<$Res>? get bowler {
@@ -429,6 +448,8 @@ class _$ScoreBoardViewStateCopyWithImpl<$Res, $Val extends ScoreBoardViewState>
     });
   }
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $InningModelCopyWith<$Res>? get nextInning {
@@ -480,6 +501,7 @@ abstract class _$$ScoreBoardViewStateImplCopyWith<$Res>
       DateTime? showEndMatchSheet,
       DateTime? showAddSubstituteSheet,
       DateTime? invalidUndoToast,
+      DateTime? showReviseTargetSheet,
       ScoreButton? tappedButton,
       bool? isLongTap,
       FieldingPositionType? position,
@@ -518,6 +540,8 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
       $Res Function(_$ScoreBoardViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -550,6 +574,7 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
     Object? showEndMatchSheet = freezed,
     Object? showAddSubstituteSheet = freezed,
     Object? invalidUndoToast = freezed,
+    Object? showReviseTargetSheet = freezed,
     Object? tappedButton = freezed,
     Object? isLongTap = freezed,
     Object? position = freezed,
@@ -681,6 +706,10 @@ class __$$ScoreBoardViewStateImplCopyWithImpl<$Res>
           ? _value.invalidUndoToast
           : invalidUndoToast // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      showReviseTargetSheet: freezed == showReviseTargetSheet
+          ? _value.showReviseTargetSheet
+          : showReviseTargetSheet // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       tappedButton: freezed == tappedButton
           ? _value.tappedButton
           : tappedButton // ignore: cast_nullable_to_non_nullable
@@ -786,6 +815,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
       this.showEndMatchSheet,
       this.showAddSubstituteSheet,
       this.invalidUndoToast,
+      this.showReviseTargetSheet,
       this.tappedButton,
       this.isLongTap,
       this.position,
@@ -875,6 +905,8 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
   @override
   final DateTime? invalidUndoToast;
   @override
+  final DateTime? showReviseTargetSheet;
+  @override
   final ScoreButton? tappedButton;
   @override
   final bool? isLongTap;
@@ -945,7 +977,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
 
   @override
   String toString() {
-    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, nextInning: $nextInning, showSelectFieldingPositionSheet: $showSelectFieldingPositionSheet, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, showAddSubstituteSheet: $showAddSubstituteSheet, invalidUndoToast: $invalidUndoToast, tappedButton: $tappedButton, isLongTap: $isLongTap, position: $position, allInnings: $allInnings, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, showForLessRun: $showForLessRun, showForDotBall: $showForDotBall, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
+    return 'ScoreBoardViewState(error: $error, actionError: $actionError, match: $match, currentInning: $currentInning, otherInning: $otherInning, bowler: $bowler, strikerId: $strikerId, batsMans: $batsMans, nextInning: $nextInning, showSelectFieldingPositionSheet: $showSelectFieldingPositionSheet, showSelectBatsManSheet: $showSelectBatsManSheet, showSelectBowlerSheet: $showSelectBowlerSheet, showSelectBowlerAndBatsManSheet: $showSelectBowlerAndBatsManSheet, showSelectPlayerSheet: $showSelectPlayerSheet, showSelectWicketTypeSheet: $showSelectWicketTypeSheet, showStrikerSelectionSheet: $showStrikerSelectionSheet, showUndoBallConfirmationDialog: $showUndoBallConfirmationDialog, showOverCompleteSheet: $showOverCompleteSheet, showInningCompleteSheet: $showInningCompleteSheet, showMatchCompleteSheet: $showMatchCompleteSheet, showAddExtraSheetForNoBall: $showAddExtraSheetForNoBall, showAddExtraSheetForLegBye: $showAddExtraSheetForLegBye, showAddExtraSheetForBye: $showAddExtraSheetForBye, showAddExtraSheetForFiveSeven: $showAddExtraSheetForFiveSeven, showPauseScoringSheet: $showPauseScoringSheet, showAddPenaltyRunSheet: $showAddPenaltyRunSheet, showEndMatchSheet: $showEndMatchSheet, showAddSubstituteSheet: $showAddSubstituteSheet, invalidUndoToast: $invalidUndoToast, showReviseTargetSheet: $showReviseTargetSheet, tappedButton: $tappedButton, isLongTap: $isLongTap, position: $position, allInnings: $allInnings, currentScoresList: $currentScoresList, previousScoresList: $previousScoresList, loading: $loading, pop: $pop, continueWithInjuredPlayers: $continueWithInjuredPlayers, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, isMatchUpdated: $isMatchUpdated, isActionInProgress: $isActionInProgress, showForLessRun: $showForLessRun, showForDotBall: $showForDotBall, ballCount: $ballCount, overCount: $overCount, lastAssignedIndex: $lastAssignedIndex)';
   }
 
   @override
@@ -1009,6 +1041,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
             (identical(other.showEndMatchSheet, showEndMatchSheet) || other.showEndMatchSheet == showEndMatchSheet) &&
             (identical(other.showAddSubstituteSheet, showAddSubstituteSheet) || other.showAddSubstituteSheet == showAddSubstituteSheet) &&
             (identical(other.invalidUndoToast, invalidUndoToast) || other.invalidUndoToast == invalidUndoToast) &&
+            (identical(other.showReviseTargetSheet, showReviseTargetSheet) || other.showReviseTargetSheet == showReviseTargetSheet) &&
             (identical(other.tappedButton, tappedButton) || other.tappedButton == tappedButton) &&
             (identical(other.isLongTap, isLongTap) || other.isLongTap == isLongTap) &&
             (identical(other.position, position) || other.position == position) &&
@@ -1060,6 +1093,7 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         showEndMatchSheet,
         showAddSubstituteSheet,
         invalidUndoToast,
+        showReviseTargetSheet,
         tappedButton,
         isLongTap,
         position,
@@ -1079,7 +1113,9 @@ class _$ScoreBoardViewStateImpl implements _ScoreBoardViewState {
         lastAssignedIndex
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ScoreBoardViewStateImplCopyWith<_$ScoreBoardViewStateImpl> get copyWith =>
@@ -1118,6 +1154,7 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
       final DateTime? showEndMatchSheet,
       final DateTime? showAddSubstituteSheet,
       final DateTime? invalidUndoToast,
+      final DateTime? showReviseTargetSheet,
       final ScoreButton? tappedButton,
       final bool? isLongTap,
       final FieldingPositionType? position,
@@ -1195,6 +1232,8 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   @override
   DateTime? get invalidUndoToast;
   @override
+  DateTime? get showReviseTargetSheet;
+  @override
   ScoreButton? get tappedButton;
   @override
   bool? get isLongTap;
@@ -1228,8 +1267,11 @@ abstract class _ScoreBoardViewState implements ScoreBoardViewState {
   int get overCount;
   @override
   int get lastAssignedIndex;
+
+  /// Create a copy of ScoreBoardViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ScoreBoardViewStateImplCopyWith<_$ScoreBoardViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

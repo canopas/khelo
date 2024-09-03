@@ -21,7 +21,9 @@ mixin _$MatchListViewState {
   List<MatchModel>? get matches => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchListViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchListViewStateCopyWith<MatchListViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +51,8 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchListViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,6 +102,8 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
       $Res Function(_$MatchListViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchListViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -177,7 +183,9 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
       const DeepCollectionEquality().hash(_matches),
       loading);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchListViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchListViewStateImplCopyWith<_$MatchListViewStateImpl> get copyWith =>
@@ -200,8 +208,11 @@ abstract class _MatchListViewState implements MatchListViewState {
   List<MatchModel>? get matches;
   @override
   bool get loading;
+
+  /// Create a copy of MatchListViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchListViewStateImplCopyWith<_$MatchListViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
