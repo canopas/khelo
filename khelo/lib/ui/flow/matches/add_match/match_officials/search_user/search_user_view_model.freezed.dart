@@ -22,7 +22,9 @@ mixin _$SearchUserViewState {
   UserModel? get selectedUser => throw _privateConstructorUsedError;
   List<UserModel> get searchedUsers => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SearchUserViewStateCopyWith<SearchUserViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -52,6 +54,8 @@ class _$SearchUserViewStateCopyWithImpl<$Res, $Val extends SearchUserViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -77,6 +81,8 @@ class _$SearchUserViewStateCopyWithImpl<$Res, $Val extends SearchUserViewState>
     ) as $Val);
   }
 
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get selectedUser {
@@ -116,6 +122,8 @@ class __$$SearchUserViewStateImplCopyWithImpl<$Res>
       $Res Function(_$SearchUserViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -194,7 +202,9 @@ class _$SearchUserViewStateImpl implements _SearchUserViewState {
       selectedUser,
       const DeepCollectionEquality().hash(_searchedUsers));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchUserViewStateImplCopyWith<_$SearchUserViewStateImpl> get copyWith =>
@@ -217,8 +227,11 @@ abstract class _SearchUserViewState implements SearchUserViewState {
   UserModel? get selectedUser;
   @override
   List<UserModel> get searchedUsers;
+
+  /// Create a copy of SearchUserViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchUserViewStateImplCopyWith<_$SearchUserViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

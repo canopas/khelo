@@ -26,7 +26,9 @@ mixin _$SignInWithPhoneState {
   bool get enableBtn => throw _privateConstructorUsedError;
   String get phone => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInWithPhoneState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SignInWithPhoneStateCopyWith<SignInWithPhoneState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -59,6 +61,8 @@ class _$SignInWithPhoneStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SignInWithPhoneState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,6 +136,8 @@ class __$$SignInWithPhoneStateImplCopyWithImpl<$Res>
       $Res Function(_$SignInWithPhoneStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SignInWithPhoneState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -250,7 +256,9 @@ class _$SignInWithPhoneStateImpl implements _SignInWithPhoneState {
       enableBtn,
       phone);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SignInWithPhoneState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SignInWithPhoneStateImplCopyWith<_$SignInWithPhoneStateImpl>
@@ -286,8 +294,11 @@ abstract class _SignInWithPhoneState implements SignInWithPhoneState {
   bool get enableBtn;
   @override
   String get phone;
+
+  /// Create a copy of SignInWithPhoneState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SignInWithPhoneStateImplCopyWith<_$SignInWithPhoneStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

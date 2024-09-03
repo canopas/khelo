@@ -43,6 +43,8 @@ class MatchService {
               toFirestore: (AddEditMatchRequest match, _) => match.toJson(),
             );
 
+  String get generateMatchId => _matchCollection.doc().id;
+
   Stream<List<MatchModel>> getCurrentUserPlayedMatches() {
     if (_currentUserId == null) {
       return Stream.value([]);
@@ -99,6 +101,40 @@ class MatchService {
 
     return _matchCollection
         .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final match = mainDoc.data();
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return MatchModel(
+            id: match.id,
+            teams: teams,
+            match_type: match.match_type,
+            number_of_over: match.number_of_over,
+            over_per_bowler: match.over_per_bowler,
+            city: match.city,
+            players: match.players,
+            team_ids: match.team_ids,
+            team_creator_ids: match.team_creator_ids,
+            ground: match.ground,
+            start_time: match.start_time,
+            created_by: match.created_by,
+            ball_type: match.ball_type,
+            pitch_type: match.pitch_type,
+            match_status: match.match_status,
+            toss_winner_id: match.toss_winner_id,
+            toss_decision: match.toss_decision,
+            current_playing_team_id: match.current_playing_team_id,
+          );
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> streamUserMatches(String userId) {
+    return _matchCollection
+        .where(FireStoreConst.players, arrayContains: userId)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(
@@ -209,6 +245,7 @@ class MatchService {
       final match = snapshot.data();
       if (match == null) {
         return MatchModel(
+          id: '',
           teams: [],
           match_type: MatchType.limitedOvers,
           number_of_over: 0,
@@ -273,6 +310,7 @@ class MatchService {
       final match = snapshot.data();
       if (match == null) {
         return MatchModel(
+          id: '',
           teams: [],
           match_type: MatchType.limitedOvers,
           number_of_over: 0,

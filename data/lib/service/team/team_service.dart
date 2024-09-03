@@ -273,4 +273,35 @@ class TeamService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Stream<List<TeamModel>> streamUserRelatedTeamsByUserId(String userId) {
+    final currentPlayer = TeamPlayer(id: userId);
+
+    final playerContains = [
+      currentPlayer.copyWith(role: TeamPlayerRole.admin).toJson(),
+      currentPlayer.copyWith(role: TeamPlayerRole.player).toJson(),
+    ];
+
+    return _teamsCollection
+        .where(FireStoreConst.teamPlayers, arrayContainsAny: playerContains)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final team = mainDoc.data();
+
+          final users = await getMemberListFromUserIds(
+            team.players.map((e) => e.id).toList(),
+          );
+
+          final players = team.players.map((player) {
+            final user = users.firstWhere((element) => element.id == player.id);
+            return player.copyWith(user: user);
+          }).toList();
+
+          return team.copyWith(players: players);
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
 }

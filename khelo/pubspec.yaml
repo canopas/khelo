@@ -40,7 +40,7 @@ dependencies:
     path: ../data
 
   shared_preferences: ^2.2.2
-  collection: any
+  collection: ^1.18.0
 
   # UI
   cupertino_icons: ^1.0.2

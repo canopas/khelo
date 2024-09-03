@@ -12,7 +12,7 @@ part 'match_model.g.dart';
 @freezed
 class MatchModel with _$MatchModel {
   const factory MatchModel({
-    String? id,
+    required String id,
     required List<MatchTeamModel> teams,
     required MatchType match_type,
     required int number_of_over,
@@ -153,7 +153,7 @@ class AddEditMatchRequest with _$AddEditMatchRequest {
   // ignore: invalid_annotation_target
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory AddEditMatchRequest({
-    String? id,
+    required String id,
     required List<AddMatchTeamRequest> teams,
     required MatchType match_type,
     required int number_of_over,

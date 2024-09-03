@@ -6,9 +6,7 @@ import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final inningServiceProvider = Provider((ref) {
-  final service = InningsService(
-    FirebaseFirestore.instance,
-  );
+  final service = InningsService(FirebaseFirestore.instance);
   return service;
 });
 
@@ -41,7 +39,7 @@ class InningsService {
     }
   }
 
-  Stream<List<InningModel>> getInningsStreamByMatchId({
+  Stream<List<InningModel>> streamInningsByMatchId({
     required String matchId,
   }) {
     return _inningCollection

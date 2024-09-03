@@ -15,6 +15,7 @@ class BallScoreModel with _$BallScoreModel {
   const factory BallScoreModel({
     String? id,
     required String inning_id,
+    required String match_id,
     required int over_number,
     required int ball_number,
     required String bowler_id,
@@ -142,17 +143,29 @@ class UserStat with _$UserStat {
 @freezed
 class BattingStat with _$BattingStat {
   const factory BattingStat({
+    @Default(0) int innings,
     @Default(0) int runScored,
     @Default(0.0) double average,
     @Default(0.0) double strikeRate,
     @Default(0) int ballFaced,
+    @Default(0) int fours,
+    @Default(0) int sixes,
+    @Default(0) int fifties,
+    @Default(0) int hundreds,
+    @Default(0) int ducks,
   }) = _BattingStat;
 }
 
 @freezed
 class BowlingStat with _$BowlingStat {
   const factory BowlingStat({
+    @Default(0) int innings,
     @Default(0) int wicketTaken,
+    @Default(0) int balls,
+    @Default(0) int runsConceded,
+    @Default(0) int maiden,
+    @Default(0) int noBalls,
+    @Default(0) int wideBalls,
     @Default(0.0) double average,
     @Default(0.0) double strikeRate,
     @Default(0.0) double economyRate,

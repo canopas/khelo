@@ -10,6 +10,7 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
     _$BallScoreModelImpl(
       id: json['id'] as String?,
       inning_id: json['inning_id'] as String,
+      match_id: json['match_id'] as String,
       over_number: (json['over_number'] as num).toInt(),
       ball_number: (json['ball_number'] as num).toInt(),
       bowler_id: json['bowler_id'] as String,
@@ -35,6 +36,7 @@ Map<String, dynamic> _$$BallScoreModelImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'inning_id': instance.inning_id,
+      'match_id': instance.match_id,
       'over_number': instance.over_number,
       'ball_number': instance.ball_number,
       'bowler_id': instance.bowler_id,

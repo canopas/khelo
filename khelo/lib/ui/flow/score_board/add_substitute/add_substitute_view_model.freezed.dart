@@ -24,7 +24,9 @@ mixin _$AddSubstituteViewState {
   List<UserModel> get nonPlayingPlayers => throw _privateConstructorUsedError;
   List<String> get playingSquadIds => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddSubstituteViewStateCopyWith<AddSubstituteViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -57,6 +59,8 @@ class _$AddSubstituteViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +96,8 @@ class _$AddSubstituteViewStateCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get selectedUser {
@@ -136,6 +142,8 @@ class __$$AddSubstituteViewStateImplCopyWithImpl<$Res>
       $Res Function(_$AddSubstituteViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -253,7 +261,9 @@ class _$AddSubstituteViewStateImpl implements _AddSubstituteViewState {
       const DeepCollectionEquality().hash(_nonPlayingPlayers),
       const DeepCollectionEquality().hash(_playingSquadIds));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddSubstituteViewStateImplCopyWith<_$AddSubstituteViewStateImpl>
@@ -282,8 +292,11 @@ abstract class _AddSubstituteViewState implements AddSubstituteViewState {
   List<UserModel> get nonPlayingPlayers;
   @override
   List<String> get playingSquadIds;
+
+  /// Create a copy of AddSubstituteViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddSubstituteViewStateImplCopyWith<_$AddSubstituteViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

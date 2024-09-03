@@ -103,7 +103,7 @@ class BallScoreService {
     }
   }
 
-  Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
+  Stream<List<BallScoreChange>> streamBallScoresByInningIds(
     List<String> inningIds,
   ) {
     return _ballScoreCollection
@@ -115,6 +115,19 @@ class BallScoreService {
               .toList(),
         )
         .handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<List<BallScoreModel>> getBallScoresByMatchIds(
+    List<String> matchIds,
+  ) async {
+    try {
+      final ballScoreRef = await _ballScoreCollection
+          .where(FireStoreConst.matchId, whereIn: matchIds)
+          .get();
+      return ballScoreRef.docs.map((e) => e.data()).toList();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Stream<List<BallScoreModel>> getCurrentUserRelatedBalls() {

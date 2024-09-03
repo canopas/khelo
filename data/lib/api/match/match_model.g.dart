@@ -8,7 +8,7 @@ part of 'match_model.dart';
 
 _$MatchModelImpl _$$MatchModelImplFromJson(Map<String, dynamic> json) =>
     _$MatchModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       teams: (json['teams'] as List<dynamic>)
           .map((e) => MatchTeamModel.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -197,7 +197,7 @@ const _$PlayerStatusEnumMap = {
 
 _$AddEditMatchRequestImpl _$$AddEditMatchRequestImplFromJson(Map json) =>
     _$AddEditMatchRequestImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       teams: (json['teams'] as List<dynamic>)
           .map((e) =>
               AddMatchTeamRequest.fromJson(Map<String, dynamic>.from(e as Map)))

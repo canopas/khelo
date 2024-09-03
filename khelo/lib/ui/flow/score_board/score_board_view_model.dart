@@ -52,7 +52,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String currentInningId,
     String otherInningId,
   ) {
-    return _ballScoreService.getBallScoresStreamByInningIds(
+    return _ballScoreService.streamBallScoresByInningIds(
         [currentInningId, otherInningId]).handleError((e) {
       throw AppError.fromError(e);
     });
@@ -63,7 +63,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       state = state.copyWith(loading: true);
       final matchInningStream = combineLatest2(
         _matchService.getMatchStreamById(matchId!),
-        _inningService.getInningsStreamByMatchId(matchId: matchId!),
+        _inningService.streamInningsByMatchId(matchId: matchId!),
       ).asyncMap((data) async {
         MatchModel match = data.$1;
         List<InningModel> innings = data.$2;
@@ -583,6 +583,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }
       final ball = BallScoreModel(
           inning_id: ballInningId,
+          match_id: state.match?.id ?? matchId,
           over_number: state.overCount,
           ball_number: ballCount,
           bowler_id: bowlerId,

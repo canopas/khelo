@@ -26,7 +26,9 @@ mixin _$SearchTeamState {
   bool get showSelectionError => throw _privateConstructorUsedError;
   bool get searchInProgress => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SearchTeamStateCopyWith<SearchTeamState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,6 +62,8 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -105,6 +109,8 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
     ) as $Val);
   }
 
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get selectedTeam {
@@ -148,6 +154,8 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
       _$SearchTeamStateImpl _value, $Res Function(_$SearchTeamStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -281,7 +289,9 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       showSelectionError,
       searchInProgress);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>
@@ -316,8 +326,11 @@ abstract class _SearchTeamState implements SearchTeamState {
   bool get showSelectionError;
   @override
   bool get searchInProgress;
+
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -80,6 +80,18 @@ class UserService {
     }
   }
 
+  Stream<UserModel> streamUserById(String id) {
+    return _userCollection.doc(id).snapshots().map((snapshot) {
+      final userModel = snapshot.data();
+      if (userModel == null) {
+        return deActiveDummyUserAccount(id);
+      }
+      return userModel;
+    }).handleError((error, stack) {
+      throw AppError.fromError(error, stack);
+    });
+  }
+
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
     final List<UserModel> users = [];
     try {

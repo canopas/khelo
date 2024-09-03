@@ -22,6 +22,7 @@ BallScoreModel _$BallScoreModelFromJson(Map<String, dynamic> json) {
 mixin _$BallScoreModel {
   String? get id => throw _privateConstructorUsedError;
   String get inning_id => throw _privateConstructorUsedError;
+  String get match_id => throw _privateConstructorUsedError;
   int get over_number => throw _privateConstructorUsedError;
   int get ball_number => throw _privateConstructorUsedError;
   String get bowler_id => throw _privateConstructorUsedError;
@@ -54,6 +55,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
   $Res call(
       {String? id,
       String inning_id,
+      String match_id,
       int over_number,
       int ball_number,
       String bowler_id,
@@ -86,6 +88,7 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
   $Res call({
     Object? id = freezed,
     Object? inning_id = null,
+    Object? match_id = null,
     Object? over_number = null,
     Object? ball_number = null,
     Object? bowler_id = null,
@@ -110,6 +113,10 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
       inning_id: null == inning_id
           ? _value.inning_id
           : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      match_id: null == match_id
+          ? _value.match_id
+          : match_id // ignore: cast_nullable_to_non_nullable
               as String,
       over_number: null == over_number
           ? _value.over_number
@@ -186,6 +193,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
   $Res call(
       {String? id,
       String inning_id,
+      String match_id,
       int over_number,
       int ball_number,
       String bowler_id,
@@ -216,6 +224,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? inning_id = null,
+    Object? match_id = null,
     Object? over_number = null,
     Object? ball_number = null,
     Object? bowler_id = null,
@@ -240,6 +249,10 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
       inning_id: null == inning_id
           ? _value.inning_id
           : inning_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      match_id: null == match_id
+          ? _value.match_id
+          : match_id // ignore: cast_nullable_to_non_nullable
               as String,
       over_number: null == over_number
           ? _value.over_number
@@ -311,6 +324,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   const _$BallScoreModelImpl(
       {this.id,
       required this.inning_id,
+      required this.match_id,
       required this.over_number,
       required this.ball_number,
       required this.bowler_id,
@@ -334,6 +348,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   final String? id;
   @override
   final String inning_id;
+  @override
+  final String match_id;
   @override
   final int over_number;
   @override
@@ -367,7 +383,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
 
   @override
   String toString() {
-    return 'BallScoreModel(id: $id, inning_id: $inning_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, fielding_position: $fielding_position, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
+    return 'BallScoreModel(id: $id, inning_id: $inning_id, match_id: $match_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, fielding_position: $fielding_position, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
   }
 
   @override
@@ -378,6 +394,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.inning_id, inning_id) ||
                 other.inning_id == inning_id) &&
+            (identical(other.match_id, match_id) ||
+                other.match_id == match_id) &&
             (identical(other.over_number, over_number) ||
                 other.over_number == over_number) &&
             (identical(other.ball_number, ball_number) ||
@@ -413,6 +431,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       runtimeType,
       id,
       inning_id,
+      match_id,
       over_number,
       ball_number,
       bowler_id,
@@ -448,6 +467,7 @@ abstract class _BallScoreModel implements BallScoreModel {
   const factory _BallScoreModel(
       {final String? id,
       required final String inning_id,
+      required final String match_id,
       required final int over_number,
       required final int ball_number,
       required final String bowler_id,
@@ -471,6 +491,8 @@ abstract class _BallScoreModel implements BallScoreModel {
   String? get id;
   @override
   String get inning_id;
+  @override
+  String get match_id;
   @override
   int get over_number;
   @override
@@ -717,10 +739,16 @@ abstract class _UserStat implements UserStat {
 
 /// @nodoc
 mixin _$BattingStat {
+  int get innings => throw _privateConstructorUsedError;
   int get runScored => throw _privateConstructorUsedError;
   double get average => throw _privateConstructorUsedError;
   double get strikeRate => throw _privateConstructorUsedError;
   int get ballFaced => throw _privateConstructorUsedError;
+  int get fours => throw _privateConstructorUsedError;
+  int get sixes => throw _privateConstructorUsedError;
+  int get fifties => throw _privateConstructorUsedError;
+  int get hundreds => throw _privateConstructorUsedError;
+  int get ducks => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $BattingStatCopyWith<BattingStat> get copyWith =>
@@ -733,7 +761,17 @@ abstract class $BattingStatCopyWith<$Res> {
           BattingStat value, $Res Function(BattingStat) then) =
       _$BattingStatCopyWithImpl<$Res, BattingStat>;
   @useResult
-  $Res call({int runScored, double average, double strikeRate, int ballFaced});
+  $Res call(
+      {int innings,
+      int runScored,
+      double average,
+      double strikeRate,
+      int ballFaced,
+      int fours,
+      int sixes,
+      int fifties,
+      int hundreds,
+      int ducks});
 }
 
 /// @nodoc
@@ -749,12 +787,22 @@ class _$BattingStatCopyWithImpl<$Res, $Val extends BattingStat>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? innings = null,
     Object? runScored = null,
     Object? average = null,
     Object? strikeRate = null,
     Object? ballFaced = null,
+    Object? fours = null,
+    Object? sixes = null,
+    Object? fifties = null,
+    Object? hundreds = null,
+    Object? ducks = null,
   }) {
     return _then(_value.copyWith(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
       runScored: null == runScored
           ? _value.runScored
           : runScored // ignore: cast_nullable_to_non_nullable
@@ -770,6 +818,26 @@ class _$BattingStatCopyWithImpl<$Res, $Val extends BattingStat>
       ballFaced: null == ballFaced
           ? _value.ballFaced
           : ballFaced // ignore: cast_nullable_to_non_nullable
+              as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fifties: null == fifties
+          ? _value.fifties
+          : fifties // ignore: cast_nullable_to_non_nullable
+              as int,
+      hundreds: null == hundreds
+          ? _value.hundreds
+          : hundreds // ignore: cast_nullable_to_non_nullable
+              as int,
+      ducks: null == ducks
+          ? _value.ducks
+          : ducks // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -783,7 +851,17 @@ abstract class _$$BattingStatImplCopyWith<$Res>
       __$$BattingStatImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int runScored, double average, double strikeRate, int ballFaced});
+  $Res call(
+      {int innings,
+      int runScored,
+      double average,
+      double strikeRate,
+      int ballFaced,
+      int fours,
+      int sixes,
+      int fifties,
+      int hundreds,
+      int ducks});
 }
 
 /// @nodoc
@@ -797,12 +875,22 @@ class __$$BattingStatImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? innings = null,
     Object? runScored = null,
     Object? average = null,
     Object? strikeRate = null,
     Object? ballFaced = null,
+    Object? fours = null,
+    Object? sixes = null,
+    Object? fifties = null,
+    Object? hundreds = null,
+    Object? ducks = null,
   }) {
     return _then(_$BattingStatImpl(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
       runScored: null == runScored
           ? _value.runScored
           : runScored // ignore: cast_nullable_to_non_nullable
@@ -819,6 +907,26 @@ class __$$BattingStatImplCopyWithImpl<$Res>
           ? _value.ballFaced
           : ballFaced // ignore: cast_nullable_to_non_nullable
               as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fifties: null == fifties
+          ? _value.fifties
+          : fifties // ignore: cast_nullable_to_non_nullable
+              as int,
+      hundreds: null == hundreds
+          ? _value.hundreds
+          : hundreds // ignore: cast_nullable_to_non_nullable
+              as int,
+      ducks: null == ducks
+          ? _value.ducks
+          : ducks // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -827,11 +935,20 @@ class __$$BattingStatImplCopyWithImpl<$Res>
 
 class _$BattingStatImpl implements _BattingStat {
   const _$BattingStatImpl(
-      {this.runScored = 0,
+      {this.innings = 0,
+      this.runScored = 0,
       this.average = 0.0,
       this.strikeRate = 0.0,
-      this.ballFaced = 0});
+      this.ballFaced = 0,
+      this.fours = 0,
+      this.sixes = 0,
+      this.fifties = 0,
+      this.hundreds = 0,
+      this.ducks = 0});
 
+  @override
+  @JsonKey()
+  final int innings;
   @override
   @JsonKey()
   final int runScored;
@@ -844,10 +961,25 @@ class _$BattingStatImpl implements _BattingStat {
   @override
   @JsonKey()
   final int ballFaced;
+  @override
+  @JsonKey()
+  final int fours;
+  @override
+  @JsonKey()
+  final int sixes;
+  @override
+  @JsonKey()
+  final int fifties;
+  @override
+  @JsonKey()
+  final int hundreds;
+  @override
+  @JsonKey()
+  final int ducks;
 
   @override
   String toString() {
-    return 'BattingStat(runScored: $runScored, average: $average, strikeRate: $strikeRate, ballFaced: $ballFaced)';
+    return 'BattingStat(innings: $innings, runScored: $runScored, average: $average, strikeRate: $strikeRate, ballFaced: $ballFaced, fours: $fours, sixes: $sixes, fifties: $fifties, hundreds: $hundreds, ducks: $ducks)';
   }
 
   @override
@@ -855,18 +987,25 @@ class _$BattingStatImpl implements _BattingStat {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BattingStatImpl &&
+            (identical(other.innings, innings) || other.innings == innings) &&
             (identical(other.runScored, runScored) ||
                 other.runScored == runScored) &&
             (identical(other.average, average) || other.average == average) &&
             (identical(other.strikeRate, strikeRate) ||
                 other.strikeRate == strikeRate) &&
             (identical(other.ballFaced, ballFaced) ||
-                other.ballFaced == ballFaced));
+                other.ballFaced == ballFaced) &&
+            (identical(other.fours, fours) || other.fours == fours) &&
+            (identical(other.sixes, sixes) || other.sixes == sixes) &&
+            (identical(other.fifties, fifties) || other.fifties == fifties) &&
+            (identical(other.hundreds, hundreds) ||
+                other.hundreds == hundreds) &&
+            (identical(other.ducks, ducks) || other.ducks == ducks));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, runScored, average, strikeRate, ballFaced);
+  int get hashCode => Object.hash(runtimeType, innings, runScored, average,
+      strikeRate, ballFaced, fours, sixes, fifties, hundreds, ducks);
 
   @JsonKey(ignore: true)
   @override
@@ -877,11 +1016,19 @@ class _$BattingStatImpl implements _BattingStat {
 
 abstract class _BattingStat implements BattingStat {
   const factory _BattingStat(
-      {final int runScored,
+      {final int innings,
+      final int runScored,
       final double average,
       final double strikeRate,
-      final int ballFaced}) = _$BattingStatImpl;
+      final int ballFaced,
+      final int fours,
+      final int sixes,
+      final int fifties,
+      final int hundreds,
+      final int ducks}) = _$BattingStatImpl;
 
+  @override
+  int get innings;
   @override
   int get runScored;
   @override
@@ -891,6 +1038,16 @@ abstract class _BattingStat implements BattingStat {
   @override
   int get ballFaced;
   @override
+  int get fours;
+  @override
+  int get sixes;
+  @override
+  int get fifties;
+  @override
+  int get hundreds;
+  @override
+  int get ducks;
+  @override
   @JsonKey(ignore: true)
   _$$BattingStatImplCopyWith<_$BattingStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -898,7 +1055,13 @@ abstract class _BattingStat implements BattingStat {
 
 /// @nodoc
 mixin _$BowlingStat {
+  int get innings => throw _privateConstructorUsedError;
   int get wicketTaken => throw _privateConstructorUsedError;
+  int get balls => throw _privateConstructorUsedError;
+  int get runsConceded => throw _privateConstructorUsedError;
+  int get maiden => throw _privateConstructorUsedError;
+  int get noBalls => throw _privateConstructorUsedError;
+  int get wideBalls => throw _privateConstructorUsedError;
   double get average => throw _privateConstructorUsedError;
   double get strikeRate => throw _privateConstructorUsedError;
   double get economyRate => throw _privateConstructorUsedError;
@@ -915,7 +1078,16 @@ abstract class $BowlingStatCopyWith<$Res> {
       _$BowlingStatCopyWithImpl<$Res, BowlingStat>;
   @useResult
   $Res call(
-      {int wicketTaken, double average, double strikeRate, double economyRate});
+      {int innings,
+      int wicketTaken,
+      int balls,
+      int runsConceded,
+      int maiden,
+      int noBalls,
+      int wideBalls,
+      double average,
+      double strikeRate,
+      double economyRate});
 }
 
 /// @nodoc
@@ -931,15 +1103,45 @@ class _$BowlingStatCopyWithImpl<$Res, $Val extends BowlingStat>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? innings = null,
     Object? wicketTaken = null,
+    Object? balls = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
     Object? average = null,
     Object? strikeRate = null,
     Object? economyRate = null,
   }) {
     return _then(_value.copyWith(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
       wicketTaken: null == wicketTaken
           ? _value.wicketTaken
           : wicketTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      balls: null == balls
+          ? _value.balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as int,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
@@ -966,7 +1168,16 @@ abstract class _$$BowlingStatImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int wicketTaken, double average, double strikeRate, double economyRate});
+      {int innings,
+      int wicketTaken,
+      int balls,
+      int runsConceded,
+      int maiden,
+      int noBalls,
+      int wideBalls,
+      double average,
+      double strikeRate,
+      double economyRate});
 }
 
 /// @nodoc
@@ -980,15 +1191,45 @@ class __$$BowlingStatImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? innings = null,
     Object? wicketTaken = null,
+    Object? balls = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
     Object? average = null,
     Object? strikeRate = null,
     Object? economyRate = null,
   }) {
     return _then(_$BowlingStatImpl(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
       wicketTaken: null == wicketTaken
           ? _value.wicketTaken
           : wicketTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      balls: null == balls
+          ? _value.balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as int,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
@@ -1010,14 +1251,38 @@ class __$$BowlingStatImplCopyWithImpl<$Res>
 
 class _$BowlingStatImpl implements _BowlingStat {
   const _$BowlingStatImpl(
-      {this.wicketTaken = 0,
+      {this.innings = 0,
+      this.wicketTaken = 0,
+      this.balls = 0,
+      this.runsConceded = 0,
+      this.maiden = 0,
+      this.noBalls = 0,
+      this.wideBalls = 0,
       this.average = 0.0,
       this.strikeRate = 0.0,
       this.economyRate = 0.0});
 
   @override
   @JsonKey()
+  final int innings;
+  @override
+  @JsonKey()
   final int wicketTaken;
+  @override
+  @JsonKey()
+  final int balls;
+  @override
+  @JsonKey()
+  final int runsConceded;
+  @override
+  @JsonKey()
+  final int maiden;
+  @override
+  @JsonKey()
+  final int noBalls;
+  @override
+  @JsonKey()
+  final int wideBalls;
   @override
   @JsonKey()
   final double average;
@@ -1030,7 +1295,7 @@ class _$BowlingStatImpl implements _BowlingStat {
 
   @override
   String toString() {
-    return 'BowlingStat(wicketTaken: $wicketTaken, average: $average, strikeRate: $strikeRate, economyRate: $economyRate)';
+    return 'BowlingStat(innings: $innings, wicketTaken: $wicketTaken, balls: $balls, runsConceded: $runsConceded, maiden: $maiden, noBalls: $noBalls, wideBalls: $wideBalls, average: $average, strikeRate: $strikeRate, economyRate: $economyRate)';
   }
 
   @override
@@ -1038,8 +1303,16 @@ class _$BowlingStatImpl implements _BowlingStat {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BowlingStatImpl &&
+            (identical(other.innings, innings) || other.innings == innings) &&
             (identical(other.wicketTaken, wicketTaken) ||
                 other.wicketTaken == wicketTaken) &&
+            (identical(other.balls, balls) || other.balls == balls) &&
+            (identical(other.runsConceded, runsConceded) ||
+                other.runsConceded == runsConceded) &&
+            (identical(other.maiden, maiden) || other.maiden == maiden) &&
+            (identical(other.noBalls, noBalls) || other.noBalls == noBalls) &&
+            (identical(other.wideBalls, wideBalls) ||
+                other.wideBalls == wideBalls) &&
             (identical(other.average, average) || other.average == average) &&
             (identical(other.strikeRate, strikeRate) ||
                 other.strikeRate == strikeRate) &&
@@ -1048,8 +1321,18 @@ class _$BowlingStatImpl implements _BowlingStat {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, wicketTaken, average, strikeRate, economyRate);
+  int get hashCode => Object.hash(
+      runtimeType,
+      innings,
+      wicketTaken,
+      balls,
+      runsConceded,
+      maiden,
+      noBalls,
+      wideBalls,
+      average,
+      strikeRate,
+      economyRate);
 
   @JsonKey(ignore: true)
   @override
@@ -1060,13 +1343,31 @@ class _$BowlingStatImpl implements _BowlingStat {
 
 abstract class _BowlingStat implements BowlingStat {
   const factory _BowlingStat(
-      {final int wicketTaken,
+      {final int innings,
+      final int wicketTaken,
+      final int balls,
+      final int runsConceded,
+      final int maiden,
+      final int noBalls,
+      final int wideBalls,
       final double average,
       final double strikeRate,
       final double economyRate}) = _$BowlingStatImpl;
 
   @override
+  int get innings;
+  @override
   int get wicketTaken;
+  @override
+  int get balls;
+  @override
+  int get runsConceded;
+  @override
+  int get maiden;
+  @override
+  int get noBalls;
+  @override
+  int get wideBalls;
   @override
   double get average;
   @override
