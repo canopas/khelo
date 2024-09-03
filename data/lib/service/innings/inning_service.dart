@@ -12,15 +12,14 @@ final inningServiceProvider = Provider((ref) {
 
 class InningsService {
   final FirebaseFirestore _firestore;
-  final CollectionReference<InningModel> _inningCollection;
 
-  InningsService(this._firestore)
-      : _inningCollection = _firestore
-            .collection(FireStoreConst.inningsCollection)
-            .withConverter(
-              fromFirestore: InningModel.fromFireStore,
-              toFirestore: (InningModel inning, _) => inning.toJson(),
-            );
+  InningsService(this._firestore);
+
+  CollectionReference<InningModel> get _inningCollection =>
+      _firestore.collection(FireStoreConst.inningsCollection).withConverter(
+            fromFirestore: InningModel.fromFireStore,
+            toFirestore: (InningModel inning, _) => inning.toJson(),
+          );
 
   String get generateInningId => _inningCollection.doc().id;
 

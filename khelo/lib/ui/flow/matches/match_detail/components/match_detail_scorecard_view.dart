@@ -8,7 +8,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -321,7 +321,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.sixes.toString(),
             player.strikeRate.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, player.player),
+          onTap: () =>
+              AppRoute.userDetail(userId: player.player.id).push(context),
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -373,7 +374,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.wideBalls.toString(),
             bowler.economy.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, bowler.player),
+          onTap: () =>
+              AppRoute.userDetail(userId: bowler.player.id).push(context),
           header: Text(
             bowler.player.name ?? '',
             style: AppTextStyle.subtitle2
@@ -474,7 +476,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (!isLastName) name += ", ";
             return WidgetSpan(
                 child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, player.player),
+              onTap: () =>
+                  AppRoute.userDetail(userId: player.player.id).push(context),
               child: Text(name,
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary)),
@@ -530,7 +533,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(TextSpan(text: "${batsmen.runs} ("));
       children.add(WidgetSpan(
           child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, batsmen.player),
+              onTap: () =>
+                  AppRoute.userDetail(userId: batsmen.player.id).push(context),
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.secondary)))));

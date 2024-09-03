@@ -20,7 +20,7 @@ BallScoreModel _$BallScoreModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$BallScoreModel {
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get inning_id => throw _privateConstructorUsedError;
   String get match_id => throw _privateConstructorUsedError;
   int get over_number => throw _privateConstructorUsedError;
@@ -53,7 +53,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
       _$BallScoreModelCopyWithImpl<$Res, BallScoreModel>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String inning_id,
       String match_id,
       int over_number,
@@ -86,7 +86,7 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? inning_id = null,
     Object? match_id = null,
     Object? over_number = null,
@@ -106,10 +106,10 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
     Object? time = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       inning_id: null == inning_id
           ? _value.inning_id
           : inning_id // ignore: cast_nullable_to_non_nullable
@@ -191,7 +191,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String inning_id,
       String match_id,
       int over_number,
@@ -222,7 +222,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? inning_id = null,
     Object? match_id = null,
     Object? over_number = null,
@@ -242,10 +242,10 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
     Object? time = null,
   }) {
     return _then(_$BallScoreModelImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       inning_id: null == inning_id
           ? _value.inning_id
           : inning_id // ignore: cast_nullable_to_non_nullable
@@ -322,7 +322,7 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BallScoreModelImpl implements _BallScoreModel {
   const _$BallScoreModelImpl(
-      {this.id,
+      {required this.id,
       required this.inning_id,
       required this.match_id,
       required this.over_number,
@@ -345,7 +345,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       _$$BallScoreModelImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   @override
   final String inning_id;
   @override
@@ -465,7 +465,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
 
 abstract class _BallScoreModel implements BallScoreModel {
   const factory _BallScoreModel(
-      {final String? id,
+      {required final String id,
       required final String inning_id,
       required final String match_id,
       required final int over_number,
@@ -488,7 +488,7 @@ abstract class _BallScoreModel implements BallScoreModel {
       _$BallScoreModelImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
   String get inning_id;
   @override

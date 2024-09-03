@@ -13,7 +13,7 @@ part 'ball_score_model.g.dart';
 @freezed
 class BallScoreModel with _$BallScoreModel {
   const factory BallScoreModel({
-    String? id,
+    required String id,
     required String inning_id,
     required String match_id,
     required int over_number,

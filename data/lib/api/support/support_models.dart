@@ -8,7 +8,7 @@ part 'support_models.g.dart';
 @freezed
 class AddSupportCaseRequest with _$AddSupportCaseRequest {
   const factory AddSupportCaseRequest({
-    String? id,
+    required String id,
     required String title,
     String? description,
     @Default([]) List<String> attachmentUrls,

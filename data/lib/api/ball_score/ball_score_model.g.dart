@@ -8,7 +8,7 @@ part of 'ball_score_model.dart';
 
 _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
     _$BallScoreModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       inning_id: json['inning_id'] as String,
       match_id: json['match_id'] as String,
       over_number: (json['over_number'] as num).toInt(),

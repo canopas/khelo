@@ -55,7 +55,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     try {
       state = state.copyWith(loading: true);
       final matchInningStream = combineLatest2(
-        _matchService.getMatchStreamById(_matchId),
+        _matchService.streamMatchById(_matchId),
         _inningService.streamInningsByMatchId(matchId: _matchId),
       );
       matchStreamSubscription = matchInningStream.listen((data) {

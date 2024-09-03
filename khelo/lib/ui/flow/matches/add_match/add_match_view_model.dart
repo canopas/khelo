@@ -158,18 +158,18 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       final match = AddEditMatchRequest(
           id: matchId ?? _matchService.generateMatchId,
           players: allPlayers.toSet().toList(),
-          team_ids: [state.teamA!.id!, state.teamB!.id!],
+          team_ids: [state.teamA!.id, state.teamB!.id],
           team_creator_ids:
               {state.teamA!.created_by!, state.teamB!.created_by!}.toList(),
           teams: [
             AddMatchTeamRequest(
-              team_id: state.teamA!.id!,
+              team_id: state.teamA!.id,
               squad: firstSquad,
               captain_id: state.teamACaptainId,
               admin_id: state.teamAAdminId,
             ),
             AddMatchTeamRequest(
-              team_id: state.teamB!.id!,
+              team_id: state.teamB!.id,
               squad: secondSquad,
               captain_id: state.teamBCaptainId,
               admin_id: state.teamBAdminId,

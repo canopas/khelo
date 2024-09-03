@@ -54,7 +54,7 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
     state = state.copyWith(loading: state.matches == null);
     _matchListStreamSubscription = _matchService
-        .getMatchesByTeamId(state.team!.id ?? "INVALID ID")
+        .streamMatchesByTeamId(state.team!.id)
         .listen((matches) {
       final teamStat = _calculateTeamStat(matches);
       state =

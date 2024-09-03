@@ -77,7 +77,7 @@ extension DataMatchModel on MatchModel {
 
       final runDifference = firstTeam.run - secondTeam.run;
       return MatchResult(
-        teamId: firstTeam.team.id ?? "",
+        teamId: firstTeam.team.id,
         teamName: teamName,
         difference: runDifference,
         winType: WinnerByType.run,
@@ -96,7 +96,7 @@ extension DataMatchModel on MatchModel {
       final wicketDifference = secondTeam.squad.length - firstTeam.wicket;
 
       return MatchResult(
-        teamId: secondTeam.team.id ?? "",
+        teamId: secondTeam.team.id,
         teamName: teamName,
         difference: wicketDifference,
         winType: WinnerByType.wicket,
