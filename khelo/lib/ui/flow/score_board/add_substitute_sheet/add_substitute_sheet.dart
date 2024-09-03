@@ -9,7 +9,7 @@ import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
-import 'package:khelo/ui/flow/score_board/add_substitute/add_substitute_view_model.dart';
+import 'package:khelo/ui/flow/score_board/add_substitute_sheet/add_substitute_view_model.dart';
 import 'package:khelo/ui/flow/score_board/components/user_cell_view.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';

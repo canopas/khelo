@@ -265,9 +265,10 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
           focusColor: context.colorScheme.outline,
           unFocusColor: context.colorScheme.outline,
         ),
+        keyboardType: allowNumberOnly ? TextInputType.number : null,
         inputFormatters: allowNumberOnly
             ? [
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                FilteringTextInputFormatter.digitsOnly,
               ]
             : null,
         onChanged: (value) => onChange(),
