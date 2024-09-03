@@ -70,46 +70,24 @@ class MatchService {
 
       final List<MatchTeamModel> teams = await getTeamsList(match.teams);
       final List<UserModel>? umpires =
-      await getUserListFromUserIds(match.umpire_ids);
+          await getUserListFromUserIds(match.umpire_ids);
       final List<UserModel>? commentators =
-      await getUserListFromUserIds(match.commentator_ids);
+          await getUserListFromUserIds(match.commentator_ids);
       final List<UserModel>? scorers =
-      await getUserListFromUserIds(match.scorer_ids);
+          await getUserListFromUserIds(match.scorer_ids);
 
       UserModel? referee;
       if (match.referee_id != null) {
         referee = await _userService.getUserById(match.referee_id!);
       }
 
-      final matchModel = MatchModel(
-        id: match.id,
+      return match.copyWith(
         teams: teams,
-        match_type: match.match_type,
-        number_of_over: match.number_of_over,
-        over_per_bowler: match.over_per_bowler,
-        players: match.players,
-        team_ids: match.team_ids,
-        team_creator_ids: match.team_creator_ids,
-        city: match.city,
-        ground: match.ground,
-        start_time: match.start_time,
-        created_by: match.created_by,
-        ball_type: match.ball_type,
-        pitch_type: match.pitch_type,
-        match_status: match.match_status,
         commentators: commentators,
         referee: referee,
         scorers: scorers,
         umpires: umpires,
-        power_play_overs1: match.power_play_overs1 ?? [],
-        power_play_overs2: match.power_play_overs2 ?? [],
-        power_play_overs3: match.power_play_overs3 ?? [],
-        toss_decision: match.toss_decision,
-        toss_winner_id: match.toss_winner_id,
-        current_playing_team_id: match.current_playing_team_id,
       );
-
-      return matchModel;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -133,27 +111,7 @@ class MatchService {
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
           final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            players: match.players,
-            team_ids: match.team_ids,
-            team_creator_ids: match.team_creator_ids,
-            city: match.city,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            toss_winner_id: match.toss_winner_id,
-            toss_decision: match.toss_decision,
-            current_playing_team_id: match.current_playing_team_id,
-            revised_target: match.revised_target,
-          );
+          return match.copyWith(teams: teams);
         }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
@@ -178,27 +136,7 @@ class MatchService {
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
           final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            city: match.city,
-            players: match.players,
-            team_ids: match.team_ids,
-            team_creator_ids: match.team_creator_ids,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            toss_winner_id: match.toss_winner_id,
-            toss_decision: match.toss_decision,
-            current_playing_team_id: match.current_playing_team_id,
-            revised_target: match.revised_target,
-          );
+          return match.copyWith(teams: teams);
         }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
@@ -229,27 +167,7 @@ class MatchService {
           final match = mainDoc.data();
 
           final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return MatchModel(
-            id: match.id,
-            teams: teams,
-            match_type: match.match_type,
-            number_of_over: match.number_of_over,
-            over_per_bowler: match.over_per_bowler,
-            city: match.city,
-            players: match.players,
-            team_ids: match.team_ids,
-            team_creator_ids: match.team_creator_ids,
-            ground: match.ground,
-            start_time: match.start_time,
-            created_by: match.created_by,
-            ball_type: match.ball_type,
-            pitch_type: match.pitch_type,
-            match_status: match.match_status,
-            toss_winner_id: match.toss_winner_id,
-            toss_decision: match.toss_decision,
-            current_playing_team_id: match.current_playing_team_id,
-            revised_target: match.revised_target,
-          );
+          return match.copyWith(teams: teams);
         }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
@@ -260,30 +178,13 @@ class MatchService {
         .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
         .snapshots()
         .asyncMap((snapshot) async {
-      final List<MatchModel> matches = [];
-      for (final mainDoc in snapshot.docs) {
-        if (mainDoc.data().match_status == MatchStatus.running) {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
 
-      final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-      final List<UserModel>? umpires =
-          await getUserListFromUserIds(match.umpire_ids);
-      final List<UserModel>? commentators =
-          await getUserListFromUserIds(match.commentator_ids);
-      final List<UserModel>? scorers =
-          await getUserListFromUserIds(match.scorer_ids);
-
-      UserModel? referee;
-      if (match.referee_id != null) {
-        referee = await _userService.getUserById(match.referee_id!);
-      }
-
-      return match.copyWith(
-        teams: teams,
-        commentators: commentators,
-        referee: referee,
-        scorers: scorers,
-        umpires: umpires,
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return match.copyWith(teams: teams);
+        }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }

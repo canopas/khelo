@@ -64,7 +64,7 @@ class MatchTeamModel with _$MatchTeamModel {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchTeamModel({
     @JsonKey(includeToJson: false, includeFromJson: false)
-    @Default(TeamModel(name: '', name_lowercase: ''))
+    @Default(TeamModel(name: '', name_lowercase: '', id: ''))
     TeamModel team,
     required String team_id,
     String? captain_id,
