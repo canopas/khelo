@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "khelo-9b4b8"
+  }
+    "targets": {},
+    "etags": {
+      "khelo-9b4b8": {
+        "extensionInstances": {}
+      }
+    },
+    "dataconnectEmulatorConfig": {}
+}
