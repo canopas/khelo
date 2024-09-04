@@ -269,7 +269,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (header != null) ...[
               Expanded(
                   flex: (data.length + 1) ~/ 1.5,
-                  child: OnTapScale(onTap: onTap, child: header)),
+                  child: OnTapScale(
+                      enabled: onTap != null, onTap: onTap, child: header)),
             ],
             for (int i = 0; i < data.length; i++) ...[
               Expanded(
@@ -321,7 +322,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.sixes.toString(),
             player.strikeRate.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, player.player),
+          onTap: player.player.isActive
+              ? () => UserDetailSheet.show(context, player.player)
+              : null,
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -373,7 +376,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.wideBalls.toString(),
             bowler.economy.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, bowler.player),
+          onTap: bowler.player.isActive
+              ? () => UserDetailSheet.show(context, bowler.player)
+              : null,
           header: Text(
             bowler.player.name ?? '',
             style: AppTextStyle.subtitle2
@@ -474,7 +479,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (!isLastName) name += ", ";
             return WidgetSpan(
                 child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, player.player),
+              onTap: player.player.isActive
+                  ? () => UserDetailSheet.show(context, player.player)
+                  : null,
               child: Text(name,
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary)),
@@ -530,7 +537,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(TextSpan(text: "${batsmen.runs} ("));
       children.add(WidgetSpan(
           child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, batsmen.player),
+              onTap: batsmen.player.isActive
+                  ? () => UserDetailSheet.show(context, batsmen.player)
+                  : null,
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.secondary)))));

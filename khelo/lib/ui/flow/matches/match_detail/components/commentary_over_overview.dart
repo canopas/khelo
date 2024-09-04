@@ -126,6 +126,7 @@ class CommentaryOverOverview extends StatelessWidget {
       children: [
         Flexible(
             child: OnTapScale(
+          enabled: batsmanSummary.player.isActive,
           onTap: () => UserDetailSheet.show(context, batsmanSummary.player),
           child: Text(
             batsmanSummary.player.name ?? '',
@@ -169,9 +170,8 @@ class BowlerSummaryView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         OnTapScale(
-          onTap: isForBowlerIntro
-              ? null
-              : () => UserDetailSheet.show(context, bowlerSummary.player),
+          enabled: bowlerSummary.player.isActive && !isForBowlerIntro,
+          onTap: () => UserDetailSheet.show(context, bowlerSummary.player),
           child: Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),
