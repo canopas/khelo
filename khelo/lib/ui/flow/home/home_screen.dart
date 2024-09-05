@@ -1,6 +1,7 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
@@ -8,11 +9,13 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../gen/assets.gen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -22,8 +25,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final _controller =
-      PageController(initialPage: 100, keepPage: true, viewportFraction: 0.9);
   late HomeViewNotifier notifier;
 
   @override
@@ -37,7 +38,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final state = ref.watch(homeViewStateProvider);
 
     return AppPage(
-      title: context.l10n.common_matches_title,
+      titleWidget: Text(
+        context.l10n.app_title,
+        style: AppTextStyle.header1.copyWith(
+          color: context.colorScheme.primary,
+        ),
+      ),
+      actions: (state.matches.isNotEmpty)
+          ? [
+              actionButton(
+                context,
+                icon: SvgPicture.asset(
+                  Assets.images.icSearch,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.textPrimary,
+                    BlendMode.srcATop,
+                  ),
+                ),
+                onPressed: () => AppRoute.searchHome(matches: state.tempMatches)
+                    .push(context),
+              )
+            ]
+          : null,
       body: Builder(builder: (context) {
         return _body(context, notifier, state);
       }),
@@ -58,49 +80,113 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onRetryTap: notifier.onResume,
       );
     }
-
-    if (state.matches.isNotEmpty) {
-      return _matchCardSlider(context, state);
-    } else {
-      return _emptyMatchView(context);
-    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    _createActionView(
+                      context,
+                      title: context.l10n.home_screen_set_up_match_title,
+                      btnText: context.l10n.home_screen_create_match_btn,
+                      onTap: () => AppRoute.addMatch().push(context),
+                    ),
+                    _createActionView(
+                      context,
+                      title: context.l10n.home_screen_set_up_team_title,
+                      btnText: context.l10n.home_screen_create_team_btn,
+                      onTap: () => AppRoute.addTeam().push(context),
+                    ),
+                  ],
+                ),
+              )),
+          const SizedBox(height: 16),
+          if (state.matches.isNotEmpty) ...[
+            _content(context, state)
+          ] else ...[
+            _emptyMatchView(context)
+          ]
+        ],
+      ),
+    );
   }
 
-  Widget _matchCardSlider(
+  Widget _content(
     BuildContext context,
     HomeViewState state,
   ) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 165,
-          child: state.matches.length == 1
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: _matchCell(context, state.matches.first),
+    return Expanded(
+      child: ListView.builder(
+        padding: context.mediaQueryPadding +
+            const EdgeInsets.symmetric(horizontal: 8),
+        itemCount: state.matches.length,
+        itemBuilder: (context, index) {
+          final item = state.matches.entries.elementAt(index);
+          return item.value.isNotEmpty
+              ? Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _matchHeader(
+                      context,
+                      header: item.key.getString(context),
+                      isViewAllShow: item.value.length > 3,
+                      onViewAll: () => AppRoute.viewAll(
+                              title: item.key.getString(context),
+                              matches: item.value)
+                          .push(context),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: item.value
+                            .map((match) => _matchCell(context, match))
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 )
-              : PageView.builder(
-                  controller: _controller,
-                  itemBuilder: (context, index) {
-                    return _matchCell(
-                        context, state.matches[index % state.matches.length]);
-                  },
-                ),
-        ),
-        const SizedBox(height: 16),
-        if (state.matches.length >= 2) ...[
-          SmoothPageIndicator(
-            controller: _controller,
-            count: state.matches.length,
-            effect: WormEffect(
-                dotHeight: 8,
-                dotWidth: 8,
-                dotColor: context.colorScheme.containerHigh,
-                activeDotColor: context.colorScheme.primary,
-                type: WormType.underground),
-          )
+              : const SizedBox();
+        },
+      ),
+    );
+  }
+
+  Widget _matchHeader(
+    BuildContext context, {
+    required String header,
+    required bool isViewAllShow,
+    required Function() onViewAll,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        children: [
+          Text(
+            header,
+            style: AppTextStyle.header3
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          const Spacer(),
+          Opacity(
+            opacity: isViewAllShow ? 1 : 0,
+            child: TextButton(
+                onPressed: onViewAll,
+                child: Text(
+                  context.l10n.home_screen_view_all_btn,
+                  style: AppTextStyle.button.copyWith(
+                    color: context.colorScheme.primary,
+                  ),
+                )),
+          ),
         ],
-      ],
+      ),
     );
   }
 
@@ -110,8 +196,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           .push(context),
       child: MediaQuery.withNoTextScaling(
         child: Container(
+          width: 360,
           padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.symmetric(horizontal: 8),
+          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           decoration: BoxDecoration(
             color: context.colorScheme.containerLow,
             border: Border.all(color: context.colorScheme.outline),
@@ -147,6 +234,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     int wicket,
   ) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         ImageAvatar(
           initial: matchTeam.team.name[0].toUpperCase(),
@@ -205,28 +293,64 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget _emptyMatchView(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      width: double.infinity,
-      margin: context.mediaQueryPadding + const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: context.colorScheme.primary)),
-      child: IntrinsicHeight(
-        child: Column(
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            context.l10n.home_screen_no_matches_title,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.header2
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            context.l10n.home_screen_no_matches_description_text,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.subtitle1
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _createActionView(
+    BuildContext context, {
+    required String title,
+    required String btnText,
+    required Function() onTap,
+  }) {
+    return OnTapScale(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(color: context.colorScheme.outline)),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              context.l10n.home_screen_no_matches_title,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
+            CircleAvatar(
+              backgroundColor: context.colorScheme.containerLow,
+              child: Icon(Icons.add, color: context.colorScheme.primary),
             ),
-            const SizedBox(height: 8),
-            Text(
-              context.l10n.home_screen_no_matches_description_text,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.body1
-                  .copyWith(color: context.colorScheme.textSecondary),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: AppTextStyle.body1
+                      .copyWith(color: context.colorScheme.textPrimary),
+                ),
+                Text(
+                  btnText,
+                  style: AppTextStyle.button
+                      .copyWith(color: context.colorScheme.primary),
+                )
+              ],
             ),
           ],
         ),

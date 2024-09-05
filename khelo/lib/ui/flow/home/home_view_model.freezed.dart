@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeViewState {
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
-  List<MatchModel> get matches => throw _privateConstructorUsedError;
+  List<MatchModel> get tempMatches => throw _privateConstructorUsedError;
+  Map<MatchStatusLabel, List<MatchModel>> get matches =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of HomeViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +35,11 @@ abstract class $HomeViewStateCopyWith<$Res> {
           HomeViewState value, $Res Function(HomeViewState) then) =
       _$HomeViewStateCopyWithImpl<$Res, HomeViewState>;
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<MatchModel> tempMatches,
+      Map<MatchStatusLabel, List<MatchModel>> matches});
 }
 
 /// @nodoc
@@ -53,6 +59,7 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
   $Res call({
     Object? error = freezed,
     Object? loading = null,
+    Object? tempMatches = null,
     Object? matches = null,
   }) {
     return _then(_value.copyWith(
@@ -61,10 +68,14 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      tempMatches: null == tempMatches
+          ? _value.tempMatches
+          : tempMatches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
       matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>,
+              as Map<MatchStatusLabel, List<MatchModel>>,
     ) as $Val);
   }
 }
@@ -77,7 +88,11 @@ abstract class _$$HomeViewStateImplCopyWith<$Res>
       __$$HomeViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<MatchModel> tempMatches,
+      Map<MatchStatusLabel, List<MatchModel>> matches});
 }
 
 /// @nodoc
@@ -95,6 +110,7 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? loading = null,
+    Object? tempMatches = null,
     Object? matches = null,
   }) {
     return _then(_$HomeViewStateImpl(
@@ -103,10 +119,14 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      tempMatches: null == tempMatches
+          ? _value._tempMatches
+          : tempMatches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
       matches: null == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>,
+              as Map<MatchStatusLabel, List<MatchModel>>,
     ));
   }
 }
@@ -117,26 +137,37 @@ class _$HomeViewStateImpl implements _HomeViewState {
   const _$HomeViewStateImpl(
       {this.error,
       this.loading = false,
-      final List<MatchModel> matches = const []})
-      : _matches = matches;
+      final List<MatchModel> tempMatches = const [],
+      final Map<MatchStatusLabel, List<MatchModel>> matches = const {}})
+      : _tempMatches = tempMatches,
+        _matches = matches;
 
   @override
   final Object? error;
   @override
   @JsonKey()
   final bool loading;
-  final List<MatchModel> _matches;
+  final List<MatchModel> _tempMatches;
   @override
   @JsonKey()
-  List<MatchModel> get matches {
-    if (_matches is EqualUnmodifiableListView) return _matches;
+  List<MatchModel> get tempMatches {
+    if (_tempMatches is EqualUnmodifiableListView) return _tempMatches;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_matches);
+    return EqualUnmodifiableListView(_tempMatches);
+  }
+
+  final Map<MatchStatusLabel, List<MatchModel>> _matches;
+  @override
+  @JsonKey()
+  Map<MatchStatusLabel, List<MatchModel>> get matches {
+    if (_matches is EqualUnmodifiableMapView) return _matches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_matches);
   }
 
   @override
   String toString() {
-    return 'HomeViewState(error: $error, loading: $loading, matches: $matches)';
+    return 'HomeViewState(error: $error, loading: $loading, tempMatches: $tempMatches, matches: $matches)';
   }
 
   @override
@@ -146,6 +177,8 @@ class _$HomeViewStateImpl implements _HomeViewState {
             other is _$HomeViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            const DeepCollectionEquality()
+                .equals(other._tempMatches, _tempMatches) &&
             const DeepCollectionEquality().equals(other._matches, _matches));
   }
 
@@ -154,6 +187,7 @@ class _$HomeViewStateImpl implements _HomeViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       loading,
+      const DeepCollectionEquality().hash(_tempMatches),
       const DeepCollectionEquality().hash(_matches));
 
   /// Create a copy of HomeViewState
@@ -167,16 +201,20 @@ class _$HomeViewStateImpl implements _HomeViewState {
 
 abstract class _HomeViewState implements HomeViewState {
   const factory _HomeViewState(
-      {final Object? error,
-      final bool loading,
-      final List<MatchModel> matches}) = _$HomeViewStateImpl;
+          {final Object? error,
+          final bool loading,
+          final List<MatchModel> tempMatches,
+          final Map<MatchStatusLabel, List<MatchModel>> matches}) =
+      _$HomeViewStateImpl;
 
   @override
   Object? get error;
   @override
   bool get loading;
   @override
-  List<MatchModel> get matches;
+  List<MatchModel> get tempMatches;
+  @override
+  Map<MatchStatusLabel, List<MatchModel>> get matches;
 
   /// Create a copy of HomeViewState
   /// with the given fields replaced by the non-null parameter values.

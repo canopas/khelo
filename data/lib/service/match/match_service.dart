@@ -148,14 +148,12 @@ class MatchService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> getRunningMatches() {
+  Stream<List<MatchModel>> getMatches() {
     return _matchCollection
-        .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
         .snapshots()
         .asyncMap((snapshot) async {
       final List<MatchModel> matches = [];
       for (final mainDoc in snapshot.docs) {
-        if (mainDoc.data().match_status == MatchStatus.running) {
           final match = mainDoc.data();
 
           final List<MatchTeamModel> teams = await getTeamsList(match.teams);
@@ -183,7 +181,6 @@ class MatchService {
             ),
           );
         }
-      }
       return matches;
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }

@@ -105,8 +105,25 @@
   "@_HOME": {
   },
   "home_screen_title": "Home",
-  "home_screen_no_matches_title": "No matches are running currently",
-  "home_screen_no_matches_description_text": "Running matches will be shown here, Stay tuned for some intense matches.",
+  "home_screen_live_title": "Live",
+  "home_screen_upcoming_title": "Upcoming",
+  "home_screen_winning_title": "Winning",
+  "home_screen_set_up_match_title": "Set up a match in minutes.",
+  "home_screen_create_match_btn": "Create match",
+  "home_screen_set_up_team_title": "Set up a team in minutes.",
+  "home_screen_create_team_btn": "Create team",
+  "home_screen_view_all_btn": "View all",
+  "home_screen_no_matches_title": "No Matches in this area!",
+  "home_screen_no_matches_description_text": "Enjoy the freedom of creating your own cricket matches or teams.",
+
+  "@_HOME_SEARCH": {
+  },
+  "home_search_hint_title": "Search matches by team name...",
+  "home_search_empty_title": "Start your search here!",
+  "home_search_empty_message": "Type your search above to find what you need fast.",
+  "home_search_results_title": "Results",
+  "home_match_list_empty_search_title": "No match results",
+  "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
 
   "@_MY_CRICKET": {
   },
@@ -590,7 +607,6 @@
   "score_board_batsman_title": "batsMan",
   "score_board_bowler_title": "bowler",
   "score_board_change_striker_title": "Change Striker",
-  "score_board_add_substitute_title": "Add substitute",
   "score_board_can_undo_till_running_over_title": "Undo is only allowed till running over",
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
