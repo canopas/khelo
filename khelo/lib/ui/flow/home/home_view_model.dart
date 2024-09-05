@@ -59,10 +59,10 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     final groupedMatches = groupBy(matches, (match) {
       switch (match.match_status) {
         case MatchStatus.running:
-        case MatchStatus.abandoned:
           return MatchStatusLabel.live;
         case MatchStatus.yetToStart:
           return MatchStatusLabel.upcoming;
+        case MatchStatus.abandoned:
         case MatchStatus.finish:
           return MatchStatusLabel.winning;
       }
