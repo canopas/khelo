@@ -215,6 +215,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     bool isCaptain = user.id == captainId;
     return Expanded(
       child: OnTapScale(
+        enabled: user.isActive,
         onTap: () => AppRoute.userDetail(userId: user.id).push(context),
         child: Padding(
           padding: const EdgeInsets.all(16),
