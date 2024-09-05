@@ -34,7 +34,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
 
-    _streamSubscription = _teamService.getUserOwnedTeams().listen((teams) {
+    _streamSubscription = _teamService.streamUserOwnedTeams().listen((teams) {
       final filteredResult =
           teams.where((element) => !excludedIds.contains(element.id)).toList();
 

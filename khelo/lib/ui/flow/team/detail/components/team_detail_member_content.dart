@@ -10,7 +10,6 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-import '../../../matches/add_match/select_squad/components/user_detail_sheet.dart';
 
 class TeamDetailMemberContent extends ConsumerWidget {
   const TeamDetailMemberContent({super.key});
@@ -39,7 +38,8 @@ class TeamDetailMemberContent extends ConsumerWidget {
                 final member = state.team!.players[index].user;
                 return UserDetailCell(
                     user: member,
-                    onTap: () => UserDetailSheet.show(context, member),
+                    onTap: () =>
+                        AppRoute.userDetail(userId: member.id).push(context),
                     showPhoneNumber: false);
               },
               separatorBuilder: (context, index) => const SizedBox(height: 16),

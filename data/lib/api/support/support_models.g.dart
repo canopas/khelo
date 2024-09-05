@@ -9,7 +9,7 @@ part of 'support_models.dart';
 _$AddSupportCaseRequestImpl _$$AddSupportCaseRequestImplFromJson(
         Map<String, dynamic> json) =>
     _$AddSupportCaseRequestImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String?,
       attachmentUrls: (json['attachmentUrls'] as List<dynamic>?)

@@ -8,7 +8,7 @@ part of 'team_model.dart';
 
 _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
     _$TeamModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       name: json['name'] as String,
       name_lowercase: json['name_lowercase'] as String,
       city: json['city'] as String?,

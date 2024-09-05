@@ -192,7 +192,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _matchCell(BuildContext context, MatchModel match) {
     return OnTapScale(
-      onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? "INVALID ID")
+      onTap: () => AppRoute.matchDetailTab(matchId: match.id)
           .push(context),
       child: MediaQuery.withNoTextScaling(
         child: Container(

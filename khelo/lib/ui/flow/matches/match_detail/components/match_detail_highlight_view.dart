@@ -211,7 +211,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
                     ),
                     onTap: () {
                       context.pop();
-                      onTap(match.team.id ?? "INVALID ID");
+                      onTap(match.team.id);
                     },
                   ))
               .toList() ??

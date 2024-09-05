@@ -52,7 +52,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String currentInningId,
     String otherInningId,
   ) {
-    return _ballScoreService.getBallScoresStreamByInningIds(
+    return _ballScoreService.streamBallScoresByInningIds(
         [currentInningId, otherInningId]).handleError((e) {
       throw AppError.fromError(e);
     });
@@ -62,8 +62,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     try {
       state = state.copyWith(loading: true);
       final matchInningStream = combineLatest2(
-        _matchService.getMatchStreamById(matchId!),
-        _inningService.getInningsStreamByMatchId(matchId: matchId!),
+        _matchService.streamMatchById(matchId!),
+        _inningService.streamInningsByMatchId(matchId: matchId!),
       ).asyncMap((data) async {
         MatchModel match = data.$1;
         List<InningModel> innings = data.$2;
@@ -584,7 +584,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ballCount = state.ballCount + 1;
       }
       final ball = BallScoreModel(
+          id: _ballScoreService.generateBallScoreId,
           inning_id: ballInningId,
+          match_id: state.match?.id ?? matchId,
           over_number: state.overCount,
           ball_number: ballCount,
           bowler_id: bowlerId,
@@ -918,7 +920,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final bowlingTeamId = state.otherInning?.team_id;
       final bowlingTeamInningId = state.otherInning?.id;
       if (lastBall == null ||
-          lastBall.id == null ||
           lastBall.over_number != state.overCount ||
           matchId == null ||
           battingTeamId == null ||
@@ -963,7 +964,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           .firstOrNull;
 
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
-          ballId: lastBall.id!,
+          ballId: lastBall.id,
           matchId: matchId,
           battingTeamId: battingTeamId,
           battingTeamInningId: battingTeamInningId,
@@ -1467,7 +1468,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         onNotFound: () => substituteStatus);
 
     await _updateMatchPlayerStatus((
-      teamId: fieldingTeam.team.id ?? '',
+      teamId: fieldingTeam.team.id,
       players: [matchPlayer.copyWith(performance: playerPerformance)],
     ));
   }

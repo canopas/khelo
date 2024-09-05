@@ -7,7 +7,7 @@ part of 'match_model.dart';
 // **************************************************************************
 
 _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       teams: (json['teams'] as List<dynamic>)
           .map((e) =>
               MatchTeamModel.fromJson(Map<String, dynamic>.from(e as Map)))

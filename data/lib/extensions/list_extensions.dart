@@ -16,15 +16,12 @@ extension ListExtension<E> on List<E> {
     }
     return newList;
   }
-}
 
-extension ChunkedList<T> on List<T> {
   /// This converts a list into a list of lists, using the specified size.
   /// For example:
   /// List<int> numbers = List.generate(100, (index) => index + 1);
   /// List<List<int>> result = numbers.chunked(5);
-  ///
-  List<List<T>> chunked(int size) {
+  List<List<E>> chunked(int size) {
     return List.generate((length / size).ceil(), (index) {
       final int start = index * size;
       return sublist(start, start + size < length ? start + size : length);

@@ -177,9 +177,9 @@ class EditProfileScreen extends ConsumerWidget {
         const SizedBox(width: 16),
         Expanded(
           child: AdaptiveOutlinedTile(
-            headerText: context.l10n.edit_profile_gender_placeholder,
+            headerText: context.l10n.common_gender_title,
             title: state.gender?.getString(context),
-            placeholder: context.l10n.edit_profile_gender_placeholder,
+            placeholder: context.l10n.common_gender_title,
             onTap: () {
               showActionBottomSheet(
                   context: context,
@@ -234,7 +234,7 @@ class EditProfileScreen extends ConsumerWidget {
         const SizedBox(height: 24),
         AdaptiveOutlinedTile(
           title: state.battingStyle?.getString(context),
-          placeholder: context.l10n.edit_profile_batting_style_placeholder,
+          placeholder: context.l10n.common_batting_style_title,
           showTrailingIcon: true,
           onTap: () {
             showActionBottomSheet(
@@ -256,7 +256,7 @@ class EditProfileScreen extends ConsumerWidget {
         const SizedBox(height: 24),
         AdaptiveOutlinedTile(
           title: state.bowlingStyle?.getString(context),
-          placeholder: context.l10n.edit_profile_bowling_style_placeholder,
+          placeholder: context.l10n.common_bowling_style_title,
           showTrailingIcon: true,
           onTap: () {
             showActionBottomSheet(
