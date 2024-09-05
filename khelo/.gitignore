@@ -50,7 +50,6 @@ android/app/google-services.json
 macos/Runner/GoogleService-Info.plist
 macos/firebase_app_id_file.json
 firebase.json
-functions/node_modules
 
 
 
