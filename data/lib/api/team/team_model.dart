@@ -13,7 +13,7 @@ part 'team_model.g.dart';
 abstract class TeamModel with _$TeamModel {
   @JsonSerializable(explicitToJson: true)
   const factory TeamModel({
-    String? id,
+    required String id,
     required String name,
     required String name_lowercase,
     String? city,

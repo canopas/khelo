@@ -6,7 +6,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -216,7 +216,7 @@ class MatchDetailSquadView extends ConsumerWidget {
     return Expanded(
       child: OnTapScale(
         enabled: user.isActive,
-        onTap: () => UserDetailSheet.show(context, user),
+        onTap: () => AppRoute.userDetail(userId: user.id).push(context),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(

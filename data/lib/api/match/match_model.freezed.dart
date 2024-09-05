@@ -20,7 +20,7 @@ MatchModel _$MatchModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MatchModel {
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   List<MatchTeamModel> get teams => throw _privateConstructorUsedError;
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
@@ -68,7 +68,7 @@ abstract class $MatchModelCopyWith<$Res> {
       _$MatchModelCopyWithImpl<$Res, MatchModel>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       List<MatchTeamModel> teams,
       MatchType match_type,
       int number_of_over,
@@ -119,7 +119,7 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
@@ -151,10 +151,10 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? revised_target = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       teams: null == teams
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -308,7 +308,7 @@ abstract class _$$MatchModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       List<MatchTeamModel> teams,
       MatchType match_type,
       int number_of_over,
@@ -359,7 +359,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? teams = null,
     Object? match_type = null,
     Object? number_of_over = null,
@@ -391,10 +391,10 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? revised_target = freezed,
   }) {
     return _then(_$MatchModelImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       teams: null == teams
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
@@ -520,7 +520,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
 @JsonSerializable(anyMap: true, explicitToJson: true)
 class _$MatchModelImpl implements _MatchModel {
   const _$MatchModelImpl(
-      {this.id,
+      {required this.id,
       required final List<MatchTeamModel> teams,
       required this.match_type,
       required this.number_of_over,
@@ -571,7 +571,7 @@ class _$MatchModelImpl implements _MatchModel {
       _$$MatchModelImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   final List<MatchTeamModel> _teams;
   @override
   List<MatchTeamModel> get teams {
@@ -851,7 +851,7 @@ class _$MatchModelImpl implements _MatchModel {
 
 abstract class _MatchModel implements MatchModel {
   const factory _MatchModel(
-      {final String? id,
+      {required final String id,
       required final List<MatchTeamModel> teams,
       required final MatchType match_type,
       required final int number_of_over,
@@ -890,7 +890,7 @@ abstract class _MatchModel implements MatchModel {
       _$MatchModelImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
   List<MatchTeamModel> get teams;
   @override
@@ -1152,7 +1152,7 @@ class __$$MatchTeamModelImplCopyWithImpl<$Res>
 class _$MatchTeamModelImpl implements _MatchTeamModel {
   const _$MatchTeamModelImpl(
       {@JsonKey(includeToJson: false, includeFromJson: false)
-      this.team = const TeamModel(name: '', name_lowercase: ''),
+      this.team = const TeamModel(name: '', name_lowercase: '', id: ''),
       required this.team_id,
       this.captain_id,
       this.admin_id,

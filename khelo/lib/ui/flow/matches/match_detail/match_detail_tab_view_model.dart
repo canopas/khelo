@@ -55,8 +55,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     try {
       state = state.copyWith(loading: true);
       final matchInningStream = combineLatest2(
-        _matchService.getMatchStreamById(_matchId),
-        _inningService.getInningsStreamByMatchId(matchId: _matchId),
+        _matchService.streamMatchById(_matchId),
+        _inningService.streamInningsByMatchId(matchId: _matchId),
       );
       matchStreamSubscription = matchInningStream.listen((data) {
         final match = data.$1;
@@ -104,7 +104,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
     ballScoreStreamSubscription = _ballScoreService
-        .getBallScoresStreamByInningIds(
+        .streamBallScoresByInningIds(
             state.allInnings.map((e) => e.id).toList())
         .listen(
       (scores) {

@@ -8,7 +8,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -323,7 +323,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.strikeRate.toString(),
           ],
           onTap: player.player.isActive
-              ? () => UserDetailSheet.show(context, player.player)
+              ? () =>  AppRoute.userDetail(userId: player.player.id).push(context)
               : null,
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +377,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.economy.toString(),
           ],
           onTap: bowler.player.isActive
-              ? () => UserDetailSheet.show(context, bowler.player)
+              ? () => AppRoute.userDetail(userId: bowler.player.id).push(context)
               : null,
           header: Text(
             bowler.player.name ?? '',
@@ -480,7 +480,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
             return WidgetSpan(
                 child: OnTapScale(
               onTap: player.player.isActive
-                  ? () => UserDetailSheet.show(context, player.player)
+                  ? () => AppRoute.userDetail(userId: player.player.id).push(context)
                   : null,
               child: Text(name,
                   style: AppTextStyle.caption
@@ -538,7 +538,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(WidgetSpan(
           child: OnTapScale(
               onTap: batsmen.player.isActive
-                  ? () => UserDetailSheet.show(context, batsmen.player)
+                  ? () => AppRoute.userDetail(userId: batsmen.player.id).push(context)
                   : null,
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption

@@ -42,7 +42,7 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     state = state.copyWith(loading: true);
     try {
       _matchesStreamSubscription =
-          _matchService.getCurrentUserRelatedMatches().listen((matches) {
+          _matchService.streamCurrentUserRelatedMatches().listen((matches) {
         state = state.copyWith(matches: matches, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(loading: false, error: e);

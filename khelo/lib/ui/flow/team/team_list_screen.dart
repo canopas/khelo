@@ -105,8 +105,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     required bool showMoreOptionButton,
   }) {
     return OnTapScale(
-      onTap: () =>
-          AppRoute.teamDetail(teamId: team.id ?? "INVALID ID").push(context),
+      onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
       child: Material(
         type: MaterialType.transparency,
         child: ListTile(

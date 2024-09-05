@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
-import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/over_score_view.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -127,7 +127,8 @@ class CommentaryOverOverview extends StatelessWidget {
         Flexible(
             child: OnTapScale(
           enabled: batsmanSummary.player.isActive,
-          onTap: () => UserDetailSheet.show(context, batsmanSummary.player),
+          onTap: () => AppRoute.userDetail(userId: batsmanSummary.player.id)
+              .push(context),
           child: Text(
             batsmanSummary.player.name ?? '',
             style: AppTextStyle.subtitle2
@@ -171,7 +172,8 @@ class BowlerSummaryView extends StatelessWidget {
       children: [
         OnTapScale(
           enabled: bowlerSummary.player.isActive && !isForBowlerIntro,
-          onTap: () => UserDetailSheet.show(context, bowlerSummary.player),
+          onTap: () => AppRoute.userDetail(userId: bowlerSummary.player.id)
+              .push(context),
           child: Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),

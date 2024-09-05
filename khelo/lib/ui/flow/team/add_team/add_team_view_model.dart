@@ -103,7 +103,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       }
       String? imageUrl = state.editTeam?.profile_img_url;
       final team = TeamModel(
-          id: state.editTeam?.id,
+          id: state.editTeam?.id ?? _teamService.generateTeamId,
           name: name,
           name_lowercase: name.caseAndSpaceInsensitive,
           profile_img_url: imageUrl,
@@ -127,8 +127,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             .where((element) => !state.teamMembers.contains(element))
             .toList();
 
-        await _teamService.removePlayersFromTeam(
-            team.id ?? "INVALID ID", filterList);
+        await _teamService.removePlayersFromTeam(team.id, filterList);
 
         state = state.copyWith(isAddInProgress: false, isPop: true);
       } else {
@@ -208,7 +207,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     try {
       final teamProfileImageUrl = state.editTeam!.profile_img_url;
 
-      await _teamService.deleteTeam(state.editTeam!.id ?? "INVALID ID");
+      await _teamService.deleteTeam(state.editTeam!.id);
       state = state.copyWith(isPop: true);
 
       if (teamProfileImageUrl != null) {
