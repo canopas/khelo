@@ -20,7 +20,7 @@ TeamModel _$TeamModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TeamModel {
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get name_lowercase => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $TeamModelCopyWith<$Res> {
       _$TeamModelCopyWithImpl<$Res, TeamModel>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String name,
       String name_lowercase,
       String? city,
@@ -65,7 +65,7 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? name = null,
     Object? name_lowercase = null,
     Object? city = freezed,
@@ -75,10 +75,10 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
     Object? players = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -120,7 +120,7 @@ abstract class _$$TeamModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String name,
       String name_lowercase,
       String? city,
@@ -141,7 +141,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? name = null,
     Object? name_lowercase = null,
     Object? city = freezed,
@@ -151,10 +151,10 @@ class __$$TeamModelImplCopyWithImpl<$Res>
     Object? players = null,
   }) {
     return _then(_$TeamModelImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -192,7 +192,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$TeamModelImpl implements _TeamModel {
   const _$TeamModelImpl(
-      {this.id,
+      {required this.id,
       required this.name,
       required this.name_lowercase,
       this.city,
@@ -207,7 +207,7 @@ class _$TeamModelImpl implements _TeamModel {
       _$$TeamModelImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   @override
   final String name;
   @override
@@ -282,7 +282,7 @@ class _$TeamModelImpl implements _TeamModel {
 
 abstract class _TeamModel implements TeamModel {
   const factory _TeamModel(
-      {final String? id,
+      {required final String id,
       required final String name,
       required final String name_lowercase,
       final String? city,
@@ -296,7 +296,7 @@ abstract class _TeamModel implements TeamModel {
       _$TeamModelImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
   String get name;
   @override

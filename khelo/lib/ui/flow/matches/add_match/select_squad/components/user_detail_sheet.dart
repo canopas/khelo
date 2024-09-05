@@ -66,7 +66,7 @@ class UserDetailSheet extends StatelessWidget {
           ),
           _memberDetailCell(
             context,
-            label: context.l10n.edit_profile_gender_placeholder,
+            label: context.l10n.common_gender_title,
             value: user.gender?.getString(context),
           ),
           _memberDetailCell(
@@ -81,12 +81,12 @@ class UserDetailSheet extends StatelessWidget {
           ),
           _memberDetailCell(
             context,
-            label: context.l10n.edit_profile_batting_style_placeholder,
+            label: context.l10n.common_batting_style_title,
             value: user.batting_style?.getString(context),
           ),
           _memberDetailCell(
             context,
-            label: context.l10n.edit_profile_bowling_style_placeholder,
+            label: context.l10n.common_bowling_style_title,
             value: user.bowling_style?.getString(context),
           ),
           if (actionButtonTitle != null) ...[

@@ -14,7 +14,7 @@ part 'match_model.g.dart';
 class MatchModel with _$MatchModel {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchModel({
-    String? id,
+    required String id,
     required List<MatchTeamModel> teams,
     required MatchType match_type,
     required int number_of_over,
@@ -64,7 +64,7 @@ class MatchTeamModel with _$MatchTeamModel {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchTeamModel({
     @JsonKey(includeToJson: false, includeFromJson: false)
-    @Default(TeamModel(name: '', name_lowercase: ''))
+    @Default(TeamModel(name: '', name_lowercase: '', id: ''))
     TeamModel team,
     required String team_id,
     String? captain_id,
@@ -143,7 +143,7 @@ extension DataMatchModel on MatchModel {
       final runDifference = (revisedRuns ?? firstTeam.run) - secondTeam.run;
 
       return MatchResult(
-        teamId: firstTeam.team.id ?? "",
+        teamId: firstTeam.team.id,
         teamName: teamName,
         difference: runDifference,
         winType: WinnerByType.run,
@@ -161,7 +161,7 @@ extension DataMatchModel on MatchModel {
       final wicketDifference = secondTeam.squad.length - firstTeam.wicket;
 
       return MatchResult(
-        teamId: secondTeam.team.id ?? "",
+        teamId: secondTeam.team.id,
         teamName: teamName,
         difference: wicketDifference,
         winType: WinnerByType.wicket,

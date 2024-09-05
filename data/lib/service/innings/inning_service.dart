@@ -6,23 +6,20 @@ import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final inningServiceProvider = Provider((ref) {
-  final service = InningsService(
-    FirebaseFirestore.instance,
-  );
+  final service = InningsService(FirebaseFirestore.instance);
   return service;
 });
 
 class InningsService {
   final FirebaseFirestore _firestore;
-  final CollectionReference<InningModel> _inningCollection;
 
-  InningsService(this._firestore)
-      : _inningCollection = _firestore
-            .collection(FireStoreConst.inningsCollection)
-            .withConverter(
-              fromFirestore: InningModel.fromFireStore,
-              toFirestore: (InningModel inning, _) => inning.toJson(),
-            );
+  InningsService(this._firestore);
+
+  CollectionReference<InningModel> get _inningCollection =>
+      _firestore.collection(FireStoreConst.inningsCollection).withConverter(
+            fromFirestore: InningModel.fromFireStore,
+            toFirestore: (InningModel inning, _) => inning.toJson(),
+          );
 
   String get generateInningId => _inningCollection.doc().id;
 
@@ -41,7 +38,7 @@ class InningsService {
     }
   }
 
-  Stream<List<InningModel>> getInningsStreamByMatchId({
+  Stream<List<InningModel>> streamInningsByMatchId({
     required String matchId,
   }) {
     return _inningCollection

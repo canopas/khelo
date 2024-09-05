@@ -21,47 +21,27 @@ final userServiceProvider = Provider((ref) {
 
 class UserService {
   UserModel? _currentUser;
-  final StateController<String?> _currentUserJsonController;
 
-  final FirebaseFirestore firestore;
-  final CollectionReference<UserModel> _userCollection;
+  final FirebaseFirestore _firestore;
+  final StateController<String?> _currentUserJsonController;
 
   UserService(
     this._currentUser,
     this._currentUserJsonController,
-    this.firestore,
-  ) : _userCollection =
-            firestore.collection(FireStoreConst.usersCollection).withConverter(
-                  fromFirestore: UserModel.fromFireStore,
-                  toFirestore: (UserModel user, _) => user.toJson(),
-                );
+    this._firestore,
+  );
+
+  CollectionReference<UserModel> get _userCollection =>
+      _firestore.collection(FireStoreConst.usersCollection).withConverter(
+            fromFirestore: UserModel.fromFireStore,
+            toFirestore: (UserModel user, _) => user.toJson(),
+          );
 
   Future<void> getUser(String id) async {
     try {
       final snapshot = await _userCollection.doc(id).get();
       final userModel = snapshot.data();
       _currentUserJsonController.state = userModel?.toJsonString();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> updateUser(UserModel user) async {
-    try {
-      final userRef = _userCollection.doc(user.id);
-
-      await userRef.set(user, SetOptions(merge: true));
-
-      _currentUserJsonController.state = user.toJsonString();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> deleteUser() async {
-    try {
-      await _userCollection.doc(_currentUser?.id).delete();
-      _currentUserJsonController.state = null;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -109,6 +89,18 @@ class UserService {
     }
   }
 
+  Stream<UserModel> streamUserById(String id) {
+    return _userCollection.doc(id).snapshots().map((snapshot) {
+      final userModel = snapshot.data();
+      if (userModel == null) {
+        return deActiveDummyUserAccount(id);
+      }
+      return userModel;
+    }).handleError((error, stack) {
+      throw AppError.fromError(error, stack);
+    });
+  }
+
   Future<List<UserModel>> searchUser(String searchKey) async {
     try {
       final snapshot = await _userCollection
@@ -130,7 +122,28 @@ class UserService {
     }
   }
 
+  Future<void> updateUser(UserModel user) async {
+    try {
+      final userRef = _userCollection.doc(user.id);
+
+      await userRef.set(user, SetOptions(merge: true));
+
+      _currentUserJsonController.state = user.toJsonString();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   void signOutUser() {
     _currentUserJsonController.state = null;
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await _userCollection.doc(_currentUser?.id).delete();
+      _currentUserJsonController.state = null;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 }

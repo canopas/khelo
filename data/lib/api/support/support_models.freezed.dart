@@ -21,7 +21,7 @@ AddSupportCaseRequest _$AddSupportCaseRequestFromJson(
 
 /// @nodoc
 mixin _$AddSupportCaseRequest {
-  String? get id => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   List<String> get attachmentUrls => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $AddSupportCaseRequestCopyWith<$Res> {
       _$AddSupportCaseRequestCopyWithImpl<$Res, AddSupportCaseRequest>;
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String title,
       String? description,
       List<String> attachmentUrls,
@@ -63,7 +63,7 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? title = null,
     Object? description = freezed,
     Object? attachmentUrls = null,
@@ -71,10 +71,10 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -109,7 +109,7 @@ abstract class _$$AddSupportCaseRequestImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? id,
+      {String id,
       String title,
       String? description,
       List<String> attachmentUrls,
@@ -129,7 +129,7 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
+    Object? id = null,
     Object? title = null,
     Object? description = freezed,
     Object? attachmentUrls = null,
@@ -137,10 +137,10 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
     Object? createdAt = null,
   }) {
     return _then(_$AddSupportCaseRequestImpl(
-      id: freezed == id
+      id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -169,7 +169,7 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
   const _$AddSupportCaseRequestImpl(
-      {this.id,
+      {required this.id,
       required this.title,
       this.description,
       final List<String> attachmentUrls = const [],
@@ -181,7 +181,7 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
       _$$AddSupportCaseRequestImplFromJson(json);
 
   @override
-  final String? id;
+  final String id;
   @override
   final String title;
   @override
@@ -243,7 +243,7 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
 
 abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   const factory _AddSupportCaseRequest(
-      {final String? id,
+      {required final String id,
       required final String title,
       final String? description,
       final List<String> attachmentUrls,
@@ -254,7 +254,7 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
       _$AddSupportCaseRequestImpl.fromJson;
 
   @override
-  String? get id;
+  String get id;
   @override
   String get title;
   @override

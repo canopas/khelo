@@ -66,7 +66,7 @@ class _UserMatchListScreenState extends ConsumerState<UserMatchListScreen>
               showStatusTag: false,
               onTap: () => AppRoute.matchDetailTab(
                       matchId:
-                          state.matches.elementAt(index).id ?? "INVALID ID")
+                          state.matches.elementAt(index).id)
                   .push(context),
             ),
             separatorBuilder: (context, index) => const SizedBox(height: 16),

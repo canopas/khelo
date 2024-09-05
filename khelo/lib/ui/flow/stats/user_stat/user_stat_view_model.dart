@@ -40,7 +40,7 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     state = state.copyWith(loading: true);
     try {
       _ballScoreStreamSubscription =
-          _ballScoreService.getCurrentUserRelatedBalls().listen((ballScores) {
+          _ballScoreService.streamCurrentUserRelatedBalls().listen((ballScores) {
         final userStat = _calculateUserStats(ballScores);
         state = state.copyWith(userStat: userStat, loading: false, error: null);
       }, onError: (e) {
