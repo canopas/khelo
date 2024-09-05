@@ -236,7 +236,7 @@ class AppRoute {
           builder: (_) => TeamDetailScreen(teamId: teamId));
 
   static AppRoute userDetail({required String userId}) =>
-      AppRoute(pathTeamDetail,
+      AppRoute(pathUserDetail,
           builder: (_) => UserDetailScreen(userId: userId));
 
   static final routes = [
