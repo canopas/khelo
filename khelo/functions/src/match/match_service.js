@@ -18,16 +18,22 @@ class MatchService {
       ...match.umpire_ids,
       ...match.commentator_ids,
     ]);
-
+    console.log("Contributors in match:", addedPlayerIds);
+    if(matchContributorIds.length === 0) {
+        return;
+    }
     const matchContributors = await this.userRepository.getUsers(matchContributorIds);
     const usersToNotify = matchContributors.filter((m) => user_models.userNotificationEnabled(m)).map((m)=> m.id);
 
-    console.log("users to notify:", usersToNotify);
+    console.log("Users to notify:", usersToNotify);
 
-    if (usersToNotify.length > 0) {
+const teamAName = teamA.name;
+const teamBName = teamB.name;
+const matchId = match.id;
+    if (usersToNotify.length > 0 && typeof matchId === 'string' && typeof teamAName === 'string'  && typeof teamBName === 'string') {
       const title = "Match Alert!";
-      const body = `${teamA.name} vs. ${teamB.name} is starting in 30 minutes!`;
-      await this.notificationService.sendNotification(usersToNotify, title, body, {matchId: match.id, type: "match_start"});
+      const body = `${teamAName} vs. ${teamBName} is starting in 30 minutes!`;
+      await this.notificationService.sendNotification(usersToNotify, title, body, {matchId: matchId, type: "match_start"});
     }
   }
 }

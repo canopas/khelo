@@ -26,9 +26,6 @@ class UserRepository {
     const userRef = this.userRef().where("id", "in", userIds);
     try {
       const userDoc = await userRef.get();
-      if (!userDoc.exists) {
-        return [];
-      }
       return userDoc.docs.map((doc) => doc.data());
     } catch (e) {
       console.error("UserRepository: Error getting users:", e);

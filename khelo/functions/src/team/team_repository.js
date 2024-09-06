@@ -13,9 +13,6 @@ class TeamRepository {
     const teamRef = this.teamRef.where("id", "in", teamIds);
     try {
       const teamDoc = await teamRef.get();
-      if (!teamDoc.exists) {
-        return [];
-      }
       return teamDoc.docs.map((doc) => doc.data());
     } catch (e) {
       console.error("TeamRepository: Error getting Teams:", e);
