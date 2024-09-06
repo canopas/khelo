@@ -124,7 +124,7 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
         final match = matches[index - 1];
         return MatchDetailCell(
           match: match,
-          onTap: () => AppRoute.matchDetailTab(matchId: match.id ?? ""),
+          onTap: () => AppRoute.matchDetailTab(matchId: match.id),
         );
       },
       separatorBuilder: (context, index) => const SizedBox(height: 16),
