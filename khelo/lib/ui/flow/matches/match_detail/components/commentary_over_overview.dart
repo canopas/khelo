@@ -126,6 +126,7 @@ class CommentaryOverOverview extends StatelessWidget {
       children: [
         Flexible(
             child: OnTapScale(
+          enabled: batsmanSummary.player.isActive,
           onTap: () => AppRoute.userDetail(userId: batsmanSummary.player.id)
               .push(context),
           child: Text(
@@ -170,10 +171,9 @@ class BowlerSummaryView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         OnTapScale(
-          onTap: isForBowlerIntro
-              ? null
-              : () => AppRoute.userDetail(userId: bowlerSummary.player.id)
-                  .push(context),
+          enabled: bowlerSummary.player.isActive && !isForBowlerIntro,
+          onTap: () => AppRoute.userDetail(userId: bowlerSummary.player.id)
+              .push(context),
           child: Padding(
             padding:
                 EdgeInsets.symmetric(horizontal: isForBowlerIntro ? 16 : 0),

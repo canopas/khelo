@@ -269,7 +269,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (header != null) ...[
               Expanded(
                   flex: (data.length + 1) ~/ 1.5,
-                  child: OnTapScale(onTap: onTap, child: header)),
+                  child: OnTapScale(
+                      enabled: onTap != null, onTap: onTap, child: header)),
             ],
             for (int i = 0; i < data.length; i++) ...[
               Expanded(
@@ -321,8 +322,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.sixes.toString(),
             player.strikeRate.toString(),
           ],
-          onTap: () =>
-              AppRoute.userDetail(userId: player.player.id).push(context),
+          onTap: player.player.isActive
+              ? () =>  AppRoute.userDetail(userId: player.player.id).push(context)
+              : null,
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -374,8 +376,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.wideBalls.toString(),
             bowler.economy.toString(),
           ],
-          onTap: () =>
-              AppRoute.userDetail(userId: bowler.player.id).push(context),
+          onTap: bowler.player.isActive
+              ? () => AppRoute.userDetail(userId: bowler.player.id).push(context)
+              : null,
           header: Text(
             bowler.player.name ?? '',
             style: AppTextStyle.subtitle2
@@ -476,8 +479,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (!isLastName) name += ", ";
             return WidgetSpan(
                 child: OnTapScale(
-              onTap: () =>
-                  AppRoute.userDetail(userId: player.player.id).push(context),
+              onTap: player.player.isActive
+                  ? () => AppRoute.userDetail(userId: player.player.id).push(context)
+                  : null,
               child: Text(name,
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary)),
@@ -533,8 +537,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(TextSpan(text: "${batsmen.runs} ("));
       children.add(WidgetSpan(
           child: OnTapScale(
-              onTap: () =>
-                  AppRoute.userDetail(userId: batsmen.player.id).push(context),
+              onTap: batsmen.player.isActive
+                  ? () => AppRoute.userDetail(userId: batsmen.player.id).push(context)
+                  : null,
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.secondary)))));
