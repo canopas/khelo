@@ -45,7 +45,7 @@ class NotificationService {
     };
 
     const response = await (0, firebase_admin.messaging)().sendEachForMulticast(payload);
-    console.log("NotificationService: Sent notification response:", response);
+    console.log("NotificationService: Sent notification response:", JSON.stringify(response, null, 2));
   }
 }
 exports.NotificationService = NotificationService;
