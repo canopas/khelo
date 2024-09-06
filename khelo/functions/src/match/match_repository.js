@@ -13,11 +13,11 @@ class MatchRepository {
   }
   async processUpcomingMatches() {
     const currentTimestamp = admin.firestore.Timestamp.now();
-    const notificationThreshold = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const NOTIFICATION_THRESHOLD = 30 * 60 * 1000; // 30 minutes in milliseconds
 
     const upcomingMatchesQuery = this.matchRef()
       .where("start_time", ">=", currentTimestamp)
-      .where("start_time", "<=", new admin.firestore.Timestamp(currentTimestamp.seconds + notificationThreshold / 1000, 0));
+      .where("start_time", "<=", new admin.firestore.Timestamp(currentTimestamp.seconds + NOTIFICATION_THRESHOLD / 1000, 0));
     try {
       const upcomingMatchesSnapshot = await upcomingMatchesQuery.get();
       if (!upcomingMatchesSnapshot.empty) {
@@ -30,7 +30,7 @@ class MatchRepository {
         console.log("No upcoming matches found within the notification threshold.");
       }
     } catch (e) {
-      console.error("Error getting upcoming matches:", e);
+      console.error("MatchRepository: Error getting upcoming matches:", e);
     }
   }
 }

@@ -19,8 +19,8 @@ class TeamService {
     console.log("Players to notify:", playersToNotify);
 
     if (playersToNotify.length > 0) {
-      const title = "Welcome to ${newTeam.name}";
-      const body = "You've been added to ${newTeam.name}. Get ready to join the action and play with your new teammates!";
+      const title =`Welcome to ${newTeam.name}`;
+      const body = `You have been added to ${newTeam.name}. Get ready to join the action and play with your new teammates!`;
       await this.notificationService.sendNotification(playersToNotify, title, body, {teamId: newTeam.id, type: "added_to_team"});
     }
   }

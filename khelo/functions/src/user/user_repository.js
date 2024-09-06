@@ -18,7 +18,7 @@ class UserRepository {
       }
       return userDoc.data();
     } catch (e) {
-      console.error("Error getting user:", e);
+      console.error("UserRepository: Error getting user:", e);
       return null;
     }
   }
@@ -31,7 +31,7 @@ class UserRepository {
       }
       return userDoc.docs.map((doc) => doc.data());
     } catch (e) {
-      console.error("Error getting user:", e);
+      console.error("UserRepository: Error getting users:", e);
       return [];
     }
   }
@@ -41,7 +41,7 @@ class UserRepository {
       const sessionsDoc = await sessionsRef.get();
       return sessionsDoc.docs.map((doc) => doc.data());
     } catch (e) {
-      console.error("Error getting sessions:", e);
+      console.error("UserRepository: Error getting user sessions:", e);
       return [];
     }
   }

@@ -10,7 +10,7 @@ class TeamRepository {
     return this.db.collection("teams");
   }
   async getTeams(teamIds) {
-    const teamRef = teamRef.where("id", "in", teamIds);
+    const teamRef = this.teamRef.where("id", "in", teamIds);
     try {
       const teamDoc = await teamRef.get();
       if (!teamDoc.exists) {
@@ -18,7 +18,7 @@ class TeamRepository {
       }
       return teamDoc.docs.map((doc) => doc.data());
     } catch (e) {
-      console.error("Error getting team:", e);
+      console.error("TeamRepository: Error getting Teams:", e);
       return [];
     }
   }
