@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'home_view_model.dart';
+part of 'home_view_all_view_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,44 +15,39 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$HomeViewState {
+mixin _$HomeViewAllViewState {
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   List<MatchModel> get matches => throw _privateConstructorUsedError;
-  Map<MatchStatusLabel, List<MatchModel>> get groupMatches =>
-      throw _privateConstructorUsedError;
 
-  /// Create a copy of HomeViewState
+  /// Create a copy of HomeViewAllViewState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $HomeViewStateCopyWith<HomeViewState> get copyWith =>
+  $HomeViewAllViewStateCopyWith<HomeViewAllViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $HomeViewStateCopyWith<$Res> {
-  factory $HomeViewStateCopyWith(
-          HomeViewState value, $Res Function(HomeViewState) then) =
-      _$HomeViewStateCopyWithImpl<$Res, HomeViewState>;
+abstract class $HomeViewAllViewStateCopyWith<$Res> {
+  factory $HomeViewAllViewStateCopyWith(HomeViewAllViewState value,
+          $Res Function(HomeViewAllViewState) then) =
+      _$HomeViewAllViewStateCopyWithImpl<$Res, HomeViewAllViewState>;
   @useResult
-  $Res call(
-      {Object? error,
-      bool loading,
-      List<MatchModel> matches,
-      Map<MatchStatusLabel, List<MatchModel>> groupMatches});
+  $Res call({Object? error, bool loading, List<MatchModel> matches});
 }
 
 /// @nodoc
-class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
-    implements $HomeViewStateCopyWith<$Res> {
-  _$HomeViewStateCopyWithImpl(this._value, this._then);
+class _$HomeViewAllViewStateCopyWithImpl<$Res,
+        $Val extends HomeViewAllViewState>
+    implements $HomeViewAllViewStateCopyWith<$Res> {
+  _$HomeViewAllViewStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of HomeViewState
+  /// Create a copy of HomeViewAllViewState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -60,7 +55,6 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
     Object? error = freezed,
     Object? loading = null,
     Object? matches = null,
-    Object? groupMatches = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -72,38 +66,30 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
               as List<MatchModel>,
-      groupMatches: null == groupMatches
-          ? _value.groupMatches
-          : groupMatches // ignore: cast_nullable_to_non_nullable
-              as Map<MatchStatusLabel, List<MatchModel>>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$HomeViewStateImplCopyWith<$Res>
-    implements $HomeViewStateCopyWith<$Res> {
-  factory _$$HomeViewStateImplCopyWith(
-          _$HomeViewStateImpl value, $Res Function(_$HomeViewStateImpl) then) =
-      __$$HomeViewStateImplCopyWithImpl<$Res>;
+abstract class _$$HomeViewAllViewStateImplCopyWith<$Res>
+    implements $HomeViewAllViewStateCopyWith<$Res> {
+  factory _$$HomeViewAllViewStateImplCopyWith(_$HomeViewAllViewStateImpl value,
+          $Res Function(_$HomeViewAllViewStateImpl) then) =
+      __$$HomeViewAllViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {Object? error,
-      bool loading,
-      List<MatchModel> matches,
-      Map<MatchStatusLabel, List<MatchModel>> groupMatches});
+  $Res call({Object? error, bool loading, List<MatchModel> matches});
 }
 
 /// @nodoc
-class __$$HomeViewStateImplCopyWithImpl<$Res>
-    extends _$HomeViewStateCopyWithImpl<$Res, _$HomeViewStateImpl>
-    implements _$$HomeViewStateImplCopyWith<$Res> {
-  __$$HomeViewStateImplCopyWithImpl(
-      _$HomeViewStateImpl _value, $Res Function(_$HomeViewStateImpl) _then)
+class __$$HomeViewAllViewStateImplCopyWithImpl<$Res>
+    extends _$HomeViewAllViewStateCopyWithImpl<$Res, _$HomeViewAllViewStateImpl>
+    implements _$$HomeViewAllViewStateImplCopyWith<$Res> {
+  __$$HomeViewAllViewStateImplCopyWithImpl(_$HomeViewAllViewStateImpl _value,
+      $Res Function(_$HomeViewAllViewStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeViewState
+  /// Create a copy of HomeViewAllViewState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -111,9 +97,8 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
     Object? error = freezed,
     Object? loading = null,
     Object? matches = null,
-    Object? groupMatches = null,
   }) {
-    return _then(_$HomeViewStateImpl(
+    return _then(_$HomeViewAllViewStateImpl(
       error: freezed == error ? _value.error : error,
       loading: null == loading
           ? _value.loading
@@ -123,24 +108,18 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
               as List<MatchModel>,
-      groupMatches: null == groupMatches
-          ? _value._groupMatches
-          : groupMatches // ignore: cast_nullable_to_non_nullable
-              as Map<MatchStatusLabel, List<MatchModel>>,
     ));
   }
 }
 
 /// @nodoc
 
-class _$HomeViewStateImpl implements _HomeViewState {
-  const _$HomeViewStateImpl(
+class _$HomeViewAllViewStateImpl implements _HomeViewAllViewState {
+  const _$HomeViewAllViewStateImpl(
       {this.error,
       this.loading = false,
-      final List<MatchModel> matches = const [],
-      final Map<MatchStatusLabel, List<MatchModel>> groupMatches = const {}})
-      : _matches = matches,
-        _groupMatches = groupMatches;
+      final List<MatchModel> matches = const []})
+      : _matches = matches;
 
   @override
   final Object? error;
@@ -156,30 +135,19 @@ class _$HomeViewStateImpl implements _HomeViewState {
     return EqualUnmodifiableListView(_matches);
   }
 
-  final Map<MatchStatusLabel, List<MatchModel>> _groupMatches;
-  @override
-  @JsonKey()
-  Map<MatchStatusLabel, List<MatchModel>> get groupMatches {
-    if (_groupMatches is EqualUnmodifiableMapView) return _groupMatches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_groupMatches);
-  }
-
   @override
   String toString() {
-    return 'HomeViewState(error: $error, loading: $loading, matches: $matches, groupMatches: $groupMatches)';
+    return 'HomeViewAllViewState(error: $error, loading: $loading, matches: $matches)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$HomeViewStateImpl &&
+            other is _$HomeViewAllViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
-            const DeepCollectionEquality().equals(other._matches, _matches) &&
-            const DeepCollectionEquality()
-                .equals(other._groupMatches, _groupMatches));
+            const DeepCollectionEquality().equals(other._matches, _matches));
   }
 
   @override
@@ -187,25 +155,24 @@ class _$HomeViewStateImpl implements _HomeViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       loading,
-      const DeepCollectionEquality().hash(_matches),
-      const DeepCollectionEquality().hash(_groupMatches));
+      const DeepCollectionEquality().hash(_matches));
 
-  /// Create a copy of HomeViewState
+  /// Create a copy of HomeViewAllViewState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
-      __$$HomeViewStateImplCopyWithImpl<_$HomeViewStateImpl>(this, _$identity);
+  _$$HomeViewAllViewStateImplCopyWith<_$HomeViewAllViewStateImpl>
+      get copyWith =>
+          __$$HomeViewAllViewStateImplCopyWithImpl<_$HomeViewAllViewStateImpl>(
+              this, _$identity);
 }
 
-abstract class _HomeViewState implements HomeViewState {
-  const factory _HomeViewState(
-          {final Object? error,
-          final bool loading,
-          final List<MatchModel> matches,
-          final Map<MatchStatusLabel, List<MatchModel>> groupMatches}) =
-      _$HomeViewStateImpl;
+abstract class _HomeViewAllViewState implements HomeViewAllViewState {
+  const factory _HomeViewAllViewState(
+      {final Object? error,
+      final bool loading,
+      final List<MatchModel> matches}) = _$HomeViewAllViewStateImpl;
 
   @override
   Object? get error;
@@ -213,13 +180,11 @@ abstract class _HomeViewState implements HomeViewState {
   bool get loading;
   @override
   List<MatchModel> get matches;
-  @override
-  Map<MatchStatusLabel, List<MatchModel>> get groupMatches;
 
-  /// Create a copy of HomeViewState
+  /// Create a copy of HomeViewAllViewState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$HomeViewAllViewStateImplCopyWith<_$HomeViewAllViewStateImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -4,6 +4,8 @@ import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/ui/flow/home/home_view_model.dart';
+import 'package:khelo/ui/flow/home/search/search_screen.dart';
 import 'package:khelo/ui/flow/intro/intro_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_screen.dart';
@@ -20,6 +22,7 @@ import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
+import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
@@ -42,6 +45,8 @@ class AppRoute {
   static const pathTeamDetail = '/team-detail';
   static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
+  static const pathSearchHome = "/search-home";
+  static const pathViewAll = "/view-all";
 
   final String path;
   final String? name;
@@ -129,6 +134,13 @@ class AppRoute {
           matchId: matchId,
         ),
       );
+
+  static AppRoute searchHome({required List<MatchModel> matches}) =>
+      AppRoute(pathSearchHome,
+          builder: (_) => SearchHomeScreen(matches: matches));
+
+  static AppRoute viewAll(MatchStatusLabel status) =>
+      AppRoute(pathViewAll, builder: (_) => HomeViewAllScreen(status: status));
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,
@@ -245,6 +257,14 @@ class AppRoute {
       builder: (context, state) {
         return state.extra == null ? const MainScreen() : state.widget(context);
       },
+    ),
+    GoRoute(
+      path: pathSearchHome,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathViewAll,
+      builder: (context, state) => state.widget(context),
     ),
     GoRoute(
       path: intro.path,
