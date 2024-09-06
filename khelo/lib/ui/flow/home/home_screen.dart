@@ -41,7 +41,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return AppPage(
       titleWidget: Text(
         context.l10n.app_title,
-        style: AppTextStyle.header1.copyWith(
+        style: AppTextStyle.appHeader.copyWith(
           color: context.colorScheme.primary,
         ),
       ),

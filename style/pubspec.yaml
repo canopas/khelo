@@ -42,3 +42,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/poppins_bold.ttf
           weight: 700
+
+    - family: SuezOne
+      fonts:
+        - asset: assets/fonts/suezOne_regular.ttf
