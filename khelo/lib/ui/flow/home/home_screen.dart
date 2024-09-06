@@ -81,44 +81,51 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onRetryTap: notifier.onResume,
       );
     }
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Row(
-                  children: [
-                    _createActionView(
-                      context,
-                      title: context.l10n.home_screen_set_up_match_title,
-                      btnText: context.l10n.home_screen_create_match_btn,
-                      onTap: () => AppRoute.addMatch().push(context),
-                    ),
-                    _createActionView(
-                      context,
-                      title: context.l10n.home_screen_set_up_team_title,
-                      btnText: context.l10n.home_screen_create_team_btn,
-                      onTap: () => AppRoute.addTeam().push(context),
-                    ),
-                  ],
+    return ListView(
+      padding:
+          context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 16),
+      children: [
+        _actionRow(context),
+        const SizedBox(height: 16),
+        (state.matches.isNotEmpty)
+            ? _content(context, state)
+            : SizedBox(
+                height: context.mediaQuerySize.height / 1.5,
+                child: EmptyScreen(
+                  title: context.l10n.home_screen_no_matches_title,
+                  description:
+                      context.l10n.home_screen_no_matches_description_text,
+                  isShowButton: false,
                 ),
-              )),
-          const SizedBox(height: 16),
-          if (state.matches.isNotEmpty) ...[
-            _content(context, state)
-          ] else ...[
-            EmptyScreen(
-              title: context.l10n.home_screen_no_matches_title,
-              description: context.l10n.home_screen_no_matches_description_text,
-              isShowButton: false,
+              ),
+      ],
+    );
+  }
+
+  Widget _actionRow(BuildContext context) {
+    return SizedBox(
+      height: 64,
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              children: [
+                _createActionView(
+                  context,
+                  title: context.l10n.home_screen_set_up_match_title,
+                  btnText: context.l10n.home_screen_create_match_btn,
+                  onTap: () => AppRoute.addMatch().push(context),
+                ),
+                _createActionView(
+                  context,
+                  title: context.l10n.home_screen_set_up_team_title,
+                  btnText: context.l10n.home_screen_create_team_btn,
+                  onTap: () => AppRoute.addTeam().push(context),
+                ),
+              ],
             ),
-          ]
-        ],
-      ),
+          )),
     );
   }
 
@@ -126,37 +133,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BuildContext context,
     HomeViewState state,
   ) {
-    return Expanded(
-      child: ListView.builder(
-        padding: context.mediaQueryPadding +
-            const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: state.groupMatches.length,
-        itemBuilder: (context, index) {
-          final item = state.groupMatches.entries.elementAt(index);
-          return item.value.isNotEmpty
-              ? Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _matchHeader(
-                      context,
-                      header: item.key.getString(context),
-                      isViewAllShow: item.value.length > 3,
-                      onViewAll: () => AppRoute.viewAll(item.key).push(context),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: state.groupMatches.length,
+      itemBuilder: (context, index) {
+        final item = state.groupMatches.entries.elementAt(index);
+        return item.value.isNotEmpty
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _matchHeader(
+                    context,
+                    header: item.key.getString(context),
+                    isViewAllShow: item.value.length > 3,
+                    onViewAll: () => AppRoute.viewAll(item.key).push(context),
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         children: item.value
                             .map((match) => _matchCell(context, match))
                             .toList(),
                       ),
                     ),
-                  ],
-                )
-              : const SizedBox();
-        },
-      ),
+                  ),
+                ],
+              )
+            : const SizedBox();
+      },
     );
   }
 
@@ -167,7 +174,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required Function() onViewAll,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Text(
@@ -199,7 +206,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Container(
           width: context.mediaQuerySize.width * 0.83,
           padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: context.colorScheme.containerLow,
             border: Border.all(color: context.colorScheme.outline),
