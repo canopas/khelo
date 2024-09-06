@@ -17,11 +17,13 @@ import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
+import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
+import 'flow/team/user_detail/user_detail_screen.dart';
 
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
@@ -32,11 +34,13 @@ class AppRoute {
   static const pathPowerPlay = '/power-play';
   static const pathSelectSquad = '/select-squad';
   static const pathAddMatchOfficials = '/add-match-officials';
+  static const pathMakeTeamAdmin = "/make-admin";
   static const pathSearchTeam = '/search-team';
   static const pathAddMatch = '/add-match';
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
   static const pathTeamDetail = '/team-detail';
+  static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
 
   final String path;
@@ -154,6 +158,10 @@ class AppRoute {
         builder: (_) => AddTeamScreen(editTeam: team),
       );
 
+  static AppRoute makeTeamAdmin({required TeamModel team}) =>
+      AppRoute(pathMakeTeamAdmin,
+          builder: (context) => MakeTeamAdminScreen(team: team));
+
   static AppRoute searchTeam(
           {List<String>? excludedIds, required bool onlyUserTeams}) =>
       AppRoute(
@@ -227,6 +235,10 @@ class AppRoute {
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
 
+  static AppRoute userDetail({required String userId}) =>
+      AppRoute(pathUserDetail,
+          builder: (_) => UserDetailScreen(userId: userId));
+
   static final routes = [
     GoRoute(
       path: main.path,
@@ -293,6 +305,14 @@ class AppRoute {
     ),
     GoRoute(
       path: pathTeamDetail,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathUserDetail,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathMakeTeamAdmin,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

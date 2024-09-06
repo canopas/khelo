@@ -23,7 +23,9 @@ mixin _$SelectSquadViewState {
   bool get isDoneBtnEnable => throw _privateConstructorUsedError;
   List<MatchPlayer> get squad => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $SelectSquadViewStateCopyWith<SelectSquadViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +58,8 @@ class _$SelectSquadViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -94,6 +98,8 @@ class _$SelectSquadViewStateCopyWithImpl<$Res,
     ) as $Val);
   }
 
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get team {
@@ -135,6 +141,8 @@ class __$$SelectSquadViewStateImplCopyWithImpl<$Res>
       $Res Function(_$SelectSquadViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -238,7 +246,9 @@ class _$SelectSquadViewStateImpl implements _SelectSquadViewState {
       isDoneBtnEnable,
       const DeepCollectionEquality().hash(_squad));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SelectSquadViewStateImplCopyWith<_$SelectSquadViewStateImpl>
@@ -268,8 +278,11 @@ abstract class _SelectSquadViewState implements SelectSquadViewState {
   bool get isDoneBtnEnable;
   @override
   List<MatchPlayer> get squad;
+
+  /// Create a copy of SelectSquadViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SelectSquadViewStateImplCopyWith<_$SelectSquadViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

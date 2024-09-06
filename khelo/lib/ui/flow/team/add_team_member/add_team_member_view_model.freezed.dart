@@ -21,11 +21,13 @@ mixin _$AddTeamMemberState {
   Object? get error => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
   List<UserModel> get searchedUsers => throw _privateConstructorUsedError;
-  List<UserModel> get selectedUsers => throw _privateConstructorUsedError;
+  List<TeamPlayer> get selectedUsers => throw _privateConstructorUsedError;
   bool get isAdded => throw _privateConstructorUsedError;
   bool get isAddInProgress => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamMemberState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddTeamMemberStateCopyWith<AddTeamMemberState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -41,7 +43,7 @@ abstract class $AddTeamMemberStateCopyWith<$Res> {
       Object? error,
       Object? actionError,
       List<UserModel> searchedUsers,
-      List<UserModel> selectedUsers,
+      List<TeamPlayer> selectedUsers,
       bool isAdded,
       bool isAddInProgress});
 }
@@ -56,6 +58,8 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddTeamMemberState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,7 +85,7 @@ class _$AddTeamMemberStateCopyWithImpl<$Res, $Val extends AddTeamMemberState>
       selectedUsers: null == selectedUsers
           ? _value.selectedUsers
           : selectedUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+              as List<TeamPlayer>,
       isAdded: null == isAdded
           ? _value.isAdded
           : isAdded // ignore: cast_nullable_to_non_nullable
@@ -107,7 +111,7 @@ abstract class _$$AddTeamMemberStateImplCopyWith<$Res>
       Object? error,
       Object? actionError,
       List<UserModel> searchedUsers,
-      List<UserModel> selectedUsers,
+      List<TeamPlayer> selectedUsers,
       bool isAdded,
       bool isAddInProgress});
 }
@@ -120,6 +124,8 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
       $Res Function(_$AddTeamMemberStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddTeamMemberState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -145,7 +151,7 @@ class __$$AddTeamMemberStateImplCopyWithImpl<$Res>
       selectedUsers: null == selectedUsers
           ? _value._selectedUsers
           : selectedUsers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+              as List<TeamPlayer>,
       isAdded: null == isAdded
           ? _value.isAdded
           : isAdded // ignore: cast_nullable_to_non_nullable
@@ -166,7 +172,7 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
       this.error,
       this.actionError,
       final List<UserModel> searchedUsers = const [],
-      final List<UserModel> selectedUsers = const [],
+      final List<TeamPlayer> selectedUsers = const [],
       this.isAdded = false,
       this.isAddInProgress = false})
       : _searchedUsers = searchedUsers,
@@ -187,10 +193,10 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
     return EqualUnmodifiableListView(_searchedUsers);
   }
 
-  final List<UserModel> _selectedUsers;
+  final List<TeamPlayer> _selectedUsers;
   @override
   @JsonKey()
-  List<UserModel> get selectedUsers {
+  List<TeamPlayer> get selectedUsers {
     if (_selectedUsers is EqualUnmodifiableListView) return _selectedUsers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_selectedUsers);
@@ -238,7 +244,9 @@ class _$AddTeamMemberStateImpl implements _AddTeamMemberState {
       isAdded,
       isAddInProgress);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamMemberState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddTeamMemberStateImplCopyWith<_$AddTeamMemberStateImpl> get copyWith =>
@@ -252,7 +260,7 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
       final Object? error,
       final Object? actionError,
       final List<UserModel> searchedUsers,
-      final List<UserModel> selectedUsers,
+      final List<TeamPlayer> selectedUsers,
       final bool isAdded,
       final bool isAddInProgress}) = _$AddTeamMemberStateImpl;
 
@@ -265,13 +273,16 @@ abstract class _AddTeamMemberState implements AddTeamMemberState {
   @override
   List<UserModel> get searchedUsers;
   @override
-  List<UserModel> get selectedUsers;
+  List<TeamPlayer> get selectedUsers;
   @override
   bool get isAdded;
   @override
   bool get isAddInProgress;
+
+  /// Create a copy of AddTeamMemberState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddTeamMemberStateImplCopyWith<_$AddTeamMemberStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -49,7 +49,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     state = state.copyWith(currentUser: user);
   }
 
-  void updatePlayersList(List<UserModel> players) {
+  void updatePlayersList(List<TeamPlayer> players) {
     if (state.editTeam == null) {
       return;
     }
@@ -86,26 +86,30 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       final name = state.nameController.text.trim();
       final location = state.locationController.text.trim();
 
-      List<UserModel> players = [];
+      List<TeamPlayer> players = [];
 
       if (state.isAddMeCheckBoxEnable &&
           state.currentUser != null &&
           state.editTeam == null) {
-        players.add(state.currentUser!);
+        final player = TeamPlayer(
+            id: state.currentUser!.id,
+            role: TeamPlayerRole.admin,
+            user: state.currentUser!);
+        players.add(player);
       }
 
       if (state.editTeam != null) {
         players = state.teamMembers;
       }
       String? imageUrl = state.editTeam?.profile_img_url;
-      AddTeamRequestModel team = AddTeamRequestModel(
-          id: state.editTeam?.id,
+      final team = TeamModel(
+          id: state.editTeam?.id ?? _teamService.generateTeamId,
           name: name,
           name_lowercase: name.caseAndSpaceInsensitive,
           profile_img_url: imageUrl,
           city: location.toLowerCase(),
           created_by: state.currentUser!.id,
-          players: players.map((e) => e.id).toList(),
+          players: players,
           created_at: state.editTeam?.created_at ?? DateTime.now());
 
       final newTeamId = await _teamService.updateTeam(team);
@@ -119,13 +123,11 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       }
 
       if (state.editTeam != null) {
-        final filterList = (state.editTeam!.players ?? [])
+        final filterList = (state.editTeam!.players)
             .where((element) => !state.teamMembers.contains(element))
-            .map((e) => e.id)
             .toList();
 
-        await _teamService.removePlayersFromTeam(
-            team.id ?? "INVALID ID", filterList);
+        await _teamService.removePlayersFromTeam(team.id, filterList);
 
         state = state.copyWith(isAddInProgress: false, isPop: true);
       } else {
@@ -205,7 +207,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     try {
       final teamProfileImageUrl = state.editTeam!.profile_img_url;
 
-      await _teamService.deleteTeam(state.editTeam!.id ?? "INVALID ID");
+      await _teamService.deleteTeam(state.editTeam!.id);
       state = state.copyWith(isPop: true);
 
       if (teamProfileImageUrl != null) {
@@ -241,6 +243,6 @@ class AddTeamState with _$AddTeamState {
     @Default(false) bool isAddBtnEnable,
     @Default(false) bool isAddInProgress,
     @Default(false) bool isPop,
-    @Default([]) List<UserModel> teamMembers,
+    @Default([]) List<TeamPlayer> teamMembers,
   }) = _AddTeamState;
 }

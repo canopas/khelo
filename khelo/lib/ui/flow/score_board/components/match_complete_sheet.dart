@@ -17,8 +17,6 @@ class MatchCompleteSheet extends ConsumerWidget {
   static Future<T?> show<T>(
     BuildContext context, {
     bool showUndoButton = true,
-    required TeamRunStat firstTeamRunStat,
-    required TeamRunStat secondTeamRunStat,
   }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
@@ -32,22 +30,14 @@ class MatchCompleteSheet extends ConsumerWidget {
       builder: (context) {
         return MatchCompleteSheet(
           showUndoButton: showUndoButton,
-          firstTeamRunStat: firstTeamRunStat,
-          secondTeamRunStat: secondTeamRunStat,
         );
       },
     );
   }
 
   final bool showUndoButton;
-  final TeamRunStat firstTeamRunStat;
-  final TeamRunStat secondTeamRunStat;
 
-  const MatchCompleteSheet(
-      {super.key,
-      required this.showUndoButton,
-      required this.firstTeamRunStat,
-      required this.secondTeamRunStat});
+  const MatchCompleteSheet({super.key, required this.showUndoButton});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -91,8 +81,11 @@ class MatchCompleteSheet extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // passing match_status as finish because matchResult is calculated based on match_status.
               WonByMessageText(
-                  matchResult: state.match?.matchResult,
+                  matchResult: state.match
+                      ?.copyWith(match_status: MatchStatus.finish)
+                      .matchResult,
                   textStyle: AppTextStyle.subtitle2
                       .copyWith(color: context.colorScheme.textPrimary)),
               const SizedBox(height: 16),
@@ -120,13 +113,22 @@ class MatchCompleteSheet extends ConsumerWidget {
             data2: context.l10n.score_board_o_title,
             isHeader: true,
           ),
-          _teamScore(context, state, teamRunStat: firstTeamRunStat),
-          _teamScore(
-            context,
-            state,
-            teamRunStat: secondTeamRunStat,
-            isLast: true,
-          )
+          ...state.allInnings.map(
+            (inning) {
+              final teamName = state.match?.teams
+                  .where((element) => element.team.id == inning.team_id)
+                  .firstOrNull
+                  ?.team
+                  .name;
+              return _teamScore(context, state,
+                  teamRunStat: TeamRunStat(
+                      teamName: teamName ?? '',
+                      wicket: inning.total_wickets,
+                      run: inning.total_runs,
+                      over: inning.overs),
+                  isLast: inning.id == state.allInnings.last.id);
+            },
+          ),
         ],
       ),
     );
@@ -164,10 +166,7 @@ class MatchCompleteSheet extends ConsumerWidget {
           color: isHeader
               ? context.colorScheme.containerLow
               : context.colorScheme.surface,
-          border: Border(
-              top: isLast
-                  ? BorderSide(color: context.colorScheme.outline)
-                  : BorderSide.none),
+          border: Border(top: BorderSide(color: context.colorScheme.outline)),
           borderRadius: BorderRadius.vertical(
               top: Radius.circular(isHeader ? 8 : 0),
               bottom: Radius.circular(isLast ? 8 : 0))),

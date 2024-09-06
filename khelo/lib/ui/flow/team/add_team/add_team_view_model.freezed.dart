@@ -32,9 +32,11 @@ mixin _$AddTeamState {
   bool get isAddBtnEnable => throw _privateConstructorUsedError;
   bool get isAddInProgress => throw _privateConstructorUsedError;
   bool get isPop => throw _privateConstructorUsedError;
-  List<UserModel> get teamMembers => throw _privateConstructorUsedError;
+  List<TeamPlayer> get teamMembers => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddTeamStateCopyWith<AddTeamState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,7 +62,7 @@ abstract class $AddTeamStateCopyWith<$Res> {
       bool isAddBtnEnable,
       bool isAddInProgress,
       bool isPop,
-      List<UserModel> teamMembers});
+      List<TeamPlayer> teamMembers});
 
   $TeamModelCopyWith<$Res>? get team;
   $TeamModelCopyWith<$Res>? get editTeam;
@@ -77,6 +79,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -153,10 +157,12 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
       teamMembers: null == teamMembers
           ? _value.teamMembers
           : teamMembers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+              as List<TeamPlayer>,
     ) as $Val);
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get team {
@@ -169,6 +175,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     });
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res>? get editTeam {
@@ -181,6 +189,8 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     });
   }
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get currentUser {
@@ -217,7 +227,7 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
       bool isAddBtnEnable,
       bool isAddInProgress,
       bool isPop,
-      List<UserModel> teamMembers});
+      List<TeamPlayer> teamMembers});
 
   @override
   $TeamModelCopyWith<$Res>? get team;
@@ -235,6 +245,8 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
       _$AddTeamStateImpl _value, $Res Function(_$AddTeamStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,7 +323,7 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
       teamMembers: null == teamMembers
           ? _value._teamMembers
           : teamMembers // ignore: cast_nullable_to_non_nullable
-              as List<UserModel>,
+              as List<TeamPlayer>,
     ));
   }
 }
@@ -334,7 +346,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
       this.isAddBtnEnable = false,
       this.isAddInProgress = false,
       this.isPop = false,
-      final List<UserModel> teamMembers = const []})
+      final List<TeamPlayer> teamMembers = const []})
       : _teamMembers = teamMembers;
 
   @override
@@ -371,10 +383,10 @@ class _$AddTeamStateImpl implements _AddTeamState {
   @override
   @JsonKey()
   final bool isPop;
-  final List<UserModel> _teamMembers;
+  final List<TeamPlayer> _teamMembers;
   @override
   @JsonKey()
-  List<UserModel> get teamMembers {
+  List<TeamPlayer> get teamMembers {
     if (_teamMembers is EqualUnmodifiableListView) return _teamMembers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_teamMembers);
@@ -440,7 +452,9 @@ class _$AddTeamStateImpl implements _AddTeamState {
       isPop,
       const DeepCollectionEquality().hash(_teamMembers));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddTeamStateImplCopyWith<_$AddTeamStateImpl> get copyWith =>
@@ -463,7 +477,7 @@ abstract class _AddTeamState implements AddTeamState {
       final bool isAddBtnEnable,
       final bool isAddInProgress,
       final bool isPop,
-      final List<UserModel> teamMembers}) = _$AddTeamStateImpl;
+      final List<TeamPlayer> teamMembers}) = _$AddTeamStateImpl;
 
   @override
   TextEditingController get nameController;
@@ -494,9 +508,12 @@ abstract class _AddTeamState implements AddTeamState {
   @override
   bool get isPop;
   @override
-  List<UserModel> get teamMembers;
+  List<TeamPlayer> get teamMembers;
+
+  /// Create a copy of AddTeamState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddTeamStateImplCopyWith<_$AddTeamStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

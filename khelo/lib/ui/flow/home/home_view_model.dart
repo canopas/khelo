@@ -35,7 +35,7 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
   void _loadMatches() async {
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    _streamSubscription = _matchService.getRunningMatches().listen(
+    _streamSubscription = _matchService.streamRunningMatches().listen(
       (matches) {
         state = state.copyWith(matches: matches, loading: false, error: null);
       },

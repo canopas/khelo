@@ -1,5 +1,4 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
-import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,11 +41,16 @@ class ScoreDisplayView extends ConsumerWidget {
   }
 
   Widget _teamName(
-    BuildContext context,
-    bool batting,
-  ) {
+    BuildContext context, {
+    required bool isBatting,
+    String? inningString,
+  }) {
+    final teamName = isBatting
+        ? (battingTeamName ?? "") +
+            (inningString != null ? " - $inningString" : "")
+        : bowlingTeamName ?? "";
     return Text(
-      (batting ? battingTeamName : bowlingTeamName) ?? "",
+      teamName,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       style: AppTextStyle.subtitle1
@@ -58,6 +62,12 @@ class ScoreDisplayView extends ConsumerWidget {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
+    final inningString = state.match?.match_type == MatchType.testMatch
+        ? (state.currentInning?.index == 1 || state.currentInning?.index == 2)
+            ? context.l10n.common_first_inning_title
+            : context.l10n.common_second_inning_title
+        : null;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -67,7 +77,7 @@ class ScoreDisplayView extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _teamName(context, true),
+          _teamName(context, isBatting: true, inningString: inningString),
           const SizedBox(height: 12),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,7 +93,8 @@ class ScoreDisplayView extends ConsumerWidget {
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
                     TextSpan(
-                      text: '($overCountString/${state.match?.number_of_over})',
+                      text:
+                          '($overCountString/${state.match?.revised_target?.overs ?? state.match?.number_of_over})',
                       style: AppTextStyle.body1
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
@@ -132,15 +143,20 @@ class ScoreDisplayView extends ConsumerWidget {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
-    if (state.otherInning?.innings_status == InningStatus.finish) {
-      final requiredRun = ((state.otherInning?.total_runs ?? 0) + 1) -
-          (state.currentInning?.total_runs ?? 0);
-      final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
+    if (state.nextInning == null) {
+      final requiredRun = getRequiredRun(state);
+      final pendingOver = (state.match?.revised_target?.overs.toInt() ??
+              state.match?.number_of_over ??
+              0) -
+          state.overCount;
       final pendingBall = (pendingOver * 6) + (6 - state.ballCount);
       return Text(
-        context.l10n.score_board_need_run_text(
-            requiredRun < 0 ? 0 : requiredRun,
-            pendingBall < 0 ? 0 : pendingBall),
+        state.match?.match_type == MatchType.testMatch
+            ? context.l10n
+                .score_board_need_run_text(requiredRun < 0 ? 0 : requiredRun)
+            : context.l10n.score_board_run_need_in_ball_text(
+                requiredRun < 0 ? 0 : requiredRun,
+                pendingBall < 0 ? 0 : pendingBall),
         textAlign: TextAlign.center,
         style:
             AppTextStyle.caption.copyWith(color: context.colorScheme.secondary),
@@ -148,6 +164,20 @@ class ScoreDisplayView extends ConsumerWidget {
     } else {
       return const SizedBox();
     }
+  }
+
+  int getRequiredRun(ScoreBoardViewState state) {
+    final currentPlayingTeam = state.match?.teams
+        .where((element) => element.team.id == state.currentInning?.team_id)
+        .firstOrNull;
+    final otherTeam = state.match?.teams
+        .where((element) => element.team.id != currentPlayingTeam?.team.id)
+        .firstOrNull;
+
+    final revisedRun = state.match?.revised_target?.runs;
+
+    return ((revisedRun ?? ((otherTeam?.run ?? 0) + 1))) -
+        (currentPlayingTeam?.run ?? 0);
   }
 
   Widget _batsManDetailsView(BuildContext context, ScoreBoardViewState state) {
@@ -247,7 +277,7 @@ class ScoreDisplayView extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _teamName(context, false),
+            child: _teamName(context, isBatting: false),
           ),
           const SizedBox(height: 8),
           _bowlerNameView(

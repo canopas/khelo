@@ -1,4 +1,5 @@
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -13,6 +14,8 @@ class TeamDetailMatchContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(teamDetailStateProvider);
+    final isAdminOrOwner =
+        state.team?.isAdminOrOwner(state.currentUserId) ?? false;
 
     if (state.matches != null && state.matches!.isNotEmpty) {
       return ListView.separated(
@@ -22,19 +25,19 @@ class TeamDetailMatchContent extends ConsumerWidget {
           final match = state.matches![index];
           return MatchDetailCell(
             match: match,
-            showActionButtons: match.created_by == state.currentUserId,
+            showActionButtons: isAdminOrOwner,
             onTap: () =>
-                AppRoute.matchDetailTab(matchId: match.id ?? "").push(context),
+                AppRoute.matchDetailTab(matchId: match.id).push(context),
             onActionTap: () {
               if (match.match_status == MatchStatus.yetToStart) {
                 AppRoute.addMatch(matchId: match.id).push(context);
               } else {
                 if (match.toss_decision == null ||
                     match.toss_winner_id == null) {
-                  AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                  AppRoute.addTossDetail(matchId: match.id)
                       .push(context);
                 } else {
-                  AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                  AppRoute.scoreBoard(matchId: match.id)
                       .push(context);
                 }
               }
@@ -49,11 +52,11 @@ class TeamDetailMatchContent extends ConsumerWidget {
           description: (state.team?.created_by == state.currentUserId)
               ? context.l10n.team_detail_empty_matches_description_text
               : context.l10n.team_detail_visitor_empty_matches_description_text,
-          isShowButton: state.team?.created_by == state.currentUserId,
+          isShowButton: isAdminOrOwner,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
             bool? isUpdated = await AppRoute.addMatch(
-                    defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                    defaultTeam: (state.team?.players.length ?? 0) >= 2
                         ? state.team
                         : null)
                 .push<bool>(context);

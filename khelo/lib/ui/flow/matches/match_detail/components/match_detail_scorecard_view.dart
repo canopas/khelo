@@ -8,7 +8,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -81,17 +81,26 @@ class MatchDetailScorecardView extends ConsumerWidget {
               final batsmen = _getBatsmen(inningOvers);
               final bowler = _getBowlers(inningOvers);
 
-              final yetToPlayPlayers = state.match?.teams
+              final teamSquad = state.match?.teams
                   .where((element) => element.team.id == overs?.team_id)
                   .firstOrNull
-                  ?.squad
+                  ?.squad;
+
+              final yetToPlayPlayers = teamSquad
+                  ?.where((element) => element.performance
+                      .where((element) =>
+                          element.inning_id == overs?.inning_id &&
+                          element.status == PlayerStatus.yetToPlay)
+                      .isNotEmpty)
                   .toList();
 
               return _teamTitleView(context,
                   teamName: _getTeamNameByTeamId(state, overs?.team_id ?? ""),
+                  inningString: _getInningStringByInningId(
+                      context, state, overs?.inning_id ?? ""),
                   over: overs ?? const OverSummary(),
-                  initiallyExpanded: state.expandedTeamScorecard
-                      .contains(inningOvers.first.team_id),
+                  initiallyExpanded: state.expandedInningsScorecard
+                      .contains(inningOvers.first.inning_id),
                   children: [
                     _dataTable(context, batsmen: batsmen),
                     ..._buildMatchTotalView(context,
@@ -103,7 +112,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
                   ],
                   onExpansionChanged: (isExpanded) =>
                       notifier.onScorecardExpansionChange(
-                          overs?.team_id ?? "", isExpanded));
+                          overs?.inning_id ?? "", isExpanded));
             },
             separatorBuilder: (context, index) => const SizedBox(height: 16),
           ),
@@ -126,6 +135,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
   Widget _teamTitleView(
     BuildContext context, {
     required String teamName,
+    String? inningString,
     required OverSummary over,
     required bool initiallyExpanded,
     required List<Widget> children,
@@ -156,12 +166,25 @@ class MatchDetailScorecardView extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                teamName,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.onPrimary),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    teamName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.subtitle1
+                        .copyWith(color: context.colorScheme.onPrimary),
+                  ),
+                  if (inningString != null)
+                    Text(
+                      inningString,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.onPrimary),
+                    ),
+                ],
               ),
             ),
             Text.rich(
@@ -246,7 +269,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (header != null) ...[
               Expanded(
                   flex: (data.length + 1) ~/ 1.5,
-                  child: OnTapScale(onTap: onTap, child: header)),
+                  child: OnTapScale(
+                      enabled: onTap != null, onTap: onTap, child: header)),
             ],
             for (int i = 0; i < data.length; i++) ...[
               Expanded(
@@ -298,7 +322,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.sixes.toString(),
             player.strikeRate.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, player.player),
+          onTap: player.player.isActive
+              ? () =>  AppRoute.userDetail(userId: player.player.id).push(context)
+              : null,
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -350,7 +376,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.wideBalls.toString(),
             bowler.economy.toString(),
           ],
-          onTap: () => UserDetailSheet.show(context, bowler.player),
+          onTap: bowler.player.isActive
+              ? () => AppRoute.userDetail(userId: bowler.player.id).push(context)
+              : null,
           header: Text(
             bowler.player.name ?? '',
             style: AppTextStyle.subtitle2
@@ -451,7 +479,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
             if (!isLastName) name += ", ";
             return WidgetSpan(
                 child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, player.player),
+              onTap: player.player.isActive
+                  ? () => AppRoute.userDetail(userId: player.player.id).push(context)
+                  : null,
               child: Text(name,
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.textPrimary)),
@@ -507,7 +537,9 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(TextSpan(text: "${batsmen.runs} ("));
       children.add(WidgetSpan(
           child: OnTapScale(
-              onTap: () => UserDetailSheet.show(context, batsmen.player),
+              onTap: batsmen.player.isActive
+                  ? () => AppRoute.userDetail(userId: batsmen.player.id).push(context)
+                  : null,
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption
                       .copyWith(color: context.colorScheme.secondary)))));
@@ -584,6 +616,24 @@ class MatchDetailScorecardView extends ConsumerWidget {
             ?.team
             .name ??
         "";
+  }
+
+  String? _getInningStringByInningId(
+      BuildContext context, MatchDetailTabState state, String inningId) {
+    if (state.match?.match_type != MatchType.testMatch) {
+      return null;
+    }
+
+    final inningIndex = state.allInnings
+        .where((element) => element.id == inningId)
+        .firstOrNull
+        ?.index;
+
+    if (inningIndex == 1 || inningIndex == 2) {
+      return context.l10n.common_first_inning_title;
+    } else {
+      return context.l10n.common_second_inning_title;
+    }
   }
 
   List<BatsmanSummary> _getBatsmen(List<OverSummary> inningOvers) {

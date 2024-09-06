@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
@@ -22,8 +23,16 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   final TeamService _teamService;
   Timer? _debounce;
 
-  AddTeamMemberViewNotifier(this._userService, this._teamService)
-      : super(AddTeamMemberState(searchController: TextEditingController()));
+  AddTeamMemberViewNotifier(
+    this._userService,
+    this._teamService,
+  ) : super(AddTeamMemberState(searchController: TextEditingController()));
+
+  late TeamModel _team;
+
+  void setData(TeamModel team) {
+    _team = team;
+  }
 
   Future<void> search(String searchKey) async {
     try {
@@ -50,7 +59,11 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   }
 
   void selectUser(UserModel user) {
-    state = state.copyWith(selectedUsers: [...state.selectedUsers, user]);
+    final role = (_team.created_by == user.id)
+        ? TeamPlayerRole.admin
+        : TeamPlayerRole.player;
+    final player = TeamPlayer(id: user.id, role: role, user: user);
+    state = state.copyWith(selectedUsers: [...state.selectedUsers, player]);
   }
 
   void unSelectUser(UserModel user) {
@@ -59,17 +72,10 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     state = state.copyWith(selectedUsers: updatedList);
   }
 
-  Future<void> addPlayersToTeam(String? id) async {
-    if (id == null) {
-      return;
-    }
-
+  Future<void> addPlayersToTeam() async {
     state = state.copyWith(isAddInProgress: true, actionError: null);
     try {
-      await _teamService.addPlayersToTeam(
-        id,
-        state.selectedUsers.map((e) => e.id).toList(),
-      );
+      await _teamService.addPlayersToTeam(_team.id, state.selectedUsers);
       state = state.copyWith(isAddInProgress: false, isAdded: true);
     } catch (e) {
       state = state.copyWith(isAddInProgress: false, actionError: e);
@@ -92,7 +98,7 @@ class AddTeamMemberState with _$AddTeamMemberState {
     Object? error,
     Object? actionError,
     @Default([]) List<UserModel> searchedUsers,
-    @Default([]) List<UserModel> selectedUsers,
+    @Default([]) List<TeamPlayer> selectedUsers,
     @Default(false) bool isAdded,
     @Default(false) bool isAddInProgress,
   }) = _AddTeamMemberState;

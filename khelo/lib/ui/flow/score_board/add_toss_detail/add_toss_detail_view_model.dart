@@ -72,7 +72,7 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
         state.copyWith(isTossDetailUpdateInProgress: true, actionError: null);
     try {
       await _matchService.updateTossDetails(
-          state.match!.id!,
+          state.match!.id,
           state.tossWinnerTeamId!,
           state.tossWinnerDecision!,
           currentPlayingTeamId);

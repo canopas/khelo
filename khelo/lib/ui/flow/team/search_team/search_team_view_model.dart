@@ -34,7 +34,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   Future<void> loadTeamList() async {
     state = state.copyWith(loading: true);
 
-    _streamSubscription = _teamService.getUserOwnedTeams().listen((teams) {
+    _streamSubscription = _teamService.streamUserOwnedTeams().listen((teams) {
       final filteredResult =
           teams.where((element) => !excludedIds.contains(element.id)).toList();
 
@@ -91,8 +91,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   void onTeamCellTap(TeamModel team) {
     state = state.copyWith(showSelectionError: false);
     final playersCount =
-        (team.players?.where((player) => player.isActive).toList() ?? [])
-            .length;
+        (team.players.where((player) => player.user.isActive).toList()).length;
     if (playersCount >= 2) {
       final isAlreadySelected = state.selectedTeam?.id == team.id;
       state = state.copyWith(selectedTeam: isAlreadySelected ? null : team);

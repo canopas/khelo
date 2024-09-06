@@ -11,10 +11,12 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/flow/score_board/add_substitute_sheet/add_substitute_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
+import 'package:khelo/ui/flow/score_board/revise_target_sheet/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_fielding_position_sheet.dart';
@@ -68,9 +70,11 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowAddExtraSheetForLegBye(context, ref);
     _observeShowAddExtraSheetForBye(context, ref);
     _observeShowAddExtraSheetForFiveSeven(context, ref);
+    _observeShowReviseTargetSheet(context, ref);
     _observePop(context, ref);
     _observeShowPauseScoringSheet(context, ref);
     _observeShowAddPenaltyRunSheet(context, ref);
+    _observeShowAddSubstituteSheet(context, ref);
     _observeEndMatchSheet(context, ref);
     _observeInvalidUndoToast(context, ref);
 
@@ -92,11 +96,16 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     BuildContext context,
     ScoreBoardViewState state,
   ) {
+    final matchOptions = MatchOption.values.toList();
+    if (!(state.match?.isRevisedTargetApplicable ?? true)) {
+      matchOptions.remove(MatchOption.reviseTarget);
+    }
+
     return moreOptionButton(
       context,
       onPressed: () => showActionBottomSheet(
           context: context,
-          items: MatchOption.values
+          items: matchOptions
               .map((option) => BottomSheetAction(
                     title: option.getTitle(context),
                     onTap: () {
@@ -157,8 +166,6 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       context,
       type: type,
       continueWithInjPlayer: continueWithInjuredPlayers,
-      batsManList: notifier.getFilteredPlayerList(PlayerSelectionType.batsMan),
-      bowlerList: notifier.getFilteredPlayerList(PlayerSelectionType.bowler),
     );
     if (result != null && context.mounted) {
       if (result.selectedPlayer != null) {
@@ -249,11 +256,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
   }
 
   Future<void> _showMatchCompleteSheet(BuildContext context) async {
-    final endMatch = await MatchCompleteSheet.show<bool>(
-      context,
-      firstTeamRunStat: notifier.getTeamRunDetails(true),
-      secondTeamRunStat: notifier.getTeamRunDetails(false),
-    );
+    final endMatch = await MatchCompleteSheet.show<bool>(context);
     if (endMatch != null && context.mounted) {
       if (endMatch) {
         notifier.endMatch();
@@ -527,6 +530,37 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeShowReviseTargetSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showReviseTargetSheet),
+        (previous, next) async {
+      if (next != null) {
+        final actualTarget = ref.read(scoreBoardStateProvider.select((value) =>
+            (value.match?.teams
+                    .where((element) =>
+                        element.team.id != value.currentInning?.team_id)
+                    .firstOrNull
+                    ?.run ??
+                0) +
+            1));
+        final totalOver = ref.read(scoreBoardStateProvider
+            .select((value) => value.match?.number_of_over ?? 0));
+
+        final result = await ReviseTargetSheet.show<Map<String, dynamic>>(
+          context,
+          actualTarget: actualTarget,
+          totalOver: totalOver,
+        );
+        if (context.mounted && result != null) {
+          notifier.setRevisedTarget(result['run'], result['over']);
+        }
+      }
+    });
+  }
+
   void _observePop(BuildContext context, WidgetRef ref) {
     ref.listen(scoreBoardStateProvider.select((value) => value.pop),
         (previous, next) {
@@ -562,16 +596,35 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     });
   }
 
+  void _observeShowAddSubstituteSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select((value) => value.showAddSubstituteSheet),
+        (previous, next) async {
+      if (next != null) {
+        final player = await AddSubstituteSheet.show<UserModel>(
+          context,
+          nonPlayingMembers: notifier.getNonPlayingTeamMembers(),
+          playingSquadIds: notifier.getPlayingSquadIds(),
+        );
+        if (context.mounted && player != null) {
+          notifier.addSubstitute(player);
+        }
+      }
+    });
+  }
+
   void _observeEndMatchSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         scoreBoardStateProvider.select((value) => value.showEndMatchSheet),
         (previous, next) {
       if (next != null) {
-        showConfirmationDialog(context,
-            title: context.l10n.common_end_match_title,
-            message: context.l10n.score_board_end_match_description_text,
-            confirmBtnText: context.l10n.common_okay_title,
-            onConfirm: notifier.abandonMatch);
+        showConfirmationDialog(
+          context,
+          title: context.l10n.common_end_match_title,
+          message: context.l10n.score_board_end_match_description_text,
+          confirmBtnText: context.l10n.common_okay_title,
+          onConfirm: notifier.abandonMatch,
+        );
       }
     });
   }

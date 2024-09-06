@@ -8,7 +8,7 @@ part of 'team_model.dart';
 
 _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
     _$TeamModelImpl(
-      id: json['id'] as String?,
+      id: json['id'] as String,
       name: json['name'] as String,
       name_lowercase: json['name_lowercase'] as String,
       city: json['city'] as String?,
@@ -17,9 +17,10 @@ _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
       created_at: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
-      players: (json['players'] as List<dynamic>?)
-          ?.map((e) => UserModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      players: (json['team_players'] as List<dynamic>?)
+              ?.map((e) => TeamPlayer.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
@@ -31,34 +32,23 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       'profile_img_url': instance.profile_img_url,
       'created_by': instance.created_by,
       'created_at': instance.created_at?.toIso8601String(),
-      'players': instance.players,
+      'team_players': instance.players.map((e) => e.toJson()).toList(),
     };
 
-_$AddTeamRequestModelImpl _$$AddTeamRequestModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$AddTeamRequestModelImpl(
-      id: json['id'] as String?,
-      name: json['name'] as String,
-      name_lowercase: json['name_lowercase'] as String,
-      city: json['city'] as String?,
-      profile_img_url: json['profile_img_url'] as String?,
-      created_by: json['created_by'] as String?,
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
-      players:
-          (json['players'] as List<dynamic>?)?.map((e) => e as String).toList(),
+_$TeamPlayerImpl _$$TeamPlayerImplFromJson(Map<String, dynamic> json) =>
+    _$TeamPlayerImpl(
+      id: json['id'] as String,
+      role: $enumDecodeNullable(_$TeamPlayerRoleEnumMap, json['role']) ??
+          TeamPlayerRole.player,
     );
 
-Map<String, dynamic> _$$AddTeamRequestModelImplToJson(
-        _$AddTeamRequestModelImpl instance) =>
+Map<String, dynamic> _$$TeamPlayerImplToJson(_$TeamPlayerImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
-      'name_lowercase': instance.name_lowercase,
-      'city': instance.city,
-      'profile_img_url': instance.profile_img_url,
-      'created_by': instance.created_by,
-      'created_at': instance.created_at?.toIso8601String(),
-      'players': instance.players,
+      'role': _$TeamPlayerRoleEnumMap[instance.role]!,
     };
+
+const _$TeamPlayerRoleEnumMap = {
+  TeamPlayerRole.admin: 'admin',
+  TeamPlayerRole.player: 'player',
+};

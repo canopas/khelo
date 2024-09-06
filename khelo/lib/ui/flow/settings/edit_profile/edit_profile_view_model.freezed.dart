@@ -36,7 +36,9 @@ mixin _$EditProfileState {
   bool get isSaved => throw _privateConstructorUsedError;
   bool get isSaveInProgress => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EditProfileStateCopyWith<EditProfileState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -78,6 +80,8 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -163,6 +167,8 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     ) as $Val);
   }
 
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get currentUser {
@@ -214,6 +220,8 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
       $Res Function(_$EditProfileStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -424,7 +432,9 @@ class _$EditProfileStateImpl implements _EditProfileState {
       isSaved,
       isSaveInProgress);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EditProfileStateImplCopyWith<_$EditProfileStateImpl> get copyWith =>
@@ -483,8 +493,11 @@ abstract class _EditProfileState implements EditProfileState {
   bool get isSaved;
   @override
   bool get isSaveInProgress;
+
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EditProfileStateImplCopyWith<_$EditProfileStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -35,6 +35,9 @@
   "common_matches_title": "Matches",
   "common_edit_team_title": "Edit Team",
   "common_location_title": "Location",
+  "common_gender_title": "Gender",
+  "common_batting_style_title": "Batting style",
+  "common_bowling_style_title": "Bowling style",
   "common_camera_text": "Camera",
   "common_gallery_text": "Gallery",
   "common_versus_short_title": "VS",
@@ -50,6 +53,8 @@
   "common_run_out_title": "Run Out",
   "common_wickets_text": "Wickets",
   "common_end_match_title": "End Match",
+  "common_first_inning_title": "First inning",
+  "common_second_inning_title": "Second inning",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -141,6 +146,7 @@
   "team_list_all_teams_title": "All teams",
   "team_list_created_by_me_title": "Created by me",
   "team_list_me_as_member_title": "Me as member",
+  "team_list_me_as_admin_title": "Me as admin",
   "team_list_no_teams_created_title": "No teams created",
   "team_list_empty_list_description": "Tap on the “ + ” icon to create a team",
 
@@ -227,11 +233,15 @@
   "select_squad_rest_of_team_title": "Rest of The Team",
   "select_squad_empty_squad_text": "Select squad via adding it from team members list.",
   "select_squad_empty_team_member_text": "No team member added in this team, try to add people you know as a team member.",
+
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
   "add_toss_detail_bat_text": "Batting",
   "add_toss_detail_bowl_text": "Bowling",
+
+  "add_substitute_search_substitute_title": "Who’s ready to step in?",
+  "add_substitute_search_substitute_description": "Search and assign a substitute fielder to maintain your fielding edge.",
 
   "team_detail_screen_title": "Team Detail",
   "team_detail_member_tab_title": "Member",
@@ -244,6 +254,14 @@
   "team_detail_empty_stat_title": "No stats available yet!",
   "team_detail_empty_stat_description_text": "The players are warming up! Stay tuned for exciting stats as the team progresses.",
   "team_detail_add_member_title": "Add member",
+  "team_detail_make_admin": "Make admin",
+  "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
+  "@team_detail_admin": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "team_detail_make_admin_owner_title": "Owner",
   "team_detail_match_tab_title": "Match",
   "team_detail_stat_tab_title": "Stat",
   "team_detail_won_title": "Won({win})",
@@ -284,6 +302,31 @@
   "team_detail_highest_runs_title": "Highest Runs",
   "team_detail_lowest_runs_title": "Lowest Runs",
   "team_detail_run_rate_title": "Run Rate",
+
+  "user_detail_info_title": "Info",
+  "user_detail_batting_title": "Batting",
+  "user_detail_bowling_title": "Bowling",
+  "user_detail_personal_information_title": "Personal information",
+  "user_detail_participation_title": "Participation",
+  "user_detail_role_title": "Role",
+  "user_detail_joining_date_title": "Joining date",
+  "user_detail_test_title": "Test",
+  "user_detail_matches_title": "Matches",
+  "user_detail_innings_title": "Innings",
+  "user_detail_runs_title": "Runs",
+  "user_detail_balls_title": "Balls",
+  "user_detail_average_title": "Average",
+  "user_detail_strike_rate_title": "SR",
+  "user_detail_fours_title": "Fours",
+  "user_detail_sixes_title": "Sixes",
+  "user_detail_fifties_title": "50s",
+  "user_detail_hundreds_title": "100s",
+  "user_detail_ducks_title": "Ducks",
+  "user_detail_maidens_title": "Maidens",
+  "user_detail_wickets_title": "Wickets",
+  "user_detail_eco_title": "Eco",
+  "user_detail_no_ball_title": "NB",
+  "user_detail_wide_ball_title": "WB",
 
   "match_status_yet_to_start_title": "Yet to start",
   "match_status_running_title": "Running",
@@ -580,6 +623,8 @@
   "score_board_undo_last_ball_title": "Undo Last Ball",
   "score_board_undo_last_ball_description_text": "are you sure you want to undo last ball?",
   "score_board_pause_scoring_title": "Pause Scoring",
+  "score_board_add_substitute_title": "Add Substitute",
+  "score_board_substitute_title": "Substitute",
   "score_board_penalty_run_title": "Penalty Run",
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue With Injured Player",
@@ -587,6 +632,19 @@
   "score_board_not_show_for_dot_ball_title": "Don't show for dot balls",
   "score_board_select_fielding_position_title": "Select fielding position",
   "score_board_pause_title": "Pause",
+  "score_board_revised_target_title": "Revised target",
+  "score_board_enter_manual_target_text": "Enter your manually calculated target",
+  "score_board_runs_text": "Runs :",
+  "score_board_in_overs_text": "in Overs :",
+  "score_board_confirm_target_text": "Confirm target",
+  "score_board_current_target_text": "Current target is {run, plural, =0{{run} runs} =1{{run} run} other{{run} runs}} in {over, plural, =0{{over} overs} =1{{over} over} other{{over} overs}}",
+  "@score_board_current_target_text": {
+    "placeholders": {
+      "run": {},
+      "over": {}
+    }
+  },
+  "score_board_target_invalid_input_error": "Please enter valid target",
   "score_board_pause_scoring_description_text": "are you sure you want to pause scoring?",
   "score_board_end_match_description_text": "are you sure you want to end match?",
   "score_board_run_sup_script_text": "{run, select, 1{{extra}} 2{{extra}²} 3{{extra}³} 4{{extra}⁴} 5{{extra}⁵} 6{{extra}⁶} 7{{extra}⁷} 8{{extra}⁸} 9{{extra}⁹} other{{extra}}}",
@@ -626,8 +684,10 @@
       }
     }
   },
-  "score_board_need_run_text": "Need {run} in {ball}",
-  "@score_board_need_run_text": {
+  "score_board_need_run_text": "Need {count, plural, =0{{count} Runs} =1{{count} Run} other{{count} Runs}}",
+
+  "score_board_run_need_in_ball_text": "Need {run} in {ball}",
+  "@score_board_run_need_in_ball_text": {
     "description": "Need {run} in {ball}",
     "placeholders": {
       "run": {
@@ -672,10 +732,7 @@
   "edit_profile_name_placeholder": "Name",
   "edit_profile_email_placeholder": "Email",
   "edit_profile_dob_placeholder": "Date of birth",
-  "edit_profile_gender_placeholder": "Gender",
   "edit_profile_player_role_placeholder": "Player role",
-  "edit_profile_batting_style_placeholder": "Batting style",
-  "edit_profile_bowling_style_placeholder": "Bowling style",
   "edit_profile_gender_male_title": "Male",
   "edit_profile_gender_female_title": "Female",
   "edit_profile_gender_prefer_not_to_say_title": "Prefer not to say",
@@ -686,6 +743,8 @@
   "profile_setting_privacy_policy_title": "Privacy policy",
   "profile_setting_terms_and_condition_title": "Terms and condition",
   "profile_setting_app_version_text": "App Version: {version}",
+  "profile_setting_scan_to_play_text": "Scan to play!",
+  "profile_setting_scan_to_play_description": "This QR code allows you to easily add the player to the team.",
 
   "@_CONTACT_SUPPORT": {
   },

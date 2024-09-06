@@ -1,8 +1,8 @@
-import 'package:data/extensions/int_extensions.dart';
+import 'int_extensions.dart';
 
 extension OverExtensionOnDouble on double {
   double add(int ballsToAdd) {
-    int totalBalls = toBalls() + ballsToAdd;
+    final int totalBalls = toBalls() + ballsToAdd;
     return totalBalls.toOvers();
   }
 
@@ -13,9 +13,9 @@ extension OverExtensionOnDouble on double {
   }
 
   int getBallNumberFromOver() {
-    String valueString = toString();
+    final String valueString = toString();
 
-    List<String> parts = valueString.split('.');
+    final List<String> parts = valueString.split('.');
 
     if (parts.length > 1) {
       return int.parse(parts[1]);

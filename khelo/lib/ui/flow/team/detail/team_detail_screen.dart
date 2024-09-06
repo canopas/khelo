@@ -1,3 +1,4 @@
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +71,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.currentUserId == state.team?.created_by)
+      actions: (state.team?.isAdminOrOwner(state.currentUserId) ?? false)
           ? [
               moreOptionButton(
                 context,
@@ -195,12 +196,24 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         onTap: () {
           context.pop();
           AppRoute.addMatch(
-                  defaultTeam: (state.team?.players?.length ?? 0) >= 2
+                  defaultTeam: (state.team?.players.length ?? 0) >= 2
                       ? state.team
                       : null)
               .push(context);
         },
       ),
+      if (state.team?.players.isNotEmpty ?? false)
+        BottomSheetAction(
+          title: context.l10n.team_detail_make_admin,
+          child: Text(context.l10n.team_detail_admin(state.team!.players
+              .where((element) => element.role == TeamPlayerRole.admin)
+              .toList()
+              .length)),
+          onTap: () {
+            context.pop();
+            AppRoute.makeTeamAdmin(team: state.team!).push(context);
+          },
+        ),
     ]);
   }
 

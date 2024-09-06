@@ -139,37 +139,37 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           .firstOrNull;
 
       final firstSquad = state.squadA
-              ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id,
-                  status: e.status ?? PlayerStatus.yetToPlay,
-                  index: e.index))
+              ?.map((e) => MatchPlayer(
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final secondSquad = state.squadB
-              ?.map((e) => MatchPlayerRequest(
-                  id: e.player.id,
-                  status: e.status ?? PlayerStatus.yetToPlay,
-                  index: e.index))
+              ?.map((e) => MatchPlayer(
+                    id: e.player.id,
+                    performance: e.performance,
+                  ))
               .toList() ??
           [];
       final allPlayers = firstSquad.map((e) => e.id).toList();
       allPlayers.addAll(secondSquad.map((e) => e.id).toList());
 
-      final match = AddEditMatchRequest(
-          id: matchId,
+      final match = MatchModel(
+          id: matchId ?? _matchService.generateMatchId,
           players: allPlayers.toSet().toList(),
-          team_ids: [state.teamA!.id!, state.teamB!.id!],
+          team_ids: [state.teamA!.id, state.teamB!.id],
           team_creator_ids:
               {state.teamA!.created_by!, state.teamB!.created_by!}.toList(),
           teams: [
-            AddMatchTeamRequest(
-              team_id: state.teamA!.id!,
+            MatchTeamModel(
+              team_id: state.teamA!.id,
               squad: firstSquad,
               captain_id: state.teamACaptainId,
               admin_id: state.teamAAdminId,
             ),
-            AddMatchTeamRequest(
-              team_id: state.teamB!.id!,
+            MatchTeamModel(
+              team_id: state.teamB!.id,
               squad: secondSquad,
               captain_id: state.teamBCaptainId,
               admin_id: state.teamBAdminId,
@@ -178,9 +178,9 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           match_type: state.matchType,
           number_of_over: int.parse(totalOvers),
           over_per_bowler: int.parse(overPerBowler),
-          power_play_overs1: state.firstPowerPlay,
-          power_play_overs2: state.secondPowerPlay,
-          power_play_overs3: state.thirdPowerPlay,
+          power_play_overs1: state.firstPowerPlay ?? [],
+          power_play_overs2: state.secondPowerPlay ?? [],
+          power_play_overs3: state.thirdPowerPlay ?? [],
           city: city,
           ground: ground,
           start_time: state.matchTime,
@@ -233,11 +233,11 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
   void onTeamSelect(TeamModel team, TeamType type) {
     final matchPlayer = team.players
-        ?.take(11)
-        .map((e) => MatchPlayer(player: e, status: PlayerStatus.yetToPlay))
+        .take(11)
+        .map((e) => MatchPlayer(id: e.user.id, player: e.user))
         .toList();
 
-    final captainAndAdminId = matchPlayer?.firstOrNull?.player.id;
+    final captainAndAdminId = matchPlayer.firstOrNull?.player.id;
     switch (type) {
       case TeamType.a:
         state = state.copyWith(

@@ -18,7 +18,9 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MyGameTabState {
   int get selectedTab => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MyGameTabState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MyGameTabStateCopyWith<MyGameTabState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -42,6 +44,8 @@ class _$MyGameTabStateCopyWithImpl<$Res, $Val extends MyGameTabState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MyGameTabState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -75,6 +79,8 @@ class __$$MyGameTabStateImplCopyWithImpl<$Res>
       _$MyGameTabStateImpl _value, $Res Function(_$MyGameTabStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MyGameTabState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -115,7 +121,9 @@ class _$MyGameTabStateImpl implements _MyGameTabState {
   @override
   int get hashCode => Object.hash(runtimeType, selectedTab);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MyGameTabState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MyGameTabStateImplCopyWith<_$MyGameTabStateImpl> get copyWith =>
@@ -128,8 +136,11 @@ abstract class _MyGameTabState implements MyGameTabState {
 
   @override
   int get selectedTab;
+
+  /// Create a copy of MyGameTabState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MyGameTabStateImplCopyWith<_$MyGameTabStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

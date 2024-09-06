@@ -53,12 +53,14 @@ class BottomSheetAction extends StatelessWidget {
   final Widget? icon;
   final String title;
   final Widget? child;
+  final bool enabled;
   final void Function()? onTap;
 
   const BottomSheetAction({
     super.key,
     this.icon,
     required this.title,
+    this.enabled = true,
     this.child,
     this.onTap,
   });
@@ -66,7 +68,7 @@ class BottomSheetAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OnTapScale(
-      enabled: child == null,
+      enabled: enabled,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),

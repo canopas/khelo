@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/support/support_models.dart';
+import '../../api/support/support_models.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../errors/app_error.dart';
@@ -10,22 +10,25 @@ final supportServiceProvider = Provider(
 );
 
 class SupportService {
-  final FirebaseFirestore firestore;
-  final CollectionReference<AddSupportCaseRequest> _supportCollection;
+  final FirebaseFirestore _firestore;
 
-  SupportService(this.firestore)
-      : _supportCollection = firestore
-            .collection(FireStoreConst.supportCollection)
-            .withConverter(
-                fromFirestore: AddSupportCaseRequest.fromFireStore,
-                toFirestore: (AddSupportCaseRequest support, _) =>
-                    support.toJson());
+  SupportService(this._firestore);
+
+  CollectionReference<AddSupportCaseRequest> get _supportCollection =>
+      _firestore.collection(FireStoreConst.supportCollection).withConverter(
+            fromFirestore: AddSupportCaseRequest.fromFireStore,
+            toFirestore: (AddSupportCaseRequest support, _) => support.toJson(),
+          );
+
+  String get generateSupportId => _supportCollection.doc().id;
 
   Future<String> addSupportCase(AddSupportCaseRequest supportCase) async {
     try {
       final supportCaseRef = _supportCollection.doc(supportCase.id);
       await supportCaseRef.set(
-          supportCase.copyWith(id: supportCaseRef.id), SetOptions(merge: true));
+        supportCase.copyWith(id: supportCaseRef.id),
+        SetOptions(merge: true),
+      );
       return supportCaseRef.id;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

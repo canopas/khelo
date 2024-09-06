@@ -105,7 +105,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
                           title: team.team.name,
                           isSelected: tossWinnerTeamId == team.team.id,
                           onTap: () => notifier
-                              .onTossWinnerSelect(team.team.id ?? "INVALID ID"),
+                              .onTossWinnerSelect(team.team.id),
                         ),
                       )
                       .toList() ??
