@@ -118,7 +118,7 @@ class MatchDetailCell extends StatelessWidget {
       child: Row(
         children: [
           ImageAvatar(
-            initial: matchTeam.team.name[0].toUpperCase(),
+            initial: matchTeam.team.name.characters.first.toUpperCase(),
             imageUrl: matchTeam.team.profile_img_url,
             size: 32,
           ),

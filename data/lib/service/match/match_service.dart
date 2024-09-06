@@ -173,11 +173,8 @@ class MatchService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> streamRunningMatches() {
-    return _matchCollection
-        .where(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value)
-        .snapshots()
-        .asyncMap((snapshot) async {
+  Stream<List<MatchModel>> streamMatches() {
+    return _matchCollection.snapshots().asyncMap((snapshot) async {
       return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
@@ -187,6 +184,32 @@ class MatchService {
         }).toList(),
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<List<MatchModel>> getMatchesByStatus({
+    required List<MatchStatus> status,
+    String? lastMatchId,
+    int limit = 10,
+  }) async {
+    final filter = status.map((e) => e.value).toList();
+
+    var query = _matchCollection
+        .where(FireStoreConst.matchStatus, whereIn: filter)
+        .orderBy(FieldPath.documentId);
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+
+    final snapshot = await query.limit(limit).get();
+
+    return Future.wait(
+      snapshot.docs.map((doc) async {
+        final match = doc.data();
+        final teams = await getTeamsList(match.teams);
+        return match.copyWith(teams: teams);
+      }).toList(),
+    );
   }
 
   Stream<MatchModel> streamMatchById(String id) {

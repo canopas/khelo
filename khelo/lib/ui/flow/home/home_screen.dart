@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -55,8 +56,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     BlendMode.srcATop,
                   ),
                 ),
-                onPressed: () => AppRoute.searchHome(matches: state.tempMatches)
-                    .push(context),
+                onPressed: () =>
+                    AppRoute.searchHome(matches: state.matches).push(context),
               )
             ]
           : null,
@@ -110,7 +111,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (state.matches.isNotEmpty) ...[
             _content(context, state)
           ] else ...[
-            _emptyMatchView(context)
+            EmptyScreen(
+              title: context.l10n.home_screen_no_matches_title,
+              description: context.l10n.home_screen_no_matches_description_text,
+              isShowButton: false,
+            ),
           ]
         ],
       ),
@@ -125,9 +130,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: ListView.builder(
         padding: context.mediaQueryPadding +
             const EdgeInsets.symmetric(horizontal: 8),
-        itemCount: state.matches.length,
+        itemCount: state.groupMatches.length,
         itemBuilder: (context, index) {
-          final item = state.matches.entries.elementAt(index);
+          final item = state.groupMatches.entries.elementAt(index);
           return item.value.isNotEmpty
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -137,10 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       context,
                       header: item.key.getString(context),
                       isViewAllShow: item.value.length > 3,
-                      onViewAll: () => AppRoute.viewAll(
-                              title: item.key.getString(context),
-                              matches: item.value)
-                          .push(context),
+                      onViewAll: () => AppRoute.viewAll(item.key).push(context),
                     ),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
@@ -192,11 +194,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _matchCell(BuildContext context, MatchModel match) {
     return OnTapScale(
-      onTap: () => AppRoute.matchDetailTab(matchId: match.id)
-          .push(context),
+      onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
       child: MediaQuery.withNoTextScaling(
         child: Container(
-          width: 360,
+          width: context.mediaQuerySize.width * 0.83,
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           decoration: BoxDecoration(
@@ -290,29 +291,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   )),
               TextSpan(text: match.ground)
             ]));
-  }
-
-  Widget _emptyMatchView(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            context.l10n.home_screen_no_matches_title,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.header2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.home_screen_no_matches_description_text,
-            textAlign: TextAlign.center,
-            style: AppTextStyle.subtitle1
-                .copyWith(color: context.colorScheme.textSecondary),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _createActionView(

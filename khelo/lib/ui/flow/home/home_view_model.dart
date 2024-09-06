@@ -37,12 +37,12 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
   void _loadMatches() async {
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    _streamSubscription = _matchService.getMatches().listen(
+    _streamSubscription = _matchService.streamMatches().listen(
       (matches) {
         final groupMatches = _groupMatches(matches);
         state = state.copyWith(
-          tempMatches: matches,
-          matches: groupMatches,
+          matches: matches,
+          groupMatches: groupMatches,
           loading: false,
           error: null,
         );
@@ -64,14 +64,15 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
           return MatchStatusLabel.upcoming;
         case MatchStatus.abandoned:
         case MatchStatus.finish:
-          return MatchStatusLabel.winning;
+          return MatchStatusLabel.finished;
       }
     });
     return {
       MatchStatusLabel.live: groupedMatches[MatchStatusLabel.live] ?? [],
       MatchStatusLabel.upcoming:
           groupedMatches[MatchStatusLabel.upcoming] ?? [],
-      MatchStatusLabel.winning: groupedMatches[MatchStatusLabel.winning] ?? [],
+      MatchStatusLabel.finished:
+          groupedMatches[MatchStatusLabel.finished] ?? [],
     };
   }
 
@@ -92,15 +93,15 @@ class HomeViewState with _$HomeViewState {
   const factory HomeViewState({
     Object? error,
     @Default(false) bool loading,
-    @Default([]) List<MatchModel> tempMatches,
-    @Default({}) Map<MatchStatusLabel, List<MatchModel>> matches,
+    @Default([]) List<MatchModel> matches,
+    @Default({}) Map<MatchStatusLabel, List<MatchModel>> groupMatches,
   }) = _HomeViewState;
 }
 
 enum MatchStatusLabel {
   live,
   upcoming,
-  winning;
+  finished;
 
   String getString(BuildContext context) {
     switch (this) {
@@ -108,8 +109,19 @@ enum MatchStatusLabel {
         return context.l10n.home_screen_live_title;
       case MatchStatusLabel.upcoming:
         return context.l10n.home_screen_upcoming_title;
-      case MatchStatusLabel.winning:
-        return context.l10n.home_screen_winning_title;
+      case MatchStatusLabel.finished:
+        return context.l10n.home_screen_finished_title;
+    }
+  }
+
+  List<MatchStatus> convertStatus() {
+    switch (this) {
+      case MatchStatusLabel.live:
+        return [MatchStatus.running];
+      case MatchStatusLabel.upcoming:
+        return [MatchStatus.yetToStart];
+      case MatchStatusLabel.finished:
+        return [MatchStatus.finish, MatchStatus.abandoned];
     }
   }
 }
