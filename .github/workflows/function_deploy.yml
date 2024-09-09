@@ -1,10 +1,10 @@
 name: Deploy Firebase Function
 
-on: push
-#  push:
-#    branches:
-#      - main
-#  workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -50,7 +50,6 @@ jobs:
       - name: Deploy Firebase functions
         run: |
           cd khelo
-          echo pwd
           export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/functions/google-application-credentials.json
           firebase deploy --only functions --non-interactive --debug
 
