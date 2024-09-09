@@ -36,6 +36,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Print Working Directory
+        run: |
+          echo "Working directory: $(pwd)"
+          echo ls -a
+
       - name: Install Dependencies
         working-directory: functions
         run: |
@@ -44,6 +49,7 @@ jobs:
       - name: Print Working Directory
         run: |
           echo "Working directory: $(pwd)"
+          echo ls -a
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
