@@ -47,15 +47,15 @@ jobs:
       - name: Prepare Google Application Credentials
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+          FIREBASE_JSON_BASE64: ${{ secrets.FIREBASE_JSON_BASE64 }}
         run: |
           cd khelo
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > functions/google-application-credentials.json
+          echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
 
       - name: Deploy Firebase functions
         run: |
-          echo "Working directory: $(pwd)"
           cd khelo
-          echo "Working directory: $(pwd)"
           firebase deploy --only functions --non-interactive --debug
 
       - name: Remove credentials file
