@@ -1,0 +1,74 @@
+# .github/workflows/deploy-dev.yml
+
+name: Deploy to Dev
+
+on: push
+#  push:
+#    branches:
+#      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: google-application-credentials.json
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        id: cache-dependencies
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/firebase
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Print Working Directory
+        run:
+          echo "Working directory: $(pwd)"
+
+      - name: Install Dependencies
+        shell: bash
+        working-directory: ./functions
+        run: |
+          npm ci
+
+      - name: Print Working Directory
+        run:
+          echo "Working directory: $(pwd)"
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Print Working Directory
+        run:
+          echo "Working directory: $(pwd)"
+
+      - name: Prepare Google Application Credentials
+        shell: bash
+        run: |
+          echo "${{ secrets.DEV_GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > "google-application-credentials.json"
+
+      - name: Use Firebase Dev
+        shell: bash
+        run: |
+          firebase use dev --debug
+
+      - name: Deploy Firebase functions
+        shell: bash
+        run: firebase deploy --only functions --non-interactive --debug
+
+      - name: Remove credentials file
+        if: success() || failure()
+        run: |
+          rm google-application-credentials.json
