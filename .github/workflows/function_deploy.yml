@@ -37,7 +37,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Print Working Directory
-        run:
+        run: |
           echo "Working directory: $(pwd)"
 
       - name: Install Dependencies
@@ -46,14 +46,14 @@ jobs:
           npm ci
 
       - name: Print Working Directory
-        run:
+        run: |
           echo "Working directory: $(pwd)"
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
       - name: Print Working Directory
-        run:
+        run: |
           echo "Working directory: $(pwd)"
 
       - name: Prepare Google Application Credentials
