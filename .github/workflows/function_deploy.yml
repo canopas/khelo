@@ -53,6 +53,9 @@ jobs:
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > google-application-credentials.json
           echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
 
+      - name: Verify Credentials Path
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS
+
       - name: Deploy Firebase functions
         run: |
           cd khelo
