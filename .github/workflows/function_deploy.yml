@@ -57,6 +57,9 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         run: |
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > google-application-credentials.json
+          echo "Credentials file saved at:"
+          pwd
+          ls -la google-application-credentials.json
 
       - name: Use Firebase Dev
         run: |
