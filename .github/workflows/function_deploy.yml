@@ -36,12 +36,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Print Working Directory
-        run: |
-          echo "Working directory: $(pwd)"
-
       - name: Install Dependencies
-        working-directory: /functions
+        working-directory: functions
         run: |
           npm ci
 
