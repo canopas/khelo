@@ -15,7 +15,7 @@ class TeamRepository {
       const teamDoc = await teamRef.get();
       return teamDoc.docs.map((doc) => doc.data());
     } catch (e) {
-      console.error("TeamRepository: Error getting Teams:", e);
+      console.error("TeamRepository: Error getting teams:", e);
       return [];
     }
   }
