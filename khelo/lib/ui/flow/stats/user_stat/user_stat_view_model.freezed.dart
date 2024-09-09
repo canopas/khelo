@@ -21,7 +21,9 @@ mixin _$UserStatViewState {
   UserStat? get userStat => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserStatViewStateCopyWith<UserStatViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +50,8 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -73,6 +77,8 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
     ) as $Val);
   }
 
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserStatCopyWith<$Res>? get userStat {
@@ -109,6 +115,8 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
       $Res Function(_$UserStatViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -177,7 +185,9 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
       userStat,
       loading);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserStatViewStateImplCopyWith<_$UserStatViewStateImpl> get copyWith =>
@@ -200,8 +210,11 @@ abstract class _UserStatViewState implements UserStatViewState {
   UserStat? get userStat;
   @override
   bool get loading;
+
+  /// Create a copy of UserStatViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserStatViewStateImplCopyWith<_$UserStatViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -42,7 +42,7 @@ class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
         return player.copyWith(role: role);
       }).toList();
 
-      await _teamService.editPlayersToTeam(_team.id ?? 'INVALID ID', players);
+      await _teamService.editPlayersToTeam(_team.id, players);
       state = state.copyWith(pop: true, actionError: null);
     } catch (e) {
       state = state.copyWith(pop: false, actionError: e);

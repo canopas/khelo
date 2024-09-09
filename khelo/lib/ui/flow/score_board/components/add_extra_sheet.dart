@@ -181,14 +181,14 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
                     maxLength: 2,
                     autoFocus: true,
                     borderRadius: BorderRadius.circular(8),
-                    keyboardType: TextInputType.number,
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     borderColor: BorderColor(
                         focusColor: Colors.transparent,
                         unFocusColor: Colors.transparent),
+                    keyboardType: TextInputType.number,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      FilteringTextInputFormatter.digitsOnly,
                     ],
                     style: AppTextStyle.subtitle2
                         .copyWith(color: context.colorScheme.textPrimary),

@@ -26,7 +26,9 @@ mixin _$ContactSupportViewState {
       throw _privateConstructorUsedError;
   List<Attachment> get attachments => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ContactSupportViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ContactSupportViewStateCopyWith<ContactSupportViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -58,6 +60,8 @@ class _$ContactSupportViewStateCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ContactSupportViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -128,6 +132,8 @@ class __$$ContactSupportViewStateImplCopyWithImpl<$Res>
       $Res Function(_$ContactSupportViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ContactSupportViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -242,7 +248,9 @@ class _$ContactSupportViewStateImpl implements _ContactSupportViewState {
       descriptionController,
       const DeepCollectionEquality().hash(_attachments));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ContactSupportViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ContactSupportViewStateImplCopyWith<_$ContactSupportViewStateImpl>
@@ -274,8 +282,11 @@ abstract class _ContactSupportViewState implements ContactSupportViewState {
   TextEditingController get descriptionController;
   @override
   List<Attachment> get attachments;
+
+  /// Create a copy of ContactSupportViewState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ContactSupportViewStateImplCopyWith<_$ContactSupportViewStateImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

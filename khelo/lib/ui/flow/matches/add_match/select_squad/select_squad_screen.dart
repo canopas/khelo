@@ -153,15 +153,15 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
                 trailing: _trailingButton(
                   context,
                   notifier,
-                  member: MatchPlayer(player: member),
+                  member: MatchPlayer(id: member.id, player: member),
                   isRemove: false,
                 ),
                 onTap: () => UserDetailSheet.show(
                   context,
                   member,
                   actionButtonTitle: context.l10n.common_add_title,
-                  onButtonTap: () =>
-                      notifier.addToSquad(MatchPlayer(player: member)),
+                  onButtonTap: () => notifier
+                      .addToSquad(MatchPlayer(id: member.id, player: member)),
                 ),
               ),
             ),

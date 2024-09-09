@@ -10,17 +10,17 @@ final supportServiceProvider = Provider(
 );
 
 class SupportService {
-  final FirebaseFirestore firestore;
-  final CollectionReference<AddSupportCaseRequest> _supportCollection;
+  final FirebaseFirestore _firestore;
 
-  SupportService(this.firestore)
-      : _supportCollection = firestore
-            .collection(FireStoreConst.supportCollection)
-            .withConverter(
-              fromFirestore: AddSupportCaseRequest.fromFireStore,
-              toFirestore: (AddSupportCaseRequest support, _) =>
-                  support.toJson(),
-            );
+  SupportService(this._firestore);
+
+  CollectionReference<AddSupportCaseRequest> get _supportCollection =>
+      _firestore.collection(FireStoreConst.supportCollection).withConverter(
+            fromFirestore: AddSupportCaseRequest.fromFireStore,
+            toFirestore: (AddSupportCaseRequest support, _) => support.toJson(),
+          );
+
+  String get generateSupportId => _supportCollection.doc().id;
 
   Future<String> addSupportCase(AddSupportCaseRequest supportCase) async {
     try {

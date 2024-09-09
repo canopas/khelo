@@ -145,6 +145,7 @@ class ContactSupportViewStateNotifier
       state = state.copyWith(submitting: true, actionError: null);
 
       final supportCase = AddSupportCaseRequest(
+          id: supportService.generateSupportId,
           title: state.titleController.text.trim(),
           description: state.descriptionController.text.trim(),
           attachmentUrls:

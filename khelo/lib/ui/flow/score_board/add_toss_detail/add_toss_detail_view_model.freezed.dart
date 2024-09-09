@@ -26,7 +26,9 @@ mixin _$AddTossDetailState {
   bool get isButtonEnable => throw _privateConstructorUsedError;
   bool get isTossDetailUpdateInProgress => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddTossDetailStateCopyWith<AddTossDetailState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -61,6 +63,8 @@ class _$AddTossDetailStateCopyWithImpl<$Res, $Val extends AddTossDetailState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -108,6 +112,8 @@ class _$AddTossDetailStateCopyWithImpl<$Res, $Val extends AddTossDetailState>
     ) as $Val);
   }
 
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $MatchModelCopyWith<$Res>? get match {
@@ -152,6 +158,8 @@ class __$$AddTossDetailStateImplCopyWithImpl<$Res>
       $Res Function(_$AddTossDetailStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -278,7 +286,9 @@ class _$AddTossDetailStateImpl implements _AddTossDetailState {
       isButtonEnable,
       isTossDetailUpdateInProgress);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddTossDetailStateImplCopyWith<_$AddTossDetailStateImpl> get copyWith =>
@@ -316,8 +326,11 @@ abstract class _AddTossDetailState implements AddTossDetailState {
   bool get isButtonEnable;
   @override
   bool get isTossDetailUpdateInProgress;
+
+  /// Create a copy of AddTossDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddTossDetailStateImplCopyWith<_$AddTossDetailStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

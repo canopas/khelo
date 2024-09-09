@@ -1,0 +1,138 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/ui/flow/team/user_detail/user_detail_view_model.dart';
+import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_style.dart';
+
+class UserDetailBowlingContent extends ConsumerWidget {
+  const UserDetailBowlingContent({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.read(userDetailStateProvider);
+    final testStats = state.testStats.bowlingStat;
+    final otherStats = state.otherStats.bowlingStat;
+
+    return ListView(
+      children: [
+        statsDataRow(
+          context,
+          isHeader: true,
+          showDivider: false,
+          title: context.l10n.user_detail_bowling_title,
+          subtitle1: context.l10n.user_detail_test_title,
+          subtitle2: context.l10n.common_other_title,
+        ),
+        const SizedBox(height: 16),
+        statsDataRow(
+          context,
+          showDivider: false,
+          title: context.l10n.user_detail_matches_title,
+          subtitle1: state.testMatchesCount.toString(),
+          subtitle2: state.otherMatchesCount.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_innings_title,
+          subtitle1: testStats?.innings.toString(),
+          subtitle2: otherStats?.innings.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_balls_title,
+          subtitle1: testStats?.balls.toString(),
+          subtitle2: otherStats?.balls.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_runs_title,
+          subtitle1: testStats?.runsConceded.toString(),
+          subtitle2: otherStats?.runsConceded.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_maidens_title,
+          subtitle1: testStats?.maiden.toString(),
+          subtitle2: otherStats?.maiden.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_wickets_title,
+          subtitle1: testStats?.wicketTaken.toString(),
+          subtitle2: otherStats?.wicketTaken.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_eco_title,
+          subtitle1: testStats?.economyRate.toStringAsFixed(1),
+          subtitle2: otherStats?.economyRate.toStringAsFixed(1),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_no_ball_title,
+          subtitle1: testStats?.noBalls.toString(),
+          subtitle2: otherStats?.noBalls.toString(),
+        ),
+        statsDataRow(
+          context,
+          title: context.l10n.user_detail_wide_ball_title,
+          subtitle1: testStats?.wideBalls.toString(),
+          subtitle2: otherStats?.wideBalls.toString(),
+        ),
+      ],
+    );
+  }
+}
+
+Widget statsDataRow(
+  BuildContext context, {
+  bool isHeader = false,
+  bool showDivider = true,
+  required String title,
+  required String? subtitle1,
+  required String? subtitle2,
+}) {
+  return Column(
+    children: [
+      if (showDivider) Divider(color: context.colorScheme.outline),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          children: [
+            Expanded(
+                flex: 4,
+                child: Text(
+                  title,
+                  style: isHeader
+                      ? AppTextStyle.header4
+                          .copyWith(color: context.colorScheme.textPrimary)
+                      : AppTextStyle.subtitle3
+                          .copyWith(color: context.colorScheme.textSecondary),
+                )),
+            Expanded(
+                child: Text(
+              subtitle1 ?? '0',
+              textAlign: TextAlign.center,
+              style: isHeader
+                  ? AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textPrimary)
+                  : AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary),
+            )),
+            Expanded(
+                child: Text(
+              subtitle2 ?? '0',
+              textAlign: TextAlign.center,
+              style: isHeader
+                  ? AppTextStyle.subtitle1
+                      .copyWith(color: context.colorScheme.textPrimary)
+                  : AppTextStyle.subtitle2
+                      .copyWith(color: context.colorScheme.textPrimary),
+            )),
+          ],
+        ),
+      ),
+    ],
+  );
+}

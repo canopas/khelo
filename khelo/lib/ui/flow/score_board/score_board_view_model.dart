@@ -52,7 +52,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String currentInningId,
     String otherInningId,
   ) {
-    return _ballScoreService.getBallScoresStreamByInningIds(
+    return _ballScoreService.streamBallScoresByInningIds(
         [currentInningId, otherInningId]).handleError((e) {
       throw AppError.fromError(e);
     });
@@ -62,8 +62,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     try {
       state = state.copyWith(loading: true);
       final matchInningStream = combineLatest2(
-        _matchService.getMatchStreamById(matchId!),
-        _inningService.getInningsStreamByMatchId(matchId: matchId!),
+        _matchService.streamMatchById(matchId!),
+        _inningService.streamInningsByMatchId(matchId: matchId!),
       ).asyncMap((data) async {
         MatchModel match = data.$1;
         List<InningModel> innings = data.$2;
@@ -457,6 +457,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showAddSubstituteSheet: DateTime.now());
       case MatchOption.endMatch:
         state = state.copyWith(showEndMatchSheet: DateTime.now());
+      case MatchOption.reviseTarget:
+        state = state.copyWith(showReviseTargetSheet: DateTime.now());
       default:
         return;
     }
@@ -582,7 +584,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ballCount = state.ballCount + 1;
       }
       final ball = BallScoreModel(
+          id: _ballScoreService.generateBallScoreId,
           inning_id: ballInningId,
+          match_id: state.match?.id ?? matchId,
           over_number: state.overCount,
           ball_number: ballCount,
           bowler_id: bowlerId,
@@ -651,7 +655,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  MatchPlayerRequest? _getUpdatedOutPlayerStatus(
+  MatchPlayer? _getUpdatedOutPlayerStatus(
     WicketType? wicketType,
     String? playerOutId,
   ) {
@@ -678,7 +682,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       performance: outPlayerPerformance,
     );
 
-    return MatchPlayerRequest(
+    return MatchPlayer(
       id: updatedPlayer.player.id,
       performance: updatedPlayer.performance,
     );
@@ -812,7 +816,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       default:
         // fair_deliveries / 6 == number_of_over_decided
         // number_of_total_ball == total_played_ball
-        final totalBalls = (state.match?.number_of_over ?? 0) * 6;
+        final revisedOver = state.match?.revised_target?.overs;
+        final totalBalls =
+            (revisedOver ?? state.match?.number_of_over ?? 0) * 6;
         final playedBalls = ((state.overCount - 1) * 6) + state.ballCount;
 
         return playedBalls == totalBalls;
@@ -860,7 +866,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           return false;
         }
 
-        final targetRun = (state.otherInning!.total_runs) + 1;
+        final targetRun = state.match?.revised_target?.runs ??
+            (state.otherInning!.total_runs) + 1;
         return state.currentInning!.total_runs >= targetRun;
     }
   }
@@ -913,7 +920,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final bowlingTeamId = state.otherInning?.team_id;
       final bowlingTeamInningId = state.otherInning?.id;
       if (lastBall == null ||
-          lastBall.id == null ||
           lastBall.over_number != state.overCount ||
           matchId == null ||
           battingTeamId == null ||
@@ -958,7 +964,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           .firstOrNull;
 
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
-          ballId: lastBall.id!,
+          ballId: lastBall.id,
           matchId: matchId,
           battingTeamId: battingTeamId,
           battingTeamInningId: battingTeamInningId,
@@ -980,7 +986,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  List<MatchPlayerRequest>? _getUndoPlayerStatus(BallScoreModel lastBall) {
+  List<MatchPlayer>? _getUndoPlayerStatus(BallScoreModel lastBall) {
     if (lastBall.wicket_type == null) {
       return null;
     }
@@ -1008,8 +1014,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               status: PlayerStatus.playing,
             ));
 
-    List<MatchPlayerRequest> updateList = [
-      MatchPlayerRequest(
+    List<MatchPlayer> updateList = [
+      MatchPlayer(
         id: outPlayer.player.id,
         performance: getOutPlayersPerformance,
       )
@@ -1024,7 +1030,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               index: oldElement.index == state.lastAssignedIndex
                   ? null
                   : oldElement.index));
-      final newBatsmanRequest = MatchPlayerRequest(
+      final newBatsmanRequest = MatchPlayer(
         id: newBatsMan.player.id,
         performance: getNewBatsMansPerformance,
       );
@@ -1052,10 +1058,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return;
     }
     try {
-      final teamRequest = AddMatchTeamRequest(
+      final teamRequest = MatchTeamModel(
           team_id: team.teamId,
           squad: team.players
-              .map((e) => MatchPlayerRequest(
+              .map((e) => MatchPlayer(
                     id: e.player.id,
                     performance: e.performance,
                   ))
@@ -1453,7 +1459,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final matchPlayer = fieldingTeam.squad
             .where((element) => element.player.id == player.id)
             .firstOrNull ??
-        MatchPlayer(player: player);
+        MatchPlayer(id: player.id, player: player);
 
     final playerPerformance = matchPlayer.performance.toList().updateWhere(
         where: (element) => element.inning_id == substituteStatus.inning_id,
@@ -1462,7 +1468,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         onNotFound: () => substituteStatus);
 
     await _updateMatchPlayerStatus((
-      teamId: fieldingTeam.team.id ?? '',
+      teamId: fieldingTeam.team.id,
       players: [matchPlayer.copyWith(performance: playerPerformance)],
     ));
   }
@@ -1528,6 +1534,17 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _cancelStreamSubscription();
     super.dispose();
   }
+
+  Future<void> setRevisedTarget(int run, int over) async {
+    String? matchId = state.match?.id;
+    if (matchId == null) {
+      return;
+    }
+    final revisedTarget =
+        RevisedTarget(runs: run, overs: over.toDouble(), time: DateTime.now());
+    await _matchService.setRevisedTarget(
+        matchId: matchId, revisedTarget: revisedTarget);
+  }
 }
 
 @freezed
@@ -1562,6 +1579,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showEndMatchSheet,
     DateTime? showAddSubstituteSheet,
     DateTime? invalidUndoToast,
+    DateTime? showReviseTargetSheet,
     ScoreButton? tappedButton,
     bool? isLongTap,
     FieldingPositionType? position,
@@ -1632,6 +1650,7 @@ enum ScoreButton {
 enum MatchOption {
   changeStriker,
   penaltyRun,
+  reviseTarget,
   pauseScoring,
   continueWithInjuredPlayer,
   addSubstitute,
@@ -1643,6 +1662,8 @@ enum MatchOption {
         return context.l10n.score_board_change_striker_title;
       case MatchOption.penaltyRun:
         return context.l10n.score_board_penalty_run_title;
+      case MatchOption.reviseTarget:
+        return context.l10n.score_board_revised_target_title;
       case MatchOption.pauseScoring:
         return context.l10n.score_board_pause_scoring_title;
       case MatchOption.continueWithInjuredPlayer:

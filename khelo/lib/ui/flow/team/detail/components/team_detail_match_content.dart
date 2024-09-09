@@ -27,17 +27,17 @@ class TeamDetailMatchContent extends ConsumerWidget {
             match: match,
             showActionButtons: isAdminOrOwner,
             onTap: () =>
-                AppRoute.matchDetailTab(matchId: match.id ?? "").push(context),
+                AppRoute.matchDetailTab(matchId: match.id).push(context),
             onActionTap: () {
               if (match.match_status == MatchStatus.yetToStart) {
                 AppRoute.addMatch(matchId: match.id).push(context);
               } else {
                 if (match.toss_decision == null ||
                     match.toss_winner_id == null) {
-                  AppRoute.addTossDetail(matchId: match.id ?? "INVALID_ID")
+                  AppRoute.addTossDetail(matchId: match.id)
                       .push(context);
                 } else {
-                  AppRoute.scoreBoard(matchId: match.id ?? "INVALID_ID")
+                  AppRoute.scoreBoard(matchId: match.id)
                       .push(context);
                 }
               }

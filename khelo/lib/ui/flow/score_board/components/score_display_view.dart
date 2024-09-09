@@ -93,7 +93,8 @@ class ScoreDisplayView extends ConsumerWidget {
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
                     TextSpan(
-                      text: '($overCountString/${state.match?.number_of_over})',
+                      text:
+                          '($overCountString/${state.match?.revised_target?.overs ?? state.match?.number_of_over})',
                       style: AppTextStyle.body1
                           .copyWith(color: context.colorScheme.textPrimary),
                     ),
@@ -144,7 +145,10 @@ class ScoreDisplayView extends ConsumerWidget {
   ) {
     if (state.nextInning == null) {
       final requiredRun = getRequiredRun(state);
-      final pendingOver = (state.match?.number_of_over ?? 0) - state.overCount;
+      final pendingOver = (state.match?.revised_target?.overs.toInt() ??
+              state.match?.number_of_over ??
+              0) -
+          state.overCount;
       final pendingBall = (pendingOver * 6) + (6 - state.ballCount);
       return Text(
         state.match?.match_type == MatchType.testMatch
@@ -170,7 +174,10 @@ class ScoreDisplayView extends ConsumerWidget {
         .where((element) => element.team.id != currentPlayingTeam?.team.id)
         .firstOrNull;
 
-    return ((otherTeam?.run ?? 0) + 1) - (currentPlayingTeam?.run ?? 0);
+    final revisedRun = state.match?.revised_target?.runs;
+
+    return ((revisedRun ?? ((otherTeam?.run ?? 0) + 1))) -
+        (currentPlayingTeam?.run ?? 0);
   }
 
   Widget _batsManDetailsView(BuildContext context, ScoreBoardViewState state) {

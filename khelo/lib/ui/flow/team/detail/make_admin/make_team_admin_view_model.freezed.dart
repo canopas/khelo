@@ -21,7 +21,9 @@ mixin _$MakeTeamAdminState {
   bool get isButtonEnabled => throw _privateConstructorUsedError;
   List<TeamPlayer> get selectedPlayers => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MakeTeamAdminStateCopyWith<MakeTeamAdminState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +51,8 @@ class _$MakeTeamAdminStateCopyWithImpl<$Res, $Val extends MakeTeamAdminState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,6 +102,8 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
       $Res Function(_$MakeTeamAdminStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -178,7 +184,9 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
       isButtonEnabled,
       const DeepCollectionEquality().hash(_selectedPlayers));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MakeTeamAdminStateImplCopyWith<_$MakeTeamAdminStateImpl> get copyWith =>
@@ -201,8 +209,11 @@ abstract class _MakeTeamAdminState implements MakeTeamAdminState {
   bool get isButtonEnabled;
   @override
   List<TeamPlayer> get selectedPlayers;
+
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MakeTeamAdminStateImplCopyWith<_$MakeTeamAdminStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

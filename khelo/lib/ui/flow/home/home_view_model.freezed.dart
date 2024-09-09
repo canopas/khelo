@@ -19,8 +19,12 @@ mixin _$HomeViewState {
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   List<MatchModel> get matches => throw _privateConstructorUsedError;
+  Map<MatchStatusLabel, List<MatchModel>> get groupMatches =>
+      throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $HomeViewStateCopyWith<HomeViewState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -31,7 +35,11 @@ abstract class $HomeViewStateCopyWith<$Res> {
           HomeViewState value, $Res Function(HomeViewState) then) =
       _$HomeViewStateCopyWithImpl<$Res, HomeViewState>;
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<MatchModel> matches,
+      Map<MatchStatusLabel, List<MatchModel>> groupMatches});
 }
 
 /// @nodoc
@@ -44,12 +52,15 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of HomeViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = freezed,
     Object? loading = null,
     Object? matches = null,
+    Object? groupMatches = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -61,6 +72,10 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
               as List<MatchModel>,
+      groupMatches: null == groupMatches
+          ? _value.groupMatches
+          : groupMatches // ignore: cast_nullable_to_non_nullable
+              as Map<MatchStatusLabel, List<MatchModel>>,
     ) as $Val);
   }
 }
@@ -73,7 +88,11 @@ abstract class _$$HomeViewStateImplCopyWith<$Res>
       __$$HomeViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<MatchModel> matches,
+      Map<MatchStatusLabel, List<MatchModel>> groupMatches});
 }
 
 /// @nodoc
@@ -84,12 +103,15 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
       _$HomeViewStateImpl _value, $Res Function(_$HomeViewStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HomeViewState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = freezed,
     Object? loading = null,
     Object? matches = null,
+    Object? groupMatches = null,
   }) {
     return _then(_$HomeViewStateImpl(
       error: freezed == error ? _value.error : error,
@@ -101,6 +123,10 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
               as List<MatchModel>,
+      groupMatches: null == groupMatches
+          ? _value._groupMatches
+          : groupMatches // ignore: cast_nullable_to_non_nullable
+              as Map<MatchStatusLabel, List<MatchModel>>,
     ));
   }
 }
@@ -111,8 +137,10 @@ class _$HomeViewStateImpl implements _HomeViewState {
   const _$HomeViewStateImpl(
       {this.error,
       this.loading = false,
-      final List<MatchModel> matches = const []})
-      : _matches = matches;
+      final List<MatchModel> matches = const [],
+      final Map<MatchStatusLabel, List<MatchModel>> groupMatches = const {}})
+      : _matches = matches,
+        _groupMatches = groupMatches;
 
   @override
   final Object? error;
@@ -128,9 +156,18 @@ class _$HomeViewStateImpl implements _HomeViewState {
     return EqualUnmodifiableListView(_matches);
   }
 
+  final Map<MatchStatusLabel, List<MatchModel>> _groupMatches;
+  @override
+  @JsonKey()
+  Map<MatchStatusLabel, List<MatchModel>> get groupMatches {
+    if (_groupMatches is EqualUnmodifiableMapView) return _groupMatches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_groupMatches);
+  }
+
   @override
   String toString() {
-    return 'HomeViewState(error: $error, loading: $loading, matches: $matches)';
+    return 'HomeViewState(error: $error, loading: $loading, matches: $matches, groupMatches: $groupMatches)';
   }
 
   @override
@@ -140,7 +177,9 @@ class _$HomeViewStateImpl implements _HomeViewState {
             other is _$HomeViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
-            const DeepCollectionEquality().equals(other._matches, _matches));
+            const DeepCollectionEquality().equals(other._matches, _matches) &&
+            const DeepCollectionEquality()
+                .equals(other._groupMatches, _groupMatches));
   }
 
   @override
@@ -148,9 +187,12 @@ class _$HomeViewStateImpl implements _HomeViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       loading,
-      const DeepCollectionEquality().hash(_matches));
+      const DeepCollectionEquality().hash(_matches),
+      const DeepCollectionEquality().hash(_groupMatches));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
@@ -159,9 +201,11 @@ class _$HomeViewStateImpl implements _HomeViewState {
 
 abstract class _HomeViewState implements HomeViewState {
   const factory _HomeViewState(
-      {final Object? error,
-      final bool loading,
-      final List<MatchModel> matches}) = _$HomeViewStateImpl;
+          {final Object? error,
+          final bool loading,
+          final List<MatchModel> matches,
+          final Map<MatchStatusLabel, List<MatchModel>> groupMatches}) =
+      _$HomeViewStateImpl;
 
   @override
   Object? get error;
@@ -170,7 +214,12 @@ abstract class _HomeViewState implements HomeViewState {
   @override
   List<MatchModel> get matches;
   @override
-  @JsonKey(ignore: true)
+  Map<MatchStatusLabel, List<MatchModel>> get groupMatches;
+
+  /// Create a copy of HomeViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeViewStateImplCopyWith<_$HomeViewStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

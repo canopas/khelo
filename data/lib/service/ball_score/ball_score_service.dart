@@ -24,23 +24,26 @@ final ballScoreServiceProvider = Provider((ref) {
 });
 
 class BallScoreService {
+  String? _currentUserId;
+
   final FirebaseFirestore _firestore;
   final MatchService _matchService;
   final InningsService _inningsService;
-  String? _currentUserId;
-  final CollectionReference<BallScoreModel> _ballScoreCollection;
 
   BallScoreService(
     this._firestore,
     this._matchService,
     this._inningsService,
     this._currentUserId,
-  ) : _ballScoreCollection = _firestore
-            .collection(FireStoreConst.ballScoresCollection)
-            .withConverter(
-              fromFirestore: BallScoreModel.fromFireStore,
-              toFirestore: (BallScoreModel score, _) => score.toJson(),
-            );
+  );
+
+  CollectionReference<BallScoreModel> get _ballScoreCollection =>
+      _firestore.collection(FireStoreConst.ballScoresCollection).withConverter(
+            fromFirestore: BallScoreModel.fromFireStore,
+            toFirestore: (BallScoreModel score, _) => score.toJson(),
+          );
+
+  String get generateBallScoreId => _ballScoreCollection.doc().id;
 
   Future<void> addBallScoreAndUpdateTeamDetails({
     required BallScoreModel score,
@@ -56,7 +59,7 @@ class BallScoreService {
     int otherTotalRuns = 0,
     int otherTotalWicketTaken = 0,
     int otherTotalBowlingTeamRuns = 0,
-    MatchPlayerRequest? updatedPlayer,
+    MatchPlayer? updatedPlayer,
   }) async {
     try {
       final scoreRef = _ballScoreCollection.doc();
@@ -103,7 +106,20 @@ class BallScoreService {
     }
   }
 
-  Stream<List<BallScoreChange>> getBallScoresStreamByInningIds(
+  Future<List<BallScoreModel>> getBallScoresByMatchIds(
+    List<String> matchIds,
+  ) async {
+    try {
+      final ballScoreRef = await _ballScoreCollection
+          .where(FireStoreConst.matchId, whereIn: matchIds)
+          .get();
+      return ballScoreRef.docs.map((e) => e.data()).toList();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Stream<List<BallScoreChange>> streamBallScoresByInningIds(
     List<String> inningIds,
   ) {
     return _ballScoreCollection
@@ -117,7 +133,7 @@ class BallScoreService {
         .handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<BallScoreModel>> getCurrentUserRelatedBalls() {
+  Stream<List<BallScoreModel>> streamCurrentUserRelatedBalls() {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
@@ -151,7 +167,7 @@ class BallScoreService {
     int otherTotalRuns = 0,
     int otherTotalWicketTaken = 0,
     int otherTotalBowlingTeamRuns = 0,
-    List<MatchPlayerRequest>? updatedPlayer,
+    List<MatchPlayer>? updatedPlayer,
   }) async {
     try {
       _firestore.runTransaction((transaction) async {

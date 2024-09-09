@@ -138,6 +138,18 @@ class UserService {
     }
   }
 
+  Stream<UserModel> streamUserById(String id) {
+    return _userCollection.doc(id).snapshots().map((snapshot) {
+      final userModel = snapshot.data();
+      if (userModel == null) {
+        return deActiveDummyUserAccount(id);
+      }
+      return userModel;
+    }).handleError((error, stack) {
+      throw AppError.fromError(error, stack);
+    });
+  }
+
   Future<List<UserModel>> searchUser(String searchKey) async {
     try {
       final snapshot = await _userRef
@@ -174,5 +186,14 @@ class UserService {
     bool notifications,
   ) async {
     await _userRef.doc(id).update({"notifications": notifications});
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await _userCollection.doc(_currentUser?.id).delete();
+      _currentUserJsonController.state = null;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 }
