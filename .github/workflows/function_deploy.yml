@@ -60,7 +60,6 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         run: |
-#          cd khelo
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > functions/google-application-credentials.json
 
       - name: Use Firebase Dev
