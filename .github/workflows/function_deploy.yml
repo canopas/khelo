@@ -39,7 +39,7 @@ jobs:
       - name: Print Working Directory
         run: |
           echo "Working directory: $(pwd)"
-          echo ls -a
+          ls -a
 
       - name: Install Dependencies
         working-directory: functions
