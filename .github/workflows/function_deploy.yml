@@ -36,20 +36,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Print Working Directory
-        run: |
-          echo "Working directory: $(pwd)"
-          ls -a
-
       - name: Install Dependencies
-        working-directory: functions
+        working-directory: khelo/functions
         run: |
           npm ci
 
       - name: Print Working Directory
         run: |
           echo "Working directory: $(pwd)"
-          echo ls -a
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
@@ -62,7 +56,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         run: |
-          echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > functions/google-application-credentials.json
+          echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > google-application-credentials.json
 
       - name: Use Firebase Dev
         run: |
@@ -74,4 +68,4 @@ jobs:
       - name: Remove credentials file
         if: success() || failure()
         run: |
-          rm functions/google-application-credentials.json
+          rm google-application-credentials.json
