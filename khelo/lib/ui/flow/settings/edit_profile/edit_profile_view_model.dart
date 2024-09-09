@@ -124,20 +124,21 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       final location = state.locationController.text.trim();
 
       UserModel user = UserModel(
-          id: state.currentUser!.id,
-          name: name,
-          name_lowercase: name.toLowerCase(),
-          email: email,
-          location: location.toLowerCase(),
-          batting_style: state.battingStyle,
-          bowling_style: state.bowlingStyle,
-          player_role: state.playerRole,
-          gender: state.gender,
-          phone: state.currentUser?.phone,
-          profile_img_url: state.imageUrl,
-          dob: state.dob,
-          created_at: state.currentUser?.created_at,
-          updated_at: DateTime.now());
+        id: state.currentUser!.id,
+        name: name,
+        name_lowercase: name.toLowerCase(),
+        email: email,
+        location: location.toLowerCase(),
+        batting_style: state.battingStyle,
+        bowling_style: state.bowlingStyle,
+        player_role: state.playerRole,
+        gender: state.gender,
+        phone: state.currentUser?.phone,
+        profile_img_url: state.imageUrl,
+        dob: state.dob,
+        created_at2: state.currentUser?.created_at ?? DateTime.now(),
+        updated_at2: DateTime.now(),
+      );
 
       await userService.updateUser(user);
       state = state.copyWith(isSaveInProgress: false, isSaved: true);

@@ -20,7 +20,7 @@ class UserDetailInfoContent extends ConsumerWidget {
         _title(context, context.l10n.user_detail_personal_information_title),
         const SizedBox(height: 8),
         _infoRowView(context, context.l10n.user_detail_joining_date_title,
-            state.user?.created_at?.format(context, DateFormatType.shortDate)),
+            (state.user?.created_at2??state.user?.created_at)?.format(context, DateFormatType.shortDate)),
         _infoRowView(context, context.l10n.common_gender_title,
             state.user?.gender?.getString(context)),
         _infoRowView(

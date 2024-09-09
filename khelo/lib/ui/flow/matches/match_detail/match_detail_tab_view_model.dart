@@ -104,12 +104,14 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
     ballScoreStreamSubscription = _ballScoreService
-        .streamBallScoresByInningIds(
-            state.allInnings.map((e) => e.id).toList())
+        .streamBallScoresByInningIds(state.allInnings.map((e) => e.id).toList())
         .listen(
       (scores) {
         final sortedList = scores.toList();
-        sortedList.sort((a, b) => a.ballScore.time.compareTo(b.ballScore.time));
+        sortedList.sort((a, b) =>
+            (a.ballScore.time2 ?? a.ballScore.time)?.compareTo(
+                b.ballScore.time2 ?? b.ballScore.time ?? DateTime.now()) ??
+            0);
 
         final overList = state.overList.toList();
         for (final score in sortedList) {

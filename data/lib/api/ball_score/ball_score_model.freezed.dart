@@ -38,7 +38,9 @@ mixin _$BallScoreModel {
   String? get wicket_taker_id => throw _privateConstructorUsedError;
   bool get is_four => throw _privateConstructorUsedError;
   bool get is_six => throw _privateConstructorUsedError;
-  DateTime get time => throw _privateConstructorUsedError;
+  DateTime? get time => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get time2 => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -70,7 +72,8 @@ abstract class $BallScoreModelCopyWith<$Res> {
       String? wicket_taker_id,
       bool is_four,
       bool is_six,
-      DateTime time});
+      DateTime? time,
+      @TimeStampJsonConverter() DateTime? time2});
 }
 
 /// @nodoc
@@ -103,7 +106,8 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
     Object? wicket_taker_id = freezed,
     Object? is_four = null,
     Object? is_six = null,
-    Object? time = null,
+    Object? time = freezed,
+    Object? time2 = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -174,10 +178,14 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
           ? _value.is_six
           : is_six // ignore: cast_nullable_to_non_nullable
               as bool,
-      time: null == time
+      time: freezed == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      time2: freezed == time2
+          ? _value.time2
+          : time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -208,7 +216,8 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
       String? wicket_taker_id,
       bool is_four,
       bool is_six,
-      DateTime time});
+      DateTime? time,
+      @TimeStampJsonConverter() DateTime? time2});
 }
 
 /// @nodoc
@@ -239,7 +248,8 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
     Object? wicket_taker_id = freezed,
     Object? is_four = null,
     Object? is_six = null,
-    Object? time = null,
+    Object? time = freezed,
+    Object? time2 = freezed,
   }) {
     return _then(_$BallScoreModelImpl(
       id: null == id
@@ -310,10 +320,14 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
           ? _value.is_six
           : is_six // ignore: cast_nullable_to_non_nullable
               as bool,
-      time: null == time
+      time: freezed == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      time2: freezed == time2
+          ? _value.time2
+          : time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -339,7 +353,8 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       this.wicket_taker_id,
       required this.is_four,
       required this.is_six,
-      required this.time});
+      this.time,
+      @TimeStampJsonConverter() this.time2});
 
   factory _$BallScoreModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$BallScoreModelImplFromJson(json);
@@ -379,11 +394,14 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   @override
   final bool is_six;
   @override
-  final DateTime time;
+  final DateTime? time;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? time2;
 
   @override
   String toString() {
-    return 'BallScoreModel(id: $id, inning_id: $inning_id, match_id: $match_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, fielding_position: $fielding_position, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time)';
+    return 'BallScoreModel(id: $id, inning_id: $inning_id, match_id: $match_id, over_number: $over_number, ball_number: $ball_number, bowler_id: $bowler_id, batsman_id: $batsman_id, non_striker_id: $non_striker_id, runs_scored: $runs_scored, extras_type: $extras_type, extras_awarded: $extras_awarded, wicket_type: $wicket_type, fielding_position: $fielding_position, player_out_id: $player_out_id, wicket_taker_id: $wicket_taker_id, is_four: $is_four, is_six: $is_six, time: $time, time2: $time2)';
   }
 
   @override
@@ -422,31 +440,34 @@ class _$BallScoreModelImpl implements _BallScoreModel {
                 other.wicket_taker_id == wicket_taker_id) &&
             (identical(other.is_four, is_four) || other.is_four == is_four) &&
             (identical(other.is_six, is_six) || other.is_six == is_six) &&
-            (identical(other.time, time) || other.time == time));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.time2, time2) || other.time2 == time2));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      inning_id,
-      match_id,
-      over_number,
-      ball_number,
-      bowler_id,
-      batsman_id,
-      non_striker_id,
-      runs_scored,
-      extras_type,
-      extras_awarded,
-      wicket_type,
-      fielding_position,
-      player_out_id,
-      wicket_taker_id,
-      is_four,
-      is_six,
-      time);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        inning_id,
+        match_id,
+        over_number,
+        ball_number,
+        bowler_id,
+        batsman_id,
+        non_striker_id,
+        runs_scored,
+        extras_type,
+        extras_awarded,
+        wicket_type,
+        fielding_position,
+        player_out_id,
+        wicket_taker_id,
+        is_four,
+        is_six,
+        time,
+        time2
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -482,7 +503,8 @@ abstract class _BallScoreModel implements BallScoreModel {
       final String? wicket_taker_id,
       required final bool is_four,
       required final bool is_six,
-      required final DateTime time}) = _$BallScoreModelImpl;
+      final DateTime? time,
+      @TimeStampJsonConverter() final DateTime? time2}) = _$BallScoreModelImpl;
 
   factory _BallScoreModel.fromJson(Map<String, dynamic> json) =
       _$BallScoreModelImpl.fromJson;
@@ -522,7 +544,10 @@ abstract class _BallScoreModel implements BallScoreModel {
   @override
   bool get is_six;
   @override
-  DateTime get time;
+  DateTime? get time;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get time2;
   @override
   @JsonKey(ignore: true)
   _$$BallScoreModelImplCopyWith<_$BallScoreModelImpl> get copyWith =>

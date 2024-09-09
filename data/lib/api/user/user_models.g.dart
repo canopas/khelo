@@ -23,6 +23,10 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       updated_at: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
+      created_at2: _$JsonConverterFromJson<Object, DateTime>(
+          json['created_at2'], const TimeStampJsonConverter().fromJson),
+      updated_at2: _$JsonConverterFromJson<Object, DateTime>(
+          json['updated_at2'], const TimeStampJsonConverter().fromJson),
       player_role:
           $enumDecodeNullable(_$PlayerRoleEnumMap, json['player_role']),
       batting_style:
@@ -45,6 +49,10 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'gender': _$UserGenderEnumMap[instance.gender],
       'created_at': instance.created_at?.toIso8601String(),
       'updated_at': instance.updated_at?.toIso8601String(),
+      'created_at2': _$JsonConverterToJson<Object, DateTime>(
+          instance.created_at2, const TimeStampJsonConverter().toJson),
+      'updated_at2': _$JsonConverterToJson<Object, DateTime>(
+          instance.updated_at2, const TimeStampJsonConverter().toJson),
       'player_role': _$PlayerRoleEnumMap[instance.player_role],
       'batting_style': _$BattingStyleEnumMap[instance.batting_style],
       'bowling_style': _$BowlingStyleEnumMap[instance.bowling_style],
@@ -57,6 +65,12 @@ const _$UserGenderEnumMap = {
   UserGender.female: 2,
   UserGender.other: 3,
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
 
 const _$PlayerRoleEnumMap = {
   PlayerRole.topOrderBatter: 1,
@@ -86,3 +100,9 @@ const _$BowlingStyleEnumMap = {
   BowlingStyle.rightArmLegBreak: 7,
   BowlingStyle.none: 8,
 };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

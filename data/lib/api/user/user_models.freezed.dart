@@ -31,6 +31,10 @@ mixin _$UserModel {
   UserGender? get gender => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
   DateTime? get updated_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_at2 => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get updated_at2 => throw _privateConstructorUsedError;
   PlayerRole? get player_role => throw _privateConstructorUsedError;
   BattingStyle? get batting_style => throw _privateConstructorUsedError;
   BowlingStyle? get bowling_style => throw _privateConstructorUsedError;
@@ -59,6 +63,8 @@ abstract class $UserModelCopyWith<$Res> {
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_at2,
+      @TimeStampJsonConverter() DateTime? updated_at2,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
@@ -89,6 +95,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_at2 = freezed,
+    Object? updated_at2 = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
@@ -139,6 +147,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_at2: freezed == created_at2
+          ? _value.created_at2
+          : created_at2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_at2: freezed == updated_at2
+          ? _value.updated_at2
+          : updated_at2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -179,6 +195,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_at2,
+      @TimeStampJsonConverter() DateTime? updated_at2,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
@@ -207,6 +225,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_at2 = freezed,
+    Object? updated_at2 = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
@@ -257,6 +277,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_at2: freezed == created_at2
+          ? _value.created_at2
+          : created_at2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_at2: freezed == updated_at2
+          ? _value.updated_at2
+          : updated_at2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -292,6 +320,8 @@ class _$UserModelImpl extends _UserModel {
       this.gender,
       this.created_at,
       this.updated_at,
+      @TimeStampJsonConverter() this.created_at2,
+      @TimeStampJsonConverter() this.updated_at2,
       this.player_role,
       this.batting_style,
       this.bowling_style,
@@ -324,6 +354,12 @@ class _$UserModelImpl extends _UserModel {
   @override
   final DateTime? updated_at;
   @override
+  @TimeStampJsonConverter()
+  final DateTime? created_at2;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? updated_at2;
+  @override
   final PlayerRole? player_role;
   @override
   final BattingStyle? batting_style;
@@ -335,7 +371,7 @@ class _$UserModelImpl extends _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive)';
+    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, created_at2: $created_at2, updated_at2: $updated_at2, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive)';
   }
 
   @override
@@ -359,6 +395,10 @@ class _$UserModelImpl extends _UserModel {
                 other.created_at == created_at) &&
             (identical(other.updated_at, updated_at) ||
                 other.updated_at == updated_at) &&
+            (identical(other.created_at2, created_at2) ||
+                other.created_at2 == created_at2) &&
+            (identical(other.updated_at2, updated_at2) ||
+                other.updated_at2 == updated_at2) &&
             (identical(other.player_role, player_role) ||
                 other.player_role == player_role) &&
             (identical(other.batting_style, batting_style) ||
@@ -384,6 +424,8 @@ class _$UserModelImpl extends _UserModel {
       gender,
       created_at,
       updated_at,
+      created_at2,
+      updated_at2,
       player_role,
       batting_style,
       bowling_style,
@@ -416,6 +458,8 @@ abstract class _UserModel extends UserModel {
       final UserGender? gender,
       final DateTime? created_at,
       final DateTime? updated_at,
+      @TimeStampJsonConverter() final DateTime? created_at2,
+      @TimeStampJsonConverter() final DateTime? updated_at2,
       final PlayerRole? player_role,
       final BattingStyle? batting_style,
       final BowlingStyle? bowling_style,
@@ -447,6 +491,12 @@ abstract class _UserModel extends UserModel {
   DateTime? get created_at;
   @override
   DateTime? get updated_at;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get created_at2;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get updated_at2;
   @override
   PlayerRole? get player_role;
   @override

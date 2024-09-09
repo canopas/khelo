@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../converter/timestamp_json_converter.dart';
+
 part 'user_models.freezed.dart';
 
 part 'user_models.g.dart';
@@ -25,6 +27,8 @@ class UserModel with _$UserModel {
     UserGender? gender,
     DateTime? created_at,
     DateTime? updated_at,
+    @TimeStampJsonConverter() DateTime? created_at2,
+    @TimeStampJsonConverter() DateTime? updated_at2,
     PlayerRole? player_role,
     BattingStyle? batting_style,
     BowlingStyle? bowling_style,

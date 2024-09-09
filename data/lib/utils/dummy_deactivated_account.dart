@@ -5,7 +5,7 @@ UserModel deActiveDummyUserAccount(String id) {
   return UserModel(
     id: id,
     name: 'Deactivated User',
-    created_at: DateTime(1950),
+    created_at2: DateTime(1950),
     location: '--',
     isActive: false,
   );
@@ -16,7 +16,7 @@ TeamModel deActiveDummyTeamModel(String id) {
     id: id,
     name: 'Deactivated Team',
     name_lowercase: 'deactivatedteam',
-    created_at: DateTime(1950),
+    created_at2: DateTime(1950),
     city: '--',
   );
 }

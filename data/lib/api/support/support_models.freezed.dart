@@ -26,7 +26,9 @@ mixin _$AddSupportCaseRequest {
   String? get description => throw _privateConstructorUsedError;
   List<String> get attachmentUrls => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get createdAt2 => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +48,8 @@ abstract class $AddSupportCaseRequestCopyWith<$Res> {
       String? description,
       List<String> attachmentUrls,
       String userId,
-      DateTime createdAt});
+      DateTime? createdAt,
+      @TimeStampJsonConverter() DateTime? createdAt2});
 }
 
 /// @nodoc
@@ -68,7 +71,8 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
     Object? description = freezed,
     Object? attachmentUrls = null,
     Object? userId = null,
-    Object? createdAt = null,
+    Object? createdAt = freezed,
+    Object? createdAt2 = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -91,10 +95,14 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      createdAt2: freezed == createdAt2
+          ? _value.createdAt2
+          : createdAt2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -114,7 +122,8 @@ abstract class _$$AddSupportCaseRequestImplCopyWith<$Res>
       String? description,
       List<String> attachmentUrls,
       String userId,
-      DateTime createdAt});
+      DateTime? createdAt,
+      @TimeStampJsonConverter() DateTime? createdAt2});
 }
 
 /// @nodoc
@@ -134,7 +143,8 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? attachmentUrls = null,
     Object? userId = null,
-    Object? createdAt = null,
+    Object? createdAt = freezed,
+    Object? createdAt2 = freezed,
   }) {
     return _then(_$AddSupportCaseRequestImpl(
       id: null == id
@@ -157,10 +167,14 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      createdAt: null == createdAt
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      createdAt2: freezed == createdAt2
+          ? _value.createdAt2
+          : createdAt2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -174,7 +188,8 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
       this.description,
       final List<String> attachmentUrls = const [],
       required this.userId,
-      required this.createdAt})
+      this.createdAt,
+      @TimeStampJsonConverter() this.createdAt2})
       : _attachmentUrls = attachmentUrls;
 
   factory _$AddSupportCaseRequestImpl.fromJson(Map<String, dynamic> json) =>
@@ -198,11 +213,14 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
   @override
   final String userId;
   @override
-  final DateTime createdAt;
+  final DateTime? createdAt;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? createdAt2;
 
   @override
   String toString() {
-    return 'AddSupportCaseRequest(id: $id, title: $title, description: $description, attachmentUrls: $attachmentUrls, userId: $userId, createdAt: $createdAt)';
+    return 'AddSupportCaseRequest(id: $id, title: $title, description: $description, attachmentUrls: $attachmentUrls, userId: $userId, createdAt: $createdAt, createdAt2: $createdAt2)';
   }
 
   @override
@@ -218,13 +236,22 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
                 .equals(other._attachmentUrls, _attachmentUrls) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.createdAt2, createdAt2) ||
+                other.createdAt2 == createdAt2));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, description,
-      const DeepCollectionEquality().hash(_attachmentUrls), userId, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      description,
+      const DeepCollectionEquality().hash(_attachmentUrls),
+      userId,
+      createdAt,
+      createdAt2);
 
   @JsonKey(ignore: true)
   @override
@@ -243,12 +270,14 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
 
 abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   const factory _AddSupportCaseRequest(
-      {required final String id,
-      required final String title,
-      final String? description,
-      final List<String> attachmentUrls,
-      required final String userId,
-      required final DateTime createdAt}) = _$AddSupportCaseRequestImpl;
+          {required final String id,
+          required final String title,
+          final String? description,
+          final List<String> attachmentUrls,
+          required final String userId,
+          final DateTime? createdAt,
+          @TimeStampJsonConverter() final DateTime? createdAt2}) =
+      _$AddSupportCaseRequestImpl;
 
   factory _AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =
       _$AddSupportCaseRequestImpl.fromJson;
@@ -264,7 +293,10 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   @override
   String get userId;
   @override
-  DateTime get createdAt;
+  DateTime? get createdAt;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get createdAt2;
   @override
   @JsonKey(ignore: true)
   _$$AddSupportCaseRequestImplCopyWith<_$AddSupportCaseRequestImpl>

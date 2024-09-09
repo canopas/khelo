@@ -41,7 +41,11 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
           const [],
       city: json['city'] as String,
       ground: json['ground'] as String,
-      start_time: DateTime.parse(json['start_time'] as String),
+      start_time: json['start_time'] == null
+          ? null
+          : DateTime.parse(json['start_time'] as String),
+      start_time2: _$JsonConverterFromJson<Object, DateTime>(
+          json['start_time2'], const TimeStampJsonConverter().fromJson),
       ball_type: $enumDecode(_$BallTypeEnumMap, json['ball_type']),
       pitch_type: $enumDecode(_$PitchTypeEnumMap, json['pitch_type']),
       created_by: json['created_by'] as String,
@@ -81,7 +85,9 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'power_play_overs3': instance.power_play_overs3,
       'city': instance.city,
       'ground': instance.ground,
-      'start_time': instance.start_time.toIso8601String(),
+      'start_time': instance.start_time?.toIso8601String(),
+      'start_time2': _$JsonConverterToJson<Object, DateTime>(
+          instance.start_time2, const TimeStampJsonConverter().toJson),
       'ball_type': _$BallTypeEnumMap[instance.ball_type]!,
       'pitch_type': _$PitchTypeEnumMap[instance.pitch_type]!,
       'created_by': instance.created_by,
@@ -103,6 +109,12 @@ const _$MatchTypeEnumMap = {
   MatchType.pairCricket: 4,
   MatchType.boxCricket: 5,
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
 
 const _$BallTypeEnumMap = {
   BallType.leather: 1,
@@ -129,6 +141,12 @@ const _$TossDecisionEnumMap = {
   TossDecision.bat: 1,
   TossDecision.bowl: 2,
 };
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map json) =>
     _$MatchTeamModelImpl(

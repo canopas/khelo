@@ -209,9 +209,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           }
         }
 
-        currentScoreList.sort((a, b) => a.time.compareTo(b.time));
+        currentScoreList.sort((a, b) =>
+            (a.time2 ?? a.time)
+                ?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+            0);
 
-        previousScoreList.sort((a, b) => a.time.compareTo(b.time));
+        previousScoreList.sort((a, b) =>
+            (a.time2 ?? a.time)
+                ?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+            0);
         state = state.copyWith(
             currentScoresList: currentScoreList,
             previousScoresList: previousScoreList,
@@ -584,24 +590,25 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ballCount = state.ballCount + 1;
       }
       final ball = BallScoreModel(
-          id: _ballScoreService.generateBallScoreId,
-          inning_id: ballInningId,
-          match_id: state.match?.id ?? matchId,
-          over_number: state.overCount,
-          ball_number: ballCount,
-          bowler_id: bowlerId,
-          batsman_id: strikerId,
-          non_striker_id: nonStrikerId,
-          is_four: isFour,
-          is_six: isSix,
-          extras_awarded: extra,
-          extras_type: extrasType,
-          player_out_id: playerOutId,
-          runs_scored: run,
-          wicket_taker_id: wicketTakerId,
-          wicket_type: wicketType,
-          fielding_position: position,
-          time: DateTime.now());
+        id: _ballScoreService.generateBallScoreId,
+        inning_id: ballInningId,
+        match_id: state.match?.id ?? matchId,
+        over_number: state.overCount,
+        ball_number: ballCount,
+        bowler_id: bowlerId,
+        batsman_id: strikerId,
+        non_striker_id: nonStrikerId,
+        is_four: isFour,
+        is_six: isSix,
+        extras_awarded: extra,
+        extras_type: extrasType,
+        player_out_id: playerOutId,
+        runs_scored: run,
+        wicket_taker_id: wicketTakerId,
+        wicket_type: wicketType,
+        fielding_position: position,
+        time2: DateTime.now(),
+      );
       int wicketCount = state.otherInning!.total_wickets;
       if (wicketType != WicketType.retiredHurt && wicketType != null) {
         wicketCount = wicketCount + 1;

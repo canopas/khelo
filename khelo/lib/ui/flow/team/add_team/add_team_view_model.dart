@@ -103,14 +103,15 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       }
       String? imageUrl = state.editTeam?.profile_img_url;
       final team = TeamModel(
-          id: state.editTeam?.id ?? _teamService.generateTeamId,
-          name: name,
-          name_lowercase: name.caseAndSpaceInsensitive,
-          profile_img_url: imageUrl,
-          city: location.toLowerCase(),
-          created_by: state.currentUser!.id,
-          players: players,
-          created_at: state.editTeam?.created_at ?? DateTime.now());
+        id: state.editTeam?.id ?? _teamService.generateTeamId,
+        name: name,
+        name_lowercase: name.caseAndSpaceInsensitive,
+        profile_img_url: imageUrl,
+        city: location.toLowerCase(),
+        created_by: state.currentUser!.id,
+        players: players,
+        created_at2: state.editTeam?.created_at ?? DateTime.now(),
+      );
 
       final newTeamId = await _teamService.updateTeam(team);
       if (state.filePath != null) {
@@ -139,7 +140,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             city: location.toLowerCase(),
             created_by: state.currentUser!.id,
             players: players,
-            created_at: state.editTeam?.created_at ?? DateTime.now());
+            created_at: state.editTeam?.created_at,
+            created_at2: state.editTeam?.created_at ?? DateTime.now());
         state = state.copyWith(isAddInProgress: false, team: teamModel);
       }
     } catch (e) {

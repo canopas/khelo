@@ -86,7 +86,7 @@ class AuthService {
         final UserModel user = UserModel(
           id: _auth.currentUser!.uid,
           phone: phone,
-          created_at: DateTime.now(),
+          created_at2: DateTime.now(),
         );
         await _userService.updateUser(user);
       } else {

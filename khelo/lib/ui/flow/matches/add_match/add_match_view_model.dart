@@ -82,7 +82,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       state.groundController.text = match.ground.toString();
       state = state.copyWith(
           match: match,
-          matchTime: match.start_time,
+          matchTime: match.start_time2 ?? match.start_time ?? DateTime.now(),
           teamA: match.teams.first.team,
           teamACaptainId: match.teams.first.captain_id,
           teamAAdminId: match.teams.first.admin_id,
@@ -183,7 +183,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           power_play_overs3: state.thirdPowerPlay ?? [],
           city: city,
           ground: ground,
-          start_time: state.matchTime,
+          start_time2: state.matchTime,
           created_by:
               state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
           ball_type: state.ballType,

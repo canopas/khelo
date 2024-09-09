@@ -33,7 +33,9 @@ mixin _$MatchModel {
   List<int> get power_play_overs3 => throw _privateConstructorUsedError;
   String get city => throw _privateConstructorUsedError;
   String get ground => throw _privateConstructorUsedError;
-  DateTime get start_time => throw _privateConstructorUsedError;
+  DateTime? get start_time => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get start_time2 => throw _privateConstructorUsedError;
   BallType get ball_type => throw _privateConstructorUsedError;
   PitchType get pitch_type => throw _privateConstructorUsedError;
   String get created_by => throw _privateConstructorUsedError;
@@ -81,7 +83,8 @@ abstract class $MatchModelCopyWith<$Res> {
       List<int> power_play_overs3,
       String city,
       String ground,
-      DateTime start_time,
+      DateTime? start_time,
+      @TimeStampJsonConverter() DateTime? start_time2,
       BallType ball_type,
       PitchType pitch_type,
       String created_by,
@@ -132,7 +135,8 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? power_play_overs3 = null,
     Object? city = null,
     Object? ground = null,
-    Object? start_time = null,
+    Object? start_time = freezed,
+    Object? start_time2 = freezed,
     Object? ball_type = null,
     Object? pitch_type = null,
     Object? created_by = null,
@@ -203,10 +207,14 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.ground
           : ground // ignore: cast_nullable_to_non_nullable
               as String,
-      start_time: null == start_time
+      start_time: freezed == start_time
           ? _value.start_time
           : start_time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      start_time2: freezed == start_time2
+          ? _value.start_time2
+          : start_time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       ball_type: null == ball_type
           ? _value.ball_type
           : ball_type // ignore: cast_nullable_to_non_nullable
@@ -321,7 +329,8 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       List<int> power_play_overs3,
       String city,
       String ground,
-      DateTime start_time,
+      DateTime? start_time,
+      @TimeStampJsonConverter() DateTime? start_time2,
       BallType ball_type,
       PitchType pitch_type,
       String created_by,
@@ -372,7 +381,8 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? power_play_overs3 = null,
     Object? city = null,
     Object? ground = null,
-    Object? start_time = null,
+    Object? start_time = freezed,
+    Object? start_time2 = freezed,
     Object? ball_type = null,
     Object? pitch_type = null,
     Object? created_by = null,
@@ -443,10 +453,14 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.ground
           : ground // ignore: cast_nullable_to_non_nullable
               as String,
-      start_time: null == start_time
+      start_time: freezed == start_time
           ? _value.start_time
           : start_time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
+      start_time2: freezed == start_time2
+          ? _value.start_time2
+          : start_time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       ball_type: null == ball_type
           ? _value.ball_type
           : ball_type // ignore: cast_nullable_to_non_nullable
@@ -533,7 +547,8 @@ class _$MatchModelImpl implements _MatchModel {
       final List<int> power_play_overs3 = const [],
       required this.city,
       required this.ground,
-      required this.start_time,
+      this.start_time,
+      @TimeStampJsonConverter() this.start_time2,
       required this.ball_type,
       required this.pitch_type,
       required this.created_by,
@@ -649,7 +664,10 @@ class _$MatchModelImpl implements _MatchModel {
   @override
   final String ground;
   @override
-  final DateTime start_time;
+  final DateTime? start_time;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? start_time2;
   @override
   final BallType ball_type;
   @override
@@ -737,7 +755,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target)';
+    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_time2: $start_time2, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target)';
   }
 
   @override
@@ -767,6 +785,8 @@ class _$MatchModelImpl implements _MatchModel {
             (identical(other.ground, ground) || other.ground == ground) &&
             (identical(other.start_time, start_time) ||
                 other.start_time == start_time) &&
+            (identical(other.start_time2, start_time2) ||
+                other.start_time2 == start_time2) &&
             (identical(other.ball_type, ball_type) ||
                 other.ball_type == ball_type) &&
             (identical(other.pitch_type, pitch_type) ||
@@ -817,6 +837,7 @@ class _$MatchModelImpl implements _MatchModel {
         city,
         ground,
         start_time,
+        start_time2,
         ball_type,
         pitch_type,
         created_by,
@@ -864,7 +885,8 @@ abstract class _MatchModel implements MatchModel {
       final List<int> power_play_overs3,
       required final String city,
       required final String ground,
-      required final DateTime start_time,
+      final DateTime? start_time,
+      @TimeStampJsonConverter() final DateTime? start_time2,
       required final BallType ball_type,
       required final PitchType pitch_type,
       required final String created_by,
@@ -916,7 +938,10 @@ abstract class _MatchModel implements MatchModel {
   @override
   String get ground;
   @override
-  DateTime get start_time;
+  DateTime? get start_time;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get start_time2;
   @override
   BallType get ball_type;
   @override

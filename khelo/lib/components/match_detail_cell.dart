@@ -80,7 +80,8 @@ class MatchDetailCell extends StatelessWidget {
       Flexible(
         flex: 2,
         child: Text(
-            match.start_time.format(context, DateFormatType.dateAndTime),
+            (match.start_time2 ?? match.start_time)!
+                .format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.caption
                 .copyWith(color: context.colorScheme.textDisabled)),
       ),
