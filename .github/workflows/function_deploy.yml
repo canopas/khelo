@@ -52,7 +52,11 @@ jobs:
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > functions/google-application-credentials.json
 
       - name: Deploy Firebase functions
-        run: firebase deploy --only functions --non-interactive --debug
+        run: |
+          echo "Working directory: $(pwd)"
+          cd khelo
+          echo "Working directory: $(pwd)"
+          firebase deploy --only functions --non-interactive --debug
 
       - name: Remove credentials file
         if: success() || failure()
