@@ -1,24 +1,27 @@
-# .github/workflows/deploy-dev.yml
-
-name: Deploy to Dev
+name: Deploy Firebase Function
 
 on: push
 #  push:
 #    branches:
 #      - main
+#  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      GOOGLE_APPLICATION_CREDENTIALS: google-application-credentials.json
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        name: Checkout
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: subosito/flutter-action@v2.12.0
+        name: Set up Flutter SDK
+        with:
+          channel: 'stable'
+          cache: true
+
+      - uses: actions/setup-node@v2
+        name: Setup Node.js
         with:
           node-version: 18
 
@@ -38,7 +41,6 @@ jobs:
           echo "Working directory: $(pwd)"
 
       - name: Install Dependencies
-        shell: bash
         working-directory: ./functions
         run: |
           npm ci
@@ -55,20 +57,20 @@ jobs:
           echo "Working directory: $(pwd)"
 
       - name: Prepare Google Application Credentials
-        shell: bash
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         run: |
-          echo "${{ secrets.DEV_GOOGLE_APPLICATION_CREDENTIALS }}" | base64 --decode > "google-application-credentials.json"
+          cd khelo
+          echo $GOOGLE_APPLICATION_CREDENTIALS | base64 -di > functions/google-application-credentials.json
 
       - name: Use Firebase Dev
-        shell: bash
         run: |
           firebase use dev --debug
 
       - name: Deploy Firebase functions
-        shell: bash
         run: firebase deploy --only functions --non-interactive --debug
 
       - name: Remove credentials file
         if: success() || failure()
         run: |
-          rm google-application-credentials.json
+          rm functions/google-application-credentials.json
