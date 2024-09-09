@@ -135,6 +135,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: state.groupMatches.length,
       itemBuilder: (context, index) {
         final item = state.groupMatches.entries.elementAt(index);
