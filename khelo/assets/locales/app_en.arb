@@ -133,6 +133,7 @@
   },
   "notification_popup_title": "Turn on notifications?",
   "notification_popup_description": "Never miss a moment of your matches. \nTurn on notifications for real-time updates and important match information.",
+  "notification_popup_later": "Later",
 
   "@_MY_CRICKET": {
   },

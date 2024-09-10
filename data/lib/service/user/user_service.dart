@@ -59,7 +59,7 @@ class UserService {
     final session = ApiSession(
       id: sessionDocRef.id,
       user_id: userId,
-      device_type: deviceService.currantPlatformType(),
+      device_type: deviceService.currentPlatformType(),
       device_id: deviceService.deviceId,
       device_name: await deviceService.deviceName,
       app_version: await deviceService.appVersion,
@@ -177,7 +177,7 @@ class UserService {
     required String deviceToken,
   }) async {
     await _sessionRef(userId).doc(sessionId).update({
-      "device_fcm_token": deviceToken,
+      FireStoreConst.deviceFcmToken: deviceToken,
     });
   }
 
@@ -185,6 +185,8 @@ class UserService {
     String id,
     bool notifications,
   ) async {
-    await _userRef.doc(id).update({"notifications": notifications});
+    await _userRef
+        .doc(id)
+        .update({FireStoreConst.notifications: notifications});
   }
 }

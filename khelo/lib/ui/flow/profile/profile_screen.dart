@@ -167,12 +167,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             context,
             icon: Assets.images.icNotificationBell,
             title: context.l10n.notification_title,
-            child: toggleButton(
-              context,
-              defaultEnabled: state.enableUserNotification,
-              onTap: (value) => handleToggle(
-                  () => notifier.onToggleUserNotificationChange(value)),
-            ),
+            child: toggleButton(context,
+                defaultEnabled: state.enableUserNotification,
+                onTap: (_) => notifier.onToggleUserNotificationChange()),
           ),
           _settingItem(
             context,
@@ -289,17 +286,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
         ],
       ),
     );
-  }
-
-  void handleToggle(Function action) async {
-    final isDeniedForever = await Permission.notification.isPermanentlyDenied;
-    if (isDeniedForever) {
-      await openAppSettings();
-    } else if (await Permission.notification.status.isDenied) {
-      await Permission.notification.request();
-    } else {
-      action();
-    }
   }
 
   Widget _turnOnNotificationPrompt({

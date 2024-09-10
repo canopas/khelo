@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _actionRow(BuildContext context) {
     return SizedBox(
-      height: 64,
+      height: 65,
       child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Padding(
@@ -328,11 +328,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Text(
                   title,
+                  textScaler: TextScaler.noScaling,
                   style: AppTextStyle.body1
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 Text(
                   btnText,
+                  textScaler: TextScaler.noScaling,
                   style: AppTextStyle.button
                       .copyWith(color: context.colorScheme.primary),
                 )

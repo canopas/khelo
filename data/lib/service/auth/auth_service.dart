@@ -23,19 +23,19 @@ class AuthService {
   final FirebaseAuth _auth;
   final UserService _userService;
 
-  final StateController<String?> _currantUserNotifier;
+  final StateController<String?> _currentUserNotifier;
   final StateController<String?> _userSessionNotifier;
 
   AuthService(
     this._auth,
     this._userService,
-    this._currantUserNotifier,
+    this._currentUserNotifier,
     this._userSessionNotifier,
   ) {
     _auth.authStateChanges().listen(
       (user) {
         if (user == null) {
-          _currantUserNotifier.state = null;
+          _currentUserNotifier.state = null;
           _userSessionNotifier.state = null;
         }
       },
@@ -111,7 +111,7 @@ class AuthService {
   ) async {
     try {
       if (credential.user == null) {
-        _currantUserNotifier.state = null;
+        _currentUserNotifier.state = null;
         _userSessionNotifier.state = null;
         return;
       }
@@ -122,7 +122,7 @@ class AuthService {
         phone: phone,
       );
 
-      _currantUserNotifier.state = user.toJsonString();
+      _currentUserNotifier.state = user.toJsonString();
       _userSessionNotifier.state = session.toJsonString();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -176,7 +176,7 @@ class AuthService {
     try {
       await clearSession();
       await _auth.signOut();
-      _currantUserNotifier.state = null;
+      _currentUserNotifier.state = null;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -185,7 +185,7 @@ class AuthService {
   Future<void> deleteAccount() async {
     try {
       await _userService.deleteUser();
-      _currantUserNotifier.state = null;
+      _currentUserNotifier.state = null;
       await _auth.currentUser?.delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

@@ -75,15 +75,18 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  void onToggleUserNotificationChange(bool value) async {
+  void onToggleUserNotificationChange() async {
     try {
       if (state.currentUser == null) return;
       state = state.copyWith(actionError: null);
 
       await _userService.updateUserNotificationSettings(
-          state.currentUser?.id ?? "INVALID ID", value);
+          state.currentUser?.id ?? "INVALID ID", state.enableUserNotification);
 
-      state = state.copyWith(enableUserNotification: value, actionError: null);
+      state = state.copyWith(
+        enableUserNotification: !state.enableUserNotification,
+        actionError: null,
+      );
     } catch (error) {
       state = state.copyWith(actionError: error);
       debugPrint(

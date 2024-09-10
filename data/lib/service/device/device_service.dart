@@ -78,7 +78,7 @@ class DeviceService {
     return response.data['countryCode'];
   }
 
-  int currantPlatformType() {
+  int currentPlatformType() {
     if (kIsWeb) {
       return 3;
     } else if (Platform.isIOS) {

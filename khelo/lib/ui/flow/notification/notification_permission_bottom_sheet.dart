@@ -48,7 +48,7 @@ Future<void> showPermissionBottomSheet(BuildContext context) async {
               children: [
                 Expanded(
                     child: PrimaryButton(
-                  context.l10n.common_not_now,
+                  context.l10n.notification_popup_later,
                   foreground: context.colorScheme.primary,
                   background: context.colorScheme.containerLow,
                   onPressed: () => Navigator.pop(context),
