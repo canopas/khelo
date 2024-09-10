@@ -15,6 +15,7 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
     String? description,
     @Default([]) List<String> attachmentUrls,
     required String userId,
+    @JsonKey(includeFromJson: false)
     DateTime? createdAt,
     @TimeStampJsonConverter() DateTime? createdAt2,
   }) = _AddSupportCaseRequest;

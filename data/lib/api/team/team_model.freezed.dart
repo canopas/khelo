@@ -26,6 +26,7 @@ mixin _$TeamModel {
   String? get city => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
   String? get created_by => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false)
   DateTime? get created_at => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get created_at2 => throw _privateConstructorUsedError;
@@ -50,7 +51,7 @@ abstract class $TeamModelCopyWith<$Res> {
       String? city,
       String? profile_img_url,
       String? created_by,
-      DateTime? created_at,
+      @JsonKey(includeFromJson: false) DateTime? created_at,
       @TimeStampJsonConverter() DateTime? created_at2,
       @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
 }
@@ -134,7 +135,7 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       String? city,
       String? profile_img_url,
       String? created_by,
-      DateTime? created_at,
+      @JsonKey(includeFromJson: false) DateTime? created_at,
       @TimeStampJsonConverter() DateTime? created_at2,
       @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
 }
@@ -212,7 +213,7 @@ class _$TeamModelImpl implements _TeamModel {
       this.city,
       this.profile_img_url,
       this.created_by,
-      this.created_at,
+      @JsonKey(includeFromJson: false) this.created_at,
       @TimeStampJsonConverter() this.created_at2,
       @JsonKey(name: FireStoreConst.teamPlayers)
       final List<TeamPlayer> players = const []})
@@ -234,6 +235,7 @@ class _$TeamModelImpl implements _TeamModel {
   @override
   final String? created_by;
   @override
+  @JsonKey(includeFromJson: false)
   final DateTime? created_at;
   @override
   @TimeStampJsonConverter()
@@ -309,7 +311,7 @@ abstract class _TeamModel implements TeamModel {
       final String? city,
       final String? profile_img_url,
       final String? created_by,
-      final DateTime? created_at,
+      @JsonKey(includeFromJson: false) final DateTime? created_at,
       @TimeStampJsonConverter() final DateTime? created_at2,
       @JsonKey(name: FireStoreConst.teamPlayers)
       final List<TeamPlayer> players}) = _$TeamModelImpl;
@@ -330,6 +332,7 @@ abstract class _TeamModel implements TeamModel {
   @override
   String? get created_by;
   @override
+  @JsonKey(includeFromJson: false)
   DateTime? get created_at;
   @override
   @TimeStampJsonConverter()

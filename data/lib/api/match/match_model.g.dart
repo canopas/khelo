@@ -41,9 +41,6 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
           const [],
       city: json['city'] as String,
       ground: json['ground'] as String,
-      start_time: json['start_time'] == null
-          ? null
-          : DateTime.parse(json['start_time'] as String),
       start_time2: _$JsonConverterFromJson<Object, DateTime>(
           json['start_time2'], const TimeStampJsonConverter().fromJson),
       ball_type: $enumDecode(_$BallTypeEnumMap, json['ball_type']),
@@ -85,7 +82,6 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'power_play_overs3': instance.power_play_overs3,
       'city': instance.city,
       'ground': instance.ground,
-      'start_time': instance.start_time?.toIso8601String(),
       'start_time2': _$JsonConverterToJson<Object, DateTime>(
           instance.start_time2, const TimeStampJsonConverter().toJson),
       'ball_type': _$BallTypeEnumMap[instance.ball_type]!,

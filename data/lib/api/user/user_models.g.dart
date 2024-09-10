@@ -17,12 +17,6 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       email: json['email'] as String?,
       profile_img_url: json['profile_img_url'] as String?,
       gender: $enumDecodeNullable(_$UserGenderEnumMap, json['gender']),
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
-      updated_at: json['updated_at'] == null
-          ? null
-          : DateTime.parse(json['updated_at'] as String),
       created_at2: _$JsonConverterFromJson<Object, DateTime>(
           json['created_at2'], const TimeStampJsonConverter().fromJson),
       updated_at2: _$JsonConverterFromJson<Object, DateTime>(
@@ -47,8 +41,6 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'email': instance.email,
       'profile_img_url': instance.profile_img_url,
       'gender': _$UserGenderEnumMap[instance.gender],
-      'created_at': instance.created_at?.toIso8601String(),
-      'updated_at': instance.updated_at?.toIso8601String(),
       'created_at2': _$JsonConverterToJson<Object, DateTime>(
           instance.created_at2, const TimeStampJsonConverter().toJson),
       'updated_at2': _$JsonConverterToJson<Object, DateTime>(

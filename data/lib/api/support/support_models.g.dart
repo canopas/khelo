@@ -17,9 +17,6 @@ _$AddSupportCaseRequestImpl _$$AddSupportCaseRequestImplFromJson(
               .toList() ??
           const [],
       userId: json['userId'] as String,
-      createdAt: json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
       createdAt2: _$JsonConverterFromJson<Object, DateTime>(
           json['createdAt2'], const TimeStampJsonConverter().fromJson),
     );
@@ -32,7 +29,6 @@ Map<String, dynamic> _$$AddSupportCaseRequestImplToJson(
       'description': instance.description,
       'attachmentUrls': instance.attachmentUrls,
       'userId': instance.userId,
-      'createdAt': instance.createdAt?.toIso8601String(),
       'createdAt2': _$JsonConverterToJson<Object, DateTime>(
           instance.createdAt2, const TimeStampJsonConverter().toJson),
     };
