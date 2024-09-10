@@ -25,9 +25,7 @@ class UserModel with _$UserModel {
     String? email,
     String? profile_img_url,
     UserGender? gender,
-    @JsonKey(includeFromJson: false)
     DateTime? created_at,
-    @JsonKey(includeFromJson: false)
     DateTime? updated_at,
     @TimeStampJsonConverter() DateTime? created_at2,
     @TimeStampJsonConverter() DateTime? updated_at2,

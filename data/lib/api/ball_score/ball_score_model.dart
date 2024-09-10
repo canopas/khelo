@@ -32,7 +32,6 @@ class BallScoreModel with _$BallScoreModel {
     String? wicket_taker_id,
     required bool is_four,
     required bool is_six,
-    @JsonKey(includeFromJson: false)
     DateTime? time,
     @TimeStampJsonConverter() DateTime? time2,
   }) = _BallScoreModel;

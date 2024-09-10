@@ -28,7 +28,6 @@ class MatchModel with _$MatchModel {
     @Default([]) List<int> power_play_overs3,
     required String city,
     required String ground,
-    @JsonKey(includeFromJson: false)
     DateTime? start_time,
     @TimeStampJsonConverter() DateTime? start_time2,
     required BallType ball_type,

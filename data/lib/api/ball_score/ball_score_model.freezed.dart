@@ -38,7 +38,6 @@ mixin _$BallScoreModel {
   String? get wicket_taker_id => throw _privateConstructorUsedError;
   bool get is_four => throw _privateConstructorUsedError;
   bool get is_six => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false)
   DateTime? get time => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get time2 => throw _privateConstructorUsedError;
@@ -73,7 +72,7 @@ abstract class $BallScoreModelCopyWith<$Res> {
       String? wicket_taker_id,
       bool is_four,
       bool is_six,
-      @JsonKey(includeFromJson: false) DateTime? time,
+      DateTime? time,
       @TimeStampJsonConverter() DateTime? time2});
 }
 
@@ -217,7 +216,7 @@ abstract class _$$BallScoreModelImplCopyWith<$Res>
       String? wicket_taker_id,
       bool is_four,
       bool is_six,
-      @JsonKey(includeFromJson: false) DateTime? time,
+      DateTime? time,
       @TimeStampJsonConverter() DateTime? time2});
 }
 
@@ -354,7 +353,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
       this.wicket_taker_id,
       required this.is_four,
       required this.is_six,
-      @JsonKey(includeFromJson: false) this.time,
+      this.time,
       @TimeStampJsonConverter() this.time2});
 
   factory _$BallScoreModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -395,7 +394,6 @@ class _$BallScoreModelImpl implements _BallScoreModel {
   @override
   final bool is_six;
   @override
-  @JsonKey(includeFromJson: false)
   final DateTime? time;
   @override
   @TimeStampJsonConverter()
@@ -505,7 +503,7 @@ abstract class _BallScoreModel implements BallScoreModel {
       final String? wicket_taker_id,
       required final bool is_four,
       required final bool is_six,
-      @JsonKey(includeFromJson: false) final DateTime? time,
+      final DateTime? time,
       @TimeStampJsonConverter() final DateTime? time2}) = _$BallScoreModelImpl;
 
   factory _BallScoreModel.fromJson(Map<String, dynamic> json) =
@@ -546,7 +544,6 @@ abstract class _BallScoreModel implements BallScoreModel {
   @override
   bool get is_six;
   @override
-  @JsonKey(includeFromJson: false)
   DateTime? get time;
   @override
   @TimeStampJsonConverter()

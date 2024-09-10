@@ -33,7 +33,6 @@ mixin _$MatchModel {
   List<int> get power_play_overs3 => throw _privateConstructorUsedError;
   String get city => throw _privateConstructorUsedError;
   String get ground => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false)
   DateTime? get start_time => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get start_time2 => throw _privateConstructorUsedError;
@@ -84,7 +83,7 @@ abstract class $MatchModelCopyWith<$Res> {
       List<int> power_play_overs3,
       String city,
       String ground,
-      @JsonKey(includeFromJson: false) DateTime? start_time,
+      DateTime? start_time,
       @TimeStampJsonConverter() DateTime? start_time2,
       BallType ball_type,
       PitchType pitch_type,
@@ -330,7 +329,7 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       List<int> power_play_overs3,
       String city,
       String ground,
-      @JsonKey(includeFromJson: false) DateTime? start_time,
+      DateTime? start_time,
       @TimeStampJsonConverter() DateTime? start_time2,
       BallType ball_type,
       PitchType pitch_type,
@@ -548,7 +547,7 @@ class _$MatchModelImpl implements _MatchModel {
       final List<int> power_play_overs3 = const [],
       required this.city,
       required this.ground,
-      @JsonKey(includeFromJson: false) this.start_time,
+      this.start_time,
       @TimeStampJsonConverter() this.start_time2,
       required this.ball_type,
       required this.pitch_type,
@@ -665,7 +664,6 @@ class _$MatchModelImpl implements _MatchModel {
   @override
   final String ground;
   @override
-  @JsonKey(includeFromJson: false)
   final DateTime? start_time;
   @override
   @TimeStampJsonConverter()
@@ -887,7 +885,7 @@ abstract class _MatchModel implements MatchModel {
       final List<int> power_play_overs3,
       required final String city,
       required final String ground,
-      @JsonKey(includeFromJson: false) final DateTime? start_time,
+      final DateTime? start_time,
       @TimeStampJsonConverter() final DateTime? start_time2,
       required final BallType ball_type,
       required final PitchType pitch_type,
@@ -940,7 +938,6 @@ abstract class _MatchModel implements MatchModel {
   @override
   String get ground;
   @override
-  @JsonKey(includeFromJson: false)
   DateTime? get start_time;
   @override
   @TimeStampJsonConverter()

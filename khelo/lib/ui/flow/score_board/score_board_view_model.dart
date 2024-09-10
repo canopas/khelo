@@ -607,6 +607,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         wicket_taker_id: wicketTakerId,
         wicket_type: wicketType,
         fielding_position: position,
+        time: DateTime.now(),
         time2: DateTime.now(),
       );
       int wicketCount = state.otherInning!.total_wickets;

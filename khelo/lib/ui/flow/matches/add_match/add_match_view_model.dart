@@ -183,6 +183,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           power_play_overs3: state.thirdPowerPlay ?? [],
           city: city,
           ground: ground,
+          start_time: state.matchTime,
           start_time2: state.matchTime,
           created_by:
               state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",

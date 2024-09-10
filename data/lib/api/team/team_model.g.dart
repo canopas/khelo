@@ -14,6 +14,9 @@ _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
       city: json['city'] as String?,
       profile_img_url: json['profile_img_url'] as String?,
       created_by: json['created_by'] as String?,
+      created_at: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
       created_at2: _$JsonConverterFromJson<Object, DateTime>(
           json['created_at2'], const TimeStampJsonConverter().fromJson),
       players: (json['team_players'] as List<dynamic>?)
@@ -30,6 +33,7 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       'city': instance.city,
       'profile_img_url': instance.profile_img_url,
       'created_by': instance.created_by,
+      'created_at': instance.created_at?.toIso8601String(),
       'created_at2': _$JsonConverterToJson<Object, DateTime>(
           instance.created_at2, const TimeStampJsonConverter().toJson),
       'team_players': instance.players.map((e) => e.toJson()).toList(),

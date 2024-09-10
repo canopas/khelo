@@ -29,9 +29,7 @@ mixin _$UserModel {
   String? get email => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
   UserGender? get gender => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false)
   DateTime? get created_at => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false)
   DateTime? get updated_at => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get created_at2 => throw _privateConstructorUsedError;
@@ -63,8 +61,8 @@ abstract class $UserModelCopyWith<$Res> {
       String? email,
       String? profile_img_url,
       UserGender? gender,
-      @JsonKey(includeFromJson: false) DateTime? created_at,
-      @JsonKey(includeFromJson: false) DateTime? updated_at,
+      DateTime? created_at,
+      DateTime? updated_at,
       @TimeStampJsonConverter() DateTime? created_at2,
       @TimeStampJsonConverter() DateTime? updated_at2,
       PlayerRole? player_role,
@@ -195,8 +193,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? email,
       String? profile_img_url,
       UserGender? gender,
-      @JsonKey(includeFromJson: false) DateTime? created_at,
-      @JsonKey(includeFromJson: false) DateTime? updated_at,
+      DateTime? created_at,
+      DateTime? updated_at,
       @TimeStampJsonConverter() DateTime? created_at2,
       @TimeStampJsonConverter() DateTime? updated_at2,
       PlayerRole? player_role,
@@ -320,8 +318,8 @@ class _$UserModelImpl extends _UserModel {
       this.email,
       this.profile_img_url,
       this.gender,
-      @JsonKey(includeFromJson: false) this.created_at,
-      @JsonKey(includeFromJson: false) this.updated_at,
+      this.created_at,
+      this.updated_at,
       @TimeStampJsonConverter() this.created_at2,
       @TimeStampJsonConverter() this.updated_at2,
       this.player_role,
@@ -352,10 +350,8 @@ class _$UserModelImpl extends _UserModel {
   @override
   final UserGender? gender;
   @override
-  @JsonKey(includeFromJson: false)
   final DateTime? created_at;
   @override
-  @JsonKey(includeFromJson: false)
   final DateTime? updated_at;
   @override
   @TimeStampJsonConverter()
@@ -460,8 +456,8 @@ abstract class _UserModel extends UserModel {
       final String? email,
       final String? profile_img_url,
       final UserGender? gender,
-      @JsonKey(includeFromJson: false) final DateTime? created_at,
-      @JsonKey(includeFromJson: false) final DateTime? updated_at,
+      final DateTime? created_at,
+      final DateTime? updated_at,
       @TimeStampJsonConverter() final DateTime? created_at2,
       @TimeStampJsonConverter() final DateTime? updated_at2,
       final PlayerRole? player_role,
@@ -492,10 +488,8 @@ abstract class _UserModel extends UserModel {
   @override
   UserGender? get gender;
   @override
-  @JsonKey(includeFromJson: false)
   DateTime? get created_at;
   @override
-  @JsonKey(includeFromJson: false)
   DateTime? get updated_at;
   @override
   @TimeStampJsonConverter()

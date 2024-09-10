@@ -26,7 +26,6 @@ mixin _$AddSupportCaseRequest {
   String? get description => throw _privateConstructorUsedError;
   List<String> get attachmentUrls => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false)
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get createdAt2 => throw _privateConstructorUsedError;
@@ -49,7 +48,7 @@ abstract class $AddSupportCaseRequestCopyWith<$Res> {
       String? description,
       List<String> attachmentUrls,
       String userId,
-      @JsonKey(includeFromJson: false) DateTime? createdAt,
+      DateTime? createdAt,
       @TimeStampJsonConverter() DateTime? createdAt2});
 }
 
@@ -123,7 +122,7 @@ abstract class _$$AddSupportCaseRequestImplCopyWith<$Res>
       String? description,
       List<String> attachmentUrls,
       String userId,
-      @JsonKey(includeFromJson: false) DateTime? createdAt,
+      DateTime? createdAt,
       @TimeStampJsonConverter() DateTime? createdAt2});
 }
 
@@ -189,7 +188,7 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
       this.description,
       final List<String> attachmentUrls = const [],
       required this.userId,
-      @JsonKey(includeFromJson: false) this.createdAt,
+      this.createdAt,
       @TimeStampJsonConverter() this.createdAt2})
       : _attachmentUrls = attachmentUrls;
 
@@ -214,7 +213,6 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
   @override
   final String userId;
   @override
-  @JsonKey(includeFromJson: false)
   final DateTime? createdAt;
   @override
   @TimeStampJsonConverter()
@@ -277,7 +275,7 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
           final String? description,
           final List<String> attachmentUrls,
           required final String userId,
-          @JsonKey(includeFromJson: false) final DateTime? createdAt,
+          final DateTime? createdAt,
           @TimeStampJsonConverter() final DateTime? createdAt2}) =
       _$AddSupportCaseRequestImpl;
 
@@ -295,7 +293,6 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   @override
   String get userId;
   @override
-  @JsonKey(includeFromJson: false)
   DateTime? get createdAt;
   @override
   @TimeStampJsonConverter()

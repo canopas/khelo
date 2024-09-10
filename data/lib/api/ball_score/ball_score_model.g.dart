@@ -28,6 +28,8 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
       wicket_taker_id: json['wicket_taker_id'] as String?,
       is_four: json['is_four'] as bool,
       is_six: json['is_six'] as bool,
+      time:
+          json['time'] == null ? null : DateTime.parse(json['time'] as String),
       time2: _$JsonConverterFromJson<Object, DateTime>(
           json['time2'], const TimeStampJsonConverter().fromJson),
     );
@@ -53,6 +55,7 @@ Map<String, dynamic> _$$BallScoreModelImplToJson(
       'wicket_taker_id': instance.wicket_taker_id,
       'is_four': instance.is_four,
       'is_six': instance.is_six,
+      'time': instance.time?.toIso8601String(),
       'time2': _$JsonConverterToJson<Object, DateTime>(
           instance.time2, const TimeStampJsonConverter().toJson),
     };
