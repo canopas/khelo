@@ -84,7 +84,7 @@ class UserService {
   Future<UserModel?> getUser(String id) async {
     try {
       final snapshot = await _userRef.doc(id).get();
-      return (snapshot.exists) ? snapshot.data() : deActiveDummyUserAccount(id);
+      return (snapshot.exists) ? snapshot.data() : null;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
