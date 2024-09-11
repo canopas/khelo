@@ -44,8 +44,8 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
       start_time: json['start_time'] == null
           ? null
           : DateTime.parse(json['start_time'] as String),
-      start_time2: _$JsonConverterFromJson<Object, DateTime>(
-          json['start_time2'], const TimeStampJsonConverter().fromJson),
+      start_at: _$JsonConverterFromJson<Object, DateTime>(
+          json['start_at'], const TimeStampJsonConverter().fromJson),
       ball_type: $enumDecode(_$BallTypeEnumMap, json['ball_type']),
       pitch_type: $enumDecode(_$PitchTypeEnumMap, json['pitch_type']),
       created_by: json['created_by'] as String,
@@ -86,8 +86,8 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'city': instance.city,
       'ground': instance.ground,
       'start_time': instance.start_time?.toIso8601String(),
-      'start_time2': _$JsonConverterToJson<Object, DateTime>(
-          instance.start_time2, const TimeStampJsonConverter().toJson),
+      'start_at': _$JsonConverterToJson<Object, DateTime>(
+          instance.start_at, const TimeStampJsonConverter().toJson),
       'ball_type': _$BallTypeEnumMap[instance.ball_type]!,
       'pitch_type': _$PitchTypeEnumMap[instance.pitch_type]!,
       'created_by': instance.created_by,
@@ -225,8 +225,8 @@ _$RevisedTargetImpl _$$RevisedTargetImplFromJson(Map<String, dynamic> json) =>
       overs: (json['overs'] as num?)?.toDouble() ?? 0,
       time:
           json['time'] == null ? null : DateTime.parse(json['time'] as String),
-      time2: _$JsonConverterFromJson<Object, DateTime>(
-          json['time2'], const TimeStampJsonConverter().fromJson),
+      revised_time: _$JsonConverterFromJson<Object, DateTime>(
+          json['revised_time'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$RevisedTargetImplToJson(_$RevisedTargetImpl instance) =>
@@ -234,6 +234,6 @@ Map<String, dynamic> _$$RevisedTargetImplToJson(_$RevisedTargetImpl instance) =>
       'runs': instance.runs,
       'overs': instance.overs,
       'time': instance.time?.toIso8601String(),
-      'time2': _$JsonConverterToJson<Object, DateTime>(
-          instance.time2, const TimeStampJsonConverter().toJson),
+      'revised_time': _$JsonConverterToJson<Object, DateTime>(
+          instance.revised_time, const TimeStampJsonConverter().toJson),
     };

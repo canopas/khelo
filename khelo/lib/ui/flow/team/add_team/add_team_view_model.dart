@@ -110,7 +110,8 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         city: location.toLowerCase(),
         created_by: state.currentUser!.id,
         players: players,
-        created_at2: state.editTeam?.created_at ?? DateTime.now(),
+        created_at: state.editTeam?.created_at ?? DateTime.now(),
+        created_time: state.editTeam?.created_at ?? DateTime.now(),
       );
 
       final newTeamId = await _teamService.updateTeam(team);
@@ -141,7 +142,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             created_by: state.currentUser!.id,
             players: players,
             created_at: state.editTeam?.created_at,
-            created_at2: state.editTeam?.created_at ?? DateTime.now());
+            created_time: state.editTeam?.created_at ?? DateTime.now());
         state = state.copyWith(isAddInProgress: false, team: teamModel);
       }
     } catch (e) {

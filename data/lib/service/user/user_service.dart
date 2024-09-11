@@ -65,6 +65,7 @@ class UserService {
       app_version: await deviceService.appVersion,
       os_version: await deviceService.osVersion,
       created_at: DateTime.now(),
+      created_time: DateTime.now(),
     );
 
     await sessionDocRef.set(session);
@@ -100,8 +101,12 @@ class UserService {
   }
 
   Future<UserModel> _createUser(String userId, String phone) async {
-    final user =
-        UserModel(id: userId, phone: phone, created_at: DateTime.now());
+    final user = UserModel(
+      id: userId,
+      phone: phone,
+      created_at: DateTime.now(),
+      created_time: DateTime.now(),
+    );
     await _userRef.doc(userId).set(user);
     return user;
   }

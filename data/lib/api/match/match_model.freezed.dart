@@ -35,7 +35,7 @@ mixin _$MatchModel {
   String get ground => throw _privateConstructorUsedError;
   DateTime? get start_time => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
-  DateTime? get start_time2 => throw _privateConstructorUsedError;
+  DateTime? get start_at => throw _privateConstructorUsedError;
   BallType get ball_type => throw _privateConstructorUsedError;
   PitchType get pitch_type => throw _privateConstructorUsedError;
   String get created_by => throw _privateConstructorUsedError;
@@ -84,7 +84,7 @@ abstract class $MatchModelCopyWith<$Res> {
       String city,
       String ground,
       DateTime? start_time,
-      @TimeStampJsonConverter() DateTime? start_time2,
+      @TimeStampJsonConverter() DateTime? start_at,
       BallType ball_type,
       PitchType pitch_type,
       String created_by,
@@ -136,7 +136,7 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? city = null,
     Object? ground = null,
     Object? start_time = freezed,
-    Object? start_time2 = freezed,
+    Object? start_at = freezed,
     Object? ball_type = null,
     Object? pitch_type = null,
     Object? created_by = null,
@@ -211,9 +211,9 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.start_time
           : start_time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      start_time2: freezed == start_time2
-          ? _value.start_time2
-          : start_time2 // ignore: cast_nullable_to_non_nullable
+      start_at: freezed == start_at
+          ? _value.start_at
+          : start_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       ball_type: null == ball_type
           ? _value.ball_type
@@ -330,7 +330,7 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       String city,
       String ground,
       DateTime? start_time,
-      @TimeStampJsonConverter() DateTime? start_time2,
+      @TimeStampJsonConverter() DateTime? start_at,
       BallType ball_type,
       PitchType pitch_type,
       String created_by,
@@ -382,7 +382,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? city = null,
     Object? ground = null,
     Object? start_time = freezed,
-    Object? start_time2 = freezed,
+    Object? start_at = freezed,
     Object? ball_type = null,
     Object? pitch_type = null,
     Object? created_by = null,
@@ -457,9 +457,9 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.start_time
           : start_time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      start_time2: freezed == start_time2
-          ? _value.start_time2
-          : start_time2 // ignore: cast_nullable_to_non_nullable
+      start_at: freezed == start_at
+          ? _value.start_at
+          : start_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       ball_type: null == ball_type
           ? _value.ball_type
@@ -548,7 +548,7 @@ class _$MatchModelImpl implements _MatchModel {
       required this.city,
       required this.ground,
       this.start_time,
-      @TimeStampJsonConverter() this.start_time2,
+      @TimeStampJsonConverter() this.start_at,
       required this.ball_type,
       required this.pitch_type,
       required this.created_by,
@@ -667,7 +667,7 @@ class _$MatchModelImpl implements _MatchModel {
   final DateTime? start_time;
   @override
   @TimeStampJsonConverter()
-  final DateTime? start_time2;
+  final DateTime? start_at;
   @override
   final BallType ball_type;
   @override
@@ -755,7 +755,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_time2: $start_time2, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target)';
+    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_at: $start_at, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target)';
   }
 
   @override
@@ -785,8 +785,8 @@ class _$MatchModelImpl implements _MatchModel {
             (identical(other.ground, ground) || other.ground == ground) &&
             (identical(other.start_time, start_time) ||
                 other.start_time == start_time) &&
-            (identical(other.start_time2, start_time2) ||
-                other.start_time2 == start_time2) &&
+            (identical(other.start_at, start_at) ||
+                other.start_at == start_at) &&
             (identical(other.ball_type, ball_type) ||
                 other.ball_type == ball_type) &&
             (identical(other.pitch_type, pitch_type) ||
@@ -837,7 +837,7 @@ class _$MatchModelImpl implements _MatchModel {
         city,
         ground,
         start_time,
-        start_time2,
+        start_at,
         ball_type,
         pitch_type,
         created_by,
@@ -886,7 +886,7 @@ abstract class _MatchModel implements MatchModel {
       required final String city,
       required final String ground,
       final DateTime? start_time,
-      @TimeStampJsonConverter() final DateTime? start_time2,
+      @TimeStampJsonConverter() final DateTime? start_at,
       required final BallType ball_type,
       required final PitchType pitch_type,
       required final String created_by,
@@ -941,7 +941,7 @@ abstract class _MatchModel implements MatchModel {
   DateTime? get start_time;
   @override
   @TimeStampJsonConverter()
-  DateTime? get start_time2;
+  DateTime? get start_at;
   @override
   BallType get ball_type;
   @override
@@ -1711,7 +1711,7 @@ mixin _$RevisedTarget {
   double get overs => throw _privateConstructorUsedError;
   DateTime? get time => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
-  DateTime? get time2 => throw _privateConstructorUsedError;
+  DateTime? get revised_time => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1729,7 +1729,7 @@ abstract class $RevisedTargetCopyWith<$Res> {
       {int runs,
       double overs,
       DateTime? time,
-      @TimeStampJsonConverter() DateTime? time2});
+      @TimeStampJsonConverter() DateTime? revised_time});
 }
 
 /// @nodoc
@@ -1748,7 +1748,7 @@ class _$RevisedTargetCopyWithImpl<$Res, $Val extends RevisedTarget>
     Object? runs = null,
     Object? overs = null,
     Object? time = freezed,
-    Object? time2 = freezed,
+    Object? revised_time = freezed,
   }) {
     return _then(_value.copyWith(
       runs: null == runs
@@ -1763,9 +1763,9 @@ class _$RevisedTargetCopyWithImpl<$Res, $Val extends RevisedTarget>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      time2: freezed == time2
-          ? _value.time2
-          : time2 // ignore: cast_nullable_to_non_nullable
+      revised_time: freezed == revised_time
+          ? _value.revised_time
+          : revised_time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ) as $Val);
   }
@@ -1783,7 +1783,7 @@ abstract class _$$RevisedTargetImplCopyWith<$Res>
       {int runs,
       double overs,
       DateTime? time,
-      @TimeStampJsonConverter() DateTime? time2});
+      @TimeStampJsonConverter() DateTime? revised_time});
 }
 
 /// @nodoc
@@ -1800,7 +1800,7 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
     Object? runs = null,
     Object? overs = null,
     Object? time = freezed,
-    Object? time2 = freezed,
+    Object? revised_time = freezed,
   }) {
     return _then(_$RevisedTargetImpl(
       runs: null == runs
@@ -1815,9 +1815,9 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      time2: freezed == time2
-          ? _value.time2
-          : time2 // ignore: cast_nullable_to_non_nullable
+      revised_time: freezed == revised_time
+          ? _value.revised_time
+          : revised_time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ));
   }
@@ -1830,7 +1830,7 @@ class _$RevisedTargetImpl implements _RevisedTarget {
       {this.runs = 0,
       this.overs = 0,
       this.time,
-      @TimeStampJsonConverter() this.time2});
+      @TimeStampJsonConverter() this.revised_time});
 
   factory _$RevisedTargetImpl.fromJson(Map<String, dynamic> json) =>
       _$$RevisedTargetImplFromJson(json);
@@ -1845,11 +1845,11 @@ class _$RevisedTargetImpl implements _RevisedTarget {
   final DateTime? time;
   @override
   @TimeStampJsonConverter()
-  final DateTime? time2;
+  final DateTime? revised_time;
 
   @override
   String toString() {
-    return 'RevisedTarget(runs: $runs, overs: $overs, time: $time, time2: $time2)';
+    return 'RevisedTarget(runs: $runs, overs: $overs, time: $time, revised_time: $revised_time)';
   }
 
   @override
@@ -1860,12 +1860,13 @@ class _$RevisedTargetImpl implements _RevisedTarget {
             (identical(other.runs, runs) || other.runs == runs) &&
             (identical(other.overs, overs) || other.overs == overs) &&
             (identical(other.time, time) || other.time == time) &&
-            (identical(other.time2, time2) || other.time2 == time2));
+            (identical(other.revised_time, revised_time) ||
+                other.revised_time == revised_time));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, runs, overs, time, time2);
+  int get hashCode => Object.hash(runtimeType, runs, overs, time, revised_time);
 
   @JsonKey(ignore: true)
   @override
@@ -1883,10 +1884,11 @@ class _$RevisedTargetImpl implements _RevisedTarget {
 
 abstract class _RevisedTarget implements RevisedTarget {
   const factory _RevisedTarget(
-      {final int runs,
-      final double overs,
-      final DateTime? time,
-      @TimeStampJsonConverter() final DateTime? time2}) = _$RevisedTargetImpl;
+          {final int runs,
+          final double overs,
+          final DateTime? time,
+          @TimeStampJsonConverter() final DateTime? revised_time}) =
+      _$RevisedTargetImpl;
 
   factory _RevisedTarget.fromJson(Map<String, dynamic> json) =
       _$RevisedTargetImpl.fromJson;
@@ -1899,7 +1901,7 @@ abstract class _RevisedTarget implements RevisedTarget {
   DateTime? get time;
   @override
   @TimeStampJsonConverter()
-  DateTime? get time2;
+  DateTime? get revised_time;
   @override
   @JsonKey(ignore: true)
   _$$RevisedTargetImplCopyWith<_$RevisedTargetImpl> get copyWith =>

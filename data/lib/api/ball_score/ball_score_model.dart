@@ -33,7 +33,7 @@ class BallScoreModel with _$BallScoreModel {
     required bool is_four,
     required bool is_six,
     DateTime? time,
-    @TimeStampJsonConverter() DateTime? time2,
+    @TimeStampJsonConverter() DateTime? score_time,
   }) = _BallScoreModel;
 
   factory BallScoreModel.fromJson(Map<String, dynamic> json) =>
@@ -320,7 +320,7 @@ extension OverSummaryMetaData on OverSummary {
       );
 
   DateTime get time =>
-      balls.lastOrNull?.time2 ?? balls.lastOrNull?.time ?? DateTime.now();
+      balls.lastOrNull?.score_time ?? balls.lastOrNull?.time ?? DateTime.now();
 
   BowlerSummary get bowlerStatAtStart {
     final runsInOver = balls
@@ -381,7 +381,8 @@ extension OverSummaryMetaData on OverSummary {
     final ballScores = [...balls, ball].toList();
     ballScores.sort(
       (a, b) =>
-          (a.time2 ?? a.time)?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+          (a.score_time ?? a.time)
+              ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
           0,
     );
 
@@ -438,7 +439,8 @@ extension OverSummaryMetaData on OverSummary {
     ballScores.removeWhere((element) => element.id == ball.id);
     ballScores.sort(
       (a, b) =>
-          (a.time2 ?? a.time)?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+          (a.score_time ?? a.time)
+              ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
           0,
     );
 

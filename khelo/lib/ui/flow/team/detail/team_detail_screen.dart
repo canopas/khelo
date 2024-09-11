@@ -104,7 +104,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
                     .copyWith(color: context.colorScheme.textPrimary)),
             const SizedBox(height: 4),
             Text(
-                (state.team?.created_at2 ??
+                (state.team?.created_time ??
                         state.team?.created_at ??
                         DateTime.now())
                     .format(context, DateFormatType.dayMonthYear),

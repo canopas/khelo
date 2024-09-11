@@ -139,8 +139,10 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
         phone: state.currentUser?.phone,
         profile_img_url: state.imageUrl,
         dob: state.dob,
-        created_at2: state.currentUser?.created_at ?? DateTime.now(),
-        updated_at2: DateTime.now(),
+        created_at: state.currentUser?.created_at ?? DateTime.now(),
+        updated_at: DateTime.now(),
+        created_time: state.currentUser?.created_at ?? DateTime.now(),
+        updated_time: DateTime.now(),
       );
 
       await userService.updateUser(user);

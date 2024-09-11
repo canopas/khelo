@@ -282,7 +282,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Text.rich(
         overflow: TextOverflow.ellipsis,
         TextSpan(
-            text: (match.start_time2 ?? match.start_time)
+            text: (match.start_at ?? match.start_time)
                 ?.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.caption
                 .copyWith(color: context.colorScheme.textSecondary),

@@ -210,13 +210,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         }
 
         currentScoreList.sort((a, b) =>
-            (a.time2 ?? a.time)
-                ?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+            (a.score_time ?? a.time)
+                ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
             0);
 
         previousScoreList.sort((a, b) =>
-            (a.time2 ?? a.time)
-                ?.compareTo(b.time2 ?? b.time ?? DateTime.now()) ??
+            (a.score_time ?? a.time)
+                ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
             0);
         state = state.copyWith(
             currentScoresList: currentScoreList,
@@ -608,7 +608,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         wicket_type: wicketType,
         fielding_position: position,
         time: DateTime.now(),
-        time2: DateTime.now(),
+        score_time: DateTime.now(),
       );
       int wicketCount = state.otherInning!.total_wickets;
       if (wicketType != WicketType.retiredHurt && wicketType != null) {
@@ -1552,7 +1552,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       runs: run,
       overs: over.toDouble(),
       time: DateTime.now(),
-      time2: DateTime.now(),
+      revised_time: DateTime.now(),
     );
     await _matchService.setRevisedTarget(
         matchId: matchId, revisedTarget: revisedTarget);

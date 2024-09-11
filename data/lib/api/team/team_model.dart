@@ -21,7 +21,7 @@ abstract class TeamModel with _$TeamModel {
     String? profile_img_url,
     String? created_by,
     DateTime? created_at,
-    @TimeStampJsonConverter() DateTime? created_at2,
+    @TimeStampJsonConverter() DateTime? created_time,
     @JsonKey(name: FireStoreConst.teamPlayers)
     @Default([])
     List<TeamPlayer> players,

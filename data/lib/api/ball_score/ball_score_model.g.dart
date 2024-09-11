@@ -30,8 +30,8 @@ _$BallScoreModelImpl _$$BallScoreModelImplFromJson(Map<String, dynamic> json) =>
       is_six: json['is_six'] as bool,
       time:
           json['time'] == null ? null : DateTime.parse(json['time'] as String),
-      time2: _$JsonConverterFromJson<Object, DateTime>(
-          json['time2'], const TimeStampJsonConverter().fromJson),
+      score_time: _$JsonConverterFromJson<Object, DateTime>(
+          json['score_time'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$BallScoreModelImplToJson(
@@ -56,8 +56,8 @@ Map<String, dynamic> _$$BallScoreModelImplToJson(
       'is_four': instance.is_four,
       'is_six': instance.is_six,
       'time': instance.time?.toIso8601String(),
-      'time2': _$JsonConverterToJson<Object, DateTime>(
-          instance.time2, const TimeStampJsonConverter().toJson),
+      'score_time': _$JsonConverterToJson<Object, DateTime>(
+          instance.score_time, const TimeStampJsonConverter().toJson),
     };
 
 const _$ExtrasTypeEnumMap = {

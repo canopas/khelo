@@ -29,7 +29,7 @@ class MatchModel with _$MatchModel {
     required String city,
     required String ground,
     DateTime? start_time,
-    @TimeStampJsonConverter() DateTime? start_time2,
+    @TimeStampJsonConverter() DateTime? start_at,
     required BallType ball_type,
     required PitchType pitch_type,
     required String created_by,
@@ -116,7 +116,7 @@ class RevisedTarget with _$RevisedTarget {
     @Default(0) int runs,
     @Default(0) double overs,
     DateTime? time,
-    @TimeStampJsonConverter() DateTime? time2,
+    @TimeStampJsonConverter() DateTime? revised_time,
   }) = _RevisedTarget;
 
   factory RevisedTarget.fromJson(Map<String, dynamic> json) =>

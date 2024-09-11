@@ -16,7 +16,7 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
     @Default([]) List<String> attachmentUrls,
     required String userId,
     DateTime? createdAt,
-    @TimeStampJsonConverter() DateTime? createdAt2,
+    @TimeStampJsonConverter() DateTime? createdTime,
   }) = _AddSupportCaseRequest;
 
   factory AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =>

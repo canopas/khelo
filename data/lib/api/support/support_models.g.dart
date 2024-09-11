@@ -20,8 +20,8 @@ _$AddSupportCaseRequestImpl _$$AddSupportCaseRequestImplFromJson(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      createdAt2: _$JsonConverterFromJson<Object, DateTime>(
-          json['createdAt2'], const TimeStampJsonConverter().fromJson),
+      createdTime: _$JsonConverterFromJson<Object, DateTime>(
+          json['createdTime'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$AddSupportCaseRequestImplToJson(
@@ -33,8 +33,8 @@ Map<String, dynamic> _$$AddSupportCaseRequestImplToJson(
       'attachmentUrls': instance.attachmentUrls,
       'userId': instance.userId,
       'createdAt': instance.createdAt?.toIso8601String(),
-      'createdAt2': _$JsonConverterToJson<Object, DateTime>(
-          instance.createdAt2, const TimeStampJsonConverter().toJson),
+      'createdTime': _$JsonConverterToJson<Object, DateTime>(
+          instance.createdTime, const TimeStampJsonConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

@@ -109,8 +109,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       (scores) {
         final sortedList = scores.toList();
         sortedList.sort((a, b) =>
-            (a.ballScore.time2 ?? a.ballScore.time)?.compareTo(
-                b.ballScore.time2 ?? b.ballScore.time ?? DateTime.now()) ??
+            (a.ballScore.score_time ?? a.ballScore.time)?.compareTo(
+                b.ballScore.score_time ?? b.ballScore.time ?? DateTime.now()) ??
             0);
 
         final overList = state.overList.toList();

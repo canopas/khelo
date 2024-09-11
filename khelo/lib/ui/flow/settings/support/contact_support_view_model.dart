@@ -151,7 +151,8 @@ class ContactSupportViewStateNotifier
         attachmentUrls:
             state.attachments.map((e) => e.url).whereNotNull().toList(),
         userId: _currentUserId ?? '',
-        createdAt2: DateTime.now(),
+        createdAt: DateTime.now(),
+        createdTime: DateTime.now(),
       );
 
       await supportService.addSupportCase(supportCase).whenComplete(
