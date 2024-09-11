@@ -17,7 +17,7 @@ const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
 
 const mail = require("./mail/mail_service");
-module.exports={mail_service};
+module.exports={mail};
 
 const logger = require("firebase-functions/logger");
 
