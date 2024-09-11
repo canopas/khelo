@@ -30,6 +30,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       bowling_style:
           $enumDecodeNullable(_$BowlingStyleEnumMap, json['bowling_style']),
       isActive: json['isActive'] as bool? ?? true,
+      notifications: json['notifications'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -49,6 +50,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'batting_style': _$BattingStyleEnumMap[instance.batting_style],
       'bowling_style': _$BowlingStyleEnumMap[instance.bowling_style],
       'isActive': instance.isActive,
+      'notifications': instance.notifications,
     };
 
 const _$UserGenderEnumMap = {
@@ -86,3 +88,33 @@ const _$BowlingStyleEnumMap = {
   BowlingStyle.rightArmLegBreak: 7,
   BowlingStyle.none: 8,
 };
+
+_$ApiSessionImpl _$$ApiSessionImplFromJson(Map<String, dynamic> json) =>
+    _$ApiSessionImpl(
+      id: json['id'] as String,
+      user_id: json['user_id'] as String,
+      device_type: (json['device_type'] as num).toInt(),
+      device_id: json['device_id'] as String,
+      device_name: json['device_name'] as String,
+      device_fcm_token: json['device_fcm_token'] as String?,
+      app_version: (json['app_version'] as num).toInt(),
+      os_version: json['os_version'] as String,
+      created_at: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      is_active: json['is_active'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$$ApiSessionImplToJson(_$ApiSessionImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'user_id': instance.user_id,
+      'device_type': instance.device_type,
+      'device_id': instance.device_id,
+      'device_name': instance.device_name,
+      'device_fcm_token': instance.device_fcm_token,
+      'app_version': instance.app_version,
+      'os_version': instance.os_version,
+      'created_at': instance.created_at?.toIso8601String(),
+      'is_active': instance.is_active,
+    };

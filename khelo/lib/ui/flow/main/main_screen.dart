@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:data/service/device/device_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,10 +9,15 @@ import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
 import 'package:khelo/ui/flow/stats/my_stats_tab_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/navigation/bottom_navigation_bar.dart';
 
+import '../../../domain/extensions/widget_extension.dart';
 import '../home/home_screen.dart';
+import '../notification/notification_permission_bottom_sheet.dart';
+import 'main_screen_state_notifier.dart';
+import 'notification_handler.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -31,11 +37,16 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   final _materialPageController = PageController();
   final _cupertinoTabController = CupertinoTabController();
+  late final NotificationHandler notificationHandler;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    notificationHandler = ref.read(notificationHandlerProvider);
+    runPostFrame(() {
+      notificationHandler.init(context);
+    });
   }
 
   @override
@@ -50,10 +61,33 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   Widget build(BuildContext context) {
+    _observerShowNotificationPermissionPrompt(context);
     if (Platform.isIOS) {
       return _cupertinoTabs(context);
     }
     return _materialTabs(context);
+  }
+
+  void _observerShowNotificationPermissionPrompt(BuildContext context) {
+    ref.listen(
+        mainScreenStateNotifierProvider
+            .select((value) => value.showNotificationPermissionPrompt),
+        (previous, next) async {
+      if (next != null) {
+        final isNotificationPermissionRequired =
+            await DeviceService.isNotificationPermissionRequired();
+        final bool hasPermission =
+            await Permission.notification.status.isGranted;
+        if (context.mounted &&
+            isNotificationPermissionRequired &&
+            !hasPermission) {
+          ref
+              .read(mainScreenStateNotifierProvider.notifier)
+              .notificationPermissionPromptShown();
+          await showPermissionBottomSheet(context);
+        }
+      }
+    });
   }
 
   Widget _cupertinoTabs(BuildContext context) => CupertinoTabScaffold(
