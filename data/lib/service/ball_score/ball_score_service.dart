@@ -110,6 +110,7 @@ class BallScoreService {
     List<String> matchIds,
   ) async {
     try {
+      if (matchIds.isEmpty) return [];
       final ballScoreRef = await _ballScoreCollection
           .where(FireStoreConst.matchId, whereIn: matchIds)
           .get();
