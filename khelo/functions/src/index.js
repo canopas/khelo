@@ -16,6 +16,9 @@ const notification_service = require("./notification/notification_service");
 const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
 
+const mail = require("./mail/mail_service");
+module.exports={mail_service};
+
 const logger = require("firebase-functions/logger");
 
 exports.TIMEZONE = "Asia/Kolkata";
