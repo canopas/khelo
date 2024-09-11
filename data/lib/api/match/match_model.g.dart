@@ -225,6 +225,8 @@ _$RevisedTargetImpl _$$RevisedTargetImplFromJson(Map<String, dynamic> json) =>
       overs: (json['overs'] as num?)?.toDouble() ?? 0,
       time:
           json['time'] == null ? null : DateTime.parse(json['time'] as String),
+      time2: _$JsonConverterFromJson<Object, DateTime>(
+          json['time2'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$RevisedTargetImplToJson(_$RevisedTargetImpl instance) =>
@@ -232,4 +234,6 @@ Map<String, dynamic> _$$RevisedTargetImplToJson(_$RevisedTargetImpl instance) =>
       'runs': instance.runs,
       'overs': instance.overs,
       'time': instance.time?.toIso8601String(),
+      'time2': _$JsonConverterToJson<Object, DateTime>(
+          instance.time2, const TimeStampJsonConverter().toJson),
     };

@@ -1548,8 +1548,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     if (matchId == null) {
       return;
     }
-    final revisedTarget =
-        RevisedTarget(runs: run, overs: over.toDouble(), time: DateTime.now());
+    final revisedTarget = RevisedTarget(
+      runs: run,
+      overs: over.toDouble(),
+      time: DateTime.now(),
+      time2: DateTime.now(),
+    );
     await _matchService.setRevisedTarget(
         matchId: matchId, revisedTarget: revisedTarget);
   }

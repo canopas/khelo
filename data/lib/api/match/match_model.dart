@@ -116,6 +116,7 @@ class RevisedTarget with _$RevisedTarget {
     @Default(0) int runs,
     @Default(0) double overs,
     DateTime? time,
+    @TimeStampJsonConverter() DateTime? time2,
   }) = _RevisedTarget;
 
   factory RevisedTarget.fromJson(Map<String, dynamic> json) =>

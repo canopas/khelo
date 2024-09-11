@@ -1710,6 +1710,8 @@ mixin _$RevisedTarget {
   int get runs => throw _privateConstructorUsedError;
   double get overs => throw _privateConstructorUsedError;
   DateTime? get time => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get time2 => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1723,7 +1725,11 @@ abstract class $RevisedTargetCopyWith<$Res> {
           RevisedTarget value, $Res Function(RevisedTarget) then) =
       _$RevisedTargetCopyWithImpl<$Res, RevisedTarget>;
   @useResult
-  $Res call({int runs, double overs, DateTime? time});
+  $Res call(
+      {int runs,
+      double overs,
+      DateTime? time,
+      @TimeStampJsonConverter() DateTime? time2});
 }
 
 /// @nodoc
@@ -1742,6 +1748,7 @@ class _$RevisedTargetCopyWithImpl<$Res, $Val extends RevisedTarget>
     Object? runs = null,
     Object? overs = null,
     Object? time = freezed,
+    Object? time2 = freezed,
   }) {
     return _then(_value.copyWith(
       runs: null == runs
@@ -1756,6 +1763,10 @@ class _$RevisedTargetCopyWithImpl<$Res, $Val extends RevisedTarget>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      time2: freezed == time2
+          ? _value.time2
+          : time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -1768,7 +1779,11 @@ abstract class _$$RevisedTargetImplCopyWith<$Res>
       __$$RevisedTargetImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int runs, double overs, DateTime? time});
+  $Res call(
+      {int runs,
+      double overs,
+      DateTime? time,
+      @TimeStampJsonConverter() DateTime? time2});
 }
 
 /// @nodoc
@@ -1785,6 +1800,7 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
     Object? runs = null,
     Object? overs = null,
     Object? time = freezed,
+    Object? time2 = freezed,
   }) {
     return _then(_$RevisedTargetImpl(
       runs: null == runs
@@ -1799,6 +1815,10 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      time2: freezed == time2
+          ? _value.time2
+          : time2 // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -1806,7 +1826,11 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$RevisedTargetImpl implements _RevisedTarget {
-  const _$RevisedTargetImpl({this.runs = 0, this.overs = 0, this.time});
+  const _$RevisedTargetImpl(
+      {this.runs = 0,
+      this.overs = 0,
+      this.time,
+      @TimeStampJsonConverter() this.time2});
 
   factory _$RevisedTargetImpl.fromJson(Map<String, dynamic> json) =>
       _$$RevisedTargetImplFromJson(json);
@@ -1819,10 +1843,13 @@ class _$RevisedTargetImpl implements _RevisedTarget {
   final double overs;
   @override
   final DateTime? time;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? time2;
 
   @override
   String toString() {
-    return 'RevisedTarget(runs: $runs, overs: $overs, time: $time)';
+    return 'RevisedTarget(runs: $runs, overs: $overs, time: $time, time2: $time2)';
   }
 
   @override
@@ -1832,12 +1859,13 @@ class _$RevisedTargetImpl implements _RevisedTarget {
             other is _$RevisedTargetImpl &&
             (identical(other.runs, runs) || other.runs == runs) &&
             (identical(other.overs, overs) || other.overs == overs) &&
-            (identical(other.time, time) || other.time == time));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.time2, time2) || other.time2 == time2));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, runs, overs, time);
+  int get hashCode => Object.hash(runtimeType, runs, overs, time, time2);
 
   @JsonKey(ignore: true)
   @override
@@ -1857,7 +1885,8 @@ abstract class _RevisedTarget implements RevisedTarget {
   const factory _RevisedTarget(
       {final int runs,
       final double overs,
-      final DateTime? time}) = _$RevisedTargetImpl;
+      final DateTime? time,
+      @TimeStampJsonConverter() final DateTime? time2}) = _$RevisedTargetImpl;
 
   factory _RevisedTarget.fromJson(Map<String, dynamic> json) =
       _$RevisedTargetImpl.fromJson;
@@ -1868,6 +1897,9 @@ abstract class _RevisedTarget implements RevisedTarget {
   double get overs;
   @override
   DateTime? get time;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get time2;
   @override
   @JsonKey(ignore: true)
   _$$RevisedTargetImplCopyWith<_$RevisedTargetImpl> get copyWith =>
