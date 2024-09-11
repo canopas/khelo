@@ -1,3 +1,5 @@
+const {onCall} = require("firebase-functions/v2/https");
+
 exports.sendSupportRequest = onCall({ region: "asia-south1"}, async (request) => {
 
     const db = admin.firestore();
