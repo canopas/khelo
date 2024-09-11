@@ -241,13 +241,13 @@ abstract class _ProfileState implements ProfileState {
   UserModel? get currentUser;
   @override
   String? get appVersion;
-
-  /// Create a copy of ProfileState
-  /// with the given fields replaced by the non-null parameter values.
   @override
   bool get enableUserNotification;
   @override
   bool get shouldShowNotificationBanner;
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProfileStateImplCopyWith<_$ProfileStateImpl> get copyWith =>

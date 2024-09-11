@@ -1,37 +1,42 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../api/support/support_models.dart';
+import 'dart:io';
+
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../errors/app_error.dart';
-import '../../utils/constant/firestore_constant.dart';
+import '../../api/user/user_models.dart';
+import '../../storage/app_preferences.dart';
+import '../device/device_service.dart';
 
 final supportServiceProvider = Provider(
-  (ref) => SupportService(FirebaseFirestore.instance),
+  (ref) => SupportService(
+    ref.read(currentUserPod),
+    ref.read(deviceServiceProvider),
+  ),
 );
 
 class SupportService {
-  final FirebaseFirestore _firestore;
+  final UserModel? _currentUser;
+  final DeviceService _device;
 
-  SupportService(this._firestore);
+  SupportService(this._currentUser, this._device);
 
-  CollectionReference<AddSupportCaseRequest> get _supportCollection =>
-      _firestore.collection(FireStoreConst.supportCollection).withConverter(
-            fromFirestore: AddSupportCaseRequest.fromFireStore,
-            toFirestore: (AddSupportCaseRequest support, _) => support.toJson(),
-          );
+  Future<void> submitSupportRequest(
+    String title,
+    String description,
+    List<String> attachments,
+  ) async {
+    final data = {
+      "title": title,
+      "description": description,
+      "device_name": await _device.deviceName,
+      "app_version": await _device.appVersion,
+      "device_os": Platform.operatingSystemVersion,
+      "user_id": _currentUser?.id,
+      "attachments": attachments,
+    };
 
-  String get generateSupportId => _supportCollection.doc().id;
-
-  Future<String> addSupportCase(AddSupportCaseRequest supportCase) async {
-    try {
-      final supportCaseRef = _supportCollection.doc(supportCase.id);
-      await supportCaseRef.set(
-        supportCase.copyWith(id: supportCaseRef.id),
-        SetOptions(merge: true),
-      );
-      return supportCaseRef.id;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
+    final callable = FirebaseFunctions.instanceFor(region: 'asia-south1')
+        .httpsCallable('sendSupportRequest');
+    await callable.call(data);
   }
 }

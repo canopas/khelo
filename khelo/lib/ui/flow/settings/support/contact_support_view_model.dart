@@ -143,19 +143,13 @@ class ContactSupportViewStateNotifier
   void submitSupportCase() async {
     try {
       state = state.copyWith(submitting: true, actionError: null);
+      final title = state.titleController.text.trim();
+      final description = state.descriptionController.text.trim();
+      final attachments = state.attachments.map((e) => e.url).nonNulls.toList();
 
-      final supportCase = AddSupportCaseRequest(
-          id: supportService.generateSupportId,
-          title: state.titleController.text.trim(),
-          description: state.descriptionController.text.trim(),
-          attachmentUrls:
-              state.attachments.map((e) => e.url).whereNotNull().toList(),
-          userId: _currentUserId ?? '',
-          createdAt: DateTime.now());
-
-      await supportService.addSupportCase(supportCase).whenComplete(
-            () => state = state.copyWith(pop: true, submitting: false),
-          );
+      await supportService.submitSupportRequest(
+          title, description, attachments);
+      state = state.copyWith(pop: true, submitting: false);
     } catch (error) {
       state = state.copyWith(actionError: error, pop: false);
       debugPrint(
