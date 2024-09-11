@@ -79,7 +79,7 @@ class MatchService {
 
       UserModel? referee;
       if (match.referee_id != null) {
-        referee = await _userService.getUserById(match.referee_id!);
+        referee = await _userService.getUser(match.referee_id!);
       }
 
       return match.copyWith(
@@ -244,7 +244,7 @@ class MatchService {
 
       UserModel? referee;
       if (match.referee_id != null) {
-        referee = await _userService.getUserById(match.referee_id!);
+        referee = await _userService.getUser(match.referee_id!);
       }
 
       return match.copyWith(

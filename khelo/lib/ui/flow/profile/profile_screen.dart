@@ -1,5 +1,4 @@
 import 'package:data/storage/app_preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,22 +11,69 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/components/complete_profile_progress.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/primary_button.dart';
+import 'package:style/button/toggle_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 import '../../../gen/assets.gen.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.watch(profileStateProvider.notifier);
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen>
+    with WidgetsBindingObserver {
+  late ProfileViewNotifier notifier;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    notifier = ref.read(profileStateProvider.notifier);
+    super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      notifier.refreshNotificationPermissionStatus();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  void _observeActionError(BuildContext context) {
+    ref.listen(profileStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  void _observeUserSession(BuildContext context) {
+    ref.listen(hasUserSession, (previous, next) {
+      if (!next) {
+        AppRoute.intro.go(context);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(profileStateProvider);
 
-    _observeActionError(context, ref);
-    _observeUserSession(context, ref);
+    _observeActionError(context);
+    _observeUserSession(context);
     return AppPage(
       title: context.l10n.tab_profile_title,
       body: Builder(
@@ -40,6 +86,10 @@ class ProfileScreen extends ConsumerWidget {
               if (state.currentUser != null) ...[
                 CompleteProfileProgress(user: state.currentUser!)
               ],
+              Visibility(
+                visible: state.shouldShowNotificationBanner,
+                child: _turnOnNotificationPrompt(context: context),
+              ),
               const SizedBox(height: 24),
               Text(
                 context.l10n.profile_settings_title,
@@ -47,7 +97,7 @@ class ProfileScreen extends ConsumerWidget {
                     .copyWith(color: context.colorScheme.textPrimary),
               ),
               const SizedBox(height: 16),
-              _settingsView(context, notifier),
+              _settingsView(context, state),
               if (state.currentUser?.id != null) ...[
                 const SizedBox(height: 16),
                 _qrCodeView(context, state.currentUser?.id ?? ""),
@@ -103,7 +153,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _settingsView(
     BuildContext context,
-    ProfileViewNotifier notifier,
+    ProfileState state,
   ) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -113,6 +163,14 @@ class ProfileScreen extends ConsumerWidget {
       ),
       child: Column(
         children: [
+          _settingItem(
+            context,
+            icon: Assets.images.icNotificationBell,
+            title: context.l10n.notification_title,
+            child: toggleButton(context,
+                defaultEnabled: state.enableUserNotification,
+                onTap: (_) => notifier.onToggleUserNotificationChange()),
+          ),
           _settingItem(
             context,
             icon: Assets.images.icContactSupport,
@@ -157,25 +215,30 @@ class ProfileScreen extends ConsumerWidget {
     required String icon,
     Color? color,
     required String title,
-    required Function() onTap,
+    Function()? onTap,
+    Widget? child,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: OnTapScale(
         onTap: onTap,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SvgPicture.asset(
               icon,
               colorFilter: ColorFilter.mode(
-                  color ?? context.colorScheme.textPrimary, BlendMode.srcATop),
+                  color ?? context.colorScheme.textPrimary, BlendMode.srcIn),
             ),
             const SizedBox(width: 16),
-            Text(
-              title,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: color ?? context.colorScheme.textPrimary),
+            Expanded(
+              child: Text(
+                title,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: color ?? context.colorScheme.textPrimary),
+              ),
             ),
+            if (child != null) child,
           ],
         ),
       ),
@@ -225,20 +288,49 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  void _observeActionError(BuildContext context, WidgetRef ref) {
-    ref.listen(profileStateProvider.select((value) => value.actionError),
-        (previous, next) {
-      if (next != null) {
-        showErrorSnackBar(context: context, error: next);
-      }
-    });
+  Widget _turnOnNotificationPrompt({
+    required BuildContext context,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        color: context.colorScheme.alert,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            context.l10n.notification_turn_on_title,
+            style: AppTextStyle.subtitle2.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              PrimaryButton(
+                context.l10n.notification_turn_on_btn_title,
+                expanded: false,
+                background: Colors.white,
+                foreground: context.colorScheme.alert,
+                onPressed: () => onRequestPermission(context),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-  void _observeUserSession(BuildContext context, WidgetRef ref) {
-    ref.listen(hasUserSession, (previous, next) {
-      if (!next) {
-        AppRoute.intro.go(context);
-      }
-    });
+  void onRequestPermission(BuildContext context) async {
+    final status = await Permission.notification.status;
+    if (status.isPermanentlyDenied) {
+      if (context.mounted) openAppSettings();
+    } else {
+      await Permission.notification.request();
+    }
   }
 }

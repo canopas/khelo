@@ -33,6 +33,7 @@ class UserModel with _$UserModel {
     BattingStyle? batting_style,
     BowlingStyle? bowling_style,
     @Default(true) bool isActive,
+    @Default(true) bool notifications,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -50,6 +51,40 @@ class UserModel with _$UserModel {
 
   static UserModel? fromJsonString(String json) =>
       UserModel.fromJson(jsonDecode(json));
+}
+
+@freezed
+class ApiSession with _$ApiSession {
+  const ApiSession._();
+
+  const factory ApiSession({
+    required String id,
+    required String user_id,
+    required int device_type,
+    required String device_id,
+    required String device_name,
+    String? device_fcm_token,
+    required int app_version,
+    required String os_version,
+    DateTime? created_at,
+    @Default(true) bool is_active,
+  }) = _ApiSession;
+
+  factory ApiSession.fromJson(Map<String, dynamic> json) =>
+      _$ApiSessionFromJson(json);
+
+  factory ApiSession.fromFireStore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options,
+      ) {
+    final Map<String, dynamic>? data = snapshot.data();
+    return ApiSession.fromJson(data!);
+  }
+
+  String toJsonString() => jsonEncode(toJson());
+
+  static ApiSession? fromJsonString(String json) =>
+      ApiSession.fromJson(jsonDecode(json));
 }
 
 extension ProfileCompleteExtension on UserModel {
