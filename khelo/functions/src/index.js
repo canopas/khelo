@@ -49,20 +49,24 @@ exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, 
   await matchRepository.processUpcomingMatches();
 });
 
-exports.sendSupportRequest = onCall({ region: "asia-south1"}, async (request) => {
+exports.sendSupportRequest = onCall({ region: "asia-south1" }, async (request) => {
 
-    const db = admin.firestore();
-    var data = request.data;
+  const db = admin.firestore();
+  var data = request.data;
 
+  try {
     await db.collection('support_requests')
-        .add({
-            to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
-            template: {
-                name: "support_request",
-                data: {
-                    request: data
-                },
-            },
-        }).then(() => console.log('Queued email for delivery!'));
+      .add({
+        to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
+        template: {
+          name: "support_request",
+          data: {
+            request: data
+          },
+        },
+      }).then(() => console.log('Queued email for delivery!'));
+  } catch (error) {
+    console.log('Failed to delivery email', error);
+  }
 
 });
