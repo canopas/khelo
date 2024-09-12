@@ -141,8 +141,6 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
         dob: state.dob,
         created_at: state.currentUser?.created_at ?? DateTime.now(),
         updated_at: DateTime.now(),
-        created_time: state.currentUser?.created_at ?? DateTime.now(),
-        updated_time: DateTime.now(),
       );
 
       await userService.updateUser(user);
