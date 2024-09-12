@@ -66,9 +66,9 @@ post_install do |installer|
 
         ## dart: PermissionGroup.notification
         'PERMISSION_NOTIFICATIONS=1',
-
         ]
     end
     # End of the permission_handler configuration
+
   end
 end

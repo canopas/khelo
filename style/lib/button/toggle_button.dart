@@ -10,34 +10,38 @@ Widget toggleButton(
 }) {
   bool defaultValue = defaultEnabled;
 
-  return StatefulBuilder(
-    builder: (context, setStateSwitch) {
-      return Theme(
-        data: context.brightness == Brightness.dark
-            ? materialThemeDataDark
-            : materialThemeDataLight,
-        child: SizedBox(
-          height: 32,
-          width: 52,
-          child: FittedBox(
-            fit: BoxFit.fitWidth,
-            child: Switch.adaptive(
-              inactiveTrackColor: context.colorScheme.containerHigh,
-              activeColor: context.colorScheme.primary,
-              trackOutlineColor: WidgetStateColor.transparent,
-              thumbColor: WidgetStatePropertyAll(context.colorScheme.onPrimary),
-              value: defaultValue,
-              onChanged: (value) {
-                setStateSwitch(() {
-                  defaultValue = value;
-                  onTap(value);
-                });
-              },
+  return Material(
+    type: MaterialType.transparency,
+    child: StatefulBuilder(
+      builder: (context, setStateSwitch) {
+        return Theme(
+          data: context.brightness == Brightness.dark
+              ? materialThemeDataDark
+              : materialThemeDataLight,
+          child: SizedBox(
+            height: 32,
+            width: 52,
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Switch.adaptive(
+                inactiveTrackColor: context.colorScheme.containerHigh,
+                activeColor: context.colorScheme.primary,
+                trackOutlineColor: WidgetStateColor.transparent,
+                thumbColor:
+                    WidgetStatePropertyAll(context.colorScheme.onPrimary),
+                value: defaultValue,
+                onChanged: (value) {
+                  setStateSwitch(() {
+                    defaultValue = value;
+                    onTap(value);
+                  });
+                },
+              ),
             ),
           ),
-        ),
-      );
-    },
+        );
+      },
+    ),
   );
 }
 

@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _actionRow(BuildContext context) {
     return SizedBox(
-      height: 64,
+      height: 65,
       child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Padding(
@@ -135,6 +135,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   ) {
     return ListView.builder(
       shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: state.groupMatches.length,
       itemBuilder: (context, index) {
         final item = state.groupMatches.entries.elementAt(index);
@@ -281,7 +282,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Text.rich(
         overflow: TextOverflow.ellipsis,
         TextSpan(
-            text: match.start_time.format(context, DateFormatType.dateAndTime),
+            text: (match.start_at ?? match.start_time)
+                ?.format(context, DateFormatType.dateAndTime),
             style: AppTextStyle.caption
                 .copyWith(color: context.colorScheme.textSecondary),
             children: [
@@ -327,11 +329,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 Text(
                   title,
+                  textScaler: TextScaler.noScaling,
                   style: AppTextStyle.body1
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
                 Text(
                   btnText,
+                  textScaler: TextScaler.noScaling,
                   style: AppTextStyle.button
                       .copyWith(color: context.colorScheme.primary),
                 )

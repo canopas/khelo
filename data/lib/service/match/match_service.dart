@@ -61,6 +61,7 @@ class MatchService {
           city: '',
           ground: '',
           start_time: DateTime.now(),
+          start_at: DateTime.now(),
           ball_type: BallType.leather,
           pitch_type: PitchType.turf,
           created_by: '',
@@ -78,7 +79,7 @@ class MatchService {
 
       UserModel? referee;
       if (match.referee_id != null) {
-        referee = await _userService.getUserById(match.referee_id!);
+        referee = await _userService.getUser(match.referee_id!);
       }
 
       return match.copyWith(
@@ -225,6 +226,7 @@ class MatchService {
           city: '',
           ground: '',
           start_time: DateTime.now(),
+          start_at: DateTime.now(),
           ball_type: BallType.leather,
           pitch_type: PitchType.turf,
           created_by: '',
@@ -242,7 +244,7 @@ class MatchService {
 
       UserModel? referee;
       if (match.referee_id != null) {
-        referee = await _userService.getUserById(match.referee_id!);
+        referee = await _userService.getUser(match.referee_id!);
       }
 
       return match.copyWith(

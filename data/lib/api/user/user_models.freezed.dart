@@ -31,10 +31,15 @@ mixin _$UserModel {
   UserGender? get gender => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
   DateTime? get updated_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_time => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get updated_time => throw _privateConstructorUsedError;
   PlayerRole? get player_role => throw _privateConstructorUsedError;
   BattingStyle? get batting_style => throw _privateConstructorUsedError;
   BowlingStyle? get bowling_style => throw _privateConstructorUsedError;
   bool get isActive => throw _privateConstructorUsedError;
+  bool get notifications => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,10 +64,13 @@ abstract class $UserModelCopyWith<$Res> {
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      @TimeStampJsonConverter() DateTime? updated_time,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
-      bool isActive});
+      bool isActive,
+      bool notifications});
 }
 
 /// @nodoc
@@ -89,10 +97,13 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_time = freezed,
+    Object? updated_time = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
     Object? isActive = null,
+    Object? notifications = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -139,6 +150,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_time: freezed == updated_time
+          ? _value.updated_time
+          : updated_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -154,6 +173,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
       isActive: null == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
   }
@@ -179,10 +202,13 @@ abstract class _$$UserModelImplCopyWith<$Res>
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      @TimeStampJsonConverter() DateTime? updated_time,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
-      bool isActive});
+      bool isActive,
+      bool notifications});
 }
 
 /// @nodoc
@@ -207,10 +233,13 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_time = freezed,
+    Object? updated_time = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
     Object? isActive = null,
+    Object? notifications = null,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -257,6 +286,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_time: freezed == updated_time
+          ? _value.updated_time
+          : updated_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -272,6 +309,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
       isActive: null == isActive
           ? _value.isActive
           : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      notifications: null == notifications
+          ? _value.notifications
+          : notifications // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
@@ -292,10 +333,13 @@ class _$UserModelImpl extends _UserModel {
       this.gender,
       this.created_at,
       this.updated_at,
+      @TimeStampJsonConverter() this.created_time,
+      @TimeStampJsonConverter() this.updated_time,
       this.player_role,
       this.batting_style,
       this.bowling_style,
-      this.isActive = true})
+      this.isActive = true,
+      this.notifications = true})
       : super._();
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -324,6 +368,12 @@ class _$UserModelImpl extends _UserModel {
   @override
   final DateTime? updated_at;
   @override
+  @TimeStampJsonConverter()
+  final DateTime? created_time;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? updated_time;
+  @override
   final PlayerRole? player_role;
   @override
   final BattingStyle? batting_style;
@@ -332,10 +382,13 @@ class _$UserModelImpl extends _UserModel {
   @override
   @JsonKey()
   final bool isActive;
+  @override
+  @JsonKey()
+  final bool notifications;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive)';
+    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, created_time: $created_time, updated_time: $updated_time, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive, notifications: $notifications)';
   }
 
   @override
@@ -359,6 +412,10 @@ class _$UserModelImpl extends _UserModel {
                 other.created_at == created_at) &&
             (identical(other.updated_at, updated_at) ||
                 other.updated_at == updated_at) &&
+            (identical(other.created_time, created_time) ||
+                other.created_time == created_time) &&
+            (identical(other.updated_time, updated_time) ||
+                other.updated_time == updated_time) &&
             (identical(other.player_role, player_role) ||
                 other.player_role == player_role) &&
             (identical(other.batting_style, batting_style) ||
@@ -366,7 +423,9 @@ class _$UserModelImpl extends _UserModel {
             (identical(other.bowling_style, bowling_style) ||
                 other.bowling_style == bowling_style) &&
             (identical(other.isActive, isActive) ||
-                other.isActive == isActive));
+                other.isActive == isActive) &&
+            (identical(other.notifications, notifications) ||
+                other.notifications == notifications));
   }
 
   @JsonKey(ignore: true)
@@ -384,10 +443,13 @@ class _$UserModelImpl extends _UserModel {
       gender,
       created_at,
       updated_at,
+      created_time,
+      updated_time,
       player_role,
       batting_style,
       bowling_style,
-      isActive);
+      isActive,
+      notifications);
 
   @JsonKey(ignore: true)
   @override
@@ -416,10 +478,13 @@ abstract class _UserModel extends UserModel {
       final UserGender? gender,
       final DateTime? created_at,
       final DateTime? updated_at,
+      @TimeStampJsonConverter() final DateTime? created_time,
+      @TimeStampJsonConverter() final DateTime? updated_time,
       final PlayerRole? player_role,
       final BattingStyle? batting_style,
       final BowlingStyle? bowling_style,
-      final bool isActive}) = _$UserModelImpl;
+      final bool isActive,
+      final bool notifications}) = _$UserModelImpl;
   const _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -448,6 +513,12 @@ abstract class _UserModel extends UserModel {
   @override
   DateTime? get updated_at;
   @override
+  @TimeStampJsonConverter()
+  DateTime? get created_time;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get updated_time;
+  @override
   PlayerRole? get player_role;
   @override
   BattingStyle? get batting_style;
@@ -456,7 +527,376 @@ abstract class _UserModel extends UserModel {
   @override
   bool get isActive;
   @override
+  bool get notifications;
+  @override
   @JsonKey(ignore: true)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ApiSession _$ApiSessionFromJson(Map<String, dynamic> json) {
+  return _ApiSession.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ApiSession {
+  String get id => throw _privateConstructorUsedError;
+  String get user_id => throw _privateConstructorUsedError;
+  int get device_type => throw _privateConstructorUsedError;
+  String get device_id => throw _privateConstructorUsedError;
+  String get device_name => throw _privateConstructorUsedError;
+  String? get device_fcm_token => throw _privateConstructorUsedError;
+  int get app_version => throw _privateConstructorUsedError;
+  String get os_version => throw _privateConstructorUsedError;
+  DateTime? get created_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_time => throw _privateConstructorUsedError;
+  bool get is_active => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ApiSessionCopyWith<ApiSession> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ApiSessionCopyWith<$Res> {
+  factory $ApiSessionCopyWith(
+          ApiSession value, $Res Function(ApiSession) then) =
+      _$ApiSessionCopyWithImpl<$Res, ApiSession>;
+  @useResult
+  $Res call(
+      {String id,
+      String user_id,
+      int device_type,
+      String device_id,
+      String device_name,
+      String? device_fcm_token,
+      int app_version,
+      String os_version,
+      DateTime? created_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      bool is_active});
+}
+
+/// @nodoc
+class _$ApiSessionCopyWithImpl<$Res, $Val extends ApiSession>
+    implements $ApiSessionCopyWith<$Res> {
+  _$ApiSessionCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user_id = null,
+    Object? device_type = null,
+    Object? device_id = null,
+    Object? device_name = null,
+    Object? device_fcm_token = freezed,
+    Object? app_version = null,
+    Object? os_version = null,
+    Object? created_at = freezed,
+    Object? created_time = freezed,
+    Object? is_active = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_type: null == device_type
+          ? _value.device_type
+          : device_type // ignore: cast_nullable_to_non_nullable
+              as int,
+      device_id: null == device_id
+          ? _value.device_id
+          : device_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_name: null == device_name
+          ? _value.device_name
+          : device_name // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_fcm_token: freezed == device_fcm_token
+          ? _value.device_fcm_token
+          : device_fcm_token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      app_version: null == app_version
+          ? _value.app_version
+          : app_version // ignore: cast_nullable_to_non_nullable
+              as int,
+      os_version: null == os_version
+          ? _value.os_version
+          : os_version // ignore: cast_nullable_to_non_nullable
+              as String,
+      created_at: freezed == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      is_active: null == is_active
+          ? _value.is_active
+          : is_active // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ApiSessionImplCopyWith<$Res>
+    implements $ApiSessionCopyWith<$Res> {
+  factory _$$ApiSessionImplCopyWith(
+          _$ApiSessionImpl value, $Res Function(_$ApiSessionImpl) then) =
+      __$$ApiSessionImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String user_id,
+      int device_type,
+      String device_id,
+      String device_name,
+      String? device_fcm_token,
+      int app_version,
+      String os_version,
+      DateTime? created_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      bool is_active});
+}
+
+/// @nodoc
+class __$$ApiSessionImplCopyWithImpl<$Res>
+    extends _$ApiSessionCopyWithImpl<$Res, _$ApiSessionImpl>
+    implements _$$ApiSessionImplCopyWith<$Res> {
+  __$$ApiSessionImplCopyWithImpl(
+      _$ApiSessionImpl _value, $Res Function(_$ApiSessionImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? user_id = null,
+    Object? device_type = null,
+    Object? device_id = null,
+    Object? device_name = null,
+    Object? device_fcm_token = freezed,
+    Object? app_version = null,
+    Object? os_version = null,
+    Object? created_at = freezed,
+    Object? created_time = freezed,
+    Object? is_active = null,
+  }) {
+    return _then(_$ApiSessionImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_type: null == device_type
+          ? _value.device_type
+          : device_type // ignore: cast_nullable_to_non_nullable
+              as int,
+      device_id: null == device_id
+          ? _value.device_id
+          : device_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_name: null == device_name
+          ? _value.device_name
+          : device_name // ignore: cast_nullable_to_non_nullable
+              as String,
+      device_fcm_token: freezed == device_fcm_token
+          ? _value.device_fcm_token
+          : device_fcm_token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      app_version: null == app_version
+          ? _value.app_version
+          : app_version // ignore: cast_nullable_to_non_nullable
+              as int,
+      os_version: null == os_version
+          ? _value.os_version
+          : os_version // ignore: cast_nullable_to_non_nullable
+              as String,
+      created_at: freezed == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      is_active: null == is_active
+          ? _value.is_active
+          : is_active // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ApiSessionImpl extends _ApiSession {
+  const _$ApiSessionImpl(
+      {required this.id,
+      required this.user_id,
+      required this.device_type,
+      required this.device_id,
+      required this.device_name,
+      this.device_fcm_token,
+      required this.app_version,
+      required this.os_version,
+      this.created_at,
+      @TimeStampJsonConverter() this.created_time,
+      this.is_active = true})
+      : super._();
+
+  factory _$ApiSessionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ApiSessionImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String user_id;
+  @override
+  final int device_type;
+  @override
+  final String device_id;
+  @override
+  final String device_name;
+  @override
+  final String? device_fcm_token;
+  @override
+  final int app_version;
+  @override
+  final String os_version;
+  @override
+  final DateTime? created_at;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? created_time;
+  @override
+  @JsonKey()
+  final bool is_active;
+
+  @override
+  String toString() {
+    return 'ApiSession(id: $id, user_id: $user_id, device_type: $device_type, device_id: $device_id, device_name: $device_name, device_fcm_token: $device_fcm_token, app_version: $app_version, os_version: $os_version, created_at: $created_at, created_time: $created_time, is_active: $is_active)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ApiSessionImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
+            (identical(other.device_type, device_type) ||
+                other.device_type == device_type) &&
+            (identical(other.device_id, device_id) ||
+                other.device_id == device_id) &&
+            (identical(other.device_name, device_name) ||
+                other.device_name == device_name) &&
+            (identical(other.device_fcm_token, device_fcm_token) ||
+                other.device_fcm_token == device_fcm_token) &&
+            (identical(other.app_version, app_version) ||
+                other.app_version == app_version) &&
+            (identical(other.os_version, os_version) ||
+                other.os_version == os_version) &&
+            (identical(other.created_at, created_at) ||
+                other.created_at == created_at) &&
+            (identical(other.created_time, created_time) ||
+                other.created_time == created_time) &&
+            (identical(other.is_active, is_active) ||
+                other.is_active == is_active));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      user_id,
+      device_type,
+      device_id,
+      device_name,
+      device_fcm_token,
+      app_version,
+      os_version,
+      created_at,
+      created_time,
+      is_active);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ApiSessionImplCopyWith<_$ApiSessionImpl> get copyWith =>
+      __$$ApiSessionImplCopyWithImpl<_$ApiSessionImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ApiSessionImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ApiSession extends ApiSession {
+  const factory _ApiSession(
+      {required final String id,
+      required final String user_id,
+      required final int device_type,
+      required final String device_id,
+      required final String device_name,
+      final String? device_fcm_token,
+      required final int app_version,
+      required final String os_version,
+      final DateTime? created_at,
+      @TimeStampJsonConverter() final DateTime? created_time,
+      final bool is_active}) = _$ApiSessionImpl;
+  const _ApiSession._() : super._();
+
+  factory _ApiSession.fromJson(Map<String, dynamic> json) =
+      _$ApiSessionImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get user_id;
+  @override
+  int get device_type;
+  @override
+  String get device_id;
+  @override
+  String get device_name;
+  @override
+  String? get device_fcm_token;
+  @override
+  int get app_version;
+  @override
+  String get os_version;
+  @override
+  DateTime? get created_at;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get created_time;
+  @override
+  bool get is_active;
+  @override
+  @JsonKey(ignore: true)
+  _$$ApiSessionImplCopyWith<_$ApiSessionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -17,6 +17,7 @@
   "common_no_title": "No",
   "common_retry_title": "Retry",
   "common_submit_title": "Submit",
+  "common_not_now": "Not now",
   "common_not_specified_title": "Not Specified",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
@@ -127,6 +128,12 @@
   "home_search_results_title": "Results",
   "home_match_list_empty_search_title": "No match results",
   "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
+
+  "@_NOTIFICATION_POPUP": {
+  },
+  "notification_popup_title": "Turn on notifications?",
+  "notification_popup_description": "Never miss a moment of your matches. \nTurn on notifications for real-time updates and important match information.",
+  "notification_popup_later": "Later",
 
   "@_MY_CRICKET": {
   },
@@ -773,6 +780,12 @@
   "profile_setting_app_version_text": "App Version: {version}",
   "profile_setting_scan_to_play_text": "Scan to play!",
   "profile_setting_scan_to_play_description": "This QR code allows you to easily add the player to the team.",
+
+  "@_NOTIFICATION": {
+  },
+  "notification_title": "Notifications",
+  "notification_turn_on_title": "It seems that your notifications have been turned off. Turn on notifications to stay updated on your teams and matches.",
+  "notification_turn_on_btn_title": "Turn on",
 
   "@_CONTACT_SUPPORT": {
   },

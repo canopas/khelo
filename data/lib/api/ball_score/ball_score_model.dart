@@ -2,6 +2,7 @@
 
 import "package:collection/collection.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../converter/timestamp_json_converter.dart';
 import '../user/user_models.dart';
 import '../../extensions/double_extensions.dart';
 import '../../extensions/int_extensions.dart';
@@ -31,7 +32,8 @@ class BallScoreModel with _$BallScoreModel {
     String? wicket_taker_id,
     required bool is_four,
     required bool is_six,
-    required DateTime time,
+    DateTime? time,
+    @TimeStampJsonConverter() DateTime? score_time,
   }) = _BallScoreModel;
 
   factory BallScoreModel.fromJson(Map<String, dynamic> json) =>
@@ -317,7 +319,8 @@ extension OverSummaryMetaData on OverSummary {
             : 0),
       );
 
-  DateTime get time => balls.lastOrNull?.time ?? DateTime.now();
+  DateTime get time =>
+      balls.lastOrNull?.score_time ?? balls.lastOrNull?.time ?? DateTime.now();
 
   BowlerSummary get bowlerStatAtStart {
     final runsInOver = balls
@@ -376,7 +379,12 @@ extension OverSummaryMetaData on OverSummary {
     final extraSummaryDetail = extrasSummary.addExtra(ball);
 
     final ballScores = [...balls, ball].toList();
-    ballScores.sort((a, b) => a.time.compareTo(b.time));
+    ballScores.sort(
+      (a, b) =>
+          (a.score_time ?? a.time)
+              ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
+          0,
+    );
 
     final configuredStriker = striker.addBall(
       ball,
@@ -429,7 +437,12 @@ extension OverSummaryMetaData on OverSummary {
 
     final ballScores = balls.toList();
     ballScores.removeWhere((element) => element.id == ball.id);
-    ballScores.sort((a, b) => a.time.compareTo(b.time));
+    ballScores.sort(
+      (a, b) =>
+          (a.score_time ?? a.time)
+              ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
+          0,
+    );
 
     final configuredStriker = striker.removeBall(ball);
     final configuredNonStriker = nonStriker.removeBall(ball);

@@ -1170,6 +1170,9 @@ PODS:
   - Firebase/Firestore (11.0.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 11.0.0)
+  - Firebase/Messaging (11.0.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 11.0.0)
   - Firebase/Storage (11.0.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 11.0.0)
@@ -1182,6 +1185,10 @@ PODS:
     - Flutter
   - firebase_crashlytics (4.1.0):
     - Firebase/Crashlytics (= 11.0.0)
+    - firebase_core
+    - Flutter
+  - firebase_messaging (15.1.0):
+    - Firebase/Messaging (= 11.0.0)
     - firebase_core
     - Flutter
   - firebase_storage (12.2.0):
@@ -1241,6 +1248,15 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GoogleUtilities/UserDefaults (~> 8.0)
     - PromisesObjC (~> 2.4)
+  - FirebaseMessaging (11.0.0):
+    - FirebaseCore (~> 11.0)
+    - FirebaseInstallations (~> 11.0)
+    - GoogleDataTransport (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GoogleUtilities/Reachability (~> 8.0)
+    - GoogleUtilities/UserDefaults (~> 8.0)
+    - nanopb (~> 3.30910.0)
   - FirebaseRemoteConfigInterop (11.1.0)
   - FirebaseSessions (11.1.0):
     - FirebaseCore (~> 11.0)
@@ -1260,6 +1276,8 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GTMSessionFetcher/Core (~> 3.4)
   - Flutter (1.0.0)
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - flutter_timezone (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
@@ -1423,8 +1441,10 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
@@ -1451,6 +1471,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseFirestoreInternal
     - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseRemoteConfigInterop
     - FirebaseSessions
     - FirebaseSharedSwift
@@ -1481,10 +1502,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   firebase_crashlytics:
     :path: ".symlinks/plugins/firebase_crashlytics/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_timezone:
     :path: ".symlinks/plugins/flutter_timezone/ios"
   fluttertoast:
@@ -1516,6 +1541,7 @@ SPEC CHECKSUMS:
   firebase_auth: 16ac5db3d064db837ecd845080d7e18e4be7c66d
   firebase_core: ceec591a66629daaee82d3321551692c4a871493
   firebase_crashlytics: e4f04180f443d5a8b56fbc0685bdbd7d90dd26f0
+  firebase_messaging: 15d8b557010f3bb7b98d0302e1c7c8fbcd244425
   firebase_storage: 3b166e39a19e95b6a2d1c33b4ebff41e12a7615b
   FirebaseAppCheckInterop: e59b52f2c0e188e6ba77b9e3f6acead2117f2abf
   FirebaseAuth: d5cf28be74d7e82257f6a3f717509eff70d3cf4a
@@ -1527,11 +1553,13 @@ SPEC CHECKSUMS:
   FirebaseFirestore: a1758850668dbb503537b7780a2a1fdc5e37c6ce
   FirebaseFirestoreInternal: 9fcc0ccb987ab73163f2249444e4bfd9eac63748
   FirebaseInstallations: d0a8fea5a6fa91abc661591cf57c0f0d70863e57
+  FirebaseMessaging: d2d1d9c62c46dd2db49a952f7deb5b16ad2c9742
   FirebaseRemoteConfigInterop: abf8b1bbc0bf1b84abd22b66746926410bf91a87
   FirebaseSessions: 78f137e68dc01ca71606169ba4ac73b98c13752a
   FirebaseSharedSwift: 260a35e08943ec810d820a70bc0359136351d0c5
   FirebaseStorage: f9e2bf027d549db18b6195a37b31c85f56e40200
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
@@ -1555,6 +1583,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 566effa93f9085aaccbf2782f996090d80556c4f
+PODFILE CHECKSUM: aa371d0c498d976e41de4a5d9d15e9f486a17a37
 
 COCOAPODS: 1.15.2

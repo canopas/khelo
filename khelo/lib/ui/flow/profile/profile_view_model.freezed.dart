@@ -19,6 +19,8 @@ mixin _$ProfileState {
   Object? get actionError => throw _privateConstructorUsedError;
   UserModel? get currentUser => throw _privateConstructorUsedError;
   String? get appVersion => throw _privateConstructorUsedError;
+  bool get enableUserNotification => throw _privateConstructorUsedError;
+  bool get shouldShowNotificationBanner => throw _privateConstructorUsedError;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -33,7 +35,12 @@ abstract class $ProfileStateCopyWith<$Res> {
           ProfileState value, $Res Function(ProfileState) then) =
       _$ProfileStateCopyWithImpl<$Res, ProfileState>;
   @useResult
-  $Res call({Object? actionError, UserModel? currentUser, String? appVersion});
+  $Res call(
+      {Object? actionError,
+      UserModel? currentUser,
+      String? appVersion,
+      bool enableUserNotification,
+      bool shouldShowNotificationBanner});
 
   $UserModelCopyWith<$Res>? get currentUser;
 }
@@ -56,6 +63,8 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
     Object? actionError = freezed,
     Object? currentUser = freezed,
     Object? appVersion = freezed,
+    Object? enableUserNotification = null,
+    Object? shouldShowNotificationBanner = null,
   }) {
     return _then(_value.copyWith(
       actionError: freezed == actionError ? _value.actionError : actionError,
@@ -67,6 +76,14 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
               as String?,
+      enableUserNotification: null == enableUserNotification
+          ? _value.enableUserNotification
+          : enableUserNotification // ignore: cast_nullable_to_non_nullable
+              as bool,
+      shouldShowNotificationBanner: null == shouldShowNotificationBanner
+          ? _value.shouldShowNotificationBanner
+          : shouldShowNotificationBanner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -93,7 +110,12 @@ abstract class _$$ProfileStateImplCopyWith<$Res>
       __$$ProfileStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? actionError, UserModel? currentUser, String? appVersion});
+  $Res call(
+      {Object? actionError,
+      UserModel? currentUser,
+      String? appVersion,
+      bool enableUserNotification,
+      bool shouldShowNotificationBanner});
 
   @override
   $UserModelCopyWith<$Res>? get currentUser;
@@ -115,6 +137,8 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
     Object? actionError = freezed,
     Object? currentUser = freezed,
     Object? appVersion = freezed,
+    Object? enableUserNotification = null,
+    Object? shouldShowNotificationBanner = null,
   }) {
     return _then(_$ProfileStateImpl(
       actionError: freezed == actionError ? _value.actionError : actionError,
@@ -126,6 +150,14 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
           ? _value.appVersion
           : appVersion // ignore: cast_nullable_to_non_nullable
               as String?,
+      enableUserNotification: null == enableUserNotification
+          ? _value.enableUserNotification
+          : enableUserNotification // ignore: cast_nullable_to_non_nullable
+              as bool,
+      shouldShowNotificationBanner: null == shouldShowNotificationBanner
+          ? _value.shouldShowNotificationBanner
+          : shouldShowNotificationBanner // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -134,7 +166,11 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
 
 class _$ProfileStateImpl implements _ProfileState {
   const _$ProfileStateImpl(
-      {this.actionError, this.currentUser, this.appVersion});
+      {this.actionError,
+      this.currentUser,
+      this.appVersion,
+      this.enableUserNotification = true,
+      this.shouldShowNotificationBanner = false});
 
   @override
   final Object? actionError;
@@ -142,10 +178,16 @@ class _$ProfileStateImpl implements _ProfileState {
   final UserModel? currentUser;
   @override
   final String? appVersion;
+  @override
+  @JsonKey()
+  final bool enableUserNotification;
+  @override
+  @JsonKey()
+  final bool shouldShowNotificationBanner;
 
   @override
   String toString() {
-    return 'ProfileState(actionError: $actionError, currentUser: $currentUser, appVersion: $appVersion)';
+    return 'ProfileState(actionError: $actionError, currentUser: $currentUser, appVersion: $appVersion, enableUserNotification: $enableUserNotification, shouldShowNotificationBanner: $shouldShowNotificationBanner)';
   }
 
   @override
@@ -158,7 +200,13 @@ class _$ProfileStateImpl implements _ProfileState {
             (identical(other.currentUser, currentUser) ||
                 other.currentUser == currentUser) &&
             (identical(other.appVersion, appVersion) ||
-                other.appVersion == appVersion));
+                other.appVersion == appVersion) &&
+            (identical(other.enableUserNotification, enableUserNotification) ||
+                other.enableUserNotification == enableUserNotification) &&
+            (identical(other.shouldShowNotificationBanner,
+                    shouldShowNotificationBanner) ||
+                other.shouldShowNotificationBanner ==
+                    shouldShowNotificationBanner));
   }
 
   @override
@@ -166,7 +214,9 @@ class _$ProfileStateImpl implements _ProfileState {
       runtimeType,
       const DeepCollectionEquality().hash(actionError),
       currentUser,
-      appVersion);
+      appVersion,
+      enableUserNotification,
+      shouldShowNotificationBanner);
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -181,7 +231,9 @@ abstract class _ProfileState implements ProfileState {
   const factory _ProfileState(
       {final Object? actionError,
       final UserModel? currentUser,
-      final String? appVersion}) = _$ProfileStateImpl;
+      final String? appVersion,
+      final bool enableUserNotification,
+      final bool shouldShowNotificationBanner}) = _$ProfileStateImpl;
 
   @override
   Object? get actionError;
@@ -189,6 +241,10 @@ abstract class _ProfileState implements ProfileState {
   UserModel? get currentUser;
   @override
   String? get appVersion;
+  @override
+  bool get enableUserNotification;
+  @override
+  bool get shouldShowNotificationBanner;
 
   /// Create a copy of ProfileState
   /// with the given fields replaced by the non-null parameter values.

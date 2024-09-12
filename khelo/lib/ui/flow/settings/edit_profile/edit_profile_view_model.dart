@@ -23,6 +23,7 @@ final editProfileStateProvider = StateNotifierProvider.autoDispose<
     ref.read(userServiceProvider),
     ref.read(authServiceProvider),
     ref.read(currentUserPod),
+    ref.read(currentUserJsonPod.notifier),
   );
   ref.listen(currentUserPod, (_, next) => notifier._updateUser(next));
   return notifier;
@@ -32,12 +33,14 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final FileUploadService _fileUploadService;
   final UserService userService;
   final AuthService _authService;
+  final StateController<String?> userJsonController;
 
   EditProfileViewNotifier(
     this._fileUploadService,
     this.userService,
     this._authService,
     UserModel? user,
+    this.userJsonController,
   ) : super(EditProfileState(
             dob: user?.dob ?? DateTime.now(),
             imageUrl: user?.profile_img_url,
@@ -124,22 +127,26 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       final location = state.locationController.text.trim();
 
       UserModel user = UserModel(
-          id: state.currentUser!.id,
-          name: name,
-          name_lowercase: name.toLowerCase(),
-          email: email,
-          location: location.toLowerCase(),
-          batting_style: state.battingStyle,
-          bowling_style: state.bowlingStyle,
-          player_role: state.playerRole,
-          gender: state.gender,
-          phone: state.currentUser?.phone,
-          profile_img_url: state.imageUrl,
-          dob: state.dob,
-          created_at: state.currentUser?.created_at,
-          updated_at: DateTime.now());
+        id: state.currentUser!.id,
+        name: name,
+        name_lowercase: name.toLowerCase(),
+        email: email,
+        location: location.toLowerCase(),
+        batting_style: state.battingStyle,
+        bowling_style: state.bowlingStyle,
+        player_role: state.playerRole,
+        gender: state.gender,
+        phone: state.currentUser?.phone,
+        profile_img_url: state.imageUrl,
+        dob: state.dob,
+        created_at: state.currentUser?.created_at ?? DateTime.now(),
+        updated_at: DateTime.now(),
+        created_time: state.currentUser?.created_at ?? DateTime.now(),
+        updated_time: DateTime.now(),
+      );
 
       await userService.updateUser(user);
+      userJsonController.state = user.toJsonString();
       state = state.copyWith(isSaveInProgress: false, isSaved: true);
     } catch (e) {
       state = state.copyWith(isSaveInProgress: false, actionError: e);

@@ -44,8 +44,8 @@ class MatchDetailInfoView extends ConsumerWidget {
         _matchTitleView(context, state.match!),
         _dataRowView(context,
             title: context.l10n.match_info_date_and_time_title,
-            subtitle: state.match?.start_time
-                .format(context, DateFormatType.shortDateTime)),
+            subtitle: (state.match?.start_at ?? state.match?.start_time)
+                ?.format(context, DateFormatType.shortDateTime)),
         _tossDetailView(context, state.match!),
         _dataRowView(context,
             title: context.l10n.match_info_venue_title,
