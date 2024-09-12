@@ -1,6 +1,6 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {value: true});
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fiveMinuteCron = exports.teamPlayerChangeObserver = exports.TIMEZONE = void 0;
 
 const app_1 = require("firebase-admin/app");
@@ -15,9 +15,7 @@ const match_repository = require("./match/match_repository");
 const notification_service = require("./notification/notification_service");
 const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
-
-const mail = require("./mail/mail_service");
-module.exports={mail};
+const mail_service = require("./mail/mail_service");
 
 const logger = require("firebase-functions/logger");
 
@@ -32,6 +30,7 @@ const teamRepository = new team_repository.TeamRepository(db);
 const notificationService = new notification_service.NotificationService(userRepository);
 const teamService = new team_service.TeamService(userRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
+const mailService = new mail_service.MailService(db);
 
 const matchRepository = new match_repository.MatchRepository(db, matchService);
 
@@ -49,4 +48,8 @@ exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: R
 
 exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, schedule: "*/5 * * * *"}, async () => {
   await matchRepository.processUpcomingMatches();
+});
+
+exports.sendSupportRequest = onCall({ region: "asia-south1" }, async (request) => {
+  await mailService.sendMail(request.data);
 });
