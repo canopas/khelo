@@ -122,6 +122,7 @@ class UserService {
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
     final List<UserModel> users = [];
     try {
+      if (ids.isEmpty) return [];
       for (final tenIds in ids.chunked(10)) {
         final snapshot =
             await _userRef.where(FireStoreConst.id, whereIn: tenIds).get();

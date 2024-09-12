@@ -27,16 +27,19 @@ class _IntroScreenState extends ConsumerState<IntroScreen> {
           children: [
             ListView(
               padding: BottomStickyOverlay.padding +
-                  EdgeInsets.only(top: context.mediaQueryPadding.top),
+                  EdgeInsets.only(top: context.mediaQueryPadding.top + 24),
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: 16.0 + context.mediaQueryPadding.right),
-                  child: SvgPicture.asset(
-                    context.brightness == Brightness.dark
-                        ? Assets.images.introGraphicDark
-                        : Assets.images.introGraphicLight,
-                    fit: BoxFit.fill,
+                SizedBox(
+                  height: context.mediaQuerySize.height * 0.65,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        right: 16.0 + context.mediaQueryPadding.right),
+                    child: SvgPicture.asset(
+                      context.brightness == Brightness.dark
+                          ? Assets.images.introGraphicDark
+                          : Assets.images.introGraphicLight,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 Padding(
