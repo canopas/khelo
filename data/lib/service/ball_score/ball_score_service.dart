@@ -123,6 +123,7 @@ class BallScoreService {
   Stream<List<BallScoreChange>> streamBallScoresByInningIds(
     List<String> inningIds,
   ) {
+    if (inningIds.isEmpty) return const Stream.empty();
     return _ballScoreCollection
         .where(FireStoreConst.inningId, whereIn: inningIds)
         .snapshots()
