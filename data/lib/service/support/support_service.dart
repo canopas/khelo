@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
@@ -25,18 +26,21 @@ class SupportService {
     String description,
     List<String> attachments,
   ) async {
-    final data = {
-      "title": title,
-      "description": description,
-      "device_name": await _device.deviceName,
-      "app_version": await _device.appVersion,
-      "device_os": Platform.operatingSystemVersion,
-      "user_id": _currentUser?.id,
-      "attachments": attachments,
-    };
-
-    final callable = FirebaseFunctions.instanceFor(region: 'asia-south1')
-        .httpsCallable('sendSupportRequest');
-    await callable.call(data);
+    try {
+      final data = {
+        "title": title,
+        "description": description,
+        "device_name": await _device.deviceName,
+        "app_version": await _device.appVersion,
+        "device_os": Platform.operatingSystemVersion,
+        "user_id": _currentUser?.id,
+        "attachments": attachments,
+      };
+      final callable = FirebaseFunctions.instanceFor(region: 'asia-south1')
+          .httpsCallable('sendSupportRequest');
+      await callable.call(data);
+    } catch (error) {
+      debugPrint("error while sending support request ->$error");
+    }
   }
 }

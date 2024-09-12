@@ -1,6 +1,6 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 exports.fiveMinuteCron = exports.teamPlayerChangeObserver = exports.TIMEZONE = void 0;
 
 const app_1 = require("firebase-admin/app");
@@ -49,24 +49,20 @@ exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, 
   await matchRepository.processUpcomingMatches();
 });
 
-exports.sendSupportRequest = onCall({ region: "asia-south1" }, async (request) => {
-
-  const db = admin.firestore();
-  var data = request.data;
-
+exports.sendSupportRequest = onCall({region: "asia-south1"}, async (request) => {
+  const data = request.data;
   try {
-    await db.collection('support_requests')
+    await db.collection("support_requests")
       .add({
         to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
         template: {
           name: "support_request",
           data: {
-            request: data
+            request: data,
           },
         },
-      }).then(() => console.log('Queued email for delivery!'));
+      }).then(() => console.log("Queued email for delivery!"));
   } catch (error) {
-    console.log('Failed to delivery email', error);
+    console.log("Failed to delivery email", error);
   }
-
 });
