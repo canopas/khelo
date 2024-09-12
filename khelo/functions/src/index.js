@@ -31,7 +31,6 @@ const teamRepository = new team_repository.TeamRepository(db);
 const notificationService = new notification_service.NotificationService(userRepository);
 const teamService = new team_service.TeamService(userRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
-const mailService = new mail_service.MailService(db);
 
 const matchRepository = new match_repository.MatchRepository(db, matchService);
 
@@ -51,6 +50,20 @@ exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, 
   await matchRepository.processUpcomingMatches();
 });
 
-exports.sendSupportRequest = onCall({ region: "asia-south1" }, async (request) => {
-  await mailService.sendMail(request.data);
+exports.sendSupportRequest = onCall({ region: "asia-south1"}, async (request) => {
+
+    const db = admin.firestore();
+    var data = request.data;
+
+    await db.collection('support_requests')
+        .add({
+            to: ["radhika.s@canopas.com", "megh.l@canopas.com"],
+            template: {
+                name: "support_request",
+                data: {
+                    request: data
+                },
+            },
+        }).then(() => console.log('Queued email for delivery!'));
+
 });
