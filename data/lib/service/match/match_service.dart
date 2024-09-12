@@ -61,6 +61,7 @@ class MatchService {
           city: '',
           ground: '',
           start_time: DateTime.now(),
+          start_at: DateTime.now(),
           ball_type: BallType.leather,
           pitch_type: PitchType.turf,
           created_by: '',
@@ -192,7 +193,7 @@ class MatchService {
     int limit = 10,
   }) async {
     final filter = status.map((e) => e.value).toList();
-
+    if (filter.isEmpty) return [];
     var query = _matchCollection
         .where(FireStoreConst.matchStatus, whereIn: filter)
         .orderBy(FieldPath.documentId);
@@ -225,6 +226,7 @@ class MatchService {
           city: '',
           ground: '',
           start_time: DateTime.now(),
+          start_at: DateTime.now(),
           ball_type: BallType.leather,
           pitch_type: PitchType.turf,
           created_by: '',

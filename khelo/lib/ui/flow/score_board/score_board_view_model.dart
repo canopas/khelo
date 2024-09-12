@@ -209,9 +209,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           }
         }
 
-        currentScoreList.sort((a, b) => a.time.compareTo(b.time));
+        currentScoreList.sort((a, b) =>
+            (a.score_time ?? a.time)
+                ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
+            0);
 
-        previousScoreList.sort((a, b) => a.time.compareTo(b.time));
+        previousScoreList.sort((a, b) =>
+            (a.score_time ?? a.time)
+                ?.compareTo(b.score_time ?? b.time ?? DateTime.now()) ??
+            0);
         state = state.copyWith(
             currentScoresList: currentScoreList,
             previousScoresList: previousScoreList,
@@ -584,24 +590,26 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ballCount = state.ballCount + 1;
       }
       final ball = BallScoreModel(
-          id: _ballScoreService.generateBallScoreId,
-          inning_id: ballInningId,
-          match_id: state.match?.id ?? matchId,
-          over_number: state.overCount,
-          ball_number: ballCount,
-          bowler_id: bowlerId,
-          batsman_id: strikerId,
-          non_striker_id: nonStrikerId,
-          is_four: isFour,
-          is_six: isSix,
-          extras_awarded: extra,
-          extras_type: extrasType,
-          player_out_id: playerOutId,
-          runs_scored: run,
-          wicket_taker_id: wicketTakerId,
-          wicket_type: wicketType,
-          fielding_position: position,
-          time: DateTime.now());
+        id: _ballScoreService.generateBallScoreId,
+        inning_id: ballInningId,
+        match_id: state.match?.id ?? matchId,
+        over_number: state.overCount,
+        ball_number: ballCount,
+        bowler_id: bowlerId,
+        batsman_id: strikerId,
+        non_striker_id: nonStrikerId,
+        is_four: isFour,
+        is_six: isSix,
+        extras_awarded: extra,
+        extras_type: extrasType,
+        player_out_id: playerOutId,
+        runs_scored: run,
+        wicket_taker_id: wicketTakerId,
+        wicket_type: wicketType,
+        fielding_position: position,
+        time: DateTime.now(),
+        score_time: DateTime.now(),
+      );
       int wicketCount = state.otherInning!.total_wickets;
       if (wicketType != WicketType.retiredHurt && wicketType != null) {
         wicketCount = wicketCount + 1;
@@ -1540,8 +1548,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     if (matchId == null) {
       return;
     }
-    final revisedTarget =
-        RevisedTarget(runs: run, overs: over.toDouble(), time: DateTime.now());
+    final revisedTarget = RevisedTarget(
+      runs: run,
+      overs: over.toDouble(),
+      time: DateTime.now(),
+      revised_time: DateTime.now(),
+    );
     await _matchService.setRevisedTarget(
         matchId: matchId, revisedTarget: revisedTarget);
   }

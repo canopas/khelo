@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../converter/timestamp_json_converter.dart';
 import '../../extensions/double_extensions.dart';
 import '../team/team_model.dart';
 import '../user/user_models.dart';
@@ -27,7 +28,8 @@ class MatchModel with _$MatchModel {
     @Default([]) List<int> power_play_overs3,
     required String city,
     required String ground,
-    required DateTime start_time,
+    DateTime? start_time,
+    @TimeStampJsonConverter() DateTime? start_at,
     required BallType ball_type,
     required PitchType pitch_type,
     required String created_by,
@@ -114,6 +116,7 @@ class RevisedTarget with _$RevisedTarget {
     @Default(0) int runs,
     @Default(0) double overs,
     DateTime? time,
+    @TimeStampJsonConverter() DateTime? revised_time,
   }) = _RevisedTarget;
 
   factory RevisedTarget.fromJson(Map<String, dynamic> json) =>

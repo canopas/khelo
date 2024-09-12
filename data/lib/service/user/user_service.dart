@@ -100,8 +100,11 @@ class UserService {
   }
 
   Future<UserModel> _createUser(String userId, String phone) async {
-    final user =
-        UserModel(id: userId, phone: phone, created_at: DateTime.now());
+    final user = UserModel(
+      id: userId,
+      phone: phone,
+      created_at: DateTime.now(),
+    );
     await _userRef.doc(userId).set(user);
     return user;
   }
@@ -117,6 +120,7 @@ class UserService {
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
     final List<UserModel> users = [];
     try {
+      if (ids.isEmpty) return [];
       for (final tenIds in ids.chunked(10)) {
         final snapshot =
             await _userRef.where(FireStoreConst.id, whereIn: tenIds).get();

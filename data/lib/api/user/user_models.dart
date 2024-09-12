@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../converter/timestamp_json_converter.dart';
+
 part 'user_models.freezed.dart';
 
 part 'user_models.g.dart';
@@ -70,9 +72,9 @@ class ApiSession with _$ApiSession {
       _$ApiSessionFromJson(json);
 
   factory ApiSession.fromFireStore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
     final Map<String, dynamic>? data = snapshot.data();
     return ApiSession.fromJson(data!);
   }
