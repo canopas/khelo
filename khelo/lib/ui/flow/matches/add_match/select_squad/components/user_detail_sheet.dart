@@ -137,7 +137,7 @@ class UserDetailSheet extends StatelessWidget {
                   .copyWith(color: context.colorScheme.textDisabled),
             ),
             Text(
-              (user.created_time ?? user.created_at ?? DateTime.now())
+              (user.created_at ?? DateTime.now())
                   .format(context, DateFormatType.dayMonthYear),
               style: AppTextStyle.body2
                   .copyWith(color: context.colorScheme.textPrimary),

@@ -56,7 +56,7 @@ exports.sendSupportRequest = onCall({ region: "asia-south1"}, async (request) =>
 
     await db.collection('support_requests')
         .add({
-            to: ["radhika.s@canopas.com", "megh.l@canopas.com"],
+            to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
             template: {
                 name: "support_request",
                 data: {
