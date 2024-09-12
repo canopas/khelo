@@ -31,6 +31,10 @@ mixin _$UserModel {
   UserGender? get gender => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
   DateTime? get updated_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_time => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get updated_time => throw _privateConstructorUsedError;
   PlayerRole? get player_role => throw _privateConstructorUsedError;
   BattingStyle? get batting_style => throw _privateConstructorUsedError;
   BowlingStyle? get bowling_style => throw _privateConstructorUsedError;
@@ -60,6 +64,8 @@ abstract class $UserModelCopyWith<$Res> {
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      @TimeStampJsonConverter() DateTime? updated_time,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
@@ -91,6 +97,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_time = freezed,
+    Object? updated_time = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
@@ -142,6 +150,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_time: freezed == updated_time
+          ? _value.updated_time
+          : updated_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -186,6 +202,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       UserGender? gender,
       DateTime? created_at,
       DateTime? updated_at,
+      @TimeStampJsonConverter() DateTime? created_time,
+      @TimeStampJsonConverter() DateTime? updated_time,
       PlayerRole? player_role,
       BattingStyle? batting_style,
       BowlingStyle? bowling_style,
@@ -215,6 +233,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? gender = freezed,
     Object? created_at = freezed,
     Object? updated_at = freezed,
+    Object? created_time = freezed,
+    Object? updated_time = freezed,
     Object? player_role = freezed,
     Object? batting_style = freezed,
     Object? bowling_style = freezed,
@@ -266,6 +286,14 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.updated_at
           : updated_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updated_time: freezed == updated_time
+          ? _value.updated_time
+          : updated_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       player_role: freezed == player_role
           ? _value.player_role
           : player_role // ignore: cast_nullable_to_non_nullable
@@ -305,6 +333,8 @@ class _$UserModelImpl extends _UserModel {
       this.gender,
       this.created_at,
       this.updated_at,
+      @TimeStampJsonConverter() this.created_time,
+      @TimeStampJsonConverter() this.updated_time,
       this.player_role,
       this.batting_style,
       this.bowling_style,
@@ -338,6 +368,12 @@ class _$UserModelImpl extends _UserModel {
   @override
   final DateTime? updated_at;
   @override
+  @TimeStampJsonConverter()
+  final DateTime? created_time;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? updated_time;
+  @override
   final PlayerRole? player_role;
   @override
   final BattingStyle? batting_style;
@@ -352,7 +388,7 @@ class _$UserModelImpl extends _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive, notifications: $notifications)';
+    return 'UserModel(id: $id, name: $name, name_lowercase: $name_lowercase, location: $location, phone: $phone, dob: $dob, email: $email, profile_img_url: $profile_img_url, gender: $gender, created_at: $created_at, updated_at: $updated_at, created_time: $created_time, updated_time: $updated_time, player_role: $player_role, batting_style: $batting_style, bowling_style: $bowling_style, isActive: $isActive, notifications: $notifications)';
   }
 
   @override
@@ -376,6 +412,10 @@ class _$UserModelImpl extends _UserModel {
                 other.created_at == created_at) &&
             (identical(other.updated_at, updated_at) ||
                 other.updated_at == updated_at) &&
+            (identical(other.created_time, created_time) ||
+                other.created_time == created_time) &&
+            (identical(other.updated_time, updated_time) ||
+                other.updated_time == updated_time) &&
             (identical(other.player_role, player_role) ||
                 other.player_role == player_role) &&
             (identical(other.batting_style, batting_style) ||
@@ -403,6 +443,8 @@ class _$UserModelImpl extends _UserModel {
       gender,
       created_at,
       updated_at,
+      created_time,
+      updated_time,
       player_role,
       batting_style,
       bowling_style,
@@ -436,6 +478,8 @@ abstract class _UserModel extends UserModel {
       final UserGender? gender,
       final DateTime? created_at,
       final DateTime? updated_at,
+      @TimeStampJsonConverter() final DateTime? created_time,
+      @TimeStampJsonConverter() final DateTime? updated_time,
       final PlayerRole? player_role,
       final BattingStyle? batting_style,
       final BowlingStyle? bowling_style,
@@ -469,6 +513,12 @@ abstract class _UserModel extends UserModel {
   @override
   DateTime? get updated_at;
   @override
+  @TimeStampJsonConverter()
+  DateTime? get created_time;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get updated_time;
+  @override
   PlayerRole? get player_role;
   @override
   BattingStyle? get batting_style;
@@ -499,6 +549,8 @@ mixin _$ApiSession {
   int get app_version => throw _privateConstructorUsedError;
   String get os_version => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_time => throw _privateConstructorUsedError;
   bool get is_active => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -523,6 +575,7 @@ abstract class $ApiSessionCopyWith<$Res> {
       int app_version,
       String os_version,
       DateTime? created_at,
+      @TimeStampJsonConverter() DateTime? created_time,
       bool is_active});
 }
 
@@ -548,6 +601,7 @@ class _$ApiSessionCopyWithImpl<$Res, $Val extends ApiSession>
     Object? app_version = null,
     Object? os_version = null,
     Object? created_at = freezed,
+    Object? created_time = freezed,
     Object? is_active = null,
   }) {
     return _then(_value.copyWith(
@@ -587,6 +641,10 @@ class _$ApiSessionCopyWithImpl<$Res, $Val extends ApiSession>
           ? _value.created_at
           : created_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       is_active: null == is_active
           ? _value.is_active
           : is_active // ignore: cast_nullable_to_non_nullable
@@ -613,6 +671,7 @@ abstract class _$$ApiSessionImplCopyWith<$Res>
       int app_version,
       String os_version,
       DateTime? created_at,
+      @TimeStampJsonConverter() DateTime? created_time,
       bool is_active});
 }
 
@@ -636,6 +695,7 @@ class __$$ApiSessionImplCopyWithImpl<$Res>
     Object? app_version = null,
     Object? os_version = null,
     Object? created_at = freezed,
+    Object? created_time = freezed,
     Object? is_active = null,
   }) {
     return _then(_$ApiSessionImpl(
@@ -675,6 +735,10 @@ class __$$ApiSessionImplCopyWithImpl<$Res>
           ? _value.created_at
           : created_at // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      created_time: freezed == created_time
+          ? _value.created_time
+          : created_time // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       is_active: null == is_active
           ? _value.is_active
           : is_active // ignore: cast_nullable_to_non_nullable
@@ -696,6 +760,7 @@ class _$ApiSessionImpl extends _ApiSession {
       required this.app_version,
       required this.os_version,
       this.created_at,
+      @TimeStampJsonConverter() this.created_time,
       this.is_active = true})
       : super._();
 
@@ -721,12 +786,15 @@ class _$ApiSessionImpl extends _ApiSession {
   @override
   final DateTime? created_at;
   @override
+  @TimeStampJsonConverter()
+  final DateTime? created_time;
+  @override
   @JsonKey()
   final bool is_active;
 
   @override
   String toString() {
-    return 'ApiSession(id: $id, user_id: $user_id, device_type: $device_type, device_id: $device_id, device_name: $device_name, device_fcm_token: $device_fcm_token, app_version: $app_version, os_version: $os_version, created_at: $created_at, is_active: $is_active)';
+    return 'ApiSession(id: $id, user_id: $user_id, device_type: $device_type, device_id: $device_id, device_name: $device_name, device_fcm_token: $device_fcm_token, app_version: $app_version, os_version: $os_version, created_at: $created_at, created_time: $created_time, is_active: $is_active)';
   }
 
   @override
@@ -750,6 +818,8 @@ class _$ApiSessionImpl extends _ApiSession {
                 other.os_version == os_version) &&
             (identical(other.created_at, created_at) ||
                 other.created_at == created_at) &&
+            (identical(other.created_time, created_time) ||
+                other.created_time == created_time) &&
             (identical(other.is_active, is_active) ||
                 other.is_active == is_active));
   }
@@ -767,6 +837,7 @@ class _$ApiSessionImpl extends _ApiSession {
       app_version,
       os_version,
       created_at,
+      created_time,
       is_active);
 
   @JsonKey(ignore: true)
@@ -794,6 +865,7 @@ abstract class _ApiSession extends ApiSession {
       required final int app_version,
       required final String os_version,
       final DateTime? created_at,
+      @TimeStampJsonConverter() final DateTime? created_time,
       final bool is_active}) = _$ApiSessionImpl;
   const _ApiSession._() : super._();
 
@@ -818,6 +890,9 @@ abstract class _ApiSession extends ApiSession {
   String get os_version;
   @override
   DateTime? get created_at;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get created_time;
   @override
   bool get is_active;
   @override

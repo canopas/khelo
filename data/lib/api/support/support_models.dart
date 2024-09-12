@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../converter/timestamp_json_converter.dart';
+
 part 'support_models.freezed.dart';
 
 part 'support_models.g.dart';
@@ -13,7 +15,8 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
     String? description,
     @Default([]) List<String> attachmentUrls,
     required String userId,
-    required DateTime createdAt,
+    DateTime? createdAt,
+    @TimeStampJsonConverter() DateTime? createdTime,
   }) = _AddSupportCaseRequest;
 
   factory AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =>

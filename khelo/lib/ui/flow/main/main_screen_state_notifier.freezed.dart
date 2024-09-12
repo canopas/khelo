@@ -19,7 +19,9 @@ mixin _$MainScreenState {
   DateTime? get showNotificationPermissionPrompt =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MainScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MainScreenStateCopyWith<MainScreenState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -43,6 +45,8 @@ class _$MainScreenStateCopyWithImpl<$Res, $Val extends MainScreenState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MainScreenState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -77,6 +81,8 @@ class __$$MainScreenStateImplCopyWithImpl<$Res>
       _$MainScreenStateImpl _value, $Res Function(_$MainScreenStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MainScreenState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -120,7 +126,9 @@ class _$MainScreenStateImpl implements _MainScreenState {
   int get hashCode =>
       Object.hash(runtimeType, showNotificationPermissionPrompt);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MainScreenState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MainScreenStateImplCopyWith<_$MainScreenStateImpl> get copyWith =>
@@ -135,8 +143,11 @@ abstract class _MainScreenState implements MainScreenState {
 
   @override
   DateTime? get showNotificationPermissionPrompt;
+
+  /// Create a copy of MainScreenState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MainScreenStateImplCopyWith<_$MainScreenStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
