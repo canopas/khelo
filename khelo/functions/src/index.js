@@ -23,6 +23,7 @@ exports.TIMEZONE = "Asia/Kolkata";
 const REGION = "asia-south1";
 const app = (0, app_1.initializeApp)();
 const db = (0, firestore_1.getFirestore)(app);
+const {onCall} = require("firebase-functions/v2/https");
 
 const userRepository = new user_repository.UserRepository(db);
 const teamRepository = new team_repository.TeamRepository(db);
