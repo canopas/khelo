@@ -65,7 +65,6 @@ class UserService {
       app_version: await deviceService.appVersion,
       os_version: await deviceService.osVersion,
       created_at: DateTime.now(),
-      created_time: DateTime.now(),
     );
 
     await sessionDocRef.set(session);
@@ -105,7 +104,6 @@ class UserService {
       id: userId,
       phone: phone,
       created_at: DateTime.now(),
-      created_time: DateTime.now(),
     );
     await _userRef.doc(userId).set(user);
     return user;

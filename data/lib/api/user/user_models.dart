@@ -27,8 +27,6 @@ class UserModel with _$UserModel {
     UserGender? gender,
     DateTime? created_at,
     DateTime? updated_at,
-    @TimeStampJsonConverter() DateTime? created_time,
-    @TimeStampJsonConverter() DateTime? updated_time,
     PlayerRole? player_role,
     BattingStyle? batting_style,
     BowlingStyle? bowling_style,
@@ -67,7 +65,6 @@ class ApiSession with _$ApiSession {
     required int app_version,
     required String os_version,
     DateTime? created_at,
-    @TimeStampJsonConverter() DateTime? created_time,
     @Default(true) bool is_active,
   }) = _ApiSession;
 
