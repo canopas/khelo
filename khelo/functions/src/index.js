@@ -15,7 +15,6 @@ const match_repository = require("./match/match_repository");
 const notification_service = require("./notification/notification_service");
 const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
-const mail_service = require("./mail/mail_service");
 
 const logger = require("firebase-functions/logger");
 
