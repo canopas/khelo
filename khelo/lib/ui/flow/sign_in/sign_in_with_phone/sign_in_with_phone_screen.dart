@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/country_code_view.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -12,8 +13,6 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
-
-import 'components/sign_in_with_phone_country_picker.dart';
 
 class SignInWithPhoneScreen extends ConsumerWidget {
   const SignInWithPhoneScreen({super.key});
@@ -76,7 +75,10 @@ class SignInWithPhoneScreen extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SignInWithPhoneCountryPicker(),
+            CountryCodeView(
+              countryCode: state.code,
+              onCodeChange: notifier.changeCountryCode,
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: AppTextField(

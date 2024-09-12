@@ -84,6 +84,12 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     }
   }
 
+  List<String> getMemberIds() {
+    var memberIds = _team.players.map((e) => e.id).toList();
+    memberIds.addAll(state.selectedUsers.map((e) => e.id));
+    return memberIds;
+  }
+
   @override
   void dispose() {
     _debounce?.cancel();

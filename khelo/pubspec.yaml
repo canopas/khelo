@@ -51,6 +51,10 @@ dependencies:
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
   qr_flutter: ^4.1.0
+  permission_handler: ^11.3.1
+
+  # contacts
+  contacts_service: ^0.6.3
 
   # picker
   canopas_country_picker: ^0.0.4

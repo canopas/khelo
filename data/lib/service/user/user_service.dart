@@ -60,6 +60,22 @@ class UserService {
     }
   }
 
+  Future<UserModel?> getUserByPhoneNumber(String number) async {
+    try {
+      final snapshot = await _userCollection
+          .where(FireStoreConst.phone, isEqualTo: number)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first.data();
+      } else {
+        return null;
+      }
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<List<UserModel>> getUsersByIds(List<String> ids) async {
     final List<UserModel> users = [];
     try {
