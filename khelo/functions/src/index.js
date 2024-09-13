@@ -52,7 +52,6 @@ exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, 
 exports.sendSupportRequest = onCall({region: "asia-south1"}, async (request) => {
   const data = request.data;
   try {
-  console.log("Sending support request mail....");
     await db.collection("support_requests")
       .add({
         to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
