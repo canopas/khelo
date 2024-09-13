@@ -222,26 +222,30 @@ class ScoreDisplayView extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AnimatedDefaultTextStyle(
-                  style: AppTextStyle.subtitle1.copyWith(
-                      color: isOnStrike
-                          ? context.colorScheme.secondary
-                          : context.colorScheme.textPrimary),
-                  duration: const Duration(milliseconds: 300),
-                  child: Text(
-                    user?.player.name ?? context.l10n.score_board_player_title,
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AnimatedDefaultTextStyle(
+                    style: AppTextStyle.subtitle1.copyWith(
+                        color: isOnStrike
+                            ? context.colorScheme.secondary
+                            : context.colorScheme.textPrimary),
+                    overflow: TextOverflow.ellipsis,
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      user?.player.name ??
+                          context.l10n.score_board_player_title,
+                    ),
                   ),
-                ),
-                Text(
-                  "$run($ball)",
-                  style: AppTextStyle.body2
-                      .copyWith(color: context.colorScheme.textDisabled),
-                ),
-              ],
+                  Text(
+                    "$run($ball)",
+                    style: AppTextStyle.body2
+                        .copyWith(color: context.colorScheme.textDisabled),
+                  ),
+                ],
+              ),
             )
           ],
         ),

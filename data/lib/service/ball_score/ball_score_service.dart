@@ -110,6 +110,7 @@ class BallScoreService {
     List<String> matchIds,
   ) async {
     try {
+      if (matchIds.isEmpty) return [];
       final ballScoreRef = await _ballScoreCollection
           .where(FireStoreConst.matchId, whereIn: matchIds)
           .get();
@@ -122,6 +123,7 @@ class BallScoreService {
   Stream<List<BallScoreChange>> streamBallScoresByInningIds(
     List<String> inningIds,
   ) {
+    if (inningIds.isEmpty) return const Stream.empty();
     return _ballScoreCollection
         .where(FireStoreConst.inningId, whereIn: inningIds)
         .snapshots()

@@ -112,6 +112,7 @@ class _PhoneVerificationScreenState
           onChanged: notifier.updateOTP,
           style: AppTextStyle.header2.copyWith(
             color: context.colorScheme.textSecondary,
+            letterSpacing: 16,
           ),
           hintStyle: AppTextStyle.header2.copyWith(
             color: context.colorScheme.outline,

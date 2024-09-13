@@ -193,7 +193,7 @@ class MatchService {
     int limit = 10,
   }) async {
     final filter = status.map((e) => e.value).toList();
-
+    if (filter.isEmpty) return [];
     var query = _matchCollection
         .where(FireStoreConst.matchStatus, whereIn: filter)
         .orderBy(FieldPath.documentId);
