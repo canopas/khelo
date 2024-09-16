@@ -22,7 +22,7 @@ class UserDetailInfoContent extends ConsumerWidget {
         _infoRowView(
             context,
             context.l10n.user_detail_joining_date_title,
-            (state.user?.created_time ?? state.user?.created_at)
+            (state.user?.created_at)
                 ?.format(context, DateFormatType.shortDate)),
         _infoRowView(context, context.l10n.common_gender_title,
             state.user?.gender?.getString(context)),

@@ -17,8 +17,10 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ContactSelectionState {
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   UserModel? get selectedUser => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  bool get isActionInProgress => throw _privateConstructorUsedError;
   bool get alreadyAdded => throw _privateConstructorUsedError;
   bool get hasContactPermission => throw _privateConstructorUsedError;
   List<Contact> get contacts => throw _privateConstructorUsedError;
@@ -38,8 +40,10 @@ abstract class $ContactSelectionStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       UserModel? selectedUser,
       bool loading,
+      bool isActionInProgress,
       bool alreadyAdded,
       bool hasContactPermission,
       List<Contact> contacts});
@@ -64,14 +68,17 @@ class _$ContactSelectionStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? selectedUser = freezed,
     Object? loading = null,
+    Object? isActionInProgress = null,
     Object? alreadyAdded = null,
     Object? hasContactPermission = null,
     Object? contacts = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
@@ -79,6 +86,10 @@ class _$ContactSelectionStateCopyWithImpl<$Res,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isActionInProgress: null == isActionInProgress
+          ? _value.isActionInProgress
+          : isActionInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
       alreadyAdded: null == alreadyAdded
           ? _value.alreadyAdded
@@ -121,8 +132,10 @@ abstract class _$$ContactSelectionStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
+      Object? actionError,
       UserModel? selectedUser,
       bool loading,
+      bool isActionInProgress,
       bool alreadyAdded,
       bool hasContactPermission,
       List<Contact> contacts});
@@ -146,14 +159,17 @@ class __$$ContactSelectionStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? actionError = freezed,
     Object? selectedUser = freezed,
     Object? loading = null,
+    Object? isActionInProgress = null,
     Object? alreadyAdded = null,
     Object? hasContactPermission = null,
     Object? contacts = null,
   }) {
     return _then(_$ContactSelectionStateImpl(
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
@@ -161,6 +177,10 @@ class __$$ContactSelectionStateImplCopyWithImpl<$Res>
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isActionInProgress: null == isActionInProgress
+          ? _value.isActionInProgress
+          : isActionInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
       alreadyAdded: null == alreadyAdded
           ? _value.alreadyAdded
@@ -183,8 +203,10 @@ class __$$ContactSelectionStateImplCopyWithImpl<$Res>
 class _$ContactSelectionStateImpl implements _ContactSelectionState {
   const _$ContactSelectionStateImpl(
       {this.error,
+      this.actionError,
       this.selectedUser,
       this.loading = false,
+      this.isActionInProgress = false,
       this.alreadyAdded = false,
       this.hasContactPermission = false,
       final List<Contact> contacts = const []})
@@ -193,10 +215,15 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
   @override
   final Object? error;
   @override
+  final Object? actionError;
+  @override
   final UserModel? selectedUser;
   @override
   @JsonKey()
   final bool loading;
+  @override
+  @JsonKey()
+  final bool isActionInProgress;
   @override
   @JsonKey()
   final bool alreadyAdded;
@@ -214,7 +241,7 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
 
   @override
   String toString() {
-    return 'ContactSelectionState(error: $error, selectedUser: $selectedUser, loading: $loading, alreadyAdded: $alreadyAdded, hasContactPermission: $hasContactPermission, contacts: $contacts)';
+    return 'ContactSelectionState(error: $error, actionError: $actionError, selectedUser: $selectedUser, loading: $loading, isActionInProgress: $isActionInProgress, alreadyAdded: $alreadyAdded, hasContactPermission: $hasContactPermission, contacts: $contacts)';
   }
 
   @override
@@ -223,9 +250,13 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
         (other.runtimeType == runtimeType &&
             other is _$ContactSelectionStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.selectedUser, selectedUser) ||
                 other.selectedUser == selectedUser) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.isActionInProgress, isActionInProgress) ||
+                other.isActionInProgress == isActionInProgress) &&
             (identical(other.alreadyAdded, alreadyAdded) ||
                 other.alreadyAdded == alreadyAdded) &&
             (identical(other.hasContactPermission, hasContactPermission) ||
@@ -237,8 +268,10 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(actionError),
       selectedUser,
       loading,
+      isActionInProgress,
       alreadyAdded,
       hasContactPermission,
       const DeepCollectionEquality().hash(_contacts));
@@ -256,8 +289,10 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
 abstract class _ContactSelectionState implements ContactSelectionState {
   const factory _ContactSelectionState(
       {final Object? error,
+      final Object? actionError,
       final UserModel? selectedUser,
       final bool loading,
+      final bool isActionInProgress,
       final bool alreadyAdded,
       final bool hasContactPermission,
       final List<Contact> contacts}) = _$ContactSelectionStateImpl;
@@ -265,9 +300,13 @@ abstract class _ContactSelectionState implements ContactSelectionState {
   @override
   Object? get error;
   @override
+  Object? get actionError;
+  @override
   UserModel? get selectedUser;
   @override
   bool get loading;
+  @override
+  bool get isActionInProgress;
   @override
   bool get alreadyAdded;
   @override

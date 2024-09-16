@@ -31,9 +31,13 @@ class ConfirmNumberSheet extends ConsumerStatefulWidget {
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return ConfirmNumberSheet(
-          code: code,
-          defaultNumber: defaultNumber,
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: ConfirmNumberSheet(
+            code: code,
+            defaultNumber: defaultNumber,
+          ),
         );
       },
     );
@@ -81,6 +85,7 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
             _phoneInputField(context, state),
             PrimaryButton(
               context.l10n.confirm_number_confirm_title,
+              enabled: state.isButtonEnable,
               onPressed: notifier.onConfirmTap,
             ),
           ],

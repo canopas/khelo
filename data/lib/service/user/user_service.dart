@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import '../../errors/app_error.dart';
 import '../../extensions/list_extensions.dart';
+import '../../api/network/client.dart';
 import '../device/device_service.dart';
 import '../../utils/constant/firestore_constant.dart';
 import '../../utils/dummy_deactivated_account.dart';
@@ -8,11 +10,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
 import '../../storage/app_preferences.dart';
+import 'user_endpoint.dart';
 
 final userServiceProvider = Provider((ref) {
   final service = UserService(
     ref.read(currentUserPod),
     FirebaseFirestore.instance,
+    ref.read(httpProvider),
     ref.read(deviceServiceProvider),
   );
 
@@ -24,11 +28,13 @@ class UserService {
   UserModel? _currentUser;
 
   final FirebaseFirestore firestore;
+  final http.Client client;
   final DeviceService deviceService;
 
   UserService(
     this._currentUser,
     this.firestore,
+    this.client,
     this.deviceService,
   );
 
@@ -90,6 +96,24 @@ class UserService {
     }
   }
 
+  Future<UserModel> createNewUser(
+    String phoneNumber,
+    String displayName,
+  ) async {
+    try {
+      final response = await client.req(
+        CreateUserEndpoint(
+          name: displayName,
+          phone: phoneNumber,
+        ),
+      );
+
+      return UserModel.fromJson(response.data);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<void> updateUser(UserModel user) async {
     try {
       final userRef = _userRef.doc(user.id);
@@ -119,7 +143,7 @@ class UserService {
 
   Future<UserModel?> getUserByPhoneNumber(String number) async {
     try {
-      final snapshot = await _userCollection
+      final snapshot = await _userRef
           .where(FireStoreConst.phone, isEqualTo: number)
           .limit(1)
           .get();

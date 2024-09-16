@@ -43,24 +43,32 @@ class _ContactSelectionScreenState
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(contactSelectionStateProvider);
+
+    _observeActionError();
     _observeAlreadyAdded();
     _observeSelectedUser();
 
     return AppPage(
       title: context.l10n.contact_selection_contact_title,
+      actions: [
+        if (state.isActionInProgress)
+          const Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: AppProgressIndicator(
+              size: AppProgressIndicatorSize.small,
+            ),
+          ),
+      ],
       body: Builder(
           builder: (context) => Padding(
                 padding: context.mediaQueryPadding,
-                child: _body(context, ref),
+                child: _body(context, state),
               )),
     );
   }
 
-  Widget _body(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    final state = ref.watch(contactSelectionStateProvider);
+  Widget _body(BuildContext context, ContactSelectionState state) {
     if (state.loading) {
       return const Center(
         child: AppProgressIndicator(),
@@ -98,13 +106,14 @@ class _ContactSelectionScreenState
       ),
       itemBuilder: (context, index) {
         final contact = state.contacts.elementAt(index);
-        return _contactCellView(context, contact);
+        return _contactCellView(context, state.isActionInProgress, contact);
       },
     );
   }
 
   Widget _contactCellView(
     BuildContext context,
+    bool isActionInProgress,
     Contact contact,
   ) {
     return Padding(
@@ -124,7 +133,9 @@ class _ContactSelectionScreenState
           const SizedBox(width: 4),
           SecondaryButton(
             context.l10n.common_add_title,
-            enabled: contact.phones != null && contact.phones!.isNotEmpty,
+            enabled: contact.phones != null &&
+                contact.phones!.isNotEmpty &&
+                !isActionInProgress,
             onPressed: () async {
               if (contact.phones == null || contact.phones!.isEmpty) {
                 return;
@@ -250,6 +261,16 @@ class _ContactSelectionScreenState
     }
 
     notifier.checkContactPermission(requestIfNotGranted: false);
+  }
+
+  void _observeActionError() {
+    ref.listen(
+        contactSelectionStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
   }
 
   void _observeAlreadyAdded() {

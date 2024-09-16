@@ -25,6 +25,7 @@ class ConfirmNumberViewNotifier extends StateNotifier<ConfirmNumberViewState> {
     if (code != null) {
       state = state.copyWith(code: code);
     }
+    onTextChange();
   }
 
   void onCodeChange(CountryCode code) {

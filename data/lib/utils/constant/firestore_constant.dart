@@ -23,7 +23,6 @@ class FireStoreConst {
   static const String teamIds = "team_ids";
   static const String teamCreatorIds = "team_creator_ids";
   static const String revisedTarget = "revised_target";
-  static const String phone = "phone";
 
   // innings field const
   static const String matchId = "match_id";
@@ -46,6 +45,25 @@ class FireStoreConst {
   static const String nameLowercase = "name_lowercase";
   static const String profileImageUrl = "profile_img_url";
 
+  // users field const
   static const String deviceFcmToken = "device_fcm_token";
   static const String notifications = "notifications";
+  static const String phone = "phone";
+  static const String name = "name";
+}
+
+class DataConfig {
+  static late DataConfig _instance;
+
+  static DataConfig get instance => _instance;
+
+  static void init(DataConfig dataConfig) {
+    _instance = dataConfig;
+  }
+
+  final String apiBaseUrl;
+
+  DataConfig({
+    required this.apiBaseUrl,
+  });
 }

@@ -11,7 +11,9 @@ part 'contact_selection_view_model.freezed.dart';
 
 final contactSelectionStateProvider = StateNotifierProvider.autoDispose<
     ContactSelectionViewNotifier, ContactSelectionState>((ref) {
-  return ContactSelectionViewNotifier(ref.read(userServiceProvider));
+  return ContactSelectionViewNotifier(
+    ref.read(userServiceProvider),
+  );
 });
 
 class ContactSelectionViewNotifier
@@ -21,12 +23,11 @@ class ContactSelectionViewNotifier
   List<String> memberIds = [];
 
   ContactSelectionViewNotifier(this._userService)
-      : super(const ContactSelectionState()) {
-    checkContactPermission();
-  }
+      : super(const ContactSelectionState());
 
   void setDate(List<String> memberIds) {
     this.memberIds = memberIds;
+    checkContactPermission();
   }
 
   Future<void> fetchContacts() async {
@@ -52,9 +53,8 @@ class ContactSelectionViewNotifier
     }
 
     state = state.copyWith(
-      hasContactPermission: status.isGranted,
-      loading: false,
-    );
+        hasContactPermission: status.isGranted,
+        loading: false,);
 
     if (status.isGranted) {
       fetchContacts();
@@ -62,19 +62,35 @@ class ContactSelectionViewNotifier
   }
 
   Future<void> getUserByPhoneNumber(String? name, String number) async {
-    state = state.copyWith(alreadyAdded: false);
+    state = state.copyWith(alreadyAdded: false, isActionInProgress: true);
     try {
       final user = await _userService.getUserByPhoneNumber(number);
       if (user == null) {
-        // TODO: call function for create account, it'll return that created user and use that one.
+        createUser(name, number);
       } else if (memberIds.contains(user.id)) {
-        state = state.copyWith(alreadyAdded: true);
+        state = state.copyWith(alreadyAdded: true, isActionInProgress: false);
       } else {
-        state = state.copyWith(selectedUser: user);
+        state = state.copyWith(selectedUser: user, isActionInProgress: false);
       }
     } catch (e) {
+      state = state.copyWith(actionError: e, isActionInProgress: false);
       debugPrint(
           "ContactSelectionViewNotifier: Error getting user by phone number $e");
+    }
+  }
+
+  Future<void> createUser(String? name, String number) async {
+    if (name == null) {
+      state = state.copyWith(isActionInProgress: false);
+      return;
+    }
+
+    try {
+      final user = await _userService.createNewUser(number, name);
+      state = state.copyWith(selectedUser: user, isActionInProgress: false);
+    } catch (e) {
+      state = state.copyWith(actionError: e, isActionInProgress: false);
+      debugPrint("ContactSelectionViewNotifier: Error creating new user $e");
     }
   }
 
@@ -117,8 +133,10 @@ class ContactSelectionViewNotifier
 class ContactSelectionState with _$ContactSelectionState {
   const factory ContactSelectionState({
     Object? error,
+    Object? actionError,
     UserModel? selectedUser,
     @Default(false) bool loading,
+    @Default(false) bool isActionInProgress,
     @Default(false) bool alreadyAdded,
     @Default(false) bool hasContactPermission,
     @Default([]) List<Contact> contacts,

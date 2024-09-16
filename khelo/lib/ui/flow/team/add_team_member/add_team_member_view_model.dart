@@ -22,13 +22,12 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   final UserService _userService;
   final TeamService _teamService;
   Timer? _debounce;
+  TeamModel? _team;
 
   AddTeamMemberViewNotifier(
     this._userService,
     this._teamService,
   ) : super(AddTeamMemberState(searchController: TextEditingController()));
-
-  late TeamModel _team;
 
   void setData(TeamModel team) {
     _team = team;
@@ -59,7 +58,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   }
 
   void selectUser(UserModel user) {
-    final role = (_team.created_by == user.id)
+    final role = (_team?.created_by == user.id)
         ? TeamPlayerRole.admin
         : TeamPlayerRole.player;
     final player = TeamPlayer(id: user.id, role: role, user: user);
@@ -75,7 +74,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   Future<void> addPlayersToTeam() async {
     state = state.copyWith(isAddInProgress: true, actionError: null);
     try {
-      await _teamService.addPlayersToTeam(_team.id, state.selectedUsers);
+      await _teamService.addPlayersToTeam(_team?.id ?? '', state.selectedUsers);
       state = state.copyWith(isAddInProgress: false, isAdded: true);
     } catch (e) {
       state = state.copyWith(isAddInProgress: false, actionError: e);
@@ -85,7 +84,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
   }
 
   List<String> getMemberIds() {
-    var memberIds = _team.players.map((e) => e.id).toList();
+    var memberIds = _team?.players.map((e) => e.id).toList() ?? [];
     memberIds.addAll(state.selectedUsers.map((e) => e.id));
     return memberIds;
   }

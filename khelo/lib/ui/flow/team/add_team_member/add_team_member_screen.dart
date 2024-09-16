@@ -104,7 +104,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               _searchedPlayerList(context, state),
             ],
           ),
-          _addViaContactButton(context, notifier.getMemberIds()),
+          _addViaContactButton(context),
         ],
       ),
     );
@@ -265,12 +265,15 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
   }
 
   Widget _addViaContactButton(
-    BuildContext context,
-    List<String> memberIds,
+    BuildContext context
   ) {
     return OnTapScale(
-      onTap: () =>
-          AppRoute.contactSelection(memberIds: memberIds).push(context),
+      onTap: () async {
+        final  user = await AppRoute.contactSelection(memberIds: notifier.getMemberIds()).push<UserModel>(context);
+        if(context.mounted && user != null) {
+          notifier.selectUser(user);
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         margin: const EdgeInsets.symmetric(horizontal: 16),
