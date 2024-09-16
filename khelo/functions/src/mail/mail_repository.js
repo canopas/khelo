@@ -53,16 +53,18 @@ class MailRepository {
   }
 
   async sendSupportRequest(data) {
-    const htmlTemplate = this.htmlTemplate(data);
-
-    return await this.db.collection("support_requests")
-      .add({
-        to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
-        message: {
-          subject: "Report problem",
-          html: htmlTemplate,
-        },
-      }).then(() => console.log("Queued email for delivery!"));
+    try {
+      await this.db.collection("support_requests")
+        .add({
+          to: ["sidhdhi.p@canopas.com", "mayank.v@canopas.com"],
+          message: {
+            subject: "Report problem",
+            html: this.htmlTemplate(data),
+          },
+        }).then(() => console.log("Queued email for delivery!"));
+    } catch (e) {
+      console.log("MailRepository: Error sending  support request:", e);
+    }
   }
 
 }
