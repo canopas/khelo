@@ -61,26 +61,26 @@ Khelo requires the following to function properly:
 
 **Software:**
 
-* **Flutter**: [Download Flutter](https://flutter.dev/docs/get-started/install) (version: 3.24 or higher)
-* **Dart**: Installed as part of the Flutter SDK (version: 3.5 or higher)
-* **Firebase**: A free Google service offering various backend functionalities.  (See [Firebase documentation](https://firebase.google.com/docs) for setup instructions)
+- **Flutter**: [Download Flutter](https://flutter.dev/docs/get-started/install) (version: 3.24 or higher)
+- **Dart**: Installed as part of the Flutter SDK (version: 3.5 or higher)
+- **Firebase**: A free Google service offering various backend functionalities. (See [Firebase documentation](https://firebase.google.com/docs) for setup instructions)
 
 **Additional Requirements:**
 
-* A **Google account** to create a Firebase project.
-* An **active internet connection** for Firebase communication.
+- A **Google account** to create a Firebase project.
+- An **active internet connection** for Firebase communication.
 
 **Platform-Specific Requirements:**
 
-* **Android (if targeting Android):**
-    * An Android device or emulator for development and testing.
-    * Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
-* **iOS (if targeting iOS):**
-    * A Mac computer with Xcode installed for development and testing.
+- **Android (if targeting Android):**
+    - An Android device or emulator for development and testing.
+    - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
+- **iOS (if targeting iOS):**
+    - A Mac computer with Xcode installed for development and testing.
 
 **Optional (for development and testing):**
 
-* **Firebase CLI**: Simplifies managing Firebase projects locally.  (See [Firebase CLI documentation](https://firebase.google.com/docs/cli))
+- **Firebase CLI**: Simplifies managing Firebase projects locally. (See [Firebase CLI documentation](https://firebase.google.com/docs/cli))
 
 
 ## Technologies Stack 
@@ -92,6 +92,7 @@ practices. Below is the current technologies stack used in the development proce
 - Flutter
 - Dart
 - Http
+- Dio
 - GoRouter
 - RiverPod
 - Firebase Authentication
