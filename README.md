@@ -55,7 +55,8 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
 
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
-## Requirements
+<details>
+  <summary> <h2>Requirements</h2> </summary>
 
 Khelo requires the following to function properly:
 
@@ -82,6 +83,7 @@ Khelo requires the following to function properly:
 
 - **Firebase CLI**: Simplifies managing Firebase projects locally. (See [Firebase CLI documentation](https://firebase.google.com/docs/cli))
 
+</details>
 
 ## Technologies Stack 
 
