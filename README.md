@@ -68,7 +68,7 @@ Khelo is owned and maintained by the [Canopas team](https://canopas.com/).
 
  You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
-<a href="https://canopas.com/contact"><img src="./screenshots/cta_btn.png" width=300></a>
+<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a>
 
 
 ## Licence 📄
