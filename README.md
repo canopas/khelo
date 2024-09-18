@@ -56,6 +56,12 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
 
+## Feedback and Suggestions
+
+For bugs, questions and discussions please use
+the [Github Issues](https://github.com/canopas/khelo/issues)
+
+
 ## Credits
 Khelo is owned and maintained by the [Canopas team](https://canopas.com/). You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
