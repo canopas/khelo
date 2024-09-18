@@ -62,7 +62,7 @@ Khelo requires the following to function properly:
 **Software:**
 
 * **Flutter**: [Download Flutter](https://flutter.dev/docs/get-started/install) (version: 3.24 or higher)
-* **Dart**: Installed as part of the Flutter SDK (Minimum version: 3.5 or higher)
+* **Dart**: Installed as part of the Flutter SDK (version: 3.5 or higher)
 * **Firebase**: A free Google service offering various backend functionalities.  (See [Firebase documentation](https://firebase.google.com/docs) for setup instructions)
 
 **Additional Requirements:**
