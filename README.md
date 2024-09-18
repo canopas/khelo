@@ -77,7 +77,8 @@ Khelo requires the following to function properly:
   - An Android device or emulator for development and testing.
   - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
 - **iOS (if targeting iOS):**
-  - A Mac computer with Xcode installed for development and testing.
+  - An Apple device or simulator for development and testing.
+  - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
 
 **Optional (for development and testing):**
 
