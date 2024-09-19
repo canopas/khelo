@@ -11,12 +11,12 @@ class MatchService {
   async notifyBeforeMatchStart(match) {
     const [teamA, teamB] = await this.teamRepository.getTeams(match.team_ids);
     const matchContributorIds = new Set([
-      match.created_by && match.created_by.toString(),
-      match.referee_id && match.referee_id.toString(),
-      ...match.players.filter(player => player && player.toString()),
-      ...match.scorer_ids.filter(scorerId => scorerId && scorerId.toString()),
-      ...match.umpire_ids.filter(umpireId => umpireId && umpireId.toString()),
-      ...match.commentator_ids.filter(commentatorId => commentatorId && commentatorId.toString()),
+      ...(match.created_by !== null ? [match.created_by] : []),
+      ...(match.referee_id !== null ? [match.referee_id] : []),
+      ...match.players.filter(e => e !== null),
+      ...match.scorer_ids.filter(e => e !== null),
+      ...match.umpire_ids.filter(e => e !== null),
+      ...match.commentator_ids.filter(e => e !== null),
     ]);
     console.log("Contributors in match:", matchContributorIds);
     if (matchContributorIds.length === 0) {
