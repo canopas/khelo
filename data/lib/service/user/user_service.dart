@@ -145,7 +145,6 @@ class UserService {
     try {
       final snapshot = await _userRef
           .where(FireStoreConst.phone, isEqualTo: number)
-          .limit(1)
           .get();
       if (snapshot.docs.isNotEmpty) {
         return snapshot.docs.first.data();

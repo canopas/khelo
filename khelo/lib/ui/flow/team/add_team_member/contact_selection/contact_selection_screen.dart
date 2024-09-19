@@ -85,6 +85,7 @@ class _ContactSelectionScreenState
       return EmptyScreen(
         title: context.l10n.contact_selection_empty_contact,
         description: context.l10n.contact_selection_empty_contact_description,
+        isShowButton: false,
       );
     }
 
@@ -223,7 +224,10 @@ class _ContactSelectionScreenState
   }
 
   Widget _profileImageView(
-      BuildContext context, Uint8List? image, String? initial) {
+    BuildContext context,
+    Uint8List? image,
+    String? initial,
+  ) {
     return Container(
       height: 40,
       width: 40,
@@ -231,10 +235,12 @@ class _ContactSelectionScreenState
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: context.colorScheme.containerHigh,
-          image: image != null
-              ? DecorationImage(image: MemoryImage(image))
+          image: image != null && image.isNotEmpty
+              ? DecorationImage(
+                  image: MemoryImage(image),
+                )
               : null),
-      child: image != null
+      child: image != null && image.isNotEmpty
           ? null
           : Text(
               initial ?? '?',

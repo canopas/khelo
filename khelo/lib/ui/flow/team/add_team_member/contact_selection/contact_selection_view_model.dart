@@ -1,5 +1,6 @@
 import 'package:canopas_country_picker/canopas_country_picker.dart';
 import 'package:data/api/user/user_models.dart';
+import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,17 +14,23 @@ final contactSelectionStateProvider = StateNotifierProvider.autoDispose<
     ContactSelectionViewNotifier, ContactSelectionState>((ref) {
   return ContactSelectionViewNotifier(
     ref.read(userServiceProvider),
+    ref.read(deviceServiceProvider),
   );
 });
 
 class ContactSelectionViewNotifier
     extends StateNotifier<ContactSelectionState> {
   final UserService _userService;
+  final DeviceService _deviceService;
   List<Contact> fetchedContacts = [];
   List<String> memberIds = [];
+  String? deviceCountryCode =
+      WidgetsBinding.instance.platformDispatcher.locale.countryCode;
 
-  ContactSelectionViewNotifier(this._userService)
-      : super(const ContactSelectionState());
+  ContactSelectionViewNotifier(this._userService, this._deviceService)
+      : super(const ContactSelectionState()) {
+    fetchCountryCode();
+  }
 
   void setDate(List<String> memberIds) {
     this.memberIds = memberIds;
@@ -41,6 +48,15 @@ class ContactSelectionViewNotifier
     }
   }
 
+  void fetchCountryCode() async {
+    try {
+      deviceCountryCode = await _deviceService.countryCode;
+    } catch (e) {
+      debugPrint(
+          "ContactSelectionViewNotifier: Error in fetchCountryCode -> $e");
+    }
+  }
+
   void checkContactPermission({requestIfNotGranted = true}) async {
     var status = await Permission.contacts.status;
     if (requestIfNotGranted &&
@@ -53,8 +69,9 @@ class ContactSelectionViewNotifier
     }
 
     state = state.copyWith(
-        hasContactPermission: status.isGranted,
-        loading: false,);
+      hasContactPermission: status.isGranted,
+      loading: false,
+    );
 
     if (status.isGranted) {
       fetchContacts();
@@ -97,36 +114,47 @@ class ContactSelectionViewNotifier
   (CountryCode, String) getNormalisedNumber(String phoneNumber) {
     String? code;
     if (phoneNumber.startsWith('+')) {
-      String splitString = phoneNumber.split(" ").first;
-      if (splitString.length <= 5) {
-        code = splitString;
-        phoneNumber = phoneNumber
-            .substring(splitString.length)
-            .replaceAll(RegExp(r'[\s\-\(\)]+'), '');
-      } else {
-        phoneNumber = phoneNumber.replaceAll(RegExp(r'[\s\-\(\)]+'), '');
-      }
+      phoneNumber = keepDigitAndPlusAtStart(phoneNumber);
+
+      final matchedCountryCode = CountryCode.allCodes
+          .where((element) => phoneNumber.startsWith(element.dialCode))
+          .firstOrNull
+          ?.dialCode;
+      code = matchedCountryCode ?? deviceCountryCode;
+      final trimFrom = matchedCountryCode != null ? code?.length : 1;
+      phoneNumber = phoneNumber.substring(trimFrom ?? 1);
     } else {
-      phoneNumber = phoneNumber.replaceAll(RegExp(r'[\s\-\(\)]+'), '');
+      phoneNumber = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
     }
+
     CountryCode? countryCode;
     if (code == null) {
       countryCode = CountryCode.getCountryCodeByAlpha2(
-        countryAlpha2Code:
-            WidgetsBinding.instance.platformDispatcher.locale.countryCode,
+        countryAlpha2Code: deviceCountryCode,
       );
     } else {
       countryCode = CountryCode.getCountryCodeByDialCode(dialCode: code);
-
+      // handle default returned US code in case not found
       if (countryCode.dialCode == "+1" && code != "+1") {
         countryCode = CountryCode.getCountryCodeByAlpha2(
-          countryAlpha2Code:
-              WidgetsBinding.instance.platformDispatcher.locale.countryCode,
+          countryAlpha2Code: deviceCountryCode,
         );
       }
     }
     return (countryCode, phoneNumber);
   }
+}
+
+String keepDigitAndPlusAtStart(String input) {
+  String formatted = input.replaceAll(RegExp(r'[^+\d]'), '');
+
+  if (formatted.startsWith('+')) {
+    formatted = '+${formatted.replaceAll(RegExp(r'[^\d]'), '')}';
+  } else {
+    formatted = formatted.replaceAll(RegExp(r'[^\d]'), '');
+  }
+
+  return formatted;
 }
 
 @freezed
