@@ -55,10 +55,13 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
 
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
-<details>
- <summary> <h2>Requirements ✅</h2> </summary>
+## Requirements ✅
 
-Khelo requires the following to function properly:
+<details>
+ <summary> Click to expand </summary>
+<br>
+
+**Khelo** requires the following to function properly:
 
 **Software:**
 
@@ -77,8 +80,7 @@ Khelo requires the following to function properly:
   - An Android device or emulator for development and testing.
   - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
 - **iOS (if targeting iOS):**
-  - An Apple device or simulator for development and testing.
-  - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
+  - A Mac computer with Xcode installed for development and testing.
 
 **Optional (for development and testing):**
 
@@ -131,7 +133,7 @@ Khelo is owned and maintained by the [Canopas team](https://canopas.com/).
 
  You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
-<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a> 💻💻
+<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" alt="Contact Canopas" width=300></a>
 
 
 ## Licence 📄
