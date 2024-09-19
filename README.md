@@ -56,6 +56,18 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
 
+## What's Coming Next? 🚀
+
+- **Tournament Feature**: Khelo will soon support tournament management, allowing users to organize
+   and track cricket tournaments with ease, right from the app.
+- **Live Streaming**: Watch live matches directly through Khelo as we introduce live streaming, making 
+  it easier to follow your favorite teams and matches in real time.
+- **Voice-Over Scoring**: Get an immersive cricket experience with voice-over scoring, providing 
+  live commentary and score updates as the game unfolds.
+- **Improve User Experience**: We're continuously working on improving the user experience, with
+  plans to incorporate additional features and enhancements shortly.
+
+
 ## Feedback & Suggestions ✨
 
 We welcome and appreciate any suggestions you may have for improvement.
