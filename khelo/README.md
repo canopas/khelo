@@ -1,16 +1,14 @@
 # khelo
 
-A new Flutter project.
+The `khelo` module is the core UI component of the Khelo app. It contains the main Flutter application implementation and native integrations. This module handles the presentation layer and user interactions.
 
-## Getting Started
+## Key Features
 
-This project is a starting point for a Flutter application.
+- **User Interface:** Provides the complete user interface for the Khelo app.
+- **Native Integration:** Includes native code for platform-specific functionalities.
+- **Navigation:** Manages app navigation and routing.
 
-A few resources to get you started if this is your first Flutter project:
+### API
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **UI:** Contains all UI components used in the app.
+- **Components:** Contains reusable components.
