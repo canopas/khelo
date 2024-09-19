@@ -107,10 +107,29 @@ practices. Below is the current technologies stack used in the development proce
 Khelo is an open-source project but currently, we are not accepting any contributions.
 
 
-## Created & Maintained By
-Khelo is owned and maintained by the Canopas team.
+## What's Coming Next? 🚀
 
-You can follow them on Twitter at @canopassoftware for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
+- **Tournament Feature**: Khelo will soon support tournament management, allowing users to organize
+   and track cricket tournaments with ease, right from the app.
+- **Live Streaming**: Watch live matches directly through Khelo as we introduce live streaming, making 
+  it easier to follow your favorite teams and matches in real time.
+- **Voice-Over Scoring**: Get an immersive cricket experience with voice-over scoring, providing 
+  live commentary and score updates as the game unfolds.
+- **Improve User Experience**: We're continuously working on improving the user experience, with
+  plans to incorporate additional features and enhancements shortly.
+
+
+## Feedback & Suggestions ✨
+
+We welcome and appreciate any suggestions you may have for improvement.
+
+For bugs, questions and discussions please use the [Github Issues](https://github.com/canopas/khelo/issues).
+
+
+## Credits
+Khelo is owned and maintained by the [Canopas team](https://canopas.com/). 
+
+ You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
 <a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a>
 
