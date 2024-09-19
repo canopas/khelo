@@ -13,16 +13,16 @@ class MatchService {
     const matchContributorIds = new Set([
       ...(match.created_by !== null ? [match.created_by] : []),
       ...(match.referee_id !== null ? [match.referee_id] : []),
-      ...match.players.filter(e => e !== null),
-      ...match.scorer_ids.filter(e => e !== null),
-      ...match.umpire_ids.filter(e => e !== null),
-      ...match.commentator_ids.filter(e => e !== null),
+      ...match.players.filter((e) => e !== null),
+      ...match.scorer_ids.filter((e) => e !== null),
+      ...match.umpire_ids.filter((e) => e !== null),
+      ...match.commentator_ids.filter((e) => e !== null),
     ]);
     console.log("Contributors in match:", matchContributorIds);
     if (matchContributorIds.length === 0) {
       return;
     }
-    const matchContributors = await this.userRepository.getUsers(matchContributorIds);
+    const matchContributors = await this.userRepository.getUsers([...matchContributorIds]);
     const usersToNotify = matchContributors.filter((m) => user_models.userNotificationEnabled(m)).map((m)=> m.id);
 
     console.log("Users to notify:", usersToNotify);
