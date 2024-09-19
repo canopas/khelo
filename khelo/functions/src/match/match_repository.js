@@ -12,12 +12,16 @@ class MatchRepository {
     return this.db.collection("matches");
   }
   async processUpcomingMatches() {
-    const currentTimestamp = admin.firestore.Timestamp.now();
     const NOTIFICATION_THRESHOLD = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const NOTIFICATION_WINDOW = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+    const currentTimestamp = admin.firestore.Timestamp.now();
+    const startThreshold = new admin.firestore.Timestamp(currentTimestamp.seconds + NOTIFICATION_THRESHOLD / 1000, 0);
+    const endThreshold = new admin.firestore.Timestamp(currentTimestamp.seconds + (NOTIFICATION_THRESHOLD + NOTIFICATION_WINDOW) / 1000, 0);
 
     const upcomingMatchesQuery = this.matchRef()
-      .where("start_at", ">=", currentTimestamp)
-      .where("start_at", "<=", new admin.firestore.Timestamp(currentTimestamp.seconds + NOTIFICATION_THRESHOLD / 1000, 0));
+      .where("start_at", ">=", startThreshold)
+      .where("start_at", "<=", endThreshold);
     try {
       const upcomingMatchesSnapshot = await upcomingMatchesQuery.get();
       if (!upcomingMatchesSnapshot.empty) {
