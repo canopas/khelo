@@ -1,6 +1,6 @@
 <p align="center"> <a href="https://canopas.com/contact"><img src="./cta/cta_banner.png"></a></p>
 
-# Khelo- From Streets to Stadiums🏏
+# Khelo- From Streets to Stadiums 🏏
 Khelo - an open-source ultimate companion for all things cricket!
 
 <img src="./screenshots/cover-image.png" />
@@ -56,7 +56,7 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
 <details>
-  <summary> <h2>Requirements</h2> </summary>
+ <summary> <h2>Requirements ✅</h2> </summary>
 
 Khelo requires the following to function properly:
 
@@ -86,7 +86,7 @@ Khelo requires the following to function properly:
 
 </details>
 
-## Technologies Stack 
+## Technologies Stack 📚
 
 Khelo utilizes the latest Flutter app development technologies and adheres to industry best
 practices. Below is the current technologies stack used in the development process:
@@ -103,7 +103,7 @@ practices. Below is the current technologies stack used in the development proce
 - Cloud Functions
 
 
-## Contribution
+## Contribution 🤝
 Khelo is an open-source project but currently, we are not accepting any contributions.
 
 
@@ -126,12 +126,12 @@ We welcome and appreciate any suggestions you may have for improvement.
 For bugs, questions and discussions please use the [Github Issues](https://github.com/canopas/khelo/issues).
 
 
-## Credits
+## Credits 💻
 Khelo is owned and maintained by the [Canopas team](https://canopas.com/). 
 
  You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
-<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a>
+<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a> 💻💻
 
 
 ## Licence 📄
