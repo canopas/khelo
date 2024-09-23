@@ -62,19 +62,12 @@ class QrCodeSheet extends StatelessWidget {
                   eyeShape: QrEyeShape.square,
                   color: context.colorScheme.textPrimary),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
             Text(
-              context.l10n.profile_setting_user_id_title,
+              context.l10n.profile_setting_use_scanner_description,
               textAlign: TextAlign.center,
-              style: AppTextStyle.body2
+              style: AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textSecondary),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              userId,
-              textAlign: TextAlign.center,
-              style: AppTextStyle.subtitle3
-                  .copyWith(color: context.colorScheme.textPrimary),
             ),
           ],
         ),

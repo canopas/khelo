@@ -31,7 +31,6 @@ import 'flow/team/user_detail/user_detail_screen.dart';
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
   static const pathEditProfile = '/edit-profile';
-  static const pathContactSupport = "/contact-support";
   static const pathAddTeamMember = '/add-team-member';
   static const pathAddTeam = '/add-team';
   static const pathPowerPlay = '/power-play';
@@ -127,6 +126,11 @@ class AppRoute {
 
   static AppRoute get phoneLogin =>
       AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
+
+  static AppRoute get contactSupport => AppRoute(
+        "/contact-support",
+        builder: (_) => const ContactSupportScreen(),
+      );
 
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
@@ -238,11 +242,6 @@ class AppRoute {
       pathEditProfile,
       builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
-  static AppRoute contactSupport() => AppRoute(
-        pathContactSupport,
-        builder: (_) => const ContactSupportScreen(),
-      );
-
   static AppRoute teamDetail({required String teamId}) =>
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
@@ -282,14 +281,7 @@ class AppRoute {
             : state.widget(context);
       },
     ),
-    GoRoute(
-      path: pathContactSupport,
-      builder: (context, state) {
-        return state.extra == null
-            ? const ContactSupportScreen()
-            : state.widget(context);
-      },
-    ),
+    contactSupport.goRoute(),
     phoneLogin.goRoute(),
     GoRoute(
       path: pathScoreBoard,
