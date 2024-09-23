@@ -1,6 +1,6 @@
 <p align="center"> <a href="https://canopas.com/contact"><img src="./cta/cta_banner.png"></a></p>
 
-# Khelo- From Streets to Stadiums🏏
+# Khelo- From Streets to Stadiums 🏏
 Khelo - an open-source ultimate companion for all things cricket!
 
 <img src="./screenshots/cover-image.png" />
@@ -55,13 +55,85 @@ Khelo is an open-source Flutter project written in Dart using Firestore database
 
  > **Note**: Khelo is currently in active development🚧, with plans to incorporate additional features shortly.
 
+## Requirements ✅
 
-## Created & Maintained By
-Khelo is owned and maintained by the Canopas team.
+<details>
+ <summary> Click to expand </summary>
+<br>
 
-You can follow them on Twitter at @canopassoftware for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
+**Khelo** requires the following to function properly:
 
-<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" width=300></a>
+**Software:**
+
+- **Flutter**: [Download Flutter](https://flutter.dev/docs/get-started/install) (version: 3.24 or higher)
+- **Dart**: Installed as part of the Flutter SDK (version: 3.5 or higher)
+- **Firebase**: A free Google service offering various backend functionalities. (See [Firebase documentation](https://firebase.google.com/docs) for setup instructions)
+
+**Additional Requirements:**
+
+- A **Google account** to create a Firebase project.
+- An **active internet connection** for Firebase communication.
+
+**Platform-Specific Requirements:**
+
+- **Android (if targeting Android):**
+  - An Android device or emulator for development and testing.
+  - Android Studio (optional, but recommended) for development: [Download Android Studio](https://developer.android.com/studio)
+- **iOS (if targeting iOS):**
+  - A Mac computer with Xcode installed for development and testing.
+
+**Optional (for development and testing):**
+
+- **Firebase CLI**: Simplifies managing Firebase projects locally. (See [Firebase CLI documentation](https://firebase.google.com/docs/cli))
+
+</details>
+
+## Technologies Stack 📚
+
+Khelo utilizes the latest Flutter app development technologies and adheres to industry best
+practices. Below is the current technologies stack used in the development process:
+
+- MVVM Architecture
+- Flutter
+- Dart
+- Http
+- Dio
+- GoRouter
+- RiverPod
+- Firebase Authentication
+- Firebase Firestore
+- Cloud Functions
+
+
+## Contribution 🤝
+Khelo is an open-source project but currently, we are not accepting any contributions.
+
+
+## What's Coming Next? 🚀
+
+- **Tournament Feature**: Khelo will soon support tournament management, allowing users to organize
+   and track cricket tournaments with ease, right from the app.
+- **Live Streaming**: Watch live matches directly through Khelo as we introduce live streaming, making 
+  it easier to follow your favorite teams and matches in real time.
+- **Voice-Over Scoring**: Get an immersive cricket experience with voice-over scoring, providing 
+  live commentary and score updates as the game unfolds.
+- **Improve User Experience**: We're continuously working on improving the user experience, with
+  plans to incorporate additional features and enhancements shortly.
+
+
+## Feedback & Suggestions ✨
+
+We welcome and appreciate any suggestions you may have for improvement.
+
+For bugs, questions and discussions please use the [Github Issues](https://github.com/canopas/khelo/issues).
+
+
+## Credits 💻
+Khelo is owned and maintained by the [Canopas team](https://canopas.com/). 
+
+ You can follow them on Twitter at [@canopassoftware](https://twitter.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
+
+<a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" alt="Contact Canopas" width=300></a>
 
 
 ## Licence 📄
