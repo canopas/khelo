@@ -780,6 +780,7 @@
   "profile_setting_app_version_text": "App Version: {version}",
   "profile_setting_scan_to_play_text": "Scan to play!",
   "profile_setting_scan_to_play_description": "This QR code allows you to easily add the player to the team.",
+  "profile_setting_use_scanner_description": "Use your phone camera or a QR code app to scan the code above and easily add the player to the team.",
 
   "@_NOTIFICATION": {
   },
