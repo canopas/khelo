@@ -137,8 +137,13 @@
 
   "@_MY_CRICKET": {
   },
-  "my_game_teams_tab_title": "Teams",
+  "my_cricket_teams_tab_title": "Teams",
   "my_cricket_screen_title": "My Cricket",
+  "my_cricket_tournament_title": "Tournament",
+
+  "@ADD_TOURNAMENT": {
+  },
+  "add_tournament_screen_title": "Add Tournament",
 
   "add_team_screen_title": "Add Team",
   "add_team_add_as_member_description_text": "Add me as a team member",

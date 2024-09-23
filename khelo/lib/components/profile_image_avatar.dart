@@ -14,7 +14,11 @@ class ProfileImageAvatar extends StatelessWidget {
   final String? imageUrl;
   final String? filePath;
   final String? placeHolderImage;
+  final Color? placeHolderColor;
   final bool isLoading;
+  final BoxShape shape;
+  final Color? color;
+  final BorderRadius? borderRadius;
   final Function() onEditButtonTap;
 
   const ProfileImageAvatar({
@@ -23,7 +27,11 @@ class ProfileImageAvatar extends StatelessWidget {
     this.imageUrl,
     this.filePath,
     this.placeHolderImage,
+    this.placeHolderColor,
     required this.isLoading,
+    this.shape = BoxShape.circle,
+    this.borderRadius,
+    this.color,
     required this.onEditButtonTap,
   });
 
@@ -49,8 +57,9 @@ class ProfileImageAvatar extends StatelessWidget {
       width: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: context.colorScheme.primary,
+          shape: shape,
+          borderRadius: borderRadius,
+          color: color ?? context.colorScheme.primary,
           image: (filePath != null)
               ? DecorationImage(
                   image: FileImage(File(filePath!)),
@@ -93,7 +102,7 @@ class ProfileImageAvatar extends StatelessWidget {
       height: size / 3,
       width: size / 3,
       colorFilter: ColorFilter.mode(
-        context.colorScheme.textInversePrimary,
+        placeHolderColor ?? context.colorScheme.textInversePrimary,
         BlendMode.srcATop,
       ),
     );

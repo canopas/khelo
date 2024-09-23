@@ -7,6 +7,7 @@ class FireStoreConst {
   static const String usersCollection = "users";
   static const String userSessionCollection = "user_sessions";
   static const String supportCollection = "contact_support";
+  static const String tournamentCollection = "tournaments";
 
   // matches field const
   static const String id = "id";

@@ -8,6 +8,7 @@ import 'package:khelo/ui/flow/matches/match_list_screen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/team/team_list_screen.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
+import 'package:khelo/ui/flow/tournament/tournament_list_screen.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -24,6 +25,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
   final List<Widget> _tabs = [
     const MatchListScreen(),
     const TeamListScreen(),
+    const TournamentListScreen(),
   ];
 
   late PageController _controller;
@@ -99,10 +101,18 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
           ),
           const SizedBox(width: 8),
           TabButton(
-            context.l10n.my_game_teams_tab_title,
+            context.l10n.my_cricket_teams_tab_title,
             selected: _selectedTab == 1,
             onTap: () {
               _controller.jumpToPage(1);
+            },
+          ),
+          const SizedBox(width: 8),
+          TabButton(
+            context.l10n.my_cricket_tournament_title,
+            selected: _selectedTab == 2,
+            onTap: () {
+              _controller.jumpToPage(2);
             },
           ),
           const Spacer(),
@@ -112,15 +122,23 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                 onPressed: () => ref
                     .read(teamListViewStateProvider.notifier)
                     .onFilterButtonTap(),
-                icon: Icon(CupertinoIcons.slider_horizontal_3,
-                    color: context.colorScheme.textPrimary)),
+                icon: Icon(
+                  CupertinoIcons.slider_horizontal_3,
+                  color: context.colorScheme.textPrimary,
+                )),
           ],
-          actionButton(context,
-              onPressed: () => _selectedTab == 1
-                  ? AppRoute.addTeam().push(context)
-                  : AppRoute.addMatch().push(context),
-              icon: Icon(Icons.add, color: context.colorScheme.textPrimary)),
-          const SizedBox(width: 8),
+          actionButton(context, onPressed: () {
+            final actions = [
+              AppRoute.addMatch(),
+              AppRoute.addTeam(),
+              AppRoute.addTournament(),
+            ];
+            actions[_selectedTab].push(context);
+          },
+              icon: Icon(
+                Icons.add,
+                color: context.colorScheme.textPrimary,
+              )),
         ],
       ),
     );

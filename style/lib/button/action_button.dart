@@ -20,6 +20,9 @@ Widget actionButton(
       onPressed: onPressed,
       icon: icon,
       padding: padding,
+      style: const ButtonStyle(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
     );
   }
 }
