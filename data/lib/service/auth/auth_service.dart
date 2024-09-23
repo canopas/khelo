@@ -10,9 +10,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
 
+final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
+
 final authServiceProvider = Provider((ref) {
   return AuthService(
-    FirebaseAuth.instance,
+    ref.read(firebaseAuthProvider),
     ref.read(userServiceProvider),
     ref.read(currentUserJsonPod.notifier),
     ref.read(currentUserSessionJsonPod.notifier),

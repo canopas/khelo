@@ -1,5 +1,6 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +13,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
@@ -51,6 +53,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
 
     _observeActionError();
     _observeIsAdded(state);
+
     return AppPage(
       title: context.l10n.add_team_member_screen_title,
       actions: [
@@ -88,14 +91,20 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     return Padding(
       padding:
           context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        alignment: Alignment.bottomRight,
         children: [
-          _searchField(context, state),
-          if (state.selectedUsers.isNotEmpty) ...[
-            _selectedPlayerList(context, state),
-          ],
-          _searchedPlayerList(context, state),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _searchField(context, state),
+              if (state.selectedUsers.isNotEmpty) ...[
+                _selectedPlayerList(context, state),
+              ],
+              _searchedPlayerList(context, state),
+            ],
+          ),
+          _addViaContactButton(context),
         ],
       ),
     );
@@ -251,6 +260,48 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                 child: _crossIcon(context)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _addViaContactButton(
+    BuildContext context
+  ) {
+    return OnTapScale(
+      onTap: () async {
+        final  user = await AppRoute.contactSelection(memberIds: notifier.getMemberIds()).push<UserModel>(context);
+        if(context.mounted && user != null) {
+          notifier.selectUser(user);
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          color: context.colorScheme.containerLowOnSurface,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              CupertinoIcons.add,
+              size: 18,
+              weight: 24,
+              color: context.colorScheme.textPrimary,
+            ),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                context.l10n.add_team_player_add_via_contact_title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.button
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -44,20 +44,23 @@ dependencies:
 
   # UI
   cupertino_icons: ^1.0.2
-  image_cropper: ^7.0.3
+  image_cropper: ^8.0.2
   cached_network_image: ^3.3.1
   fluttertoast: ^8.2.4
   smooth_page_indicator: ^1.1.0
   flutter_svg: ^2.0.10+1
   url_launcher: ^6.3.0
   qr_flutter: ^4.1.0
+  permission_handler: ^11.3.1
   flutter_local_notifications: ^17.1.0
+
+  # contacts
+  contacts_service: ^0.6.3
 
   # picker
   canopas_country_picker: ^0.0.4
   image_picker: ^1.0.7
   twemoji_v2: ^0.5.3
-  permission_handler: ^11.3.1
 
   # io
   freezed_annotation: ^2.4.1
