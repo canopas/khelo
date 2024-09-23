@@ -22,19 +22,22 @@ class MatchRepository {
     const startThreshold = new admin.firestore.Timestamp(startThresholdInSeconds, 0);
     const endThreshold = new admin.firestore.Timestamp(endThresholdInSeconds, 0);
 
+    console.log(`MatchRepository: getting matches within threshold from ${startThreshold.toDate().toLocaleString()} to ${endThreshold.toDate().toLocaleString()}`);
+
     const upcomingMatchesQuery = this.matchRef()
       .where("start_at", ">=", startThreshold)
       .where("start_at", "<=", endThreshold);
     try {
       const upcomingMatchesSnapshot = await upcomingMatchesQuery.get();
       if (!upcomingMatchesSnapshot.empty) {
+        console.log(`MatchRepository: ${upcomingMatchesSnapshot.length} upcoming matches found within threshold`);
         const promises = upcomingMatchesSnapshot.docs.map(async (matchDoc) => {
           const matchData = matchDoc.data();
           await this.matchService.notifyBeforeMatchStart(matchData);
         });
         await Promise.all(promises);
       } else {
-        console.log(`MatchRepository: No upcoming matches found within threshold.from ${startThreshold.toDate().toLocaleString()} to ${endThreshold.toDate().toLocaleString()}`);
+        console.log("MatchRepository: No upcoming matches found within threshold");
       }
     } catch (e) {
       console.error("MatchRepository: Error getting upcoming matches:", e);
