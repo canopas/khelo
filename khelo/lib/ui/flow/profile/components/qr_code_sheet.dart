@@ -33,13 +33,13 @@ class QrCodeSheet extends StatelessWidget {
     return Container(
       constraints:
           BoxConstraints(maxHeight: context.mediaQuerySize.height * 0.8),
-      padding: context.mediaQueryPadding +
-          const EdgeInsets.only(top: 24, left: 16, right: 16),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         color: context.colorScheme.surface,
       ),
       child: SingleChildScrollView(
+        padding: context.mediaQueryPadding +
+            const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         child: Column(
           children: [
             Align(
@@ -62,7 +62,7 @@ class QrCodeSheet extends StatelessWidget {
                   eyeShape: QrEyeShape.square,
                   color: context.colorScheme.textPrimary),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             Text(
               context.l10n.profile_setting_use_scanner_description,
               textAlign: TextAlign.center,
