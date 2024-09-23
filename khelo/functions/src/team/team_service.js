@@ -12,14 +12,14 @@ class TeamService {
     const oldPlayers = oldTeam.team_players || [];
     const newPlayers = newTeam.team_players || [];
     const addedPlayerIds = newPlayers.filter((player) => !oldPlayers.some((oldPlayer) => oldPlayer.id === player.id)).map((m) => m.id);
-    console.log("Newly added players:", addedPlayerIds);
+    console.log("TeamService: Newly added players:", addedPlayerIds);
     if (addedPlayerIds.length === 0) {
       return;
     }
     const addedPlayers = await this.userRepository.getUsers(addedPlayerIds);
     const playersToNotify = addedPlayers.filter((m) => user_models.userNotificationEnabled(m)).map((m)=> m.id);
 
-    console.log("Players to notify:", playersToNotify);
+    console.log("TeamService: Players to notify:", playersToNotify);
     const teamName=newTeam.name;
     const teamId= newTeam.id;
     if (playersToNotify.length > 0 && typeof teamId === "string" && typeof teamName === "string") {

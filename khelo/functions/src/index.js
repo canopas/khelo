@@ -66,7 +66,7 @@ exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: R
   await teamService.notifyOnAddedToTeam(oldTeam, newTeam);
 });
 
-exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, schedule: "*/5 * * * *"}, async () => {
+exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, schedule: "*/5 * * * *", region: REGION}, async () => {
   await matchRepository.processUpcomingMatches();
 });
 

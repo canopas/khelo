@@ -18,14 +18,14 @@ class MatchService {
       ...match.umpire_ids.filter((e) => e !== null),
       ...match.commentator_ids.filter((e) => e !== null),
     ]);
-    console.log("Contributors in match:", matchContributorIds);
+    console.log("MatchService: Contributors in match:", matchContributorIds);
     if (matchContributorIds.length === 0) {
       return;
     }
     const matchContributors = await this.userRepository.getUsers([...matchContributorIds]);
     const usersToNotify = matchContributors.filter((m) => user_models.userNotificationEnabled(m)).map((m)=> m.id);
 
-    console.log("Users to notify:", usersToNotify);
+    console.log("MatchService: Users to notify:", usersToNotify);
 
     const teamAName = teamA.name;
     const teamBName = teamB.name;

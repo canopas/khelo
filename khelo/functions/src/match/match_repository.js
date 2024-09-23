@@ -16,8 +16,11 @@ class MatchRepository {
     const NOTIFICATION_WINDOW = 5 * 60 * 1000; // 5 minutes in milliseconds
 
     const currentTimestamp = admin.firestore.Timestamp.now();
-    const startThreshold = new admin.firestore.Timestamp(currentTimestamp.seconds + NOTIFICATION_THRESHOLD / 1000, 0);
-    const endThreshold = new admin.firestore.Timestamp(currentTimestamp.seconds + (NOTIFICATION_THRESHOLD + NOTIFICATION_WINDOW) / 1000, 0);
+    const startThresholdInSeconds = currentTimestamp.seconds + NOTIFICATION_THRESHOLD / 1000;
+    const endThresholdInSeconds = currentTimestamp.seconds + (NOTIFICATION_THRESHOLD + NOTIFICATION_WINDOW) / 1000;
+
+    const startThreshold = new admin.firestore.Timestamp(startThresholdInSeconds, 0);
+    const endThreshold = new admin.firestore.Timestamp(endThresholdInSeconds, 0);
 
     const upcomingMatchesQuery = this.matchRef()
       .where("start_at", ">=", startThreshold)
@@ -31,7 +34,7 @@ class MatchRepository {
         });
         await Promise.all(promises);
       } else {
-        console.log("No upcoming matches found within the notification threshold.");
+        console.log(`MatchRepository: No upcoming matches found within threshold.from ${startThreshold.toDate().toLocaleString()} to ${endThreshold.toDate().toLocaleString()}`);
       }
     } catch (e) {
       console.error("MatchRepository: Error getting upcoming matches:", e);
