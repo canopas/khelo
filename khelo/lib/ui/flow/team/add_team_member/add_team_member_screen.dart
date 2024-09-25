@@ -12,6 +12,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/user_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/components/user_detail_sheet.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_view_model.dart';
 import 'package:khelo/ui/flow/team/add_team_member/components/verify_team_member_sheet.dart';
@@ -54,6 +55,18 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     return AppPage(
       title: context.l10n.add_team_member_screen_title,
       actions: [
+        actionButton(
+          context,
+          onPressed: () async {
+            final user = await AppRoute.scannerScreen.push<UserModel>(context);
+            if (context.mounted && user != null) {
+              notifier.selectUser(user);
+            }
+          },
+          icon: SvgPicture.asset(
+            Assets.images.icQrCode,
+          ),
+        ),
         state.isAddInProgress
             ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
             : actionButton(

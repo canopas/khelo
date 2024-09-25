@@ -11,6 +11,7 @@ import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/team/user_detail/component/user_detail_info_content.dart';
 import 'package:khelo/ui/flow/team/user_detail/user_detail_view_model.dart';
 import 'package:style/button/action_button.dart';
+import 'package:style/button/secondary_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -21,8 +22,13 @@ import 'component/user_detail_bowling_content.dart';
 
 class UserDetailScreen extends ConsumerStatefulWidget {
   final String userId;
+  final bool showAddButton;
 
-  const UserDetailScreen({super.key, required this.userId});
+  const UserDetailScreen({
+    super.key,
+    required this.userId,
+    this.showAddButton = false,
+  });
 
   @override
   ConsumerState createState() => _UserDetailScreenState();
@@ -69,6 +75,14 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
+      actions: (widget.showAddButton)
+          ? [
+              SecondaryButton(
+                context.l10n.common_add_title,
+                onPressed: () => context.pop(state.user),
+              )
+            ]
+          : null,
       body: Builder(builder: (context) {
         return _body(context, state);
       }),
@@ -93,7 +107,9 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
                     .copyWith(color: context.colorScheme.textPrimary)),
             const SizedBox(height: 4),
             Text(
-              state.user?.phone.format(context, StringFormats.obscurePhoneNumber) ?? '',
+                state.user?.phone
+                        .format(context, StringFormats.obscurePhoneNumber) ??
+                    '',
                 style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.textSecondary)),
           ],

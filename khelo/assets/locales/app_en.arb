@@ -146,6 +146,13 @@
   "add_team_player_role_title": "Playing role",
   "add_team_players_text": "Players",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
+
+  "scan_qr_code": "Scan QR code",
+  "scan_qr_code_description": "Place the QR code into the frame",
+  "scan_qr_permission_title": "Allow camera access to use scanning features",
+  "scan_qr_permission_description": "Please enable camera access in your device settings to use the scanning feature.",
+  "scan_qr_permission_settings": "Go to settings",
+
   "add_team_member_screen_title": "Add team member",
   "add_team_member_details_title": "Details",
   "add_team_member_search_placeholder_text": "Search member name",

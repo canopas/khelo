@@ -21,6 +21,7 @@ import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
+import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
@@ -127,6 +128,9 @@ class AppRoute {
 
   static AppRoute get phoneLogin =>
       AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
+
+  static AppRoute get scannerScreen =>
+      AppRoute("/scanner-screen", builder: (_) => const ScannerScreen());
 
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
@@ -247,9 +251,15 @@ class AppRoute {
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
 
-  static AppRoute userDetail({required String userId}) =>
+  static AppRoute userDetail({
+    required String userId,
+    bool showAddButton = false,
+  }) =>
       AppRoute(pathUserDetail,
-          builder: (_) => UserDetailScreen(userId: userId));
+          builder: (_) => UserDetailScreen(
+                userId: userId,
+                showAddButton: showAddButton,
+              ));
 
   static final routes = [
     GoRoute(
@@ -291,6 +301,7 @@ class AppRoute {
       },
     ),
     phoneLogin.goRoute(),
+    scannerScreen.goRoute(),
     GoRoute(
       path: pathScoreBoard,
       builder: (context, state) => state.widget(context),
