@@ -10,7 +10,7 @@ class TeamRepository {
     return this.db.collection("teams");
   }
   async getTeams(teamIds) {
-    const teamRef = this.teamRef.where("id", "in", teamIds);
+    const teamRef = this.teamRef().where("id", "in", teamIds);
     try {
       const teamDoc = await teamRef.get();
       return teamDoc.docs.map((doc) => doc.data());

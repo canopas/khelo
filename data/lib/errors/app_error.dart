@@ -33,7 +33,7 @@ class AppError implements Exception {
     } else if (error is TypeError) {
       return SomethingWentWrongError(
         message: error.toString(),
-        stackTrace: error.stackTrace,
+        stackTrace: stack,
       );
     } else if (error is LargeAttachmentUploadError) {
       return const LargeAttachmentUploadError();

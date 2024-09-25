@@ -1,4 +1,5 @@
 import 'package:data/storage/provider/preferences_provider.dart';
+import 'package:data/utils/constant/firestore_constant.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/ui/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
+
+const _baseUrl = 'https://apiv1-g7mqemn2ga-el.a.run.app/';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +22,12 @@ void main() async {
 Future<ProviderContainer> _initContainer() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  DataConfig.init(
+    DataConfig(
+      apiBaseUrl: _baseUrl,
+    ),
   );
 
   if (!kDebugMode) {

@@ -46,6 +46,25 @@ class FireStoreConst {
   static const String nameLowercase = "name_lowercase";
   static const String profileImageUrl = "profile_img_url";
 
+  // users field const
   static const String deviceFcmToken = "device_fcm_token";
   static const String notifications = "notifications";
+  static const String phone = "phone";
+  static const String name = "name";
+}
+
+class DataConfig {
+  static late DataConfig _instance;
+
+  static DataConfig get instance => _instance;
+
+  static void init(DataConfig dataConfig) {
+    _instance = dataConfig;
+  }
+
+  final String apiBaseUrl;
+
+  DataConfig({
+    required this.apiBaseUrl,
+  });
 }

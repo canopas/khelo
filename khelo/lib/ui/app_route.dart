@@ -19,6 +19,7 @@ import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
 import 'package:khelo/ui/flow/sign_in/phone_verification/phone_verification_screen.dart';
 import 'package:khelo/ui/flow/team/add_team/add_team_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
+import 'package:khelo/ui/flow/team/add_team_member/contact_selection/contact_selection_screen.dart';
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
@@ -32,7 +33,6 @@ import 'flow/team/user_detail/user_detail_screen.dart';
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
   static const pathEditProfile = '/edit-profile';
-  static const pathContactSupport = "/contact-support";
   static const pathAddTeamMember = '/add-team-member';
   static const pathAddTeam = '/add-team';
   static const pathPowerPlay = '/power-play';
@@ -48,6 +48,7 @@ class AppRoute {
   static const pathMatchDetailTab = '/match-detail-tab';
   static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
+  static const pathContactSelection = "/contact-selection";
   static const pathAddTournament = "/add-tournament";
 
   final String path;
@@ -129,6 +130,11 @@ class AppRoute {
 
   static AppRoute get phoneLogin =>
       AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
+
+  static AppRoute get contactSupport => AppRoute(
+        "/contact-support",
+        builder: (_) => const ContactSupportScreen(),
+      );
 
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
@@ -245,11 +251,6 @@ class AppRoute {
       pathEditProfile,
       builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
-  static AppRoute contactSupport() => AppRoute(
-        pathContactSupport,
-        builder: (_) => const ContactSupportScreen(),
-      );
-
   static AppRoute teamDetail({required String teamId}) =>
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
@@ -257,6 +258,10 @@ class AppRoute {
   static AppRoute userDetail({required String userId}) =>
       AppRoute(pathUserDetail,
           builder: (_) => UserDetailScreen(userId: userId));
+
+  static AppRoute contactSelection({required List<String> memberIds}) =>
+      AppRoute(pathContactSelection,
+          builder: (_) => ContactSelectionScreen(memberIds: memberIds));
 
   static final routes = [
     GoRoute(
@@ -289,14 +294,7 @@ class AppRoute {
             : state.widget(context);
       },
     ),
-    GoRoute(
-      path: pathContactSupport,
-      builder: (context, state) {
-        return state.extra == null
-            ? const ContactSupportScreen()
-            : state.widget(context);
-      },
-    ),
+    contactSupport.goRoute(),
     phoneLogin.goRoute(),
     GoRoute(
       path: pathScoreBoard,
@@ -340,6 +338,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathUserDetail,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathContactSelection,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

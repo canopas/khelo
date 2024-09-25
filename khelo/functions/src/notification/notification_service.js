@@ -19,7 +19,7 @@ class NotificationService {
       }
     }
     if (tokens.size == 0) {
-      console.debug("No tokens found for user");
+      console.debug("NotificationService: No tokens found for user");
       return;
     }
     const payload = {
