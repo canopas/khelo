@@ -286,7 +286,7 @@ class _ContactSelectionScreenState
       if (next == true && context.mounted) {
         showErrorSnackBar(
           context: context,
-          error: context.l10n.contact_selection_already_added,
+          error: context.l10n.add_team_member_already_added,
         );
       }
     });

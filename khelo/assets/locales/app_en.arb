@@ -147,6 +147,13 @@
   "add_team_player_add_via_contact_title": "Add via Contact",
   "add_team_players_text": "Players",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
+
+  "scan_qr_code": "Scan QR code",
+  "scan_qr_code_description": "Place the QR code into the frame",
+  "scan_qr_permission_title": "Allow camera access to use scanning features",
+  "scan_qr_permission_description": "Please enable camera access in your device settings to use the scanning feature.",
+  "scan_qr_permission_settings": "Go to settings",
+
   "add_team_member_screen_title": "Add team member",
   "add_team_member_details_title": "Details",
   "add_team_member_search_placeholder_text": "Search member name",
@@ -156,6 +163,7 @@
   "add_team_member_search_no_result_title": "Oops! No User Found",
   "add_team_member_search_description_text": "It seems we don't have anyone by that name. Give another name a go!",
   "add_team_member_added_text": "ADDED",
+  "add_team_member_already_added": "Member already added",
   "add_team_member_verify_error_text": "Please enter correct digits",
   "add_team_member_verify_placeholder_text": "Enter the last {count} digits of the phone number of the selected player.",
   "@add_team_member_verify_placeholder_text": {
@@ -173,7 +181,6 @@
   "contact_selection_access_permission": "Allow contact access",
   "contact_selection_access_permission_description": "Allow contact access to add member via contacts.",
   "contact_selection_allow_title": "Allow",
-  "contact_selection_already_added": "Member already added",
 
   "confirm_number_confirm_phone_title": "Confirm phone number",
   "confirm_number_confirm_title": "Confirm",

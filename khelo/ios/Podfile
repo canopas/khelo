@@ -50,7 +50,8 @@ post_install do |installer|
 
          ## dart: PermissionGroup.notification
         'PERMISSION_NOTIFICATIONS=1',
-
+        ## dart: PermissionGroup.camera
+        'PERMISSION_CAMERA=1',
       ]
 
     end
@@ -63,6 +64,8 @@ post_install do |installer|
 
         ## dart: PermissionGroup.notification
         'PERMISSION_NOTIFICATIONS=1',
+        ## dart: PermissionGroup.camera
+        'PERMISSION_CAMERA=1',
         ]
     end
     # End of the permission_handler configuration
