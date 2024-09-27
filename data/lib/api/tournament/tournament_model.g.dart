@@ -11,15 +11,19 @@ _$TournamentModelImpl _$$TournamentModelImplFromJson(Map json) =>
       id: json['id'] as String,
       name: json['name'] as String,
       profile_img_url: json['profile_img_url'] as String?,
-      banner_img_url: json['banner_img_url'] as String?,
-      type: json['type'] ?? TournamentType.other,
+      type: $enumDecode(_$TournamentTypeEnumMap, json['type']),
       members: (json['members'] as List<dynamic>?)
               ?.map((e) => TournamentMember.fromJson(
                   Map<String, dynamic>.from(e as Map)))
               .toList() ??
           const [],
-      start_date: DateTime.parse(json['start_date'] as String),
-      end_date: DateTime.parse(json['end_date'] as String),
+      created_by: json['created_by'] as String,
+      created_at: _$JsonConverterFromJson<Object, DateTime>(
+          json['created_at'], const TimeStampJsonConverter().fromJson),
+      start_date:
+          const TimeStampJsonConverter().fromJson(json['start_date'] as Object),
+      end_date:
+          const TimeStampJsonConverter().fromJson(json['end_date'] as Object),
       team_ids: (json['team_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -36,14 +40,40 @@ Map<String, dynamic> _$$TournamentModelImplToJson(
       'id': instance.id,
       'name': instance.name,
       'profile_img_url': instance.profile_img_url,
-      'banner_img_url': instance.banner_img_url,
-      'type': instance.type,
+      'type': _$TournamentTypeEnumMap[instance.type]!,
       'members': instance.members.map((e) => e.toJson()).toList(),
-      'start_date': instance.start_date.toIso8601String(),
-      'end_date': instance.end_date.toIso8601String(),
+      'created_by': instance.created_by,
+      'created_at': _$JsonConverterToJson<Object, DateTime>(
+          instance.created_at, const TimeStampJsonConverter().toJson),
+      'start_date': const TimeStampJsonConverter().toJson(instance.start_date),
+      'end_date': const TimeStampJsonConverter().toJson(instance.end_date),
       'team_ids': instance.team_ids,
       'match_ids': instance.match_ids,
     };
+
+const _$TournamentTypeEnumMap = {
+  TournamentType.knockOut: 1,
+  TournamentType.miniRobin: 2,
+  TournamentType.boxLeague: 3,
+  TournamentType.doubleOut: 4,
+  TournamentType.superOver: 5,
+  TournamentType.bestOf: 6,
+  TournamentType.gully: 7,
+  TournamentType.mixed: 8,
+  TournamentType.other: 9,
+};
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
 
 _$TournamentMemberImpl _$$TournamentMemberImplFromJson(
         Map<String, dynamic> json) =>

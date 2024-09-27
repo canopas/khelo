@@ -23,12 +23,14 @@ mixin _$TournamentModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
-  String? get banner_img_url => throw _privateConstructorUsedError;
-  dynamic get type => throw _privateConstructorUsedError;
+  TournamentType get type => throw _privateConstructorUsedError;
   List<TournamentMember> get members => throw _privateConstructorUsedError;
-  @JsonConverterHelper()
+  String get created_by => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime? get created_at => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
   DateTime get start_date => throw _privateConstructorUsedError;
-  @JsonConverterHelper()
+  @TimeStampJsonConverter()
   DateTime get end_date => throw _privateConstructorUsedError;
   List<String> get team_ids => throw _privateConstructorUsedError;
   List<String> get match_ids => throw _privateConstructorUsedError;
@@ -53,11 +55,12 @@ abstract class $TournamentModelCopyWith<$Res> {
       {String id,
       String name,
       String? profile_img_url,
-      String? banner_img_url,
-      dynamic type,
+      TournamentType type,
       List<TournamentMember> members,
-      @JsonConverterHelper() DateTime start_date,
-      @JsonConverterHelper() DateTime end_date,
+      String created_by,
+      @TimeStampJsonConverter() DateTime? created_at,
+      @TimeStampJsonConverter() DateTime start_date,
+      @TimeStampJsonConverter() DateTime end_date,
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -82,9 +85,10 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
     Object? id = null,
     Object? name = null,
     Object? profile_img_url = freezed,
-    Object? banner_img_url = freezed,
-    Object? type = freezed,
+    Object? type = null,
     Object? members = null,
+    Object? created_by = null,
+    Object? created_at = freezed,
     Object? start_date = null,
     Object? end_date = null,
     Object? team_ids = null,
@@ -105,18 +109,22 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
           ? _value.profile_img_url
           : profile_img_url // ignore: cast_nullable_to_non_nullable
               as String?,
-      banner_img_url: freezed == banner_img_url
-          ? _value.banner_img_url
-          : banner_img_url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type
+      type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as TournamentType,
       members: null == members
           ? _value.members
           : members // ignore: cast_nullable_to_non_nullable
               as List<TournamentMember>,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
+      created_at: freezed == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       start_date: null == start_date
           ? _value.start_date
           : start_date // ignore: cast_nullable_to_non_nullable
@@ -157,11 +165,12 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
       {String id,
       String name,
       String? profile_img_url,
-      String? banner_img_url,
-      dynamic type,
+      TournamentType type,
       List<TournamentMember> members,
-      @JsonConverterHelper() DateTime start_date,
-      @JsonConverterHelper() DateTime end_date,
+      String created_by,
+      @TimeStampJsonConverter() DateTime? created_at,
+      @TimeStampJsonConverter() DateTime start_date,
+      @TimeStampJsonConverter() DateTime end_date,
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -184,9 +193,10 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
     Object? id = null,
     Object? name = null,
     Object? profile_img_url = freezed,
-    Object? banner_img_url = freezed,
-    Object? type = freezed,
+    Object? type = null,
     Object? members = null,
+    Object? created_by = null,
+    Object? created_at = freezed,
     Object? start_date = null,
     Object? end_date = null,
     Object? team_ids = null,
@@ -207,15 +217,22 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
           ? _value.profile_img_url
           : profile_img_url // ignore: cast_nullable_to_non_nullable
               as String?,
-      banner_img_url: freezed == banner_img_url
-          ? _value.banner_img_url
-          : banner_img_url // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: freezed == type ? _value.type! : type,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as TournamentType,
       members: null == members
           ? _value._members
           : members // ignore: cast_nullable_to_non_nullable
               as List<TournamentMember>,
+      created_by: null == created_by
+          ? _value.created_by
+          : created_by // ignore: cast_nullable_to_non_nullable
+              as String,
+      created_at: freezed == created_at
+          ? _value.created_at
+          : created_at // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       start_date: null == start_date
           ? _value.start_date
           : start_date // ignore: cast_nullable_to_non_nullable
@@ -252,11 +269,12 @@ class _$TournamentModelImpl implements _TournamentModel {
       {required this.id,
       required this.name,
       this.profile_img_url,
-      this.banner_img_url,
-      this.type = TournamentType.other,
+      required this.type,
       final List<TournamentMember> members = const [],
-      @JsonConverterHelper() required this.start_date,
-      @JsonConverterHelper() required this.end_date,
+      required this.created_by,
+      @TimeStampJsonConverter() this.created_at,
+      @TimeStampJsonConverter() required this.start_date,
+      @TimeStampJsonConverter() required this.end_date,
       final List<String> team_ids = const [],
       final List<String> match_ids = const [],
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -279,10 +297,7 @@ class _$TournamentModelImpl implements _TournamentModel {
   @override
   final String? profile_img_url;
   @override
-  final String? banner_img_url;
-  @override
-  @JsonKey()
-  final dynamic type;
+  final TournamentType type;
   final List<TournamentMember> _members;
   @override
   @JsonKey()
@@ -293,10 +308,15 @@ class _$TournamentModelImpl implements _TournamentModel {
   }
 
   @override
-  @JsonConverterHelper()
+  final String created_by;
+  @override
+  @TimeStampJsonConverter()
+  final DateTime? created_at;
+  @override
+  @TimeStampJsonConverter()
   final DateTime start_date;
   @override
-  @JsonConverterHelper()
+  @TimeStampJsonConverter()
   final DateTime end_date;
   final List<String> _team_ids;
   @override
@@ -336,7 +356,7 @@ class _$TournamentModelImpl implements _TournamentModel {
 
   @override
   String toString() {
-    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, members: $members, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches)';
+    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, type: $type, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches)';
   }
 
   @override
@@ -348,10 +368,12 @@ class _$TournamentModelImpl implements _TournamentModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.profile_img_url, profile_img_url) ||
                 other.profile_img_url == profile_img_url) &&
-            (identical(other.banner_img_url, banner_img_url) ||
-                other.banner_img_url == banner_img_url) &&
-            const DeepCollectionEquality().equals(other.type, type) &&
+            (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
+            (identical(other.created_by, created_by) ||
+                other.created_by == created_by) &&
+            (identical(other.created_at, created_at) ||
+                other.created_at == created_at) &&
             (identical(other.start_date, start_date) ||
                 other.start_date == start_date) &&
             (identical(other.end_date, end_date) ||
@@ -370,9 +392,10 @@ class _$TournamentModelImpl implements _TournamentModel {
       id,
       name,
       profile_img_url,
-      banner_img_url,
-      const DeepCollectionEquality().hash(type),
+      type,
       const DeepCollectionEquality().hash(_members),
+      created_by,
+      created_at,
       start_date,
       end_date,
       const DeepCollectionEquality().hash(_team_ids),
@@ -400,11 +423,12 @@ abstract class _TournamentModel implements TournamentModel {
       {required final String id,
       required final String name,
       final String? profile_img_url,
-      final String? banner_img_url,
-      final dynamic type,
+      required final TournamentType type,
       final List<TournamentMember> members,
-      @JsonConverterHelper() required final DateTime start_date,
-      @JsonConverterHelper() required final DateTime end_date,
+      required final String created_by,
+      @TimeStampJsonConverter() final DateTime? created_at,
+      @TimeStampJsonConverter() required final DateTime start_date,
+      @TimeStampJsonConverter() required final DateTime end_date,
       final List<String> team_ids,
       final List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -422,16 +446,19 @@ abstract class _TournamentModel implements TournamentModel {
   @override
   String? get profile_img_url;
   @override
-  String? get banner_img_url;
-  @override
-  dynamic get type;
+  TournamentType get type;
   @override
   List<TournamentMember> get members;
   @override
-  @JsonConverterHelper()
+  String get created_by;
+  @override
+  @TimeStampJsonConverter()
+  DateTime? get created_at;
+  @override
+  @TimeStampJsonConverter()
   DateTime get start_date;
   @override
-  @JsonConverterHelper()
+  @TimeStampJsonConverter()
   DateTime get end_date;
   @override
   List<String> get team_ids;

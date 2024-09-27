@@ -18,6 +18,7 @@
   "common_retry_title": "Retry",
   "common_submit_title": "Submit",
   "common_not_now": "Not now",
+  "common_create": "Create",
   "common_not_specified_title": "Not Specified",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
@@ -141,9 +142,52 @@
   "my_cricket_screen_title": "My Cricket",
   "my_cricket_tournament_title": "Tournament",
 
-  "@ADD_TOURNAMENT": {
+  "@_ADD_TOURNAMENT": {
   },
   "add_tournament_screen_title": "Add Tournament",
+  "add_tournament_name": "Tournament Name",
+  "add_tournament_type": "Tournament Type",
+  "add_tournament_start_date": "Start Date",
+  "add_tournament_end_date": "End Date",
+  "add_tournament_team_selection": "Team selection",
+  "add_tournament_matches_selection": "Matches selection",
+  "add_tournament_team_count": "{count, plural, =0{Select Team} =1{{count} Team} other{{count} Teams}}",
+  "@add_tournament_team_count": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "add_tournament_match_count": "{count, plural, =0{Select Match} =1{{count} Match} other{{count} Matches}}",
+  "@add_tournament_match_count": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+
+  "@_TOURNAMENT_TYPE":{
+  },
+  "tournament_type_knockout": "KnockOut",
+  "tournament_type_miniRobin": "Mini Robin",
+  "tournament_type_boxLeague": "Box League",
+  "tournament_type_doubleOut": "Double Out",
+  "tournament_type_superOver": "Super Over",
+  "tournament_type_bestOf": "Best Of",
+  "tournament_type_gully": "Gully",
+  "tournament_type_mixed": "Mixed",
+  "tournament_type_other": "Other",
+
+  "tournament_type_knockout_description": "Teams face off in a single elimination, with the loser immediately knocked out.",
+  "tournament_type_miniRobin_description": "A smaller round-robin format where each team plays once against all others.",
+  "tournament_type_boxLeague_description": "Teams are divided into groups, with top teams advancing to the knockout stage.",
+  "tournament_type_doubleOut_description": "Teams get two chances before being knocked out, with a winners and losers bracket.",
+  "tournament_type_superOver_description": "A knockout format with a super over to decide tied matches.",
+  "tournament_type_bestOf_description": "Teams play a series of matches, and the first to win the majority is the champion.",
+  "tournament_type_gully_description": "Casual street-style cricket with short games and flexible rules.",
+  "tournament_type_mixed_description": "Teams are randomly mixed, creating fun and unpredictable matches",
+  "tournament_type_other_description": "A custom format for tournaments with unique rules or structures.",
+
+
 
   "add_team_screen_title": "Add Team",
   "add_team_add_as_member_description_text": "Add me as a team member",

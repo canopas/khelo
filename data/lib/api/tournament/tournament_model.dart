@@ -2,8 +2,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:json_serializable/type_helper.dart';
 
+import '../../converter/timestamp_json_converter.dart';
 import '../match/match_model.dart';
 import '../team/team_model.dart';
 
@@ -18,11 +18,12 @@ class TournamentModel with _$TournamentModel {
     required String id,
     required String name,
     String? profile_img_url,
-    String? banner_img_url,
-    @Default(TournamentType.other) type,
+    required TournamentType type,
     @Default([]) List<TournamentMember> members,
-    @JsonConverterHelper() required DateTime start_date,
-    @JsonConverterHelper() required DateTime end_date,
+    required String created_by,
+    @TimeStampJsonConverter() DateTime? created_at,
+    @TimeStampJsonConverter() required DateTime start_date,
+    @TimeStampJsonConverter() required DateTime end_date,
     @Default([]) List<String> team_ids,
     @Default([]) List<String> match_ids,
     @JsonKey(includeFromJson: false, includeToJson: false)
@@ -54,6 +55,7 @@ class TournamentMember with _$TournamentMember {
       _$TournamentMemberFromJson(json);
 }
 
+@JsonEnum(valueField: "value")
 enum TournamentType {
   knockOut(1),
   miniRobin(2),
