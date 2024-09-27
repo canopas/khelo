@@ -91,7 +91,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
           TabButton(
             context.l10n.common_matches_title,
             selected: _selectedTab == 0,
@@ -139,6 +139,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                 Icons.add,
                 color: context.colorScheme.textPrimary,
               )),
+          const SizedBox(width: 4),
         ],
       ),
     );
