@@ -24,7 +24,9 @@ dependencies:
   firebase_auth: ^5.0.0
 
   # io
+  http: ^1.2.1
   dio: ^5.0.2
+  cloud_functions: ^5.1.1
   json_annotation: ^4.9.0
   json_serializable: ^6.7.1
   freezed_annotation: ^2.4.1

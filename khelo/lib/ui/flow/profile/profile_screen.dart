@@ -9,6 +9,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/components/complete_profile_progress.dart';
+import 'package:khelo/ui/flow/profile/components/qr_code_sheet.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -175,7 +176,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             context,
             icon: Assets.images.icContactSupport,
             title: context.l10n.contact_support_title,
-            onTap: () => AppRoute.contactSupport().push(context),
+            onTap: () => AppRoute.contactSupport.push(context),
           ),
           _settingItem(
             context,
@@ -249,41 +250,44 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     BuildContext context,
     String userId,
   ) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: context.colorScheme.outline),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n.profile_setting_scan_to_play_text,
-            style: AppTextStyle.header4
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            context.l10n.profile_setting_scan_to_play_description,
-            style: AppTextStyle.subtitle3
-                .copyWith(color: context.colorScheme.textSecondary),
-          ),
-          const SizedBox(height: 24),
-          Center(
-            child: QrImageView(
-              data: userId,
-              version: QrVersions.auto,
-              size: 120.0,
-              dataModuleStyle: QrDataModuleStyle(
-                  dataModuleShape: QrDataModuleShape.square,
-                  color: context.colorScheme.textPrimary),
-              eyeStyle: QrEyeStyle(
-                  eyeShape: QrEyeShape.square,
-                  color: context.colorScheme.textPrimary),
+    return OnTapScale(
+      onTap: () => QrCodeSheet.show(context, userId: userId),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: context.colorScheme.outline),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              context.l10n.profile_setting_scan_to_play_text,
+              style: AppTextStyle.header4
+                  .copyWith(color: context.colorScheme.textPrimary),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+            Text(
+              context.l10n.profile_setting_scan_to_play_description,
+              style: AppTextStyle.subtitle3
+                  .copyWith(color: context.colorScheme.textSecondary),
+            ),
+            const SizedBox(height: 24),
+            Center(
+              child: QrImageView(
+                data: userId,
+                version: QrVersions.auto,
+                size: 120.0,
+                dataModuleStyle: QrDataModuleStyle(
+                    dataModuleShape: QrDataModuleShape.square,
+                    color: context.colorScheme.textPrimary),
+                eyeStyle: QrEyeStyle(
+                    eyeShape: QrEyeShape.square,
+                    color: context.colorScheme.textPrimary),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

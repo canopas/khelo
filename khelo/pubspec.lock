@@ -230,6 +230,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.3.1"
+  cloud_functions:
+    dependency: transitive
+    description:
+      name: cloud_functions
+      sha256: "225447ae732d01aacc5238f2b6ecea0550d91dbee72924bbbbb17fea70a2ec70"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.2"
+  cloud_functions_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_functions_platform_interface
+      sha256: "0a624fe8a25db0bbc00bf6aece8db843b3af835d16559d3872f3f6021bd7ad35"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.5.36"
+  cloud_functions_web:
+    dependency: transitive
+    description:
+      name: cloud_functions_web
+      sha256: ea5903f58ec62efc3c0c9ec2db0e316d7288bc3eaa30ec88e5e90bf822a4e0cb
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.10.1"
   code_builder:
     dependency: transitive
     description:
@@ -254,6 +278,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  contacts_service:
+    dependency: "direct main"
+    description:
+      name: contacts_service
+      sha256: f6d5ea33b31dfcdcd2e65d8abdc836502e04ddb0f66a96aa726fa9891ea9671e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.3"
   convert:
     dependency: transitive
     description:
@@ -1225,6 +1257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      sha256: ea0b925899e64ecdfbf9c7becb60d5b50e706ade44a85b2363be2a22d88117d2
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.2"
   riverpod:
     dependency: transitive
     description:
@@ -1537,10 +1577,10 @@ packages:
     dependency: "direct main"
     description:
       name: twemoji_v2
-      sha256: e573f62ef26b1261c6a5e027096187a9b49da77d14bdeb54b16a55bd1127d482
+      sha256: "1894d08626e6f07cb3dcd6286855407b322c157445008b54f683058fb868e1fb"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.3"
+    version: "0.6.0"
   typed_data:
     dependency: transitive
     description:
