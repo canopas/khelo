@@ -43,6 +43,7 @@ class AppRoute {
   static const pathAddMatch = '/add-match';
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
+  static const pathScannerScreen = '/scanner-screen';
   static const pathTeamDetail = '/team-detail';
   static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
@@ -129,14 +130,9 @@ class AppRoute {
   static AppRoute get phoneLogin =>
       AppRoute("/phone-login", builder: (_) => const SignInWithPhoneScreen());
 
-  static AppRoute get scannerScreen =>
-      AppRoute("/scanner-screen", builder: (_) => const ScannerScreen());
-
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
-        builder: (_) => ScoreBoardScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => ScoreBoardScreen(matchId: matchId),
       );
 
   static AppRoute searchHome({required List<MatchModel> matches}) =>
@@ -148,9 +144,7 @@ class AppRoute {
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,
-        builder: (_) => AddTossDetailScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => AddTossDetailScreen(matchId: matchId),
       );
 
   static AppRoute addMatch({String? matchId, TeamModel? defaultTeam}) =>
@@ -164,9 +158,7 @@ class AppRoute {
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
         pathMatchDetailTab,
-        builder: (_) => MatchDetailTabScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => MatchDetailTabScreen(matchId: matchId),
       );
 
   static AppRoute addTeam({TeamModel? team}) => AppRoute(
@@ -261,6 +253,12 @@ class AppRoute {
                 showAddButton: showAddButton,
               ));
 
+  static AppRoute scannerScreen({required List<String> addedMembers}) =>
+      AppRoute(
+        pathScannerScreen,
+        builder: (_) => ScannerScreen(addedMembers: addedMembers),
+      );
+
   static final routes = [
     GoRoute(
       path: main.path,
@@ -301,7 +299,6 @@ class AppRoute {
       },
     ),
     phoneLogin.goRoute(),
-    scannerScreen.goRoute(),
     GoRoute(
       path: pathScoreBoard,
       builder: (context, state) => state.widget(context),
@@ -340,6 +337,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathUserDetail,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathScannerScreen,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

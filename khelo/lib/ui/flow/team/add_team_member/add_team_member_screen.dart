@@ -58,13 +58,16 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
         actionButton(
           context,
           onPressed: () async {
-            final user = await AppRoute.scannerScreen.push<UserModel>(context);
-            if (context.mounted && user != null) {
-              notifier.selectUser(user);
-            }
+            final user = await AppRoute.scannerScreen(addedMembers: [])
+                .push<UserModel>(context);
+            if (context.mounted && user != null) notifier.selectUser(user);
           },
           icon: SvgPicture.asset(
             Assets.images.icQrCode,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.textPrimary,
+              BlendMode.srcIn,
+            ),
           ),
         ),
         state.isAddInProgress

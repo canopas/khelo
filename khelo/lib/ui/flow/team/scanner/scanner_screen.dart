@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_view_model.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/primary_button.dart';
@@ -21,7 +21,9 @@ import '../../../../components/app_page.dart';
 import '../../../../components/error_snackbar.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
-  const ScannerScreen({super.key});
+  final List<String> addedMembers;
+
+  const ScannerScreen({super.key, required this.addedMembers});
 
   @override
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
@@ -51,9 +53,20 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     });
   }
 
+  void _observeIsAlreadyAdded() {
+    ref.listen(
+        scannerStateNotifierProvider.select((value) => value.isAlreadyAdded),
+        (prev, next) {
+      if (next) {
+        showSnackBar(context, "Member Already added");
+      }
+    });
+  }
+
   @override
   void initState() {
     _notifier = ref.read(scannerStateNotifierProvider.notifier);
+    runPostFrame(() => _notifier.setData(widget.addedMembers));
     super.initState();
   }
 
@@ -61,6 +74,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   Widget build(BuildContext context) {
     _observeBarcode();
     _observeError();
+    _observeIsAlreadyAdded();
     final state = ref.watch(scannerStateNotifierProvider);
     final Size size = context.mediaQuerySize;
     final scanWindow = Rect.fromCenter(
@@ -72,8 +86,9 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          if (state.hasPermission) _scannerContent(scanWindow, state, size),
-          if (!state.hasPermission) _requestPermissionView(),
+          (state.hasPermission)
+              ? _scannerContent(scanWindow, state, size)
+              : _requestPermissionView(),
         ],
       ),
     );
@@ -83,13 +98,18 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        MobileScanner(
+        QRView(
           key: qrKey,
-          controller: state.controller,
+          onQRViewCreated: _notifier.initializeController,
+          overlay: QrScannerOverlayShape(
+            cutOutSize: size.width,
+            borderColor: Colors.transparent,
+          ),
         ),
         CustomPaint(
           painter: ScannerOverlay(
-              scanWindow: size.width / 2,
+              scanWindow:
+                  (size.width < size.height ? size.width : size.height) / 2,
               color: context.colorScheme.textPrimary,
               bgColor: context.brightness == Brightness.dark
                   ? Colors.black38
@@ -106,22 +126,31 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: actionButton(
-                context,
-                onPressed: () => context.pop(),
-                icon: Icon(
-                  Icons.close,
-                  color: context.colorScheme.textSecondary,
-                  size: 24,
+            Expanded(
+              flex: 3,
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: actionButton(
+                  context,
+                  onPressed: context.pop,
+                  icon: Icon(
+                    Icons.close,
+                    color: context.colorScheme.textSecondary,
+                    size: 24,
+                  ),
                 ),
               ),
             ),
-            const Spacer(),
-            _hintView(context),
-            const SizedBox(height: 24),
-            _controlView(context, state.flashOn),
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: [
+                  _hintView(context),
+                  const SizedBox(height: 24),
+                  _flashButton(context, isFlashOn: state.flashOn),
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -147,55 +176,24 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
     );
   }
 
-  Widget _controlView(BuildContext context, bool isFlashOn) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _actionButton(
-          context,
-          image: Assets.images.icGallery,
-          onTap: () async {
-            // gallery permission is granted then only, else show some Dialog
-            // if permission is denied, ask for permission,
-            // if permission id permanently denied, show dialog with openSetting
-
-            final XFile? file =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
-
-            if (mounted && file != null) {
-              _notifier.analyzeFromFile(file.path);
-            }
-          },
-        ),
-        const SizedBox(width: 16),
-        _actionButton(
-          context,
-          image: Assets.images.icFlash,
-          foregroundColor: isFlashOn ? context.colorScheme.onPrimary : null,
-          backgroundColor: isFlashOn ? context.colorScheme.primary : null,
-          onTap: _notifier.toggleTorch,
-        ),
-      ],
-    );
-  }
-
-  Widget _actionButton(
+  Widget _flashButton(
     BuildContext context, {
-    required String image,
-    Color? foregroundColor,
-    Color? backgroundColor,
-    required Function() onTap,
+    bool isFlashOn = false,
   }) {
     return OnTapScale(
-      onTap: onTap,
+      onTap: _notifier.toggleTorch,
       child: CircleAvatar(
-          backgroundColor: backgroundColor ?? context.colorScheme.containerLow,
+          backgroundColor: isFlashOn
+              ? context.colorScheme.primary
+              : context.colorScheme.containerLow,
           child: SvgPicture.asset(
-            image,
+            Assets.images.icFlash,
             height: 24,
             width: 24,
             colorFilter: ColorFilter.mode(
-                foregroundColor ?? context.colorScheme.textPrimary,
+                isFlashOn
+                    ? context.colorScheme.onPrimary
+                    : context.colorScheme.textPrimary,
                 BlendMode.srcIn),
           )),
     );
@@ -283,7 +281,7 @@ class ScannerOverlay extends CustomPainter {
     final arcSize = Size.square(borderRadius * 2);
 
     final rect = Rect.fromCircle(
-      center: Offset(canvasRect.size.width / 2, canvasRect.size.height / 3),
+      center: Offset(canvasRect.size.width / 2, canvasRect.size.height / 2.5),
       radius: scanWindow / 2,
     );
 

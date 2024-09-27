@@ -40,6 +40,8 @@
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Capture a new profile image using your device's camera for a personalized and up-to-date appearance.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -17,10 +17,11 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$ScannerState {
   Object? get error => throw _privateConstructorUsedError;
+  QRViewController? get controller => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   bool get flashOn => throw _privateConstructorUsedError;
   bool get hasPermission => throw _privateConstructorUsedError;
-  MobileScannerController get controller => throw _privateConstructorUsedError;
+  bool get isAlreadyAdded => throw _privateConstructorUsedError;
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,10 +38,11 @@ abstract class $ScannerStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
+      QRViewController? controller,
       String userId,
       bool flashOn,
       bool hasPermission,
-      MobileScannerController controller});
+      bool isAlreadyAdded});
 }
 
 /// @nodoc
@@ -59,13 +61,18 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? controller = freezed,
     Object? userId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
-    Object? controller = null,
+    Object? isAlreadyAdded = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      controller: freezed == controller
+          ? _value.controller
+          : controller // ignore: cast_nullable_to_non_nullable
+              as QRViewController?,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -78,10 +85,10 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
           ? _value.hasPermission
           : hasPermission // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: null == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as MobileScannerController,
+      isAlreadyAdded: null == isAlreadyAdded
+          ? _value.isAlreadyAdded
+          : isAlreadyAdded // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -96,10 +103,11 @@ abstract class _$$ScannerStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
+      QRViewController? controller,
       String userId,
       bool flashOn,
       bool hasPermission,
-      MobileScannerController controller});
+      bool isAlreadyAdded});
 }
 
 /// @nodoc
@@ -116,13 +124,18 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? controller = freezed,
     Object? userId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
-    Object? controller = null,
+    Object? isAlreadyAdded = null,
   }) {
     return _then(_$ScannerStateImpl(
       error: freezed == error ? _value.error : error,
+      controller: freezed == controller
+          ? _value.controller
+          : controller // ignore: cast_nullable_to_non_nullable
+              as QRViewController?,
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -135,10 +148,10 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
           ? _value.hasPermission
           : hasPermission // ignore: cast_nullable_to_non_nullable
               as bool,
-      controller: null == controller
-          ? _value.controller
-          : controller // ignore: cast_nullable_to_non_nullable
-              as MobileScannerController,
+      isAlreadyAdded: null == isAlreadyAdded
+          ? _value.isAlreadyAdded
+          : isAlreadyAdded // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -148,13 +161,16 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
 class _$ScannerStateImpl implements _ScannerState {
   const _$ScannerStateImpl(
       {this.error,
+      this.controller,
       this.userId = '',
       this.flashOn = false,
       this.hasPermission = false,
-      required this.controller});
+      this.isAlreadyAdded = false});
 
   @override
   final Object? error;
+  @override
+  final QRViewController? controller;
   @override
   @JsonKey()
   final String userId;
@@ -165,11 +181,12 @@ class _$ScannerStateImpl implements _ScannerState {
   @JsonKey()
   final bool hasPermission;
   @override
-  final MobileScannerController controller;
+  @JsonKey()
+  final bool isAlreadyAdded;
 
   @override
   String toString() {
-    return 'ScannerState(error: $error, userId: $userId, flashOn: $flashOn, hasPermission: $hasPermission, controller: $controller)';
+    return 'ScannerState(error: $error, controller: $controller, userId: $userId, flashOn: $flashOn, hasPermission: $hasPermission, isAlreadyAdded: $isAlreadyAdded)';
   }
 
   @override
@@ -178,22 +195,25 @@ class _$ScannerStateImpl implements _ScannerState {
         (other.runtimeType == runtimeType &&
             other is _$ScannerStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.controller, controller) ||
+                other.controller == controller) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.flashOn, flashOn) || other.flashOn == flashOn) &&
             (identical(other.hasPermission, hasPermission) ||
                 other.hasPermission == hasPermission) &&
-            (identical(other.controller, controller) ||
-                other.controller == controller));
+            (identical(other.isAlreadyAdded, isAlreadyAdded) ||
+                other.isAlreadyAdded == isAlreadyAdded));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      controller,
       userId,
       flashOn,
       hasPermission,
-      controller);
+      isAlreadyAdded);
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.
@@ -207,13 +227,16 @@ class _$ScannerStateImpl implements _ScannerState {
 abstract class _ScannerState implements ScannerState {
   const factory _ScannerState(
       {final Object? error,
+      final QRViewController? controller,
       final String userId,
       final bool flashOn,
       final bool hasPermission,
-      required final MobileScannerController controller}) = _$ScannerStateImpl;
+      final bool isAlreadyAdded}) = _$ScannerStateImpl;
 
   @override
   Object? get error;
+  @override
+  QRViewController? get controller;
   @override
   String get userId;
   @override
@@ -221,7 +244,7 @@ abstract class _ScannerState implements ScannerState {
   @override
   bool get hasPermission;
   @override
-  MobileScannerController get controller;
+  bool get isAlreadyAdded;
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.

@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 part 'scanner_view_model.freezed.dart';
 
@@ -16,14 +15,15 @@ final scannerStateNotifierProvider =
 });
 
 class ScannerStateNotifier extends StateNotifier<ScannerState> {
+  List<String> addedMembers = [];
   StreamSubscription? _subscription;
 
-  ScannerStateNotifier()
-      : super(
-          ScannerState(controller: MobileScannerController()),
-        ) {
+  ScannerStateNotifier() : super(const ScannerState()) {
     _checkCameraPermission();
-    _observeQrCode();
+  }
+
+  void setData(List<String> addedMembers) {
+    this.addedMembers = addedMembers;
   }
 
   Future<void> _checkCameraPermission() async {
@@ -39,33 +39,38 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
     }
   }
 
+  void initializeController(QRViewController controller) {
+    state = state.copyWith(controller: controller);
+    _observeQrCode();
+  }
+
   void toggleTorch() async {
     state = state.copyWith(error: null);
     try {
-      await state.controller.toggleTorch();
-      state = state.copyWith(flashOn: state.controller.torchEnabled);
+      await state.controller?.toggleFlash();
+      final flashState = await state.controller?.getFlashStatus() ?? false;
+      state = state.copyWith(flashOn: flashState);
     } catch (e) {
       state = state.copyWith(error: e);
       debugPrint("ScannerViewNotifier: Error while toggling flash $e");
     }
   }
 
-  Future<void> analyzeFromFile(String filePath) async {
-    final barcodes = await state.controller.analyzeImage(filePath);
-    state = state.copyWith(
-      userId: barcodes?.barcodes.firstOrNull?.displayValue ?? "",
-    );
-  }
-
   void _observeQrCode() {
     _subscription?.cancel();
     state = state.copyWith(error: null);
-    _subscription = state.controller.barcodes.listen(
+    _subscription = state.controller?.scannedDataStream.listen(
       (event) {
-        removeListeners();
-        state = state.copyWith(
-          userId: event.barcodes.firstOrNull?.displayValue ?? "",
-        );
+        state = state.copyWith(isAlreadyAdded: false);
+        final code = event.code;
+        if (addedMembers.contains(code)) {
+          state = state.copyWith(isAlreadyAdded: true);
+        } else {
+          removeListeners();
+          state = state.copyWith(
+            userId: event.code ?? "",
+          );
+        }
       },
       onError: (e) {
         state = state.copyWith(error: e);
@@ -76,7 +81,7 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
 
   void removeListeners() {
     _subscription?.cancel();
-    state.controller.dispose();
+    state.controller?.dispose();
   }
 
   @override
@@ -90,9 +95,10 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
 class ScannerState with _$ScannerState {
   const factory ScannerState({
     Object? error,
+    QRViewController? controller,
     @Default('') String userId,
     @Default(false) bool flashOn,
     @Default(false) bool hasPermission,
-    required MobileScannerController controller,
+    @Default(false) bool isAlreadyAdded,
   }) = _ScannerState;
 }
