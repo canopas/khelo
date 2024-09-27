@@ -61,16 +61,13 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
     state = state.copyWith(error: null);
     _subscription = state.controller?.scannedDataStream.listen(
       (event) {
-        state = state.copyWith(isAlreadyAdded: false);
         final code = event.code;
-        if (addedMembers.contains(code)) {
-          state = state.copyWith(isAlreadyAdded: true);
-        } else {
+        if (!addedMembers.contains(code)) {
           removeListeners();
-          state = state.copyWith(
-            userId: event.code ?? "",
-          );
         }
+        state = state.copyWith(
+          userId: code ?? "",
+        );
       },
       onError: (e) {
         state = state.copyWith(error: e);
@@ -99,6 +96,5 @@ class ScannerState with _$ScannerState {
     @Default('') String userId,
     @Default(false) bool flashOn,
     @Default(false) bool hasPermission,
-    @Default(false) bool isAlreadyAdded,
   }) = _ScannerState;
 }

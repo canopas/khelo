@@ -163,6 +163,7 @@
   "add_team_member_search_no_result_title": "Oops! No User Found",
   "add_team_member_search_description_text": "It seems we don't have anyone by that name. Give another name a go!",
   "add_team_member_added_text": "ADDED",
+  "add_team_member_already_added": "Member already added",
   "add_team_member_verify_error_text": "Please enter correct digits",
   "add_team_member_verify_placeholder_text": "Enter the last {count} digits of the phone number of the selected player.",
   "@add_team_member_verify_placeholder_text": {
@@ -180,7 +181,6 @@
   "contact_selection_access_permission": "Allow contact access",
   "contact_selection_access_permission_description": "Allow contact access to add member via contacts.",
   "contact_selection_allow_title": "Allow",
-  "contact_selection_already_added": "Member already added",
 
   "confirm_number_confirm_phone_title": "Confirm phone number",
   "confirm_number_confirm_title": "Confirm",

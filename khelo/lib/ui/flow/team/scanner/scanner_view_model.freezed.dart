@@ -21,7 +21,6 @@ mixin _$ScannerState {
   String get userId => throw _privateConstructorUsedError;
   bool get flashOn => throw _privateConstructorUsedError;
   bool get hasPermission => throw _privateConstructorUsedError;
-  bool get isAlreadyAdded => throw _privateConstructorUsedError;
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.
@@ -41,8 +40,7 @@ abstract class $ScannerStateCopyWith<$Res> {
       QRViewController? controller,
       String userId,
       bool flashOn,
-      bool hasPermission,
-      bool isAlreadyAdded});
+      bool hasPermission});
 }
 
 /// @nodoc
@@ -65,7 +63,6 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
     Object? userId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
-    Object? isAlreadyAdded = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -85,10 +82,6 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
           ? _value.hasPermission
           : hasPermission // ignore: cast_nullable_to_non_nullable
               as bool,
-      isAlreadyAdded: null == isAlreadyAdded
-          ? _value.isAlreadyAdded
-          : isAlreadyAdded // ignore: cast_nullable_to_non_nullable
-              as bool,
     ) as $Val);
   }
 }
@@ -106,8 +99,7 @@ abstract class _$$ScannerStateImplCopyWith<$Res>
       QRViewController? controller,
       String userId,
       bool flashOn,
-      bool hasPermission,
-      bool isAlreadyAdded});
+      bool hasPermission});
 }
 
 /// @nodoc
@@ -128,7 +120,6 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
     Object? userId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
-    Object? isAlreadyAdded = null,
   }) {
     return _then(_$ScannerStateImpl(
       error: freezed == error ? _value.error : error,
@@ -148,10 +139,6 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
           ? _value.hasPermission
           : hasPermission // ignore: cast_nullable_to_non_nullable
               as bool,
-      isAlreadyAdded: null == isAlreadyAdded
-          ? _value.isAlreadyAdded
-          : isAlreadyAdded // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -164,8 +151,7 @@ class _$ScannerStateImpl implements _ScannerState {
       this.controller,
       this.userId = '',
       this.flashOn = false,
-      this.hasPermission = false,
-      this.isAlreadyAdded = false});
+      this.hasPermission = false});
 
   @override
   final Object? error;
@@ -180,13 +166,10 @@ class _$ScannerStateImpl implements _ScannerState {
   @override
   @JsonKey()
   final bool hasPermission;
-  @override
-  @JsonKey()
-  final bool isAlreadyAdded;
 
   @override
   String toString() {
-    return 'ScannerState(error: $error, controller: $controller, userId: $userId, flashOn: $flashOn, hasPermission: $hasPermission, isAlreadyAdded: $isAlreadyAdded)';
+    return 'ScannerState(error: $error, controller: $controller, userId: $userId, flashOn: $flashOn, hasPermission: $hasPermission)';
   }
 
   @override
@@ -200,9 +183,7 @@ class _$ScannerStateImpl implements _ScannerState {
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.flashOn, flashOn) || other.flashOn == flashOn) &&
             (identical(other.hasPermission, hasPermission) ||
-                other.hasPermission == hasPermission) &&
-            (identical(other.isAlreadyAdded, isAlreadyAdded) ||
-                other.isAlreadyAdded == isAlreadyAdded));
+                other.hasPermission == hasPermission));
   }
 
   @override
@@ -212,8 +193,7 @@ class _$ScannerStateImpl implements _ScannerState {
       controller,
       userId,
       flashOn,
-      hasPermission,
-      isAlreadyAdded);
+      hasPermission);
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.
@@ -230,8 +210,7 @@ abstract class _ScannerState implements ScannerState {
       final QRViewController? controller,
       final String userId,
       final bool flashOn,
-      final bool hasPermission,
-      final bool isAlreadyAdded}) = _$ScannerStateImpl;
+      final bool hasPermission}) = _$ScannerStateImpl;
 
   @override
   Object? get error;
@@ -243,8 +222,6 @@ abstract class _ScannerState implements ScannerState {
   bool get flashOn;
   @override
   bool get hasPermission;
-  @override
-  bool get isAlreadyAdded;
 
   /// Create a copy of ScannerState
   /// with the given fields replaced by the non-null parameter values.

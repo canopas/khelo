@@ -110,6 +110,12 @@ class UserDetailViewNotifier extends StateNotifier<UserDetailViewState> {
       state = state.copyWith(selectedTab: tab);
     }
   }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
+  }
 }
 
 @freezed

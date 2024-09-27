@@ -60,7 +60,8 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
         actionButton(
           context,
           onPressed: () async {
-            final user = await AppRoute.scannerScreen(addedMembers: [])
+            final user = await AppRoute.scannerScreen(
+                    addedMembers: notifier.getMemberIds())
                 .push<UserModel>(context);
             if (context.mounted && user != null) notifier.selectUser(user);
           },
@@ -279,13 +280,13 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     );
   }
 
-  Widget _addViaContactButton(
-    BuildContext context
-  ) {
+  Widget _addViaContactButton(BuildContext context) {
     return OnTapScale(
       onTap: () async {
-        final  user = await AppRoute.contactSelection(memberIds: notifier.getMemberIds()).push<UserModel>(context);
-        if(context.mounted && user != null) {
+        final user =
+            await AppRoute.contactSelection(memberIds: notifier.getMemberIds())
+                .push<UserModel>(context);
+        if (context.mounted && user != null) {
           notifier.selectUser(user);
         }
       },

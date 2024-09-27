@@ -79,6 +79,7 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
           ? [
               SecondaryButton(
                 context.l10n.common_add_title,
+                enabled: !state.loading,
                 onPressed: () => context.pop(state.user),
               )
             ]

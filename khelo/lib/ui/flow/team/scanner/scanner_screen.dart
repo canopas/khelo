@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -37,9 +38,15 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   void _observeBarcode() {
     ref.listen(scannerStateNotifierProvider.select((value) => value.userId),
         (prev, userId) async {
-      if (userId.isNotEmpty) {
-        AppRoute.userDetail(userId: userId, showAddButton: true)
-            .pushReplacement(context);
+      if (widget.addedMembers.contains(userId)) {
+        showSnackBar(context, context.l10n.add_team_member_already_added);
+      } else if (userId.isNotEmpty) {
+        final user =
+            await AppRoute.userDetail(userId: userId, showAddButton: true)
+                .push<UserModel?>(context);
+        if (mounted) {
+          context.pop(user);
+        }
       }
     });
   }
@@ -49,16 +56,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
         (prev, error) {
       if (error != null) {
         showSnackBar(context, context.l10n.something_went_wrong_error_title);
-      }
-    });
-  }
-
-  void _observeIsAlreadyAdded() {
-    ref.listen(
-        scannerStateNotifierProvider.select((value) => value.isAlreadyAdded),
-        (prev, next) {
-      if (next) {
-        showSnackBar(context, "Member Already added");
       }
     });
   }
@@ -74,7 +71,6 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   Widget build(BuildContext context) {
     _observeBarcode();
     _observeError();
-    _observeIsAlreadyAdded();
     final state = ref.watch(scannerStateNotifierProvider);
     final Size size = context.mediaQuerySize;
     final scanWindow = Rect.fromCenter(
