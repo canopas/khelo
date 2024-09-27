@@ -106,7 +106,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
           painter: ScannerOverlay(
               scanWindow:
                   (size.width < size.height ? size.width : size.height) / 2,
-              color: context.colorScheme.textPrimary,
+              color: context.colorScheme.primary,
               bgColor: context.brightness == Brightness.dark
                   ? Colors.black38
                   : Colors.white54),

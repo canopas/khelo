@@ -82,7 +82,7 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     removeListeners();
     super.dispose();
   }
