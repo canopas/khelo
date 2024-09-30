@@ -45,7 +45,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
     _observeActionError();
     final state = ref.watch(makeTeamAdminStateProvider);
     return AppPage(
-      title: context.l10n.team_detail_make_admin,
+      title: context.l10n.team_detail_make_admin_screen_title,
       actions: [
         actionButton(context,
             onPressed: state.isButtonEnabled ? notifier.onSave : null,

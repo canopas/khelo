@@ -194,7 +194,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
         },
       ),
       BottomSheetAction(
-        title: context.l10n.add_match_screen_title,
+        title: context.l10n.team_detail_add_match_title,
         onTap: () {
           context.pop();
           AppRoute.addMatch(

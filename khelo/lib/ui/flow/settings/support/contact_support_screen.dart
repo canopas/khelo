@@ -67,7 +67,7 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
         if (!state.pop) return notifier.discardAttachments();
       },
       child: AppPage(
-        title: context.l10n.contact_support_title,
+        title: context.l10n.contact_support_screen_title,
         body: Builder(builder: (context) {
           return _body(context, state);
         }),

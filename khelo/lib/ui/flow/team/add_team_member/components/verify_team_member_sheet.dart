@@ -57,7 +57,7 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
           onPressed: context.pop,
         ),
         PrimaryButton(
-          context.l10n.add_team_member_verify_title,
+          context.l10n.common_verify_title,
           expanded: false,
           enabled: verificationNumber.trim().length == verifyNumberCount,
           onPressed: () {
@@ -80,7 +80,7 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          context.l10n.add_team_member_verify_title,
+          context.l10n.common_verify_title,
           style: AppTextStyle.header3
               .copyWith(color: context.colorScheme.textPrimary),
         ),
@@ -101,14 +101,17 @@ class _VerifyTeamMemberSheetState extends State<VerifyTeamMemberSheet> {
             unFocusColor: Colors.transparent,
           ),
           hintText: "0" * verifyNumberCount,
-          hintStyle:
-              AppTextStyle.header4.copyWith(color: context.colorScheme.outline),
+          hintStyle: AppTextStyle.header4.copyWith(
+            color: context.colorScheme.outline,
+            letterSpacing: 16,
+          ),
           errorText: errorString,
           backgroundColor: context.colorScheme.containerLow,
           borderRadius: BorderRadius.circular(12),
           contentPadding: const EdgeInsets.symmetric(vertical: 16),
           style: AppTextStyle.header4.copyWith(
             color: context.colorScheme.textPrimary,
+            letterSpacing: 16,
           ),
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,

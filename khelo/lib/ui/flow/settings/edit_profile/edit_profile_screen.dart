@@ -41,7 +41,9 @@ class EditProfileScreen extends ConsumerWidget {
     _observeIsSaved(context, ref);
 
     return AppPage(
-      title: context.l10n.edit_profile_screen_title,
+      title: isToCreateAccount
+          ? context.l10n.edit_profile_create_profile_screen_title
+          : context.l10n.edit_profile_screen_title,
       actions: [
         actionButton(context,
             onPressed: (state.isButtonEnable && !state.isImageUploading)

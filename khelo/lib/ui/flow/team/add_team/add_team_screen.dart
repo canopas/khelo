@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_picker_sheet.dart';
 import 'package:khelo/components/profile_image_avatar.dart';
@@ -55,7 +56,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
 
     return AppPage(
       title: widget.editTeam != null
-          ? context.l10n.common_edit_team_title
+          ? context.l10n.add_team_edit_team_screen_title
           : context.l10n.add_team_screen_title,
       automaticallyImplyLeading: false,
       leading: backButton(
@@ -66,8 +67,14 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         if (widget.editTeam != null) ...[
           actionButton(
             context,
-            onPressed: () =>
-                _showDeleteAlert(context, onDelete: notifier.onTeamDelete),
+            onPressed: () => showConfirmationDialog(
+              context,
+              title: context.l10n.common_delete_title,
+              message: context.l10n.alert_confirm_default_message(
+                  context.l10n.common_delete_title.toLowerCase()),
+              confirmBtnText: context.l10n.common_delete_title,
+              onConfirm: notifier.onTeamDelete,
+            ),
             icon: SvgPicture.asset(
               Assets.images.icBin,
               height: 24,
@@ -247,41 +254,6 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
         progress: state.isAddInProgress,
         onPressed: notifier.onAddBtnTap,
       ),
-    );
-  }
-
-  void _showDeleteAlert(
-    BuildContext context, {
-    required Function() onDelete,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(context.l10n.common_delete_title),
-          content: Text(context.l10n.alert_confirm_default_message(
-              context.l10n.common_delete_title.toLowerCase())),
-          actions: [
-            TextButton(
-              onPressed: context.pop,
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onDelete();
-              },
-              child: Text(
-                context.l10n.common_delete_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 
