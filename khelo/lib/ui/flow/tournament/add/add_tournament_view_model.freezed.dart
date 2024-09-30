@@ -25,8 +25,6 @@ mixin _$AddTournamentState {
   bool get pop => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get enableButton => throw _privateConstructorUsedError;
-  List<String> get teamIds => throw _privateConstructorUsedError;
-  List<String> get matchIds => throw _privateConstructorUsedError;
   bool get imageUploading => throw _privateConstructorUsedError;
   String? get imageUrl => throw _privateConstructorUsedError;
   TextEditingController get nameController =>
@@ -56,8 +54,6 @@ abstract class $AddTournamentStateCopyWith<$Res> {
       bool pop,
       bool loading,
       bool enableButton,
-      List<String> teamIds,
-      List<String> matchIds,
       bool imageUploading,
       String? imageUrl,
       TextEditingController nameController,
@@ -88,8 +84,6 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
     Object? pop = null,
     Object? loading = null,
     Object? enableButton = null,
-    Object? teamIds = null,
-    Object? matchIds = null,
     Object? imageUploading = null,
     Object? imageUrl = freezed,
     Object? nameController = null,
@@ -126,14 +120,6 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
           ? _value.enableButton
           : enableButton // ignore: cast_nullable_to_non_nullable
               as bool,
-      teamIds: null == teamIds
-          ? _value.teamIds
-          : teamIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      matchIds: null == matchIds
-          ? _value.matchIds
-          : matchIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       imageUploading: null == imageUploading
           ? _value.imageUploading
           : imageUploading // ignore: cast_nullable_to_non_nullable
@@ -172,8 +158,6 @@ abstract class _$$AddTournamentStateImplCopyWith<$Res>
       bool pop,
       bool loading,
       bool enableButton,
-      List<String> teamIds,
-      List<String> matchIds,
       bool imageUploading,
       String? imageUrl,
       TextEditingController nameController,
@@ -202,8 +186,6 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
     Object? pop = null,
     Object? loading = null,
     Object? enableButton = null,
-    Object? teamIds = null,
-    Object? matchIds = null,
     Object? imageUploading = null,
     Object? imageUrl = freezed,
     Object? nameController = null,
@@ -240,14 +222,6 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
           ? _value.enableButton
           : enableButton // ignore: cast_nullable_to_non_nullable
               as bool,
-      teamIds: null == teamIds
-          ? _value._teamIds
-          : teamIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      matchIds: null == matchIds
-          ? _value._matchIds
-          : matchIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       imageUploading: null == imageUploading
           ? _value.imageUploading
           : imageUploading // ignore: cast_nullable_to_non_nullable
@@ -281,14 +255,10 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       this.pop = false,
       this.loading = false,
       this.enableButton = false,
-      final List<String> teamIds = const [],
-      final List<String> matchIds = const [],
       this.imageUploading = false,
       this.imageUrl = null,
       required this.nameController,
-      this.selectedType = TournamentType.knockOut})
-      : _teamIds = teamIds,
-        _matchIds = matchIds;
+      this.selectedType = TournamentType.knockOut});
 
   @override
   final Object? error;
@@ -311,24 +281,6 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
   @override
   @JsonKey()
   final bool enableButton;
-  final List<String> _teamIds;
-  @override
-  @JsonKey()
-  List<String> get teamIds {
-    if (_teamIds is EqualUnmodifiableListView) return _teamIds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teamIds);
-  }
-
-  final List<String> _matchIds;
-  @override
-  @JsonKey()
-  List<String> get matchIds {
-    if (_matchIds is EqualUnmodifiableListView) return _matchIds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_matchIds);
-  }
-
   @override
   @JsonKey()
   final bool imageUploading;
@@ -343,7 +295,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
 
   @override
   String toString() {
-    return 'AddTournamentState(error: $error, actionError: $actionError, filePath: $filePath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, enableButton: $enableButton, teamIds: $teamIds, matchIds: $matchIds, imageUploading: $imageUploading, imageUrl: $imageUrl, nameController: $nameController, selectedType: $selectedType)';
+    return 'AddTournamentState(error: $error, actionError: $actionError, filePath: $filePath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, enableButton: $enableButton, imageUploading: $imageUploading, imageUrl: $imageUrl, nameController: $nameController, selectedType: $selectedType)';
   }
 
   @override
@@ -365,8 +317,6 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.enableButton, enableButton) ||
                 other.enableButton == enableButton) &&
-            const DeepCollectionEquality().equals(other._teamIds, _teamIds) &&
-            const DeepCollectionEquality().equals(other._matchIds, _matchIds) &&
             (identical(other.imageUploading, imageUploading) ||
                 other.imageUploading == imageUploading) &&
             (identical(other.imageUrl, imageUrl) ||
@@ -389,8 +339,6 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       pop,
       loading,
       enableButton,
-      const DeepCollectionEquality().hash(_teamIds),
-      const DeepCollectionEquality().hash(_matchIds),
       imageUploading,
       imageUrl,
       nameController,
@@ -417,8 +365,6 @@ abstract class _AddTournamentState implements AddTournamentState {
       final bool pop,
       final bool loading,
       final bool enableButton,
-      final List<String> teamIds,
-      final List<String> matchIds,
       final bool imageUploading,
       final String? imageUrl,
       required final TextEditingController nameController,
@@ -442,10 +388,6 @@ abstract class _AddTournamentState implements AddTournamentState {
   bool get loading;
   @override
   bool get enableButton;
-  @override
-  List<String> get teamIds;
-  @override
-  List<String> get matchIds;
   @override
   bool get imageUploading;
   @override

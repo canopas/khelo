@@ -20,9 +20,9 @@ class TournamentService {
             toFirestore: (TournamentModel tournament, _) => tournament.toJson(),
           );
 
-  String get generateTeamId => _tournamentCollection.doc().id;
+  String get generateTournamentId => _tournamentCollection.doc().id;
 
-  Future<void> updateTournament(TournamentModel tournament) async {
+  Future<void> createTournament(TournamentModel tournament) async {
     try {
       await _tournamentCollection
           .doc(tournament.id)

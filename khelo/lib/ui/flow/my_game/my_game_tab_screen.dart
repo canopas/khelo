@@ -91,7 +91,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          const SizedBox(width: 8),
+          const SizedBox(width: 16),
           TabButton(
             context.l10n.common_matches_title,
             selected: _selectedTab == 0,
@@ -118,28 +118,34 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
           const Spacer(),
           if (_selectedTab == 1 &&
               ref.watch(teamListViewStateProvider).teams.isNotEmpty) ...[
-            actionButton(context,
-                onPressed: () => ref
-                    .read(teamListViewStateProvider.notifier)
-                    .onFilterButtonTap(),
-                icon: Icon(
-                  CupertinoIcons.slider_horizontal_3,
-                  color: context.colorScheme.textPrimary,
-                )),
-          ],
-          actionButton(context, onPressed: () {
-            final actions = [
-              AppRoute.addMatch(),
-              AppRoute.addTeam(),
-              AppRoute.addTournament(),
-            ];
-            actions[_selectedTab].push(context);
-          },
+            actionButton(
+              context,
+              onPressed: () => ref
+                  .read(teamListViewStateProvider.notifier)
+                  .onFilterButtonTap(),
               icon: Icon(
-                Icons.add,
+                CupertinoIcons.slider_horizontal_3,
                 color: context.colorScheme.textPrimary,
-              )),
-          const SizedBox(width: 4),
+              ),
+              shrinkWrap: true,
+            ),
+          ],
+          actionButton(
+            context,
+            onPressed: () {
+              final actions = [
+                AppRoute.addMatch(),
+                AppRoute.addTeam(),
+                AppRoute.addTournament(),
+              ];
+              actions[_selectedTab].push(context);
+            },
+            icon: Icon(
+              Icons.add,
+              color: context.colorScheme.textPrimary,
+            ),
+            shrinkWrap: true,
+          ),
         ],
       ),
     );

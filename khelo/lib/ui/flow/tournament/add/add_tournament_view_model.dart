@@ -63,8 +63,6 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
 
   void onChange() {
     final name = state.nameController.text.trim();
-    // final isValidTeams = state.teamIds.isNotEmpty &&
-    //     validateTypeWithTeam(type: state.selectedType, teamIds: state.teamIds);
 
     state = state.copyWith(enableButton: name.isNotEmpty);
   }
@@ -81,19 +79,12 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     state = state.copyWith(endDate: endDate);
   }
 
-  void onSelectTeams(List<String> teamIds) {
-    state = state.copyWith(teamIds: teamIds);
-    onChange();
-  }
-
-  void onSelectMatches(List<String> matches) {
-    state = state.copyWith(teamIds: matches);
-  }
-
   void addTournament() async {
     try {
+      if (state.currentUserId == null) return;
+
       state = state.copyWith(loading: true);
-      final tournamentId = _tournamentService.generateTeamId;
+      final tournamentId = _tournamentService.generateTournamentId;
       final name = state.nameController.text.trim();
 
       if (state.filePath != null && state.currentUserId != null) {
@@ -121,41 +112,15 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
           ),
         ],
         profile_img_url: state.imageUrl,
-        team_ids: state.teamIds,
-        match_ids: state.matchIds,
       );
 
-      await _tournamentService.updateTournament(tournament);
+      await _tournamentService.createTournament(tournament);
 
       state = state.copyWith(pop: true, loading: false, error: null);
     } catch (error) {
-      state = state.copyWith(error: error);
+      state = state.copyWith(loading: false, error: error);
       debugPrint(
           "AddTournamentViewNotifier: error while adding tournament -> $error");
-    }
-  }
-
-  bool validateTypeWithTeam({
-    required TournamentType type,
-    required List<String> teamIds,
-  }) {
-    switch (type) {
-      case TournamentType.knockOut:
-      case TournamentType.superOver:
-      case TournamentType.bestOf:
-      case TournamentType.gully:
-      case TournamentType.mixed:
-        return teamIds.length >= 2;
-
-      case TournamentType.miniRobin:
-        return teamIds.length >= 3;
-
-      case TournamentType.boxLeague:
-      case TournamentType.doubleOut:
-        return teamIds.length >= 4;
-
-      case TournamentType.other:
-        return true;
     }
   }
 }
@@ -172,8 +137,6 @@ class AddTournamentState with _$AddTournamentState {
     @Default(false) bool pop,
     @Default(false) bool loading,
     @Default(false) bool enableButton,
-    @Default([]) List<String> teamIds,
-    @Default([]) List<String> matchIds,
     @Default(false) bool imageUploading,
     @Default(null) String? imageUrl,
     required TextEditingController nameController,

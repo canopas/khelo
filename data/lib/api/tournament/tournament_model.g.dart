@@ -22,8 +22,8 @@ _$TournamentModelImpl _$$TournamentModelImplFromJson(Map json) =>
           json['created_at'], const TimeStampJsonConverter().fromJson),
       start_date:
           const TimeStampJsonConverter().fromJson(json['start_date'] as Object),
-      end_date:
-          const TimeStampJsonConverter().fromJson(json['end_date'] as Object),
+      end_date: _$JsonConverterFromJson<Object, DateTime>(
+          json['end_date'], const TimeStampJsonConverter().fromJson),
       team_ids: (json['team_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -46,7 +46,8 @@ Map<String, dynamic> _$$TournamentModelImplToJson(
       'created_at': _$JsonConverterToJson<Object, DateTime>(
           instance.created_at, const TimeStampJsonConverter().toJson),
       'start_date': const TimeStampJsonConverter().toJson(instance.start_date),
-      'end_date': const TimeStampJsonConverter().toJson(instance.end_date),
+      'end_date': _$JsonConverterToJson<Object, DateTime>(
+          instance.end_date, const TimeStampJsonConverter().toJson),
       'team_ids': instance.team_ids,
       'match_ids': instance.match_ids,
     };

@@ -111,20 +111,6 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
         ),
         const SizedBox(height: 16),
         _dateScheduleView(context, state),
-        const SizedBox(height: 16),
-        _selectTileView(
-          icon: Icons.keyboard_arrow_right_rounded,
-          label: context.l10n.add_tournament_team_selection,
-          title: context.l10n.add_tournament_team_count(state.teamIds.length),
-          onTap: () {},
-        ),
-        const SizedBox(height: 16),
-        _selectTileView(
-          icon: Icons.keyboard_arrow_right_rounded,
-          label: context.l10n.add_tournament_matches_selection,
-          title: context.l10n.add_tournament_match_count(state.matchIds.length),
-          onTap: () {},
-        ),
       ],
     );
   }

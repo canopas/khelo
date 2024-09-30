@@ -31,7 +31,7 @@ mixin _$TournamentModel {
   @TimeStampJsonConverter()
   DateTime get start_date => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
-  DateTime get end_date => throw _privateConstructorUsedError;
+  DateTime? get end_date => throw _privateConstructorUsedError;
   List<String> get team_ids => throw _privateConstructorUsedError;
   List<String> get match_ids => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -60,7 +60,7 @@ abstract class $TournamentModelCopyWith<$Res> {
       String created_by,
       @TimeStampJsonConverter() DateTime? created_at,
       @TimeStampJsonConverter() DateTime start_date,
-      @TimeStampJsonConverter() DateTime end_date,
+      @TimeStampJsonConverter() DateTime? end_date,
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -90,7 +90,7 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
     Object? created_by = null,
     Object? created_at = freezed,
     Object? start_date = null,
-    Object? end_date = null,
+    Object? end_date = freezed,
     Object? team_ids = null,
     Object? match_ids = null,
     Object? teams = null,
@@ -129,10 +129,10 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
           ? _value.start_date
           : start_date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      end_date: null == end_date
+      end_date: freezed == end_date
           ? _value.end_date
           : end_date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       team_ids: null == team_ids
           ? _value.team_ids
           : team_ids // ignore: cast_nullable_to_non_nullable
@@ -170,7 +170,7 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
       String created_by,
       @TimeStampJsonConverter() DateTime? created_at,
       @TimeStampJsonConverter() DateTime start_date,
-      @TimeStampJsonConverter() DateTime end_date,
+      @TimeStampJsonConverter() DateTime? end_date,
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -198,7 +198,7 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
     Object? created_by = null,
     Object? created_at = freezed,
     Object? start_date = null,
-    Object? end_date = null,
+    Object? end_date = freezed,
     Object? team_ids = null,
     Object? match_ids = null,
     Object? teams = null,
@@ -237,10 +237,10 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
           ? _value.start_date
           : start_date // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      end_date: null == end_date
+      end_date: freezed == end_date
           ? _value.end_date
           : end_date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       team_ids: null == team_ids
           ? _value._team_ids
           : team_ids // ignore: cast_nullable_to_non_nullable
@@ -274,7 +274,7 @@ class _$TournamentModelImpl implements _TournamentModel {
       required this.created_by,
       @TimeStampJsonConverter() this.created_at,
       @TimeStampJsonConverter() required this.start_date,
-      @TimeStampJsonConverter() required this.end_date,
+      @TimeStampJsonConverter() this.end_date,
       final List<String> team_ids = const [],
       final List<String> match_ids = const [],
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -317,7 +317,7 @@ class _$TournamentModelImpl implements _TournamentModel {
   final DateTime start_date;
   @override
   @TimeStampJsonConverter()
-  final DateTime end_date;
+  final DateTime? end_date;
   final List<String> _team_ids;
   @override
   @JsonKey()
@@ -428,7 +428,7 @@ abstract class _TournamentModel implements TournamentModel {
       required final String created_by,
       @TimeStampJsonConverter() final DateTime? created_at,
       @TimeStampJsonConverter() required final DateTime start_date,
-      @TimeStampJsonConverter() required final DateTime end_date,
+      @TimeStampJsonConverter() final DateTime? end_date,
       final List<String> team_ids,
       final List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
@@ -459,7 +459,7 @@ abstract class _TournamentModel implements TournamentModel {
   DateTime get start_date;
   @override
   @TimeStampJsonConverter()
-  DateTime get end_date;
+  DateTime? get end_date;
   @override
   List<String> get team_ids;
   @override
