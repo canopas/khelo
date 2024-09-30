@@ -50,11 +50,12 @@ jobs:
       - name: Print Contents
         run: |
           cd khelo
-          echo functions/google-application-credentials.json
+          cat functions/google-application-credentials.json
 
       - name: Deploy Firebase functions
         run: |
           cd khelo/functions
+          echo google-application-credentials.json
           firebase deploy --only functions --debug
 
       - name: Remove credentials file
