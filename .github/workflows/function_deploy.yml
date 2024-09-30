@@ -49,9 +49,7 @@ jobs:
 
       - name: Deploy Firebase functions
         run: |
-          cd khelo
-          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/functions/google-application-credentials.json          
-          cd functions
+          cd khelo/functions
           ls -a
           firebase deploy --only functions --debug
 
