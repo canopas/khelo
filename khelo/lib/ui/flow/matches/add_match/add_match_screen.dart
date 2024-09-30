@@ -33,6 +33,8 @@ import 'package:data/api/match/match_model.dart';
 import 'package:style/theme/colors.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
+import '../../../../components/confirmation_dialog.dart';
+
 class AddMatchScreen extends ConsumerStatefulWidget {
   final String? matchId;
   final TeamModel? defaultTeam;
@@ -116,9 +118,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     required Function() onDelete,
   }) {
     return actionButton(context,
-        onPressed: () => _showDeleteAlert(
+        onPressed: () => showConfirmationDialog(
               context,
-              onDelete: onDelete,
+              title: context.l10n.common_delete_title,
+              message: context.l10n.alert_confirm_default_message(
+                  context.l10n.common_delete_title.toLowerCase()),
+              confirmBtnText: context.l10n.common_delete_title,
+              onConfirm: onDelete,
             ),
         icon: SvgPicture.asset(
           Assets.images.icBin,
@@ -398,41 +404,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         notifier.onDateSelect(selectedDate: selectedDateTime);
       }
     });
-  }
-
-  void _showDeleteAlert(
-    BuildContext context, {
-    required Function() onDelete,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(context.l10n.common_delete_title),
-          content: Text(context.l10n.alert_confirm_default_message(
-              context.l10n.common_delete_title.toLowerCase())),
-          actions: [
-            TextButton(
-              onPressed: context.pop,
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onDelete();
-              },
-              child: Text(
-                context.l10n.common_delete_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _observeActionError(BuildContext context, WidgetRef ref) {

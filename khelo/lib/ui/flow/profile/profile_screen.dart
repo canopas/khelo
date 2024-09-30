@@ -175,7 +175,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           _settingItem(
             context,
             icon: Assets.images.icContactSupport,
-            title: context.l10n.contact_support_title,
+            title: context.l10n.profile_setting_contact_support,
             onTap: () => AppRoute.contactSupport.push(context),
           ),
           _settingItem(

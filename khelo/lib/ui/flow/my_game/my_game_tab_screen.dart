@@ -112,8 +112,10 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                 onPressed: () => ref
                     .read(teamListViewStateProvider.notifier)
                     .onFilterButtonTap(),
-                icon: Icon(CupertinoIcons.slider_horizontal_3,
-                    color: context.colorScheme.textPrimary)),
+                icon: Icon(
+                  CupertinoIcons.slider_horizontal_3,
+                  color: context.colorScheme.textPrimary,
+                )),
           ],
           actionButton(context,
               onPressed: () => _selectedTab == 1
