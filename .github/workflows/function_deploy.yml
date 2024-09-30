@@ -51,7 +51,7 @@ jobs:
         run: |
           cd khelo
           export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/functions/google-application-credentials.json
-          firebase deploy --only functions --non-interactive --debug
+          firebase deploy --only functions --debug
 
       - name: Remove credentials file
         if: success() || failure()

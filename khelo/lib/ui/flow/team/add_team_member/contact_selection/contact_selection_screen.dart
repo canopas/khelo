@@ -14,6 +14,7 @@ import 'package:khelo/ui/flow/team/add_team_member/confirm_number_sheet/confirm_
 import 'package:khelo/ui/flow/team/add_team_member/contact_selection/contact_selection_view_model.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -37,7 +38,7 @@ class _ContactSelectionScreenState
   @override
   void initState() {
     notifier = ref.read(contactSelectionStateProvider.notifier);
-    runPostFrame(() => notifier.setDate(widget.memberIds));
+    runPostFrame(() => notifier.setData(widget.memberIds));
     super.initState();
   }
 
@@ -52,13 +53,36 @@ class _ContactSelectionScreenState
     return AppPage(
       title: context.l10n.contact_selection_contact_title,
       actions: [
-        if (state.isActionInProgress)
-          const Padding(
-            padding: EdgeInsets.only(right: 16.0),
-            child: AppProgressIndicator(
-              size: AppProgressIndicatorSize.small,
-            ),
-          ),
+        (state.isActionInProgress)
+            ? const Padding(
+                padding: EdgeInsets.only(right: 16.0),
+                child: AppProgressIndicator(
+                  size: AppProgressIndicatorSize.small,
+                ),
+              )
+            : actionButton(
+                context,
+                icon: Icon(
+                  Icons.add,
+                  color: context.colorScheme.textPrimary,
+                ),
+                onPressed: () async {
+                  final confirmedNumber = await ConfirmNumberSheet.show<
+                      (String, CountryCode, String)>(
+                    context,
+                    code: CountryCode.getCountryCodeByAlpha2(
+                      countryAlpha2Code: state.deviceCountryCode,
+                    ),
+                    isForCreateUser: true,
+                  );
+                  if (context.mounted && confirmedNumber != null) {
+                    notifier.getUserByPhoneNumber(
+                      confirmedNumber.$1,
+                      "${confirmedNumber.$2.dialCode} ${confirmedNumber.$3}",
+                    );
+                  }
+                },
+              ),
       ],
       body: Builder(
           builder: (context) => Padding(
@@ -210,7 +234,7 @@ class _ContactSelectionScreenState
   ) async {
     final (code, number) = notifier.getNormalisedNumber(phoneNumber);
     final confirmedNumber =
-        await ConfirmNumberSheet.show<(CountryCode, String)>(
+        await ConfirmNumberSheet.show<(String, CountryCode, String)>(
       context,
       code: code,
       defaultNumber: number,
@@ -218,7 +242,7 @@ class _ContactSelectionScreenState
     if (context.mounted && confirmedNumber != null) {
       notifier.getUserByPhoneNumber(
         displayName,
-        "${confirmedNumber.$1.dialCode} ${confirmedNumber.$2}",
+        "${confirmedNumber.$2.dialCode} ${confirmedNumber.$3}",
       );
     }
   }
