@@ -87,7 +87,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
       final name = state.nameController.text.trim();
       final location = state.locationController.text.trim();
-      final initials = state.nameInitialsController.text.trim().toUpperCase();
+      final initials = state.nameInitialsController.text.trim();
 
       List<TeamPlayer> players = [];
 
@@ -111,7 +111,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         name_lowercase: name.caseAndSpaceInsensitive,
         profile_img_url: imageUrl,
         city: location.toLowerCase(),
-        initials: initials,
+        initials: initials.isNotEmpty ? initials : null,
         created_by: state.currentUser!.id,
         players: players,
         created_at: state.editTeam?.created_at ?? DateTime.now(),
@@ -143,7 +143,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             name_lowercase: name.caseAndSpaceInsensitive,
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
-            initials: initials,
+            initials: initials.isNotEmpty ? initials : null,
             created_by: state.currentUser!.id,
             players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now(),
