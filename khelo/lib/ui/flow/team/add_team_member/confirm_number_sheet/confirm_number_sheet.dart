@@ -16,11 +16,13 @@ import 'confirm_number_view_model.dart';
 class ConfirmNumberSheet extends ConsumerStatefulWidget {
   final CountryCode? code;
   final String? defaultNumber;
+  final bool isForCreateUser;
 
   static Future<T?> show<T>(
     BuildContext context, {
     CountryCode? code,
     String? defaultNumber,
+    bool isForCreateUser = false,
   }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
@@ -37,6 +39,7 @@ class ConfirmNumberSheet extends ConsumerStatefulWidget {
           child: ConfirmNumberSheet(
             code: code,
             defaultNumber: defaultNumber,
+            isForCreateUser: isForCreateUser,
           ),
         );
       },
@@ -47,6 +50,7 @@ class ConfirmNumberSheet extends ConsumerStatefulWidget {
     super.key,
     this.code,
     this.defaultNumber,
+    this.isForCreateUser = false,
   });
 
   @override
@@ -59,7 +63,8 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
   @override
   void initState() {
     notifier = ref.read(confirmNumberStateProvider.notifier);
-    runPostFrame(() => notifier.setDate(widget.code, widget.defaultNumber));
+    runPostFrame(() => notifier.setDate(
+        widget.code, widget.defaultNumber, widget.isForCreateUser));
     super.initState();
   }
 
@@ -78,11 +83,39 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              context.l10n.confirm_number_confirm_phone_title,
+              state.isForCreateUser
+                  ? context.l10n.confirm_number_add_user_manually_title
+                  : context.l10n.confirm_number_confirm_phone_title,
               style: AppTextStyle.header3
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
+            const SizedBox(height: 24),
+            if (state.isForCreateUser) ...[
+              AppTextField(
+                controller: state.nameController,
+                autoFocus: true,
+                style: AppTextStyle.subtitle3.copyWith(
+                  color: context.colorScheme.textPrimary,
+                ),
+                hintStyle: AppTextStyle.subtitle3.copyWith(
+                  color: context.colorScheme.textDisabled,
+                ),
+                hintText: context.l10n.confirm_number_name_title,
+                backgroundColor: context.colorScheme.containerLowOnSurface,
+                borderRadius: BorderRadius.circular(30),
+                borderType: AppTextFieldBorderType.outline,
+                borderColor: BorderColor(
+                    focusColor: Colors.transparent,
+                    unFocusColor: Colors.transparent),
+                onChanged: (_) => notifier.onTextChange(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                onTapOutside: (event) =>
+                    FocusManager.instance.primaryFocus?.unfocus(),
+              ),
+              const SizedBox(height: 24),
+            ],
             _phoneInputField(context, state),
+            const SizedBox(height: 40),
             PrimaryButton(
               context.l10n.confirm_number_confirm_title,
               enabled: state.isButtonEnable,
@@ -99,47 +132,43 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
     ConfirmNumberViewState state,
   ) {
     return MediaQuery.withNoTextScaling(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CountryCodeView(
-              countryCode: state.code,
-              onCodeChange: notifier.onCodeChange,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: AppTextField(
-                controller: state.phoneController,
-                autoFocus: true,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
-                style: AppTextStyle.header2.copyWith(
-                  color: context.colorScheme.textSecondary,
-                ),
-                hintStyle: AppTextStyle.header2.copyWith(
-                  color: context.colorScheme.outline,
-                ),
-                hintText: context.l10n.sign_in_phone_number_placeholder,
-                backgroundColor: context.colorScheme.containerLowOnSurface,
-                borderRadius: BorderRadius.circular(40),
-                borderType: AppTextFieldBorderType.outline,
-                borderColor: BorderColor(
-                    focusColor: Colors.transparent,
-                    unFocusColor: Colors.transparent),
-                prefixIcon: _inputFieldPrefix(context, state),
-                prefixIconConstraints: const BoxConstraints.tightFor(),
-                onChanged: (_) => notifier.onTextChange(),
-                onSubmitted: (_) => notifier.onConfirmTap(),
-                onTapOutside: (event) =>
-                    FocusManager.instance.primaryFocus?.unfocus(),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CountryCodeView(
+            countryCode: state.code,
+            onCodeChange: notifier.onCodeChange,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: AppTextField(
+              controller: state.phoneController,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              style: AppTextStyle.header2.copyWith(
+                color: context.colorScheme.textSecondary,
               ),
+              hintStyle: AppTextStyle.header2.copyWith(
+                color: context.colorScheme.outline,
+              ),
+              hintText: context.l10n.sign_in_phone_number_placeholder,
+              backgroundColor: context.colorScheme.containerLowOnSurface,
+              borderRadius: BorderRadius.circular(40),
+              borderType: AppTextFieldBorderType.outline,
+              borderColor: BorderColor(
+                  focusColor: Colors.transparent,
+                  unFocusColor: Colors.transparent),
+              prefixIcon: _inputFieldPrefix(context, state),
+              prefixIconConstraints: const BoxConstraints.tightFor(),
+              onChanged: (_) => notifier.onTextChange(),
+              onSubmitted: (_) => notifier.onConfirmTap(),
+              onTapOutside: (event) =>
+                  FocusManager.instance.primaryFocus?.unfocus(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -173,8 +202,9 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
     ref.listen(confirmNumberStateProvider.select((value) => value.isPop),
         (previous, next) {
       if (next == true && context.mounted) {
+        String name = state.nameController.text;
         String number = state.phoneController.text;
-        context.pop((state.code, number));
+        context.pop((name, state.code, number));
       }
     });
   }
