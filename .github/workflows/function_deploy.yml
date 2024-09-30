@@ -47,11 +47,15 @@ jobs:
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 --decode > functions/google-application-credentials.json
           echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
 
-      - name: Deploy Firebase functions
+      - name: Print Contents
         run: |
           cd khelo
-          export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/functions/google-application-credentials.json
-          firebase deploy --only functions --non-interactive --debug
+          echo functions/google-application-credentials.json
+
+      - name: Deploy Firebase functions
+        run: |
+          cd khelo/functions
+          firebase deploy --only functions --debug
 
       - name: Remove credentials file
         if: success() || failure()
