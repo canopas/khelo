@@ -63,7 +63,7 @@ class _ConfirmNumberSheetState extends ConsumerState<ConfirmNumberSheet> {
   @override
   void initState() {
     notifier = ref.read(confirmNumberStateProvider.notifier);
-    runPostFrame(() => notifier.setDate(
+    runPostFrame(() => notifier.setData(
         widget.code, widget.defaultNumber, widget.isForCreateUser));
     super.initState();
   }

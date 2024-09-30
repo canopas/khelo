@@ -24,15 +24,15 @@ class ContactSelectionViewNotifier
   final DeviceService _deviceService;
   List<Contact> fetchedContacts = [];
   List<String> memberIds = [];
-  String? deviceCountryCode =
-      WidgetsBinding.instance.platformDispatcher.locale.countryCode;
 
   ContactSelectionViewNotifier(this._userService, this._deviceService)
-      : super(const ContactSelectionState()) {
+      : super(ContactSelectionState(
+            deviceCountryCode: WidgetsBinding
+                .instance.platformDispatcher.locale.countryCode)) {
     fetchCountryCode();
   }
 
-  void setDate(List<String> memberIds) {
+  void setData(List<String> memberIds) {
     this.memberIds = memberIds;
     checkContactPermission();
   }
@@ -50,7 +50,8 @@ class ContactSelectionViewNotifier
 
   void fetchCountryCode() async {
     try {
-      deviceCountryCode = await _deviceService.countryCode;
+      final deviceCountryCode = await _deviceService.countryCode;
+      state = state.copyWith(deviceCountryCode: deviceCountryCode);
     } catch (e) {
       debugPrint(
           "ContactSelectionViewNotifier: Error in fetchCountryCode -> $e");
@@ -120,7 +121,7 @@ class ContactSelectionViewNotifier
           .where((element) => phoneNumber.startsWith(element.dialCode))
           .firstOrNull
           ?.dialCode;
-      code = matchedCountryCode ?? deviceCountryCode;
+      code = matchedCountryCode ?? state.deviceCountryCode;
       final trimFrom = matchedCountryCode != null ? code?.length : 1;
       phoneNumber = phoneNumber.substring(trimFrom ?? 1);
     } else {
@@ -130,14 +131,14 @@ class ContactSelectionViewNotifier
     CountryCode? countryCode;
     if (code == null) {
       countryCode = CountryCode.getCountryCodeByAlpha2(
-        countryAlpha2Code: deviceCountryCode,
+        countryAlpha2Code: state.deviceCountryCode,
       );
     } else {
       countryCode = CountryCode.getCountryCodeByDialCode(dialCode: code);
       // handle default returned US code in case not found
       if (countryCode.dialCode == "+1" && code != "+1") {
         countryCode = CountryCode.getCountryCodeByAlpha2(
-          countryAlpha2Code: deviceCountryCode,
+          countryAlpha2Code: state.deviceCountryCode,
         );
       }
     }
@@ -162,6 +163,7 @@ class ContactSelectionState with _$ContactSelectionState {
   const factory ContactSelectionState({
     Object? error,
     Object? actionError,
+    String? deviceCountryCode,
     UserModel? selectedUser,
     @Default(false) bool loading,
     @Default(false) bool isActionInProgress,

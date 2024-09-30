@@ -38,7 +38,7 @@ class _ContactSelectionScreenState
   @override
   void initState() {
     notifier = ref.read(contactSelectionStateProvider.notifier);
-    runPostFrame(() => notifier.setDate(widget.memberIds));
+    runPostFrame(() => notifier.setData(widget.memberIds));
     super.initState();
   }
 
@@ -70,6 +70,9 @@ class _ContactSelectionScreenState
                   final confirmedNumber = await ConfirmNumberSheet.show<
                       (String, CountryCode, String)>(
                     context,
+                    code: CountryCode.getCountryCodeByAlpha2(
+                      countryAlpha2Code: state.deviceCountryCode,
+                    ),
                     isForCreateUser: true,
                   );
                   if (context.mounted && confirmedNumber != null) {

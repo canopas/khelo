@@ -21,7 +21,7 @@ class ConfirmNumberViewNotifier extends StateNotifier<ConfirmNumberViewState> {
           ),
         ));
 
-  void setDate(
+  void setData(
     CountryCode? code,
     String? defaultNumber,
     bool isForCreateUser,
@@ -37,13 +37,22 @@ class ConfirmNumberViewNotifier extends StateNotifier<ConfirmNumberViewState> {
   }
 
   void onTextChange() {
-    final isButtonEnabled = state.phoneController.text.length > 3 &&
-        (state.isForCreateUser ? state.nameController.text.length > 3 : true);
-    state = state.copyWith(isButtonEnable: isButtonEnabled);
+    final isNameNotEmpty = state.isForCreateUser
+        ? state.nameController.text.trim().isNotEmpty
+        : true;
+    final isPhoneNotEmpty = state.phoneController.text.trim().length > 3;
+    state = state.copyWith(isButtonEnable: isNameNotEmpty && isPhoneNotEmpty);
   }
 
   void onConfirmTap() {
     state = state.copyWith(isPop: true);
+  }
+
+  @override
+  void dispose() {
+    state.nameController.dispose();
+    state.phoneController.dispose();
+    super.dispose();
   }
 }
 
