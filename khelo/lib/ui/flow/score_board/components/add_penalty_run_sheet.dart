@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/components/user_cell_view.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
@@ -153,7 +154,9 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
             title: firstTeam?.name ?? "",
             imageUrl: firstTeam?.profile_img_url,
             outerPadding: 32,
-            initial: firstTeam?.name[0].toUpperCase(),
+            initial: firstTeam?.initials ??
+                firstTeam?.name.initials(limit: 1) ??
+                "?",
             isSelected: selectedTeamId == firstTeam?.id,
             onTap: () => setState(() {
               selectedTeamId = firstTeam?.id;
@@ -165,7 +168,9 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
           UserCellView(
             title: secondTeam?.name ?? "",
             imageUrl: secondTeam?.profile_img_url,
-            initial: secondTeam?.name[0].toUpperCase(),
+            initial: secondTeam?.initials ??
+                secondTeam?.name.initials(limit: 1) ??
+                "?",
             outerPadding: 32,
             isSelected: selectedTeamId == secondTeam?.id,
             onTap: () => setState(() {

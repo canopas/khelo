@@ -12,6 +12,7 @@ _$TeamModelImpl _$$TeamModelImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       name_lowercase: json['name_lowercase'] as String,
       city: json['city'] as String?,
+      initials: json['initials'] as String?,
       profile_img_url: json['profile_img_url'] as String?,
       created_by: json['created_by'] as String?,
       created_at: json['created_at'] == null
@@ -31,6 +32,7 @@ Map<String, dynamic> _$$TeamModelImplToJson(_$TeamModelImpl instance) =>
       'name': instance.name,
       'name_lowercase': instance.name_lowercase,
       'city': instance.city,
+      'initials': instance.initials,
       'profile_img_url': instance.profile_img_url,
       'created_by': instance.created_by,
       'created_at': instance.created_at?.toIso8601String(),

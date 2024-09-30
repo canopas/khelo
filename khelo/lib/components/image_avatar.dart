@@ -53,11 +53,18 @@ class ImageAvatar extends StatelessWidget {
   }
 
   Widget _initialView(BuildContext context) {
-    return Text(
-      initial,
-      style: AppTextStyle.subtitle1.copyWith(
-          color: foregroundColor ?? context.colorScheme.textPrimary,
-          fontSize: size / 2.15),
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          initial,
+          textAlign: TextAlign.center,
+          style: AppTextStyle.subtitle1.copyWith(
+              color: foregroundColor ?? context.colorScheme.textPrimary,
+              fontSize: size / 2.15),
+        ),
+      ),
     );
   }
 }

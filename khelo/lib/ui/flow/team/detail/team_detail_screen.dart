@@ -7,6 +7,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -91,7 +92,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       children: [
         // profile view
         ImageAvatar(
-          initial: state.team?.name[0].toUpperCase() ?? "?",
+          initial: state.team?.initials ?? state.team?.name.initials(limit: 1) ?? "?",
           imageUrl: state.team?.profile_img_url,
           size: 48,
         ),

@@ -144,6 +144,7 @@
   "add_team_edit_team_screen_title": "Edit Team",
   "add_team_add_as_member_description_text": "Add me as a team member",
   "add_team_enter_team_name_placeholder_text": "Enter team name",
+  "add_team_team_initial_placeholder_text": "Team initials (e.g. IND, AUS, PBKS)",
   "add_team_player_role_title": "Playing role",
   "add_team_player_add_via_contact_title": "Add via Contact",
   "add_team_players_text": "Players",

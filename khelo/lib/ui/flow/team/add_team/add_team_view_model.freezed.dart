@@ -20,6 +20,8 @@ mixin _$AddTeamState {
       throw _privateConstructorUsedError;
   TextEditingController get locationController =>
       throw _privateConstructorUsedError;
+  TextEditingController get nameInitialsController =>
+      throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
   String? get filePath => throw _privateConstructorUsedError;
   bool? get isNameAvailable => throw _privateConstructorUsedError;
@@ -50,6 +52,7 @@ abstract class $AddTeamStateCopyWith<$Res> {
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
+      TextEditingController nameInitialsController,
       Object? actionError,
       String? filePath,
       bool? isNameAvailable,
@@ -86,6 +89,7 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
+    Object? nameInitialsController = null,
     Object? actionError = freezed,
     Object? filePath = freezed,
     Object? isNameAvailable = freezed,
@@ -108,6 +112,10 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
       locationController: null == locationController
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
+      nameInitialsController: null == nameInitialsController
+          ? _value.nameInitialsController
+          : nameInitialsController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       actionError: freezed == actionError ? _value.actionError : actionError,
       filePath: freezed == filePath
@@ -215,6 +223,7 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
   $Res call(
       {TextEditingController nameController,
       TextEditingController locationController,
+      TextEditingController nameInitialsController,
       Object? actionError,
       String? filePath,
       bool? isNameAvailable,
@@ -252,6 +261,7 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
   $Res call({
     Object? nameController = null,
     Object? locationController = null,
+    Object? nameInitialsController = null,
     Object? actionError = freezed,
     Object? filePath = freezed,
     Object? isNameAvailable = freezed,
@@ -274,6 +284,10 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
       locationController: null == locationController
           ? _value.locationController
           : locationController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
+      nameInitialsController: null == nameInitialsController
+          ? _value.nameInitialsController
+          : nameInitialsController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       actionError: freezed == actionError ? _value.actionError : actionError,
       filePath: freezed == filePath
@@ -334,6 +348,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
   const _$AddTeamStateImpl(
       {required this.nameController,
       required this.locationController,
+      required this.nameInitialsController,
       this.actionError,
       this.filePath,
       this.isNameAvailable,
@@ -353,6 +368,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
   final TextEditingController nameController;
   @override
   final TextEditingController locationController;
+  @override
+  final TextEditingController nameInitialsController;
   @override
   final Object? actionError;
   @override
@@ -394,7 +411,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
 
   @override
   String toString() {
-    return 'AddTeamState(nameController: $nameController, locationController: $locationController, actionError: $actionError, filePath: $filePath, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
+    return 'AddTeamState(nameController: $nameController, locationController: $locationController, nameInitialsController: $nameInitialsController, actionError: $actionError, filePath: $filePath, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
   }
 
   @override
@@ -406,6 +423,8 @@ class _$AddTeamStateImpl implements _AddTeamState {
                 other.nameController == nameController) &&
             (identical(other.locationController, locationController) ||
                 other.locationController == locationController) &&
+            (identical(other.nameInitialsController, nameInitialsController) ||
+                other.nameInitialsController == nameInitialsController) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
             (identical(other.filePath, filePath) ||
@@ -438,6 +457,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
       runtimeType,
       nameController,
       locationController,
+      nameInitialsController,
       const DeepCollectionEquality().hash(actionError),
       filePath,
       isNameAvailable,
@@ -465,6 +485,7 @@ abstract class _AddTeamState implements AddTeamState {
   const factory _AddTeamState(
       {required final TextEditingController nameController,
       required final TextEditingController locationController,
+      required final TextEditingController nameInitialsController,
       final Object? actionError,
       final String? filePath,
       final bool? isNameAvailable,
@@ -483,6 +504,8 @@ abstract class _AddTeamState implements AddTeamState {
   TextEditingController get nameController;
   @override
   TextEditingController get locationController;
+  @override
+  TextEditingController get nameInitialsController;
   @override
   Object? get actionError;
   @override

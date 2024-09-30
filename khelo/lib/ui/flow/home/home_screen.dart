@@ -7,6 +7,7 @@ import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
@@ -246,7 +247,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ImageAvatar(
-          initial: matchTeam.team.name[0].toUpperCase(),
+          initial:
+              matchTeam.team.initials ?? matchTeam.team.name.initials(limit: 1),
           imageUrl: matchTeam.team.profile_img_url,
           size: 32,
         ),

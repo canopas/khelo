@@ -10,6 +10,7 @@ import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
@@ -101,11 +102,12 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
                         (team) => _tossCellView(
                           context: context,
                           imageUrl: team.team.profile_img_url,
-                          initial: team.team.name[0].toUpperCase(),
+                          initial: team.team.initials ??
+                              team.team.name.initials(limit: 1),
                           title: team.team.name,
                           isSelected: tossWinnerTeamId == team.team.id,
-                          onTap: () => notifier
-                              .onTossWinnerSelect(team.team.id),
+                          onTap: () =>
+                              notifier.onTossWinnerSelect(team.team.id),
                         ),
                       )
                       .toList() ??
