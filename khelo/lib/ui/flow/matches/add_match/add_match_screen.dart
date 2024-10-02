@@ -351,41 +351,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     );
   }
 
-  void _showDeleteAlert(
-    BuildContext context, {
-    required Function() onDelete,
-  }) {
-    showAdaptiveDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog.adaptive(
-          title: Text(context.l10n.common_delete_title),
-          content: Text(context.l10n.alert_confirm_default_message(
-              context.l10n.common_delete_title.toLowerCase())),
-          actions: [
-            TextButton(
-              onPressed: context.pop,
-              child: Text(
-                context.l10n.common_cancel_title,
-                style: TextStyle(color: context.colorScheme.textSecondary),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.pop();
-                onDelete();
-              },
-              child: Text(
-                context.l10n.common_delete_title,
-                style: TextStyle(color: context.colorScheme.alert),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _observeActionError(BuildContext context, WidgetRef ref) {
     ref.listen(addMatchViewStateProvider.select((value) => value.actionError),
         (previous, next) {
