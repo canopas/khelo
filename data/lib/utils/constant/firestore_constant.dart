@@ -51,7 +51,10 @@ class FireStoreConst {
   static const String notifications = "notifications";
   static const String phone = "phone";
   static const String name = "name";
-}
+
+  // tournament filed const
+  static const String members = "members";
+ }
 
 class DataConfig {
   static late DataConfig _instance;
