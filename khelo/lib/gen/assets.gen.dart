@@ -52,6 +52,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_error.svg
   String get icError => 'assets/images/ic_error.svg';
 
+  /// File path: assets/images/ic_flash.svg
+  String get icFlash => 'assets/images/ic_flash.svg';
+
   /// File path: assets/images/ic_gallery.svg
   String get icGallery => 'assets/images/ic_gallery.svg';
 
@@ -84,6 +87,9 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_profile_thin.svg
   String get icProfileThin => 'assets/images/ic_profile_thin.svg';
+
+  /// File path: assets/images/ic_qr_code.svg
+  String get icQrCode => 'assets/images/ic_qr_code.svg';
 
   /// File path: assets/images/ic_referee.svg
   String get icReferee => 'assets/images/ic_referee.svg';
@@ -155,6 +161,7 @@ class $AssetsImagesGen {
         icCricket,
         icEdit,
         icError,
+        icFlash,
         icGallery,
         icGroup,
         icHome,
@@ -166,6 +173,7 @@ class $AssetsImagesGen {
         icPrivacyPolicy,
         icProfile,
         icProfileThin,
+        icQrCode,
         icReferee,
         icRoundedCheck,
         icSave,

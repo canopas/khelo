@@ -138,14 +138,16 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           style: AppTextStyle.header2
               .copyWith(color: context.colorScheme.textSecondary),
         ),
+        const SizedBox(height: 8),
         for (int index = 0; index < state.userTeams.length; index++) ...[
           _teamProfileCell(context, state, state.userTeams[index]),
           if (index != state.userTeams.length - 1) ...[
             Divider(color: context.colorScheme.outline),
           ] else ...[
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
           ],
         ],
+        const SizedBox(height: 8),
         _createTeamCell(context)
       ],
     );

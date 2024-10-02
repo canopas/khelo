@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ContactSelectionState {
   Object? get error => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
+  String? get deviceCountryCode => throw _privateConstructorUsedError;
   UserModel? get selectedUser => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get isActionInProgress => throw _privateConstructorUsedError;
@@ -41,6 +42,7 @@ abstract class $ContactSelectionStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       Object? actionError,
+      String? deviceCountryCode,
       UserModel? selectedUser,
       bool loading,
       bool isActionInProgress,
@@ -69,6 +71,7 @@ class _$ContactSelectionStateCopyWithImpl<$Res,
   $Res call({
     Object? error = freezed,
     Object? actionError = freezed,
+    Object? deviceCountryCode = freezed,
     Object? selectedUser = freezed,
     Object? loading = null,
     Object? isActionInProgress = null,
@@ -79,6 +82,10 @@ class _$ContactSelectionStateCopyWithImpl<$Res,
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
+      deviceCountryCode: freezed == deviceCountryCode
+          ? _value.deviceCountryCode
+          : deviceCountryCode // ignore: cast_nullable_to_non_nullable
+              as String?,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
@@ -133,6 +140,7 @@ abstract class _$$ContactSelectionStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       Object? actionError,
+      String? deviceCountryCode,
       UserModel? selectedUser,
       bool loading,
       bool isActionInProgress,
@@ -160,6 +168,7 @@ class __$$ContactSelectionStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? actionError = freezed,
+    Object? deviceCountryCode = freezed,
     Object? selectedUser = freezed,
     Object? loading = null,
     Object? isActionInProgress = null,
@@ -170,6 +179,10 @@ class __$$ContactSelectionStateImplCopyWithImpl<$Res>
     return _then(_$ContactSelectionStateImpl(
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
+      deviceCountryCode: freezed == deviceCountryCode
+          ? _value.deviceCountryCode
+          : deviceCountryCode // ignore: cast_nullable_to_non_nullable
+              as String?,
       selectedUser: freezed == selectedUser
           ? _value.selectedUser
           : selectedUser // ignore: cast_nullable_to_non_nullable
@@ -204,6 +217,7 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
   const _$ContactSelectionStateImpl(
       {this.error,
       this.actionError,
+      this.deviceCountryCode,
       this.selectedUser,
       this.loading = false,
       this.isActionInProgress = false,
@@ -216,6 +230,8 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
   final Object? error;
   @override
   final Object? actionError;
+  @override
+  final String? deviceCountryCode;
   @override
   final UserModel? selectedUser;
   @override
@@ -241,7 +257,7 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
 
   @override
   String toString() {
-    return 'ContactSelectionState(error: $error, actionError: $actionError, selectedUser: $selectedUser, loading: $loading, isActionInProgress: $isActionInProgress, alreadyAdded: $alreadyAdded, hasContactPermission: $hasContactPermission, contacts: $contacts)';
+    return 'ContactSelectionState(error: $error, actionError: $actionError, deviceCountryCode: $deviceCountryCode, selectedUser: $selectedUser, loading: $loading, isActionInProgress: $isActionInProgress, alreadyAdded: $alreadyAdded, hasContactPermission: $hasContactPermission, contacts: $contacts)';
   }
 
   @override
@@ -252,6 +268,8 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
+            (identical(other.deviceCountryCode, deviceCountryCode) ||
+                other.deviceCountryCode == deviceCountryCode) &&
             (identical(other.selectedUser, selectedUser) ||
                 other.selectedUser == selectedUser) &&
             (identical(other.loading, loading) || other.loading == loading) &&
@@ -269,6 +287,7 @@ class _$ContactSelectionStateImpl implements _ContactSelectionState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(actionError),
+      deviceCountryCode,
       selectedUser,
       loading,
       isActionInProgress,
@@ -290,6 +309,7 @@ abstract class _ContactSelectionState implements ContactSelectionState {
   const factory _ContactSelectionState(
       {final Object? error,
       final Object? actionError,
+      final String? deviceCountryCode,
       final UserModel? selectedUser,
       final bool loading,
       final bool isActionInProgress,
@@ -301,6 +321,8 @@ abstract class _ContactSelectionState implements ContactSelectionState {
   Object? get error;
   @override
   Object? get actionError;
+  @override
+  String? get deviceCountryCode;
   @override
   UserModel? get selectedUser;
   @override

@@ -22,6 +22,7 @@ import 'package:khelo/ui/flow/team/add_team_member/add_team_member_screen.dart';
 import 'package:khelo/ui/flow/team/add_team_member/contact_selection/contact_selection_screen.dart';
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
+import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
 import 'flow/home/view_all/home_view_all_screen.dart';
@@ -43,6 +44,7 @@ class AppRoute {
   static const pathAddMatch = '/add-match';
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
+  static const pathScannerScreen = '/scanner-screen';
   static const pathTeamDetail = '/team-detail';
   static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
@@ -138,9 +140,7 @@ class AppRoute {
 
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
-        builder: (_) => ScoreBoardScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => ScoreBoardScreen(matchId: matchId),
       );
 
   static AppRoute searchHome({required List<MatchModel> matches}) =>
@@ -152,9 +152,7 @@ class AppRoute {
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,
-        builder: (_) => AddTossDetailScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => AddTossDetailScreen(matchId: matchId),
       );
 
   static AppRoute addMatch({String? matchId, TeamModel? defaultTeam}) =>
@@ -173,9 +171,7 @@ class AppRoute {
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
         pathMatchDetailTab,
-        builder: (_) => MatchDetailTabScreen(
-          matchId: matchId,
-        ),
+        builder: (_) => MatchDetailTabScreen(matchId: matchId),
       );
 
   static AppRoute addTeam({TeamModel? team}) => AppRoute(
@@ -255,9 +251,21 @@ class AppRoute {
       AppRoute(pathTeamDetail,
           builder: (_) => TeamDetailScreen(teamId: teamId));
 
-  static AppRoute userDetail({required String userId}) =>
+  static AppRoute userDetail({
+    required String userId,
+    bool showAddButton = false,
+  }) =>
       AppRoute(pathUserDetail,
-          builder: (_) => UserDetailScreen(userId: userId));
+          builder: (_) => UserDetailScreen(
+                userId: userId,
+                showAddButton: showAddButton,
+              ));
+
+  static AppRoute scannerScreen({required List<String> addedMembers}) =>
+      AppRoute(
+        pathScannerScreen,
+        builder: (_) => ScannerScreen(addedMembers: addedMembers),
+      );
 
   static AppRoute contactSelection({required List<String> memberIds}) =>
       AppRoute(pathContactSelection,
@@ -342,6 +350,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathContactSelection,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathScannerScreen,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

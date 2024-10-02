@@ -1683,7 +1683,7 @@ enum MatchOption {
       case MatchOption.addSubstitute:
         return context.l10n.score_board_add_substitute_title;
       case MatchOption.endMatch:
-        return context.l10n.common_end_match_title;
+        return context.l10n.score_board_option_end_match;
     }
   }
 }

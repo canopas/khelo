@@ -146,7 +146,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
   ) async {
     return await showActionBottomSheet(context: context, items: [
       BottomSheetAction(
-        title: context.l10n.team_list_add_members_title,
+        title: context.l10n.team_detail_add_members_title,
         onTap: () {
           context.pop();
           AppRoute.addTeamMember(team: team).push(context);

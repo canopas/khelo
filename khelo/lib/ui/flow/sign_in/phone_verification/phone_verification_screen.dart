@@ -84,7 +84,7 @@ class _PhoneVerificationScreenState
               child: PrimaryButton(
                 enabled: state.enableVerify,
                 progress: state.verifying,
-                context.l10n.otp_verification_verify_btn_text,
+                context.l10n.common_verify_title,
                 onPressed: notifier.verifyOTP,
               ),
             ),

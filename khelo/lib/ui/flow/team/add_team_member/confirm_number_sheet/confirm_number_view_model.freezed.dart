@@ -16,11 +16,13 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ConfirmNumberViewState {
-  Object? get error => throw _privateConstructorUsedError;
   TextEditingController get phoneController =>
+      throw _privateConstructorUsedError;
+  TextEditingController get nameController =>
       throw _privateConstructorUsedError;
   CountryCode get code => throw _privateConstructorUsedError;
   bool get isButtonEnable => throw _privateConstructorUsedError;
+  bool get isForCreateUser => throw _privateConstructorUsedError;
   bool get isPop => throw _privateConstructorUsedError;
 
   /// Create a copy of ConfirmNumberViewState
@@ -37,10 +39,11 @@ abstract class $ConfirmNumberViewStateCopyWith<$Res> {
       _$ConfirmNumberViewStateCopyWithImpl<$Res, ConfirmNumberViewState>;
   @useResult
   $Res call(
-      {Object? error,
-      TextEditingController phoneController,
+      {TextEditingController phoneController,
+      TextEditingController nameController,
       CountryCode code,
       bool isButtonEnable,
+      bool isForCreateUser,
       bool isPop});
 }
 
@@ -60,17 +63,21 @@ class _$ConfirmNumberViewStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? phoneController = null,
+    Object? nameController = null,
     Object? code = null,
     Object? isButtonEnable = null,
+    Object? isForCreateUser = null,
     Object? isPop = null,
   }) {
     return _then(_value.copyWith(
-      error: freezed == error ? _value.error : error,
       phoneController: null == phoneController
           ? _value.phoneController
           : phoneController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
+      nameController: null == nameController
+          ? _value.nameController
+          : nameController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       code: null == code
           ? _value.code
@@ -79,6 +86,10 @@ class _$ConfirmNumberViewStateCopyWithImpl<$Res,
       isButtonEnable: null == isButtonEnable
           ? _value.isButtonEnable
           : isButtonEnable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isForCreateUser: null == isForCreateUser
+          ? _value.isForCreateUser
+          : isForCreateUser // ignore: cast_nullable_to_non_nullable
               as bool,
       isPop: null == isPop
           ? _value.isPop
@@ -98,10 +109,11 @@ abstract class _$$ConfirmNumberViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Object? error,
-      TextEditingController phoneController,
+      {TextEditingController phoneController,
+      TextEditingController nameController,
       CountryCode code,
       bool isButtonEnable,
+      bool isForCreateUser,
       bool isPop});
 }
 
@@ -120,17 +132,21 @@ class __$$ConfirmNumberViewStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? phoneController = null,
+    Object? nameController = null,
     Object? code = null,
     Object? isButtonEnable = null,
+    Object? isForCreateUser = null,
     Object? isPop = null,
   }) {
     return _then(_$ConfirmNumberViewStateImpl(
-      error: freezed == error ? _value.error : error,
       phoneController: null == phoneController
           ? _value.phoneController
           : phoneController // ignore: cast_nullable_to_non_nullable
+              as TextEditingController,
+      nameController: null == nameController
+          ? _value.nameController
+          : nameController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       code: null == code
           ? _value.code
@@ -139,6 +155,10 @@ class __$$ConfirmNumberViewStateImplCopyWithImpl<$Res>
       isButtonEnable: null == isButtonEnable
           ? _value.isButtonEnable
           : isButtonEnable // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isForCreateUser: null == isForCreateUser
+          ? _value.isForCreateUser
+          : isForCreateUser // ignore: cast_nullable_to_non_nullable
               as bool,
       isPop: null == isPop
           ? _value.isPop
@@ -152,16 +172,17 @@ class __$$ConfirmNumberViewStateImplCopyWithImpl<$Res>
 
 class _$ConfirmNumberViewStateImpl implements _ConfirmNumberViewState {
   const _$ConfirmNumberViewStateImpl(
-      {this.error,
-      required this.phoneController,
+      {required this.phoneController,
+      required this.nameController,
       required this.code,
       this.isButtonEnable = false,
+      this.isForCreateUser = false,
       this.isPop = false});
 
   @override
-  final Object? error;
-  @override
   final TextEditingController phoneController;
+  @override
+  final TextEditingController nameController;
   @override
   final CountryCode code;
   @override
@@ -169,11 +190,14 @@ class _$ConfirmNumberViewStateImpl implements _ConfirmNumberViewState {
   final bool isButtonEnable;
   @override
   @JsonKey()
+  final bool isForCreateUser;
+  @override
+  @JsonKey()
   final bool isPop;
 
   @override
   String toString() {
-    return 'ConfirmNumberViewState(error: $error, phoneController: $phoneController, code: $code, isButtonEnable: $isButtonEnable, isPop: $isPop)';
+    return 'ConfirmNumberViewState(phoneController: $phoneController, nameController: $nameController, code: $code, isButtonEnable: $isButtonEnable, isForCreateUser: $isForCreateUser, isPop: $isPop)';
   }
 
   @override
@@ -181,23 +205,21 @@ class _$ConfirmNumberViewStateImpl implements _ConfirmNumberViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ConfirmNumberViewStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.phoneController, phoneController) ||
                 other.phoneController == phoneController) &&
+            (identical(other.nameController, nameController) ||
+                other.nameController == nameController) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.isButtonEnable, isButtonEnable) ||
                 other.isButtonEnable == isButtonEnable) &&
+            (identical(other.isForCreateUser, isForCreateUser) ||
+                other.isForCreateUser == isForCreateUser) &&
             (identical(other.isPop, isPop) || other.isPop == isPop));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(error),
-      phoneController,
-      code,
-      isButtonEnable,
-      isPop);
+  int get hashCode => Object.hash(runtimeType, phoneController, nameController,
+      code, isButtonEnable, isForCreateUser, isPop);
 
   /// Create a copy of ConfirmNumberViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -211,20 +233,23 @@ class _$ConfirmNumberViewStateImpl implements _ConfirmNumberViewState {
 
 abstract class _ConfirmNumberViewState implements ConfirmNumberViewState {
   const factory _ConfirmNumberViewState(
-      {final Object? error,
-      required final TextEditingController phoneController,
+      {required final TextEditingController phoneController,
+      required final TextEditingController nameController,
       required final CountryCode code,
       final bool isButtonEnable,
+      final bool isForCreateUser,
       final bool isPop}) = _$ConfirmNumberViewStateImpl;
 
   @override
-  Object? get error;
-  @override
   TextEditingController get phoneController;
+  @override
+  TextEditingController get nameController;
   @override
   CountryCode get code;
   @override
   bool get isButtonEnable;
+  @override
+  bool get isForCreateUser;
   @override
   bool get isPop;
 

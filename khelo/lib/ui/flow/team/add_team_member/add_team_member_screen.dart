@@ -57,6 +57,22 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     return AppPage(
       title: context.l10n.add_team_member_screen_title,
       actions: [
+        actionButton(
+          context,
+          onPressed: () async {
+            final user = await AppRoute.scannerScreen(
+                    addedMembers: notifier.getMemberIds())
+                .push<UserModel>(context);
+            if (context.mounted && user != null) notifier.selectUser(user);
+          },
+          icon: SvgPicture.asset(
+            Assets.images.icQrCode,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.textPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
         state.isAddInProgress
             ? const AppProgressIndicator(size: AppProgressIndicatorSize.small)
             : actionButton(
@@ -264,13 +280,13 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     );
   }
 
-  Widget _addViaContactButton(
-    BuildContext context
-  ) {
+  Widget _addViaContactButton(BuildContext context) {
     return OnTapScale(
       onTap: () async {
-        final  user = await AppRoute.contactSelection(memberIds: notifier.getMemberIds()).push<UserModel>(context);
-        if(context.mounted && user != null) {
+        final user =
+            await AppRoute.contactSelection(memberIds: notifier.getMemberIds())
+                .push<UserModel>(context);
+        if (context.mounted && user != null) {
           notifier.selectUser(user);
         }
       },

@@ -14,17 +14,21 @@ class ConfirmNumberViewNotifier extends StateNotifier<ConfirmNumberViewState> {
   ConfirmNumberViewNotifier()
       : super(ConfirmNumberViewState(
           phoneController: TextEditingController(),
+          nameController: TextEditingController(),
           code: CountryCode.getCountryCodeByAlpha2(
             countryAlpha2Code:
                 WidgetsBinding.instance.platformDispatcher.locale.countryCode,
           ),
         ));
 
-  void setDate(CountryCode? code, String? defaultNumber) {
+  void setData(
+    CountryCode? code,
+    String? defaultNumber,
+    bool isForCreateUser,
+  ) {
     state.phoneController.text = defaultNumber ?? '';
-    if (code != null) {
-      state = state.copyWith(code: code);
-    }
+    state = state.copyWith(
+        isForCreateUser: isForCreateUser, code: code ?? state.code);
     onTextChange();
   }
 
@@ -33,22 +37,33 @@ class ConfirmNumberViewNotifier extends StateNotifier<ConfirmNumberViewState> {
   }
 
   void onTextChange() {
-    state = state.copyWith(
-        isButtonEnable: state.phoneController.text.length > 3);
+    final isNameNotEmpty = state.isForCreateUser
+        ? state.nameController.text.trim().isNotEmpty
+        : true;
+    final isPhoneNotEmpty = state.phoneController.text.trim().length > 3;
+    state = state.copyWith(isButtonEnable: isNameNotEmpty && isPhoneNotEmpty);
   }
 
   void onConfirmTap() {
     state = state.copyWith(isPop: true);
+  }
+
+  @override
+  void dispose() {
+    state.nameController.dispose();
+    state.phoneController.dispose();
+    super.dispose();
   }
 }
 
 @freezed
 class ConfirmNumberViewState with _$ConfirmNumberViewState {
   const factory ConfirmNumberViewState({
-    Object? error,
     required TextEditingController phoneController,
+    required TextEditingController nameController,
     required CountryCode code,
     @Default(false) bool isButtonEnable,
+    @Default(false) bool isForCreateUser,
     @Default(false) bool isPop,
   }) = _ConfirmNumberViewState;
 }
