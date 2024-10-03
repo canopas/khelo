@@ -112,7 +112,7 @@ class TeamSelectionView extends StatelessWidget {
                     )
                   : (team.profile_img_url == null)
                       ? Text(
-                          team.initials ?? team.name.initials(limit: 1),
+                          team.name_initial ?? team.name.initials(limit: 1),
                           style: AppTextStyle.subtitle1.copyWith(
                               color: context.colorScheme.textDisabled),
                         )

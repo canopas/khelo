@@ -60,7 +60,7 @@ class FinalScoreView extends ConsumerWidget {
     return Row(
       children: [
         ImageAvatar(
-          initial: team.team.initials ?? team.team.name.initials(limit: 1),
+          initial: team.team.name_initial ?? team.team.name.initials(limit: 1),
           imageUrl: team.team.profile_img_url,
           size: 32,
         ),

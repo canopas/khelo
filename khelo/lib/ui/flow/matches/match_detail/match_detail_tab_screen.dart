@@ -61,7 +61,7 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
   String _getScreenTitle(BuildContext context, MatchDetailTabState state) {
     if (state.match != null) {
       String title = state.match!.teams
-          .map((e) => e.team.initials ?? e.team.name.initials(limit: 3))
+          .map((e) => e.team.name_initial ?? e.team.name.initials(limit: 3))
           .join(" ${context.l10n.common_versus_short_title} ");
       return title;
     }

@@ -168,7 +168,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           leading: ImageAvatar(
-            initial: team.initials ?? team.name.initials(limit: 1),
+            initial: team.name_initial ?? team.name.initials(limit: 1),
             imageUrl: team.profile_img_url,
             size: 40,
           ),

@@ -42,7 +42,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   void setData({TeamModel? editTeam}) {
     state.nameController.text = editTeam?.name ?? "";
     state.locationController.text = editTeam?.city ?? "";
-    state.nameInitialsController.text = editTeam?.initials ?? "";
+    state.nameInitialsController.text = editTeam?.name_initial ?? "";
     state = state.copyWith(
         editTeam: editTeam, teamMembers: editTeam?.players ?? []);
   }
@@ -111,7 +111,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         name_lowercase: name.caseAndSpaceInsensitive,
         profile_img_url: imageUrl,
         city: location.toLowerCase(),
-        initials: initials.isNotEmpty ? initials : null,
+        name_initial: initials.isNotEmpty ? initials : null,
         created_by: state.currentUser!.id,
         players: players,
         created_at: state.editTeam?.created_at ?? DateTime.now(),
@@ -143,7 +143,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             name_lowercase: name.caseAndSpaceInsensitive,
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
-            initials: initials.isNotEmpty ? initials : null,
+            name_initial: initials.isNotEmpty ? initials : null,
             created_by: state.currentUser!.id,
             players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now(),

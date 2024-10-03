@@ -154,7 +154,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
             title: firstTeam?.name ?? "",
             imageUrl: firstTeam?.profile_img_url,
             outerPadding: 32,
-            initial: firstTeam?.initials ??
+            initial: firstTeam?.name_initial ??
                 firstTeam?.name.initials(limit: 1) ??
                 "?",
             isSelected: selectedTeamId == firstTeam?.id,
@@ -168,7 +168,7 @@ class _AddPenaltyRunSheetState extends ConsumerState<AddPenaltyRunSheet> {
           UserCellView(
             title: secondTeam?.name ?? "",
             imageUrl: secondTeam?.profile_img_url,
-            initial: secondTeam?.initials ??
+            initial: secondTeam?.name_initial ??
                 secondTeam?.name.initials(limit: 1) ??
                 "?",
             outerPadding: 32,

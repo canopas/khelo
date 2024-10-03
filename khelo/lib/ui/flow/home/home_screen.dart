@@ -248,7 +248,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       children: [
         ImageAvatar(
           initial:
-              matchTeam.team.initials ?? matchTeam.team.name.initials(limit: 1),
+              matchTeam.team.name_initial ?? matchTeam.team.name.initials(limit: 1),
           imageUrl: matchTeam.team.profile_img_url,
           size: 32,
         ),

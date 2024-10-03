@@ -102,7 +102,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
                         (team) => _tossCellView(
                           context: context,
                           imageUrl: team.team.profile_img_url,
-                          initial: team.team.initials ??
+                          initial: team.team.name_initial ??
                               team.team.name.initials(limit: 1),
                           title: team.team.name,
                           isSelected: tossWinnerTeamId == team.team.id,

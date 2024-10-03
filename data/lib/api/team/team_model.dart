@@ -18,7 +18,7 @@ abstract class TeamModel with _$TeamModel {
     required String name,
     required String name_lowercase,
     String? city,
-    String? initials,
+    String? name_initial,
     String? profile_img_url,
     String? created_by,
     DateTime? created_at,
