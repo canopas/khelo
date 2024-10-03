@@ -1377,9 +1377,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         "INVALID ID";
     final teamPlayers = state.match?.teams
         .firstWhere((element) => element.team.id == teamId)
-        .squad
-        .where((element) => element.player.isActive)
-        .toList();
+        .squad;
 
     if (type == PlayerSelectionType.bowler) {
       // remove substitute to select from bowlers
@@ -1434,8 +1432,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .firstOrNull;
     final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
     final teamPlayers = team?.team.players
-        .where((element) =>
-            element.user.isActive && !teamSquadIds.contains(element.id))
+        .where((element) => !teamSquadIds.contains(element.id))
         .map((e) => e.user)
         .toList();
     return teamPlayers ?? [];
@@ -1496,9 +1493,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final teamId = state.otherInning?.team_id ?? "INVALID ID";
     final teamPlayers = state.match?.teams
         .firstWhere((element) => element.team.id == teamId)
-        .squad
-        .where((element) => element.player.isActive)
-        .toList();
+        .squad;
 
     return teamPlayers ?? [];
   }

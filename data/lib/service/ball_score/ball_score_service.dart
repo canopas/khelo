@@ -5,7 +5,6 @@ import '../../errors/app_error.dart';
 import '../../extensions/double_extensions.dart';
 import '../innings/inning_service.dart';
 import '../match/match_service.dart';
-import '../../storage/app_preferences.dart';
 import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,16 +15,12 @@ final ballScoreServiceProvider = Provider((ref) {
     FirebaseFirestore.instance,
     ref.read(matchServiceProvider),
     ref.read(inningServiceProvider),
-    ref.read(currentUserPod)?.id,
   );
 
-  ref.listen(currentUserPod, (_, next) => service._currentUserId = next?.id);
   return service;
 });
 
 class BallScoreService {
-  String? _currentUserId;
-
   final FirebaseFirestore _firestore;
   final MatchService _matchService;
   final InningsService _inningsService;
@@ -34,7 +29,6 @@ class BallScoreService {
     this._firestore,
     this._matchService,
     this._inningsService,
-    this._currentUserId,
   );
 
   CollectionReference<BallScoreModel> get _ballScoreCollection =>
@@ -132,25 +126,6 @@ class BallScoreService {
               .map((score) => BallScoreChange(score.type, score.doc.data()!))
               .toList(),
         )
-        .handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  Stream<List<BallScoreModel>> streamCurrentUserRelatedBalls() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-
-    return _ballScoreCollection
-        .where(
-          Filter.or(
-            Filter(FireStoreConst.bowlerId, isEqualTo: _currentUserId),
-            Filter(FireStoreConst.batsmanId, isEqualTo: _currentUserId),
-            Filter(FireStoreConst.wicketTakerId, isEqualTo: _currentUserId),
-            Filter(FireStoreConst.playerOutId, isEqualTo: _currentUserId),
-          ),
-        )
-        .snapshots()
-        .map((event) => event.docs.map((score) => score.data()).toList())
         .handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 

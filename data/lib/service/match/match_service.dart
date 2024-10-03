@@ -94,30 +94,6 @@ class MatchService {
     }
   }
 
-  Stream<List<MatchModel>> streamCurrentUserPlayedMatches() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-
-    final filter = Filter.and(
-      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.finish.value),
-      Filter(FireStoreConst.players, arrayContains: _currentUserId),
-    );
-
-    return _matchCollection
-        .where(filter)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          final match = mainDoc.data();
-          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return match.copyWith(teams: teams);
-        }).toList(),
-      );
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
   Stream<List<MatchModel>> streamCurrentUserRelatedMatches() {
     if (_currentUserId == null) {
       return Stream.value([]);

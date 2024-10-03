@@ -42,6 +42,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
   @override
   Widget build(BuildContext context) {
     _observePop();
+    _observeShowSelectionError();
     _observeActionError();
     final state = ref.watch(makeTeamAdminStateProvider);
     return AppPage(
@@ -73,6 +74,17 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
         if (next) context.pop();
       },
     );
+  }
+
+  void _observeShowSelectionError() {
+    ref.listen(
+        makeTeamAdminStateProvider.select((value) => value.showSelectionError),
+        (previous, next) {
+      if (next) {
+        showErrorSnackBar(
+            context: context, error: context.l10n.make_admin_selection_error);
+      }
+    });
   }
 
   void _observeActionError() {
