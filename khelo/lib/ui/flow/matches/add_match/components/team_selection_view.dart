@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
@@ -111,7 +112,7 @@ class TeamSelectionView extends StatelessWidget {
                     )
                   : (team.profile_img_url == null)
                       ? Text(
-                          team.name[0].toUpperCase(),
+                          team.name_initial ?? team.name.initials(limit: 1),
                           style: AppTextStyle.subtitle1.copyWith(
                               color: context.colorScheme.textDisabled),
                         )

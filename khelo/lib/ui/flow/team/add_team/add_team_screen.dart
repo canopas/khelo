@@ -20,6 +20,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/text/text_input_formatter.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/back_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
@@ -131,11 +132,23 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
                         : null,
                 hintText:
                     context.l10n.add_team_enter_team_name_placeholder_text),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             _textInputField(
               controller: state.locationController,
               onChanged: (p0) => notifier.onValueChange(),
               hintText: context.l10n.common_location_title,
+            ),
+            const SizedBox(height: 16),
+            _textInputField(
+              controller: state.nameInitialsController,
+              textCapitalization: TextCapitalization.characters,
+              maxLength: 4,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                CustomTextFormatter((text) => text.toUpperCase()),
+              ],
+              onChanged: (p0) => notifier.onValueChange(),
+              hintText: context.l10n.add_team_team_initial_placeholder_text,
             ),
             if (widget.editTeam == null) ...[
               const SizedBox(height: 8),
@@ -221,8 +234,10 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     required TextEditingController controller,
     required String hintText,
     required Function(String)? onChanged,
+    TextCapitalization textCapitalization = TextCapitalization.none,
     List<TextInputFormatter>? inputFormatters,
     Widget? suffixIcon,
+    int? maxLength,
   }) {
     return AppTextField(
       controller: controller,
@@ -235,7 +250,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
       hintStyle: AppTextStyle.subtitle3
           .copyWith(color: context.colorScheme.textDisabled),
       borderRadius: BorderRadius.circular(12),
+      textCapitalization: textCapitalization,
       borderType: AppTextFieldBorderType.outline,
+      maxLength: maxLength,
       backgroundColor: context.colorScheme.containerLow,
       borderColor: BorderColor(
           focusColor: Colors.transparent, unFocusColor: Colors.transparent),

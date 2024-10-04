@@ -8,6 +8,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
@@ -167,7 +168,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           dense: true,
           contentPadding: EdgeInsets.zero,
           leading: ImageAvatar(
-            initial: team.name[0].toUpperCase(),
+            initial: team.name_initial ?? team.name.initials(limit: 1),
             imageUrl: team.profile_img_url,
             size: 40,
           ),

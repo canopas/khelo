@@ -24,6 +24,7 @@ mixin _$TeamModel {
   String get name => throw _privateConstructorUsedError;
   String get name_lowercase => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
+  String? get name_initial => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
   String? get created_by => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $TeamModelCopyWith<$Res> {
       String name,
       String name_lowercase,
       String? city,
+      String? name_initial,
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
@@ -72,6 +74,7 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
     Object? name = null,
     Object? name_lowercase = null,
     Object? city = freezed,
+    Object? name_initial = freezed,
     Object? profile_img_url = freezed,
     Object? created_by = freezed,
     Object? created_at = freezed,
@@ -94,6 +97,10 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name_initial: freezed == name_initial
+          ? _value.name_initial
+          : name_initial // ignore: cast_nullable_to_non_nullable
               as String?,
       profile_img_url: freezed == profile_img_url
           ? _value.profile_img_url
@@ -132,6 +139,7 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       String name,
       String name_lowercase,
       String? city,
+      String? name_initial,
       String? profile_img_url,
       String? created_by,
       DateTime? created_at,
@@ -154,6 +162,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
     Object? name = null,
     Object? name_lowercase = null,
     Object? city = freezed,
+    Object? name_initial = freezed,
     Object? profile_img_url = freezed,
     Object? created_by = freezed,
     Object? created_at = freezed,
@@ -176,6 +185,10 @@ class __$$TeamModelImplCopyWithImpl<$Res>
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name_initial: freezed == name_initial
+          ? _value.name_initial
+          : name_initial // ignore: cast_nullable_to_non_nullable
               as String?,
       profile_img_url: freezed == profile_img_url
           ? _value.profile_img_url
@@ -210,6 +223,7 @@ class _$TeamModelImpl implements _TeamModel {
       required this.name,
       required this.name_lowercase,
       this.city,
+      this.name_initial,
       this.profile_img_url,
       this.created_by,
       this.created_at,
@@ -230,6 +244,8 @@ class _$TeamModelImpl implements _TeamModel {
   @override
   final String? city;
   @override
+  final String? name_initial;
+  @override
   final String? profile_img_url;
   @override
   final String? created_by;
@@ -249,7 +265,7 @@ class _$TeamModelImpl implements _TeamModel {
 
   @override
   String toString() {
-    return 'TeamModel(id: $id, name: $name, name_lowercase: $name_lowercase, city: $city, profile_img_url: $profile_img_url, created_by: $created_by, created_at: $created_at, created_time: $created_time, players: $players)';
+    return 'TeamModel(id: $id, name: $name, name_lowercase: $name_lowercase, city: $city, name_initial: $name_initial, profile_img_url: $profile_img_url, created_by: $created_by, created_at: $created_at, created_time: $created_time, players: $players)';
   }
 
   @override
@@ -262,6 +278,8 @@ class _$TeamModelImpl implements _TeamModel {
             (identical(other.name_lowercase, name_lowercase) ||
                 other.name_lowercase == name_lowercase) &&
             (identical(other.city, city) || other.city == city) &&
+            (identical(other.name_initial, name_initial) ||
+                other.name_initial == name_initial) &&
             (identical(other.profile_img_url, profile_img_url) ||
                 other.profile_img_url == profile_img_url) &&
             (identical(other.created_by, created_by) ||
@@ -281,6 +299,7 @@ class _$TeamModelImpl implements _TeamModel {
       name,
       name_lowercase,
       city,
+      name_initial,
       profile_img_url,
       created_by,
       created_at,
@@ -307,6 +326,7 @@ abstract class _TeamModel implements TeamModel {
       required final String name,
       required final String name_lowercase,
       final String? city,
+      final String? name_initial,
       final String? profile_img_url,
       final String? created_by,
       final DateTime? created_at,
@@ -325,6 +345,8 @@ abstract class _TeamModel implements TeamModel {
   String get name_lowercase;
   @override
   String? get city;
+  @override
+  String? get name_initial;
   @override
   String? get profile_img_url;
   @override
