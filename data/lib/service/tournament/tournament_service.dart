@@ -43,10 +43,15 @@ class TournamentService {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
+    final currantMember = TournamentMember(id: _currentUserId ?? 'INVALID ID');
 
+    final memberContains = [
+      currantMember.copyWith(role: TournamentMemberRole.organizer).toJson(),
+      currantMember.copyWith(role: TournamentMemberRole.admin).toJson(),
+    ];
     final filter = Filter.or(
       Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
-      Filter(FireStoreConst.members, arrayContains: _currentUserId),
+      Filter(FireStoreConst.members, arrayContainsAny: memberContains),
     );
 
     return _tournamentCollection
