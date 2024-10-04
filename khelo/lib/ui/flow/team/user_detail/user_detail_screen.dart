@@ -170,6 +170,7 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
     return Expanded(
       child: PageView(
         controller: _controller,
+        onPageChanged: notifier.onTabChange,
         children: [
           UserDetailInfoContent(
             teams: state.teams.map((e) => e.name).join(", "),
@@ -188,11 +189,13 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
             otherStats: state.otherStats.bowlingStat,
           ),
         ],
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

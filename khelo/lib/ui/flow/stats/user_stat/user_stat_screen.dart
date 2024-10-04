@@ -114,6 +114,7 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
     return Expanded(
       child: PageView(
         controller: _controller,
+        onPageChanged: notifier.onTabChange,
         children: [
           UserDetailBattingContent(
             testMatchesCount: state.testMatchesCount,
@@ -134,11 +135,14 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             otherStats: state.otherStats.fieldingStat,
           ),
         ],
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

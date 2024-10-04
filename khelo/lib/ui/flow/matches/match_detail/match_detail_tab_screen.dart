@@ -82,7 +82,6 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
               onPageChanged: (index) {
                 notifier.onTabChange(index);
                 _scrollToIndex(index);
-                setState(() {});
               },
             ),
           ),

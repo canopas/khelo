@@ -168,15 +168,12 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     return Expanded(
       child: PageView(
         controller: _controller,
+        onPageChanged: notifier.onTabChange,
         children: const [
           TeamDetailMatchContent(),
           TeamDetailMemberContent(),
           TeamDetailStatContent(),
         ],
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
       ),
     );
   }
