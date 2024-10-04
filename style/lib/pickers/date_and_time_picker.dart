@@ -13,8 +13,8 @@ Future<void> selectDate(
     context: context,
     helpText: helpText,
     initialDate: initialDate,
-    firstDate: DateTime(1965),
-    lastDate: DateTime(2101),
+    firstDate: DateTime.now(),
+    lastDate: DateTime(DateTime.now().year + 1),
     builder: (context, child) {
       return Theme(
         data: context.brightness == Brightness.dark

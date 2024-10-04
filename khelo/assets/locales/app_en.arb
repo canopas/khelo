@@ -154,12 +154,12 @@
 
   "@_TOURNAMENT_TYPE":{
   },
-  "tournament_type_knockout": "KnockOut",
-  "tournament_type_miniRobin": "Mini Robin",
-  "tournament_type_boxLeague": "Box League",
-  "tournament_type_doubleOut": "Double Out",
-  "tournament_type_superOver": "Super Over",
-  "tournament_type_bestOf": "Best Of",
+  "tournament_type_knock_out": "Knockout",
+  "tournament_type_mini_robin": "Mini Robin",
+  "tournament_type_box_league": "Box League",
+  "tournament_type_double_out": "Double Out",
+  "tournament_type_super_over": "Super Over",
+  "tournament_type_best_of": "Best Of",
   "tournament_type_gully": "Gully",
   "tournament_type_mixed": "Mixed",
   "tournament_type_other": "Other",

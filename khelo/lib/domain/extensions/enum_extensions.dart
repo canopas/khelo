@@ -271,17 +271,17 @@ extension TournamentTypeString on TournamentType {
   String getString(BuildContext context) {
     switch (this) {
       case TournamentType.knockOut:
-        return context.l10n.tournament_type_knockout;
+        return context.l10n.tournament_type_knock_out;
       case TournamentType.miniRobin:
-        return context.l10n.tournament_type_miniRobin;
+        return context.l10n.tournament_type_mini_robin;
       case TournamentType.boxLeague:
-        return context.l10n.tournament_type_boxLeague;
+        return context.l10n.tournament_type_box_league;
       case TournamentType.doubleOut:
-        return context.l10n.tournament_type_doubleOut;
+        return context.l10n.tournament_type_double_out;
       case TournamentType.superOver:
-        return context.l10n.tournament_type_superOver;
+        return context.l10n.tournament_type_super_over;
       case TournamentType.bestOf:
-        return context.l10n.tournament_type_bestOf;
+        return context.l10n.tournament_type_best_of;
       case TournamentType.gully:
         return context.l10n.tournament_type_gully;
       case TournamentType.mixed:
