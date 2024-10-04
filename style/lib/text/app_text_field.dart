@@ -37,6 +37,7 @@ class AppTextField extends StatelessWidget {
   final Widget? prefixIcon;
   final BoxConstraints? prefixIconConstraints;
   final List<TextInputFormatter>? inputFormatters;
+  final TextCapitalization textCapitalization;
   final Function(PointerDownEvent)? onTapOutside;
 
   const AppTextField({
@@ -70,6 +71,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType,
     this.focusNode,
     this.inputFormatters,
+    this.textCapitalization = TextCapitalization.none,
     this.prefixIcon,
     this.prefixIconConstraints,
     this.textAlign = TextAlign.start,
@@ -109,6 +111,7 @@ class AppTextField extends StatelessWidget {
           maxLines: maxLines,
           minLines: minLines,
           inputFormatters: inputFormatters,
+          textCapitalization: textCapitalization,
           expands: expands,
           textInputAction: textInputAction,
           autofocus: autoFocus,

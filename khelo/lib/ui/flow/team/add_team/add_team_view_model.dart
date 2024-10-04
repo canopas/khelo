@@ -36,11 +36,13 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       : super(AddTeamState(
             nameController: TextEditingController(),
             locationController: TextEditingController(),
+            nameInitialsController: TextEditingController(),
             currentUser: user));
 
   void setData({TeamModel? editTeam}) {
     state.nameController.text = editTeam?.name ?? "";
     state.locationController.text = editTeam?.city ?? "";
+    state.nameInitialsController.text = editTeam?.name_initial ?? "";
     state = state.copyWith(
         editTeam: editTeam, teamMembers: editTeam?.players ?? []);
   }
@@ -85,6 +87,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
       final name = state.nameController.text.trim();
       final location = state.locationController.text.trim();
+      final initials = state.nameInitialsController.text.trim();
 
       List<TeamPlayer> players = [];
 
@@ -108,6 +111,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         name_lowercase: name.caseAndSpaceInsensitive,
         profile_img_url: imageUrl,
         city: location.toLowerCase(),
+        name_initial: initials.isNotEmpty ? initials : null,
         created_by: state.currentUser!.id,
         players: players,
         created_at: state.editTeam?.created_at ?? DateTime.now(),
@@ -139,6 +143,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             name_lowercase: name.caseAndSpaceInsensitive,
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
+            name_initial: initials.isNotEmpty ? initials : null,
             created_by: state.currentUser!.id,
             players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now(),
@@ -234,6 +239,7 @@ class AddTeamState with _$AddTeamState {
   const factory AddTeamState({
     required TextEditingController nameController,
     required TextEditingController locationController,
+    required TextEditingController nameInitialsController,
     Object? actionError,
     String? filePath,
     bool? isNameAvailable,

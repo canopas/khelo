@@ -5,7 +5,6 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/domain/formatter/string_formatter.dart';
 import 'package:khelo/ui/flow/team/user_detail/component/user_detail_info_content.dart';
@@ -95,7 +94,7 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         ImageAvatar(
-          initial: state.user?.name?.initials(limit: 1) ?? "?",
+          initial: state.user?.nameInitial ?? "?",
           imageUrl: state.user?.profile_img_url,
           size: 48,
         ),
