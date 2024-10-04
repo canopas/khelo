@@ -6,6 +6,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
+import 'package:khelo/ui/flow/team/user_detail/component/user_detail_fielding_content.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -83,7 +84,8 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
   Widget _tabView(BuildContext context) {
     final tabs = [
       context.l10n.user_detail_batting_title,
-      context.l10n.user_detail_bowling_title
+      context.l10n.user_detail_bowling_title,
+      context.l10n.user_detail_fielding_title
     ];
 
     return SingleChildScrollView(
@@ -124,6 +126,12 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
             otherMatchesCount: state.otherMatchesCount,
             testStats: state.testStats.bowlingStat,
             otherStats: state.otherStats.bowlingStat,
+          ),
+          UserDetailFieldingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.fieldingStat,
+            otherStats: state.otherStats.fieldingStat,
           ),
         ],
         onPageChanged: (index) {
