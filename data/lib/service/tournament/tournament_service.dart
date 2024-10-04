@@ -43,11 +43,11 @@ class TournamentService {
     if (_currentUserId == null) {
       return Stream.value([]);
     }
-    final currantMember = TournamentMember(id: _currentUserId ?? 'INVALID ID');
+    final currentMember = TournamentMember(id: _currentUserId ?? 'INVALID ID');
 
     final memberContains = [
-      currantMember.copyWith(role: TournamentMemberRole.organizer).toJson(),
-      currantMember.copyWith(role: TournamentMemberRole.admin).toJson(),
+      currentMember.copyWith(role: TournamentMemberRole.organizer).toJson(),
+      currentMember.copyWith(role: TournamentMemberRole.admin).toJson(),
     ];
     final filter = Filter.or(
       Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
@@ -57,12 +57,7 @@ class TournamentService {
     return _tournamentCollection
         .where(filter)
         .snapshots()
-        .asyncMap((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          return mainDoc.data();
-        }).toList(),
-      );
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+        .map((event) => event.docs.map((e) => e.data()).toList())
+        .handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 }

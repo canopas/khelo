@@ -17,14 +17,15 @@ final tournamentListViewStateProvider =
 class TournamentListViewNotifier
     extends StateNotifier<TournamentListViewState> {
   final TournamentService _tournamentService;
-  late StreamSubscription _tournamentStreamSubscription;
+  StreamSubscription? _tournamentStreamSubscription;
 
   TournamentListViewNotifier(this._tournamentService)
       : super(const TournamentListViewState()) {
-    _loadTournamentList();
+    loadTournaments();
   }
 
-  Future<void> _loadTournamentList() async {
+  Future<void> loadTournaments() async {
+    _tournamentStreamSubscription?.cancel();
     state = state.copyWith(loading: state.groupTournaments.isEmpty);
     try {
       _tournamentStreamSubscription = _tournamentService
@@ -53,13 +54,10 @@ class TournamentListViewNotifier
     );
   }
 
-  _cancelStreamSubscription() {
-    _tournamentStreamSubscription.cancel();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _loadTournamentList();
+  @override
+  void dispose() {
+    _tournamentStreamSubscription?.cancel();
+    super.dispose();
   }
 }
 

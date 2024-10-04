@@ -52,7 +52,7 @@ class FireStoreConst {
   static const String phone = "phone";
   static const String name = "name";
 
-  // tournament filed const
+  // tournament field const
   static const String members = "members";
  }
 

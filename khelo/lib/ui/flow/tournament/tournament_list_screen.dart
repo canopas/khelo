@@ -62,12 +62,12 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadTournaments,
       );
     }
     if (state.groupTournaments.isEmpty) {
       return EmptyScreen(
-        title: context.l10n.tournament_list_no_tournaments_created_title,
+        title: context.l10n.tournament_list_empty_list_title,
         description: context.l10n.tournament_list_empty_list_description,
         isShowButton: false,
       );

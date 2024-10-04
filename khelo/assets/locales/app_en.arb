@@ -150,7 +150,7 @@
   "add_tournament_start_date": "Start Date",
   "add_tournament_end_date": "End Date",
 
-  "tournament_list_no_tournaments_created_title": "No tournaments created",
+  "tournament_list_empty_list_title": "No tournaments created",
   "tournament_list_empty_list_description": "Tap on the “ + ” icon to create a tournament",
   "tournament_list_match_title": "{count, plural, =0{No matches} =1{{count} Match} other{{count} Matches}}",
   "@tournament_list_match_title": {
