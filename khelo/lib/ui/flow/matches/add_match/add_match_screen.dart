@@ -336,11 +336,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
                     headerText: context.l10n.add_match_time_title,
                     placeholder: context.l10n.add_match_time_title,
                     onTap: () {
-                      selectDate(
+                      selectTime(
                         context,
-                        initialDate: state.matchTime,
-                        onDateSelected: (selectedDate) =>
-                            notifier.onDateSelect(selectedDate: selectedDate),
+                        initialTime: state.matchTime,
+                        onTimeSelected: (selectedTime) =>
+                            notifier.onDateSelect(selectedDate: selectedTime),
                       );
                     }),
               ),

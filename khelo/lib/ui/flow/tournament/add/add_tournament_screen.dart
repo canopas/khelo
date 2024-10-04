@@ -8,13 +8,11 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/pickers/date_and_time_picker.dart';
 import 'package:style/text/app_text_field.dart';
-import 'package:style/text/app_text_style.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/action_bottom_sheet.dart';
@@ -97,10 +95,11 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        _selectTileView(
-          label: context.l10n.add_tournament_type,
+        AdaptiveOutlinedTile(
+          placeholder: context.l10n.add_tournament_type_placeholder,
+          headerText: context.l10n.add_tournament_type,
           title: state.selectedType.getString(context),
-          icon: Icons.keyboard_arrow_down_rounded,
+          showTrailingIcon: true,
           onTap: () {
             _selectTypeSheet(
               context,
@@ -124,7 +123,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
         context.l10n.common_create,
         progress: state.loading,
         enabled: state.enableButton,
-        onPressed: () => notifier.addTournament(),
+        onPressed: notifier.addTournament,
       ),
     );
   }
@@ -149,52 +148,6 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
           }
         },
       ),
-    );
-  }
-
-  Widget _selectTileView({
-    String? label,
-    IconData? icon,
-    required String title,
-    required Function() onTap,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (label != null) ...[
-          Text(
-            label,
-            style: AppTextStyle.body2.copyWith(
-              color: context.colorScheme.textDisabled,
-            ),
-          ),
-          const SizedBox(height: 12),
-        ],
-        OnTapScale(
-          onTap: onTap,
-          child: Material(
-            type: MaterialType.transparency,
-            child: ListTile(
-              dense: true,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: context.colorScheme.outline),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              title: Text(
-                title,
-                style: AppTextStyle.body2.copyWith(
-                  color: context.colorScheme.textPrimary,
-                ),
-              ),
-              trailing: Icon(
-                icon,
-                color: context.colorScheme.textDisabled,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
