@@ -145,7 +145,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               maxLength: 4,
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
-                UpperCaseTextFormatter(),
+                CustomTextFormatter((text) => text.toUpperCase()),
               ],
               onChanged: (p0) => notifier.onValueChange(),
               hintText: context.l10n.add_team_team_initial_placeholder_text,
