@@ -19,6 +19,7 @@ mixin _$MakeTeamAdminState {
   Object? get actionError => throw _privateConstructorUsedError;
   bool get pop => throw _privateConstructorUsedError;
   bool get isButtonEnabled => throw _privateConstructorUsedError;
+  bool get showSelectionError => throw _privateConstructorUsedError;
   List<TeamPlayer> get selectedPlayers => throw _privateConstructorUsedError;
 
   /// Create a copy of MakeTeamAdminState
@@ -38,6 +39,7 @@ abstract class $MakeTeamAdminStateCopyWith<$Res> {
       {Object? actionError,
       bool pop,
       bool isButtonEnabled,
+      bool showSelectionError,
       List<TeamPlayer> selectedPlayers});
 }
 
@@ -59,6 +61,7 @@ class _$MakeTeamAdminStateCopyWithImpl<$Res, $Val extends MakeTeamAdminState>
     Object? actionError = freezed,
     Object? pop = null,
     Object? isButtonEnabled = null,
+    Object? showSelectionError = null,
     Object? selectedPlayers = null,
   }) {
     return _then(_value.copyWith(
@@ -70,6 +73,10 @@ class _$MakeTeamAdminStateCopyWithImpl<$Res, $Val extends MakeTeamAdminState>
       isButtonEnabled: null == isButtonEnabled
           ? _value.isButtonEnabled
           : isButtonEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSelectionError: null == showSelectionError
+          ? _value.showSelectionError
+          : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
       selectedPlayers: null == selectedPlayers
           ? _value.selectedPlayers
@@ -91,6 +98,7 @@ abstract class _$$MakeTeamAdminStateImplCopyWith<$Res>
       {Object? actionError,
       bool pop,
       bool isButtonEnabled,
+      bool showSelectionError,
       List<TeamPlayer> selectedPlayers});
 }
 
@@ -110,6 +118,7 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
     Object? actionError = freezed,
     Object? pop = null,
     Object? isButtonEnabled = null,
+    Object? showSelectionError = null,
     Object? selectedPlayers = null,
   }) {
     return _then(_$MakeTeamAdminStateImpl(
@@ -121,6 +130,10 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
       isButtonEnabled: null == isButtonEnabled
           ? _value.isButtonEnabled
           : isButtonEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showSelectionError: null == showSelectionError
+          ? _value.showSelectionError
+          : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
       selectedPlayers: null == selectedPlayers
           ? _value._selectedPlayers
@@ -137,6 +150,7 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
       {this.actionError,
       this.pop = false,
       this.isButtonEnabled = false,
+      this.showSelectionError = false,
       final List<TeamPlayer> selectedPlayers = const []})
       : _selectedPlayers = selectedPlayers;
 
@@ -148,6 +162,9 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
   @override
   @JsonKey()
   final bool isButtonEnabled;
+  @override
+  @JsonKey()
+  final bool showSelectionError;
   final List<TeamPlayer> _selectedPlayers;
   @override
   @JsonKey()
@@ -159,7 +176,7 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
 
   @override
   String toString() {
-    return 'MakeTeamAdminState(actionError: $actionError, pop: $pop, isButtonEnabled: $isButtonEnabled, selectedPlayers: $selectedPlayers)';
+    return 'MakeTeamAdminState(actionError: $actionError, pop: $pop, isButtonEnabled: $isButtonEnabled, showSelectionError: $showSelectionError, selectedPlayers: $selectedPlayers)';
   }
 
   @override
@@ -172,6 +189,8 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
             (identical(other.pop, pop) || other.pop == pop) &&
             (identical(other.isButtonEnabled, isButtonEnabled) ||
                 other.isButtonEnabled == isButtonEnabled) &&
+            (identical(other.showSelectionError, showSelectionError) ||
+                other.showSelectionError == showSelectionError) &&
             const DeepCollectionEquality()
                 .equals(other._selectedPlayers, _selectedPlayers));
   }
@@ -182,6 +201,7 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
       const DeepCollectionEquality().hash(actionError),
       pop,
       isButtonEnabled,
+      showSelectionError,
       const DeepCollectionEquality().hash(_selectedPlayers));
 
   /// Create a copy of MakeTeamAdminState
@@ -199,6 +219,7 @@ abstract class _MakeTeamAdminState implements MakeTeamAdminState {
       {final Object? actionError,
       final bool pop,
       final bool isButtonEnabled,
+      final bool showSelectionError,
       final List<TeamPlayer> selectedPlayers}) = _$MakeTeamAdminStateImpl;
 
   @override
@@ -207,6 +228,8 @@ abstract class _MakeTeamAdminState implements MakeTeamAdminState {
   bool get pop;
   @override
   bool get isButtonEnabled;
+  @override
+  bool get showSelectionError;
   @override
   List<TeamPlayer> get selectedPlayers;
 

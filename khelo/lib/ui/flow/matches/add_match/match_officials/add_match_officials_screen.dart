@@ -49,13 +49,14 @@ class _AddMatchOfficialsScreenState
         return Stack(
           children: [
             ListView(
-              padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+              padding: context.mediaQueryPadding +
+                  BottomStickyOverlay.padding +
+                  const EdgeInsets.only(bottom: 40),
               children: [
                 for (final type in MatchOfficials.values) ...[
                   _sectionTitle(context, type.getTitle(context)),
                   _officialList(context, notifier, state, type),
                 ],
-                const SizedBox(height: 40)
               ],
             ),
             _stickyButton(context, state)

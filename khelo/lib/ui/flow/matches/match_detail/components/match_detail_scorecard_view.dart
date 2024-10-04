@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -82,8 +83,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
               final bowler = _getBowlers(inningOvers);
 
               final teamSquad = state.match?.teams
-                  .where((element) => element.team.id == overs?.team_id)
-                  .firstOrNull
+                  .firstWhereOrNull(
+                      (element) => element.team.id == overs?.team_id)
                   ?.squad;
 
               final yetToPlayPlayers = teamSquad
@@ -323,7 +324,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             player.strikeRate.toString(),
           ],
           onTap: player.player.isActive
-              ? () =>  AppRoute.userDetail(userId: player.player.id).push(context)
+              ? () =>
+                  AppRoute.userDetail(userId: player.player.id).push(context)
               : null,
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +379,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             bowler.economy.toString(),
           ],
           onTap: bowler.player.isActive
-              ? () => AppRoute.userDetail(userId: bowler.player.id).push(context)
+              ? () =>
+                  AppRoute.userDetail(userId: bowler.player.id).push(context)
               : null,
           header: Text(
             bowler.player.name ?? '',
@@ -480,7 +483,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
             return WidgetSpan(
                 child: OnTapScale(
               onTap: player.player.isActive
-                  ? () => AppRoute.userDetail(userId: player.player.id).push(context)
+                  ? () => AppRoute.userDetail(userId: player.player.id)
+                      .push(context)
                   : null,
               child: Text(name,
                   style: AppTextStyle.caption
@@ -538,7 +542,8 @@ class MatchDetailScorecardView extends ConsumerWidget {
       children.add(WidgetSpan(
           child: OnTapScale(
               onTap: batsmen.player.isActive
-                  ? () => AppRoute.userDetail(userId: batsmen.player.id).push(context)
+                  ? () => AppRoute.userDetail(userId: batsmen.player.id)
+                      .push(context)
                   : null,
               child: Text(batsmen.player.name ?? '',
                   style: AppTextStyle.caption
@@ -611,8 +616,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
 
   String _getTeamNameByTeamId(MatchDetailTabState state, String teamId) {
     return state.match?.teams
-            .where((element) => element.team.id == teamId)
-            .firstOrNull
+            .firstWhereOrNull((element) => element.team.id == teamId)
             ?.team
             .name ??
         "";
@@ -625,8 +629,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     }
 
     final inningIndex = state.allInnings
-        .where((element) => element.id == inningId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.id == inningId)
         ?.index;
 
     if (inningIndex == 1 || inningIndex == 2) {
@@ -684,14 +687,13 @@ class MatchDetailScorecardView extends ConsumerWidget {
         (startOver - 1).isNegative || (startOver - 1) == 0
             ? 0
             : inningOvers
-                    .where((element) => element.overNumber == startOver - 1)
-                    .firstOrNull
+                    .firstWhereOrNull(
+                        (element) => element.overNumber == startOver - 1)
                     ?.totalRuns ??
                 0;
 
     final runsAfterEndOver = inningOvers
-            .where((element) => element.overNumber == endOver)
-            .firstOrNull
+            .firstWhereOrNull((element) => element.overNumber == endOver)
             ?.totalRuns ??
         0;
 

@@ -40,25 +40,27 @@ class PrimerProgressBar extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _legendItem(
-              context,
-              color: context.colorScheme.positive,
-              text: context.l10n.team_detail_won_title(status.win),
-            ),
-            _legendItem(
-              context,
-              color: context.colorScheme.secondary,
-              text: context.l10n.team_detail_tie_title(status.tie),
-            ),
-            _legendItem(
-              context,
-              color: context.colorScheme.alert,
-              text: context.l10n.team_detail_lost_title(status.lost),
-            ),
-          ],
+        MediaQuery.withNoTextScaling(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _legendItem(
+                context,
+                color: context.colorScheme.positive,
+                text: context.l10n.team_detail_won_title(status.win),
+              ),
+              _legendItem(
+                context,
+                color: context.colorScheme.secondary,
+                text: context.l10n.team_detail_tie_title(status.tie),
+              ),
+              _legendItem(
+                context,
+                color: context.colorScheme.alert,
+                text: context.l10n.team_detail_lost_title(status.lost),
+              ),
+            ],
+          ),
         )
       ],
     );

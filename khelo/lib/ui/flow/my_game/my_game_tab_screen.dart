@@ -72,11 +72,8 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
           Expanded(
             child: PageView(
               controller: _controller,
+              onPageChanged: notifier.onTabChange,
               children: _tabs,
-              onPageChanged: (index) {
-                notifier.onTabChange(index);
-                setState(() {});
-              },
             ),
           ),
         ],

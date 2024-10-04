@@ -125,6 +125,7 @@ class _ContactSelectionScreenState
 
     return ListView.separated(
       itemCount: state.contacts.length,
+      padding: const EdgeInsets.symmetric(vertical: 16),
       separatorBuilder: (context, index) => Divider(
         color: context.colorScheme.outline,
         height: 32,

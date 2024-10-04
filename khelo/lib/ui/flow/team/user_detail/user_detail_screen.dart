@@ -34,12 +34,6 @@ class UserDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
-  final List<Widget> _tabs = [
-    const UserDetailInfoContent(),
-    const UserDetailBattingContent(),
-    const UserDetailBowlingContent(),
-  ];
-
   late PageController _controller;
 
   int get _selectedTab => _controller.hasClients
@@ -133,51 +127,74 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
       padding: context.mediaQueryPadding,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _tabView(context),
-          _content(context),
+          _content(context, state),
         ],
       ),
     );
   }
 
   Widget _tabView(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
+    final tabs = [
+      context.l10n.user_detail_info_title,
+      context.l10n.user_detail_batting_title,
+      context.l10n.user_detail_bowling_title
+    ];
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      scrollDirection: Axis.horizontal,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(
+          tabs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TabButton(
+              tabs[index],
+              onTap: () {
+                _controller.jumpToPage(index);
+              },
+              selected: index == _selectedTab,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _content(BuildContext context, UserDetailViewState state) {
+    return Expanded(
+      child: PageView(
+        controller: _controller,
+        onPageChanged: notifier.onTabChange,
         children: [
-          TabButton(
-            context.l10n.user_detail_info_title,
-            selected: _selectedTab == 0,
-            onTap: () => _controller.jumpToPage(0),
+          UserDetailInfoContent(
+            teams: state.teams.map((e) => e.name).join(", "),
+            user: state.user,
           ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.user_detail_batting_title,
-            selected: _selectedTab == 1,
-            onTap: () => _controller.jumpToPage(1),
+          UserDetailBattingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.battingStat,
+            otherStats: state.otherStats.battingStat,
           ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.user_detail_bowling_title,
-            selected: _selectedTab == 2,
-            onTap: () => _controller.jumpToPage(2),
+          UserDetailBowlingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.bowlingStat,
+            otherStats: state.otherStats.bowlingStat,
           ),
         ],
       ),
     );
   }
 
-  Widget _content(BuildContext context) {
-    return Expanded(
-      child: PageView(
-        controller: _controller,
-        children: _tabs,
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
-      ),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

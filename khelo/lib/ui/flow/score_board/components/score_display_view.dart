@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
@@ -167,12 +168,10 @@ class ScoreDisplayView extends ConsumerWidget {
   }
 
   int getRequiredRun(ScoreBoardViewState state) {
-    final currentPlayingTeam = state.match?.teams
-        .where((element) => element.team.id == state.currentInning?.team_id)
-        .firstOrNull;
-    final otherTeam = state.match?.teams
-        .where((element) => element.team.id != currentPlayingTeam?.team.id)
-        .firstOrNull;
+    final currentPlayingTeam = state.match?.teams.firstWhereOrNull(
+        (element) => element.team.id == state.currentInning?.team_id);
+    final otherTeam = state.match?.teams.firstWhereOrNull(
+        (element) => element.team.id != currentPlayingTeam?.team.id);
 
     final revisedRun = state.match?.revised_target?.runs;
 

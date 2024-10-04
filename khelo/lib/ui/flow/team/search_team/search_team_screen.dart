@@ -102,13 +102,16 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     BuildContext context,
     SearchTeamState state,
   ) {
-    return SearchTextField(
-      controller: state.searchController,
-      onChange: notifier.onSearchChanged,
-      hintText: context.l10n.search_team_search_placeholder_title,
-      suffixIcon: state.searchInProgress
-          ? const UnconstrainedBox(child: AppProgressIndicator(radius: 8))
-          : const SizedBox(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: SearchTextField(
+        controller: state.searchController,
+        onChange: notifier.onSearchChanged,
+        hintText: context.l10n.search_team_search_placeholder_title,
+        suffixIcon: state.searchInProgress
+            ? const UnconstrainedBox(child: AppProgressIndicator(radius: 8))
+            : const SizedBox(),
+      ),
     );
   }
 
@@ -128,12 +131,14 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     }
 
     return ListView(
+      padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        for (final team in state.searchResults) ...[
-          _teamProfileCell(context, state, team),
-          Divider(color: context.colorScheme.outline),
+        for (int index = 0; index < state.searchResults.length; index++) ...[
+          _teamProfileCell(context, state, state.searchResults[index]),
+          if (index != state.searchResults.length - 1)
+            Divider(color: context.colorScheme.outline),
         ],
-        const SizedBox(height: 24),
+        const SizedBox(height: 16),
         Text(
           context.l10n.search_team_your_teams_title,
           style: AppTextStyle.header2

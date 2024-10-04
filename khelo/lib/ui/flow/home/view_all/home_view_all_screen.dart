@@ -57,24 +57,27 @@ class _HomeViewAllScreenState extends ConsumerState<HomeViewAllScreen> {
       );
     }
 
-    return ListView.separated(
-        padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
-        itemCount: state.matches.length + 1,
-        itemBuilder: (context, index) {
-          if (index < state.matches.length) {
-            final match = state.matches[index];
-            return MatchDetailCell(
-              match: match,
-              onTap: () =>
-                  AppRoute.matchDetailTab(matchId: match.id).push(context),
-            );
-          }
-          return OnVisibleCallback(
-              onVisible: () => runPostFrame(() => notifier.loadMatches()),
-              child: (state.loading && state.matches.isNotEmpty)
-                  ? const Center(child: AppProgressIndicator())
-                  : const SizedBox());
-        },
-        separatorBuilder: (context, index) => const SizedBox(height: 16));
+    return Padding(
+      padding: context.mediaQueryPadding,
+      child: ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: state.matches.length + 1,
+          itemBuilder: (context, index) {
+            if (index < state.matches.length) {
+              final match = state.matches[index];
+              return MatchDetailCell(
+                match: match,
+                onTap: () =>
+                    AppRoute.matchDetailTab(matchId: match.id).push(context),
+              );
+            }
+            return OnVisibleCallback(
+                onVisible: () => runPostFrame(() => notifier.loadMatches()),
+                child: (state.loading && state.matches.isNotEmpty)
+                    ? const Center(child: AppProgressIndicator())
+                    : const SizedBox());
+          },
+          separatorBuilder: (context, index) => const SizedBox(height: 16)),
+    );
   }
 }

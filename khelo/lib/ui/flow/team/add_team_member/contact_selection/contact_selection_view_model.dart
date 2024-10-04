@@ -1,4 +1,5 @@
 import 'package:canopas_country_picker/canopas_country_picker.dart';
+import 'package:collection/collection.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
@@ -118,8 +119,7 @@ class ContactSelectionViewNotifier
       phoneNumber = keepDigitAndPlusAtStart(phoneNumber);
 
       final matchedCountryCode = CountryCode.allCodes
-          .where((element) => phoneNumber.startsWith(element.dialCode))
-          .firstOrNull
+          .firstWhereOrNull((element) => phoneNumber.startsWith(element.dialCode))
           ?.dialCode;
       code = matchedCountryCode ?? state.deviceCountryCode;
       final trimFrom = matchedCountryCode != null ? code?.length : 1;

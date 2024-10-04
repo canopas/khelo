@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
@@ -163,8 +164,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
 
   String _getTeamNameByInningId(MatchDetailTabState state) {
     final teamName = state.match?.teams
-        .where((element) => element.team.id == state.highlightTeamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == state.highlightTeamId)
         ?.team
         .name;
     return teamName ?? "--";
