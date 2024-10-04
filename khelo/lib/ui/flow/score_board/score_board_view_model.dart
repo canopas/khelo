@@ -1432,7 +1432,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .firstOrNull;
     final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
     final teamPlayers = team?.team.players
-        .where((element) => !teamSquadIds.contains(element.id))
+        .where((element) =>
+            !teamSquadIds.contains(element.id) && element.user.isActive)
         .map((e) => e.user)
         .toList();
     return teamPlayers ?? [];
