@@ -47,9 +47,8 @@ class ContactSupportViewStateNotifier
     state = state.copyWith(
       actionError: null,
       enableSubmit: state.titleController.text.trim().isNotEmpty &&
-          state.attachments
-                  .where((element) => element.uploadStatus.isUploading)
-                  .firstOrNull ==
+          state.attachments.firstWhereOrNull(
+                  (element) => element.uploadStatus.isUploading) ==
               null,
     );
   }

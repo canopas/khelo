@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/service/match/match_service.dart';
@@ -134,9 +135,9 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           .map((e) => e.user.id)
           .toList();
       final refereeId = state.officials
-          .where((element) => element.type == MatchOfficials.referee)
-          .map((e) => e.user.id)
-          .firstOrNull;
+          .firstWhereOrNull((element) => element.type == MatchOfficials.referee)
+          ?.user
+          .id;
 
       final firstSquad = state.squadA
               ?.map((e) => MatchPlayer(

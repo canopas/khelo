@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -32,8 +33,7 @@ class MatchOfficialSelectionView extends StatelessWidget {
                         type: official,
                         isWholeCellTappable: true,
                         user: state.officials
-                            .where((element) => element.type == official)
-                            .firstOrNull
+                            .firstWhereOrNull((element) => element.type == official)
                             ?.user,
                         onCardTap: () async {
                           final officials = await AppRoute.addMatchOfficials(

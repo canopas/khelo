@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
@@ -179,8 +180,8 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
       runSpacing: 16,
       children: list.map((player) {
         final status = player.performance
-            .where((element) => element.inning_id == state.currentInning?.id)
-            .firstOrNull
+            .firstWhereOrNull(
+                (element) => element.inning_id == state.currentInning?.id)
             ?.status;
 
         final isSelected = type == PlayerSelectionType.batsMan
@@ -274,17 +275,15 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
         notifier.onContinueWithInjuredPlayersChange(isEnabled);
         if (!isEnabled) {
           if (batsMan1?.performance
-                  .where(
+                  .firstWhereOrNull(
                       (element) => element.inning_id == state.currentInning?.id)
-                  .firstOrNull
                   ?.status ==
               PlayerStatus.injured) {
             batsMan1 = null;
           }
           if (batsMan2?.performance
-                  .where(
+                  .firstWhereOrNull(
                       (element) => element.inning_id == state.currentInning?.id)
-                  .firstOrNull
                   ?.status ==
               PlayerStatus.injured) {
             batsMan2 = null;

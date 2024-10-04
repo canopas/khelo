@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -120,8 +121,7 @@ class MatchDetailInfoView extends ConsumerWidget {
 
   Widget _tossDetailView(BuildContext context, MatchModel match) {
     String? teamName = match.teams
-        .where((element) => element.team.id == match.toss_winner_id)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == match.toss_winner_id)
         ?.team
         .name;
     String? decision = match.toss_decision?.getString(context);

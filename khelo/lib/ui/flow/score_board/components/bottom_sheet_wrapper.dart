@@ -29,52 +29,48 @@ class BottomSheetWrapper extends StatelessWidget {
         color: context.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
-      child: AnimatedSize(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease,
-        child: IntrinsicHeight(
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: showDragHandle ? 44 : 0),
-                child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0) +
-                        EdgeInsets.only(bottom: contentBottomSpacing) +
-                        context.mediaQueryPadding +
-                        BottomStickyOverlay.padding,
-                    child: content),
-              ),
-              if (showDragHandle) ...[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    height: 4,
-                    width: 32,
-                    margin: const EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                        color: context.colorScheme.outline,
-                        borderRadius: BorderRadius.circular(10)),
-                  ),
-                ),
-              ],
-              BottomStickyOverlay(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ...?options,
-                    Row(
-                      children: [
-                        for (int i = 0; i < action.length; i++) ...[
-                          Expanded(child: action[i]),
-                          if (i < action.length - 1) const SizedBox(width: 16),
-                        ]
-                      ],
-                    ),
-                  ],
+      child: IntrinsicHeight(
+        child: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: showDragHandle ? 44 : 0),
+              child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0) +
+                      EdgeInsets.only(bottom: contentBottomSpacing) +
+                      context.mediaQueryPadding +
+                      BottomStickyOverlay.padding,
+                  child: content),
+            ),
+            if (showDragHandle) ...[
+              Align(
+                alignment: Alignment.topCenter,
+                child: Container(
+                  height: 4,
+                  width: 32,
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  decoration: BoxDecoration(
+                      color: context.colorScheme.outline,
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
             ],
-          ),
+            BottomStickyOverlay(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...?options,
+                  Row(
+                    children: [
+                      for (int i = 0; i < action.length; i++) ...[
+                        Expanded(child: action[i]),
+                        if (i < action.length - 1) const SizedBox(width: 16),
+                      ]
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

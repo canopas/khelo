@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +110,7 @@ class MatchDetailCommentaryView extends ConsumerWidget {
 
   TeamModel? _getTeamByTeamId(MatchDetailTabState state, String teamId) {
     return state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == teamId)
         ?.team;
   }
 

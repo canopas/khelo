@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,8 +59,8 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
     final currentPlayingTeamId = state.tossWinnerDecision == TossDecision.bat
         ? state.tossWinnerTeamId
         : state.match!.teams
-            .where((element) => element.team.id != state.tossWinnerTeamId)
-            .firstOrNull
+            .firstWhereOrNull(
+                (element) => element.team.id != state.tossWinnerTeamId)
             ?.team
             .id;
     if (state.match?.id == null ||

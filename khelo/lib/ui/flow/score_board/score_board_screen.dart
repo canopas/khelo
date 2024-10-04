@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
@@ -16,7 +17,6 @@ import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/match_complete_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/over_complete_sheet.dart';
-import 'package:khelo/ui/flow/score_board/revise_target_sheet/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/score_board_buttons.dart';
 import 'package:khelo/ui/flow/score_board/components/score_display_view.dart';
 import 'package:khelo/ui/flow/score_board/components/select_fielding_position_sheet.dart';
@@ -24,6 +24,7 @@ import 'package:khelo/ui/flow/score_board/components/select_player_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_taker_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/select_wicket_type_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/striker_selection_sheet.dart';
+import 'package:khelo/ui/flow/score_board/revise_target_sheet/revise_target_sheet.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/toggle_button.dart';
@@ -540,9 +541,8 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
       if (next != null) {
         final actualTarget = ref.read(scoreBoardStateProvider.select((value) =>
             (value.match?.teams
-                    .where((element) =>
+                    .firstWhereOrNull((element) =>
                         element.team.id != value.currentInning?.team_id)
-                    .firstOrNull
                     ?.run ??
                 0) +
             1));

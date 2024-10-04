@@ -195,21 +195,23 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
                 user,
                 actionButtonTitle:
                     enableAction ? context.l10n.common_select_title : null,
-                onButtonTap: () async {
-                  if (user.phone != null) {
-                    final res = await VerifyTeamMemberSheet.show(context,
-                        phoneNumber: user.phone!);
-                    if (res != null && res && context.mounted) {
-                      context.pop(user);
-                    }
-                  }
-                },
+                onButtonTap: () => _handleUserSelection(context, user),
               ),
             ),
           );
         },
       ).toList()),
     );
+  }
+
+  void _handleUserSelection(BuildContext context, UserModel user) async {
+    if (user.phone != null) {
+      final res =
+          await VerifyTeamMemberSheet.show(context, phoneNumber: user.phone!);
+      if (res != null && res && context.mounted) {
+        context.pop(user);
+      }
+    }
   }
 
   Widget _searchTextField(
@@ -231,15 +233,7 @@ class _AddSubstituteSheetState extends ConsumerState<AddSubstituteSheet> {
     return SecondaryButton(
       context.l10n.common_select_title,
       enabled: enabled,
-      onPressed: () async {
-        if (user.phone != null) {
-          final res = await VerifyTeamMemberSheet.show(context,
-              phoneNumber: user.phone!);
-          if (res != null && res && context.mounted) {
-            context.pop(user);
-          }
-        }
-      },
+      onPressed: () => _handleUserSelection(context, user),
     );
   }
 
