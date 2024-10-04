@@ -22,6 +22,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_arrow_down.svg
   String get icArrowDown => 'assets/images/ic_arrow_down.svg';
 
+  /// File path: assets/images/ic_arrow_forward.svg
+  String get icArrowForward => 'assets/images/ic_arrow_forward.svg';
+
   /// File path: assets/images/ic_bat_selected.svg
   String get icBatSelected => 'assets/images/ic_bat_selected.svg';
 
@@ -151,6 +154,7 @@ class $AssetsImagesGen {
         bowler,
         icAboutUs,
         icArrowDown,
+        icArrowForward,
         icBatSelected,
         icBin,
         icCalendar,

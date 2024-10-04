@@ -6,6 +6,8 @@ enum DateFormatType {
   dateAndTime,
   date,
   time,
+  dayMonth,
+  monthYear,
   shortDate,
   shortDateTime,
   dayMonthYear
@@ -33,6 +35,18 @@ extension DateFormatter on DateTime {
             .format(this);
       case DateFormatType.dayMonthYear:
         return DateFormat.yMMMd().format(this);
+      case DateFormatType.monthYear:
+        return DateFormat('MMMM yyyy').format(this);
+      case DateFormatType.dayMonth:
+        return DateFormat('dd MMM').format(this);
     }
   }
+
+  static String formatDateRange(
+    BuildContext context, {
+    required DateTime startDate,
+    required DateTime endDate,
+    required DateFormatType formatType,
+  }) =>
+      "${startDate.format(context, formatType)} - ${endDate.format(context, formatType)}";
 }
