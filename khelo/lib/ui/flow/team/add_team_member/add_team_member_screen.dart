@@ -142,6 +142,7 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
               isShowButton: false,
             )
           : ListView.separated(
+              padding: const EdgeInsets.only(top: 8, bottom: 70),
               itemCount: state.searchedUsers.length,
               itemBuilder: (context, index) {
                 UserModel user = state.searchedUsers[index];

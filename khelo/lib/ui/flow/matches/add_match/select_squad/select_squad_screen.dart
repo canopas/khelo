@@ -75,13 +75,15 @@ class _SelectSquadScreenState extends ConsumerState<SelectSquadScreen> {
             )),
       ],
       body: Builder(builder: (context) {
-        return ListView(
-          padding: context.mediaQueryPadding +
-              const EdgeInsets.symmetric(horizontal: 16),
-          children: [
-            _playingSquadList(context, notifier, state),
-            _teamMemberList(context, notifier, state)
-          ],
+        return Padding(
+          padding: context.mediaQueryPadding,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            children: [
+              _playingSquadList(context, notifier, state),
+              _teamMemberList(context, notifier, state)
+            ],
+          ),
         );
       }),
     );

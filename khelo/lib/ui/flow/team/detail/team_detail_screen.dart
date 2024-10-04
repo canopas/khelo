@@ -32,12 +32,6 @@ class TeamDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
-  final List<Widget> _tabs = [
-    const TeamDetailMatchContent(),
-    const TeamDetailMemberContent(),
-    const TeamDetailStatContent(),
-  ];
-
   late PageController _controller;
 
   late TeamDetailViewNotifier notifier;
@@ -130,6 +124,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     return Padding(
       padding: context.mediaQueryPadding,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 16),
@@ -141,28 +136,30 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   }
 
   Widget _tabView(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+    final tabs = [
+      context.l10n.team_detail_match_tab_title,
+      context.l10n.team_detail_member_tab_title,
+      context.l10n.team_detail_stat_tab_title
+    ];
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      scrollDirection: Axis.horizontal,
       child: Row(
-        children: [
-          TabButton(
-            context.l10n.team_detail_match_tab_title,
-            selected: _selectedTab == 0,
-            onTap: () => _controller.jumpToPage(0),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(
+          tabs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TabButton(
+              tabs[index],
+              onTap: () {
+                _controller.jumpToPage(index);
+              },
+              selected: index == _selectedTab,
+            ),
           ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.team_detail_member_tab_title,
-            selected: _selectedTab == 1,
-            onTap: () => _controller.jumpToPage(1),
-          ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.team_detail_stat_tab_title,
-            selected: _selectedTab == 2,
-            onTap: () => _controller.jumpToPage(2),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -171,7 +168,11 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     return Expanded(
       child: PageView(
         controller: _controller,
-        children: _tabs,
+        children: const [
+          TeamDetailMatchContent(),
+          TeamDetailMemberContent(),
+          TeamDetailStatContent(),
+        ],
         onPageChanged: (index) {
           notifier.onTabChange(index);
           setState(() {});

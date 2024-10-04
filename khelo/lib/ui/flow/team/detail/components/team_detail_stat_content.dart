@@ -62,6 +62,7 @@ class TeamDetailStatContent extends ConsumerWidget {
         children: [
           Text(
             context.l10n.team_detail_match_title(playedMatches),
+            textAlign: TextAlign.center,
             style: AppTextStyle.header2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
@@ -117,10 +118,12 @@ class TeamDetailStatContent extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
+          Expanded(
+            child: Text(
+              title,
+              style: AppTextStyle.body1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
           ),
           Text(
             count,

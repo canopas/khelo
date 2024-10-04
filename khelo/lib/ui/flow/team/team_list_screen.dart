@@ -79,7 +79,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     return (state.filteredTeams.isNotEmpty)
         ? ListView.separated(
             itemCount: state.filteredTeams.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16) +
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8) +
                 context.mediaQueryPadding,
             separatorBuilder: (context, index) =>
                 Divider(color: context.colorScheme.outline),

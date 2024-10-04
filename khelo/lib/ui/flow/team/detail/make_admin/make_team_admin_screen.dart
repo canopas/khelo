@@ -105,46 +105,49 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
         (element) => element.id == widget.team.created_by,
         orElse: () => const TeamPlayer(id: ''));
 
-    return ListView.separated(
-      padding:
-          const EdgeInsets.symmetric(vertical: 16) + context.mediaQueryPadding,
-      itemCount: members.length + 1,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return (owner.id.isNotEmpty)
-              ? UserDetailCell(
-                  user: owner.user,
-                  showPhoneNumber: false,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  onTap: () => UserDetailSheet.show(context, owner.user),
-                  trailing: Text(
-                      context.l10n.team_detail_make_admin_owner_title,
-                      style: AppTextStyle.body2
-                          .copyWith(color: context.colorScheme.primary)),
-                )
-              : const SizedBox();
-        }
+    return Padding(
+      padding: context.mediaQueryPadding,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        itemCount: members.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return (owner.id.isNotEmpty)
+                ? UserDetailCell(
+                    user: owner.user,
+                    showPhoneNumber: false,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    onTap: () => UserDetailSheet.show(context, owner.user),
+                    trailing: Text(
+                        context.l10n.team_detail_make_admin_owner_title,
+                        style: AppTextStyle.body2
+                            .copyWith(color: context.colorScheme.primary)),
+                  )
+                : const SizedBox();
+          }
 
-        final player = members[index - 1];
-        return UserDetailCell(
-            user: player.user,
-            showPhoneNumber: false,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            onTap: () => UserDetailSheet.show(context, player.user),
-            trailing: RoundedCheckBox(
-              isSelected: state.selectedPlayers
-                  .any((element) => element.user == player.user),
-              onTap: (_) => notifier.selectAdmin(player),
-            ));
-      },
-      separatorBuilder: (context, index) => (index == 0 && owner.id.isNotEmpty)
-          ? Divider(
-              height: 24,
-              thickness: 1,
-              color: context.colorScheme.outline,
-            )
-          : const SizedBox(height: 16),
+          final player = members[index - 1];
+          return UserDetailCell(
+              user: player.user,
+              showPhoneNumber: false,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              onTap: () => UserDetailSheet.show(context, player.user),
+              trailing: RoundedCheckBox(
+                isSelected: state.selectedPlayers
+                    .any((element) => element.user == player.user),
+                onTap: (_) => notifier.selectAdmin(player),
+              ));
+        },
+        separatorBuilder: (context, index) =>
+            (index == 0 && owner.id.isNotEmpty)
+                ? Divider(
+                    height: 24,
+                    thickness: 1,
+                    color: context.colorScheme.outline,
+                  )
+                : const SizedBox(height: 16),
+      ),
     );
   }
 }
