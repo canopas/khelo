@@ -16,9 +16,9 @@ final signInWithPhoneStateProvider = StateNotifierProvider.autoDispose<
 
 class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
   final AuthService _authService;
-  final DeviceService deviceService;
+  final DeviceService _deviceService;
 
-  SignInWithPhoneViewNotifier(this._authService, this.deviceService)
+  SignInWithPhoneViewNotifier(this._authService, this._deviceService)
       : super(
           SignInWithPhoneState(
             phoneController: TextEditingController(),
@@ -28,12 +28,12 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
             ),
           ),
         ) {
-    fetchCountryCode();
+    _fetchCountryCode();
   }
 
-  void fetchCountryCode() async {
+  void _fetchCountryCode() async {
     try {
-      final countryCode = await deviceService.countryCode;
+      final countryCode = await _deviceService.countryCode;
       if (countryCode != state.code.code) {
         state = state.copyWith(
           code: CountryCode.getCountryCodeByAlpha2(
@@ -86,6 +86,12 @@ class SignInWithPhoneViewNotifier extends StateNotifier<SignInWithPhoneState> {
       debugPrint(
           "SignInWithPhoneViewNotifier: error in verifyPhoneNumber -> $error");
     }
+  }
+
+  @override
+  void dispose() {
+    state.phoneController.dispose();
+    super.dispose();
   }
 }
 

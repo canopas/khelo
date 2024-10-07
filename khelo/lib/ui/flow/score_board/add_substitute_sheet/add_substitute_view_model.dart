@@ -31,7 +31,7 @@ class AddSubstituteViewNotifier extends StateNotifier<AddSubstituteViewState> {
         nonPlayingPlayers: nonPlayingPlayers, playingSquadIds: playingSquadIds);
   }
 
-  Future<void> search(String searchKey) async {
+  Future<void> _search(String searchKey) async {
     try {
       if (searchKey.isEmpty) {
         state = state.copyWith(searchedUsers: [], error: null);
@@ -51,7 +51,7 @@ class AddSubstituteViewNotifier extends StateNotifier<AddSubstituteViewState> {
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      search(state.searchController.text.trim());
+      _search(state.searchController.text.trim());
     });
   }
 
@@ -61,6 +61,7 @@ class AddSubstituteViewNotifier extends StateNotifier<AddSubstituteViewState> {
 
   @override
   void dispose() {
+    state.searchController.dispose();
     _debounce?.cancel();
     super.dispose();
   }

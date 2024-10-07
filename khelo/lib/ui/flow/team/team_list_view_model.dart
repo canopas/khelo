@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:data/api/team/team_model.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -16,32 +17,37 @@ final teamListViewStateProvider =
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
-    notifier.setUserId(next?.id);
+    notifier._setUserId(next?.id);
   });
   return notifier;
 });
 
 class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
   final TeamService _teamService;
-  late StreamSubscription _teamsStreamSubscription;
+  StreamSubscription? _teamsStreamSubscription;
 
   TeamListViewNotifier(this._teamService, String? userId)
       : super(TeamListViewState(currentUserId: userId)) {
-    _loadTeamList();
+    loadTeamList();
   }
 
-  void setUserId(String? userId) {
+  void _setUserId(String? userId) {
     if (userId == null) {
-      _cancelStreamSubscription();
+      _teamsStreamSubscription?.cancel();
     }
     state = state.copyWith(currentUserId: userId);
+    loadTeamList();
   }
 
-  Future<void> _loadTeamList() async {
+  Future<void> loadTeamList() async {
+    if (state.currentUserId == null) return;
+
+    _teamsStreamSubscription?.cancel();
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
-      _teamsStreamSubscription =
-          _teamService.streamUserRelatedTeams().listen((teams) {
+      _teamsStreamSubscription = _teamService
+          .streamUserRelatedTeams(state.currentUserId!)
+          .listen((teams) {
         state = state.copyWith(teams: teams, loading: false, error: null);
         _filterTeamList();
       }, onError: (e) {
@@ -93,13 +99,10 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     state = state.copyWith(showFilterOptionSheet: DateTime.now());
   }
 
-  _cancelStreamSubscription() {
-    _teamsStreamSubscription.cancel();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _loadTeamList();
+  @override
+  void dispose() {
+    _teamsStreamSubscription?.cancel();
+    super.dispose();
   }
 }
 

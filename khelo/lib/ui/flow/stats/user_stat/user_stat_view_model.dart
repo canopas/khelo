@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
@@ -18,7 +19,7 @@ final userStatViewStateProvider =
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
-    notifier.setUserId(next?.id);
+    notifier._setUserId(next?.id);
   });
   return notifier;
 });
@@ -27,32 +28,33 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
   final MatchService _matchService;
   final BallScoreService _ballScoreService;
   StreamSubscription? _subscription;
+  String? _currentUserId;
 
   UserStatViewNotifier(
-      this._matchService, this._ballScoreService, String? userId)
-      : super(UserStatViewState(currentUserId: userId)) {
+      this._matchService, this._ballScoreService, this._currentUserId)
+      : super(const UserStatViewState()) {
     loadData();
   }
 
-  void setUserId(String? userId) {
+  void _setUserId(String? userId) {
     if (userId == null) {
       _subscription?.cancel();
     }
-    state = state.copyWith(currentUserId: userId);
+    _currentUserId = userId;
+    loadData();
   }
 
   void loadData() {
-    if (state.currentUserId == null) {
+    if (_currentUserId == null) {
       return;
     }
     _subscription?.cancel();
     state = state.copyWith(loading: true);
 
-    _subscription = _matchService
-        .streamUserMatches(state.currentUserId!)
-        .listen((matches) async {
+    _subscription = _matchService.streamUserMatches(_currentUserId!).listen(
+        (matches) async {
       final (testMatchCount, testStat, otherMatchCount, otherStats) =
-          await loadMatchData(matches);
+          await _loadMatchData(matches);
       state = state.copyWith(
         testStats: testStat,
         otherStats: otherStats,
@@ -66,7 +68,7 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
     });
   }
 
-  Future<(int, UserStat, int, UserStat)> loadMatchData(
+  Future<(int, UserStat, int, UserStat)> _loadMatchData(
       List<MatchModel> matches) async {
     try {
       final testMatches = matches
@@ -81,11 +83,11 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
       final testStats = ballScore
           .where((element) => testMatches.contains(element.match_id))
           .toList()
-          .calculateUserStats(state.currentUserId ?? '');
+          .calculateUserStats(_currentUserId ?? '');
       final otherStats = ballScore
           .where((element) => otherMatches.contains(element.match_id))
           .toList()
-          .calculateUserStats(state.currentUserId ?? '');
+          .calculateUserStats(_currentUserId ?? '');
 
       return (testMatches.length, testStats, otherMatches.length, otherStats);
     } catch (e) {
@@ -112,7 +114,6 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
 class UserStatViewState with _$UserStatViewState {
   const factory UserStatViewState({
     Object? error,
-    String? currentUserId,
     @Default(0) int selectedTab,
     @Default(0) int testMatchesCount,
     @Default(0) int otherMatchesCount,

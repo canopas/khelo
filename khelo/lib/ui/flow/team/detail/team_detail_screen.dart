@@ -86,7 +86,9 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       children: [
         // profile view
         ImageAvatar(
-          initial: state.team?.name_initial ?? state.team?.name.initials(limit: 1) ?? "?",
+          initial: state.team?.name_initial ??
+              state.team?.name.initials(limit: 1) ??
+              "?",
           imageUrl: state.team?.profile_img_url,
           size: 48,
         ),
@@ -118,7 +120,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadData,
       );
     }
 

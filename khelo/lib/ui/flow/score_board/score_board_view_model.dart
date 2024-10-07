@@ -470,7 +470,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       tappedButton: btn,
       isLongTap: isLongTap,
     );
-    if (showFieldingPositionSheet(btn)) {
+    if (_showFieldingPositionSheet(btn)) {
       state = state.copyWith(showSelectFieldingPositionSheet: DateTime.now());
       return;
     }
@@ -519,7 +519,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  bool showFieldingPositionSheet(ScoreButton tapped) {
+  bool _showFieldingPositionSheet(ScoreButton tapped) {
     bool isDotBall = tapped == ScoreButton.zero;
     bool isLessRuns = tapped == ScoreButton.one ||
         tapped == ScoreButton.two ||
@@ -1482,23 +1482,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     return list;
   }
 
-  _cancelStreamSubscription() async {
-    await _matchStreamSubscription?.cancel();
-    await _ballScoreStreamSubscription?.cancel();
-    await _matchStreamController.close();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _loadMatchesAndInning();
-  }
-
-  @override
-  Future<void> dispose() async {
-    await _cancelStreamSubscription();
-    super.dispose();
-  }
-
   Future<void> setRevisedTarget(int run, int over) async {
     String? matchId = state.match?.id;
     if (matchId == null) {
@@ -1512,6 +1495,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     );
     await _matchService.setRevisedTarget(
         matchId: matchId, revisedTarget: revisedTarget);
+  }
+
+   _cancelStreamSubscription() async {
+    await _matchStreamSubscription?.cancel();
+    await _ballScoreStreamSubscription?.cancel();
+    await _matchStreamController.close();
+  }
+
+  void onResume() {
+    _cancelStreamSubscription();
+    _loadMatchesAndInning();
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _cancelStreamSubscription();
+    super.dispose();
   }
 }
 

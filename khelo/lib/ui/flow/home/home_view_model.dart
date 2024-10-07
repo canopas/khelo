@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
@@ -22,19 +23,20 @@ final homeViewStateProvider =
 
 class HomeViewNotifier extends StateNotifier<HomeViewState> {
   final MatchService _matchService;
-  late StreamSubscription _streamSubscription;
+  StreamSubscription? _streamSubscription;
 
   HomeViewNotifier(this._matchService) : super(const HomeViewState()) {
-    _loadMatches();
+    loadMatches();
   }
 
   void _onUserSessionUpdate(bool hasSession) {
     if (!hasSession) {
-      _streamSubscription.cancel();
+      _streamSubscription?.cancel();
     }
   }
 
-  void _loadMatches() async {
+  void loadMatches() async {
+    _streamSubscription?.cancel();
     state = state.copyWith(loading: state.matches.isEmpty);
 
     _streamSubscription = _matchService.streamMatches().listen(
@@ -76,14 +78,9 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     };
   }
 
-  onResume() {
-    _streamSubscription.cancel();
-    _loadMatches();
-  }
-
   @override
   void dispose() {
-    _streamSubscription.cancel();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 }

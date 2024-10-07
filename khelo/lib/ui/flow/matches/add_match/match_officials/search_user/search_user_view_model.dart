@@ -22,7 +22,7 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
   SearchUserViewNotifier(this._userService)
       : super(SearchUserViewState(searchController: TextEditingController()));
 
-  Future<void> search(String searchKey) async {
+  Future<void> _search(String searchKey) async {
     try {
       if (searchKey.isEmpty) {
         state = state.copyWith(searchedUsers: [], error: null);
@@ -42,7 +42,7 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      search(state.searchController.text.trim());
+      _search(state.searchController.text.trim());
     });
   }
 
@@ -52,6 +52,7 @@ class SearchUserViewNotifier extends StateNotifier<SearchUserViewState> {
 
   @override
   void dispose() {
+    state.searchController.dispose();
     _debounce?.cancel();
     super.dispose();
   }

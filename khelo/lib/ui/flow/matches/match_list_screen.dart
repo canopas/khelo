@@ -56,7 +56,7 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadMatches,
       );
     }
 
@@ -72,19 +72,17 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
               return MatchDetailCell(
                 match: match,
                 showActionButtons: match.created_by == state.currentUserId,
-                onTap: () => AppRoute.matchDetailTab(matchId: match.id)
-                    .push(context),
+                onTap: () =>
+                    AppRoute.matchDetailTab(matchId: match.id).push(context),
                 onActionTap: () {
                   if (match.match_status == MatchStatus.yetToStart) {
                     AppRoute.addMatch(matchId: match.id).push(context);
                   } else if (match.match_status == MatchStatus.running) {
                     if (match.toss_decision == null ||
                         match.toss_winner_id == null) {
-                      AppRoute.addTossDetail(matchId: match.id)
-                          .push(context);
+                      AppRoute.addTossDetail(matchId: match.id).push(context);
                     } else {
-                      AppRoute.scoreBoard(matchId: match.id)
-                          .push(context);
+                      AppRoute.scoreBoard(matchId: match.id).push(context);
                     }
                   }
                 },

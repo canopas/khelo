@@ -30,14 +30,12 @@ class HomeViewAllViewNotifier extends StateNotifier<HomeViewAllViewState> {
     if (_status.isEmpty) return;
     if (state.loading || _maxLoaded) return;
     try {
-      state = state.copyWith(loading: true);
-
+      state = state.copyWith(loading: state.matches.isEmpty);
       final matches = await _matchService.getMatchesByStatus(
         status: _status,
         lastMatchId: _lastMatchId,
         limit: 10,
       );
-
       _maxLoaded = matches.length < 10;
 
       if (matches.isNotEmpty) {

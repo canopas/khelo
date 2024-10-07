@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/team/team_service.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:data/utils/constant/firebase_storage_constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,14 +31,15 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   final FileUploadService _fileUploadService;
   final TeamService _teamService;
   Timer? _debounce;
+  UserModel? _currentUser;
 
   AddTeamViewNotifier(
-      this._fileUploadService, this._teamService, UserModel? user)
+      this._fileUploadService, this._teamService, this._currentUser)
       : super(AddTeamState(
-            nameController: TextEditingController(),
-            locationController: TextEditingController(),
-            nameInitialsController: TextEditingController(),
-            currentUser: user));
+          nameController: TextEditingController(),
+          locationController: TextEditingController(),
+          nameInitialsController: TextEditingController(),
+        ));
 
   void setData({TeamModel? editTeam}) {
     state.nameController.text = editTeam?.name ?? "";
@@ -48,7 +50,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
   }
 
   void _updateUser(UserModel? user) {
-    state = state.copyWith(currentUser: user);
+    _currentUser = user;
   }
 
   void updatePlayersList(List<TeamPlayer> players) {
@@ -92,12 +94,12 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       List<TeamPlayer> players = [];
 
       if (state.isAddMeCheckBoxEnable &&
-          state.currentUser != null &&
+          _currentUser != null &&
           state.editTeam == null) {
         final player = TeamPlayer(
-            id: state.currentUser!.id,
+            id: _currentUser!.id,
             role: TeamPlayerRole.admin,
-            user: state.currentUser!);
+            user: _currentUser!);
         players.add(player);
       }
 
@@ -112,7 +114,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         profile_img_url: imageUrl,
         city: location.toLowerCase(),
         name_initial: initials.isNotEmpty ? initials : null,
-        created_by: state.currentUser!.id,
+        created_by: _currentUser!.id,
         players: players,
         created_at: state.editTeam?.created_at ?? DateTime.now(),
         created_time: state.editTeam?.created_time ?? DateTime.now(),
@@ -123,7 +125,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
         imageUrl = await _fileUploadService.uploadProfileImage(
           filePath: state.filePath!,
           uploadPath: StorageConst.teamProfileUploadPath(
-              userId: state.currentUser!.id, teamId: newTeamId),
+              userId: _currentUser!.id, teamId: newTeamId),
         );
         await _teamService.updateProfileImageUrl(newTeamId, imageUrl);
       }
@@ -144,7 +146,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
             name_initial: initials.isNotEmpty ? initials : null,
-            created_by: state.currentUser!.id,
+            created_by: _currentUser!.id,
             players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now(),
             created_time: state.editTeam?.created_time ?? DateTime.now());
@@ -191,7 +193,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
     });
   }
 
-  Future<void> deleteUnusedImage(String imgUrl) async {
+  Future<void> _deleteUnusedImage(String imgUrl) async {
     try {
       await _fileUploadService.deleteUploadedImage(imgUrl);
     } catch (e) {
@@ -219,7 +221,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
       state = state.copyWith(isPop: true);
 
       if (teamProfileImageUrl != null) {
-        await deleteUnusedImage(teamProfileImageUrl);
+        await _deleteUnusedImage(teamProfileImageUrl);
       }
     } catch (e) {
       state = state.copyWith(actionError: e);
@@ -229,6 +231,9 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
 
   @override
   void dispose() {
+    state.nameController.dispose();
+    state.locationController.dispose();
+    state.nameInitialsController.dispose();
     _debounce?.cancel();
     super.dispose();
   }
@@ -245,7 +250,6 @@ class AddTeamState with _$AddTeamState {
     bool? isNameAvailable,
     TeamModel? team,
     TeamModel? editTeam,
-    UserModel? currentUser,
     @Default(false) bool isImageUploading,
     @Default(true) bool isAddMeCheckBoxEnable,
     @Default(false) bool checkingForAvailability,
