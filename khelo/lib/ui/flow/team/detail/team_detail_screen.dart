@@ -217,6 +217,16 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             AppRoute.makeTeamAdmin(team: state.team!).push(context);
           },
         ),
+      BottomSheetAction(
+        title: context.l10n.common_qr_code_title,
+        onTap: () {
+          context.pop();
+          AppRoute.qrCodeView(
+                  id: state.team?.id ?? "",
+                  description: context.l10n.team_detail_use_qr_description)
+              .push(context);
+        },
+      ),
     ]);
   }
 

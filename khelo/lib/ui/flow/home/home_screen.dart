@@ -181,22 +181,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              header,
-              style: AppTextStyle.header3
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            const Spacer(),
-            Opacity(
-              opacity: isViewAllShow ? 1 : 0,
+            Expanded(
               child: Text(
-                context.l10n.home_screen_view_all_btn,
-                style: AppTextStyle.button.copyWith(
-                  color: context.colorScheme.primary,
-                ),
+                header,
+                style: AppTextStyle.header3
+                    .copyWith(color: context.colorScheme.textPrimary),
               ),
             ),
+            Visibility(
+                visible: isViewAllShow,
+                child: Text(
+                  context.l10n.home_screen_view_all_btn,
+                  style: AppTextStyle.button.copyWith(
+                    color: context.colorScheme.primary,
+                  ),
+                )),
           ],
         ),
       ),

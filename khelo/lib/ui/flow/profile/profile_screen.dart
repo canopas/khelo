@@ -9,10 +9,9 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/profile/components/complete_profile_progress.dart';
-import 'package:khelo/ui/flow/profile/components/qr_code_sheet.dart';
 import 'package:khelo/ui/flow/profile/profile_view_model.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/button/toggle_button.dart';
@@ -251,7 +250,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     String userId,
   ) {
     return OnTapScale(
-      onTap: () => QrCodeSheet.show(context, userId: userId),
+      onTap: () => AppRoute.qrCodeView(
+              id: userId,
+              description: context.l10n.profile_setting_use_scanner_description)
+          .push(context),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(

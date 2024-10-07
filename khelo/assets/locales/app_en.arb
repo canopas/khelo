@@ -56,6 +56,7 @@
   "common_end_match_title": "End Match",
   "common_first_inning_title": "First inning",
   "common_second_inning_title": "Second inning",
+  "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
@@ -302,6 +303,7 @@
   "team_detail_add_members_title": "Add members",
   "team_detail_add_match_title": "Add match",
   "team_detail_make_admin": "Make admin",
+  "team_detail_use_qr_description": "Use your phone camera or a QR code app to scan the code above and easily add the team to the tournament",
   "make_admin_selection_error": "Can't select deactivated user as admin",
   "team_detail_make_admin_screen_title": "Make Admin",
   "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
