@@ -57,8 +57,12 @@ mixin _$MatchModel {
   String? get current_playing_team_id => throw _privateConstructorUsedError;
   RevisedTarget? get revised_target => throw _privateConstructorUsedError;
 
+  /// Serializes this MatchModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchModelCopyWith<MatchModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -119,6 +123,8 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -282,6 +288,8 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     ) as $Val);
   }
 
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res>? get referee {
@@ -294,6 +302,8 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     });
   }
 
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $RevisedTargetCopyWith<$Res>? get revised_target {
@@ -365,6 +375,8 @@ class __$$MatchModelImplCopyWithImpl<$Res>
       _$MatchModelImpl _value, $Res Function(_$MatchModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -819,7 +831,7 @@ class _$MatchModelImpl implements _MatchModel {
                 other.revised_target == revised_target));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -856,7 +868,9 @@ class _$MatchModelImpl implements _MatchModel {
         revised_target
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchModelImplCopyWith<_$MatchModelImpl> get copyWith =>
@@ -978,8 +992,11 @@ abstract class _MatchModel implements MatchModel {
   String? get current_playing_team_id;
   @override
   RevisedTarget? get revised_target;
+
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchModelImplCopyWith<_$MatchModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -994,8 +1011,12 @@ mixin _$MatchSetting {
   bool get show_wagon_wheel_for_less_run => throw _privateConstructorUsedError;
   bool get show_wagon_wheel_for_dot_ball => throw _privateConstructorUsedError;
 
+  /// Serializes this MatchSetting to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchSettingCopyWith<MatchSetting> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1022,6 +1043,8 @@ class _$MatchSettingCopyWithImpl<$Res, $Val extends MatchSetting>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1068,6 +1091,8 @@ class __$$MatchSettingImplCopyWithImpl<$Res>
       _$MatchSettingImpl _value, $Res Function(_$MatchSettingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1137,12 +1162,14 @@ class _$MatchSettingImpl implements _MatchSetting {
                     show_wagon_wheel_for_dot_ball));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, continue_with_injured_player,
       show_wagon_wheel_for_less_run, show_wagon_wheel_for_dot_ball);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchSettingImplCopyWith<_$MatchSettingImpl> get copyWith =>
@@ -1171,8 +1198,11 @@ abstract class _MatchSetting implements MatchSetting {
   bool get show_wagon_wheel_for_less_run;
   @override
   bool get show_wagon_wheel_for_dot_ball;
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchSettingImplCopyWith<_$MatchSettingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1193,8 +1223,12 @@ mixin _$MatchTeamModel {
   int get wicket => throw _privateConstructorUsedError;
   List<MatchPlayer> get squad => throw _privateConstructorUsedError;
 
+  /// Serializes this MatchTeamModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchTeamModelCopyWith<MatchTeamModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1228,6 +1262,8 @@ class _$MatchTeamModelCopyWithImpl<$Res, $Val extends MatchTeamModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1276,6 +1312,8 @@ class _$MatchTeamModelCopyWithImpl<$Res, $Val extends MatchTeamModel>
     ) as $Val);
   }
 
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamModelCopyWith<$Res> get team {
@@ -1315,6 +1353,8 @@ class __$$MatchTeamModelImplCopyWithImpl<$Res>
       _$MatchTeamModelImpl _value, $Res Function(_$MatchTeamModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1432,12 +1472,14 @@ class _$MatchTeamModelImpl implements _MatchTeamModel {
             const DeepCollectionEquality().equals(other._squad, _squad));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, team, team_id, captain_id,
       admin_id, over, run, wicket, const DeepCollectionEquality().hash(_squad));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchTeamModelImplCopyWith<_$MatchTeamModelImpl> get copyWith =>
@@ -1484,8 +1526,11 @@ abstract class _MatchTeamModel implements MatchTeamModel {
   int get wicket;
   @override
   List<MatchPlayer> get squad;
+
+  /// Create a copy of MatchTeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchTeamModelImplCopyWith<_$MatchTeamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1502,8 +1547,12 @@ mixin _$MatchPlayer {
   List<PlayerPerformance> get performance => throw _privateConstructorUsedError;
   PlayerStatus get status => throw _privateConstructorUsedError;
 
+  /// Serializes this MatchPlayer to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MatchPlayerCopyWith<MatchPlayer> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1533,6 +1582,8 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1561,6 +1612,8 @@ class _$MatchPlayerCopyWithImpl<$Res, $Val extends MatchPlayer>
     ) as $Val);
   }
 
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get player {
@@ -1596,6 +1649,8 @@ class __$$MatchPlayerImplCopyWithImpl<$Res>
       _$MatchPlayerImpl _value, $Res Function(_$MatchPlayerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1675,12 +1730,14 @@ class _$MatchPlayerImpl implements _MatchPlayer {
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, player, id,
       const DeepCollectionEquality().hash(_performance), status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MatchPlayerImplCopyWith<_$MatchPlayerImpl> get copyWith =>
@@ -1714,8 +1771,11 @@ abstract class _MatchPlayer implements MatchPlayer {
   List<PlayerPerformance> get performance;
   @override
   PlayerStatus get status;
+
+  /// Create a copy of MatchPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MatchPlayerImplCopyWith<_$MatchPlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1730,8 +1790,12 @@ mixin _$PlayerPerformance {
   PlayerStatus? get status => throw _privateConstructorUsedError;
   int? get index => throw _privateConstructorUsedError;
 
+  /// Serializes this PlayerPerformance to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PlayerPerformance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlayerPerformanceCopyWith<PlayerPerformance> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1755,6 +1819,8 @@ class _$PlayerPerformanceCopyWithImpl<$Res, $Val extends PlayerPerformance>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of PlayerPerformance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1798,6 +1864,8 @@ class __$$PlayerPerformanceImplCopyWithImpl<$Res>
       $Res Function(_$PlayerPerformanceImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PlayerPerformance
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1854,11 +1922,13 @@ class _$PlayerPerformanceImpl implements _PlayerPerformance {
             (identical(other.index, index) || other.index == index));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, inning_id, status, index);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PlayerPerformance
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlayerPerformanceImplCopyWith<_$PlayerPerformanceImpl> get copyWith =>
@@ -1888,8 +1958,11 @@ abstract class _PlayerPerformance implements PlayerPerformance {
   PlayerStatus? get status;
   @override
   int? get index;
+
+  /// Create a copy of PlayerPerformance
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlayerPerformanceImplCopyWith<_$PlayerPerformanceImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1906,8 +1979,12 @@ mixin _$RevisedTarget {
   @TimeStampJsonConverter()
   DateTime? get revised_time => throw _privateConstructorUsedError;
 
+  /// Serializes this RevisedTarget to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RevisedTarget
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RevisedTargetCopyWith<RevisedTarget> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1935,6 +2012,8 @@ class _$RevisedTargetCopyWithImpl<$Res, $Val extends RevisedTarget>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RevisedTarget
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1987,6 +2066,8 @@ class __$$RevisedTargetImplCopyWithImpl<$Res>
       _$RevisedTargetImpl _value, $Res Function(_$RevisedTargetImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RevisedTarget
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2057,11 +2138,13 @@ class _$RevisedTargetImpl implements _RevisedTarget {
                 other.revised_time == revised_time));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, runs, overs, time, revised_time);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RevisedTarget
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RevisedTargetImplCopyWith<_$RevisedTargetImpl> get copyWith =>
@@ -2095,8 +2178,11 @@ abstract class _RevisedTarget implements RevisedTarget {
   @override
   @TimeStampJsonConverter()
   DateTime? get revised_time;
+
+  /// Create a copy of RevisedTarget
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RevisedTargetImplCopyWith<_$RevisedTargetImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2107,7 +2193,9 @@ mixin _$TeamMatchStatus {
   int get tie => throw _privateConstructorUsedError;
   int get lost => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamMatchStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamMatchStatusCopyWith<TeamMatchStatus> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2131,6 +2219,8 @@ class _$TeamMatchStatusCopyWithImpl<$Res, $Val extends TeamMatchStatus>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamMatchStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2174,6 +2264,8 @@ class __$$TeamMatchStatusImplCopyWithImpl<$Res>
       _$TeamMatchStatusImpl _value, $Res Function(_$TeamMatchStatusImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamMatchStatus
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2231,7 +2323,9 @@ class _$TeamMatchStatusImpl implements _TeamMatchStatus {
   @override
   int get hashCode => Object.hash(runtimeType, win, tie, lost);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamMatchStatus
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
@@ -2249,8 +2343,11 @@ abstract class _TeamMatchStatus implements TeamMatchStatus {
   int get tie;
   @override
   int get lost;
+
+  /// Create a copy of TeamMatchStatus
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamMatchStatusImplCopyWith<_$TeamMatchStatusImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2267,7 +2364,9 @@ mixin _$TeamStat {
   int get lowest_runs => throw _privateConstructorUsedError;
   double get run_rate => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamStatCopyWith<TeamStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2301,6 +2400,8 @@ class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2354,6 +2455,8 @@ class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
     ) as $Val);
   }
 
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $TeamMatchStatusCopyWith<$Res> get status {
@@ -2394,6 +2497,8 @@ class __$$TeamStatImplCopyWithImpl<$Res>
       _$TeamStatImpl _value, $Res Function(_$TeamStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2520,7 +2625,9 @@ class _$TeamStatImpl implements _TeamStat {
   int get hashCode => Object.hash(runtimeType, played, status, runs, wickets,
       batting_average, bowling_average, highest_runs, lowest_runs, run_rate);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
@@ -2557,8 +2664,11 @@ abstract class _TeamStat implements TeamStat {
   int get lowest_runs;
   @override
   double get run_rate;
+
+  /// Create a copy of TeamStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamStatImplCopyWith<_$TeamStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

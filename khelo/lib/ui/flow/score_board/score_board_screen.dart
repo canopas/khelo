@@ -338,10 +338,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             .select((value) => value.showSelectFieldingPositionSheet),
         (previous, next) async {
       if (next != null) {
-        final showForLessRun = ref.read(scoreBoardStateProvider.select(
-            (value) => value.matchSetting.show_wagon_wheel_for_less_run));
-        final showForDotBall = ref.read(scoreBoardStateProvider.select(
-            (value) => value.matchSetting.show_wagon_wheel_for_dot_ball));
+        final matchSetting = ref.read(
+            scoreBoardStateProvider.select((value) => value.matchSetting));
+        final showForLessRun = matchSetting.show_wagon_wheel_for_less_run;
+        final showForDotBall = matchSetting.show_wagon_wheel_for_dot_ball;
         final tappedButton = ref.read(
             scoreBoardStateProvider.select((value) => value.tappedButton));
         final isLongTapped = ref

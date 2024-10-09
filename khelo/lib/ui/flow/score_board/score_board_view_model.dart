@@ -1229,10 +1229,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     switch (option) {
       case MatchOption.continueWithInjuredPlayer:
         setting = setting.copyWith(continue_with_injured_player: isTrue);
+        break;
       case MatchOption.showForLessRuns:
         setting = setting.copyWith(show_wagon_wheel_for_less_run: isTrue);
+        break;
       case MatchOption.showForDotBall:
         setting = setting.copyWith(show_wagon_wheel_for_dot_ball: isTrue);
+        break;
       default:
         return;
     }
@@ -1691,9 +1694,9 @@ enum MatchOption {
 
   bool showToggle() {
     switch (this) {
-      case MatchOption.continueWithInjuredPlayer ||
-            MatchOption.showForLessRuns ||
-            MatchOption.showForDotBall:
+      case MatchOption.continueWithInjuredPlayer:
+      case MatchOption.showForLessRuns:
+      case MatchOption.showForDotBall:
         return true;
       default:
         return false;

@@ -42,8 +42,12 @@ mixin _$BallScoreModel {
   @TimeStampJsonConverter()
   DateTime? get score_time => throw _privateConstructorUsedError;
 
+  /// Serializes this BallScoreModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of BallScoreModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BallScoreModelCopyWith<BallScoreModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -86,6 +90,8 @@ class _$BallScoreModelCopyWithImpl<$Res, $Val extends BallScoreModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BallScoreModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -228,6 +234,8 @@ class __$$BallScoreModelImplCopyWithImpl<$Res>
       _$BallScoreModelImpl _value, $Res Function(_$BallScoreModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BallScoreModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -445,7 +453,7 @@ class _$BallScoreModelImpl implements _BallScoreModel {
                 other.score_time == score_time));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hashAll([
         runtimeType,
@@ -470,7 +478,9 @@ class _$BallScoreModelImpl implements _BallScoreModel {
         score_time
       ]);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BallScoreModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BallScoreModelImplCopyWith<_$BallScoreModelImpl> get copyWith =>
@@ -550,8 +560,11 @@ abstract class _BallScoreModel implements BallScoreModel {
   @override
   @TimeStampJsonConverter()
   DateTime? get score_time;
+
+  /// Create a copy of BallScoreModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BallScoreModelImplCopyWith<_$BallScoreModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -562,7 +575,9 @@ mixin _$UserStat {
   BowlingStat? get bowlingStat => throw _privateConstructorUsedError;
   FieldingStat? get fieldingStat => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserStatCopyWith<UserStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -592,6 +607,8 @@ class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -615,6 +632,8 @@ class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
     ) as $Val);
   }
 
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BattingStatCopyWith<$Res>? get battingStat {
@@ -627,6 +646,8 @@ class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
     });
   }
 
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BowlingStatCopyWith<$Res>? get bowlingStat {
@@ -639,6 +660,8 @@ class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
     });
   }
 
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FieldingStatCopyWith<$Res>? get fieldingStat {
@@ -681,6 +704,8 @@ class __$$UserStatImplCopyWithImpl<$Res>
       _$UserStatImpl _value, $Res Function(_$UserStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -739,7 +764,9 @@ class _$UserStatImpl implements _UserStat {
   int get hashCode =>
       Object.hash(runtimeType, battingStat, bowlingStat, fieldingStat);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
@@ -758,8 +785,11 @@ abstract class _UserStat implements UserStat {
   BowlingStat? get bowlingStat;
   @override
   FieldingStat? get fieldingStat;
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -777,7 +807,9 @@ mixin _$BattingStat {
   int get hundreds => throw _privateConstructorUsedError;
   int get ducks => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BattingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BattingStatCopyWith<BattingStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -811,6 +843,8 @@ class _$BattingStatCopyWithImpl<$Res, $Val extends BattingStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BattingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -899,6 +933,8 @@ class __$$BattingStatImplCopyWithImpl<$Res>
       _$BattingStatImpl _value, $Res Function(_$BattingStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BattingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1034,7 +1070,9 @@ class _$BattingStatImpl implements _BattingStat {
   int get hashCode => Object.hash(runtimeType, innings, runScored, average,
       strikeRate, ballFaced, fours, sixes, fifties, hundreds, ducks);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BattingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BattingStatImplCopyWith<_$BattingStatImpl> get copyWith =>
@@ -1074,8 +1112,11 @@ abstract class _BattingStat implements BattingStat {
   int get hundreds;
   @override
   int get ducks;
+
+  /// Create a copy of BattingStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BattingStatImplCopyWith<_$BattingStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1093,7 +1134,9 @@ mixin _$BowlingStat {
   double get strikeRate => throw _privateConstructorUsedError;
   double get economyRate => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BowlingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BowlingStatCopyWith<BowlingStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1127,6 +1170,8 @@ class _$BowlingStatCopyWithImpl<$Res, $Val extends BowlingStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BowlingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1215,6 +1260,8 @@ class __$$BowlingStatImplCopyWithImpl<$Res>
       _$BowlingStatImpl _value, $Res Function(_$BowlingStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BowlingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1361,7 +1408,9 @@ class _$BowlingStatImpl implements _BowlingStat {
       strikeRate,
       economyRate);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BowlingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BowlingStatImplCopyWith<_$BowlingStatImpl> get copyWith =>
@@ -1401,8 +1450,11 @@ abstract class _BowlingStat implements BowlingStat {
   double get strikeRate;
   @override
   double get economyRate;
+
+  /// Create a copy of BowlingStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BowlingStatImplCopyWith<_$BowlingStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1413,7 +1465,9 @@ mixin _$FieldingStat {
   int get runOut => throw _privateConstructorUsedError;
   int get stumping => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FieldingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FieldingStatCopyWith<FieldingStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1437,6 +1491,8 @@ class _$FieldingStatCopyWithImpl<$Res, $Val extends FieldingStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FieldingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1480,6 +1536,8 @@ class __$$FieldingStatImplCopyWithImpl<$Res>
       _$FieldingStatImpl _value, $Res Function(_$FieldingStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FieldingStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1539,7 +1597,9 @@ class _$FieldingStatImpl implements _FieldingStat {
   @override
   int get hashCode => Object.hash(runtimeType, catches, runOut, stumping);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FieldingStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FieldingStatImplCopyWith<_$FieldingStatImpl> get copyWith =>
@@ -1558,8 +1618,11 @@ abstract class _FieldingStat implements FieldingStat {
   int get runOut;
   @override
   int get stumping;
+
+  /// Create a copy of FieldingStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FieldingStatImplCopyWith<_$FieldingStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1574,8 +1637,12 @@ mixin _$OverStatModel {
   int get wicket => throw _privateConstructorUsedError;
   int get extra => throw _privateConstructorUsedError;
 
+  /// Serializes this OverStatModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of OverStatModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OverStatModelCopyWith<OverStatModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1599,6 +1666,8 @@ class _$OverStatModelCopyWithImpl<$Res, $Val extends OverStatModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of OverStatModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1642,6 +1711,8 @@ class __$$OverStatModelImplCopyWithImpl<$Res>
       _$OverStatModelImpl _value, $Res Function(_$OverStatModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of OverStatModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1699,11 +1770,13 @@ class _$OverStatModelImpl implements _OverStatModel {
             (identical(other.extra, extra) || other.extra == extra));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, run, wicket, extra);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of OverStatModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
@@ -1730,8 +1803,11 @@ abstract class _OverStatModel implements OverStatModel {
   int get wicket;
   @override
   int get extra;
+
+  /// Create a copy of OverStatModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OverStatModelImplCopyWith<_$OverStatModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1747,8 +1823,12 @@ mixin _$TeamRunStat {
   int get wicket => throw _privateConstructorUsedError;
   double get over => throw _privateConstructorUsedError;
 
+  /// Serializes this TeamRunStat to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TeamRunStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamRunStatCopyWith<TeamRunStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1772,6 +1852,8 @@ class _$TeamRunStatCopyWithImpl<$Res, $Val extends TeamRunStat>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamRunStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1820,6 +1902,8 @@ class __$$TeamRunStatImplCopyWithImpl<$Res>
       _$TeamRunStatImpl _value, $Res Function(_$TeamRunStatImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamRunStat
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1888,11 +1972,13 @@ class _$TeamRunStatImpl implements _TeamRunStat {
             (identical(other.over, over) || other.over == over));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, teamName, run, wicket, over);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamRunStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamRunStatImplCopyWith<_$TeamRunStatImpl> get copyWith =>
@@ -1924,8 +2010,11 @@ abstract class _TeamRunStat implements TeamRunStat {
   int get wicket;
   @override
   double get over;
+
+  /// Create a copy of TeamRunStat
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamRunStatImplCopyWith<_$TeamRunStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1944,7 +2033,9 @@ mixin _$OverSummary {
   int get totalRuns => throw _privateConstructorUsedError;
   int get totalWickets => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $OverSummaryCopyWith<OverSummary> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1984,6 +2075,8 @@ class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2047,6 +2140,8 @@ class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
     ) as $Val);
   }
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BowlerSummaryCopyWith<$Res> get bowler {
@@ -2055,6 +2150,8 @@ class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
     });
   }
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BatsmanSummaryCopyWith<$Res> get striker {
@@ -2063,6 +2160,8 @@ class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
     });
   }
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $BatsmanSummaryCopyWith<$Res> get nonStriker {
@@ -2071,6 +2170,8 @@ class _$OverSummaryCopyWithImpl<$Res, $Val extends OverSummary>
     });
   }
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ExtraSummaryCopyWith<$Res> get extrasSummary {
@@ -2119,6 +2220,8 @@ class __$$OverSummaryImplCopyWithImpl<$Res>
       _$OverSummaryImpl _value, $Res Function(_$OverSummaryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2292,7 +2395,9 @@ class _$OverSummaryImpl implements _OverSummary {
       totalRuns,
       totalWickets);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$OverSummaryImplCopyWith<_$OverSummaryImpl> get copyWith =>
@@ -2335,8 +2440,11 @@ abstract class _OverSummary implements OverSummary {
   int get totalRuns;
   @override
   int get totalWickets;
+
+  /// Create a copy of OverSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OverSummaryImplCopyWith<_$OverSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2353,7 +2461,9 @@ mixin _$BatsmanSummary {
   int get sixes => throw _privateConstructorUsedError;
   int get fours => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BatsmanSummaryCopyWith<BatsmanSummary> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2390,6 +2500,8 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2443,6 +2555,8 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
     ) as $Val);
   }
 
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get player {
@@ -2451,6 +2565,8 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
     });
   }
 
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlayerCopyWith<$Res>? get ballBy {
@@ -2463,6 +2579,8 @@ class _$BatsmanSummaryCopyWithImpl<$Res, $Val extends BatsmanSummary>
     });
   }
 
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $PlayerCopyWith<$Res>? get catchBy {
@@ -2511,6 +2629,8 @@ class __$$BatsmanSummaryImplCopyWithImpl<$Res>
       _$BatsmanSummaryImpl _value, $Res Function(_$BatsmanSummaryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2631,7 +2751,9 @@ class _$BatsmanSummaryImpl implements _BatsmanSummary {
   int get hashCode => Object.hash(runtimeType, player, ballBy, catchBy,
       wicketType, outAtOver, runs, ballFaced, sixes, fours);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BatsmanSummaryImplCopyWith<_$BatsmanSummaryImpl> get copyWith =>
@@ -2669,8 +2791,11 @@ abstract class _BatsmanSummary implements BatsmanSummary {
   int get sixes;
   @override
   int get fours;
+
+  /// Create a copy of BatsmanSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BatsmanSummaryImplCopyWith<_$BatsmanSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2685,7 +2810,9 @@ mixin _$BowlerSummary {
   int get noBalls => throw _privateConstructorUsedError;
   int get wideBalls => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $BowlerSummaryCopyWith<BowlerSummary> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2718,6 +2845,8 @@ class _$BowlerSummaryCopyWithImpl<$Res, $Val extends BowlerSummary>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2761,6 +2890,8 @@ class _$BowlerSummaryCopyWithImpl<$Res, $Val extends BowlerSummary>
     ) as $Val);
   }
 
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get player {
@@ -2799,6 +2930,8 @@ class __$$BowlerSummaryImplCopyWithImpl<$Res>
       _$BowlerSummaryImpl _value, $Res Function(_$BowlerSummaryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2903,7 +3036,9 @@ class _$BowlerSummaryImpl implements _BowlerSummary {
   int get hashCode => Object.hash(runtimeType, player, runsConceded, maiden,
       overDelivered, wicket, noBalls, wideBalls);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BowlerSummaryImplCopyWith<_$BowlerSummaryImpl> get copyWith =>
@@ -2934,8 +3069,11 @@ abstract class _BowlerSummary implements BowlerSummary {
   int get noBalls;
   @override
   int get wideBalls;
+
+  /// Create a copy of BowlerSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BowlerSummaryImplCopyWith<_$BowlerSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2945,7 +3083,9 @@ mixin _$Player {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Player
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $PlayerCopyWith<Player> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -2967,6 +3107,8 @@ class _$PlayerCopyWithImpl<$Res, $Val extends Player>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Player
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3004,6 +3146,8 @@ class __$$PlayerImplCopyWithImpl<$Res>
       _$PlayerImpl _value, $Res Function(_$PlayerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Player
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3052,7 +3196,9 @@ class _$PlayerImpl implements _Player {
   @override
   int get hashCode => Object.hash(runtimeType, id, name);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Player
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
@@ -3066,8 +3212,11 @@ abstract class _Player implements Player {
   String get id;
   @override
   String get name;
+
+  /// Create a copy of Player
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PlayerImplCopyWith<_$PlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3080,7 +3229,9 @@ mixin _$ExtraSummary {
   int get wideBall => throw _privateConstructorUsedError;
   int get penalty => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ExtraSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ExtraSummaryCopyWith<ExtraSummary> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3104,6 +3255,8 @@ class _$ExtraSummaryCopyWithImpl<$Res, $Val extends ExtraSummary>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ExtraSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3157,6 +3310,8 @@ class __$$ExtraSummaryImplCopyWithImpl<$Res>
       _$ExtraSummaryImpl _value, $Res Function(_$ExtraSummaryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ExtraSummary
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3239,7 +3394,9 @@ class _$ExtraSummaryImpl implements _ExtraSummary {
   int get hashCode =>
       Object.hash(runtimeType, bye, legBye, noBall, wideBall, penalty);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ExtraSummary
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ExtraSummaryImplCopyWith<_$ExtraSummaryImpl> get copyWith =>
@@ -3264,8 +3421,11 @@ abstract class _ExtraSummary implements ExtraSummary {
   int get wideBall;
   @override
   int get penalty;
+
+  /// Create a copy of ExtraSummary
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ExtraSummaryImplCopyWith<_$ExtraSummaryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
