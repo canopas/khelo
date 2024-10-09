@@ -30,8 +30,12 @@ mixin _$AddSupportCaseRequest {
   @TimeStampJsonConverter()
   DateTime? get createdTime => throw _privateConstructorUsedError;
 
+  /// Serializes this AddSupportCaseRequest to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddSupportCaseRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AddSupportCaseRequestCopyWith<AddSupportCaseRequest> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -63,6 +67,8 @@ class _$AddSupportCaseRequestCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AddSupportCaseRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -135,6 +141,8 @@ class __$$AddSupportCaseRequestImplCopyWithImpl<$Res>
       $Res Function(_$AddSupportCaseRequestImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddSupportCaseRequest
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -241,7 +249,7 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
                 other.createdTime == createdTime));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -253,7 +261,9 @@ class _$AddSupportCaseRequestImpl implements _AddSupportCaseRequest {
       createdAt,
       createdTime);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddSupportCaseRequest
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddSupportCaseRequestImplCopyWith<_$AddSupportCaseRequestImpl>
@@ -297,8 +307,11 @@ abstract class _AddSupportCaseRequest implements AddSupportCaseRequest {
   @override
   @TimeStampJsonConverter()
   DateTime? get createdTime;
+
+  /// Create a copy of AddSupportCaseRequest
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddSupportCaseRequestImplCopyWith<_$AddSupportCaseRequestImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -310,7 +323,9 @@ mixin _$Attachment {
   String get name => throw _privateConstructorUsedError;
   AttachmentUploadStatus get uploadStatus => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Attachment
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AttachmentCopyWith<Attachment> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -338,6 +353,8 @@ class _$AttachmentCopyWithImpl<$Res, $Val extends Attachment>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Attachment
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -390,6 +407,8 @@ class __$$AttachmentImplCopyWithImpl<$Res>
       _$AttachmentImpl _value, $Res Function(_$AttachmentImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Attachment
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -459,7 +478,9 @@ class _$AttachmentImpl implements _Attachment {
   @override
   int get hashCode => Object.hash(runtimeType, path, url, name, uploadStatus);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Attachment
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AttachmentImplCopyWith<_$AttachmentImpl> get copyWith =>
@@ -481,8 +502,11 @@ abstract class _Attachment implements Attachment {
   String get name;
   @override
   AttachmentUploadStatus get uploadStatus;
+
+  /// Create a copy of Attachment
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AttachmentImplCopyWith<_$AttachmentImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

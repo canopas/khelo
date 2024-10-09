@@ -91,13 +91,13 @@ class _SelectFieldingPositionSheetState
         ),
         const SizedBox(height: 24),
         ToggleButtonTile(
-          title: context.l10n.score_board_not_show_for_less_run_title,
+          title: context.l10n.score_board_show_wheel_for_less_run_title,
           defaultEnabled: showForLessRun,
           onTap: (show) => showForLessRun = show,
         ),
         const SizedBox(height: 8),
         ToggleButtonTile(
-          title: context.l10n.score_board_not_show_for_dot_ball_title,
+          title: context.l10n.score_board_show_wheel_for_dot_ball_title,
           defaultEnabled: showForDotBall,
           onTap: (show) => showForDotBall = show,
         ),

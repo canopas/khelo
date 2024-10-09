@@ -1,11 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../converter/timestamp_json_converter.dart';
 import '../../extensions/double_extensions.dart';
 import '../team/team_model.dart';
 import '../user/user_models.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'match_model.freezed.dart';
 
@@ -59,6 +60,24 @@ class MatchModel with _$MatchModel {
     SnapshotOptions? options,
   ) =>
       MatchModel.fromJson(snapshot.data()!);
+}
+
+@freezed
+class MatchSetting with _$MatchSetting {
+  const factory MatchSetting({
+    @Default(true) bool continue_with_injured_player,
+    @Default(true) bool show_wagon_wheel_for_less_run,
+    @Default(true) bool show_wagon_wheel_for_dot_ball,
+  }) = _MatchSetting;
+
+  factory MatchSetting.fromJson(Map<String, dynamic> json) =>
+      _$MatchSettingFromJson(json);
+
+  factory MatchSetting.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      MatchSetting.fromJson(snapshot.data()!);
 }
 
 @freezed

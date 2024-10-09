@@ -33,8 +33,12 @@ mixin _$TeamModel {
   @JsonKey(name: FireStoreConst.teamPlayers)
   List<TeamPlayer> get players => throw _privateConstructorUsedError;
 
+  /// Serializes this TeamModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamModelCopyWith<TeamModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -67,6 +71,8 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,6 +161,8 @@ class __$$TeamModelImplCopyWithImpl<$Res>
       _$TeamModelImpl _value, $Res Function(_$TeamModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -291,7 +299,7 @@ class _$TeamModelImpl implements _TeamModel {
             const DeepCollectionEquality().equals(other._players, _players));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -306,7 +314,9 @@ class _$TeamModelImpl implements _TeamModel {
       created_time,
       const DeepCollectionEquality().hash(_players));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamModelImplCopyWith<_$TeamModelImpl> get copyWith =>
@@ -359,8 +369,11 @@ abstract class _TeamModel implements TeamModel {
   @override
   @JsonKey(name: FireStoreConst.teamPlayers)
   List<TeamPlayer> get players;
+
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamModelImplCopyWith<_$TeamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -376,8 +389,12 @@ mixin _$TeamPlayer {
   @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel get user => throw _privateConstructorUsedError;
 
+  /// Serializes this TeamPlayer to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TeamPlayerCopyWith<TeamPlayer> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -406,6 +423,8 @@ class _$TeamPlayerCopyWithImpl<$Res, $Val extends TeamPlayer>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -429,6 +448,8 @@ class _$TeamPlayerCopyWithImpl<$Res, $Val extends TeamPlayer>
     ) as $Val);
   }
 
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get user {
@@ -463,6 +484,8 @@ class __$$TeamPlayerImplCopyWithImpl<$Res>
       _$TeamPlayerImpl _value, $Res Function(_$TeamPlayerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -524,11 +547,13 @@ class _$TeamPlayerImpl implements _TeamPlayer {
             (identical(other.user, user) || other.user == user));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, role, user);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TeamPlayerImplCopyWith<_$TeamPlayerImpl> get copyWith =>
@@ -559,8 +584,11 @@ abstract class _TeamPlayer implements TeamPlayer {
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel get user;
+
+  /// Create a copy of TeamPlayer
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TeamPlayerImplCopyWith<_$TeamPlayerImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

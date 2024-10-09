@@ -37,8 +37,12 @@ mixin _$UserModel {
   bool get isActive => throw _privateConstructorUsedError;
   bool get notifications => throw _privateConstructorUsedError;
 
+  /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserModelCopyWith<UserModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -77,6 +81,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -201,6 +207,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
       _$UserModelImpl _value, $Res Function(_$UserModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -388,7 +396,7 @@ class _$UserModelImpl extends _UserModel {
                 other.notifications == notifications));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -409,7 +417,9 @@ class _$UserModelImpl extends _UserModel {
       isActive,
       notifications);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
@@ -478,8 +488,11 @@ abstract class _UserModel extends UserModel {
   bool get isActive;
   @override
   bool get notifications;
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -501,8 +514,12 @@ mixin _$ApiSession {
   DateTime? get created_at => throw _privateConstructorUsedError;
   bool get is_active => throw _privateConstructorUsedError;
 
+  /// Serializes this ApiSession to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ApiSession
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ApiSessionCopyWith<ApiSession> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -536,6 +553,8 @@ class _$ApiSessionCopyWithImpl<$Res, $Val extends ApiSession>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ApiSession
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -624,6 +643,8 @@ class __$$ApiSessionImplCopyWithImpl<$Res>
       _$ApiSessionImpl _value, $Res Function(_$ApiSessionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ApiSession
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -754,7 +775,7 @@ class _$ApiSessionImpl extends _ApiSession {
                 other.is_active == is_active));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -769,7 +790,9 @@ class _$ApiSessionImpl extends _ApiSession {
       created_at,
       is_active);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ApiSession
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ApiSessionImplCopyWith<_$ApiSessionImpl> get copyWith =>
@@ -820,8 +843,11 @@ abstract class _ApiSession extends ApiSession {
   DateTime? get created_at;
   @override
   bool get is_active;
+
+  /// Create a copy of ApiSession
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ApiSessionImplCopyWith<_$ApiSessionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
