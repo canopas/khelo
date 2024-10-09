@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,7 @@ class CommentaryBallSummary extends StatelessWidget {
 
   Widget _ballSummaryTextView(BuildContext context) {
     final outPlayerSummary = overSummary.outPlayers
-        .where((element) => element.player.id == ball.player_out_id)
-        .firstOrNull;
+        .firstWhereOrNull((element) => element.player.id == ball.player_out_id);
     final wicketTakerText = ball.wicket_type != null
         ? " ${ball.wicket_type?.getString(context)}${outPlayerSummary?.catchBy != null ? context.l10n.match_commentary_by_fielder_text(outPlayerSummary?.catchBy?.name ?? "") : ""}!!"
         : "";

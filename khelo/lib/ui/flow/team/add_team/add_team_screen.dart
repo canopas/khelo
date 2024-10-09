@@ -96,7 +96,7 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     return Stack(
       children: [
         ListView(
-          padding: const EdgeInsets.all(16) + BottomStickyOverlay.padding,
+          padding: context.mediaQueryPadding + const EdgeInsets.all(16) + BottomStickyOverlay.padding,
           children: [
             ProfileImageAvatar(
               size: profileViewHeight,

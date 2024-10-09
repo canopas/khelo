@@ -1,18 +1,27 @@
+import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/team/user_detail/component/user_detail_bowling_content.dart';
-import 'package:khelo/ui/flow/team/user_detail/user_detail_view_model.dart';
 
 class UserDetailBattingContent extends ConsumerWidget {
-  const UserDetailBattingContent({super.key});
+  final int testMatchesCount;
+  final int otherMatchesCount;
+  final BattingStat? testStats;
+  final BattingStat? otherStats;
+
+  const UserDetailBattingContent({
+    super.key,
+    this.testMatchesCount = 0,
+    this.otherMatchesCount = 0,
+    this.testStats,
+    this.otherStats,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(userDetailStateProvider);
-    final testStats = state.testStats.battingStat;
-    final otherStats = state.otherStats.battingStat;
     return ListView(
+      padding: const EdgeInsets.only(bottom: 40),
       children: [
         statsDataRow(
           context,
@@ -27,8 +36,8 @@ class UserDetailBattingContent extends ConsumerWidget {
           context,
           showDivider: false,
           title: context.l10n.user_detail_matches_title,
-          subtitle1: state.testMatchesCount.toString(),
-          subtitle2: state.otherMatchesCount.toString(),
+          subtitle1: testMatchesCount.toString(),
+          subtitle2: otherMatchesCount.toString(),
         ),
         statsDataRow(
           context,

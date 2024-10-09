@@ -37,7 +37,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
   ) : super(ProfileState(currentUser: user)) {
     _updateStat();
     refreshNotificationPermissionStatus();
-    getAppVersion();
+    _getAppVersion();
   }
 
   void _updateUser(UserModel? user) {
@@ -51,7 +51,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     );
   }
 
-  void getAppVersion() async {
+  void _getAppVersion() async {
     final appVersion = await _deviceService.version;
     state = state.copyWith(appVersion: appVersion);
   }

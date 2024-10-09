@@ -1,39 +1,38 @@
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
-import 'package:khelo/ui/flow/team/user_detail/user_detail_view_model.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 class UserDetailInfoContent extends ConsumerWidget {
-  const UserDetailInfoContent({super.key});
+  final UserModel? user;
+  final String teams;
+
+  const UserDetailInfoContent({super.key, this.user, this.teams = ''});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.read(userDetailStateProvider);
-
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       children: [
         _title(context, context.l10n.user_detail_personal_information_title),
         const SizedBox(height: 8),
-        _infoRowView(
-            context,
-            context.l10n.user_detail_joining_date_title,
-            state.user?.created_at?.format(context, DateFormatType.shortDate)),
+        _infoRowView(context, context.l10n.user_detail_joining_date_title,
+            user?.created_at?.format(context, DateFormatType.shortDate)),
         _infoRowView(context, context.l10n.common_gender_title,
-            state.user?.gender?.getString(context)),
+            user?.gender?.getString(context)),
         _infoRowView(
-            context, context.l10n.common_location_title, state.user?.location),
+            context, context.l10n.common_location_title, user?.location),
         _infoRowView(context, context.l10n.user_detail_role_title,
-            state.user?.player_role?.getString(context)),
+            user?.player_role?.getString(context)),
         _infoRowView(context, context.l10n.common_batting_style_title,
-            state.user?.batting_style?.getString(context)),
+            user?.batting_style?.getString(context)),
         _infoRowView(context, context.l10n.common_bowling_style_title,
-            state.user?.bowling_style?.getString(context)),
-        _teamParticipationView(context, state),
+            user?.bowling_style?.getString(context)),
+        _teamParticipationView(context),
       ],
     );
   }
@@ -74,11 +73,7 @@ class UserDetailInfoContent extends ConsumerWidget {
     );
   }
 
-  Widget _teamParticipationView(
-    BuildContext context,
-    UserDetailViewState state,
-  ) {
-    final teams = state.teams.map((e) => e.name).join(", ");
+  Widget _teamParticipationView(BuildContext context) {
     if (teams.isEmpty) {
       return const SizedBox();
     }

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,10 +69,9 @@ class MatchDetailOversView extends ConsumerWidget {
               state,
               over.inning_id,
               state.allInnings
-                      .where(
+                      .firstWhereOrNull(
                         (element) => element.id == over.inning_id,
                       )
-                      .firstOrNull
                       ?.index ??
                   1),
         );
@@ -143,15 +143,11 @@ class MatchDetailOversView extends ConsumerWidget {
 
   String _getTeamNameByInningId(MatchDetailTabState state, String inningId) {
     final teamId = state.allInnings
-        .where(
-          (element) => element.id == inningId,
-        )
-        .firstOrNull
+        .firstWhereOrNull((element) => element.id == inningId)
         ?.team_id;
 
     final teamName = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == teamId)
         ?.team
         .name;
     return teamName ?? "--";
@@ -161,7 +157,7 @@ class MatchDetailOversView extends ConsumerWidget {
       String inningId, int inningCount) {
     final title = _getTeamNameByInningId(state, inningId);
     return Padding(
-      padding: const EdgeInsets.only(top: 32, bottom: 16, left: 16, right: 16),
+      padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
       child: Text(
         "${context.l10n.match_commentary_inning_count_text(inningCount)}: $title",
         style: AppTextStyle.subtitle1

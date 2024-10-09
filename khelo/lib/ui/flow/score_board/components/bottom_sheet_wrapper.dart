@@ -21,8 +21,10 @@ class BottomSheetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints:
-          BoxConstraints(maxHeight: context.mediaQuerySize.height * 0.8),
+      constraints: BoxConstraints(
+          maxHeight: (context.mediaQuerySize.height -
+                  MediaQuery.of(context).viewInsets.bottom) *
+              0.8),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),

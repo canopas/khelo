@@ -36,10 +36,11 @@ class SearchUserBottomSheet extends ConsumerWidget {
     final notifier = ref.watch(searchUserStateProvider.notifier);
     final state = ref.watch(searchUserStateProvider);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: SizedBox(
-        height: context.mediaQuerySize.height * 0.8,
+    return SizedBox(
+      height: context.mediaQuerySize.height * 0.8,
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           children: [
             _searchTextField(context, notifier, state),
@@ -73,6 +74,7 @@ class SearchUserBottomSheet extends ConsumerWidget {
             isShowButton: false,
           )
         : ListView.separated(
+            padding: const EdgeInsets.only(top: 16, bottom: 40),
             separatorBuilder: (context, index) {
               return Divider(
                 color: context.colorScheme.outline,

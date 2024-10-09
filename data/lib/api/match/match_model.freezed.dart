@@ -2068,10 +2068,10 @@ mixin _$TeamStat {
   TeamMatchStatus get status => throw _privateConstructorUsedError;
   int get runs => throw _privateConstructorUsedError;
   int get wickets => throw _privateConstructorUsedError;
-  double get bating_average => throw _privateConstructorUsedError;
+  double get batting_average => throw _privateConstructorUsedError;
   double get bowling_average => throw _privateConstructorUsedError;
   int get highest_runs => throw _privateConstructorUsedError;
-  int get lowest_runts => throw _privateConstructorUsedError;
+  int get lowest_runs => throw _privateConstructorUsedError;
   double get run_rate => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -2089,10 +2089,10 @@ abstract class $TeamStatCopyWith<$Res> {
       TeamMatchStatus status,
       int runs,
       int wickets,
-      double bating_average,
+      double batting_average,
       double bowling_average,
       int highest_runs,
-      int lowest_runts,
+      int lowest_runs,
       double run_rate});
 
   $TeamMatchStatusCopyWith<$Res> get status;
@@ -2115,10 +2115,10 @@ class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
     Object? status = null,
     Object? runs = null,
     Object? wickets = null,
-    Object? bating_average = null,
+    Object? batting_average = null,
     Object? bowling_average = null,
     Object? highest_runs = null,
-    Object? lowest_runts = null,
+    Object? lowest_runs = null,
     Object? run_rate = null,
   }) {
     return _then(_value.copyWith(
@@ -2138,9 +2138,9 @@ class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
           ? _value.wickets
           : wickets // ignore: cast_nullable_to_non_nullable
               as int,
-      bating_average: null == bating_average
-          ? _value.bating_average
-          : bating_average // ignore: cast_nullable_to_non_nullable
+      batting_average: null == batting_average
+          ? _value.batting_average
+          : batting_average // ignore: cast_nullable_to_non_nullable
               as double,
       bowling_average: null == bowling_average
           ? _value.bowling_average
@@ -2150,9 +2150,9 @@ class _$TeamStatCopyWithImpl<$Res, $Val extends TeamStat>
           ? _value.highest_runs
           : highest_runs // ignore: cast_nullable_to_non_nullable
               as int,
-      lowest_runts: null == lowest_runts
-          ? _value.lowest_runts
-          : lowest_runts // ignore: cast_nullable_to_non_nullable
+      lowest_runs: null == lowest_runs
+          ? _value.lowest_runs
+          : lowest_runs // ignore: cast_nullable_to_non_nullable
               as int,
       run_rate: null == run_rate
           ? _value.run_rate
@@ -2183,10 +2183,10 @@ abstract class _$$TeamStatImplCopyWith<$Res>
       TeamMatchStatus status,
       int runs,
       int wickets,
-      double bating_average,
+      double batting_average,
       double bowling_average,
       int highest_runs,
-      int lowest_runts,
+      int lowest_runs,
       double run_rate});
 
   @override
@@ -2208,10 +2208,10 @@ class __$$TeamStatImplCopyWithImpl<$Res>
     Object? status = null,
     Object? runs = null,
     Object? wickets = null,
-    Object? bating_average = null,
+    Object? batting_average = null,
     Object? bowling_average = null,
     Object? highest_runs = null,
-    Object? lowest_runts = null,
+    Object? lowest_runs = null,
     Object? run_rate = null,
   }) {
     return _then(_$TeamStatImpl(
@@ -2231,9 +2231,9 @@ class __$$TeamStatImplCopyWithImpl<$Res>
           ? _value.wickets
           : wickets // ignore: cast_nullable_to_non_nullable
               as int,
-      bating_average: null == bating_average
-          ? _value.bating_average
-          : bating_average // ignore: cast_nullable_to_non_nullable
+      batting_average: null == batting_average
+          ? _value.batting_average
+          : batting_average // ignore: cast_nullable_to_non_nullable
               as double,
       bowling_average: null == bowling_average
           ? _value.bowling_average
@@ -2243,9 +2243,9 @@ class __$$TeamStatImplCopyWithImpl<$Res>
           ? _value.highest_runs
           : highest_runs // ignore: cast_nullable_to_non_nullable
               as int,
-      lowest_runts: null == lowest_runts
-          ? _value.lowest_runts
-          : lowest_runts // ignore: cast_nullable_to_non_nullable
+      lowest_runs: null == lowest_runs
+          ? _value.lowest_runs
+          : lowest_runs // ignore: cast_nullable_to_non_nullable
               as int,
       run_rate: null == run_rate
           ? _value.run_rate
@@ -2263,10 +2263,10 @@ class _$TeamStatImpl implements _TeamStat {
       this.status = const TeamMatchStatus(),
       this.runs = 0,
       this.wickets = 0,
-      this.bating_average = 0.0,
+      this.batting_average = 0.0,
       this.bowling_average = 0.0,
       this.highest_runs = 0,
-      this.lowest_runts = 0,
+      this.lowest_runs = 0,
       this.run_rate = 0.0});
 
   @override
@@ -2283,7 +2283,7 @@ class _$TeamStatImpl implements _TeamStat {
   final int wickets;
   @override
   @JsonKey()
-  final double bating_average;
+  final double batting_average;
   @override
   @JsonKey()
   final double bowling_average;
@@ -2292,14 +2292,14 @@ class _$TeamStatImpl implements _TeamStat {
   final int highest_runs;
   @override
   @JsonKey()
-  final int lowest_runts;
+  final int lowest_runs;
   @override
   @JsonKey()
   final double run_rate;
 
   @override
   String toString() {
-    return 'TeamStat(played: $played, status: $status, runs: $runs, wickets: $wickets, bating_average: $bating_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runts: $lowest_runts, run_rate: $run_rate)';
+    return 'TeamStat(played: $played, status: $status, runs: $runs, wickets: $wickets, batting_average: $batting_average, bowling_average: $bowling_average, highest_runs: $highest_runs, lowest_runs: $lowest_runs, run_rate: $run_rate)';
   }
 
   @override
@@ -2311,21 +2311,21 @@ class _$TeamStatImpl implements _TeamStat {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.runs, runs) || other.runs == runs) &&
             (identical(other.wickets, wickets) || other.wickets == wickets) &&
-            (identical(other.bating_average, bating_average) ||
-                other.bating_average == bating_average) &&
+            (identical(other.batting_average, batting_average) ||
+                other.batting_average == batting_average) &&
             (identical(other.bowling_average, bowling_average) ||
                 other.bowling_average == bowling_average) &&
             (identical(other.highest_runs, highest_runs) ||
                 other.highest_runs == highest_runs) &&
-            (identical(other.lowest_runts, lowest_runts) ||
-                other.lowest_runts == lowest_runts) &&
+            (identical(other.lowest_runs, lowest_runs) ||
+                other.lowest_runs == lowest_runs) &&
             (identical(other.run_rate, run_rate) ||
                 other.run_rate == run_rate));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, played, status, runs, wickets,
-      bating_average, bowling_average, highest_runs, lowest_runts, run_rate);
+      batting_average, bowling_average, highest_runs, lowest_runs, run_rate);
 
   @JsonKey(ignore: true)
   @override
@@ -2340,10 +2340,10 @@ abstract class _TeamStat implements TeamStat {
       final TeamMatchStatus status,
       final int runs,
       final int wickets,
-      final double bating_average,
+      final double batting_average,
       final double bowling_average,
       final int highest_runs,
-      final int lowest_runts,
+      final int lowest_runs,
       final double run_rate}) = _$TeamStatImpl;
 
   @override
@@ -2355,13 +2355,13 @@ abstract class _TeamStat implements TeamStat {
   @override
   int get wickets;
   @override
-  double get bating_average;
+  double get batting_average;
   @override
   double get bowling_average;
   @override
   int get highest_runs;
   @override
-  int get lowest_runts;
+  int get lowest_runs;
   @override
   double get run_rate;
   @override

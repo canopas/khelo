@@ -62,6 +62,7 @@ class TeamDetailStatContent extends ConsumerWidget {
         children: [
           Text(
             context.l10n.team_detail_match_title(playedMatches),
+            textAlign: TextAlign.center,
             style: AppTextStyle.header2
                 .copyWith(color: context.colorScheme.textPrimary),
           ),
@@ -89,7 +90,7 @@ class TeamDetailStatContent extends ConsumerWidget {
               count: stat.wickets.toString()),
           _teamStatCell(context,
               title: context.l10n.common_batting_average_title,
-              count: stat.bating_average.toStringAsFixed(2)),
+              count: stat.batting_average.toStringAsFixed(2)),
           _teamStatCell(context,
               title: context.l10n.common_bowling_average_title,
               count: stat.bowling_average.toStringAsFixed(2)),
@@ -98,7 +99,7 @@ class TeamDetailStatContent extends ConsumerWidget {
               count: stat.highest_runs.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_lowest_runs_title,
-              count: stat.lowest_runts.toString()),
+              count: stat.lowest_runs.toString()),
           _teamStatCell(context,
               title: context.l10n.team_detail_run_rate_title,
               count: '${stat.run_rate.toStringAsFixed(2)}%'),
@@ -117,10 +118,12 @@ class TeamDetailStatContent extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: AppTextStyle.body1
-                .copyWith(color: context.colorScheme.textPrimary),
+          Expanded(
+            child: Text(
+              title,
+              style: AppTextStyle.body1
+                  .copyWith(color: context.colorScheme.textPrimary),
+            ),
           ),
           Text(
             count,

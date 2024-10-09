@@ -22,7 +22,7 @@ class AddMatchOfficialsViewNotifier
   }
 
   void addOfficial(MatchOfficials type, UserModel user) {
-    if (isAlreadyAdded(type, user.id)) {
+    if (_isAlreadyAdded(type, user.id)) {
       return;
     }
     state = state.copyWith(
@@ -39,7 +39,7 @@ class AddMatchOfficialsViewNotifier
 
   void updateOfficial(
       MatchOfficials type, String existingUserId, UserModel user) {
-    if (isAlreadyAdded(type, user.id)) {
+    if (_isAlreadyAdded(type, user.id)) {
       return;
     }
     state = state.copyWith(
@@ -50,7 +50,7 @@ class AddMatchOfficialsViewNotifier
     ));
   }
 
-  bool isAlreadyAdded(MatchOfficials type, String id) {
+  bool _isAlreadyAdded(MatchOfficials type, String id) {
     final officialIds = state.officials
         .where((element) => element.type == type)
         .map((e) => e.user.id);

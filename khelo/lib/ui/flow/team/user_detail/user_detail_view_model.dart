@@ -33,7 +33,7 @@ class UserDetailViewNotifier extends StateNotifier<UserDetailViewState> {
   final UserService _userService;
   final TeamService _teamService;
   StreamSubscription? _subscription;
-  String? userId;
+  String? _userId;
 
   UserDetailViewNotifier(
     this._matchService,
@@ -43,24 +43,24 @@ class UserDetailViewNotifier extends StateNotifier<UserDetailViewState> {
   ) : super(const UserDetailViewState());
 
   void setUserId(String id) {
-    userId = id;
+    _userId = id;
     loadData();
   }
 
   void loadData() {
-    if (userId == null) {
+    if (_userId == null) {
       return;
     }
     _subscription?.cancel();
     state = state.copyWith(loading: true);
     final matchData = combineLatest3(
-        _userService.streamUserById(userId!),
-        _teamService.streamUserRelatedTeamsByUserId(userId!),
-        _matchService.streamUserMatches(userId!));
+        _userService.streamUserById(_userId!),
+        _teamService.streamUserRelatedTeamsByUserId(_userId!),
+        _matchService.streamUserMatches(_userId!));
 
     _subscription = matchData.listen((event) async {
       final (testMatchCount, testStat, otherMatchCount, otherStats) =
-          await loadMatchData(event.$3);
+          await _loadMatchData(event.$3);
       state = state.copyWith(
         user: event.$1,
         teams: event.$2,
@@ -76,7 +76,7 @@ class UserDetailViewNotifier extends StateNotifier<UserDetailViewState> {
     });
   }
 
-  Future<(int, UserStat, int, UserStat)> loadMatchData(
+  Future<(int, UserStat, int, UserStat)> _loadMatchData(
       List<MatchModel> matches) async {
     try {
       final testMatches = matches
@@ -91,11 +91,11 @@ class UserDetailViewNotifier extends StateNotifier<UserDetailViewState> {
       final testStats = ballScore
           .where((element) => testMatches.contains(element.match_id))
           .toList()
-          .calculateUserStats(userId ?? '');
+          .calculateUserStats(_userId ?? '');
       final otherStats = ballScore
           .where((element) => otherMatches.contains(element.match_id))
           .toList()
-          .calculateUserStats(userId ?? '');
+          .calculateUserStats(_userId ?? '');
 
       return (testMatches.length, testStats, otherMatches.length, otherStats);
     } catch (e) {

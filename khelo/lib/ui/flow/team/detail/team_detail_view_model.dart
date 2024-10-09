@@ -5,6 +5,7 @@ import 'package:data/api/team/team_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -20,64 +21,56 @@ final teamDetailStateProvider =
             ));
 
 class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
-   StreamSubscription? _teamStreamSubscription;
-   StreamSubscription? _matchListStreamSubscription;
+  StreamSubscription? _teamStreamSubscription;
   final TeamService _teamService;
   final MatchService _matchService;
-  String? teamId;
+  String? _teamId;
 
   TeamDetailViewNotifier(this._teamService, this._matchService, String? userId)
       : super(TeamDetailState(currentUserId: userId));
 
   void setData(String teamId) {
-    this.teamId = teamId;
-    loadTeamById();
+    _teamId = teamId;
+    loadData();
   }
 
-  Future<void> loadTeamById() async {
-    if (teamId == null) return;
+  void loadData() {
+    if (_teamId == null) return;
+    _teamStreamSubscription?.cancel();
+    state =
+        state.copyWith(loading: state.team == null || state.matches == null);
+    final teamCombiner = combineLatest2(_teamService.streamTeamById(_teamId!),
+        _matchService.streamMatchesByTeamId(_teamId!));
+    _teamStreamSubscription = teamCombiner.listen((data) {
+      final teamStat = _calculateTeamStat(_teamId!, data.$2);
 
-    state = state.copyWith(loading: state.team == null);
-    _teamStreamSubscription =
-        _teamService.streamTeamById(teamId!).listen((team) {
-      state = state.copyWith(team: team, loading: false);
-      loadTeamMatches();
+      state = state.copyWith(
+        team: data.$1,
+        matches: data.$2,
+        teamStat: teamStat,
+        loading: false,
+      );
     }, onError: (e) {
       state = state.copyWith(loading: false, error: e);
       debugPrint(
-          "TeamDetailViewNotifier: error while loading team by id -> $e");
+          "TeamDetailViewNotifier: error while loading team and matches by id -> $e");
     });
   }
 
-  Future<void> loadTeamMatches() async {
-    if (state.team == null) return;
-
-    state = state.copyWith(loading: state.matches == null);
-    _matchListStreamSubscription = _matchService
-        .streamMatchesByTeamId(state.team!.id)
-        .listen((matches) {
-      final teamStat = _calculateTeamStat(matches);
-      state =
-          state.copyWith(matches: matches, teamStat: teamStat, loading: false);
-    }, onError: (e) {
-      debugPrint(
-          "TeamDetailViewNotifier: error while loading team matches -> $e");
-    });
-  }
-
-  TeamStat _calculateTeamStat(List<MatchModel> matches) {
+  TeamStat _calculateTeamStat(String teamId, List<MatchModel> matches) {
     final finishedMatches = _filterFinishedMatches(matches);
     if (finishedMatches.isEmpty) return const TeamStat();
+    final totalRuns = _totalRuns(teamId, finishedMatches);
     return TeamStat(
       played: finishedMatches.length,
-      status: _teamMatchStatus(finishedMatches),
-      runs: _totalRuns(finishedMatches),
-      wickets: _wickets(finishedMatches),
-      bating_average: _battingAverage(finishedMatches),
-      bowling_average: _bowlingAverage(finishedMatches),
-      highest_runs: _highestAndLowestRuns(finishedMatches).$1,
-      lowest_runts: _highestAndLowestRuns(finishedMatches).$2,
-      run_rate: _runRate(finishedMatches, _totalRuns(finishedMatches)),
+      status: _teamMatchStatus(teamId, finishedMatches),
+      runs: totalRuns,
+      wickets: _wickets(teamId, finishedMatches),
+      batting_average: _battingAverage(teamId, finishedMatches),
+      bowling_average: _bowlingAverage(teamId, finishedMatches),
+      highest_runs: _highestAndLowestRuns(teamId, finishedMatches).$1,
+      lowest_runs: _highestAndLowestRuns(teamId, finishedMatches).$2,
+      run_rate: _runRate(teamId, finishedMatches, totalRuns),
     );
   }
 
@@ -87,28 +80,24 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
         .toList();
   }
 
-  int _totalRuns(List<MatchModel> finishedMatches) {
+  int _totalRuns(String teamId, List<MatchModel> finishedMatches) {
     return finishedMatches
-        .map((match) =>
-            match.teams.firstWhere((team) => team.team.id == state.team?.id))
+        .map((match) => _getTeam(match, teamId))
         .fold<int>(0, (totalRuns, team) => totalRuns + team.run);
   }
 
-  int _wickets(List<MatchModel> finishedMatches) {
+  int _wickets(String teamId, List<MatchModel> finishedMatches) {
     return finishedMatches
-        .map((match) =>
-            match.teams.firstWhere((team) => team.team.id == state.team?.id))
+        .map((match) => _getTeam(match, teamId))
         .fold<int>(0, (totalWickets, team) => totalWickets + team.wicket);
   }
 
-  double _battingAverage(List<MatchModel> finishedMatches) {
+  double _battingAverage(String teamId, List<MatchModel> finishedMatches) {
     return finishedMatches.fold<double>(
       0,
       (total, match) {
-        final team =
-            match.teams.firstWhere((team) => team.team.id == state.team?.id);
-        final opponentTeam =
-            match.teams.firstWhere((team) => team.team.id != state.team?.id);
+        final team = _getTeam(match, teamId);
+        final opponentTeam = _getOpponentTeam(match, teamId);
 
         return total +
             (opponentTeam.wicket > 0 ? team.run / opponentTeam.wicket : 0);
@@ -116,14 +105,18 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     );
   }
 
-  double _bowlingAverage(List<MatchModel> finishedMatches) {
+  MatchTeamModel _getTeam(MatchModel match, String teamId) =>
+      match.teams.firstWhere((team) => team.team.id == teamId);
+
+  MatchTeamModel _getOpponentTeam(MatchModel match, String teamId) =>
+      match.teams.firstWhere((team) => team.team.id != teamId);
+
+  double _bowlingAverage(String teamId, List<MatchModel> finishedMatches) {
     return finishedMatches.fold<double>(
           0,
           (total, match) {
-            final team = match.teams
-                .firstWhere((team) => team.team.id == state.team?.id);
-            final opponentTeam = match.teams
-                .firstWhere((team) => team.team.id != state.team?.id);
+            final team = _getTeam(match, teamId);
+            final opponentTeam = _getOpponentTeam(match, teamId);
 
             return total +
                 (team.wicket > 0 ? opponentTeam.run / team.wicket : 0);
@@ -132,13 +125,13 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
         finishedMatches.length;
   }
 
-  (int, int) _highestAndLowestRuns(List<MatchModel> finishedMatches) {
-    final firstTeamRuns = finishedMatches
-        .map((match) => match.teams
-            .firstWhere((team) => team.team.id == state.team?.id)
-            .run)
-        .toList();
-
+  (int, int) _highestAndLowestRuns(
+      String teamId, List<MatchModel> finishedMatches) {
+    final firstTeamRuns =
+        finishedMatches.map((match) => _getTeam(match, teamId).run).toList();
+    if (firstTeamRuns.isEmpty) {
+      return (0, 0);
+    }
     final highestRuns = firstTeamRuns
         .reduce((value, element) => element > value ? element : value);
     final lowestRuns = firstTeamRuns
@@ -146,16 +139,16 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     return (highestRuns, lowestRuns);
   }
 
-  double _runRate(List<MatchModel> finishedMatches, int runs) {
+  double _runRate(String teamId, List<MatchModel> finishedMatches, int runs) {
     final totalOvers = finishedMatches
-        .map(
-            (match) => match.teams.firstWhere((team) => team.team.id == teamId))
+        .map((match) => _getTeam(match, teamId))
         .fold<double>(0.0, (total, team) => total + team.over);
 
     return totalOvers > 0 ? runs / totalOvers : 0;
   }
 
-  TeamMatchStatus _teamMatchStatus(List<MatchModel> finishedMatches) {
+  TeamMatchStatus _teamMatchStatus(
+      String teamId, List<MatchModel> finishedMatches) {
     return finishedMatches.fold<TeamMatchStatus>(
       const TeamMatchStatus(),
       (status, match) {
@@ -193,16 +186,9 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     }
   }
 
-  onResume() {
-    _teamStreamSubscription?.cancel();
-    _matchListStreamSubscription?.cancel();
-    loadTeamById();
-  }
-
   @override
   void dispose() {
     _teamStreamSubscription?.cancel();
-    _matchListStreamSubscription?.cancel();
     super.dispose();
   }
 }

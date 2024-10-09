@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
@@ -195,8 +196,7 @@ class OverCompleteSheet extends ConsumerWidget {
   String _getCurrentTeamName(BuildContext context, ScoreBoardViewState state) {
     final teamId = state.currentInning?.team_id;
     final teamName = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == teamId)
         ?.team
         .name;
     return teamName ?? context.l10n.score_board_current_team_title;

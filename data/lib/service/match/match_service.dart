@@ -1,32 +1,26 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../api/match/match_model.dart';
 import '../../api/team/team_model.dart';
 import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/list_extensions.dart';
+import '../../utils/constant/firestore_constant.dart';
 import '../team/team_service.dart';
 import '../user/user_service.dart';
-import '../../utils/constant/firestore_constant.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../storage/app_preferences.dart';
-
-final matchServiceProvider = Provider((ref) {
-  final service = MatchService(
+final matchServiceProvider = Provider(
+  (ref) => MatchService(
     FirebaseFirestore.instance,
     ref.read(teamServiceProvider),
     ref.read(userServiceProvider),
-    ref.read(currentUserPod)?.id,
-  );
-
-  ref.listen(currentUserPod, (_, next) => service._currentUserId = next?.id);
-  return service;
-});
+  ),
+);
 
 class MatchService {
-  String? _currentUserId;
-
   final FirebaseFirestore _firestore;
   final TeamService _teamService;
   final UserService _userService;
@@ -35,7 +29,6 @@ class MatchService {
     this._firestore,
     this._teamService,
     this._userService,
-    this._currentUserId,
   );
 
   CollectionReference<MatchModel> get _matchCollection =>
@@ -94,39 +87,11 @@ class MatchService {
     }
   }
 
-  Stream<List<MatchModel>> streamCurrentUserPlayedMatches() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-
-    final filter = Filter.and(
-      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.finish.value),
-      Filter(FireStoreConst.players, arrayContains: _currentUserId),
-    );
-
-    return _matchCollection
-        .where(filter)
-        .snapshots()
-        .asyncMap((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          final match = mainDoc.data();
-          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return match.copyWith(teams: teams);
-        }).toList(),
-      );
-    }).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  Stream<List<MatchModel>> streamCurrentUserRelatedMatches() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-
+  Stream<List<MatchModel>> streamUserRelatedMatches(String userId) {
     final filter = Filter.or(
-      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
-      Filter(FireStoreConst.players, arrayContains: _currentUserId),
-      Filter(FireStoreConst.teamCreatorIds, arrayContains: _currentUserId),
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
+      Filter(FireStoreConst.players, arrayContains: userId),
+      Filter(FireStoreConst.teamCreatorIds, arrayContains: userId),
     );
 
     return _matchCollection

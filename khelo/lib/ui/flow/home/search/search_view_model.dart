@@ -45,6 +45,7 @@ class SearchHomeViewNotifier extends StateNotifier<SearchHomeViewState> {
 
   @override
   void dispose() {
+    state.searchController.dispose();
     _debounce?.cancel();
     super.dispose();
   }

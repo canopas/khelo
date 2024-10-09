@@ -13,6 +13,7 @@ import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_offici
 import 'package:khelo/ui/flow/matches/add_match/power_play/power_play_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_screen.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_screen.dart';
+import 'package:khelo/ui/flow/profile/components/qr_code_view.dart';
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen.dart';
 import 'package:khelo/ui/flow/score_board/score_board_screen.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_screen.dart';
@@ -24,6 +25,7 @@ import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
+
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
 import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
@@ -45,13 +47,13 @@ class AppRoute {
   static const pathAddTossDetail = '/add-toss-detail';
   static const pathScoreBoard = '/score-board';
   static const pathScannerScreen = '/scanner-screen';
+  static const pathQrCode = '/qr-code';
   static const pathTeamDetail = '/team-detail';
   static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
   static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
   static const pathContactSelection = "/contact-selection";
-  static const pathAddTournament = "/add-tournament";
 
   final String path;
   final String? name;
@@ -267,6 +269,13 @@ class AppRoute {
         builder: (_) => ScannerScreen(addedMembers: addedMembers),
       );
 
+  static AppRoute qrCodeView(
+          {required String id, required String description}) =>
+      AppRoute(
+        pathQrCode,
+        builder: (_) => QrCodeView(id: id, description: description),
+      );
+
   static AppRoute contactSelection({required List<String> memberIds}) =>
       AppRoute(pathContactSelection,
           builder: (_) => ContactSelectionScreen(memberIds: memberIds));
@@ -376,6 +385,13 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddMatchOfficials,
+      pageBuilder: (context, state) => adaptivePage(
+        child: state.widget(context),
+        fullscreenDialog: true,
+      ),
+    ),
+    GoRoute(
+      path: pathQrCode,
       pageBuilder: (context, state) => adaptivePage(
         child: state.widget(context),
         fullscreenDialog: true,

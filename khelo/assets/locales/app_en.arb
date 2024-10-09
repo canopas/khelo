@@ -57,6 +57,7 @@
   "common_end_match_title": "End Match",
   "common_first_inning_title": "First inning",
   "common_second_inning_title": "Second inning",
+  "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
@@ -346,6 +347,8 @@
   "team_detail_add_members_title": "Add members",
   "team_detail_add_match_title": "Add match",
   "team_detail_make_admin": "Make admin",
+  "team_detail_use_qr_description": "Use your phone camera or a QR code app to scan the code above and easily add the team to the tournament",
+  "make_admin_selection_error": "Can't select deactivated user as admin",
   "team_detail_make_admin_screen_title": "Make Admin",
   "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
   "@team_detail_admin": {
@@ -398,6 +401,7 @@
   "user_detail_info_title": "Info",
   "user_detail_batting_title": "Batting",
   "user_detail_bowling_title": "Bowling",
+  "user_detail_fielding_title": "Fielding",
   "user_detail_personal_information_title": "Personal information",
   "user_detail_participation_title": "Participation",
   "user_detail_role_title": "Role",
@@ -419,6 +423,9 @@
   "user_detail_eco_title": "Eco",
   "user_detail_no_ball_title": "NB",
   "user_detail_wide_ball_title": "WB",
+  "user_detail_catches_title": "Catches",
+  "user_detail_run_out_title": "Run out",
+  "user_detail_stumping_title": "Stumping",
 
   "match_status_yet_to_start_title": "Yet to start",
   "match_status_running_title": "Running",
@@ -806,15 +813,6 @@
   "@_STATS": {
   },
   "tab_stats_title": "Stats",
-  "my_stat_stats_batting_statics_title": "Batting Statistics",
-  "my_stat_stats_run_scored_title": "Run scored",
-  "my_stat_stats_strike_rate_title": "Strike rate",
-  "my_stat_stats_ball_faced_title": "Ball faced",
-  "my_stat_stats_bowling_statics_title": "Bowling Statistics",
-  "my_stat_stats_economy_rate_title": "Economy rate",
-  "my_stat_stats_fielding_statics_title": "Fielding Statistics",
-  "my_stat_stats_catches_title": "Catches",
-  "my_stat_stats_stumping_title": "Stumping",
 
   "@_PROFILE": {
   },

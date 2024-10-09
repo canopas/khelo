@@ -8,7 +8,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
-import 'package:khelo/ui/flow/stats/my_stats_tab_screen.dart';
+import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/navigation/bottom_navigation_bar.dart';
@@ -31,7 +31,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
   static final List<Widget> _widgets = <Widget>[
     const HomeScreen(),
     const MyGameTabScreen(),
-    const MyStatsTabScreen(),
+    const UserStatScreen(),
     const ProfileScreen(),
   ];
 

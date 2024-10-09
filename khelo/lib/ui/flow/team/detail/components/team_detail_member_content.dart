@@ -77,10 +77,13 @@ class TeamDetailMemberContent extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Text(
-              context.l10n.team_detail_add_members_title,
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.primary),
+            Flexible(
+              child: Text(
+                context.l10n.team_detail_add_members_title,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.primary),
+              ),
             )
           ],
         ),

@@ -103,10 +103,12 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
+            Expanded(
+              child: Text(
+                title,
+                style: AppTextStyle.subtitle1
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
             ),
             OnTapScale(
               onTap: onResetTap,

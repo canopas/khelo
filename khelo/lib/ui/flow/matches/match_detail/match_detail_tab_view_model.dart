@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
@@ -37,8 +39,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late String _matchId;
-  StreamSubscription? matchStreamSubscription;
-  StreamSubscription? ballScoreStreamSubscription;
+  StreamSubscription? _matchStreamSubscription;
+  StreamSubscription? _ballScoreStreamSubscription;
 
   MatchDetailTabViewNotifier(
     this._matchService,
@@ -58,7 +60,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         _matchService.streamMatchById(_matchId),
         _inningService.streamInningsByMatchId(matchId: _matchId),
       );
-      matchStreamSubscription = matchInningStream.listen((data) {
+      _matchStreamSubscription = matchInningStream.listen((data) {
         final match = data.$1;
         final innings = data.$2;
         state = state.copyWith(match: match);
@@ -69,8 +71,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
             .lastOrNull
             ?.id;
         final runningInningId = innings
-            .where((element) => element.innings_status == InningStatus.running)
-            .firstOrNull
+            .firstWhereOrNull(
+                (element) => element.innings_status == InningStatus.running)
             ?.id;
         onScorecardExpansionChange(
           winnerInningId ?? runningInningId ?? innings.firstOrNull?.id ?? '',
@@ -103,7 +105,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
-    ballScoreStreamSubscription = _ballScoreService
+    _ballScoreStreamSubscription = _ballScoreService
         .streamBallScoresByInningIds(state.allInnings.map((e) => e.id).toList())
         .listen(
       (scores) {
@@ -190,22 +192,18 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
       catchBy = Player(id: player.id, name: player.name ?? '');
     }
 
-    final currentOver = overList
-        .where((element) =>
-            element.overNumber == ball.over_number &&
-            element.inning_id == ball.inning_id)
-        .firstOrNull;
+    final currentOver = overList.firstWhereOrNull((element) =>
+        element.overNumber == ball.over_number &&
+        element.inning_id == ball.inning_id);
 
     if (currentOver != null) {
       return currentOver
           .copyWith(striker: striker, nonStriker: nonStriker, bowler: bowler)
           .addBall(ball, catchBy: catchBy);
     } else {
-      final lastOver = overList
-          .where((element) =>
-              element.overNumber == ball.over_number - 1 &&
-              element.inning_id == ball.inning_id)
-          .firstOrNull;
+      final lastOver = overList.firstWhereOrNull((element) =>
+          element.overNumber == ball.over_number - 1 &&
+          element.inning_id == ball.inning_id);
       return OverSummary(
               inning_id: ball.inning_id,
               overNumber: ball.over_number,
@@ -225,8 +223,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 
   String _getTeamIdByInningId(String inningId) {
     final teamId = state.allInnings
-        .where((element) => element.id == inningId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.id == inningId)
         ?.team_id;
     return teamId ?? "";
   }
@@ -245,18 +242,6 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
 
     return bowler;
-  }
-
-  int getFractionalPart(double value) {
-    String valueString = value.toString();
-
-    List<String> parts = valueString.split('.');
-
-    if (parts.length > 1) {
-      return int.parse(parts[1]);
-    } else {
-      return 0;
-    }
   }
 
   BatsmanSummary _configureBatsman({
@@ -300,18 +285,15 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     bool isFieldingTeam = false,
   }) {
     final teamId = state.allInnings
-        .where((element) => element.id == inningId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.id == inningId)
         ?.team_id;
 
     final player = state.match?.teams
-        .where((element) => isFieldingTeam
+        .firstWhereOrNull((element) => isFieldingTeam
             ? teamId != element.team.id
             : teamId == element.team.id)
-        .firstOrNull
         ?.squad
-        .where((element) => element.player.id == playerId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.player.id == playerId)
         ?.player;
 
     return player ?? const UserModel(id: '');
@@ -368,10 +350,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
   }
 
-  Future<void> cancelStreamSubscription() async {
+  Future<void> _cancelStreamSubscription() async {
     state = state.copyWith(ballScoreQueryListenerSet: false);
-    await matchStreamSubscription?.cancel();
-    await ballScoreStreamSubscription?.cancel();
+    await _matchStreamSubscription?.cancel();
+    await _ballScoreStreamSubscription?.cancel();
   }
 
   void onTabChange(int tab) {
@@ -392,13 +374,13 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   Future<void> onResume() async {
-    await cancelStreamSubscription();
+    await _cancelStreamSubscription();
     _loadMatchesAndInning();
   }
 
   @override
   void dispose() {
-    cancelStreamSubscription();
+    _cancelStreamSubscription();
     super.dispose();
   }
 }

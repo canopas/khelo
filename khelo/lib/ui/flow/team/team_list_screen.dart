@@ -66,7 +66,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadTeamList,
       );
     }
 
@@ -80,7 +80,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     return (state.filteredTeams.isNotEmpty)
         ? ListView.separated(
             itemCount: state.filteredTeams.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16) +
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8) +
                 context.mediaQueryPadding,
             separatorBuilder: (context, index) =>
                 Divider(color: context.colorScheme.outline),

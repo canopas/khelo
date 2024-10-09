@@ -12,11 +12,10 @@ final makeTeamAdminStateProvider = StateNotifierProvider.autoDispose<
 
 class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
   final TeamService _teamService;
+  late TeamModel _team;
 
   MakeTeamAdminViewNotifier(this._teamService)
       : super(const MakeTeamAdminState());
-
-  late TeamModel _team;
 
   void setData(TeamModel team) {
     _team = team;
@@ -27,7 +26,15 @@ class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
   }
 
   void selectAdmin(TeamPlayer player) {
+    state = state.copyWith(showSelectionError: false);
     final admins = state.selectedPlayers.toList();
+
+    // Do not allow to select Deactivated user but allow to deselect them.
+    if (!player.user.isActive && !admins.contains(player)) {
+      state = state.copyWith(showSelectionError: true);
+      return;
+    }
+
     (admins.contains(player)) ? admins.remove(player) : admins.add(player);
     state = state.copyWith(selectedPlayers: admins, isButtonEnabled: true);
   }
@@ -57,6 +64,7 @@ class MakeTeamAdminState with _$MakeTeamAdminState {
     Object? actionError,
     @Default(false) bool pop,
     @Default(false) bool isButtonEnabled,
+    @Default(false) bool showSelectionError,
     @Default([]) List<TeamPlayer> selectedPlayers,
   }) = _MakeTeamAdminState;
 }

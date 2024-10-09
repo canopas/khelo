@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/match/match_model.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
+import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,190 +14,98 @@ part 'user_stat_view_model.freezed.dart';
 final userStatViewStateProvider =
     StateNotifierProvider<UserStatViewNotifier, UserStatViewState>((ref) {
   final notifier = UserStatViewNotifier(
+    ref.read(matchServiceProvider),
     ref.read(ballScoreServiceProvider),
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
-    notifier.setUserId(next?.id);
+    notifier._setUserId(next?.id);
   });
   return notifier;
 });
 
 class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
+  final MatchService _matchService;
   final BallScoreService _ballScoreService;
-  late StreamSubscription _ballScoreStreamSubscription;
+  StreamSubscription? _subscription;
+  String? _currentUserId;
 
-  UserStatViewNotifier(this._ballScoreService, String? userId)
-      : super(UserStatViewState(currentUserId: userId)) {
-    _getUserRelatedBalls();
+  UserStatViewNotifier(
+      this._matchService, this._ballScoreService, this._currentUserId)
+      : super(const UserStatViewState()) {
+    loadData();
   }
 
-  void setUserId(String? userId) {
+  void _setUserId(String? userId) {
     if (userId == null) {
-      _cancelStreamSubscription();
+      _subscription?.cancel();
     }
-    state = state.copyWith(currentUserId: userId);
+    _currentUserId = userId;
+    loadData();
   }
 
-  Future<void> _getUserRelatedBalls() async {
+  void loadData() {
+    if (_currentUserId == null) {
+      return;
+    }
+    _subscription?.cancel();
     state = state.copyWith(loading: true);
+
+    _subscription = _matchService.streamUserMatches(_currentUserId!).listen(
+        (matches) async {
+      final (testMatchCount, testStat, otherMatchCount, otherStats) =
+          await _loadMatchData(matches);
+      state = state.copyWith(
+        testStats: testStat,
+        otherStats: otherStats,
+        testMatchesCount: testMatchCount,
+        otherMatchesCount: otherMatchCount,
+        loading: false,
+      );
+    }, onError: (e) {
+      state = state.copyWith(loading: false, error: e);
+      debugPrint("UserDetailViewNotifier: error while loading data -> $e");
+    });
+  }
+
+  Future<(int, UserStat, int, UserStat)> _loadMatchData(
+      List<MatchModel> matches) async {
     try {
-      _ballScoreStreamSubscription =
-          _ballScoreService.streamCurrentUserRelatedBalls().listen((ballScores) {
-        final userStat = _calculateUserStats(ballScores);
-        state = state.copyWith(userStat: userStat, loading: false, error: null);
-      }, onError: (e) {
-        state = state.copyWith(error: e, loading: false);
-        debugPrint(
-            "UserStatViewNotifier: error while getting user related balls -> $e");
-      });
+      final testMatches = matches
+          .where((element) => element.match_type == MatchType.testMatch)
+          .map((e) => e.id);
+      final otherMatches = matches
+          .where((element) => element.match_type != MatchType.testMatch)
+          .map((e) => e.id);
+      final ballScore = await _ballScoreService
+          .getBallScoresByMatchIds(matches.map((e) => e.id).toList());
+
+      final testStats = ballScore
+          .where((element) => testMatches.contains(element.match_id))
+          .toList()
+          .calculateUserStats(_currentUserId ?? '');
+      final otherStats = ballScore
+          .where((element) => otherMatches.contains(element.match_id))
+          .toList()
+          .calculateUserStats(_currentUserId ?? '');
+
+      return (testMatches.length, testStats, otherMatches.length, otherStats);
     } catch (e) {
-      state = state.copyWith(error: e, loading: false);
       debugPrint(
-          "UserStatViewNotifier: error while getting user related balls -> $e");
+          "UserDetailViewNotifier: error while loading match data -> $e");
+      rethrow;
     }
   }
 
-  UserStat _calculateUserStats(List<BallScoreModel> ballList) {
-    final runScored = ballList
-        .where((element) => element.batsman_id == state.currentUserId)
-        .fold(0, (sum, element) => sum + element.runs_scored);
-    final batingStat =
-        _calculateBatingStats(ballList: ballList, runScored: runScored);
-
-    final bowlingStat = _calculateBowlingStats(ballList);
-
-    final fieldingStat = _calculateFieldingStats(ballList);
-
-    return UserStat(
-      battingStat: batingStat,
-      bowlingStat: bowlingStat,
-      fieldingStat: fieldingStat,
-    );
-  }
-
-  BattingStat _calculateBatingStats({
-    required List<BallScoreModel> ballList,
-    required int runScored,
-  }) {
-    final dismissal = ballList
-        .where((element) => element.player_out_id == state.currentUserId)
-        .length;
-
-    final ballFaced = ballList
-        .where((element) =>
-            element.batsman_id == state.currentUserId &&
-            (element.extras_type == null ||
-                element.extras_type == ExtrasType.legBye ||
-                element.extras_type == ExtrasType.bye))
-        .length;
-
-    final average = dismissal == 0 ? 0.0 : runScored / dismissal;
-
-    final strikeRate = ballFaced == 0 ? 0.0 : (runScored / ballFaced) * 100.0;
-
-    return BattingStat(
-      average: average,
-      strikeRate: strikeRate,
-      ballFaced: ballFaced,
-      runScored: runScored,
-    );
-  }
-
-  BowlingStat _calculateBowlingStats(List<BallScoreModel> ballList) {
-    final deliveries =
-        ballList.where((element) => element.bowler_id == state.currentUserId);
-
-    final wicketTaken = deliveries
-        .where((element) =>
-            element.wicket_type != null &&
-            (element.wicket_type == WicketType.retired ||
-                element.wicket_type == WicketType.retiredHurt ||
-                element.wicket_type == WicketType.timedOut))
-        .length;
-
-    final bowledBallCount = deliveries
-        .where((element) =>
-            element.wicket_type != WicketType.retired &&
-            element.wicket_type != WicketType.retiredHurt &&
-            element.wicket_type != WicketType.timedOut &&
-            element.extras_type != ExtrasType.penaltyRun)
-        .length;
-
-    final bowledBallCountForEconomyRate = deliveries
-        .where((element) =>
-            (element.extras_type == null ||
-                element.extras_type == ExtrasType.legBye ||
-                element.extras_type == ExtrasType.bye) &&
-            element.wicket_type != WicketType.retired &&
-            element.wicket_type != WicketType.retiredHurt &&
-            element.wicket_type != WicketType.timedOut &&
-            element.extras_type != ExtrasType.penaltyRun)
-        .length;
-
-    final runsConceded = deliveries
-        .where((element) => element.extras_type != ExtrasType.penaltyRun)
-        .fold(
-            0,
-            (sum, element) =>
-                sum + element.runs_scored + (element.extras_awarded ?? 0));
-
-    final average = wicketTaken == 0 ? 0.0 : runsConceded / wicketTaken;
-
-    final strikeRate = wicketTaken == 0 ? 0.0 : bowledBallCount / wicketTaken;
-
-    final economyRate = bowledBallCountForEconomyRate == 0
-        ? 0.0
-        : (runsConceded / bowledBallCountForEconomyRate) * 6;
-
-    return BowlingStat(
-      average: average,
-      strikeRate: strikeRate,
-      wicketTaken: wicketTaken,
-      economyRate: economyRate,
-    );
-  }
-
-  FieldingStat _calculateFieldingStats(List<BallScoreModel> ballList) {
-    final catches = ballList
-        .where((element) =>
-            element.wicket_taker_id == state.currentUserId &&
-            (element.wicket_type == WicketType.caught ||
-                element.wicket_type == WicketType.caughtBehind ||
-                element.wicket_type == WicketType.caughtAndBowled))
-        .length;
-
-    final runOut = ballList
-        .where((element) =>
-            element.wicket_taker_id == state.currentUserId &&
-            element.wicket_type == WicketType.runOut)
-        .length;
-
-    final stumping = ballList
-        .where((element) =>
-            element.wicket_taker_id == state.currentUserId &&
-            element.wicket_type == WicketType.stumped)
-        .length;
-
-    return FieldingStat(
-      catches: catches,
-      runOut: runOut,
-      stumping: stumping,
-    );
-  }
-
-  _cancelStreamSubscription() {
-    _ballScoreStreamSubscription.cancel();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _getUserRelatedBalls();
+  void onTabChange(int tab) {
+    if (state.selectedTab != tab) {
+      state = state.copyWith(selectedTab: tab);
+    }
   }
 
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    _subscription?.cancel();
     super.dispose();
   }
 }
@@ -203,8 +114,11 @@ class UserStatViewNotifier extends StateNotifier<UserStatViewState> {
 class UserStatViewState with _$UserStatViewState {
   const factory UserStatViewState({
     Object? error,
-    String? currentUserId,
-    UserStat? userStat,
+    @Default(0) int selectedTab,
+    @Default(0) int testMatchesCount,
+    @Default(0) int otherMatchesCount,
+    @Default(UserStat()) UserStat testStats,
+    @Default(UserStat()) UserStat otherStats,
     @Default(false) bool loading,
   }) = _UserStatViewState;
 }

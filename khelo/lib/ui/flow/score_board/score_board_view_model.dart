@@ -1,14 +1,16 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:data/api/match/match_model.dart';
-import 'package:data/api/innings/inning_model.dart';
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/innings/inning_model.dart';
+import 'package:data/api/match/match_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
-import 'package:data/service/match/match_service.dart';
-import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
+import 'package:data/service/innings/inning_service.dart';
+import 'package:data/service/match/match_service.dart';
 import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,30 +77,22 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           await _createInnings(
               isForTestMatch: match.match_type == MatchType.testMatch);
         } else {
-          final inningFirst = innings
-              .where(
-                  (element) => element.innings_status == InningStatus.running)
-              .firstOrNull;
+          final inningFirst = innings.firstWhereOrNull(
+              (element) => element.innings_status == InningStatus.running);
           InningModel? inningSecond;
           InningModel? nextInning;
           if (match.match_type == MatchType.testMatch) {
             final isIndexEven = (inningFirst?.index ?? 0) % 2 == 0;
-            inningSecond = innings
-                .where((inning) => _isSelectInning(
-                    inning, isIndexEven, inningFirst?.index ?? 0))
-                .firstOrNull;
+            inningSecond = innings.firstWhereOrNull((inning) =>
+                _isSelectInning(inning, isIndexEven, inningFirst?.index ?? 0));
           } else {
-            inningSecond = innings
-                .where(
-                    (element) => element.innings_status != InningStatus.running)
-                .firstOrNull;
+            inningSecond = innings.firstWhereOrNull(
+                (element) => element.innings_status != InningStatus.running);
           }
 
-          nextInning = innings
-              .where(
-                (inning) => inning.index == (inningFirst?.index ?? 0) + 1,
-              )
-              .firstOrNull;
+          nextInning = innings.firstWhereOrNull(
+            (inning) => inning.index == (inningFirst?.index ?? 0) + 1,
+          );
 
           if (inningFirst != state.currentInning ||
               inningSecond != state.otherInning ||
@@ -256,9 +250,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
 
     final List<MatchPlayer>? battingTeamSquad = state.match!.teams
-        .where((element) =>
+        .firstWhereOrNull((element) =>
             state.match!.current_playing_team_id == element.team.id)
-        .firstOrNull
         ?.squad;
     final currentPlayingBatsMan = battingTeamSquad
         ?.where((element) => element.performance.any((element) =>
@@ -269,9 +262,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     int lastPlayerIndex = battingTeamSquad
             ?.map(
               (e) => e.performance
-                  .where(
+                  .firstWhereOrNull(
                       (element) => element.inning_id == state.currentInning?.id)
-                  .firstOrNull
                   ?.index,
             )
             .reduce((value, element) =>
@@ -301,8 +293,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
             .firstWhere(
                 (element) => state.otherInning?.team_id == element.team.id)
             .squad
-            .where((element) => element.player.id == bowlerId)
-            .firstOrNull
+            .firstWhereOrNull((element) => element.player.id == bowlerId)
         : null;
 
     state = state.copyWith(
@@ -369,10 +360,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       if (striker == lastBall.player_out_id) {
         // new BatsmanId
         final newBatsmanId = state.batsMans
-            ?.where((element) =>
+            ?.firstWhereOrNull((element) =>
                 element.player.id != lastBall.batsman_id &&
                 element.player.id != lastBall.non_striker_id)
-            .firstOrNull
             ?.player
             .id;
         if (newBatsmanId != null) {
@@ -397,8 +387,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     final tossWinnerId = state.match?.toss_winner_id;
     final tossDecision = state.match?.toss_decision;
     final opponentTeamId = state.match?.teams
-        .where((element) => element.team.id != state.match?.toss_winner_id)
-        .firstOrNull
+        .firstWhereOrNull(
+            (element) => element.team.id != state.match?.toss_winner_id)
         ?.team
         .id;
     if (matchId == null ||
@@ -480,7 +470,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       tappedButton: btn,
       isLongTap: isLongTap,
     );
-    if (showFieldingPositionSheet(btn)) {
+    if (_showFieldingPositionSheet(btn)) {
       state = state.copyWith(showSelectFieldingPositionSheet: DateTime.now());
       return;
     }
@@ -529,7 +519,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  bool showFieldingPositionSheet(ScoreButton tapped) {
+  bool _showFieldingPositionSheet(ScoreButton tapped) {
     bool isDotBall = tapped == ScoreButton.zero;
     bool isLessRuns = tapped == ScoreButton.one ||
         tapped == ScoreButton.two ||
@@ -559,8 +549,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final bowlerId = state.bowler?.player.id;
       final strikerId = state.strikerId;
       final nonStrikerId = state.batsMans
-          ?.where((element) => element.player.id != state.strikerId)
-          .firstOrNull
+          ?.firstWhereOrNull((element) => element.player.id != state.strikerId)
           ?.player
           .id;
       final matchId = state.match?.id;
@@ -629,16 +618,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final updatedPlayer = _getUpdatedOutPlayerStatus(wicketType, playerOutId);
       state = state.copyWith(isMatchUpdated: false);
 
-      final otherBattingInning = state.allInnings
-          .where((element) =>
-              element.team_id == battingTeamId &&
-              element.id != battingTeamInningId)
-          .firstOrNull;
-      final otherBowlingInning = state.allInnings
-          .where((element) =>
-              element.team_id == bowlingTeamId &&
-              element.id != bowlingTeamInningId)
-          .firstOrNull;
+      final otherBattingInning = state.allInnings.firstWhereOrNull((element) =>
+          element.team_id == battingTeamId &&
+          element.id != battingTeamInningId);
+      final otherBowlingInning = state.allInnings.firstWhereOrNull((element) =>
+          element.team_id == bowlingTeamId &&
+          element.id != bowlingTeamInningId);
       await _ballScoreService.addBallScoreAndUpdateTeamDetails(
         score: ball,
         matchId: matchId,
@@ -672,8 +657,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
 
     final outPlayer = state.batsMans
-        ?.where((element) => element.player.id == playerOutId)
-        .firstOrNull;
+        ?.firstWhereOrNull((element) => element.player.id == playerOutId);
 
     if (outPlayer == null) {
       return null;
@@ -699,8 +683,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   void setOrSwitchStriker({String? batsManId}) {
     final striker = batsManId ??
         state.batsMans
-            ?.where((element) => element.player.id != state.strikerId)
-            .firstOrNull
+            ?.firstWhereOrNull(
+                (element) => element.player.id != state.strikerId)
             ?.player
             .id;
     state = state.copyWith(
@@ -778,8 +762,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .map((e) => e.id);
 
     final battingSquad = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == teamId)
         ?.squad
         .where(
           (element) => !element.performance.any(
@@ -794,9 +777,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     int injuredCount = 0;
 
     battingSquad?.forEach((element) {
-      final currentPerformance = element.performance
-          .where((element) => element.inning_id == state.currentInning?.id)
-          .firstOrNull;
+      final currentPerformance = element.performance.firstWhereOrNull(
+          (element) => element.inning_id == state.currentInning?.id);
 
       if (currentPerformance?.status == PlayerStatus.yetToPlay) {
         yetToPlayCount += 1;
@@ -842,17 +824,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               ? state.otherInning?.team_id
               : state.currentInning?.team_id;
 
-          final secondPlayingTeam = state.match?.teams
-              .where(
-                (element) => element.team.id == secondPlayingTeamId,
-              )
-              .firstOrNull;
+          final secondPlayingTeam = state.match?.teams.firstWhereOrNull(
+            (element) => element.team.id == secondPlayingTeamId,
+          );
 
-          final firstPlayingTeam = state.match?.teams
-              .where(
-                (element) => element.team.id != secondPlayingTeamId,
-              )
-              .firstOrNull;
+          final firstPlayingTeam = state.match?.teams.firstWhereOrNull(
+            (element) => element.team.id != secondPlayingTeamId,
+          );
           if (firstPlayingTeam == null || secondPlayingTeam == null) {
             return false;
           }
@@ -886,17 +864,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         if (state.currentInning?.index == 4 && _isAllOut()) {
           final secondPlayingTeamId = state.currentInning?.team_id;
 
-          final secondPlayingTeam = state.match?.teams
-              .where(
-                (element) => element.team.id == secondPlayingTeamId,
-              )
-              .firstOrNull;
+          final secondPlayingTeam = state.match?.teams.firstWhereOrNull(
+            (element) => element.team.id == secondPlayingTeamId,
+          );
 
-          final firstPlayingTeam = state.match?.teams
-              .where(
-                (element) => element.team.id != secondPlayingTeamId,
-              )
-              .firstOrNull;
+          final firstPlayingTeam = state.match?.teams.firstWhereOrNull(
+            (element) => element.team.id != secondPlayingTeamId,
+          );
           if (firstPlayingTeam == null || secondPlayingTeam == null) {
             return false;
           }
@@ -960,16 +934,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final updatedPlayers = _getUndoPlayerStatus(lastBall);
       state = state.copyWith(isMatchUpdated: false);
 
-      final otherBattingInning = state.allInnings
-          .where((element) =>
-              element.team_id == battingTeamId &&
-              element.id != battingTeamInningId)
-          .firstOrNull;
-      final otherBowlingInning = state.allInnings
-          .where((element) =>
-              element.team_id == bowlingTeamId &&
-              element.id != bowlingTeamInningId)
-          .firstOrNull;
+      final otherBattingInning = state.allInnings.firstWhereOrNull((element) =>
+          element.team_id == battingTeamId &&
+          element.id != battingTeamInningId);
+      final otherBowlingInning = state.allInnings.firstWhereOrNull((element) =>
+          element.team_id == bowlingTeamId &&
+          element.id != bowlingTeamInningId);
 
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
           ballId: lastBall.id,
@@ -999,22 +969,19 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return null;
     }
     final battingTeam = state.match?.teams
-        .where((element) => element.team.id == state.currentInning?.team_id)
-        .firstOrNull
+        .firstWhereOrNull(
+            (element) => element.team.id == state.currentInning?.team_id)
         ?.squad;
 
-    final outPlayer = battingTeam
-        ?.where((element) => element.player.id == lastBall.player_out_id)
-        .firstOrNull;
+    final outPlayer = battingTeam?.firstWhereOrNull(
+        (element) => element.player.id == lastBall.player_out_id);
 
     if (outPlayer == null) {
       return null;
     }
-    final newBatsMan = state.batsMans
-        ?.where((element) =>
-            element.player.id != lastBall.batsman_id &&
-            element.player.id != lastBall.non_striker_id)
-        .firstOrNull;
+    final newBatsMan = state.batsMans?.firstWhereOrNull((element) =>
+        element.player.id != lastBall.batsman_id &&
+        element.player.id != lastBall.non_striker_id);
 
     final getOutPlayersPerformance = outPlayer.performance.updateWhere(
         where: (element) => element.inning_id == state.currentInning?.id,
@@ -1254,13 +1221,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       state = state.copyWith(actionError: null, isActionInProgress: true);
 
       MatchPlayer? bowler;
-      var battingPlayer = currentPlayers
-          .where((element) => element.teamId == state.currentInning?.team_id)
-          .firstOrNull;
+      var battingPlayer = currentPlayers.firstWhereOrNull(
+          (element) => element.teamId == state.currentInning?.team_id);
 
       bowler = currentPlayers
-          .where((element) => element.teamId == state.otherInning?.team_id)
-          .firstOrNull
+          .firstWhereOrNull(
+              (element) => element.teamId == state.otherInning?.team_id)
           ?.players
           .firstOrNull;
 
@@ -1272,8 +1238,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           final playerPerformance = statusUpdatedSquad
               .elementAt(index)
               .performance
-              .where((element) => element.inning_id == state.currentInning?.id)
-              .firstOrNull;
+              .firstWhereOrNull(
+                  (element) => element.inning_id == state.currentInning?.id);
 
           if (playerPerformance?.index == null ||
               playerPerformance?.index == 0 ||
@@ -1349,8 +1315,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ? state.currentInning?.team_id
         : state.otherInning?.team_id;
     final teamName = state.match?.teams
-        .where((element) => element.team.id == teamId)
-        .firstOrNull
+        .firstWhereOrNull((element) => element.team.id == teamId)
         ?.team
         .name;
     return teamName;
@@ -1377,9 +1342,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         "INVALID ID";
     final teamPlayers = state.match?.teams
         .firstWhere((element) => element.team.id == teamId)
-        .squad
-        .where((element) => element.player.isActive)
-        .toList();
+        .squad;
 
     if (type == PlayerSelectionType.bowler) {
       // remove substitute to select from bowlers
@@ -1415,9 +1378,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                         element.status == PlayerStatus.substitute,
                   ) &&
                   _isPlayerEligibleForBatsman(element.performance
-                      .where((element) =>
+                      .firstWhereOrNull((element) =>
                           element.inning_id == state.currentInning?.id)
-                      .firstOrNull
                       ?.status))
               .toList() ??
           [];
@@ -1429,13 +1391,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return [];
     }
 
-    final team = state.match?.teams
-        .where((element) => element.team.id != state.currentInning?.team_id)
-        .firstOrNull;
+    final team = state.match?.teams.firstWhereOrNull(
+        (element) => element.team.id != state.currentInning?.team_id);
     final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
     final teamPlayers = team?.team.players
         .where((element) =>
-            element.user.isActive && !teamSquadIds.contains(element.id))
+            !teamSquadIds.contains(element.id) && element.user.isActive)
         .map((e) => e.user)
         .toList();
     return teamPlayers ?? [];
@@ -1446,17 +1407,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return [];
     }
 
-    final team = state.match?.teams
-        .where((element) => element.team.id != state.currentInning?.team_id)
-        .firstOrNull;
+    final team = state.match?.teams.firstWhereOrNull(
+        (element) => element.team.id != state.currentInning?.team_id);
     final teamSquadIds = team?.squad.map((e) => e.player.id).toList() ?? [];
     return teamSquadIds;
   }
 
   Future<void> addSubstitute(UserModel player) async {
-    final fieldingTeam = state.match?.teams
-        .where((element) => element.team.id != state.currentInning?.team_id)
-        .firstOrNull;
+    final fieldingTeam = state.match?.teams.firstWhereOrNull(
+        (element) => element.team.id != state.currentInning?.team_id);
     if (fieldingTeam == null) {
       return;
     }
@@ -1465,8 +1424,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         status: PlayerStatus.substitute);
 
     final matchPlayer = fieldingTeam.squad
-            .where((element) => element.player.id == player.id)
-            .firstOrNull ??
+            .firstWhereOrNull((element) => element.player.id == player.id) ??
         MatchPlayer(id: player.id, player: player);
 
     final playerPerformance = matchPlayer.performance.toList().updateWhere(
@@ -1495,10 +1453,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     final teamId = state.otherInning?.team_id ?? "INVALID ID";
     final teamPlayers = state.match?.teams
-        .firstWhere((element) => element.team.id == teamId)
-        .squad
-        .where((element) => element.player.isActive)
-        .toList();
+        .firstWhereOrNull((element) => element.team.id == teamId)
+        ?.squad;
 
     return teamPlayers ?? [];
   }
@@ -1526,23 +1482,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     return list;
   }
 
-  _cancelStreamSubscription() async {
-    await _matchStreamSubscription?.cancel();
-    await _ballScoreStreamSubscription?.cancel();
-    await _matchStreamController.close();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _loadMatchesAndInning();
-  }
-
-  @override
-  Future<void> dispose() async {
-    await _cancelStreamSubscription();
-    super.dispose();
-  }
-
   Future<void> setRevisedTarget(int run, int over) async {
     String? matchId = state.match?.id;
     if (matchId == null) {
@@ -1556,6 +1495,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     );
     await _matchService.setRevisedTarget(
         matchId: matchId, revisedTarget: revisedTarget);
+  }
+
+   _cancelStreamSubscription() async {
+    await _matchStreamSubscription?.cancel();
+    await _ballScoreStreamSubscription?.cancel();
+    await _matchStreamController.close();
+  }
+
+  void onResume() {
+    _cancelStreamSubscription();
+    _loadMatchesAndInning();
+  }
+
+  @override
+  Future<void> dispose() async {
+    await _cancelStreamSubscription();
+    super.dispose();
   }
 }
 

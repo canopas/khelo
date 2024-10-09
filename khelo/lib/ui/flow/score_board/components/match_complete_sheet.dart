@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
@@ -116,8 +117,7 @@ class MatchCompleteSheet extends ConsumerWidget {
           ...state.allInnings.map(
             (inning) {
               final teamName = state.match?.teams
-                  .where((element) => element.team.id == inning.team_id)
-                  .firstOrNull
+                  .firstWhereOrNull((element) => element.team.id == inning.team_id)
                   ?.team
                   .name;
               return _teamScore(context, state,

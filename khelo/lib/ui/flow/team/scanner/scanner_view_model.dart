@@ -15,7 +15,7 @@ final scannerStateNotifierProvider =
 });
 
 class ScannerStateNotifier extends StateNotifier<ScannerState> {
-  List<String> addedMembers = [];
+  List<String> _addedMembers = [];
   StreamSubscription? _subscription;
 
   ScannerStateNotifier() : super(const ScannerState()) {
@@ -23,7 +23,7 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
   }
 
   void setData(List<String> addedMembers) {
-    this.addedMembers = addedMembers;
+    _addedMembers = addedMembers;
   }
 
   Future<void> _checkCameraPermission() async {
@@ -62,8 +62,8 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
     _subscription = state.controller?.scannedDataStream.listen(
       (event) {
         final code = event.code;
-        if (!addedMembers.contains(code)) {
-          removeListeners();
+        if (!_addedMembers.contains(code)) {
+          _removeListeners();
         }
         state = state.copyWith(
           userId: code ?? "",
@@ -76,14 +76,14 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
     );
   }
 
-  void removeListeners() {
+  void _removeListeners() {
     _subscription?.cancel();
     state.controller?.dispose();
   }
 
   @override
   void dispose() {
-    removeListeners();
+    _removeListeners();
     super.dispose();
   }
 }

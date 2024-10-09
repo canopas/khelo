@@ -33,12 +33,6 @@ class TeamDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
-  final List<Widget> _tabs = [
-    const TeamDetailMatchContent(),
-    const TeamDetailMemberContent(),
-    const TeamDetailStatContent(),
-  ];
-
   late PageController _controller;
 
   late TeamDetailViewNotifier notifier;
@@ -92,7 +86,9 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       children: [
         // profile view
         ImageAvatar(
-          initial: state.team?.name_initial ?? state.team?.name.initials(limit: 1) ?? "?",
+          initial: state.team?.name_initial ??
+              state.team?.name.initials(limit: 1) ??
+              "?",
           imageUrl: state.team?.profile_img_url,
           size: 48,
         ),
@@ -124,13 +120,14 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadData,
       );
     }
 
     return Padding(
       padding: context.mediaQueryPadding,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 16),
@@ -142,28 +139,30 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
   }
 
   Widget _tabView(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+    final tabs = [
+      context.l10n.team_detail_match_tab_title,
+      context.l10n.team_detail_member_tab_title,
+      context.l10n.team_detail_stat_tab_title
+    ];
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      scrollDirection: Axis.horizontal,
       child: Row(
-        children: [
-          TabButton(
-            context.l10n.team_detail_match_tab_title,
-            selected: _selectedTab == 0,
-            onTap: () => _controller.jumpToPage(0),
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(
+          tabs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TabButton(
+              tabs[index],
+              onTap: () {
+                _controller.jumpToPage(index);
+              },
+              selected: index == _selectedTab,
+            ),
           ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.team_detail_member_tab_title,
-            selected: _selectedTab == 1,
-            onTap: () => _controller.jumpToPage(1),
-          ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.team_detail_stat_tab_title,
-            selected: _selectedTab == 2,
-            onTap: () => _controller.jumpToPage(2),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -172,11 +171,12 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
     return Expanded(
       child: PageView(
         controller: _controller,
-        children: _tabs,
-        onPageChanged: (index) {
-          notifier.onTabChange(index);
-          setState(() {});
-        },
+        onPageChanged: notifier.onTabChange,
+        children: const [
+          TeamDetailMatchContent(),
+          TeamDetailMemberContent(),
+          TeamDetailStatContent(),
+        ],
       ),
     );
   }
@@ -217,6 +217,16 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             AppRoute.makeTeamAdmin(team: state.team!).push(context);
           },
         ),
+      BottomSheetAction(
+        title: context.l10n.common_qr_code_title,
+        onTap: () {
+          context.pop();
+          AppRoute.qrCodeView(
+                  id: state.team?.id ?? "",
+                  description: context.l10n.team_detail_use_qr_description)
+              .push(context);
+        },
+      ),
     ]);
   }
 

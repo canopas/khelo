@@ -33,7 +33,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     _team = team;
   }
 
-  Future<void> search(String searchKey) async {
+  Future<void> _search(String searchKey) async {
     try {
       if (searchKey.isEmpty) {
         state = state.copyWith(searchedUsers: []);
@@ -53,7 +53,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      search(state.searchController.text.trim());
+      _search(state.searchController.text.trim());
     });
   }
 
@@ -91,6 +91,7 @@ class AddTeamMemberViewNotifier extends StateNotifier<AddTeamMemberState> {
 
   @override
   void dispose() {
+    state.searchController.dispose();
     _debounce?.cancel();
     super.dispose();
   }

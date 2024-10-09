@@ -1,11 +1,12 @@
 import 'package:canopas_country_picker/canopas_country_picker.dart';
+import 'package:collection/collection.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 part 'contact_selection_view_model.freezed.dart';
@@ -22,25 +23,24 @@ class ContactSelectionViewNotifier
     extends StateNotifier<ContactSelectionState> {
   final UserService _userService;
   final DeviceService _deviceService;
-  List<Contact> fetchedContacts = [];
-  List<String> memberIds = [];
+  List<String> _memberIds = [];
 
   ContactSelectionViewNotifier(this._userService, this._deviceService)
       : super(ContactSelectionState(
             deviceCountryCode: WidgetsBinding
                 .instance.platformDispatcher.locale.countryCode)) {
-    fetchCountryCode();
+    _fetchCountryCode();
   }
 
   void setData(List<String> memberIds) {
-    this.memberIds = memberIds;
+    _memberIds = memberIds;
     checkContactPermission();
   }
 
   Future<void> fetchContacts() async {
     try {
       state = state.copyWith(error: null, loading: true);
-      fetchedContacts = await ContactsService.getContacts();
+      final fetchedContacts = await ContactsService.getContacts();
       state = state.copyWith(contacts: fetchedContacts, loading: false);
     } catch (e) {
       state = state.copyWith(loading: false, error: e);
@@ -48,7 +48,7 @@ class ContactSelectionViewNotifier
     }
   }
 
-  void fetchCountryCode() async {
+  void _fetchCountryCode() async {
     try {
       final deviceCountryCode = await _deviceService.countryCode;
       state = state.copyWith(deviceCountryCode: deviceCountryCode);
@@ -84,8 +84,8 @@ class ContactSelectionViewNotifier
     try {
       final user = await _userService.getUserByPhoneNumber(number);
       if (user == null) {
-        createUser(name, number);
-      } else if (memberIds.contains(user.id)) {
+        _createUser(name, number);
+      } else if (_memberIds.contains(user.id)) {
         state = state.copyWith(alreadyAdded: true, isActionInProgress: false);
       } else {
         state = state.copyWith(selectedUser: user, isActionInProgress: false);
@@ -97,7 +97,7 @@ class ContactSelectionViewNotifier
     }
   }
 
-  Future<void> createUser(String? name, String number) async {
+  Future<void> _createUser(String? name, String number) async {
     if (name == null) {
       state = state.copyWith(isActionInProgress: false);
       return;
@@ -115,11 +115,11 @@ class ContactSelectionViewNotifier
   (CountryCode, String) getNormalisedNumber(String phoneNumber) {
     String? code;
     if (phoneNumber.startsWith('+')) {
-      phoneNumber = keepDigitAndPlusAtStart(phoneNumber);
+      phoneNumber = _keepDigitAndPlusAtStart(phoneNumber);
 
       final matchedCountryCode = CountryCode.allCodes
-          .where((element) => phoneNumber.startsWith(element.dialCode))
-          .firstOrNull
+          .firstWhereOrNull(
+              (element) => phoneNumber.startsWith(element.dialCode))
           ?.dialCode;
       code = matchedCountryCode ?? state.deviceCountryCode;
       final trimFrom = matchedCountryCode != null ? code?.length : 1;
@@ -146,7 +146,7 @@ class ContactSelectionViewNotifier
   }
 }
 
-String keepDigitAndPlusAtStart(String input) {
+String _keepDigitAndPlusAtStart(String input) {
   String formatted = input.replaceAll(RegExp(r'[^+\d]'), '');
 
   if (formatted.startsWith('+')) {

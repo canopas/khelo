@@ -1,14 +1,18 @@
-import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_view_model.dart';
+import 'package:khelo/ui/flow/team/user_detail/component/user_detail_fielding_content.dart';
+import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
+
+import '../../team/user_detail/component/user_detail_batting_content.dart';
+import '../../team/user_detail/component/user_detail_bowling_content.dart';
 
 class UserStatScreen extends ConsumerStatefulWidget {
   const UserStatScreen({super.key});
@@ -19,12 +23,21 @@ class UserStatScreen extends ConsumerStatefulWidget {
 
 class _UserStatScreenState extends ConsumerState<UserStatScreen>
     with WidgetsBindingObserver {
+  late PageController _controller;
+
+  int get _selectedTab => _controller.hasClients
+      ? _controller.page?.round() ?? 0
+      : _controller.initialPage;
+
   late UserStatViewNotifier notifier;
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     notifier = ref.read(userStatViewStateProvider.notifier);
+    _controller = PageController(
+      initialPage: ref.read(userStatViewStateProvider).selectedTab,
+    );
     super.initState();
   }
 
@@ -39,215 +52,97 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (context) => _body(context));
+    return AppPage(
+      body: Builder(builder: (context) => _body(context)),
+    );
   }
 
   Widget _body(BuildContext context) {
     final state = ref.watch(userStatViewStateProvider);
-
-    if (state.loading) return const Center(child: AppProgressIndicator());
-
+    if (state.loading) {
+      return const Center(child: AppProgressIndicator());
+    }
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadData,
       );
     }
-    if (state.userStat == null) return const SizedBox();
 
-    return ListView(
-      padding: const EdgeInsets.all(16) + context.mediaQueryPadding,
-      children: [
-        if (state.userStat?.battingStat != null) ...[
-          _sectionTitle(
-              context, context.l10n.my_stat_stats_batting_statics_title),
-          _battingStats(context, state.userStat?.battingStat),
-        ],
-        const SizedBox(height: 40),
-        if (state.userStat?.bowlingStat != null) ...[
-          _sectionTitle(
-              context, context.l10n.my_stat_stats_bowling_statics_title),
-          _bowlingStats(context, state.userStat?.bowlingStat),
-        ],
-        const SizedBox(height: 40),
-        if (state.userStat?.fieldingStat != null) ...[
-          _sectionTitle(
-              context, context.l10n.my_stat_stats_fielding_statics_title),
-          _fieldingStats(context, state.userStat?.fieldingStat),
-        ],
-      ],
-    );
-  }
-
-  Widget _battingStats(BuildContext context, BattingStat? battingStat) {
-    if (battingStat == null) return const SizedBox();
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 16),
-      decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(16)),
+    return Padding(
+      padding: context.mediaQueryPadding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _mainStatisticView(
-            context,
-            title: context.l10n.my_stat_stats_run_scored_title,
-            count: battingStat.runScored.toString(),
-          ),
-          const SizedBox(height: 16),
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _subStatisticView(context,
-                    title: context.l10n.common_batting_average_title,
-                    count: battingStat.average.toStringAsFixed(2)),
-                _subStatisticView(context,
-                    title: context.l10n.my_stat_stats_strike_rate_title,
-                    count: '${battingStat.strikeRate.toStringAsFixed(2)}%'),
-                _subStatisticView(context,
-                    title: context.l10n.my_stat_stats_ball_faced_title,
-                    count: battingStat.ballFaced.toString()),
-              ],
-            ),
-          ),
+          _tabView(context),
+          _content(context, state),
         ],
       ),
     );
   }
 
-  Widget _bowlingStats(BuildContext context, BowlingStat? bowlingStat) {
-    if (bowlingStat == null) return const SizedBox();
+  Widget _tabView(BuildContext context) {
+    final tabs = [
+      context.l10n.user_detail_batting_title,
+      context.l10n.user_detail_bowling_title,
+      context.l10n.user_detail_fielding_title
+    ];
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 16),
-      decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(16)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _mainStatisticView(
-            context,
-            title: context.l10n.common_wicket_taken_title,
-            count: bowlingStat.wicketTaken.toString(),
-          ),
-          const SizedBox(height: 16),
-          IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _subStatisticView(context,
-                    title: context.l10n.common_bowling_average_title,
-                    count: bowlingStat.average.toStringAsFixed(2)),
-                _subStatisticView(context,
-                    title: context.l10n.my_stat_stats_strike_rate_title,
-                    count: '${bowlingStat.strikeRate.toStringAsFixed(2)}%'),
-                _subStatisticView(context,
-                    title: context.l10n.my_stat_stats_economy_rate_title,
-                    count: bowlingStat.economyRate.toStringAsFixed(2)),
-              ],
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(
+          tabs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TabButton(
+              tabs[index],
+              onTap: () {
+                _controller.jumpToPage(index);
+              },
+              selected: index == _selectedTab,
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _fieldingStats(BuildContext context, FieldingStat? fieldingStat) {
-    if (fieldingStat == null) return const SizedBox();
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 16),
-      decoration: BoxDecoration(
-          border: Border.all(color: context.colorScheme.outline),
-          borderRadius: BorderRadius.circular(16)),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _subStatisticView(context,
-                title: context.l10n.my_stat_stats_catches_title,
-                count: fieldingStat.catches.toString()),
-            _subStatisticView(context,
-                title: context.l10n.common_run_out_title,
-                count: fieldingStat.runOut.toString()),
-            _subStatisticView(context,
-                title: context.l10n.my_stat_stats_stumping_title,
-                count: fieldingStat.stumping.toString()),
-          ],
         ),
       ),
     );
   }
 
-  Widget _sectionTitle(BuildContext context, String title) => Text(title,
-      style: AppTextStyle.header4
-          .copyWith(color: context.colorScheme.textPrimary));
-
-  Widget _mainStatisticView(
-    BuildContext context, {
-    required String title,
-    required String count,
-  }) {
-    return Container(
-        width: context.mediaQuerySize.width,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-            color: context.colorScheme.containerLow,
-            borderRadius: BorderRadius.circular(16)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              count,
-              style: AppTextStyle.subtitle1
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-            Text(
-              title,
-              style: AppTextStyle.body2
-                  .copyWith(color: context.colorScheme.textSecondary),
-            ),
-          ],
-        ));
+  Widget _content(BuildContext context, UserStatViewState state) {
+    return Expanded(
+      child: PageView(
+        controller: _controller,
+        onPageChanged: notifier.onTabChange,
+        children: [
+          UserDetailBattingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.battingStat,
+            otherStats: state.otherStats.battingStat,
+          ),
+          UserDetailBowlingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.bowlingStat,
+            otherStats: state.otherStats.bowlingStat,
+          ),
+          UserDetailFieldingContent(
+            testMatchesCount: state.testMatchesCount,
+            otherMatchesCount: state.otherMatchesCount,
+            testStats: state.testStats.fieldingStat,
+            otherStats: state.otherStats.fieldingStat,
+          ),
+        ],
+      ),
+    );
   }
 
-  Widget _subStatisticView(
-    BuildContext context, {
-    required String title,
-    required String count,
-  }) {
-    return Expanded(
-      child: Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-              color: context.colorScheme.containerLow,
-              borderRadius: BorderRadius.circular(16)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                count,
-                style: AppTextStyle.subtitle1
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.textSecondary),
-              ),
-            ],
-          )),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 }

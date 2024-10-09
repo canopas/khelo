@@ -79,7 +79,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadMatches,
       );
     }
     return ListView(
@@ -87,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 16),
       children: [
         _actionRow(context),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         (state.matches.isNotEmpty)
             ? _content(context, state)
             : SizedBox(
@@ -175,28 +175,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required bool isViewAllShow,
     required Function() onViewAll,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          Text(
-            header,
-            style: AppTextStyle.header3
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          const Spacer(),
-          Opacity(
-            opacity: isViewAllShow ? 1 : 0,
-            child: TextButton(
-                onPressed: onViewAll,
+    return OnTapScale(
+      onTap: onViewAll,
+      enabled: isViewAllShow,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                header,
+                style: AppTextStyle.header3
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+            ),
+            Visibility(
+                visible: isViewAllShow,
                 child: Text(
                   context.l10n.home_screen_view_all_btn,
                   style: AppTextStyle.button.copyWith(
                     color: context.colorScheme.primary,
                   ),
                 )),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -247,8 +250,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ImageAvatar(
-          initial:
-              matchTeam.team.name_initial ?? matchTeam.team.name.initials(limit: 1),
+          initial: matchTeam.team.name_initial ??
+              matchTeam.team.name.initials(limit: 1),
           imageUrl: matchTeam.team.profile_img_url,
           size: 32,
         ),

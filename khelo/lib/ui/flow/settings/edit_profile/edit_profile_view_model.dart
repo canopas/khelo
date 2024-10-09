@@ -33,14 +33,14 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final FileUploadService _fileUploadService;
   final UserService userService;
   final AuthService _authService;
-  final StateController<String?> userJsonController;
+  final StateController<String?> _userJsonController;
 
   EditProfileViewNotifier(
     this._fileUploadService,
     this.userService,
     this._authService,
     UserModel? user,
-    this.userJsonController,
+    this._userJsonController,
   ) : super(EditProfileState(
             dob: user?.dob ?? DateTime.now(),
             imageUrl: user?.profile_img_url,
@@ -144,7 +144,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       );
 
       await userService.updateUser(user);
-      userJsonController.state = user.toJsonString();
+      _userJsonController.state = user.toJsonString();
       state = state.copyWith(isSaveInProgress: false, isSaved: true);
     } catch (e) {
       state = state.copyWith(isSaveInProgress: false, actionError: e);
@@ -160,7 +160,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       await _authService.deleteAccount();
 
       if (userProfileImageUrl != null) {
-        await deleteUnusedImage(userProfileImageUrl);
+        await _deleteUnusedImage(userProfileImageUrl);
       }
     } catch (e) {
       if (e is RequiresRecentLoginError) {
@@ -177,7 +177,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
       final userProfileImageUrl = state.currentUser!.profile_img_url;
       _authService.reAuthenticateAndDeleteAccount();
       if (userProfileImageUrl != null) {
-        await deleteUnusedImage(userProfileImageUrl);
+        await _deleteUnusedImage(userProfileImageUrl);
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == "web-user-interaction-failure") {
@@ -191,13 +191,21 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
     }
   }
 
-  Future<void> deleteUnusedImage(String imgUrl) async {
+  Future<void> _deleteUnusedImage(String imgUrl) async {
     try {
       await _fileUploadService.deleteUploadedImage(imgUrl);
     } catch (e) {
       debugPrint(
           "EditProfileViewNotifier: error while deleting Unused Image -> $e");
     }
+  }
+
+  @override
+  void dispose() {
+    state.nameController.dispose();
+    state.emailController.dispose();
+    state.locationController.dispose();
+    super.dispose();
   }
 }
 

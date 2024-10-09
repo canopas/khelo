@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/service/match/match_service.dart';
@@ -18,7 +19,7 @@ final addMatchViewStateProvider =
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
-    notifier.setUserId(next?.id);
+    notifier._setUserId(next?.id);
   });
   return notifier;
 });
@@ -26,15 +27,15 @@ final addMatchViewStateProvider =
 class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   final MatchService _matchService;
   String? matchId;
+  String? _currentUserId;
 
-  AddMatchViewNotifier(this._matchService, String? userId)
+  AddMatchViewNotifier(this._matchService, this._currentUserId)
       : super(AddMatchViewState(
           totalOverController: TextEditingController(text: "10"),
           overPerBowlerController: TextEditingController(text: "2"),
           cityController: TextEditingController(),
           groundController: TextEditingController(),
           matchTime: DateTime.now(),
-          currentUserId: userId,
         ));
 
   void setData(String? matchId, TeamModel? defaultTeam) {
@@ -48,8 +49,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     }
   }
 
-  void setUserId(String? userId) {
-    state = state.copyWith(currentUserId: userId);
+  void _setUserId(String? userId) {
+    _currentUserId = userId;
   }
 
   Future<void> getMatchById() async {
@@ -134,9 +135,9 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           .map((e) => e.user.id)
           .toList();
       final refereeId = state.officials
-          .where((element) => element.type == MatchOfficials.referee)
-          .map((e) => e.user.id)
-          .firstOrNull;
+          .firstWhereOrNull((element) => element.type == MatchOfficials.referee)
+          ?.user
+          .id;
 
       final firstSquad = state.squadA
               ?.map((e) => MatchPlayer(
@@ -185,8 +186,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           ground: ground,
           start_time: state.matchTime,
           start_at: state.matchTime,
-          created_by:
-              state.currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
+          created_by: _currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
           ball_type: state.ballType,
           pitch_type: state.pitchType,
           umpire_ids: umpireIds,
@@ -347,6 +347,15 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       debugPrint("AddMatchViewNotifier: error while delete Match -> $e");
     }
   }
+
+  @override
+  void dispose() {
+    state.totalOverController.dispose();
+    state.overPerBowlerController.dispose();
+    state.cityController.dispose();
+    state.groundController.dispose();
+    super.dispose();
+  }
 }
 
 @freezed
@@ -359,7 +368,6 @@ class AddMatchViewState with _$AddMatchViewState {
     required TextEditingController groundController,
     Object? error,
     Object? actionError,
-    String? currentUserId,
     MatchModel? match,
     TeamModel? teamA,
     TeamModel? teamB,
