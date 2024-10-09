@@ -66,7 +66,7 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.onResume,
+        onRetryTap: notifier.loadTeamList,
       );
     }
 

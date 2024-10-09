@@ -34,11 +34,9 @@ class TeamDetailMatchContent extends ConsumerWidget {
               } else {
                 if (match.toss_decision == null ||
                     match.toss_winner_id == null) {
-                  AppRoute.addTossDetail(matchId: match.id)
-                      .push(context);
+                  AppRoute.addTossDetail(matchId: match.id).push(context);
                 } else {
-                  AppRoute.scoreBoard(matchId: match.id)
-                      .push(context);
+                  AppRoute.scoreBoard(matchId: match.id).push(context);
                 }
               }
             },
@@ -55,14 +53,14 @@ class TeamDetailMatchContent extends ConsumerWidget {
           isShowButton: isAdminOrOwner,
           buttonTitle: context.l10n.add_match_screen_title,
           onTap: () async {
-            bool? isUpdated = await AppRoute.addMatch(
+            AppRoute.addMatch(
                     defaultTeam: (state.team?.players.length ?? 0) >= 2
                         ? state.team
                         : null)
-                .push<bool>(context);
-            if (isUpdated == true && context.mounted) {
-              ref.read(teamDetailStateProvider.notifier).loadTeamById();
-            }
+                .push(context);
+            // if (isUpdated == true && context.mounted) {
+            //   ref.read(teamDetailStateProvider.notifier).loadTeamById();
+            // }
           });
     }
   }

@@ -39,8 +39,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
   late String _matchId;
-  StreamSubscription? matchStreamSubscription;
-  StreamSubscription? ballScoreStreamSubscription;
+  StreamSubscription? _matchStreamSubscription;
+  StreamSubscription? _ballScoreStreamSubscription;
 
   MatchDetailTabViewNotifier(
     this._matchService,
@@ -60,7 +60,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         _matchService.streamMatchById(_matchId),
         _inningService.streamInningsByMatchId(matchId: _matchId),
       );
-      matchStreamSubscription = matchInningStream.listen((data) {
+      _matchStreamSubscription = matchInningStream.listen((data) {
         final match = data.$1;
         final innings = data.$2;
         state = state.copyWith(match: match);
@@ -105,7 +105,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
     state = state.copyWith(ballScoreQueryListenerSet: true);
 
-    ballScoreStreamSubscription = _ballScoreService
+    _ballScoreStreamSubscription = _ballScoreService
         .streamBallScoresByInningIds(state.allInnings.map((e) => e.id).toList())
         .listen(
       (scores) {
@@ -244,18 +244,6 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     return bowler;
   }
 
-  int getFractionalPart(double value) {
-    String valueString = value.toString();
-
-    List<String> parts = valueString.split('.');
-
-    if (parts.length > 1) {
-      return int.parse(parts[1]);
-    } else {
-      return 0;
-    }
-  }
-
   BatsmanSummary _configureBatsman({
     required List<OverSummary> overList,
     required String playerId,
@@ -362,10 +350,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
   }
 
-  Future<void> cancelStreamSubscription() async {
+  Future<void> _cancelStreamSubscription() async {
     state = state.copyWith(ballScoreQueryListenerSet: false);
-    await matchStreamSubscription?.cancel();
-    await ballScoreStreamSubscription?.cancel();
+    await _matchStreamSubscription?.cancel();
+    await _ballScoreStreamSubscription?.cancel();
   }
 
   void onTabChange(int tab) {
@@ -386,13 +374,13 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   Future<void> onResume() async {
-    await cancelStreamSubscription();
+    await _cancelStreamSubscription();
     _loadMatchesAndInning();
   }
 
   @override
   void dispose() {
-    cancelStreamSubscription();
+    _cancelStreamSubscription();
     super.dispose();
   }
 }

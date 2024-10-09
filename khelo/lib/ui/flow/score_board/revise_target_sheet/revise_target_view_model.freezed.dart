@@ -16,7 +16,6 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReviseTargetViewState {
-  Object? get error => throw _privateConstructorUsedError;
   bool? get showErrorString => throw _privateConstructorUsedError;
   bool? get isPop => throw _privateConstructorUsedError;
   bool get isButtonEnabled => throw _privateConstructorUsedError;
@@ -41,8 +40,7 @@ abstract class $ReviseTargetViewStateCopyWith<$Res> {
       _$ReviseTargetViewStateCopyWithImpl<$Res, ReviseTargetViewState>;
   @useResult
   $Res call(
-      {Object? error,
-      bool? showErrorString,
+      {bool? showErrorString,
       bool? isPop,
       bool isButtonEnabled,
       int actualTarget,
@@ -67,7 +65,6 @@ class _$ReviseTargetViewStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? showErrorString = freezed,
     Object? isPop = freezed,
     Object? isButtonEnabled = null,
@@ -77,7 +74,6 @@ class _$ReviseTargetViewStateCopyWithImpl<$Res,
     Object? manualRunsTextController = null,
   }) {
     return _then(_value.copyWith(
-      error: freezed == error ? _value.error : error,
       showErrorString: freezed == showErrorString
           ? _value.showErrorString
           : showErrorString // ignore: cast_nullable_to_non_nullable
@@ -120,8 +116,7 @@ abstract class _$$ReviseTargetViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Object? error,
-      bool? showErrorString,
+      {bool? showErrorString,
       bool? isPop,
       bool isButtonEnabled,
       int actualTarget,
@@ -144,7 +139,6 @@ class __$$ReviseTargetViewStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? error = freezed,
     Object? showErrorString = freezed,
     Object? isPop = freezed,
     Object? isButtonEnabled = null,
@@ -154,7 +148,6 @@ class __$$ReviseTargetViewStateImplCopyWithImpl<$Res>
     Object? manualRunsTextController = null,
   }) {
     return _then(_$ReviseTargetViewStateImpl(
-      error: freezed == error ? _value.error : error,
       showErrorString: freezed == showErrorString
           ? _value.showErrorString
           : showErrorString // ignore: cast_nullable_to_non_nullable
@@ -191,8 +184,7 @@ class __$$ReviseTargetViewStateImplCopyWithImpl<$Res>
 
 class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
   const _$ReviseTargetViewStateImpl(
-      {this.error,
-      this.showErrorString,
+      {this.showErrorString,
       this.isPop,
       this.isButtonEnabled = false,
       this.actualTarget = 0,
@@ -200,8 +192,6 @@ class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
       required this.manualOverTextController,
       required this.manualRunsTextController});
 
-  @override
-  final Object? error;
   @override
   final bool? showErrorString;
   @override
@@ -222,7 +212,7 @@ class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
 
   @override
   String toString() {
-    return 'ReviseTargetViewState(error: $error, showErrorString: $showErrorString, isPop: $isPop, isButtonEnabled: $isButtonEnabled, actualTarget: $actualTarget, totalOvers: $totalOvers, manualOverTextController: $manualOverTextController, manualRunsTextController: $manualRunsTextController)';
+    return 'ReviseTargetViewState(showErrorString: $showErrorString, isPop: $isPop, isButtonEnabled: $isButtonEnabled, actualTarget: $actualTarget, totalOvers: $totalOvers, manualOverTextController: $manualOverTextController, manualRunsTextController: $manualRunsTextController)';
   }
 
   @override
@@ -230,7 +220,6 @@ class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ReviseTargetViewStateImpl &&
-            const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.showErrorString, showErrorString) ||
                 other.showErrorString == showErrorString) &&
             (identical(other.isPop, isPop) || other.isPop == isPop) &&
@@ -251,7 +240,6 @@ class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(error),
       showErrorString,
       isPop,
       isButtonEnabled,
@@ -272,8 +260,7 @@ class _$ReviseTargetViewStateImpl implements _ReviseTargetViewState {
 
 abstract class _ReviseTargetViewState implements ReviseTargetViewState {
   const factory _ReviseTargetViewState(
-          {final Object? error,
-          final bool? showErrorString,
+          {final bool? showErrorString,
           final bool? isPop,
           final bool isButtonEnabled,
           final int actualTarget,
@@ -282,8 +269,6 @@ abstract class _ReviseTargetViewState implements ReviseTargetViewState {
           required final TextEditingController manualRunsTextController}) =
       _$ReviseTargetViewStateImpl;
 
-  @override
-  Object? get error;
   @override
   bool? get showErrorString;
   @override

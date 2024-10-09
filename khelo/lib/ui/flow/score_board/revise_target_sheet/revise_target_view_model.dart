@@ -37,12 +37,18 @@ class ReviseTargetViewNotifier extends StateNotifier<ReviseTargetViewState> {
         state.manualRunsTextController.text.trim().isNotEmpty;
     state = state.copyWith(showErrorString: null, isButtonEnabled: isEnable);
   }
+
+  @override
+  void dispose() {
+    state.manualRunsTextController.dispose();
+    state.manualOverTextController.dispose();
+    super.dispose();
+  }
 }
 
 @freezed
 class ReviseTargetViewState with _$ReviseTargetViewState {
   const factory ReviseTargetViewState({
-    Object? error,
     bool? showErrorString,
     bool? isPop,
     @Default(false) bool isButtonEnabled,

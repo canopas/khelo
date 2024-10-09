@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:data/api/team/team_model.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/team/team_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,32 +13,50 @@ part 'search_team_view_model.freezed.dart';
 final searchTeamViewStateProvider =
     StateNotifierProvider.autoDispose<SearchTeamViewNotifier, SearchTeamState>(
         (ref) {
-  return SearchTeamViewNotifier(ref.read(teamServiceProvider));
+  final notifier = SearchTeamViewNotifier(
+    ref.read(teamServiceProvider),
+    ref.read(currentUserPod)?.id,
+  );
+  ref.listen(currentUserPod, (previous, next) {
+    notifier._setUserId(next?.id);
+  });
+  return notifier;
 });
 
 class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
-  late StreamSubscription _streamSubscription;
   final TeamService _teamService;
+  StreamSubscription? _streamSubscription;
+  String? _currentUserId;
   Timer? _debounce;
-  List<String> excludedIds = [];
-  bool onlyUserTeams = false;
+  List<String> _excludedIds = [];
+  bool _onlyUserTeams = false;
 
-  SearchTeamViewNotifier(this._teamService)
+  SearchTeamViewNotifier(this._teamService, this._currentUserId)
       : super(SearchTeamState(searchController: TextEditingController())) {
-    loadTeamList();
+    _loadTeamList();
+  }
+
+  void _setUserId(String? userId) {
+    if (userId == null) {
+      _streamSubscription?.cancel();
+    }
+    _currentUserId = userId;
+    _loadTeamList();
   }
 
   void setData(List<String>? ids, bool userTeams) {
-    excludedIds = ids ?? [];
-    onlyUserTeams = userTeams;
+    _excludedIds = ids ?? [];
+    _onlyUserTeams = userTeams;
   }
 
-  Future<void> loadTeamList() async {
+  Future<void> _loadTeamList() async {
+    if (_currentUserId == null) return;
+    _streamSubscription?.cancel();
     state = state.copyWith(loading: true);
-
-    _streamSubscription = _teamService.streamUserOwnedTeams().listen((teams) {
+    _streamSubscription =
+        _teamService.streamUserOwnedTeams(_currentUserId!).listen((teams) {
       final filteredResult =
-          teams.where((element) => !excludedIds.contains(element.id)).toList();
+          teams.where((element) => !_excludedIds.contains(element.id)).toList();
 
       state = state.copyWith(
           userTeams: filteredResult, loading: false, error: null);
@@ -46,12 +66,12 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
     });
   }
 
-  Future<void> search(String searchKey) async {
+  Future<void> _search(String searchKey) async {
     state = state.copyWith(searchInProgress: true);
 
     try {
       List<TeamModel> filteredResult;
-      if (onlyUserTeams) {
+      if (_onlyUserTeams) {
         filteredResult = state.userTeams
             .where((team) => team.name.caseAndSpaceInsensitive
                 .startsWith(searchKey.caseAndSpaceInsensitive))
@@ -59,7 +79,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
       } else {
         final teams = await _teamService.searchTeam(searchKey);
         filteredResult =
-            teams.where((team) => !excludedIds.contains(team.id)).toList();
+            teams.where((team) => !_excludedIds.contains(team.id)).toList();
       }
 
       state = state.copyWith(
@@ -83,7 +103,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       if (state.searchController.text.isNotEmpty) {
-        search(state.searchController.text.trim());
+        _search(state.searchController.text.trim());
       }
     });
   }
@@ -102,8 +122,9 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
 
   @override
   void dispose() {
+    state.searchController.dispose();
     _debounce?.cancel();
-    _streamSubscription.cancel();
+    _streamSubscription?.cancel();
     super.dispose();
   }
 }

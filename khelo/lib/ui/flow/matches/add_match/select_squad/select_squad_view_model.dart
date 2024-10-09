@@ -41,12 +41,12 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
         : null;
     state = state.copyWith(
         squad: updatedList, captainId: captainId, adminId: adminId);
-    onSquadChange();
+    _onSquadChange();
   }
 
   void addToSquad(MatchPlayer user) {
     state = state.copyWith(squad: [...state.squad, user]);
-    onSquadChange();
+    _onSquadChange();
   }
 
   void onCaptainOrAdminSelect(PlayerMatchRole role, String id) {
@@ -56,15 +56,15 @@ class SelectSquadViewNotifier extends StateNotifier<SelectSquadViewState> {
       case PlayerMatchRole.admin:
         state = state.copyWith(adminId: id);
     }
-    onSelectionChange();
+    _onSelectionChange();
   }
 
-  void onSquadChange() {
+  void _onSquadChange() {
     state = state.copyWith(isDoneBtnEnable: state.squad.length >= 2);
-    onSelectionChange();
+    _onSelectionChange();
   }
 
-  void onSelectionChange() {
+  void _onSelectionChange() {
     final isEnable = state.captainId != null && state.adminId != null;
     state = state.copyWith(isOkayBtnEnable: isEnable);
   }

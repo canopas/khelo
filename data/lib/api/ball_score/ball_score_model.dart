@@ -687,14 +687,14 @@ extension ExtraSummaryMetaData on ExtraSummary {
 
 extension BallScoreList on List<BallScoreModel> {
   UserStat calculateUserStats(String currentUserId) {
-    final batingStat = calculateBattingStats(currentUserId: currentUserId);
+    final battingStat = calculateBattingStats(currentUserId: currentUserId);
 
     final bowlingStat = calculateBowlingStats(currentUserId);
 
     final fieldingStat = calculateFieldingStats(currentUserId);
 
     return UserStat(
-      battingStat: batingStat,
+      battingStat: battingStat,
       bowlingStat: bowlingStat,
       fieldingStat: fieldingStat,
     );

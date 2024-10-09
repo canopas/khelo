@@ -12,11 +12,10 @@ final makeTeamAdminStateProvider = StateNotifierProvider.autoDispose<
 
 class MakeTeamAdminViewNotifier extends StateNotifier<MakeTeamAdminState> {
   final TeamService _teamService;
+  late TeamModel _team;
 
   MakeTeamAdminViewNotifier(this._teamService)
       : super(const MakeTeamAdminState());
-
-  late TeamModel _team;
 
   void setData(TeamModel team) {
     _team = team;

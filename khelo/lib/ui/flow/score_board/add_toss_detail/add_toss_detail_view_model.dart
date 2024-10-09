@@ -41,15 +41,15 @@ class AddTossDetailViewNotifier extends StateNotifier<AddTossDetailState> {
 
   void onTossWinnerSelect(String id) {
     state = state.copyWith(tossWinnerTeamId: id);
-    onValueChange();
+    _onValueChange();
   }
 
   void onOptionSelect(TossDecision selection) {
     state = state.copyWith(tossWinnerDecision: selection);
-    onValueChange();
+    _onValueChange();
   }
 
-  void onValueChange() {
+  void _onValueChange() {
     final isEnable =
         state.tossWinnerDecision != null && state.tossWinnerTeamId != null;
     state = state.copyWith(isButtonEnable: isEnable);

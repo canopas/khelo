@@ -17,7 +17,6 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UserStatViewState {
   Object? get error => throw _privateConstructorUsedError;
-  String? get currentUserId => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
   int get testMatchesCount => throw _privateConstructorUsedError;
   int get otherMatchesCount => throw _privateConstructorUsedError;
@@ -40,7 +39,6 @@ abstract class $UserStatViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
-      String? currentUserId,
       int selectedTab,
       int testMatchesCount,
       int otherMatchesCount,
@@ -68,7 +66,6 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
   @override
   $Res call({
     Object? error = freezed,
-    Object? currentUserId = freezed,
     Object? selectedTab = null,
     Object? testMatchesCount = null,
     Object? otherMatchesCount = null,
@@ -78,10 +75,6 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
-      currentUserId: freezed == currentUserId
-          ? _value.currentUserId
-          : currentUserId // ignore: cast_nullable_to_non_nullable
-              as String?,
       selectedTab: null == selectedTab
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
@@ -140,7 +133,6 @@ abstract class _$$UserStatViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
-      String? currentUserId,
       int selectedTab,
       int testMatchesCount,
       int otherMatchesCount,
@@ -168,7 +160,6 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
-    Object? currentUserId = freezed,
     Object? selectedTab = null,
     Object? testMatchesCount = null,
     Object? otherMatchesCount = null,
@@ -178,10 +169,6 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$UserStatViewStateImpl(
       error: freezed == error ? _value.error : error,
-      currentUserId: freezed == currentUserId
-          ? _value.currentUserId
-          : currentUserId // ignore: cast_nullable_to_non_nullable
-              as String?,
       selectedTab: null == selectedTab
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
@@ -215,7 +202,6 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
 class _$UserStatViewStateImpl implements _UserStatViewState {
   const _$UserStatViewStateImpl(
       {this.error,
-      this.currentUserId,
       this.selectedTab = 0,
       this.testMatchesCount = 0,
       this.otherMatchesCount = 0,
@@ -225,8 +211,6 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
 
   @override
   final Object? error;
-  @override
-  final String? currentUserId;
   @override
   @JsonKey()
   final int selectedTab;
@@ -248,7 +232,7 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
 
   @override
   String toString() {
-    return 'UserStatViewState(error: $error, currentUserId: $currentUserId, selectedTab: $selectedTab, testMatchesCount: $testMatchesCount, otherMatchesCount: $otherMatchesCount, testStats: $testStats, otherStats: $otherStats, loading: $loading)';
+    return 'UserStatViewState(error: $error, selectedTab: $selectedTab, testMatchesCount: $testMatchesCount, otherMatchesCount: $otherMatchesCount, testStats: $testStats, otherStats: $otherStats, loading: $loading)';
   }
 
   @override
@@ -257,8 +241,6 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
         (other.runtimeType == runtimeType &&
             other is _$UserStatViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.currentUserId, currentUserId) ||
-                other.currentUserId == currentUserId) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab) &&
             (identical(other.testMatchesCount, testMatchesCount) ||
@@ -276,7 +258,6 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
-      currentUserId,
       selectedTab,
       testMatchesCount,
       otherMatchesCount,
@@ -297,7 +278,6 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
 abstract class _UserStatViewState implements UserStatViewState {
   const factory _UserStatViewState(
       {final Object? error,
-      final String? currentUserId,
       final int selectedTab,
       final int testMatchesCount,
       final int otherMatchesCount,
@@ -307,8 +287,6 @@ abstract class _UserStatViewState implements UserStatViewState {
 
   @override
   Object? get error;
-  @override
-  String? get currentUserId;
   @override
   int get selectedTab;
   @override

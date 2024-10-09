@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -15,34 +16,38 @@ final matchListStateProvider =
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
-    notifier.setUserId(next?.id);
+    notifier._setUserId(next?.id);
   });
   return notifier;
 });
 
 class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
   final MatchService _matchService;
-  late StreamSubscription _matchesStreamSubscription;
+  StreamSubscription? _matchesStreamSubscription;
 
   MatchListViewNotifier(this._matchService, String? userId)
-      : super(MatchListViewState(
-          currentUserId: userId,
-        )) {
-    _loadMatches();
+      : super(MatchListViewState(currentUserId: userId)) {
+    loadMatches();
   }
 
-  void setUserId(String? userId) {
+  void _setUserId(String? userId) {
     if (userId == null) {
-      _cancelStreamSubscription();
+      _matchesStreamSubscription?.cancel();
     }
     state = state.copyWith(currentUserId: userId);
+    loadMatches();
   }
 
-  Future<void> _loadMatches() async {
+  Future<void> loadMatches() async {
+    if (state.currentUserId == null) {
+      return;
+    }
+    _matchesStreamSubscription?.cancel();
     state = state.copyWith(loading: true);
     try {
-      _matchesStreamSubscription =
-          _matchService.streamCurrentUserRelatedMatches().listen((matches) {
+      _matchesStreamSubscription = _matchService
+          .streamUserRelatedMatches(state.currentUserId ?? '')
+          .listen((matches) {
         state = state.copyWith(matches: matches, loading: false, error: null);
       }, onError: (e) {
         state = state.copyWith(loading: false, error: e);
@@ -54,18 +59,9 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     }
   }
 
-  _cancelStreamSubscription() async {
-    await _matchesStreamSubscription.cancel();
-  }
-
-  onResume() {
-    _cancelStreamSubscription();
-    _loadMatches();
-  }
-
   @override
   void dispose() {
-    _cancelStreamSubscription();
+    _matchesStreamSubscription?.cancel();
     super.dispose();
   }
 }

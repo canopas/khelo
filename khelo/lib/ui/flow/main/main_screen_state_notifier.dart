@@ -20,26 +20,26 @@ final mainScreenStateNotifierProvider =
 });
 
 class MainScreenStateNotifier extends StateNotifier<MainScreenState> {
-  final StateController<String?> lastNotificationPermissionPromptDate;
-  final UserModel? currentUser;
+  final StateController<String?> _lastNotificationPermissionPromptDate;
+  final UserModel? _currentUser;
 
-  final AuthService authService;
+  final AuthService _authService;
 
   StreamSubscription? _tokenSub;
 
   MainScreenStateNotifier(
-    this.lastNotificationPermissionPromptDate,
-    this.currentUser,
-    this.authService,
+    this._lastNotificationPermissionPromptDate,
+    this._currentUser,
+    this._authService,
   ) : super(const MainScreenState()) {
     _showNotificationPermissionPromptIfRequired();
     _refreshFcmToken();
   }
 
   void _showNotificationPermissionPromptIfRequired() async {
-    if (currentUser == null) return;
+    if (_currentUser == null) return;
     await Future.delayed(const Duration(seconds: 4));
-    final date = lastNotificationPermissionPromptDate.state;
+    final date = _lastNotificationPermissionPromptDate.state;
 
     if (date == null ||
         DateTime.now().difference(DateTime.parse(date)).inDays >= 21) {
@@ -48,15 +48,13 @@ class MainScreenStateNotifier extends StateNotifier<MainScreenState> {
   }
 
   void notificationPermissionPromptShown() {
-    lastNotificationPermissionPromptDate.state = DateTime.now().toString();
+    _lastNotificationPermissionPromptDate.state = DateTime.now().toString();
   }
 
   void _refreshFcmToken() {
     _tokenSub?.cancel();
     _tokenSub = FirebaseMessaging.instance.onTokenRefresh.listen(
-      (fcmToken) {
-        authService.registerDevice(fcmToken);
-      },
+      _authService.registerDevice,
       onError: (error, stackTrace) {
         debugPrint(
             'MainScreenStateNotifier: Error refreshing FCM token $error');

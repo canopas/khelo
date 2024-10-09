@@ -27,7 +27,6 @@ mixin _$AddTeamState {
   bool? get isNameAvailable => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
   TeamModel? get editTeam => throw _privateConstructorUsedError;
-  UserModel? get currentUser => throw _privateConstructorUsedError;
   bool get isImageUploading => throw _privateConstructorUsedError;
   bool get isAddMeCheckBoxEnable => throw _privateConstructorUsedError;
   bool get checkingForAvailability => throw _privateConstructorUsedError;
@@ -58,7 +57,6 @@ abstract class $AddTeamStateCopyWith<$Res> {
       bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
-      UserModel? currentUser,
       bool isImageUploading,
       bool isAddMeCheckBoxEnable,
       bool checkingForAvailability,
@@ -69,7 +67,6 @@ abstract class $AddTeamStateCopyWith<$Res> {
 
   $TeamModelCopyWith<$Res>? get team;
   $TeamModelCopyWith<$Res>? get editTeam;
-  $UserModelCopyWith<$Res>? get currentUser;
 }
 
 /// @nodoc
@@ -95,7 +92,6 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
     Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
-    Object? currentUser = freezed,
     Object? isImageUploading = null,
     Object? isAddMeCheckBoxEnable = null,
     Object? checkingForAvailability = null,
@@ -134,10 +130,6 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
           ? _value.editTeam
           : editTeam // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
-      currentUser: freezed == currentUser
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
       isImageUploading: null == isImageUploading
           ? _value.isImageUploading
           : isImageUploading // ignore: cast_nullable_to_non_nullable
@@ -196,20 +188,6 @@ class _$AddTeamStateCopyWithImpl<$Res, $Val extends AddTeamState>
       return _then(_value.copyWith(editTeam: value) as $Val);
     });
   }
-
-  /// Create a copy of AddTeamState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserModelCopyWith<$Res>? get currentUser {
-    if (_value.currentUser == null) {
-      return null;
-    }
-
-    return $UserModelCopyWith<$Res>(_value.currentUser!, (value) {
-      return _then(_value.copyWith(currentUser: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -229,7 +207,6 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
       bool? isNameAvailable,
       TeamModel? team,
       TeamModel? editTeam,
-      UserModel? currentUser,
       bool isImageUploading,
       bool isAddMeCheckBoxEnable,
       bool checkingForAvailability,
@@ -242,8 +219,6 @@ abstract class _$$AddTeamStateImplCopyWith<$Res>
   $TeamModelCopyWith<$Res>? get team;
   @override
   $TeamModelCopyWith<$Res>? get editTeam;
-  @override
-  $UserModelCopyWith<$Res>? get currentUser;
 }
 
 /// @nodoc
@@ -267,7 +242,6 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
     Object? isNameAvailable = freezed,
     Object? team = freezed,
     Object? editTeam = freezed,
-    Object? currentUser = freezed,
     Object? isImageUploading = null,
     Object? isAddMeCheckBoxEnable = null,
     Object? checkingForAvailability = null,
@@ -306,10 +280,6 @@ class __$$AddTeamStateImplCopyWithImpl<$Res>
           ? _value.editTeam
           : editTeam // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
-      currentUser: freezed == currentUser
-          ? _value.currentUser
-          : currentUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
       isImageUploading: null == isImageUploading
           ? _value.isImageUploading
           : isImageUploading // ignore: cast_nullable_to_non_nullable
@@ -354,7 +324,6 @@ class _$AddTeamStateImpl implements _AddTeamState {
       this.isNameAvailable,
       this.team,
       this.editTeam,
-      this.currentUser,
       this.isImageUploading = false,
       this.isAddMeCheckBoxEnable = true,
       this.checkingForAvailability = false,
@@ -380,8 +349,6 @@ class _$AddTeamStateImpl implements _AddTeamState {
   final TeamModel? team;
   @override
   final TeamModel? editTeam;
-  @override
-  final UserModel? currentUser;
   @override
   @JsonKey()
   final bool isImageUploading;
@@ -411,7 +378,7 @@ class _$AddTeamStateImpl implements _AddTeamState {
 
   @override
   String toString() {
-    return 'AddTeamState(nameController: $nameController, locationController: $locationController, nameInitialsController: $nameInitialsController, actionError: $actionError, filePath: $filePath, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, currentUser: $currentUser, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
+    return 'AddTeamState(nameController: $nameController, locationController: $locationController, nameInitialsController: $nameInitialsController, actionError: $actionError, filePath: $filePath, isNameAvailable: $isNameAvailable, team: $team, editTeam: $editTeam, isImageUploading: $isImageUploading, isAddMeCheckBoxEnable: $isAddMeCheckBoxEnable, checkingForAvailability: $checkingForAvailability, isAddBtnEnable: $isAddBtnEnable, isAddInProgress: $isAddInProgress, isPop: $isPop, teamMembers: $teamMembers)';
   }
 
   @override
@@ -434,8 +401,6 @@ class _$AddTeamStateImpl implements _AddTeamState {
             (identical(other.team, team) || other.team == team) &&
             (identical(other.editTeam, editTeam) ||
                 other.editTeam == editTeam) &&
-            (identical(other.currentUser, currentUser) ||
-                other.currentUser == currentUser) &&
             (identical(other.isImageUploading, isImageUploading) ||
                 other.isImageUploading == isImageUploading) &&
             (identical(other.isAddMeCheckBoxEnable, isAddMeCheckBoxEnable) ||
@@ -463,7 +428,6 @@ class _$AddTeamStateImpl implements _AddTeamState {
       isNameAvailable,
       team,
       editTeam,
-      currentUser,
       isImageUploading,
       isAddMeCheckBoxEnable,
       checkingForAvailability,
@@ -491,7 +455,6 @@ abstract class _AddTeamState implements AddTeamState {
       final bool? isNameAvailable,
       final TeamModel? team,
       final TeamModel? editTeam,
-      final UserModel? currentUser,
       final bool isImageUploading,
       final bool isAddMeCheckBoxEnable,
       final bool checkingForAvailability,
@@ -516,8 +479,6 @@ abstract class _AddTeamState implements AddTeamState {
   TeamModel? get team;
   @override
   TeamModel? get editTeam;
-  @override
-  UserModel? get currentUser;
   @override
   bool get isImageUploading;
   @override

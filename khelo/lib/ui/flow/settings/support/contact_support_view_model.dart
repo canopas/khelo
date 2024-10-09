@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:data/api/support/support_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
@@ -9,10 +10,9 @@ import 'package:data/storage/app_preferences.dart';
 import 'package:data/utils/constant/firebase_storage_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:data/api/support/support_models.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:khelo/domain/extensions/file_extension.dart';
 
 part 'contact_support_view_model.freezed.dart';
@@ -28,15 +28,15 @@ final contactSupportStateNotifierProvider = StateNotifierProvider.autoDispose<
 
 class ContactSupportViewStateNotifier
     extends StateNotifier<ContactSupportViewState> {
-  final ImagePicker picker;
-  final FileUploadService fileUploadService;
-  final SupportService supportService;
+  final ImagePicker _picker;
+  final FileUploadService _fileUploadService;
+  final SupportService _supportService;
   final String? _currentUserId;
 
   ContactSupportViewStateNotifier(
-    this.picker,
-    this.fileUploadService,
-    this.supportService,
+    this._picker,
+    this._fileUploadService,
+    this._supportService,
     this._currentUserId,
   ) : super(ContactSupportViewState(
           titleController: TextEditingController(),
@@ -76,7 +76,7 @@ class ContactSupportViewStateNotifier
             attachments: attachments,
             actionError: const LargeAttachmentUploadError());
       } else {
-        final url = await fileUploadService.uploadProfileImage(
+        final url = await _fileUploadService.uploadProfileImage(
             filePath: path,
             uploadPath: StorageConst.supportAttachmentUploadPath(
                 userId: _currentUserId ?? '',
@@ -107,7 +107,7 @@ class ContactSupportViewStateNotifier
 
   void pickAttachments() async {
     try {
-      final List<XFile> medias = await picker.pickMultipleMedia(
+      final List<XFile> medias = await _picker.pickMultipleMedia(
         imageQuality: 70,
       );
       for (XFile media in medias) {
@@ -122,7 +122,7 @@ class ContactSupportViewStateNotifier
 
   void removeAttachment(int index) async {
     if (state.attachments.elementAt(index).url != null) {
-      await fileUploadService
+      await _fileUploadService
           .deleteUploadedImage(state.attachments.elementAt(index).url ?? '');
     }
     state = state.copyWith(
@@ -133,7 +133,7 @@ class ContactSupportViewStateNotifier
   void discardAttachments() async {
     for (final attachment in state.attachments) {
       if (attachment.url != null) {
-        await fileUploadService.deleteUploadedImage(attachment.url!);
+        await _fileUploadService.deleteUploadedImage(attachment.url!);
       }
     }
     state = state.copyWith(attachments: []);
@@ -144,7 +144,7 @@ class ContactSupportViewStateNotifier
       state = state.copyWith(submitting: true, actionError: null);
 
       final supportCase = AddSupportCaseRequest(
-        id: supportService.generateSupportId,
+        id: _supportService.generateSupportId,
         title: state.titleController.text.trim(),
         description: state.descriptionController.text.trim(),
         attachmentUrls:
@@ -154,7 +154,7 @@ class ContactSupportViewStateNotifier
         createdTime: DateTime.now(),
       );
 
-      await supportService.addSupportCase(supportCase).whenComplete(
+      await _supportService.addSupportCase(supportCase).whenComplete(
             () => state = state.copyWith(pop: true, submitting: false),
           );
     } catch (error) {
@@ -162,6 +162,13 @@ class ContactSupportViewStateNotifier
       debugPrint(
           "ContactSupportViewStateNotifier: Error while adding support case $error");
     }
+  }
+
+  @override
+  void dispose() {
+    state.titleController.dispose();
+    state.descriptionController.dispose();
+    super.dispose();
   }
 }
 

@@ -1,34 +1,28 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../../api/team/team_model.dart';
 import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
-import '../user/user_service.dart';
 import '../../utils/constant/firestore_constant.dart';
 import '../../utils/dummy_deactivated_account.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../user/user_service.dart';
 
-import '../../storage/app_preferences.dart';
-
-final teamServiceProvider = Provider((ref) {
-  final service = TeamService(
-    ref.read(currentUserPod)?.id,
+final teamServiceProvider = Provider(
+  (ref) => TeamService(
     FirebaseFirestore.instance,
     ref.read(userServiceProvider),
-  );
-
-  ref.listen(currentUserPod, (_, next) => service._currentUserId = next?.id);
-  return service;
-});
+  ),
+);
 
 class TeamService {
-  String? _currentUserId;
-
   final FirebaseFirestore _firestore;
   final UserService _userService;
 
-  TeamService(this._currentUserId, this._firestore, this._userService);
+  TeamService(this._firestore, this._userService);
 
   CollectionReference<TeamModel> get _teamsCollection =>
       _firestore.collection(FireStoreConst.teamsCollection).withConverter(
@@ -76,11 +70,8 @@ class TeamService {
     }).handleError((error, stack) => AppError.fromError(error, stack));
   }
 
-  Stream<List<TeamModel>> streamUserRelatedTeams() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-    final currentPlayer = TeamPlayer(id: _currentUserId ?? 'INVALID ID');
+  Stream<List<TeamModel>> streamUserRelatedTeams(String userId) {
+    final currentPlayer = TeamPlayer(id: userId);
 
     final playerContains = [
       currentPlayer.copyWith(role: TeamPlayerRole.admin).toJson(),
@@ -88,7 +79,7 @@ class TeamService {
     ];
 
     final filter = Filter.or(
-      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.teamPlayers, arrayContainsAny: playerContains),
     );
     return _teamsCollection
@@ -114,14 +105,14 @@ class TeamService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<TeamModel>> streamUserOwnedTeams() {
+  Stream<List<TeamModel>> streamUserOwnedTeams(String userId) {
     final currentPlayer = TeamPlayer(
-      id: _currentUserId ?? 'INVALID ID',
+      id: userId,
       role: TeamPlayerRole.admin,
     );
 
     final filter = Filter.or(
-      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.teamPlayers, arrayContains: currentPlayer.toJson()),
     );
     return _teamsCollection

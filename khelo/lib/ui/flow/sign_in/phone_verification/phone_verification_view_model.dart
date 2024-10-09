@@ -18,10 +18,10 @@ final phoneVerificationStateProvider = StateNotifierProvider.autoDispose<
 class PhoneVerificationViewNotifier
     extends StateNotifier<PhoneVerificationState> {
   final AuthService _authService;
-  late String phoneNumber;
-  late String countryCode;
+  late String _phoneNumber;
+  late String _countryCode;
 
-  bool firstAutoVerificationComplete = false;
+  bool _firstAutoVerificationComplete = false;
 
   PhoneVerificationViewNotifier(this._authService)
       : super(const PhoneVerificationState());
@@ -32,9 +32,9 @@ class PhoneVerificationViewNotifier
         enableVerify: otp.length == 6,
         showErrorVerificationCodeText: false);
 
-    if (!firstAutoVerificationComplete && otp.length == 6) {
+    if (!_firstAutoVerificationComplete && otp.length == 6) {
       verifyOTP();
-      firstAutoVerificationComplete = true;
+      _firstAutoVerificationComplete = true;
     }
   }
 
@@ -44,8 +44,8 @@ class PhoneVerificationViewNotifier
     required String code,
   }) {
     state = state.copyWith(verificationId: verificationId);
-    phoneNumber = phone;
-    countryCode = code;
+    _phoneNumber = phone;
+    _countryCode = code;
   }
 
   Future<void> verifyOTP() async {
@@ -56,7 +56,7 @@ class PhoneVerificationViewNotifier
         actionError: null);
     try {
       await _authService.verifyOTP(
-          countryCode, phoneNumber, state.verificationId!, state.otp);
+          _countryCode, _phoneNumber, state.verificationId!, state.otp);
       state = state.copyWith(verifying: false, isVerificationComplete: true);
     } on AppError catch (e) {
       if (e.l10nCode == AppErrorL10nCodes.invalidVerificationCode) {
