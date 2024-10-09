@@ -43,7 +43,6 @@ class ContactSelectionViewNotifier
       final fetchedContacts = await FlutterContacts.getContacts(
         withProperties: true,
         withThumbnail: true,
-        withPhoto: true,
       );
       state = state.copyWith(contacts: fetchedContacts, loading: false);
     } catch (e) {

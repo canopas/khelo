@@ -146,8 +146,11 @@ class _ContactSelectionScreenState
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          _profileImageView(context, contact.photoOrThumbnail,
-              contact.displayName.characters.firstOrNull),
+          _profileImageView(
+            context,
+            contact.thumbnail,
+            contact.displayName.characters.firstOrNull,
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
