@@ -146,7 +146,7 @@ class AddTeamViewNotifier extends StateNotifier<AddTeamState> {
             profile_img_url: imageUrl,
             city: location.toLowerCase(),
             name_initial: initials.isNotEmpty ? initials : null,
-            created_by: _currentUser!.id,
+            created_by: _currentUser?.id,
             players: players,
             created_at: state.editTeam?.created_at ?? DateTime.now(),
             created_time: state.editTeam?.created_time ?? DateTime.now());
