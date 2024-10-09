@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:canopas_country_picker/canopas_country_picker.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/contact.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
@@ -146,12 +146,12 @@ class _ContactSelectionScreenState
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         children: [
-          _profileImageView(context, contact.avatar,
-              contact.displayName?.characters.firstOrNull),
+          _profileImageView(context, contact.photoOrThumbnail,
+              contact.displayName.characters.firstOrNull),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
-              contact.displayName ?? '',
+              contact.displayName,
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
@@ -159,18 +159,16 @@ class _ContactSelectionScreenState
           const SizedBox(width: 4),
           SecondaryButton(
             context.l10n.common_add_title,
-            enabled: contact.phones != null &&
-                contact.phones!.isNotEmpty &&
-                !isActionInProgress,
+            enabled: contact.phones.isNotEmpty && !isActionInProgress,
             onPressed: () async {
-              if (contact.phones == null || contact.phones!.isEmpty) {
+              if (contact.phones.isEmpty) {
                 return;
               }
-              if ((contact.phones?.length ?? 0) > 1) {
+              if (contact.phones.length > 1) {
                 _showSelectNumberDialog(context, contact);
               } else {
-                final firstNumber = contact.phones?.first.value;
-                if (firstNumber != null && firstNumber.isNotEmpty) {
+                final firstNumber = contact.phones.first.number;
+                if (firstNumber.isNotEmpty) {
                   showConfirmNumberSheet(
                       context, contact.displayName, firstNumber);
                 }
@@ -193,31 +191,29 @@ class _ContactSelectionScreenState
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: contact.phones?.map((e) {
-                  final showDivider = contact.phones?.lastOrNull != e;
-                  if (e.value == null || e.value!.isEmpty) {
-                    return const SizedBox();
-                  }
-                  return OnTapScale(
-                    onTap: () => context.pop(e.value),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          e.value ?? '',
-                          style: AppTextStyle.subtitle3
-                              .copyWith(color: context.colorScheme.textPrimary),
-                        ),
-                        if (showDivider)
-                          Divider(
-                            height: 36,
-                            color: context.colorScheme.outline,
-                          ),
-                      ],
+            children: contact.phones.map((e) {
+              final showDivider = contact.phones.lastOrNull != e;
+              if (e.number.isEmpty) return const SizedBox();
+
+              return OnTapScale(
+                onTap: () => context.pop(e.number),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      e.number,
+                      style: AppTextStyle.subtitle3
+                          .copyWith(color: context.colorScheme.textPrimary),
                     ),
-                  );
-                }).toList() ??
-                [],
+                    if (showDivider)
+                      Divider(
+                        height: 36,
+                        color: context.colorScheme.outline,
+                      ),
+                  ],
+                ),
+              );
+            }).toList(),
           ),
         ),
       ),
@@ -261,9 +257,7 @@ class _ContactSelectionScreenState
           shape: BoxShape.circle,
           color: context.colorScheme.containerHigh,
           image: image != null && image.isNotEmpty
-              ? DecorationImage(
-                  image: MemoryImage(image),
-                )
+              ? DecorationImage(image: MemoryImage(image), fit: BoxFit.fill)
               : null),
       child: image != null && image.isNotEmpty
           ? null

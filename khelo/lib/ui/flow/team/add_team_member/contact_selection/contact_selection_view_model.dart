@@ -1,10 +1,10 @@
 import 'package:canopas_country_picker/canopas_country_picker.dart';
 import 'package:collection/collection.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -40,7 +40,11 @@ class ContactSelectionViewNotifier
   Future<void> fetchContacts() async {
     try {
       state = state.copyWith(error: null, loading: true);
-      final fetchedContacts = await ContactsService.getContacts();
+      final fetchedContacts = await FlutterContacts.getContacts(
+        withProperties: true,
+        withThumbnail: true,
+        withPhoto: true,
+      );
       state = state.copyWith(contacts: fetchedContacts, loading: false);
     } catch (e) {
       state = state.copyWith(loading: false, error: e);
