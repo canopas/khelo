@@ -65,10 +65,10 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
       status: _teamMatchStatus(finishedMatches),
       runs: _totalRuns(teamId, finishedMatches),
       wickets: _wickets(teamId, finishedMatches),
-      bating_average: _battingAverage(teamId, finishedMatches),
+      batting_average: _battingAverage(teamId, finishedMatches),
       bowling_average: _bowlingAverage(teamId, finishedMatches),
       highest_runs: _highestAndLowestRuns(teamId, finishedMatches).$1,
-      lowest_runts: _highestAndLowestRuns(teamId, finishedMatches).$2,
+      lowest_runs: _highestAndLowestRuns(teamId, finishedMatches).$2,
       run_rate: _runRate(finishedMatches, _totalRuns(teamId, finishedMatches)),
     );
   }

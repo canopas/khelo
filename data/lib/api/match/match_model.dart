@@ -309,10 +309,10 @@ class TeamStat with _$TeamStat {
     @Default(TeamMatchStatus()) TeamMatchStatus status,
     @Default(0) int runs,
     @Default(0) int wickets,
-    @Default(0.0) double bating_average,
+    @Default(0.0) double batting_average,
     @Default(0.0) double bowling_average,
     @Default(0) int highest_runs,
-    @Default(0) int lowest_runts,
+    @Default(0) int lowest_runs,
     @Default(0.0) double run_rate,
   }) = _TeamStat;
 }
