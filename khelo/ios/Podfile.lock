@@ -1159,8 +1159,6 @@ PODS:
     - Firebase/Functions (= 11.2.0)
     - firebase_core
     - Flutter
-  - contacts_service (0.2.2):
-    - Flutter
   - device_info_plus (0.0.1):
     - Flutter
   - Firebase/Auth (11.2.0):
@@ -1292,6 +1290,8 @@ PODS:
     - GoogleUtilities/Environment (~> 8.0)
     - GTMSessionFetcher/Core (~> 3.4)
   - Flutter (1.0.0)
+  - flutter_contacts (0.0.1):
+    - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
   - flutter_timezone (0.0.1):
@@ -1457,7 +1457,6 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
-  - contacts_service (from `.symlinks/plugins/contacts_service/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -1465,6 +1464,7 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_timezone (from `.symlinks/plugins/flutter_timezone/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
@@ -1519,8 +1519,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_functions:
     :path: ".symlinks/plugins/cloud_functions/ios"
-  contacts_service:
-    :path: ".symlinks/plugins/contacts_service/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   firebase_auth:
@@ -1535,6 +1533,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_contacts:
+    :path: ".symlinks/plugins/flutter_contacts/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   flutter_timezone:
@@ -1565,7 +1565,6 @@ SPEC CHECKSUMS:
   BoringSSL-GRPC: ca6a8e5d04812fce8ffd6437810c2d46f925eaeb
   cloud_firestore: 5cb927f1a8c9d748d6fdbf16c6b267956cb82c53
   cloud_functions: 071fdf2c9ae0932ea9eb8b7d8aef4b014112a8ab
-  contacts_service: 849e1f84281804c8bfbec1b4c3eedcb23c5d3eca
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 98e6bf5278170668a7983e12971a66b2cd57fc8c
   firebase_auth: 0c77e299a8f2d1c74d1b1f6b78b3d4d802c19f47
@@ -1591,6 +1590,7 @@ SPEC CHECKSUMS:
   FirebaseSharedSwift: d39c2ad64a11a8d936ce25a42b00df47078bb59c
   FirebaseStorage: 9353f926690b2329957860abfcbc8b4074fe45e8
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
   flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_timezone: ffb07bdad3c6276af8dada0f11978d8a1f8a20bb
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
