@@ -54,6 +54,7 @@ class AppRoute {
   static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
   static const pathContactSelection = "/contact-selection";
+  static const pathAddTournament = "/add-tournament";
 
   final String path;
   final String? name;

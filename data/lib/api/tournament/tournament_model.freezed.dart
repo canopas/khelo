@@ -23,6 +23,7 @@ mixin _$TournamentModel {
   String get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
+  String? get banner_img_url => throw _privateConstructorUsedError;
   TournamentType get type => throw _privateConstructorUsedError;
   List<TournamentMember> get members => throw _privateConstructorUsedError;
   String get created_by => throw _privateConstructorUsedError;
@@ -39,8 +40,12 @@ mixin _$TournamentModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<MatchModel> get matches => throw _privateConstructorUsedError;
 
+  /// Serializes this TournamentModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TournamentModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TournamentModelCopyWith<TournamentModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -55,6 +60,7 @@ abstract class $TournamentModelCopyWith<$Res> {
       {String id,
       String name,
       String? profile_img_url,
+      String? banner_img_url,
       TournamentType type,
       List<TournamentMember> members,
       String created_by,
@@ -79,12 +85,15 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TournamentModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? name = null,
     Object? profile_img_url = freezed,
+    Object? banner_img_url = freezed,
     Object? type = null,
     Object? members = null,
     Object? created_by = null,
@@ -108,6 +117,10 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
       profile_img_url: freezed == profile_img_url
           ? _value.profile_img_url
           : profile_img_url // ignore: cast_nullable_to_non_nullable
+              as String?,
+      banner_img_url: freezed == banner_img_url
+          ? _value.banner_img_url
+          : banner_img_url // ignore: cast_nullable_to_non_nullable
               as String?,
       type: null == type
           ? _value.type
@@ -165,6 +178,7 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
       {String id,
       String name,
       String? profile_img_url,
+      String? banner_img_url,
       TournamentType type,
       List<TournamentMember> members,
       String created_by,
@@ -187,12 +201,15 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
       _$TournamentModelImpl _value, $Res Function(_$TournamentModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TournamentModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? name = null,
     Object? profile_img_url = freezed,
+    Object? banner_img_url = freezed,
     Object? type = null,
     Object? members = null,
     Object? created_by = null,
@@ -216,6 +233,10 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
       profile_img_url: freezed == profile_img_url
           ? _value.profile_img_url
           : profile_img_url // ignore: cast_nullable_to_non_nullable
+              as String?,
+      banner_img_url: freezed == banner_img_url
+          ? _value.banner_img_url
+          : banner_img_url // ignore: cast_nullable_to_non_nullable
               as String?,
       type: null == type
           ? _value.type
@@ -269,6 +290,7 @@ class _$TournamentModelImpl implements _TournamentModel {
       {required this.id,
       required this.name,
       this.profile_img_url,
+      this.banner_img_url,
       required this.type,
       final List<TournamentMember> members = const [],
       required this.created_by,
@@ -296,6 +318,8 @@ class _$TournamentModelImpl implements _TournamentModel {
   final String name;
   @override
   final String? profile_img_url;
+  @override
+  final String? banner_img_url;
   @override
   final TournamentType type;
   final List<TournamentMember> _members;
@@ -356,7 +380,7 @@ class _$TournamentModelImpl implements _TournamentModel {
 
   @override
   String toString() {
-    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, type: $type, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches)';
+    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches)';
   }
 
   @override
@@ -368,6 +392,8 @@ class _$TournamentModelImpl implements _TournamentModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.profile_img_url, profile_img_url) ||
                 other.profile_img_url == profile_img_url) &&
+            (identical(other.banner_img_url, banner_img_url) ||
+                other.banner_img_url == banner_img_url) &&
             (identical(other.type, type) || other.type == type) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
             (identical(other.created_by, created_by) ||
@@ -385,13 +411,14 @@ class _$TournamentModelImpl implements _TournamentModel {
             const DeepCollectionEquality().equals(other._matches, _matches));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
       id,
       name,
       profile_img_url,
+      banner_img_url,
       type,
       const DeepCollectionEquality().hash(_members),
       created_by,
@@ -403,7 +430,9 @@ class _$TournamentModelImpl implements _TournamentModel {
       const DeepCollectionEquality().hash(_teams),
       const DeepCollectionEquality().hash(_matches));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TournamentModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TournamentModelImplCopyWith<_$TournamentModelImpl> get copyWith =>
@@ -423,6 +452,7 @@ abstract class _TournamentModel implements TournamentModel {
       {required final String id,
       required final String name,
       final String? profile_img_url,
+      final String? banner_img_url,
       required final TournamentType type,
       final List<TournamentMember> members,
       required final String created_by,
@@ -445,6 +475,8 @@ abstract class _TournamentModel implements TournamentModel {
   String get name;
   @override
   String? get profile_img_url;
+  @override
+  String? get banner_img_url;
   @override
   TournamentType get type;
   @override
@@ -470,8 +502,11 @@ abstract class _TournamentModel implements TournamentModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<MatchModel> get matches;
+
+  /// Create a copy of TournamentModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TournamentModelImplCopyWith<_$TournamentModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -485,8 +520,12 @@ mixin _$TournamentMember {
   String get id => throw _privateConstructorUsedError;
   TournamentMemberRole get role => throw _privateConstructorUsedError;
 
+  /// Serializes this TournamentMember to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $TournamentMemberCopyWith<TournamentMember> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -510,6 +549,8 @@ class _$TournamentMemberCopyWithImpl<$Res, $Val extends TournamentMember>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -548,6 +589,8 @@ class __$$TournamentMemberImplCopyWithImpl<$Res>
       $Res Function(_$TournamentMemberImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -596,11 +639,13 @@ class _$TournamentMemberImpl implements _TournamentMember {
             (identical(other.role, role) || other.role == role));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, role);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TournamentMemberImplCopyWith<_$TournamentMemberImpl> get copyWith =>
@@ -627,8 +672,11 @@ abstract class _TournamentMember implements TournamentMember {
   String get id;
   @override
   TournamentMemberRole get role;
+
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TournamentMemberImplCopyWith<_$TournamentMemberImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -18,7 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$AddTournamentState {
   Object? get error => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
-  String? get filePath => throw _privateConstructorUsedError;
+  String? get profilePath => throw _privateConstructorUsedError;
+  String? get bannerPath => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
   DateTime get endDate => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
@@ -26,7 +27,8 @@ mixin _$AddTournamentState {
   bool get loading => throw _privateConstructorUsedError;
   bool get enableButton => throw _privateConstructorUsedError;
   bool get imageUploading => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
+  String? get profileImgUrl => throw _privateConstructorUsedError;
+  String? get bannerImgUrl => throw _privateConstructorUsedError;
   TextEditingController get nameController =>
       throw _privateConstructorUsedError;
   TournamentType get selectedType => throw _privateConstructorUsedError;
@@ -47,7 +49,8 @@ abstract class $AddTournamentStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       Object? actionError,
-      String? filePath,
+      String? profilePath,
+      String? bannerPath,
       String? currentUserId,
       DateTime endDate,
       DateTime startDate,
@@ -55,7 +58,8 @@ abstract class $AddTournamentStateCopyWith<$Res> {
       bool loading,
       bool enableButton,
       bool imageUploading,
-      String? imageUrl,
+      String? profileImgUrl,
+      String? bannerImgUrl,
       TextEditingController nameController,
       TournamentType selectedType});
 }
@@ -77,7 +81,8 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
   $Res call({
     Object? error = freezed,
     Object? actionError = freezed,
-    Object? filePath = freezed,
+    Object? profilePath = freezed,
+    Object? bannerPath = freezed,
     Object? currentUserId = freezed,
     Object? endDate = null,
     Object? startDate = null,
@@ -85,16 +90,21 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
     Object? loading = null,
     Object? enableButton = null,
     Object? imageUploading = null,
-    Object? imageUrl = freezed,
+    Object? profileImgUrl = freezed,
+    Object? bannerImgUrl = freezed,
     Object? nameController = null,
     Object? selectedType = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      filePath: freezed == filePath
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
+      profilePath: freezed == profilePath
+          ? _value.profilePath
+          : profilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerPath: freezed == bannerPath
+          ? _value.bannerPath
+          : bannerPath // ignore: cast_nullable_to_non_nullable
               as String?,
       currentUserId: freezed == currentUserId
           ? _value.currentUserId
@@ -124,9 +134,13 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
           ? _value.imageUploading
           : imageUploading // ignore: cast_nullable_to_non_nullable
               as bool,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      profileImgUrl: freezed == profileImgUrl
+          ? _value.profileImgUrl
+          : profileImgUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerImgUrl: freezed == bannerImgUrl
+          ? _value.bannerImgUrl
+          : bannerImgUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       nameController: null == nameController
           ? _value.nameController
@@ -151,7 +165,8 @@ abstract class _$$AddTournamentStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       Object? actionError,
-      String? filePath,
+      String? profilePath,
+      String? bannerPath,
       String? currentUserId,
       DateTime endDate,
       DateTime startDate,
@@ -159,7 +174,8 @@ abstract class _$$AddTournamentStateImplCopyWith<$Res>
       bool loading,
       bool enableButton,
       bool imageUploading,
-      String? imageUrl,
+      String? profileImgUrl,
+      String? bannerImgUrl,
       TextEditingController nameController,
       TournamentType selectedType});
 }
@@ -179,7 +195,8 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? actionError = freezed,
-    Object? filePath = freezed,
+    Object? profilePath = freezed,
+    Object? bannerPath = freezed,
     Object? currentUserId = freezed,
     Object? endDate = null,
     Object? startDate = null,
@@ -187,16 +204,21 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
     Object? loading = null,
     Object? enableButton = null,
     Object? imageUploading = null,
-    Object? imageUrl = freezed,
+    Object? profileImgUrl = freezed,
+    Object? bannerImgUrl = freezed,
     Object? nameController = null,
     Object? selectedType = null,
   }) {
     return _then(_$AddTournamentStateImpl(
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      filePath: freezed == filePath
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
+      profilePath: freezed == profilePath
+          ? _value.profilePath
+          : profilePath // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerPath: freezed == bannerPath
+          ? _value.bannerPath
+          : bannerPath // ignore: cast_nullable_to_non_nullable
               as String?,
       currentUserId: freezed == currentUserId
           ? _value.currentUserId
@@ -226,9 +248,13 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
           ? _value.imageUploading
           : imageUploading // ignore: cast_nullable_to_non_nullable
               as bool,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      profileImgUrl: freezed == profileImgUrl
+          ? _value.profileImgUrl
+          : profileImgUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bannerImgUrl: freezed == bannerImgUrl
+          ? _value.bannerImgUrl
+          : bannerImgUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       nameController: null == nameController
           ? _value.nameController
@@ -248,7 +274,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
   const _$AddTournamentStateImpl(
       {this.error,
       this.actionError,
-      this.filePath,
+      this.profilePath,
+      this.bannerPath,
       this.currentUserId,
       required this.endDate,
       required this.startDate,
@@ -256,7 +283,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       this.loading = false,
       this.enableButton = false,
       this.imageUploading = false,
-      this.imageUrl = null,
+      this.profileImgUrl = null,
+      this.bannerImgUrl = null,
       required this.nameController,
       this.selectedType = TournamentType.knockOut});
 
@@ -265,7 +293,9 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
   @override
   final Object? actionError;
   @override
-  final String? filePath;
+  final String? profilePath;
+  @override
+  final String? bannerPath;
   @override
   final String? currentUserId;
   @override
@@ -286,7 +316,10 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
   final bool imageUploading;
   @override
   @JsonKey()
-  final String? imageUrl;
+  final String? profileImgUrl;
+  @override
+  @JsonKey()
+  final String? bannerImgUrl;
   @override
   final TextEditingController nameController;
   @override
@@ -295,7 +328,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
 
   @override
   String toString() {
-    return 'AddTournamentState(error: $error, actionError: $actionError, filePath: $filePath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, enableButton: $enableButton, imageUploading: $imageUploading, imageUrl: $imageUrl, nameController: $nameController, selectedType: $selectedType)';
+    return 'AddTournamentState(error: $error, actionError: $actionError, profilePath: $profilePath, bannerPath: $bannerPath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, enableButton: $enableButton, imageUploading: $imageUploading, profileImgUrl: $profileImgUrl, bannerImgUrl: $bannerImgUrl, nameController: $nameController, selectedType: $selectedType)';
   }
 
   @override
@@ -306,8 +339,10 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
-            (identical(other.filePath, filePath) ||
-                other.filePath == filePath) &&
+            (identical(other.profilePath, profilePath) ||
+                other.profilePath == profilePath) &&
+            (identical(other.bannerPath, bannerPath) ||
+                other.bannerPath == bannerPath) &&
             (identical(other.currentUserId, currentUserId) ||
                 other.currentUserId == currentUserId) &&
             (identical(other.endDate, endDate) || other.endDate == endDate) &&
@@ -319,8 +354,10 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
                 other.enableButton == enableButton) &&
             (identical(other.imageUploading, imageUploading) ||
                 other.imageUploading == imageUploading) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.profileImgUrl, profileImgUrl) ||
+                other.profileImgUrl == profileImgUrl) &&
+            (identical(other.bannerImgUrl, bannerImgUrl) ||
+                other.bannerImgUrl == bannerImgUrl) &&
             (identical(other.nameController, nameController) ||
                 other.nameController == nameController) &&
             (identical(other.selectedType, selectedType) ||
@@ -332,7 +369,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(actionError),
-      filePath,
+      profilePath,
+      bannerPath,
       currentUserId,
       endDate,
       startDate,
@@ -340,7 +378,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       loading,
       enableButton,
       imageUploading,
-      imageUrl,
+      profileImgUrl,
+      bannerImgUrl,
       nameController,
       selectedType);
 
@@ -358,7 +397,8 @@ abstract class _AddTournamentState implements AddTournamentState {
   const factory _AddTournamentState(
       {final Object? error,
       final Object? actionError,
-      final String? filePath,
+      final String? profilePath,
+      final String? bannerPath,
       final String? currentUserId,
       required final DateTime endDate,
       required final DateTime startDate,
@@ -366,7 +406,8 @@ abstract class _AddTournamentState implements AddTournamentState {
       final bool loading,
       final bool enableButton,
       final bool imageUploading,
-      final String? imageUrl,
+      final String? profileImgUrl,
+      final String? bannerImgUrl,
       required final TextEditingController nameController,
       final TournamentType selectedType}) = _$AddTournamentStateImpl;
 
@@ -375,7 +416,9 @@ abstract class _AddTournamentState implements AddTournamentState {
   @override
   Object? get actionError;
   @override
-  String? get filePath;
+  String? get profilePath;
+  @override
+  String? get bannerPath;
   @override
   String? get currentUserId;
   @override
@@ -391,7 +434,9 @@ abstract class _AddTournamentState implements AddTournamentState {
   @override
   bool get imageUploading;
   @override
-  String? get imageUrl;
+  String? get profileImgUrl;
+  @override
+  String? get bannerImgUrl;
   @override
   TextEditingController get nameController;
   @override

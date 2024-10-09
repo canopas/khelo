@@ -45,11 +45,18 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     state = state.copyWith(currentUserId: userId);
   }
 
-  Future<void> onImageChange(String imagePath) async {
+  Future<void> onImageChange({
+    required String imagePath,
+    bool isBanner = false,
+  }) async {
     try {
       state = state.copyWith(imageUploading: true, actionError: null);
       if (await File(imagePath).isFileUnderMaxSize()) {
-        state = state.copyWith(filePath: imagePath, imageUploading: false);
+        isBanner
+            ? state =
+                state.copyWith(bannerPath: imagePath, imageUploading: false)
+            : state =
+                state.copyWith(profilePath: imagePath, imageUploading: false);
       } else {
         state = state.copyWith(
             imageUploading: false,
@@ -87,14 +94,24 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
       final tournamentId = _tournamentService.generateTournamentId;
       final name = state.nameController.text.trim();
 
-      if (state.filePath != null && state.currentUserId != null) {
-        final imageUrl = await _fileUploadService.uploadProfileImage(
-          filePath: state.filePath ?? '',
+      if (state.profilePath != null) {
+        final profileImgUrl = await _fileUploadService.uploadProfileImage(
+          filePath: state.profilePath ?? '',
           uploadPath: StorageConst.tournamentProfileUploadPath(
               userId: state.currentUserId ?? 'INVALID ID',
               tournamentId: tournamentId),
         );
-        state = state.copyWith(imageUrl: imageUrl);
+        state = state.copyWith(profileImgUrl: profileImgUrl);
+      }
+
+      if (state.bannerPath != null) {
+        final bannerImgUrl = await _fileUploadService.uploadProfileImage(
+          filePath: state.bannerPath ?? '',
+          uploadPath: StorageConst.tournamentBannerUploadPath(
+              userId: state.currentUserId ?? 'INVALID ID',
+              tournamentId: tournamentId),
+        );
+        state = state.copyWith(bannerImgUrl: bannerImgUrl);
       }
 
       final tournament = TournamentModel(
@@ -111,7 +128,8 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
             role: TournamentMemberRole.organizer,
           ),
         ],
-        profile_img_url: state.imageUrl,
+        profile_img_url: state.profileImgUrl,
+        banner_img_url: state.bannerImgUrl,
       );
 
       await _tournamentService.createTournament(tournament);
@@ -130,7 +148,8 @@ class AddTournamentState with _$AddTournamentState {
   const factory AddTournamentState({
     Object? error,
     Object? actionError,
-    String? filePath,
+    String? profilePath,
+    String? bannerPath,
     String? currentUserId,
     required DateTime endDate,
     required DateTime startDate,
@@ -138,7 +157,8 @@ class AddTournamentState with _$AddTournamentState {
     @Default(false) bool loading,
     @Default(false) bool enableButton,
     @Default(false) bool imageUploading,
-    @Default(null) String? imageUrl,
+    @Default(null) String? profileImgUrl,
+    @Default(null) String? bannerImgUrl,
     required TextEditingController nameController,
     @Default(TournamentType.knockOut) TournamentType selectedType,
   }) = _AddTournamentState;

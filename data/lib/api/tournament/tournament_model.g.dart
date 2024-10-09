@@ -11,6 +11,7 @@ _$TournamentModelImpl _$$TournamentModelImplFromJson(Map json) =>
       id: json['id'] as String,
       name: json['name'] as String,
       profile_img_url: json['profile_img_url'] as String?,
+      banner_img_url: json['banner_img_url'] as String?,
       type: $enumDecode(_$TournamentTypeEnumMap, json['type']),
       members: (json['members'] as List<dynamic>?)
               ?.map((e) => TournamentMember.fromJson(
@@ -40,6 +41,7 @@ Map<String, dynamic> _$$TournamentModelImplToJson(
       'id': instance.id,
       'name': instance.name,
       'profile_img_url': instance.profile_img_url,
+      'banner_img_url': instance.banner_img_url,
       'type': _$TournamentTypeEnumMap[instance.type]!,
       'members': instance.members.map((e) => e.toJson()).toList(),
       'created_by': instance.created_by,

@@ -18,6 +18,7 @@ class TournamentModel with _$TournamentModel {
     required String id,
     required String name,
     String? profile_img_url,
+    String? banner_img_url,
     required TournamentType type,
     @Default([]) List<TournamentMember> members,
     required String created_by,

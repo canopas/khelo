@@ -151,6 +151,8 @@
   "add_tournament_type_placeholder": "Select tournament type",
   "add_tournament_start_date": "Start Date",
   "add_tournament_end_date": "End Date",
+  "add_tournament_edit_banner": "Edit banner",
+  "add_tournament_add_banner_placeholder": "Add banner image",
 
   "tournament_list_empty_list_title": "No tournaments created",
   "tournament_list_empty_list_description": "Tap on the “ + ” icon to create a tournament",
