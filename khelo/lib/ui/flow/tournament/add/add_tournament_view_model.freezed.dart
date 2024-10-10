@@ -25,6 +25,7 @@ mixin _$AddTournamentState {
   DateTime get startDate => throw _privateConstructorUsedError;
   bool get pop => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  bool get showDateError => throw _privateConstructorUsedError;
   bool get enableButton => throw _privateConstructorUsedError;
   bool get imageUploading => throw _privateConstructorUsedError;
   String? get profileImgUrl => throw _privateConstructorUsedError;
@@ -56,6 +57,7 @@ abstract class $AddTournamentStateCopyWith<$Res> {
       DateTime startDate,
       bool pop,
       bool loading,
+      bool showDateError,
       bool enableButton,
       bool imageUploading,
       String? profileImgUrl,
@@ -88,6 +90,7 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
     Object? startDate = null,
     Object? pop = null,
     Object? loading = null,
+    Object? showDateError = null,
     Object? enableButton = null,
     Object? imageUploading = null,
     Object? profileImgUrl = freezed,
@@ -125,6 +128,10 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showDateError: null == showDateError
+          ? _value.showDateError
+          : showDateError // ignore: cast_nullable_to_non_nullable
               as bool,
       enableButton: null == enableButton
           ? _value.enableButton
@@ -172,6 +179,7 @@ abstract class _$$AddTournamentStateImplCopyWith<$Res>
       DateTime startDate,
       bool pop,
       bool loading,
+      bool showDateError,
       bool enableButton,
       bool imageUploading,
       String? profileImgUrl,
@@ -202,6 +210,7 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
     Object? startDate = null,
     Object? pop = null,
     Object? loading = null,
+    Object? showDateError = null,
     Object? enableButton = null,
     Object? imageUploading = null,
     Object? profileImgUrl = freezed,
@@ -239,6 +248,10 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showDateError: null == showDateError
+          ? _value.showDateError
+          : showDateError // ignore: cast_nullable_to_non_nullable
               as bool,
       enableButton: null == enableButton
           ? _value.enableButton
@@ -281,6 +294,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       required this.startDate,
       this.pop = false,
       this.loading = false,
+      this.showDateError = false,
       this.enableButton = false,
       this.imageUploading = false,
       this.profileImgUrl = null,
@@ -310,6 +324,9 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
   final bool loading;
   @override
   @JsonKey()
+  final bool showDateError;
+  @override
+  @JsonKey()
   final bool enableButton;
   @override
   @JsonKey()
@@ -328,7 +345,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
 
   @override
   String toString() {
-    return 'AddTournamentState(error: $error, actionError: $actionError, profilePath: $profilePath, bannerPath: $bannerPath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, enableButton: $enableButton, imageUploading: $imageUploading, profileImgUrl: $profileImgUrl, bannerImgUrl: $bannerImgUrl, nameController: $nameController, selectedType: $selectedType)';
+    return 'AddTournamentState(error: $error, actionError: $actionError, profilePath: $profilePath, bannerPath: $bannerPath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, pop: $pop, loading: $loading, showDateError: $showDateError, enableButton: $enableButton, imageUploading: $imageUploading, profileImgUrl: $profileImgUrl, bannerImgUrl: $bannerImgUrl, nameController: $nameController, selectedType: $selectedType)';
   }
 
   @override
@@ -350,6 +367,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
                 other.startDate == startDate) &&
             (identical(other.pop, pop) || other.pop == pop) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.showDateError, showDateError) ||
+                other.showDateError == showDateError) &&
             (identical(other.enableButton, enableButton) ||
                 other.enableButton == enableButton) &&
             (identical(other.imageUploading, imageUploading) ||
@@ -376,6 +395,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       startDate,
       pop,
       loading,
+      showDateError,
       enableButton,
       imageUploading,
       profileImgUrl,
@@ -404,6 +424,7 @@ abstract class _AddTournamentState implements AddTournamentState {
       required final DateTime startDate,
       final bool pop,
       final bool loading,
+      final bool showDateError,
       final bool enableButton,
       final bool imageUploading,
       final String? profileImgUrl,
@@ -429,6 +450,8 @@ abstract class _AddTournamentState implements AddTournamentState {
   bool get pop;
   @override
   bool get loading;
+  @override
+  bool get showDateError;
   @override
   bool get enableButton;
   @override

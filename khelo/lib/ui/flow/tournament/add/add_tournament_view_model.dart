@@ -90,7 +90,12 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     try {
       if (state.currentUserId == null) return;
 
-      state = state.copyWith(loading: true);
+      if (state.endDate.isBefore(state.startDate)) {
+        state = state.copyWith(showDateError: true);
+        return;
+      }
+
+      state = state.copyWith(loading: true, showDateError: false);
       final tournamentId = _tournamentService.generateTournamentId;
       final name = state.nameController.text.trim();
 
@@ -98,8 +103,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         final profileImgUrl = await _fileUploadService.uploadProfileImage(
           filePath: state.profilePath ?? '',
           uploadPath: StorageConst.tournamentProfileUploadPath(
-              userId: state.currentUserId ?? 'INVALID ID',
-              tournamentId: tournamentId),
+              userId: state.currentUserId!, tournamentId: tournamentId),
         );
         state = state.copyWith(profileImgUrl: profileImgUrl);
       }
@@ -108,8 +112,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         final bannerImgUrl = await _fileUploadService.uploadProfileImage(
           filePath: state.bannerPath ?? '',
           uploadPath: StorageConst.tournamentBannerUploadPath(
-              userId: state.currentUserId ?? 'INVALID ID',
-              tournamentId: tournamentId),
+              userId: state.currentUserId!, tournamentId: tournamentId),
         );
         state = state.copyWith(bannerImgUrl: bannerImgUrl);
       }
@@ -121,10 +124,10 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         start_date: state.startDate,
         end_date: state.endDate,
         created_at: DateTime.now(),
-        created_by: state.currentUserId ?? 'INVALID ID',
+        created_by: state.currentUserId!,
         members: [
           TournamentMember(
-            id: state.currentUserId ?? 'INVALID ID',
+            id: state.currentUserId!,
             role: TournamentMemberRole.organizer,
           ),
         ],
@@ -134,12 +137,19 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
 
       await _tournamentService.createTournament(tournament);
 
-      state = state.copyWith(pop: true, loading: false, error: null);
+      state = state.copyWith(
+          pop: true, loading: false, error: null, showDateError: false);
     } catch (error) {
       state = state.copyWith(loading: false, error: error);
       debugPrint(
           "AddTournamentViewNotifier: error while adding tournament -> $error");
     }
+  }
+
+  @override
+  void dispose() {
+    state.nameController.dispose();
+    super.dispose();
   }
 }
 
@@ -155,6 +165,7 @@ class AddTournamentState with _$AddTournamentState {
     required DateTime startDate,
     @Default(false) bool pop,
     @Default(false) bool loading,
+    @Default(false) bool showDateError,
     @Default(false) bool enableButton,
     @Default(false) bool imageUploading,
     @Default(null) String? profileImgUrl,

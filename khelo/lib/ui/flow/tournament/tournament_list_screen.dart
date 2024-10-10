@@ -81,14 +81,6 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
       slivers: [
         ..._tournaments(context, state),
         SliverToBoxAdapter(
-          child: state.groupTournaments.isNotEmpty && state.loading
-              ? const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Center(child: AppProgressIndicator()),
-                )
-              : const SizedBox(),
-        ),
-        SliverToBoxAdapter(
           child: SizedBox(height: 16 + context.mediaQueryPadding.bottom),
         ),
       ],

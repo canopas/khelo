@@ -91,60 +91,75 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          const SizedBox(width: 16),
-          TabButton(
-            context.l10n.common_matches_title,
-            selected: _selectedTab == 0,
-            onTap: () {
-              _controller.jumpToPage(0);
-            },
-          ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.my_cricket_teams_tab_title,
-            selected: _selectedTab == 1,
-            onTap: () {
-              _controller.jumpToPage(1);
-            },
-          ),
-          const SizedBox(width: 8),
-          TabButton(
-            context.l10n.my_cricket_tournament_title,
-            selected: _selectedTab == 2,
-            onTap: () {
-              _controller.jumpToPage(2);
-            },
-          ),
-          const Spacer(),
-          if (_selectedTab == 1 &&
-              ref.watch(teamListViewStateProvider).teams.isNotEmpty) ...[
-            actionButton(
-              context,
-              onPressed: () => ref
-                  .read(teamListViewStateProvider.notifier)
-                  .onFilterButtonTap(),
-              icon: Icon(
-                CupertinoIcons.slider_horizontal_3,
-                color: context.colorScheme.textPrimary,
+          Expanded(
+            child: SizedBox(
+              height: 36,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  const SizedBox(width: 16),
+                  TabButton(
+                    context.l10n.common_matches_title,
+                    selected: _selectedTab == 0,
+                    onTap: () {
+                      _controller.jumpToPage(0);
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  TabButton(
+                    context.l10n.my_cricket_teams_tab_title,
+                    selected: _selectedTab == 1,
+                    onTap: () {
+                      _controller.jumpToPage(1);
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  TabButton(
+                    context.l10n.my_cricket_tournament_title,
+                    selected: _selectedTab == 2,
+                    onTap: () {
+                      _controller.jumpToPage(2);
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                ],
               ),
-              shrinkWrap: true,
             ),
-          ],
-          actionButton(
-            context,
-            onPressed: () {
-              final actions = [
-                AppRoute.addMatch(),
-                AppRoute.addTeam(),
-                AppRoute.addTournament(),
-              ];
-              actions[_selectedTab].push(context);
-            },
-            icon: Icon(
-              Icons.add,
-              color: context.colorScheme.textPrimary,
+          ),
+          Container(
+            color: context.colorScheme.surface,
+            child: Row(
+              children: [
+                if (_selectedTab == 1 &&
+                    ref.watch(teamListViewStateProvider).teams.isNotEmpty) ...[
+                  actionButton(
+                    context,
+                    onPressed: () => ref
+                        .read(teamListViewStateProvider.notifier)
+                        .onFilterButtonTap(),
+                    icon: Icon(
+                      CupertinoIcons.slider_horizontal_3,
+                      color: context.colorScheme.textPrimary,
+                    ),
+                  ),
+                ],
+                actionButton(
+                  context,
+                  onPressed: () {
+                    final actions = [
+                      AppRoute.addMatch(),
+                      AppRoute.addTeam(),
+                      AppRoute.addTournament(),
+                    ];
+                    actions[_selectedTab].push(context);
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    color: context.colorScheme.textPrimary,
+                  ),
+                ),
+              ],
             ),
-            shrinkWrap: true,
           ),
         ],
       ),

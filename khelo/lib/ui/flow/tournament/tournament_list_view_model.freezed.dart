@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$TournamentListViewState {
+  String? get currentUserId => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   Map<DateTime, List<TournamentModel>> get groupTournaments =>
@@ -35,7 +36,8 @@ abstract class $TournamentListViewStateCopyWith<$Res> {
       _$TournamentListViewStateCopyWithImpl<$Res, TournamentListViewState>;
   @useResult
   $Res call(
-      {Object? error,
+      {String? currentUserId,
+      Object? error,
       bool loading,
       Map<DateTime, List<TournamentModel>> groupTournaments});
 }
@@ -56,11 +58,16 @@ class _$TournamentListViewStateCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? currentUserId = freezed,
     Object? error = freezed,
     Object? loading = null,
     Object? groupTournaments = null,
   }) {
     return _then(_value.copyWith(
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error ? _value.error : error,
       loading: null == loading
           ? _value.loading
@@ -84,7 +91,8 @@ abstract class _$$TournamentListViewStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {Object? error,
+      {String? currentUserId,
+      Object? error,
       bool loading,
       Map<DateTime, List<TournamentModel>> groupTournaments});
 }
@@ -104,11 +112,16 @@ class __$$TournamentListViewStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? currentUserId = freezed,
     Object? error = freezed,
     Object? loading = null,
     Object? groupTournaments = null,
   }) {
     return _then(_$TournamentListViewStateImpl(
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error ? _value.error : error,
       loading: null == loading
           ? _value.loading
@@ -126,11 +139,14 @@ class __$$TournamentListViewStateImplCopyWithImpl<$Res>
 
 class _$TournamentListViewStateImpl implements _TournamentListViewState {
   const _$TournamentListViewStateImpl(
-      {this.error,
+      {this.currentUserId,
+      this.error,
       this.loading = true,
       final Map<DateTime, List<TournamentModel>> groupTournaments = const {}})
       : _groupTournaments = groupTournaments;
 
+  @override
+  final String? currentUserId;
   @override
   final Object? error;
   @override
@@ -147,7 +163,7 @@ class _$TournamentListViewStateImpl implements _TournamentListViewState {
 
   @override
   String toString() {
-    return 'TournamentListViewState(error: $error, loading: $loading, groupTournaments: $groupTournaments)';
+    return 'TournamentListViewState(currentUserId: $currentUserId, error: $error, loading: $loading, groupTournaments: $groupTournaments)';
   }
 
   @override
@@ -155,6 +171,8 @@ class _$TournamentListViewStateImpl implements _TournamentListViewState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TournamentListViewStateImpl &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             const DeepCollectionEquality()
@@ -164,6 +182,7 @@ class _$TournamentListViewStateImpl implements _TournamentListViewState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      currentUserId,
       const DeepCollectionEquality().hash(error),
       loading,
       const DeepCollectionEquality().hash(_groupTournaments));
@@ -180,11 +199,14 @@ class _$TournamentListViewStateImpl implements _TournamentListViewState {
 
 abstract class _TournamentListViewState implements TournamentListViewState {
   const factory _TournamentListViewState(
-          {final Object? error,
+          {final String? currentUserId,
+          final Object? error,
           final bool loading,
           final Map<DateTime, List<TournamentModel>> groupTournaments}) =
       _$TournamentListViewStateImpl;
 
+  @override
+  String? get currentUserId;
   @override
   Object? get error;
   @override

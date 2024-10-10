@@ -3,23 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/tournament/tournament_model.dart';
 import '../../errors/app_error.dart';
-import '../../storage/app_preferences.dart';
 import '../../utils/constant/firestore_constant.dart';
 
-final tournamentServiceProvider = Provider((ref) {
-  final service = TournamentService(
-    FirebaseFirestore.instance,
-    ref.read(currentUserPod)?.id,
-  );
-  ref.listen(currentUserPod, (_, next) => service._currentUserId = next?.id);
-  return service;
-});
+final tournamentServiceProvider =
+    Provider((ref) => TournamentService(FirebaseFirestore.instance));
 
 class TournamentService {
-  String? _currentUserId;
   final FirebaseFirestore _firestore;
 
-  TournamentService(this._firestore, this._currentUserId);
+  TournamentService(this._firestore);
 
   CollectionReference<TournamentModel> get _tournamentCollection =>
       _firestore.collection(FireStoreConst.tournamentCollection).withConverter(
@@ -39,18 +31,15 @@ class TournamentService {
     }
   }
 
-  Stream<List<TournamentModel>> streamCurrentUserRelatedMatches() {
-    if (_currentUserId == null) {
-      return Stream.value([]);
-    }
-    final currentMember = TournamentMember(id: _currentUserId ?? 'INVALID ID');
+  Stream<List<TournamentModel>> streamCurrentUserRelatedMatches(String userId) {
+    final currentMember = TournamentMember(id: userId);
 
     final memberContains = [
       currentMember.copyWith(role: TournamentMemberRole.organizer).toJson(),
       currentMember.copyWith(role: TournamentMemberRole.admin).toJson(),
     ];
     final filter = Filter.or(
-      Filter(FireStoreConst.createdBy, isEqualTo: _currentUserId),
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.members, arrayContainsAny: memberContains),
     );
 

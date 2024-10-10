@@ -62,18 +62,28 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
     });
   }
 
+  void _observeDateError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        addTournamentStateProvider.select((value) => value.showDateError),
+        (previous, next) {
+      showErrorSnackBar(
+          context: context, error: context.l10n.add_tournament_date_error);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     _observeActionError(context, ref);
+    _observeDateError(context, ref);
     _observePop(context, ref);
 
     final state = ref.watch(addTournamentStateProvider);
 
     return AppPage(
+      title: context.l10n.add_tournament_screen_title,
       body: Builder(
         builder: (context) => Stack(
           children: [
-            _bannerView(context, state),
             _body(context, state),
             _stickyButton(context, state),
           ],
@@ -83,107 +93,89 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
   }
 
   Widget _body(BuildContext context, AddTournamentState state) {
-    return Padding(
-      padding: EdgeInsets.all(16)
-          .copyWith(top: context.mediaQuerySize.height * 0.22),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _profileView(context, state),
-            const SizedBox(height: 16),
-            AppTextField(
-              controller: state.nameController,
-              label: context.l10n.add_tournament_name,
-              onChanged: (_) => notifier.onChange(),
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              borderRadius: BorderRadius.circular(12),
-              borderType: AppTextFieldBorderType.outline,
-              borderColor: BorderColor(
-                focusColor: context.colorScheme.outline,
-                unFocusColor: context.colorScheme.outline,
+    return ListView(
+      padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
+      children: [
+        _bannerView(context, state),
+        Padding(
+          padding: const EdgeInsets.all(16).copyWith(top: 16),
+          child: Column(
+            children: [
+              AppTextField(
+                controller: state.nameController,
+                label: context.l10n.add_tournament_name,
+                onChanged: (_) => notifier.onChange(),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                borderRadius: BorderRadius.circular(12),
+                borderType: AppTextFieldBorderType.outline,
+                borderColor: BorderColor(
+                  focusColor: context.colorScheme.outline,
+                  unFocusColor: context.colorScheme.outline,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            AdaptiveOutlinedTile(
-              placeholder: context.l10n.add_tournament_type_placeholder,
-              headerText: context.l10n.add_tournament_type,
-              title: state.selectedType.getString(context),
-              showTrailingIcon: true,
-              onTap: () {
-                _selectTypeSheet(
-                  context,
-                  selectedType: state.selectedType,
-                  onSelected: (type) => notifier.onSelectType(type),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            _dateScheduleView(context, state)
-          ],
+              const SizedBox(height: 16),
+              AdaptiveOutlinedTile(
+                placeholder: context.l10n.add_tournament_type_placeholder,
+                headerText: context.l10n.add_tournament_type,
+                title: state.selectedType.getString(context),
+                showTrailingIcon: true,
+                onTap: () {
+                  _selectTypeSheet(
+                    context,
+                    selectedType: state.selectedType,
+                    onSelected: (type) => notifier.onSelectType(type),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              _dateScheduleView(context, state)
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _bannerView(BuildContext context, AddTournamentState state) {
-    final double bannerHeight = context.mediaQuerySize.height * 0.27;
     final bool hasBannerImage =
         state.bannerPath != null || state.bannerImgUrl != null;
 
-    return Container(
-      height: bannerHeight,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: context.colorScheme.containerLow,
-        image: state.bannerPath != null
-            ? DecorationImage(
-                image: FileImage(File(state.bannerPath!)),
-                fit: BoxFit.cover,
-              )
-            : null,
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          if (state.imageUploading) Center(child: AppProgressIndicator()),
-          if (!state.imageUploading)
-            hasBannerImage
-                ? _buildCachedNetworkOrFileImage(context, state)
-                : _bannerPlaceholder(context,
-                    onTap: () => _pickImage(isBanner: true)),
-          if (hasBannerImage && !state.imageUploading)
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: _editBannerButton(context),
-            ),
-          _buildHeader(context),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context) {
-    return Positioned(
-      top: 16,
-      left: 0,
-      child: Padding(
-        padding: context.mediaQueryPadding,
-        child: Row(
-          children: [
-            BackButton(color: context.colorScheme.textPrimary),
-            const SizedBox(width: 16),
-            Text(
-              context.l10n.add_tournament_screen_title,
-              style: AppTextStyle.header2.copyWith(
-                color: context.colorScheme.textPrimary,
-              ),
-            )
-          ],
+    return Stack(
+      children: [
+        Container(
+          height: 204,
+          width: context.mediaQuerySize.width,
+          margin: EdgeInsets.only(bottom: 45),
+          decoration: BoxDecoration(
+            color: context.colorScheme.containerLow,
+            image: state.bannerPath != null
+                ? DecorationImage(
+                    image: FileImage(File(state.bannerPath!)),
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              if (state.imageUploading) Center(child: AppProgressIndicator()),
+              if (!state.imageUploading)
+                hasBannerImage
+                    ? _buildCachedNetworkOrFileImage(context, state)
+                    : _bannerPlaceholder(context,
+                        onTap: () => _pickImage(isBanner: true)),
+              if (hasBannerImage && !state.imageUploading)
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: _editBannerButton(context),
+                ),
+            ],
+          ),
         ),
-      ),
+        _profileView(context, state),
+      ],
     );
   }
 
@@ -275,14 +267,18 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
   }
 
   Widget _profileView(BuildContext context, AddTournamentState state) {
-    return ProfileImageAvatar(
-      size: 90,
-      isLoading: state.imageUploading && state.profilePath == null,
-      filePath: state.profilePath,
-      imageUrl: state.profileImgUrl,
-      placeHolderImage: Assets.images.icTournaments,
-      alignment: Alignment.centerLeft,
-      onEditButtonTap: () => _pickImage(),
+    return Positioned(
+      left: 16,
+      bottom: 0,
+      child: ProfileImageAvatar(
+        size: 90,
+        isLoading: state.imageUploading && state.profilePath == null,
+        filePath: state.profilePath,
+        imageUrl: state.profileImgUrl,
+        placeHolderImage: Assets.images.icTournaments,
+        alignment: Alignment.centerLeft,
+        onEditButtonTap: _pickImage,
+      ),
     );
   }
 
@@ -304,7 +300,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                     selectDate(
                       context,
                       initialDate: state.startDate,
-                      onDateSelected: (date) => notifier.onStartDate(date),
+                      onDateSelected: notifier.onStartDate,
                     );
                   }),
             ),
@@ -318,7 +314,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                     selectDate(
                       context,
                       initialDate: state.endDate,
-                      onDateSelected: (date) => notifier.onEndDate(date),
+                      onDateSelected: notifier.onEndDate,
                     );
                   }),
             ),
