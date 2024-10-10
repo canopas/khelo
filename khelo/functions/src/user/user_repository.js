@@ -62,6 +62,27 @@ class UserRepository {
       return [];
     }
   }
+
+  async getAnyActiveUserFromIds(additionalAdminIds) {
+    if (additionalAdminIds.length == 0) {
+      return null;
+    }
+    const userRef = this.userRef();
+    try {
+      const querySnapshot = await userRef
+        .where("id", "in", additionalAdminIds)
+        .limit(1)
+        .get();
+      if (!querySnapshot.empty) {
+        return querySnapshot.docs[0].data();
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error("UserRepository: Error getting any active user from ids:", e);
+      return null;
+    }
+  }
 }
 const firebaseAuthMiddleware = (userRepository) => {
   return async (req, res, next) => {

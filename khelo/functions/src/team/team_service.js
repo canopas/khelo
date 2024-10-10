@@ -4,8 +4,9 @@ exports.TeamService = void 0;
 const user_models = require("../user/user_models");
 
 class TeamService {
-  constructor(userRepository, notificationService) {
+  constructor(userRepository, teamRepository, notificationService) {
     this.userRepository = userRepository;
+    this.teamRepository = teamRepository;
     this.notificationService = notificationService;
   }
   async notifyOnAddedToTeam(oldTeam, newTeam) {
@@ -26,6 +27,32 @@ class TeamService {
       const title =`Welcome to ${teamName}`;
       const body = `You have been added to ${teamName}. Get ready to join the action and play with your new teammates!`;
       await this.notificationService.sendNotification(playersToNotify, title, body, {team_id: teamId, type: "added_to_team"});
+    }
+  }
+
+  async selectNewTeamAdminIfNeeded(userId) {
+    const teams = await this.teamRepository.getTeamsCreatedByUserId(userId);
+
+    for (const team of teams) {
+      const adminIds = team.team_players.filter((player) => player.role == "admin" && player.id != team.created_by).map((e) => e.id);
+      console.log("TeamService: admins:", adminIds);
+
+      const activeAdmin = await this.userRepository.getAnyActiveUserFromIds(adminIds);
+
+      if (adminIds.length == 0 || activeAdmin === null) {
+        const playerIds = team.team_players.filter((player) => player.role == "player" && player.id != team.created_by).map((e) => e.id);
+        console.log("TeamService: players:", playerIds);
+        if (playerIds.length == 0) {
+          await this.teamRepository.markNoAdminTrueInTeam(team.id);
+        } else {
+          const playerAsAdmin = await this.userRepository.getAnyActiveUserFromIds(playerIds);
+          if (playerAsAdmin === null) {
+            await this.teamRepository.markNoAdminTrueInTeam(team.id);
+          } else {
+            await this.teamRepository.changePlayerRoleToAdmin(team.id, playerAsAdmin.id);
+          }
+        }
+      }
     }
   }
 }
