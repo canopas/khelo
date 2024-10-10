@@ -30,7 +30,7 @@ const userRepository = new user_repository.UserRepository(db);
 const teamRepository = new team_repository.TeamRepository(db);
 
 const notificationService = new notification_service.NotificationService(userRepository);
-const teamService = new team_service.TeamService(userRepository, notificationService);
+const teamService = new team_service.TeamService(userRepository, teamRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
 const authService = new auth_service.AuthService(userRepository);
 
@@ -64,6 +64,18 @@ exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: R
   const newTeam = snapshot.after.data();
 
   await teamService.notifyOnAddedToTeam(oldTeam, newTeam);
+});
+
+exports.userDeleteObserver = (0, firestore_2.onDocumentDeleted)({region: REGION, document: "users/{userId}"}, async (event) => {
+  const snapshot = event.data;
+  if (!snapshot) {
+    (0, logger.error)("No data associated with the event");
+    return;
+  }
+  const user = snapshot.data();
+  if (user && user.id) {
+    await teamService.selectNewTeamAdminIfNeeded(user.id);
+  }
 });
 
 exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, schedule: "*/5 * * * *", region: REGION}, async () => {
