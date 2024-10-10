@@ -31,28 +31,34 @@ class TeamService {
   }
 
   async selectNewTeamAdminIfNeeded(userId) {
-    const teams = await this.teamRepository.getTeamsCreatedByUserId(userId);
+    try {
+      const teams = await this.teamRepository.getTeamsCreatedByUserId(userId);
 
-    for (const team of teams) {
-      const adminIds = team.team_players.filter((player) => player.role == "admin" && player.id != team.created_by).map((e) => e.id);
-      console.log("TeamService: admins:", adminIds);
+      await Promise.all(
+        teams.map(async (team) => {
+          const adminIds = team.team_players.filter((p) => p.role == "admin" && p.id != team.created_by).map((e) => e.id);
+          console.log("TeamService: admins:", adminIds);
 
-      const activeAdmin = await this.userRepository.getAnyActiveUserFromIds(adminIds);
+          const activeAdmin = await this.userRepository.getAnyActiveUserFromIds(adminIds);
 
-      if (adminIds.length == 0 || activeAdmin === null) {
-        const playerIds = team.team_players.filter((player) => player.role == "player" && player.id != team.created_by).map((e) => e.id);
-        console.log("TeamService: players:", playerIds);
-        if (playerIds.length == 0) {
-          await this.teamRepository.markNoAdminTrueInTeam(team.id);
-        } else {
-          const playerAsAdmin = await this.userRepository.getAnyActiveUserFromIds(playerIds);
-          if (playerAsAdmin === null) {
-            await this.teamRepository.markNoAdminTrueInTeam(team.id);
-          } else {
-            await this.teamRepository.changePlayerRoleToAdmin(team.id, playerAsAdmin.id);
+          if (adminIds.length == 0 || activeAdmin === null) {
+            const playerIds = team.team_players.filter((p) => p.role == "player" && p.id != team.created_by).map((e) => e.id);
+            console.log("TeamService: players:", playerIds);
+            if (playerIds.length == 0) {
+              await this.teamRepository.markNoAdminTrueInTeam(team.id);
+            } else {
+              const playerAsAdmin = await this.userRepository.getAnyActiveUserFromIds(playerIds);
+              if (playerAsAdmin === null) {
+                await this.teamRepository.markNoAdminTrueInTeam(team.id);
+              } else {
+                await this.teamRepository.changePlayerRoleToAdmin(team.id, playerAsAdmin.id);
+              }
+            }
           }
-        }
-      }
+        }),
+      );
+    } catch (e) {
+      console.log("Error selecting new team admin:", e);
     }
   }
 }
