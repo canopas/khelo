@@ -89,13 +89,13 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
   void addTournament() async {
     try {
       if (state.currentUserId == null) return;
+      state = state.copyWith(loading: true, showDateError: false);
 
       if (state.endDate.isBefore(state.startDate)) {
-        state = state.copyWith(showDateError: true);
+        state = state.copyWith(showDateError: true, loading: false);
         return;
       }
 
-      state = state.copyWith(loading: true, showDateError: false);
       final tournamentId = _tournamentService.generateTournamentId;
       final name = state.nameController.text.trim();
 
