@@ -8,6 +8,7 @@ Widget actionButton(
   void Function()? onPressed,
   required Widget icon,
   EdgeInsets padding = EdgeInsets.zero,
+  bool shrinkWrap = false,
 }) {
   if (Platform.isIOS) {
     return CupertinoButton(
@@ -20,6 +21,11 @@ Widget actionButton(
       onPressed: onPressed,
       icon: icon,
       padding: padding,
+      style: ButtonStyle(
+        tapTargetSize: shrinkWrap
+            ? MaterialTapTargetSize.shrinkWrap
+            : MaterialTapTargetSize.padded,
+      ),
     );
   }
 }

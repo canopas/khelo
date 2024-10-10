@@ -10,6 +10,7 @@ Future<T?> showActionBottomSheet<T>({
   required List<BottomSheetAction> items,
   bool useRootNavigator = true,
   bool showDragHandle = true,
+  double? heightFactor,
 }) async {
   HapticFeedback.mediumImpact();
   return await showModalBottomSheet<T>(
@@ -22,27 +23,31 @@ Future<T?> showActionBottomSheet<T>({
     useRootNavigator: useRootNavigator,
     isScrollControlled: true,
     showDragHandle: showDragHandle,
+    useSafeArea: true,
     context: context,
-    builder: (context) => SingleChildScrollView(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(16),
+    builder: (context) => FractionallySizedBox(
+      heightFactor: heightFactor,
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(16),
+            ),
+            color: context.colorScheme.surface,
           ),
-          color: context.colorScheme.surface,
-        ),
-        padding: EdgeInsets.only(
-          bottom: context.mediaQueryPadding.bottom,
-        ),
-        child: ColumnBuilder.separated(
-          separatorBuilder: (index) => Divider(
-            height: 0,
-            thickness: 1,
-            color: context.colorScheme.outline,
+          padding: EdgeInsets.only(
+            bottom: context.mediaQueryPadding.bottom,
           ),
-          itemBuilder: (index) => items[index],
-          itemCount: items.length,
-          mainAxisSize: MainAxisSize.min,
+          child: ColumnBuilder.separated(
+            separatorBuilder: (index) => Divider(
+              height: 0,
+              thickness: 1,
+              color: context.colorScheme.outline,
+            ),
+            itemBuilder: (index) => items[index],
+            itemCount: items.length,
+            mainAxisSize: MainAxisSize.min,
+          ),
         ),
       ),
     ),
@@ -54,6 +59,7 @@ class BottomSheetAction extends StatelessWidget {
   final String title;
   final Widget? child;
   final bool enabled;
+  final String? subTitle;
   final void Function()? onTap;
 
   const BottomSheetAction({
@@ -62,6 +68,7 @@ class BottomSheetAction extends StatelessWidget {
     required this.title,
     this.enabled = true,
     this.child,
+    this.subTitle,
     this.onTap,
   });
 
@@ -80,10 +87,24 @@ class BottomSheetAction extends StatelessWidget {
               child: const SizedBox(width: 20),
             ),
             Expanded(
-              child: Text(
-                title,
-                style: AppTextStyle.subtitle2
-                    .copyWith(color: context.colorScheme.textPrimary),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyle.subtitle2
+                        .copyWith(color: context.colorScheme.textPrimary),
+                  ),
+                  if (subTitle != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      subTitle ?? '',
+                      style: AppTextStyle.caption.copyWith(
+                        color: context.colorScheme.textSecondary,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
             Visibility(

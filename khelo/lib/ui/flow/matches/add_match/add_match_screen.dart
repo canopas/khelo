@@ -27,10 +27,10 @@ import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
+import 'package:style/pickers/date_and_time_picker.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:data/api/match/match_model.dart';
-import 'package:style/theme/colors.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/confirmation_dialog.dart';
@@ -320,7 +320,12 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
                     headerText: context.l10n.add_match_date_title,
                     placeholder: context.l10n.add_match_date_title,
                     onTap: () {
-                      _selectDate(context, notifier, state);
+                      selectDate(
+                        context,
+                        initialDate: state.matchTime,
+                        onDateSelected: (selectedDate) =>
+                            notifier.onDateSelect(selectedDate: selectedDate),
+                      );
                     }),
               ),
               const SizedBox(width: 16),
@@ -331,7 +336,12 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
                     headerText: context.l10n.add_match_time_title,
                     placeholder: context.l10n.add_match_time_title,
                     onTap: () {
-                      _selectTime(context, notifier, state);
+                      selectTime(
+                        context,
+                        initialTime: state.matchTime,
+                        onTimeSelected: (selectedTime) =>
+                            notifier.onDateSelect(selectedDate: selectedTime),
+                      );
                     }),
               ),
             ],
@@ -339,71 +349,6 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
         ),
       ],
     );
-  }
-
-  Future<void> _selectDate(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) async {
-    showDatePicker(
-      context: context,
-      initialDate: state.matchTime,
-      firstDate: DateTime(1965),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: context.brightness == Brightness.dark
-              ? materialThemeDataDark
-              : materialThemeDataLight,
-          child: child!,
-        );
-      },
-    ).then((selectedDate) {
-      if (selectedDate != null) {
-        DateTime selectedDateTime = DateTime(
-          selectedDate.year,
-          selectedDate.month,
-          selectedDate.day,
-          state.matchTime.hour,
-          state.matchTime.minute,
-        );
-        notifier.onDateSelect(selectedDate: selectedDateTime);
-      }
-    });
-  }
-
-  Future<void> _selectTime(
-    BuildContext context,
-    AddMatchViewNotifier notifier,
-    AddMatchViewState state,
-  ) async {
-    showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(
-        hour: state.matchTime.hour,
-        minute: state.matchTime.minute,
-      ),
-      builder: (context, child) {
-        return Theme(
-          data: context.brightness == Brightness.dark
-              ? materialThemeDataDark
-              : materialThemeDataLight,
-          child: child!,
-        );
-      },
-    ).then((selectedTime) {
-      if (selectedTime != null) {
-        DateTime selectedDateTime = DateTime(
-          state.matchTime.year,
-          state.matchTime.month,
-          state.matchTime.day,
-          selectedTime.hour,
-          selectedTime.minute,
-        );
-        notifier.onDateSelect(selectedDate: selectedDateTime);
-      }
-    });
   }
 
   void _observeActionError(BuildContext context, WidgetRef ref) {

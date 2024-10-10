@@ -17,4 +17,16 @@ class StorageConst {
     required String imageName,
   }) =>
       "$rootDirectory/$userId/support_attachment_images/$imageName";
+
+  static String tournamentProfileUploadPath({
+    required String userId,
+    required String tournamentId,
+  }) =>
+      "$rootDirectory/$userId/tournament_images/$tournamentId/profile";
+
+  static String tournamentBannerUploadPath({
+    required String userId,
+    required String tournamentId,
+  }) =>
+      "$rootDirectory/$userId/tournament_images/$tournamentId/banner";
 }

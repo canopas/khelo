@@ -26,6 +26,7 @@ import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 
+import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
 import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
@@ -53,6 +54,7 @@ class AppRoute {
   static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
   static const pathContactSelection = "/contact-selection";
+  static const pathAddTournament = "/add-tournament";
 
   final String path;
   final String? name;
@@ -163,6 +165,11 @@ class AppRoute {
           matchId: matchId,
           defaultTeam: defaultTeam,
         ),
+      );
+
+  static AppRoute addTournament() => AppRoute(
+        pathAddTournament,
+        builder: (_) => const AddTournamentScreen(),
       );
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
@@ -317,6 +324,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddMatch,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathAddTournament,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

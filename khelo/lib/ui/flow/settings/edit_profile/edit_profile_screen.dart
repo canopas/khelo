@@ -18,9 +18,9 @@ import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart
 import 'package:style/button/action_button.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/pickers/date_and_time_picker.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/theme/colors.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/image_picker_sheet.dart';
@@ -173,7 +173,16 @@ class EditProfileScreen extends ConsumerWidget {
             title: state.dob.format(context, DateFormatType.shortDate),
             showTrailingIcon: true,
             placeholder: context.l10n.edit_profile_dob_placeholder,
-            onTap: () => _selectDate(context, notifier, state),
+            onTap: () => selectDate(
+              context,
+              helpText: context.l10n.edit_profile_select_birth_date_placeholder,
+              initialDate: state.dob,
+              onDateSelected: (date) {
+                if (date != state.dob) {
+                  notifier.onDateSelect(selectedDate: date);
+                }
+              },
+            ),
           ),
         ),
         const SizedBox(width: 16),
@@ -296,31 +305,6 @@ class EditProfileScreen extends ConsumerWidget {
             ),
           )
         : null;
-  }
-
-  Future<void> _selectDate(
-    BuildContext context,
-    EditProfileViewNotifier notifier,
-    EditProfileState state,
-  ) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      helpText: context.l10n.edit_profile_select_birth_date_placeholder,
-      initialDate: state.dob,
-      firstDate: DateTime(1920),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: context.brightness == Brightness.dark
-              ? materialThemeDataDark
-              : materialThemeDataLight,
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != state.dob) {
-      notifier.onDateSelect(selectedDate: picked);
-    }
   }
 
   Widget _deleteButton(
