@@ -92,13 +92,11 @@ class _TournamentDetailScreenState
             moreOptionButton(context),
           ],
         ),
-        SliverToBoxAdapter(
-          child: SizedBox(height: 16 + context.mediaQueryPadding.bottom),
-        ),
         SliverPersistentHeader(
           pinned: true,
           delegate: SliverPersistentDelegate(
             child: _tabSelection(context),
+            size: 60,
           ),
         ),
         SliverFillRemaining(
@@ -155,10 +153,14 @@ class _TournamentDetailScreenState
 
       return FlexibleSpaceBar(
         title: isCollapsed
-            ? Text(
-                tournament.name,
-                style: AppTextStyle.header2.copyWith(
-                  color: context.colorScheme.textPrimary,
+            ? AnimatedOpacity(
+                opacity: isCollapsed ? 1 : 0,
+                duration: const Duration(milliseconds: 100),
+                child: Text(
+                  tournament.name,
+                  style: AppTextStyle.header2.copyWith(
+                    color: context.colorScheme.textPrimary,
+                  ),
                 ),
               )
             : null,
@@ -187,12 +189,15 @@ class _TournamentDetailScreenState
                     )
                   : null,
             ),
-            if (!isCollapsed)
-              Positioned(
-                left: 16,
-                bottom: 24,
+            Positioned(
+              left: 16,
+              bottom: 24,
+              child: AnimatedOpacity(
+                opacity: isCollapsed ? 0 : 1,
+                duration: const Duration(milliseconds: 100),
                 child: _profileView(context, tournament),
               ),
+            ),
           ],
         ),
       );

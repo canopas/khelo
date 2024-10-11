@@ -3,8 +3,13 @@ import 'package:style/extensions/context_extensions.dart';
 
 class SliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
+  final double size;
 
-  SliverPersistentDelegate({Key? key, required this.child});
+  SliverPersistentDelegate({
+    Key? key,
+    required this.child,
+    this.size = 50,
+  });
 
   @override
   Widget build(
@@ -25,8 +30,8 @@ class SliverPersistentDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 50;
+  double get maxExtent => size;
 
   @override
-  double get minExtent => 50;
+  double get minExtent => size;
 }
