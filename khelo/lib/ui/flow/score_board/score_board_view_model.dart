@@ -54,7 +54,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   void _loadMatchSetting() {
     if (matchId == null) return;
-    _matchSettingSubscription?.cancel();
     _matchSettingSubscription =
         _matchService.streamMatchSetting(matchId!).listen((setting) {
       state = state.copyWith(matchSetting: setting ?? state.matchSetting);
@@ -1545,12 +1544,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   _cancelStreamSubscription() async {
     await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
+    await _matchSettingSubscription?.cancel();
     await _matchStreamController.close();
   }
 
   void onResume() {
     _cancelStreamSubscription();
     _loadMatchesAndInning();
+    _loadMatchSetting();
   }
 
   @override
