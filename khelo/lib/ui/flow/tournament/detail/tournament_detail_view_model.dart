@@ -42,7 +42,7 @@ class TournamentDetailStateViewNotifier
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
-          "TournamentListViewNotifier: error while loading tournament list -> $e");
+          "TournamentDetailStateViewNotifier: error while loading tournament list -> $e");
     });
   }
 

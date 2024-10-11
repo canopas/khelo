@@ -465,15 +465,12 @@ class MatchService {
     }
   }
 
-  //Helper Methods
   Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
     try {
-      final List<MatchModel> matches = [];
-      await Future.forEach(matchIds, (matchId) async {
-        final match = await getMatchById(matchId);
-        matches.add(match);
-      });
-      return matches;
+      return await _matchCollection
+          .where(FieldPath.documentId, whereIn: matchIds)
+          .get()
+          .then((value) => value.docs.map((e) => e.data()).toList());
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

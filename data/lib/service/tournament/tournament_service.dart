@@ -10,28 +10,28 @@ import '../user/user_service.dart';
 
 final tournamentServiceProvider = Provider(
   (ref) => TournamentService(
-    fireStore: FirebaseFirestore.instance,
-    teamService: ref.read(teamServiceProvider),
-    matchService: ref.read(matchServiceProvider),
-    userService: ref.read(userServiceProvider),
+    FirebaseFirestore.instance,
+    ref.read(teamServiceProvider),
+    ref.read(matchServiceProvider),
+    ref.read(userServiceProvider),
   ),
 );
 
 class TournamentService {
-  final FirebaseFirestore fireStore;
-  final TeamService teamService;
-  final MatchService matchService;
-  final UserService userService;
+  final FirebaseFirestore _firestore;
+  final TeamService _teamService;
+  final MatchService _matchService;
+  final UserService _userService;
 
-  TournamentService({
-    required this.fireStore,
-    required this.teamService,
-    required this.matchService,
-    required this.userService,
-  });
+  TournamentService(
+    this._firestore,
+    this._teamService,
+    this._matchService,
+    this._userService,
+  );
 
   CollectionReference<TournamentModel> get _tournamentCollection =>
-      fireStore.collection(FireStoreConst.tournamentCollection).withConverter(
+      _firestore.collection(FireStoreConst.tournamentCollection).withConverter(
             fromFirestore: TournamentModel.fromFireStore,
             toFirestore: (TournamentModel tournament, _) => tournament.toJson(),
           );
@@ -86,18 +86,18 @@ class TournamentService {
         final matchIds = tournament.match_ids;
 
         if (teamIds.isNotEmpty) {
-          final teams = await teamService.getTeamsByIds(teamIds);
+          final teams = await _teamService.getTeamsByIds(teamIds);
           tournament = tournament.copyWith(teams: teams);
         }
 
         if (matchIds.isNotEmpty) {
-          final matches = await matchService.getMatchesByIds(matchIds);
+          final matches = await _matchService.getMatchesByIds(matchIds);
           tournament = tournament.copyWith(matches: matches);
         }
 
         if (tournament.members.isNotEmpty) {
           final memberIds = tournament.members.map((e) => e.id).toList();
-          final users = await userService.getUsersByIds(memberIds);
+          final users = await _userService.getUsersByIds(memberIds);
 
           final members = tournament.members.map((member) {
             final user = users.firstWhere((element) => element.id == member.id);

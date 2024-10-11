@@ -269,11 +269,10 @@ class TeamService {
 
   Future<List<TeamModel>> getTeamsByIds(List<String> teamIds) async {
     try {
-      final teamList = await _teamsCollection
+      return await _teamsCollection
           .where(FieldPath.documentId, whereIn: teamIds)
           .get()
           .then((value) => value.docs.map((e) => e.data()).toList());
-      return teamList;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
