@@ -169,7 +169,7 @@ class MatchService {
   Stream<List<MatchModel>> streamUpcomingMatches() {
     final DateTime now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
-    final DateTime aMonthAfter = startOfDay.add(Duration(days: 30));
+    final DateTime aMonthAfter = DateTime(now.year, now.month + 1, now.day);
 
     final Timestamp timestampAfterMonth = Timestamp.fromDate(aMonthAfter);
     final Timestamp timestampNow = Timestamp.fromDate(startOfDay);
