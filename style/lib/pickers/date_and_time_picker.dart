@@ -9,12 +9,14 @@ Future<void> selectDate(
   required DateTime initialDate,
   required Function(DateTime) onDateSelected,
 }) async {
+  final now = DateTime.now();
+
   showDatePicker(
     context: context,
     helpText: helpText,
     initialDate: initialDate,
-    firstDate: DateTime.now(),
-    lastDate: DateTime(DateTime.now().year + 1),
+    firstDate: initialDate.isBefore(now) ? initialDate : now,
+    lastDate: DateTime(now.year + 1, now.month, now.day),
     builder: (context, child) {
       return Theme(
         data: context.brightness == Brightness.dark

@@ -1,11 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../converter/timestamp_json_converter.dart';
 import '../../extensions/double_extensions.dart';
 import '../team/team_model.dart';
 import '../user/user_models.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'match_model.freezed.dart';
 
@@ -49,6 +50,7 @@ class MatchModel with _$MatchModel {
     String? toss_winner_id,
     String? current_playing_team_id,
     RevisedTarget? revised_target,
+    @TimeStampJsonConverter() DateTime? updated_at,
   }) = _MatchModel;
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>

@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -39,12 +40,20 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     _streamSubscription?.cancel();
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    _streamSubscription = _matchService.streamMatches().listen(
-      (matches) {
-        final groupMatches = _groupMatches(matches);
+    final matchCombiner = combineLatest3(
+        _matchService.streamActiveRunningMatches(),
+        _matchService.streamUpcomingMatches(),
+        _matchService.streamFinishedMatches());
+
+    _streamSubscription = matchCombiner.listen(
+      (allMatches) {
         state = state.copyWith(
-          matches: matches,
-          groupMatches: groupMatches,
+          matches: [...allMatches.$1, ...allMatches.$2, ...allMatches.$3],
+          groupMatches: {
+            MatchStatusLabel.live: allMatches.$1,
+            MatchStatusLabel.upcoming: allMatches.$2,
+            MatchStatusLabel.finished: allMatches.$3,
+          },
           loading: false,
           error: null,
         );
@@ -54,28 +63,6 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
         debugPrint("HomeViewNotifier: error while load matches -> $e");
       },
     );
-  }
-
-  Map<MatchStatusLabel, List<MatchModel>> _groupMatches(
-      List<MatchModel> matches) {
-    final groupedMatches = groupBy(matches, (match) {
-      switch (match.match_status) {
-        case MatchStatus.running:
-          return MatchStatusLabel.live;
-        case MatchStatus.yetToStart:
-          return MatchStatusLabel.upcoming;
-        case MatchStatus.abandoned:
-        case MatchStatus.finish:
-          return MatchStatusLabel.finished;
-      }
-    });
-    return {
-      MatchStatusLabel.live: groupedMatches[MatchStatusLabel.live] ?? [],
-      MatchStatusLabel.upcoming:
-          groupedMatches[MatchStatusLabel.upcoming] ?? [],
-      MatchStatusLabel.finished:
-          groupedMatches[MatchStatusLabel.finished] ?? [],
-    };
   }
 
   @override
