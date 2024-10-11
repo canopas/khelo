@@ -41,7 +41,7 @@ class MatchService {
       _firestore
           .collection(FireStoreConst.matchesCollection)
           .doc(matchId)
-          .collection(FireStoreConst.matchSettingSubCollection)
+          .collection(FireStoreConst.matchSettingsSubCollection)
           .doc(FireStoreConst.settingDocument)
           .withConverter(
             fromFirestore: MatchSetting.fromFireStore,

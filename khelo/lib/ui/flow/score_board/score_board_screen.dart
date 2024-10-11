@@ -109,11 +109,10 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
           items: matchOptions
               .map((option) => BottomSheetAction(
                     title: option.getTitle(context),
+                    enabled: !option.showToggle(),
                     onTap: () {
-                      if (option != MatchOption.continueWithInjuredPlayer) {
-                        context.pop();
-                        notifier.onMatchOptionSelect(option, true);
-                      }
+                      context.pop();
+                      notifier.onMatchOptionSelect(option, true);
                     },
                     child: option.showToggle()
                         ? toggleButton(
