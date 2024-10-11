@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/storage/app_preferences.dart';
