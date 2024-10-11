@@ -37,6 +37,17 @@ class MatchService {
             toFirestore: (MatchModel match, _) => match.toJson(),
           );
 
+  DocumentReference<MatchSetting> _matchSettingDocument(String matchId) =>
+      _firestore
+          .collection(FireStoreConst.matchesCollection)
+          .doc(matchId)
+          .collection(FireStoreConst.matchSettingsSubCollection)
+          .doc(FireStoreConst.settingDocument)
+          .withConverter(
+            fromFirestore: MatchSetting.fromFireStore,
+            toFirestore: (MatchSetting setting, _) => setting.toJson(),
+          );
+
   String get generateMatchId => _matchCollection.doc().id;
 
   Future<MatchModel> getMatchById(String id) async {
@@ -85,6 +96,19 @@ class MatchService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  Stream<MatchSetting?> streamMatchSetting(String matchId) {
+    return _matchSettingDocument(matchId)
+        .snapshots()
+        .map((snapshot) => snapshot.data())
+        .handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<void> updateMatchSetting(String matchId, MatchSetting settings) async {
+    await _matchSettingDocument(matchId)
+        .set(settings, SetOptions(merge: true))
+        .catchError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Stream<List<MatchModel>> streamUserRelatedMatches(String userId) {
