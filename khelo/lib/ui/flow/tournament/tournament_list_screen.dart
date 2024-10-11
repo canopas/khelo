@@ -17,6 +17,7 @@ import 'package:style/text/app_text_style.dart';
 import '../../../components/empty_screen.dart';
 import '../../../components/error_screen.dart';
 import '../../../gen/assets.gen.dart';
+import 'components/sliver_header_delegate.dart';
 
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
@@ -97,7 +98,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         slivers: [
           SliverPersistentHeader(
             pinned: true,
-            delegate: SliverAppbarDelegate(
+            delegate: SliverPersistentDelegate(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -227,34 +228,4 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
           TextSpan(text: tournament.type.getString(context))
         ]));
   }
-}
-
-class SliverAppbarDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-
-  SliverAppbarDelegate({Key? key, required this.child});
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Container(
-      color: context.colorScheme.surface,
-      alignment: Alignment.centerLeft,
-      child: child,
-    );
-  }
-
-  @override
-  bool shouldRebuild(SliverAppbarDelegate oldDelegate) {
-    return child != oldDelegate.child;
-  }
-
-  @override
-  double get maxExtent => 50;
-
-  @override
-  double get minExtent => 50;
 }

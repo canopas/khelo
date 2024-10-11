@@ -177,6 +177,11 @@
       }
     }
   },
+  "tournament_detail_overview_tab": "Overview",
+  "tournament_detail_teams_tab": "Teams",
+  "tournament_detail_matches_tab": "Matches",
+  "tournament_detail_points_table_tab": "Points Table",
+  "tournament_detail_stats_tab": "Stats",
 
   "@_TOURNAMENT_TYPE":{
   },

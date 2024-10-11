@@ -45,6 +45,17 @@ class TournamentDetailStateViewNotifier
           "TournamentListViewNotifier: error while loading tournament list -> $e");
     });
   }
+
+  void onTabChange(int tab) {
+    if (state.selectedTab != tab) {
+      state = state.copyWith(selectedTab: tab);
+    }
+  }
+  @override
+  void dispose() {
+    _tournamentSubscription?.cancel();
+    super.dispose();
+  }
 }
 
 @freezed
@@ -52,6 +63,7 @@ class TournamentDetailState with _$TournamentDetailState {
   const factory TournamentDetailState({
     @Default(null) TournamentModel? tournament,
     @Default(false) bool loading,
+    @Default(0) int selectedTab,
     Object? error,
   }) = _TournamentDetailState;
 }

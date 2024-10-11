@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$TournamentDetailState {
   TournamentModel? get tournament => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  int get selectedTab => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
 
   /// Create a copy of TournamentDetailState
@@ -33,7 +34,11 @@ abstract class $TournamentDetailStateCopyWith<$Res> {
           $Res Function(TournamentDetailState) then) =
       _$TournamentDetailStateCopyWithImpl<$Res, TournamentDetailState>;
   @useResult
-  $Res call({TournamentModel? tournament, bool loading, Object? error});
+  $Res call(
+      {TournamentModel? tournament,
+      bool loading,
+      int selectedTab,
+      Object? error});
 
   $TournamentModelCopyWith<$Res>? get tournament;
 }
@@ -56,6 +61,7 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
   $Res call({
     Object? tournament = freezed,
     Object? loading = null,
+    Object? selectedTab = null,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
@@ -67,6 +73,10 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
       error: freezed == error ? _value.error : error,
     ) as $Val);
   }
@@ -95,7 +105,11 @@ abstract class _$$TournamentDetailStateImplCopyWith<$Res>
       __$$TournamentDetailStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({TournamentModel? tournament, bool loading, Object? error});
+  $Res call(
+      {TournamentModel? tournament,
+      bool loading,
+      int selectedTab,
+      Object? error});
 
   @override
   $TournamentModelCopyWith<$Res>? get tournament;
@@ -117,6 +131,7 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
   $Res call({
     Object? tournament = freezed,
     Object? loading = null,
+    Object? selectedTab = null,
     Object? error = freezed,
   }) {
     return _then(_$TournamentDetailStateImpl(
@@ -128,6 +143,10 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      selectedTab: null == selectedTab
+          ? _value.selectedTab
+          : selectedTab // ignore: cast_nullable_to_non_nullable
+              as int,
       error: freezed == error ? _value.error : error,
     ));
   }
@@ -137,7 +156,10 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
 
 class _$TournamentDetailStateImpl implements _TournamentDetailState {
   const _$TournamentDetailStateImpl(
-      {this.tournament = null, this.loading = false, this.error});
+      {this.tournament = null,
+      this.loading = false,
+      this.selectedTab = 0,
+      this.error});
 
   @override
   @JsonKey()
@@ -146,11 +168,14 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
   @JsonKey()
   final bool loading;
   @override
+  @JsonKey()
+  final int selectedTab;
+  @override
   final Object? error;
 
   @override
   String toString() {
-    return 'TournamentDetailState(tournament: $tournament, loading: $loading, error: $error)';
+    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error)';
   }
 
   @override
@@ -161,11 +186,13 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
             (identical(other.tournament, tournament) ||
                 other.tournament == tournament) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            (identical(other.selectedTab, selectedTab) ||
+                other.selectedTab == selectedTab) &&
             const DeepCollectionEquality().equals(other.error, error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tournament, loading,
+  int get hashCode => Object.hash(runtimeType, tournament, loading, selectedTab,
       const DeepCollectionEquality().hash(error));
 
   /// Create a copy of TournamentDetailState
@@ -182,12 +209,15 @@ abstract class _TournamentDetailState implements TournamentDetailState {
   const factory _TournamentDetailState(
       {final TournamentModel? tournament,
       final bool loading,
+      final int selectedTab,
       final Object? error}) = _$TournamentDetailStateImpl;
 
   @override
   TournamentModel? get tournament;
   @override
   bool get loading;
+  @override
+  int get selectedTab;
   @override
   Object? get error;
 
