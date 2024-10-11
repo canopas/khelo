@@ -7,6 +7,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/tournament_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -122,7 +123,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
   Widget _tournamentItem(BuildContext context, TournamentModel tournament) {
     return OnTapScale(
-      onTap: () {},
+      onTap: () =>
+          AppRoute.tournamentDetail(tournamentId: tournament.id).push(context),
       child: Container(
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
