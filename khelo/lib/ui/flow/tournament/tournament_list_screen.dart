@@ -7,6 +7,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/tournament_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -16,6 +17,7 @@ import 'package:style/text/app_text_style.dart';
 import '../../../components/empty_screen.dart';
 import '../../../components/error_screen.dart';
 import '../../../gen/assets.gen.dart';
+import 'components/sliver_header_delegate.dart';
 
 class TournamentListScreen extends ConsumerStatefulWidget {
   const TournamentListScreen({super.key});
@@ -96,7 +98,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         slivers: [
           SliverPersistentHeader(
             pinned: true,
-            delegate: SliverAppbarDelegate(
+            delegate: SliverPersistentDelegate(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
@@ -122,7 +124,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
 
   Widget _tournamentItem(BuildContext context, TournamentModel tournament) {
     return OnTapScale(
-      onTap: () {},
+      onTap: () =>
+          AppRoute.tournamentDetail(tournamentId: tournament.id).push(context),
       child: Container(
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -225,34 +228,4 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
           TextSpan(text: tournament.type.getString(context))
         ]));
   }
-}
-
-class SliverAppbarDelegate extends SliverPersistentHeaderDelegate {
-  final Widget child;
-
-  SliverAppbarDelegate({Key? key, required this.child});
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return Container(
-      color: context.colorScheme.surface,
-      alignment: Alignment.centerLeft,
-      child: child,
-    );
-  }
-
-  @override
-  bool shouldRebuild(SliverAppbarDelegate oldDelegate) {
-    return child != oldDelegate.child;
-  }
-
-  @override
-  double get maxExtent => 50;
-
-  @override
-  double get minExtent => 50;
 }

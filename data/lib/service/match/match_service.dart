@@ -574,4 +574,15 @@ class MatchService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
+    try {
+      return await _matchCollection
+          .where(FieldPath.documentId, whereIn: matchIds)
+          .get()
+          .then((value) => value.docs.map((e) => e.data()).toList());
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }

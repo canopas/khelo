@@ -164,6 +164,25 @@
     }
   },
 
+  "@_TOURNAMENT_DETAIL": {
+  },
+  "tournament_detail_not_found_title": "No Tournament found",
+  "tournament_detail_not_found_description": "The tournament you are looking for is not available.",
+  "tournament_detail_start_from_title": "Start from {date}",
+  "@tournament_detail_start_from_title": {
+    "description": "Start from {date}",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tournament_detail_overview_tab": "Overview",
+  "tournament_detail_teams_tab": "Teams",
+  "tournament_detail_matches_tab": "Matches",
+  "tournament_detail_points_table_tab": "Points Table",
+  "tournament_detail_stats_tab": "Stats",
+
   "@_TOURNAMENT_TYPE":{
   },
   "tournament_type_knock_out": "Knockout",

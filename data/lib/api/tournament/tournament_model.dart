@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../converter/timestamp_json_converter.dart';
 import '../match/match_model.dart';
 import '../team/team_model.dart';
+import '../user/user_models.dart';
 
 part 'tournament_model.freezed.dart';
 
@@ -47,8 +48,11 @@ class TournamentModel with _$TournamentModel {
 
 @freezed
 class TournamentMember with _$TournamentMember {
+  @JsonSerializable(explicitToJson: true)
   const factory TournamentMember({
     required String id,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(UserModel(id: '')) UserModel user,
     @Default(TournamentMemberRole.admin) TournamentMemberRole role,
   }) = _TournamentMember;
 
