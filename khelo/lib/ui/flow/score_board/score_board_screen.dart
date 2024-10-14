@@ -109,22 +109,35 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
           items: matchOptions
               .map((option) => BottomSheetAction(
                     title: option.getTitle(context),
+                    enabled: !option.showToggle(),
                     onTap: () {
-                      if (option != MatchOption.continueWithInjuredPlayer) {
-                        context.pop();
-                        notifier.onMatchOptionSelect(option, true);
-                      }
+                      context.pop();
+                      notifier.onMatchOptionSelect(option, true);
                     },
-                    child: option == MatchOption.continueWithInjuredPlayer
+                    child: option.showToggle()
                         ? toggleButton(
                             context,
-                            defaultEnabled: state.continueWithInjuredPlayers,
-                            onTap: notifier.onContinueWithInjuredPlayersChange,
+                            defaultEnabled: _getDefaultValue(state, option),
+                            onTap: (result) => notifier
+                                .onToggleMatchOptionChange(result, option),
                           )
                         : null,
                   ))
               .toList()),
     );
+  }
+
+  bool _getDefaultValue(ScoreBoardViewState state, MatchOption option) {
+    switch (option) {
+      case MatchOption.continueWithInjuredPlayer:
+        return state.matchSetting.continue_with_injured_player;
+      case MatchOption.showForLessRuns:
+        return state.matchSetting.show_wagon_wheel_for_less_run;
+      case MatchOption.showForDotBall:
+        return state.matchSetting.show_wagon_wheel_for_dot_ball;
+      default:
+        return false;
+    }
   }
 
   Widget _body(
@@ -324,20 +337,20 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             .select((value) => value.showSelectFieldingPositionSheet),
         (previous, next) async {
       if (next != null) {
-        final showForLessRun = ref.read(
-            scoreBoardStateProvider.select((value) => value.showForLessRun));
-        final showForDotBall = ref.read(
-            scoreBoardStateProvider.select((value) => value.showForDotBall));
+        final matchSetting = ref.read(
+            scoreBoardStateProvider.select((value) => value.matchSetting));
+        final showForLessRun = matchSetting.show_wagon_wheel_for_less_run;
+        final showForDotBall = matchSetting.show_wagon_wheel_for_dot_ball;
         final tappedButton = ref.read(
             scoreBoardStateProvider.select((value) => value.tappedButton));
         final isLongTapped = ref
             .read(scoreBoardStateProvider.select((value) => value.isLongTap));
         final result = await SelectFieldingPositionSheet.show<
                 (FieldingPositionType, bool, bool)>(context,
-            showForLessRun: !showForLessRun, showForDotBall: !showForDotBall);
+            showForLessRun: showForLessRun, showForDotBall: showForDotBall);
         if (context.mounted && result != null && tappedButton != null) {
           notifier.onFieldingPositionSelected(tappedButton,
-              isLongTapped ?? false, result.$1, !result.$2, !result.$3);
+              isLongTapped ?? false, result.$1, result.$2, result.$3);
         }
       }
     });
@@ -348,8 +361,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showSelectBatsManSheet),
         (previous, next) {
       if (next != null) {
-        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
-            .select((value) => value.continueWithInjuredPlayers));
+        final continueWithInjuredPlayers = ref.read(
+            scoreBoardStateProvider.select(
+                (value) => value.matchSetting.continue_with_injured_player));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -364,8 +378,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showSelectBowlerSheet),
         (previous, next) {
       if (next != null) {
-        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
-            .select((value) => value.continueWithInjuredPlayers));
+        final continueWithInjuredPlayers = ref.read(
+            scoreBoardStateProvider.select(
+                (value) => value.matchSetting.continue_with_injured_player));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -382,8 +397,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
             .select((value) => value.showSelectBowlerAndBatsManSheet),
         (previous, next) {
       if (next != null) {
-        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
-            .select((value) => value.continueWithInjuredPlayers));
+        final continueWithInjuredPlayers = ref.read(
+            scoreBoardStateProvider.select(
+                (value) => value.matchSetting.continue_with_injured_player));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,
@@ -398,8 +414,9 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         scoreBoardStateProvider.select((value) => value.showSelectPlayerSheet),
         (previous, next) {
       if (next != null) {
-        final continueWithInjuredPlayers = ref.read(scoreBoardStateProvider
-            .select((value) => value.continueWithInjuredPlayers));
+        final continueWithInjuredPlayers = ref.read(
+            scoreBoardStateProvider.select(
+                (value) => value.matchSetting.continue_with_injured_player));
         _showSelectPlayerSheet(
           context,
           continueWithInjuredPlayers,

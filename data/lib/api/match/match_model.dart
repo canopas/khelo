@@ -64,6 +64,24 @@ class MatchModel with _$MatchModel {
 }
 
 @freezed
+class MatchSetting with _$MatchSetting {
+  const factory MatchSetting({
+    @Default(true) bool continue_with_injured_player,
+    @Default(true) bool show_wagon_wheel_for_less_run,
+    @Default(true) bool show_wagon_wheel_for_dot_ball,
+  }) = _MatchSetting;
+
+  factory MatchSetting.fromJson(Map<String, dynamic> json) =>
+      _$MatchSettingFromJson(json);
+
+  factory MatchSetting.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      MatchSetting.fromJson(snapshot.data()!);
+}
+
+@freezed
 class MatchTeamModel with _$MatchTeamModel {
   @JsonSerializable(anyMap: true, explicitToJson: true)
   const factory MatchTeamModel({

@@ -152,6 +152,23 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
+_$MatchSettingImpl _$$MatchSettingImplFromJson(Map<String, dynamic> json) =>
+    _$MatchSettingImpl(
+      continue_with_injured_player:
+          json['continue_with_injured_player'] as bool? ?? true,
+      show_wagon_wheel_for_less_run:
+          json['show_wagon_wheel_for_less_run'] as bool? ?? true,
+      show_wagon_wheel_for_dot_ball:
+          json['show_wagon_wheel_for_dot_ball'] as bool? ?? true,
+    );
+
+Map<String, dynamic> _$$MatchSettingImplToJson(_$MatchSettingImpl instance) =>
+    <String, dynamic>{
+      'continue_with_injured_player': instance.continue_with_injured_player,
+      'show_wagon_wheel_for_less_run': instance.show_wagon_wheel_for_less_run,
+      'show_wagon_wheel_for_dot_ball': instance.show_wagon_wheel_for_dot_ball,
+    };
+
 _$MatchTeamModelImpl _$$MatchTeamModelImplFromJson(Map json) =>
     _$MatchTeamModelImpl(
       team_id: json['team_id'] as String,

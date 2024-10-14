@@ -1026,6 +1026,212 @@ abstract class _MatchModel implements MatchModel {
       throw _privateConstructorUsedError;
 }
 
+MatchSetting _$MatchSettingFromJson(Map<String, dynamic> json) {
+  return _MatchSetting.fromJson(json);
+}
+
+/// @nodoc
+mixin _$MatchSetting {
+  bool get continue_with_injured_player => throw _privateConstructorUsedError;
+  bool get show_wagon_wheel_for_less_run => throw _privateConstructorUsedError;
+  bool get show_wagon_wheel_for_dot_ball => throw _privateConstructorUsedError;
+
+  /// Serializes this MatchSetting to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $MatchSettingCopyWith<MatchSetting> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $MatchSettingCopyWith<$Res> {
+  factory $MatchSettingCopyWith(
+          MatchSetting value, $Res Function(MatchSetting) then) =
+      _$MatchSettingCopyWithImpl<$Res, MatchSetting>;
+  @useResult
+  $Res call(
+      {bool continue_with_injured_player,
+      bool show_wagon_wheel_for_less_run,
+      bool show_wagon_wheel_for_dot_ball});
+}
+
+/// @nodoc
+class _$MatchSettingCopyWithImpl<$Res, $Val extends MatchSetting>
+    implements $MatchSettingCopyWith<$Res> {
+  _$MatchSettingCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? continue_with_injured_player = null,
+    Object? show_wagon_wheel_for_less_run = null,
+    Object? show_wagon_wheel_for_dot_ball = null,
+  }) {
+    return _then(_value.copyWith(
+      continue_with_injured_player: null == continue_with_injured_player
+          ? _value.continue_with_injured_player
+          : continue_with_injured_player // ignore: cast_nullable_to_non_nullable
+              as bool,
+      show_wagon_wheel_for_less_run: null == show_wagon_wheel_for_less_run
+          ? _value.show_wagon_wheel_for_less_run
+          : show_wagon_wheel_for_less_run // ignore: cast_nullable_to_non_nullable
+              as bool,
+      show_wagon_wheel_for_dot_ball: null == show_wagon_wheel_for_dot_ball
+          ? _value.show_wagon_wheel_for_dot_ball
+          : show_wagon_wheel_for_dot_ball // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$MatchSettingImplCopyWith<$Res>
+    implements $MatchSettingCopyWith<$Res> {
+  factory _$$MatchSettingImplCopyWith(
+          _$MatchSettingImpl value, $Res Function(_$MatchSettingImpl) then) =
+      __$$MatchSettingImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {bool continue_with_injured_player,
+      bool show_wagon_wheel_for_less_run,
+      bool show_wagon_wheel_for_dot_ball});
+}
+
+/// @nodoc
+class __$$MatchSettingImplCopyWithImpl<$Res>
+    extends _$MatchSettingCopyWithImpl<$Res, _$MatchSettingImpl>
+    implements _$$MatchSettingImplCopyWith<$Res> {
+  __$$MatchSettingImplCopyWithImpl(
+      _$MatchSettingImpl _value, $Res Function(_$MatchSettingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? continue_with_injured_player = null,
+    Object? show_wagon_wheel_for_less_run = null,
+    Object? show_wagon_wheel_for_dot_ball = null,
+  }) {
+    return _then(_$MatchSettingImpl(
+      continue_with_injured_player: null == continue_with_injured_player
+          ? _value.continue_with_injured_player
+          : continue_with_injured_player // ignore: cast_nullable_to_non_nullable
+              as bool,
+      show_wagon_wheel_for_less_run: null == show_wagon_wheel_for_less_run
+          ? _value.show_wagon_wheel_for_less_run
+          : show_wagon_wheel_for_less_run // ignore: cast_nullable_to_non_nullable
+              as bool,
+      show_wagon_wheel_for_dot_ball: null == show_wagon_wheel_for_dot_ball
+          ? _value.show_wagon_wheel_for_dot_ball
+          : show_wagon_wheel_for_dot_ball // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$MatchSettingImpl implements _MatchSetting {
+  const _$MatchSettingImpl(
+      {this.continue_with_injured_player = true,
+      this.show_wagon_wheel_for_less_run = true,
+      this.show_wagon_wheel_for_dot_ball = true});
+
+  factory _$MatchSettingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MatchSettingImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final bool continue_with_injured_player;
+  @override
+  @JsonKey()
+  final bool show_wagon_wheel_for_less_run;
+  @override
+  @JsonKey()
+  final bool show_wagon_wheel_for_dot_ball;
+
+  @override
+  String toString() {
+    return 'MatchSetting(continue_with_injured_player: $continue_with_injured_player, show_wagon_wheel_for_less_run: $show_wagon_wheel_for_less_run, show_wagon_wheel_for_dot_ball: $show_wagon_wheel_for_dot_ball)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$MatchSettingImpl &&
+            (identical(other.continue_with_injured_player,
+                    continue_with_injured_player) ||
+                other.continue_with_injured_player ==
+                    continue_with_injured_player) &&
+            (identical(other.show_wagon_wheel_for_less_run,
+                    show_wagon_wheel_for_less_run) ||
+                other.show_wagon_wheel_for_less_run ==
+                    show_wagon_wheel_for_less_run) &&
+            (identical(other.show_wagon_wheel_for_dot_ball,
+                    show_wagon_wheel_for_dot_ball) ||
+                other.show_wagon_wheel_for_dot_ball ==
+                    show_wagon_wheel_for_dot_ball));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, continue_with_injured_player,
+      show_wagon_wheel_for_less_run, show_wagon_wheel_for_dot_ball);
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$MatchSettingImplCopyWith<_$MatchSettingImpl> get copyWith =>
+      __$$MatchSettingImplCopyWithImpl<_$MatchSettingImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$MatchSettingImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _MatchSetting implements MatchSetting {
+  const factory _MatchSetting(
+      {final bool continue_with_injured_player,
+      final bool show_wagon_wheel_for_less_run,
+      final bool show_wagon_wheel_for_dot_ball}) = _$MatchSettingImpl;
+
+  factory _MatchSetting.fromJson(Map<String, dynamic> json) =
+      _$MatchSettingImpl.fromJson;
+
+  @override
+  bool get continue_with_injured_player;
+  @override
+  bool get show_wagon_wheel_for_less_run;
+  @override
+  bool get show_wagon_wheel_for_dot_ball;
+
+  /// Create a copy of MatchSetting
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$MatchSettingImplCopyWith<_$MatchSettingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 MatchTeamModel _$MatchTeamModelFromJson(Map<String, dynamic> json) {
   return _MatchTeamModel.fromJson(json);
 }
