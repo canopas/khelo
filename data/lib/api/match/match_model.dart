@@ -50,6 +50,7 @@ class MatchModel with _$MatchModel {
     String? toss_winner_id,
     String? current_playing_team_id,
     RevisedTarget? revised_target,
+    @TimeStampJsonConverter() DateTime? updated_at,
   }) = _MatchModel;
 
   factory MatchModel.fromJson(Map<String, dynamic> json) =>

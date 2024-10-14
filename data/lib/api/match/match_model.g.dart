@@ -68,6 +68,8 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
           ? null
           : RevisedTarget.fromJson(
               Map<String, dynamic>.from(json['revised_target'] as Map)),
+      updated_at: _$JsonConverterFromJson<Object, DateTime>(
+          json['updated_at'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
@@ -100,6 +102,8 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'toss_winner_id': instance.toss_winner_id,
       'current_playing_team_id': instance.current_playing_team_id,
       'revised_target': instance.revised_target?.toJson(),
+      'updated_at': _$JsonConverterToJson<Object, DateTime>(
+          instance.updated_at, const TimeStampJsonConverter().toJson),
     };
 
 const _$MatchTypeEnumMap = {
