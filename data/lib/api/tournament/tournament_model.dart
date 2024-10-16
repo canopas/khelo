@@ -34,6 +34,9 @@ class TournamentModel with _$TournamentModel {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default([])
     List<MatchModel> matches,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default([])
+    List<PlayerKeyStat> keyStats,
   }) = _TournamentModel;
 
   factory TournamentModel.fromJson(Map<String, dynamic> json) =>
@@ -52,7 +55,8 @@ class TournamentMember with _$TournamentMember {
   const factory TournamentMember({
     required String id,
     @JsonKey(includeToJson: false, includeFromJson: false)
-    @Default(UserModel(id: '')) UserModel user,
+    @Default(UserModel(id: ''))
+    UserModel user,
     @Default(TournamentMemberRole.admin) TournamentMemberRole role,
   }) = _TournamentMember;
 
@@ -84,4 +88,14 @@ enum TournamentMemberRole {
   bool get isOrganizer => this == TournamentMemberRole.organizer;
 
   bool get isAdmin => this == TournamentMemberRole.admin;
+}
+
+@freezed
+class PlayerKeyStat with _$PlayerKeyStat {
+  @JsonSerializable(explicitToJson: true)
+  const factory PlayerKeyStat({
+    required String teamName,
+    required UserModel player,
+    required int runs,
+  }) = _PlayerKeyStat;
 }

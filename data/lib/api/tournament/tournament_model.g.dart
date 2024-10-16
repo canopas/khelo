@@ -97,3 +97,17 @@ const _$TournamentMemberRoleEnumMap = {
   TournamentMemberRole.organizer: 'organizer',
   TournamentMemberRole.admin: 'admin',
 };
+
+_$PlayerKeyStatImpl _$$PlayerKeyStatImplFromJson(Map<String, dynamic> json) =>
+    _$PlayerKeyStatImpl(
+      teamName: json['teamName'] as String,
+      player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
+      runs: (json['runs'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$$PlayerKeyStatImplToJson(_$PlayerKeyStatImpl instance) =>
+    <String, dynamic>{
+      'teamName': instance.teamName,
+      'player': instance.player.toJson(),
+      'runs': instance.runs,
+    };

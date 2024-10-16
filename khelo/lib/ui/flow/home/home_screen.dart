@@ -193,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Visibility(
                 visible: isViewAllShow,
                 child: Text(
-                  context.l10n.home_screen_view_all_btn,
+                  context.l10n.common_view_all,
                   style: AppTextStyle.button.copyWith(
                     color: context.colorScheme.primary,
                   ),
