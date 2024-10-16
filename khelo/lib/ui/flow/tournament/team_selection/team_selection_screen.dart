@@ -4,80 +4,91 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
-import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/error_snackbar.dart';
-import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
-import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
-import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
+import 'package:khelo/ui/flow/tournament/team_selection/team_selection_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/text/search_text_field.dart';
+import 'package:style/widgets/rounded_check_box.dart';
 
 import '../../../../components/create_team_cell.dart';
+import '../../../../components/error_screen.dart';
+import '../../../../components/error_snackbar.dart';
+import '../../../../components/image_avatar.dart';
+import '../../../../domain/extensions/widget_extension.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../team/search_team/components/team_member_sheet.dart';
 
-class SearchTeamScreen extends ConsumerStatefulWidget {
-  final List<String>? excludedIds;
-  final bool onlyUserTeams;
+class TeamSelectionScreen extends ConsumerStatefulWidget {
+  final List<TeamModel>? selectedTeams;
 
-  const SearchTeamScreen({
+  const TeamSelectionScreen({
     super.key,
-    required this.excludedIds,
-    required this.onlyUserTeams,
+    this.selectedTeams,
   });
 
   @override
-  ConsumerState createState() => _SearchTeamScreenState();
+  ConsumerState createState() => _TeamSelectionScreenState();
 }
 
-class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
-  late SearchTeamViewNotifier notifier;
+class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
+  late TeamSelectionViewNotifier notifier;
 
   @override
   void initState() {
     super.initState();
-    notifier = ref.read(searchTeamViewStateProvider.notifier);
-    runPostFrame(
-        () => notifier.setData(widget.excludedIds, widget.onlyUserTeams));
+    notifier = ref.read(teamSelectionViewStateProvider.notifier);
+    runPostFrame(() => notifier.setData(widget.selectedTeams));
   }
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(searchTeamViewStateProvider);
+    final state = ref.watch(teamSelectionViewStateProvider);
     _observeActionError();
 
     return AppPage(
-      title: context.l10n.search_team_screen_title,
+      title: context.l10n.team_selection_screen_title,
       actions: [
         IconButton(
-          onPressed: state.selectedTeam != null
-              ? () async {
-                  if (state.userTeams
-                      .any((team) => team.id == state.selectedTeam?.id)) {
-                    context.pop(state.selectedTeam);
-                  } else {
-                    final res = await TeamMemberSheet.show<bool>(
-                      context,
-                      team: state.selectedTeam!,
-                      isForVerification: true,
-                    );
-                    if (res != null && res && context.mounted) {
-                      context.pop(state.selectedTeam);
-                    }
-                  }
-                }
-              : null,
+          onPressed: () async {
+            final userTeams = state.userTeams.map((e) => e.id).toSet();
+            final previouslySelected =
+                notifier.selectedIds.map((e) => e.id).toSet();
+            final List<TeamModel> verified = [];
+            final List<TeamModel> unverified = [];
+
+            for (final team in state.selectedTeams) {
+              if (userTeams.contains(team.id) ||
+                  previouslySelected.contains(team.id)) {
+                verified.add(team);
+              } else {
+                unverified.add(team);
+              }
+            }
+
+            for (final team in unverified) {
+              final res = await TeamMemberSheet.show<bool>(
+                context,
+                team: team,
+                isForVerification: true,
+              );
+
+              if (res == true && context.mounted) {
+                verified.add(team);
+              }
+            }
+
+            if (context.mounted) {
+              context.pop(verified);
+            }
+          },
           icon: SvgPicture.asset(
             Assets.images.icCheck,
             colorFilter: ColorFilter.mode(
-              state.selectedTeam != null
-                  ? context.colorScheme.textPrimary
-                  : context.colorScheme.textDisabled,
+              context.colorScheme.textPrimary,
               BlendMode.srcIn,
             ),
           ),
@@ -97,10 +108,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     );
   }
 
-  Widget _searchTextField(
-    BuildContext context,
-    SearchTeamState state,
-  ) {
+  Widget _searchTextField(BuildContext context, TeamSelectionViewState state) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: SearchTextField(
@@ -114,10 +122,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     );
   }
 
-  Widget _teamList(
-    BuildContext context,
-    SearchTeamState state,
-  ) {
+  Widget _teamList(BuildContext context, TeamSelectionViewState state) {
     if (state.loading) {
       return const Center(child: AppProgressIndicator());
     }
@@ -129,6 +134,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
       );
     }
 
+    final selectedTeam = notifier.getSelectedTeamOfOtherUser();
+
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
@@ -136,6 +143,11 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           _teamProfileCell(context, state, state.searchResults[index]),
           if (index != state.searchResults.length - 1)
             Divider(color: context.colorScheme.outline),
+        ],
+        for (int index = 0; index < selectedTeam.length; index++) ...[
+          if (state.searchResults.isNotEmpty)
+            Divider(color: context.colorScheme.outline),
+          _teamProfileCell(context, state, selectedTeam[index]),
         ],
         const SizedBox(height: 16),
         Text(
@@ -159,10 +171,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
   }
 
   Widget _teamProfileCell(
-    BuildContext context,
-    SearchTeamState state,
-    TeamModel team,
-  ) {
+      BuildContext context, TeamSelectionViewState state, TeamModel team) {
     return OnTapScale(
       onTap: () => notifier.onTeamCellTap(team),
       onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
@@ -206,9 +215,10 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               ],
             ),
           ),
-          trailing: (team.id == state.selectedTeam?.id)
-              ? SvgPicture.asset(Assets.images.icRoundedCheck)
-              : null,
+          trailing: RoundedCheckBox(
+              isSelected:
+                  state.selectedTeams.map((e) => e.id).contains(team.id),
+              onTap: (_) => notifier.onTeamCellTap(team)),
         ),
       ),
     );
@@ -216,7 +226,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
 
   void _observeActionError() {
     ref.listen(
-      searchTeamViewStateProvider.select((value) => value.showSelectionError),
+      teamSelectionViewStateProvider
+          .select((value) => value.showSelectionError),
       (previous, next) {
         if (next) {
           showErrorSnackBar(

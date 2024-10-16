@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,8 +26,9 @@ import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
-
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
+import 'package:khelo/ui/flow/tournament/team_selection/team_selection_screen.dart';
+
 import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
@@ -55,6 +57,7 @@ class AppRoute {
   static const pathViewAll = "/view-all";
   static const pathContactSelection = "/contact-selection";
   static const pathAddTournament = "/add-tournament";
+  static const pathTeamSelection = "/team-selection";
 
   final String path;
   final String? name;
@@ -170,6 +173,11 @@ class AppRoute {
   static AppRoute addTournament() => AppRoute(
         pathAddTournament,
         builder: (_) => const AddTournamentScreen(),
+      );
+
+  static AppRoute teamSelection({List<TeamModel>? selectedTeams}) => AppRoute(
+        pathTeamSelection,
+        builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
       );
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
@@ -328,6 +336,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddTournament,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathTeamSelection,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

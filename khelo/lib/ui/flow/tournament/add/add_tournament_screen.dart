@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import 'package:khelo/components/profile_image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/gen/assets.gen.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
@@ -129,7 +131,24 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                 },
               ),
               const SizedBox(height: 16),
-              _dateScheduleView(context, state)
+              _dateScheduleView(context, state),
+              const SizedBox(height: 16),
+              AdaptiveOutlinedTile(
+                placeholder: context.l10n.add_tournament_team_selection,
+                headerText: context.l10n.add_tournament_team_selection,
+                title:
+                    context.l10n.add_tournament_teams_title(state.teams.length),
+                showTrailingIcon: true,
+                iconImage: Assets.images.icArrowForward,
+                onTap: () async {
+                  final selectedTeams =
+                      await AppRoute.teamSelection(selectedTeams: state.teams)
+                          .push<List<TeamModel>>(context);
+                  if (context.mounted && selectedTeams != null) {
+                    notifier.onSelectTeam(selectedTeams);
+                  }
+                },
+              ),
             ],
           ),
         ),

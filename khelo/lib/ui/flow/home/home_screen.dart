@@ -121,7 +121,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 _createActionView(
                   context,
                   title: context.l10n.home_screen_set_up_team_title,
-                  btnText: context.l10n.home_screen_create_team_btn,
+                  btnText: context.l10n.common_create_team_title,
                   onTap: () => AppRoute.addTeam().push(context),
                 ),
               ],

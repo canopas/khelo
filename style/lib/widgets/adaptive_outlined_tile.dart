@@ -11,6 +11,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
   final int? maxLines;
   final String placeholder;
   final bool showTrailingIcon;
+  final String? iconImage;
   final Function()? onTap;
 
   const AdaptiveOutlinedTile({
@@ -21,6 +22,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
     this.maxLines,
     required this.placeholder,
     this.showTrailingIcon = false,
+    this.iconImage,
     this.onTap,
   });
 
@@ -73,7 +75,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
                 ),
                 if (showTrailingIcon) ...[
                   SvgPicture.asset(
-                    "assets/images/ic_arrow_down.svg",
+                    iconImage ?? "assets/images/ic_arrow_down.svg",
                     height: 18,
                     width: 18,
                     colorFilter: ColorFilter.mode(
