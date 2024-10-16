@@ -26,6 +26,7 @@ Widget toggleButton(
               child: Switch.adaptive(
                 inactiveTrackColor: context.colorScheme.containerHigh,
                 activeColor: context.colorScheme.primary,
+                activeTrackColor: context.colorScheme.primary,
                 trackOutlineColor: WidgetStateColor.transparent,
                 thumbColor:
                     WidgetStatePropertyAll(context.colorScheme.onPrimary),

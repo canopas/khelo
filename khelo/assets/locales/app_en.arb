@@ -785,6 +785,9 @@
   "edit_profile_gender_prefer_not_to_say_title": "Prefer not to say",
   "edit_profile_delete_account_btn_title": "Delete account",
   "edit_profile_delete_account_description_text": "This can not undone. if you delete your account, your data will be gone forever.",
+  "transfer_teams_title" : "Before You Go...",
+  "transfer_teams_description" : "We’re sorry to see you leave. You currently own or manage some teams. To delete your account, please assign new owners and admins for your teams to ensure they're in good hands.",
+  "transfer_teams_go_to_teams" : "Go to Teams",
 
   "profile_settings_title": "Settings",
   "profile_setting_contact_support": "Contact support",
