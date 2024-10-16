@@ -55,8 +55,7 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
         IconButton(
           onPressed: () async {
             final userTeams = state.userTeams.map((e) => e.id).toSet();
-            final previouslySelected =
-                notifier.selectedIds.map((e) => e.id).toSet();
+            final previouslySelected = notifier.selectedIds.toSet();
             final List<TeamModel> verified = [];
             final List<TeamModel> unverified = [];
 
@@ -139,16 +138,10 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
     return ListView(
       padding: const EdgeInsets.symmetric(vertical: 16),
       children: [
-        for (int index = 0; index < state.searchResults.length; index++) ...[
-          _teamProfileCell(context, state, state.searchResults[index]),
-          if (index != state.searchResults.length - 1)
-            Divider(color: context.colorScheme.outline),
-        ],
-        for (int index = 0; index < selectedTeam.length; index++) ...[
-          if (state.searchResults.isNotEmpty)
-            Divider(color: context.colorScheme.outline),
-          _teamProfileCell(context, state, selectedTeam[index]),
-        ],
+        ..._buildTeamList(state,
+            teams: state.searchResults,
+            showDividerAtLast: selectedTeam.isNotEmpty),
+        ..._buildTeamList(state, teams: selectedTeam),
         const SizedBox(height: 16),
         Text(
           context.l10n.common_your_teams_title,
@@ -156,18 +149,26 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
               .copyWith(color: context.colorScheme.textSecondary),
         ),
         const SizedBox(height: 8),
-        for (int index = 0; index < state.userTeams.length; index++) ...[
-          _teamProfileCell(context, state, state.userTeams[index]),
-          if (index != state.userTeams.length - 1) ...[
-            Divider(color: context.colorScheme.outline),
-          ] else ...[
-            const SizedBox(height: 8),
-          ],
-        ],
-        const SizedBox(height: 8),
+        ..._buildTeamList(state, teams: state.userTeams),
+        SizedBox(height: state.userTeams.isEmpty ? 8 : 16),
         createTeamCell(context)
       ],
     );
+  }
+
+  List<Widget> _buildTeamList(
+    TeamSelectionViewState state, {
+    required List<TeamModel> teams,
+    bool showDividerAtLast = false,
+  }) {
+    final List<Widget> children = [];
+    for (int index = 0; index < teams.length; index++) {
+      children.add(_teamProfileCell(context, state, teams[index]));
+      if (index != teams.length - 1 || showDividerAtLast) {
+        children.add(Divider(color: context.colorScheme.outline));
+      }
+    }
+    return children;
   }
 
   Widget _teamProfileCell(

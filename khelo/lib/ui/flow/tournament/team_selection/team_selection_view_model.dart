@@ -29,7 +29,7 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
   String? _currentUserId;
   Timer? _debounce;
 
-  List<TeamModel> selectedIds = [];
+  List<String> selectedIds = [];
 
   TeamSelectionViewNotifier(this._teamService, this._currentUserId)
       : super(
@@ -47,7 +47,7 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
 
   void setData(List<TeamModel>? teams) {
     state = state.copyWith(selectedTeams: teams ?? []);
-    selectedIds = teams ?? [];
+    selectedIds = teams?.map((e) => e.id).toList() ?? [];
   }
 
   Future<void> _loadTeamList() async {
@@ -95,6 +95,8 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       if (state.searchController.text.isNotEmpty) {
         _search(state.searchController.text.trim());
+      } else {
+        state = state.copyWith(searchResults: []);
       }
     });
   }
