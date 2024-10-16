@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:style/extensions/date_extensions.dart';
 
 enum DateFormatType {
   dateAndTime,
@@ -42,11 +43,30 @@ extension DateFormatter on DateTime {
     }
   }
 
+  String relativeTime(BuildContext context) {
+    final today = DateTime.now();
+    final tomorrow = today.add(const Duration(days: 1));
+
+    String day;
+    if (isSameDay(today)) {
+      day = 'Today';
+    } else if (isSameDay(tomorrow)) {
+      day = 'Tomorrow';
+    } else if (year == today.year) {
+      day = DateFormat('d MMM').format(this);
+    } else {
+      day = DateFormat('d MMM yyyy').format(this);
+    }
+
+    return day;
+  }
+
   static String formatDateRange(
     BuildContext context, {
     required DateTime startDate,
-    required DateTime endDate,
+    DateTime? endDate,
     required DateFormatType formatType,
   }) =>
-      "${startDate.format(context, formatType)} - ${endDate.format(context, formatType)}";
+      endDate?.format(context, formatType) ??
+      "${startDate.format(context, formatType)} - ${endDate!.format(context, formatType)}";
 }

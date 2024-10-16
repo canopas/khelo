@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../api/match/match_model.dart';
 import '../../api/tournament/tournament_model.dart';
 import '../../errors/app_error.dart';
 import '../../utils/constant/firestore_constant.dart';
+import '../ball_score/ball_score_service.dart';
 import '../match/match_service.dart';
 import '../team/team_service.dart';
 import '../user/user_service.dart';
@@ -14,6 +16,7 @@ final tournamentServiceProvider = Provider(
     ref.read(teamServiceProvider),
     ref.read(matchServiceProvider),
     ref.read(userServiceProvider),
+    ref.read(ballScoreServiceProvider),
   ),
 );
 
@@ -22,12 +25,14 @@ class TournamentService {
   final TeamService _teamService;
   final MatchService _matchService;
   final UserService _userService;
+  final BallScoreService _ballScoreService;
 
   TournamentService(
     this._firestore,
     this._teamService,
     this._matchService,
     this._userService,
+    this._ballScoreService,
   );
 
   CollectionReference<TournamentModel> get _tournamentCollection =>
@@ -92,7 +97,9 @@ class TournamentService {
 
         if (matchIds.isNotEmpty) {
           final matches = await _matchService.getMatchesByIds(matchIds);
-          tournament = tournament.copyWith(matches: matches);
+          final keyStats = await getKeyStats(matches);
+          tournament =
+              tournament.copyWith(matches: matches, keyStats: keyStats);
         }
 
         if (tournament.members.isNotEmpty) {
@@ -110,5 +117,35 @@ class TournamentService {
         return tournament;
       }
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<List<PlayerKeyStat>> getKeyStats(List<MatchModel> matches) async {
+    final Map<String, PlayerKeyStat> playerStatsMap = {};
+
+    for (var match in matches) {
+      for (var team in match.teams) {
+        for (var player in team.squad) {
+          final totalRuns =
+              await _ballScoreService.getPlayerTotalRuns(match.id, player.id);
+
+          if (totalRuns > 0) {
+            if (playerStatsMap.containsKey(player.id)) {
+              playerStatsMap[player.id] = playerStatsMap[player.id]!.copyWith(
+                runs: playerStatsMap[player.id]!.runs + totalRuns,
+              );
+            } else {
+              playerStatsMap[player.id] = PlayerKeyStat(
+                teamName: team.team.name,
+                player: player.player,
+                runs: totalRuns,
+              );
+            }
+          }
+        }
+      }
+    }
+
+    return playerStatsMap.values.toList()
+      ..sort((a, b) => b.runs.compareTo(a.runs));
   }
 }

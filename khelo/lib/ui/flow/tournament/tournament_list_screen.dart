@@ -203,14 +203,12 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
     TournamentModel tournament,
   ) {
     return Text.rich(TextSpan(
-        text: (tournament.end_date != null)
-            ? DateFormatter.formatDateRange(
-                context,
-                startDate: tournament.start_date,
-                endDate: tournament.end_date!,
-                formatType: DateFormatType.dayMonth,
-              )
-            : tournament.start_date.format(context, DateFormatType.dayMonth),
+        text: DateFormatter.formatDateRange(
+          context,
+          startDate: tournament.start_date,
+          endDate: tournament.end_date!,
+          formatType: DateFormatType.dayMonth,
+        ),
         style: AppTextStyle.caption
             .copyWith(color: context.colorScheme.textDisabled),
         children: [

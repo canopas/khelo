@@ -59,6 +59,7 @@
   "common_second_inning_title": "Second inning",
   "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
+  "common_view_all": "View all",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -118,7 +119,6 @@
   "home_screen_create_match_btn": "Create match",
   "home_screen_set_up_team_title": "Set up a team in minutes.",
   "home_screen_create_team_btn": "Create team",
-  "home_screen_view_all_btn": "View all",
   "home_screen_no_matches_title": "No Matches in this area!",
   "home_screen_no_matches_description_text": "Enjoy the freedom of creating your own cricket matches or teams.",
 
@@ -182,6 +182,14 @@
   "tournament_detail_matches_tab": "Matches",
   "tournament_detail_points_table_tab": "Points Table",
   "tournament_detail_stats_tab": "Stats",
+
+  "tournament_detail_overview_info_title": "Tournament info",
+  "tournament_detail_overview_type_title": "Type",
+  "tournament_detail_overview_duration_title": "Duration",
+  "tournament_detail_overview_teams_squads_title": "Teams Squads",
+  "tournament_detail_overview_key_stats_title": "Key Stats",
+  "tournament_detail_overview_key_stats_most_runs_title": "Most Runs",
+  "tournament_detail_overview_featured_matches_title": "Featured Matches",
 
   "@_TOURNAMENT_TYPE":{
   },
