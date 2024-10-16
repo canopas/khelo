@@ -38,7 +38,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
     _controller = PageController(
       initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
     );
@@ -53,10 +52,19 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
     }
   }
 
+  void _observeSelectedTab() {
+    ref.listen(myGameTabViewStateProvider.select((value) => value.selectedTab),
+        (previous, next) {
+      if (next != _selectedTab) {
+        _controller.jumpToPage(next);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = ref.watch(myGameTabViewStateProvider.notifier);
-
+    _observeSelectedTab();
     return AppPage(
       body: Builder(
         builder: (context) {
