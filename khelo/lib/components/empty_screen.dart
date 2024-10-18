@@ -8,7 +8,7 @@ class EmptyScreen extends StatelessWidget {
   final String description;
   final bool isShowButton;
   final String? buttonTitle;
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   const EmptyScreen({
     super.key,

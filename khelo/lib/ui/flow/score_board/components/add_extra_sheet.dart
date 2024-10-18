@@ -130,7 +130,7 @@ class _AddExtraSheetState extends State<AddExtraSheet> {
 
   Widget _runButton({
     required text,
-    required Function() onTap,
+    required VoidCallback onTap,
     required bool selected,
   }) {
     return OnTapScale(

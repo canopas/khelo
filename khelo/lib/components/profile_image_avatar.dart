@@ -15,7 +15,7 @@ class ProfileImageAvatar extends StatelessWidget {
   final String? filePath;
   final String? placeHolderImage;
   final bool isLoading;
-  final Function() onEditButtonTap;
+  final VoidCallback onEditButtonTap;
 
   const ProfileImageAvatar({
     super.key,
@@ -101,7 +101,7 @@ class ProfileImageAvatar extends StatelessWidget {
 
   Widget _editImageButton(
     BuildContext context, {
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return Align(
       alignment: Alignment.bottomRight,

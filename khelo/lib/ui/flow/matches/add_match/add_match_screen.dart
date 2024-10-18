@@ -90,7 +90,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   Widget _scheduleMatchButton(
     BuildContext context, {
     AddMatchErrorType? saveBtnError,
-    required Function() onSchedule,
+    required VoidCallback onSchedule,
   }) {
     return actionButton(
       context,
@@ -115,7 +115,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
 
   Widget _deleteMatchButton(
     BuildContext context, {
-    required Function() onDelete,
+    required VoidCallback onDelete,
   }) {
     return actionButton(context,
         onPressed: () => showConfirmationDialog(
@@ -254,7 +254,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     required TextEditingController controller,
     required String hintText,
     bool allowNumberOnly = false,
-    required Function() onChange,
+    required VoidCallback onChange,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -326,7 +326,7 @@ class EditProfileScreen extends ConsumerWidget {
 
   Widget _deleteButton(
     BuildContext context, {
-    required Function() onDelete,
+    required VoidCallback onDelete,
   }) {
     return PrimaryButton(
       onPressed: onDelete,
@@ -361,7 +361,7 @@ class EditProfileScreen extends ConsumerWidget {
   void _observeShowDeleteConfirmationDialog(
     BuildContext context,
     WidgetRef ref,
-    Function() onDeleteTap,
+      VoidCallback onDeleteTap,
   ) {
     ref.listen(
         editProfileStateProvider.select(

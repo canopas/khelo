@@ -14,10 +14,10 @@ import 'package:style/text/app_text_style.dart';
 
 class MatchDetailCell extends StatelessWidget {
   final MatchModel match;
-  final Function() onTap;
+  final VoidCallback onTap;
   final bool showStatusTag;
   final bool showActionButtons;
-  final Function()? onActionTap;
+  final VoidCallback? onActionTap;
 
   const MatchDetailCell({
     super.key,

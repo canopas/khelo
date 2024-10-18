@@ -16,7 +16,7 @@ class UserDetailSheet extends StatelessWidget {
     BuildContext context,
     UserModel user, {
     String? actionButtonTitle,
-    Function()? onButtonTap,
+        VoidCallback? onButtonTap,
   }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
@@ -36,7 +36,7 @@ class UserDetailSheet extends StatelessWidget {
 
   final UserModel user;
   final String? actionButtonTitle;
-  final Function()? onButtonTap;
+  final VoidCallback? onButtonTap;
 
   const UserDetailSheet({
     super.key,

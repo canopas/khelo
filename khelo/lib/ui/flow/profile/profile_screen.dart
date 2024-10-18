@@ -21,7 +21,7 @@ import 'package:style/text/app_text_style.dart';
 import '../../../gen/assets.gen.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
-  final Function() changeTabToMyCricketTeamList;
+  final VoidCallback changeTabToMyCricketTeamList;
 
   const ProfileScreen({super.key, required this.changeTabToMyCricketTeamList});
 
@@ -127,9 +127,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
   Widget _userProfileView(BuildContext context, ProfileState state) {
     return OnTapScale(
       onTap: () async {
-        final changeTabToMyCricket =
+        final shouldChangeTabToMyCricket =
             await AppRoute.editProfile().push<bool>(context);
-        if (context.mounted && changeTabToMyCricket == true) {
+        if (context.mounted && shouldChangeTabToMyCricket == true) {
           widget.changeTabToMyCricketTeamList();
         }
       },
@@ -223,7 +223,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
     required String icon,
     Color? color,
     required String title,
-    Function()? onTap,
+    VoidCallback? onTap,
     Widget? child,
   }) {
     return Padding(

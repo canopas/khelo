@@ -64,7 +64,7 @@ class AttachmentsTypeView extends StatelessWidget {
 }
 
 class AttachmentItem extends StatelessWidget {
-  final void Function() onCancelTap;
+  final VoidCallback onCancelTap;
   final String path;
   final bool isLoading;
 

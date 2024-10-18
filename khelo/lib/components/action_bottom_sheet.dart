@@ -54,7 +54,7 @@ class BottomSheetAction extends StatelessWidget {
   final String title;
   final Widget? child;
   final bool enabled;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
 
   const BottomSheetAction({
     super.key,

@@ -94,7 +94,7 @@ class _PowerPlayScreenState extends ConsumerState<PowerPlayScreen> {
     required BuildContext context,
     required String title,
     required bool isEnable,
-    required Function() onResetTap,
+    required VoidCallback onResetTap,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
