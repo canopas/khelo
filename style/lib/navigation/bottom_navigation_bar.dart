@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../extensions/context_extensions.dart';
 import '../text/app_text_style.dart';
 
+typedef TabTapMethodBuilder = void Function(
+    BuildContext context, void Function(int) onTabTap);
+
 class TabItem {
   final Widget tabIcon;
   final Widget tabActiveIcon;
@@ -28,11 +31,14 @@ class TabItem {
 }
 
 class AppBottomNavigationBar extends StatefulWidget {
+  final TabTapMethodBuilder builder;
+
   final List<TabItem> tabs;
 
   const AppBottomNavigationBar({
     super.key,
     required this.tabs,
+    required this.builder,
   });
 
   @override
@@ -50,6 +56,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    widget.builder.call(context, onTab);
     final colors = context.colorScheme;
     return Container(
       decoration: BoxDecoration(

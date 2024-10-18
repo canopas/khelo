@@ -32,6 +32,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
     with WidgetsBindingObserver {
   final _materialPageController = PageController();
   final _cupertinoTabController = CupertinoTabController();
+  void Function(int) onTabChange = (_) {};
   late final NotificationHandler notificationHandler;
 
   int myCricketInitialTab = 0;
@@ -61,12 +62,18 @@ class _MainScreenState extends ConsumerState<MainScreen>
     _observerShowNotificationPermissionPrompt(context);
     final List<Widget> widgets = <Widget>[
       const HomeScreen(),
-      MyGameTabScreen(initialTab: myCricketInitialTab),
+      MyGameTabScreen(
+          initialTab: myCricketInitialTab,
+          onTabChange: (index) {
+            myCricketInitialTab = index;
+            setState(() {});
+          }),
       const UserStatScreen(),
       ProfileScreen(changeTabToMyCricketTeamList: () {
         changeTab(1);
         myCricketInitialTab = 1;
         ref.read(myGameTabViewStateProvider.notifier).onTabChange(1);
+        onTabChange.call(1);
         setState(() {});
       }),
     ];
@@ -130,7 +137,12 @@ class _MainScreenState extends ConsumerState<MainScreen>
           physics: const NeverScrollableScrollPhysics(),
           children: widgets,
         ),
-        bottomNavigationBar: AppBottomNavigationBar(tabs: _tabItems(context)),
+        bottomNavigationBar: AppBottomNavigationBar(
+          tabs: _tabItems(context),
+          builder: (BuildContext context, void Function(int) onTabTap) {
+            onTabChange = onTabTap;
+          },
+        ),
       );
 
   List<TabItem> _tabItems(BuildContext context) => [

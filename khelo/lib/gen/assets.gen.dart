@@ -94,9 +94,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_referee.svg
   String get icReferee => 'assets/images/ic_referee.svg';
 
-  /// File path: assets/images/ic_rounded_check.svg
-  String get icRoundedCheck => 'assets/images/ic_rounded_check.svg';
-
   /// File path: assets/images/ic_save.svg
   String get icSave => 'assets/images/ic_save.svg';
 
@@ -172,7 +169,6 @@ class $AssetsImagesGen {
         icProfileThin,
         icQrCode,
         icReferee,
-        icRoundedCheck,
         icSave,
         icScorer,
         icSearch,
