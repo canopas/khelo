@@ -9,7 +9,6 @@ import 'package:style/button/primary_button.dart';
 import 'package:style/button/secondary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/widgets/drag_handle.dart';
 
 import '../../../team/search_team/components/team_member_sheet.dart';
 
@@ -28,9 +27,8 @@ class VerificationTeamListSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      showDragHandle: false,
+      showDragHandle: true,
       useRootNavigator: true,
-      isDismissible: false,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
         return VerificationTeamListSheet(
@@ -72,7 +70,7 @@ class _VerificationTeamListSheetState extends State<VerificationTeamListSheet> {
             Padding(
               padding: context.mediaQueryPadding +
                   BottomStickyOverlay.padding +
-                  EdgeInsets.only(top: 44, left: 16, right: 16),
+                  EdgeInsets.symmetric(horizontal: 16),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,7 +87,6 @@ class _VerificationTeamListSheetState extends State<VerificationTeamListSheet> {
                 ),
               ),
             ),
-            dragHandle(context),
             BottomStickyOverlay(
               child: PrimaryButton(context.l10n.common_select_title,
                   enabled: verified.isNotEmpty,
