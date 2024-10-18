@@ -10,16 +10,15 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
-import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/text/search_text_field.dart';
 
+import '../../../../components/create_team_cell.dart';
 import '../../../../gen/assets.gen.dart';
 
 class SearchTeamScreen extends ConsumerStatefulWidget {
@@ -140,7 +139,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         ],
         const SizedBox(height: 16),
         Text(
-          context.l10n.search_team_your_teams_title,
+          context.l10n.common_your_teams_title,
           style: AppTextStyle.header2
               .copyWith(color: context.colorScheme.textSecondary),
         ),
@@ -154,7 +153,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           ],
         ],
         const SizedBox(height: 8),
-        _createTeamCell(context)
+        createTeamCell(context)
       ],
     );
   }
@@ -202,8 +201,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                       ),
                     )),
                 TextSpan(
-                  text: context.l10n
-                      .search_team_player_title(team.players.length),
+                  text: context.l10n.common_players_title(team.players.length),
                 ),
               ],
             ),
@@ -212,36 +210,6 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
               ? SvgPicture.asset(Assets.images.icRoundedCheck)
               : null,
         ),
-      ),
-    );
-  }
-
-  Widget _createTeamCell(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          color: context.colorScheme.containerLow,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: context.colorScheme.outline)),
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              context.l10n.search_team_create_team_description,
-              style: AppTextStyle.body2
-                  .copyWith(color: context.colorScheme.textPrimary),
-            ),
-          ),
-          const SizedBox(width: 16),
-          SizedBox(
-            height: 36,
-            child: PrimaryButton(
-              context.l10n.search_team_create_team_title,
-              expanded: false,
-              onPressed: () => AppRoute.addTeam().push(context),
-            ),
-          ),
-        ],
       ),
     );
   }

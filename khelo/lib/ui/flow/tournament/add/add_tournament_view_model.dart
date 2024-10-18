@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
@@ -125,6 +126,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         end_date: state.endDate,
         created_at: DateTime.now(),
         created_by: state.currentUserId!,
+        team_ids: state.teams.map((e) => e.id).toList(),
         members: [
           TournamentMember(
             id: state.currentUserId!,
@@ -146,6 +148,10 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     }
   }
 
+  void onSelectTeam(List<TeamModel> selectedTeams) {
+    state = state.copyWith(teams: selectedTeams);
+  }
+
   @override
   void dispose() {
     state.nameController.dispose();
@@ -163,6 +169,7 @@ class AddTournamentState with _$AddTournamentState {
     String? currentUserId,
     required DateTime endDate,
     required DateTime startDate,
+    @Default([]) List<TeamModel> teams,
     @Default(false) bool pop,
     @Default(false) bool loading,
     @Default(false) bool showDateError,

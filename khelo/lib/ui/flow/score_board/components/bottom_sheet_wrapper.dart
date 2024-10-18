@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/extensions/context_extensions.dart';
+import 'package:style/widgets/drag_handle.dart';
 
 class BottomSheetWrapper extends StatelessWidget {
   final Widget content;
@@ -41,19 +42,7 @@ class BottomSheetWrapper extends StatelessWidget {
                       BottomStickyOverlay.padding,
                   child: content),
             ),
-            if (showDragHandle) ...[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: 4,
-                  width: 32,
-                  margin: const EdgeInsets.symmetric(vertical: 20),
-                  decoration: BoxDecoration(
-                      color: context.colorScheme.outline,
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            ],
+            if (showDragHandle) dragHandle(context),
             BottomStickyOverlay(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
