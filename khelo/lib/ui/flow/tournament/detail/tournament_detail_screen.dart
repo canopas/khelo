@@ -8,6 +8,7 @@ import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
+import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_overview_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
@@ -96,12 +97,12 @@ class _TournamentDetailScreenState
           pinned: true,
           delegate: SliverPersistentDelegate(
             child: _tabSelection(context),
-            size: 60,
+            size: 70,
           ),
         ),
         SliverFillRemaining(
           child: _content(context, state),
-        )
+        ),
       ],
     );
   }
@@ -110,8 +111,10 @@ class _TournamentDetailScreenState
     return PageView(
       controller: _controller,
       onPageChanged: notifier.onTabChange,
-      children: const [
-        //Add Tab view
+      children: [
+        TournamentDetailOverviewTab(
+          tournament: state.tournament!,
+        ),
       ],
     );
   }

@@ -182,6 +182,27 @@ class BallScoreService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Future<int> getPlayerTotalRuns(String matchId, String playerId) async {
+    try {
+      final filter = Filter.and(
+        Filter(FireStoreConst.matchId, isEqualTo: matchId),
+        Filter(FireStoreConst.batsmanId, isEqualTo: playerId),
+      );
+
+      final snapshot = await _ballScoreCollection.where(filter).get();
+      final totalRuns = snapshot.docs.fold<int>(
+        0,
+        (total, doc) {
+          final runsScored = doc.data().runs_scored;
+          return runsScored > 0 ? total + runsScored : total;
+        },
+      );
+      return totalRuns;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }
 
 class BallScoreChange {

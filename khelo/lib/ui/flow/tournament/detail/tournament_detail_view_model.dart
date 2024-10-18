@@ -51,6 +51,7 @@ class TournamentDetailStateViewNotifier
       state = state.copyWith(selectedTab: tab);
     }
   }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
