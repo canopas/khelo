@@ -115,9 +115,8 @@ class _VerificationTeamListSheetState extends State<VerificationTeamListSheet> {
             );
 
             if (res == true && context.mounted) {
-              setState(() {
-                verified.add(team);
-              });
+              verified.add(team);
+              setState(() {});
             }
           },
         ),
