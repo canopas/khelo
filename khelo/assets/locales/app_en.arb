@@ -32,10 +32,19 @@
       "count": {}
     }
   },
+  "common_players_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
+  "@common_players_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "common_tie_title": "Tie",
   "common_wicket_taken_title": " Wicket taken",
   "common_matches_title": "Matches",
   "common_edit_team_title": "Edit team",
+  "common_create_team_title": "Create team",
+  "common_create_team_description": "Create Your Dream Cricket Team Today!",
+  "common_your_teams_title": "Your Teams",
   "common_location_title": "Location",
   "common_gender_title": "Gender",
   "common_batting_style_title": "Batting style",
@@ -59,6 +68,7 @@
   "common_second_inning_title": "Second inning",
   "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
+  "common_verified_title": "Verified",
   "common_view_all": "View all",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
@@ -151,9 +161,17 @@
   "add_tournament_type_placeholder": "Select tournament type",
   "add_tournament_start_date": "Start Date",
   "add_tournament_end_date": "End Date",
+  "add_tournament_team_selection": "Team selection",
+  "add_tournament_match_selection": "Match selection",
   "add_tournament_edit_banner": "Edit banner",
   "add_tournament_add_banner_placeholder": "Add banner image",
   "add_tournament_date_error": "End date should be greater than start date",
+  "add_tournament_teams_title": "{count, plural, =0{No teams} =1{{count} Team} other{{count} Teams}}",
+  "@add_tournament_teams_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
 
   "tournament_list_empty_list_title": "No tournaments created",
   "tournament_list_empty_list_description": "Tap on the “ + ” icon to create a tournament",
@@ -163,6 +181,10 @@
       "count": {}
     }
   },
+
+  "team_selection_screen_title": "Select Teams",
+  "team_selection_select_team_title": "Select teams",
+  "team_selection_verify_team_to_add_title": "Verify teams to add",
 
   "@_TOURNAMENT_DETAIL": {
   },
@@ -327,17 +349,9 @@
   "search_user_empty_title": "Time to gather your officials!",
   "search_user_empty_description_text": "Search and assign officials for your next match. Get ready for cricket action!",
   "search_team_screen_title": "Search Team",
-  "search_team_your_teams_title": "Your Teams",
   "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",
   "search_team_search_placeholder_title": "Search team name",
-  "search_team_create_team_title": "Create team",
-  "search_team_create_team_description": "Create Your Dream Cricket Team Today!",
-  "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
-  "@search_team_player_title": {
-    "placeholders": {
-      "count": {}
-    }
-  },
+
   "power_play_text": "Power play {count}",
   "@power_play_text": {
     "description": "Power play {count}",
