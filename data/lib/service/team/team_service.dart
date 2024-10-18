@@ -138,6 +138,36 @@ class TeamService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
+  Future<List<TeamModel>> getUserOwnedTeams(String userId) {
+    final currentPlayer = TeamPlayer(
+      id: userId,
+      role: TeamPlayerRole.admin,
+    );
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
+      Filter(FireStoreConst.teamPlayers, arrayContains: currentPlayer.toJson()),
+    );
+    return _teamsCollection.where(filter).get().then((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final team = mainDoc.data();
+
+          final users = await getMemberListFromUserIds(
+            team.players.map((e) => e.id).toList(),
+          );
+
+          final players = team.players.map((player) {
+            final user = users.firstWhere((element) => element.id == player.id);
+            return player.copyWith(user: user);
+          }).toList();
+
+          return team.copyWith(players: players);
+        }).toList(),
+      );
+    }).catchError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Future<String> updateTeam(TeamModel team) async {
     try {
       final teamRef = _teamsCollection.doc(team.id);
