@@ -156,22 +156,26 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
     required List<TeamModel> teams,
     bool showDividerAtLast = false,
   }) {
-    final List<Widget> children = [];
-    for (int index = 0; index < teams.length; index++) {
-      final team = teams[index];
-      children.add(TeamProfileCell(
-        team: team,
-        onTap: () => notifier.onTeamCellTap(team),
-        onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
-        trailing: RoundedCheckBox(
-            isSelected: state.selectedTeams.map((e) => e.id).contains(team.id),
-            onTap: (_) => notifier.onTeamCellTap(team)),
-      ));
-      if (index != teams.length - 1 || showDividerAtLast) {
-        children.add(Divider(color: context.colorScheme.outline));
-      }
+    if (teams.isEmpty) {
+      return [];
     }
-    return children;
+    final listLength = (teams.length * 2) - (showDividerAtLast ? 0 : 1);
+    return List.generate(listLength, (index) {
+      if (index.isOdd) {
+        return Divider(color: context.colorScheme.outline);
+      } else {
+        final team = teams[index ~/ 2];
+        return TeamProfileCell(
+          team: team,
+          onTap: () => notifier.onTeamCellTap(team),
+          onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
+          trailing: RoundedCheckBox(
+              isSelected:
+                  state.selectedTeams.map((e) => e.id).contains(team.id),
+              onTap: (_) => notifier.onTeamCellTap(team)),
+        );
+      }
+    });
   }
 
   void _observeActionError() {

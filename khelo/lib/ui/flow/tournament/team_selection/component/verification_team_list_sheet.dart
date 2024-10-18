@@ -63,69 +63,77 @@ class _VerificationTeamListSheetState extends State<VerificationTeamListSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: context.mediaQuerySize.height * 0.8,
-      child: Stack(
-        children: [
-          dragHandle(context),
-          Padding(
-            padding: context.mediaQueryPadding +
-                BottomStickyOverlay.padding +
-                EdgeInsets.only(top: 44, left: 16, right: 16),
-            child: ListView(
-              children: [
-                Text(
-                  context.l10n.team_selection_verify_team_to_add_title,
-                  style: AppTextStyle.header3
-                      .copyWith(color: context.colorScheme.textPrimary),
+    return ConstrainedBox(
+      constraints:
+          BoxConstraints(maxHeight: context.mediaQuerySize.height * 0.8),
+      child: IntrinsicHeight(
+        child: Stack(
+          children: [
+            Padding(
+              padding: context.mediaQueryPadding +
+                  BottomStickyOverlay.padding +
+                  EdgeInsets.only(top: 44, left: 16, right: 16),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.team_selection_verify_team_to_add_title,
+                      style: AppTextStyle.header3
+                          .copyWith(color: context.colorScheme.textPrimary),
+                    ),
+                    SizedBox(height: 24),
+                    ..._buildList(context),
+                    SizedBox(height: 40),
+                  ],
                 ),
-                SizedBox(height: 24),
-                ..._buildList(context),
-                SizedBox(height: 16),
-              ],
+              ),
             ),
-          ),
-          BottomStickyOverlay(
-            child: PrimaryButton(context.l10n.common_select_title,
-                enabled: verified.isNotEmpty,
-                onPressed: () => context.pop(verified.toSet().toList())),
-          ),
-        ],
+            dragHandle(context),
+            BottomStickyOverlay(
+              child: PrimaryButton(context.l10n.common_select_title,
+                  enabled: verified.isNotEmpty,
+                  onPressed: () => context.pop(verified.toSet().toList())),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   List<Widget> _buildList(BuildContext context) {
-    final List<Widget> children = [];
-    for (int index = 0; index < widget.allTeams.length; index++) {
-      final team = widget.allTeams[index];
-      final isVerified = verified.map((e) => e.id).contains(team.id);
-      children.add(TeamProfileCell(
-        team: team,
-        trailing: SecondaryButton(
-          isVerified
-              ? context.l10n.common_verified_title
-              : context.l10n.common_verify_title,
-          enabled: !isVerified,
-          onPressed: () async {
-            final res = await TeamMemberSheet.show<bool>(
-              context,
-              team: team,
-              isForVerification: true,
-            );
-
-            if (res == true && context.mounted) {
-              verified.add(team);
-              setState(() {});
-            }
-          },
-        ),
-        onTap: () => TeamMemberSheet.show(context, team: team),
-      ));
-      if (index != widget.allTeams.length - 1) {
-        children.add(Divider(color: context.colorScheme.outline));
-      }
+    if (widget.allTeams.isEmpty) {
+      return [];
     }
-    return children;
+    return List.generate((widget.allTeams.length * 2) - 1, (index) {
+      if (index.isOdd) {
+        return Divider(color: context.colorScheme.outline);
+      } else {
+        final team = widget.allTeams[index ~/ 2];
+        final isVerified = verified.map((e) => e.id).contains(team.id);
+        return TeamProfileCell(
+          team: team,
+          trailing: SecondaryButton(
+            isVerified
+                ? context.l10n.common_verified_title
+                : context.l10n.common_verify_title,
+            enabled: !isVerified,
+            onPressed: () async {
+              final res = await TeamMemberSheet.show<bool>(
+                context,
+                team: team,
+                isForVerification: true,
+              );
+
+              if (res == true && context.mounted) {
+                verified.add(team);
+                setState(() {});
+              }
+            },
+          ),
+          onTap: () => TeamMemberSheet.show(context, team: team),
+        );
+      }
+    });
   }
 }
