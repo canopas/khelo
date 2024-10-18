@@ -35,9 +35,8 @@ class _TournamentDetailOverviewTabState
     return Container(
       color: context.colorScheme.containerLow,
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
-        padding: context.mediaQueryPadding.copyWith(top: 0) +
-            EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.all(16)
+            .copyWith(bottom: context.mediaQueryPadding.bottom + 40),
         children: [
           _featuredMatchesView(context, widget.tournament.matches),
           _keyStatsView(context, widget.tournament.keyStats),
@@ -52,29 +51,28 @@ class _TournamentDetailOverviewTabState
     if (matches.isEmpty) return SizedBox();
 
     return Padding(
-      padding: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(top: 16),
       child: Column(
         children: [
           _header(
             context,
             title:
                 context.l10n.tournament_detail_overview_featured_matches_title,
-            showViewAll: false,
+            showViewAll: matches.length > 3,
             onViewAll: () {},
           ),
-          const SizedBox(height: 8),
-          ...matches.map((match) => _matchCellView(context, match, true)),
+          ...List.generate(
+            matches.take(3).length,
+            (index) => _matchCellView(context, matches[index]),
+          )
         ],
       ),
     );
   }
 
-  Widget _matchCellView(
-      BuildContext context, MatchModel match, bool isFinalMatch) {
+  Widget _matchCellView(BuildContext context, MatchModel match) {
     return Container(
-      padding: isFinalMatch
-          ? EdgeInsets.only(right: 16)
-          : EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       margin: EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: context.colorScheme.surface,
@@ -82,12 +80,6 @@ class _TournamentDetailOverviewTabState
       ),
       child: Row(
         children: [
-          if (isFinalMatch) ...[
-            RotatedBox(
-              quarterTurns: 7,
-              child: _finalTag(),
-            ),
-          ],
           _buildTeamInfo(team: match.teams.first.team),
           const Spacer(),
           Column(
@@ -116,20 +108,6 @@ class _TournamentDetailOverviewTabState
           const Spacer(),
           _buildTeamInfo(team: match.teams.last.team, isSecond: true),
         ],
-      ),
-    );
-  }
-
-  Widget _finalTag() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      decoration: BoxDecoration(
-        color: context.colorScheme.primary.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Text(
-        "Semi Final 1",
-        style: TextStyle(fontFamily: AppTextStyle.poppinsFontFamily),
       ),
     );
   }

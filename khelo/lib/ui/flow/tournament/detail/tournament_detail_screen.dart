@@ -97,7 +97,7 @@ class _TournamentDetailScreenState
           pinned: true,
           delegate: SliverPersistentDelegate(
             child: _tabSelection(context),
-            size: 60,
+            size: 70,
           ),
         ),
         SliverFillRemaining(
