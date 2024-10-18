@@ -21,9 +21,9 @@ import 'package:style/text/app_text_style.dart';
 import '../../../gen/assets.gen.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
-  final Function() changeTabToMyCricket;
+  final Function() changeTabToMyCricketTeamList;
 
-  const ProfileScreen({super.key, required this.changeTabToMyCricket});
+  const ProfileScreen({super.key, required this.changeTabToMyCricketTeamList});
 
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
@@ -130,7 +130,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
         final changeTabToMyCricket =
             await AppRoute.editProfile().push<bool>(context);
         if (context.mounted && changeTabToMyCricket == true) {
-          widget.changeTabToMyCricket();
+          widget.changeTabToMyCricketTeamList();
         }
       },
       child: Container(

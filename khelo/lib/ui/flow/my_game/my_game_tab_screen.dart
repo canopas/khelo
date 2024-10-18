@@ -13,7 +13,9 @@ import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 
 class MyGameTabScreen extends ConsumerStatefulWidget {
-  const MyGameTabScreen({super.key});
+  final int? initialTab;
+
+  const MyGameTabScreen({super.key, this.initialTab});
 
   @override
   ConsumerState createState() => _MyGameTabScreenState();
@@ -37,7 +39,8 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _controller = PageController(
-      initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
+      initialPage:
+          widget.initialTab ?? ref.read(myGameTabViewStateProvider).selectedTab,
     );
   }
 

@@ -34,6 +34,8 @@ class _MainScreenState extends ConsumerState<MainScreen>
   final _cupertinoTabController = CupertinoTabController();
   late final NotificationHandler notificationHandler;
 
+  int myCricketInitialTab = 0;
+
   @override
   void initState() {
     super.initState();
@@ -59,11 +61,13 @@ class _MainScreenState extends ConsumerState<MainScreen>
     _observerShowNotificationPermissionPrompt(context);
     final List<Widget> widgets = <Widget>[
       const HomeScreen(),
-      MyGameTabScreen(),
+      MyGameTabScreen(initialTab: myCricketInitialTab),
       const UserStatScreen(),
-      ProfileScreen(changeTabToMyCricket: () {
+      ProfileScreen(changeTabToMyCricketTeamList: () {
         changeTab(1);
+        myCricketInitialTab = 1;
         ref.read(myGameTabViewStateProvider.notifier).onTabChange(1);
+        setState(() {});
       }),
     ];
 
