@@ -35,8 +35,8 @@ class _TournamentDetailOverviewTabState
     return Container(
       color: context.colorScheme.containerLow,
       child: ListView(
-        padding: EdgeInsets.all(16)
-            .copyWith(bottom: context.mediaQueryPadding.bottom + 40),
+        padding: context.mediaQueryPadding.copyWith(top: 0) +
+            EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
         children: [
           _featuredMatchesView(context, widget.tournament.matches),
           _keyStatsView(context, widget.tournament.keyStats),
