@@ -26,6 +26,8 @@ class FireStoreConst {
   static const String teamIds = "team_ids";
   static const String teamCreatorIds = "team_creator_ids";
   static const String revisedTarget = "revised_target";
+  static const String updatedAt = "updated_at";
+  static const String startAt = "start_at";
 
   // innings field const
   static const String matchId = "match_id";
@@ -56,7 +58,7 @@ class FireStoreConst {
 
   // tournament field const
   static const String members = "members";
- }
+}
 
 class DataConfig {
   static late DataConfig _instance;

@@ -186,6 +186,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           ground: ground,
           start_time: state.matchTime,
           start_at: state.matchTime,
+          updated_at: DateTime.now(),
           created_by: _currentUserId ?? state.teamA?.created_by ?? "INVALID ID",
           ball_type: state.ballType,
           pitch_type: state.pitchType,

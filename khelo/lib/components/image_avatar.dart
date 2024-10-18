@@ -8,6 +8,7 @@ class ImageAvatar extends StatelessWidget {
   final double size;
   final String? imageUrl;
   final String initial;
+  final Border? border;
   final Color? foregroundColor;
   final Color? backgroundColor;
 
@@ -15,6 +16,7 @@ class ImageAvatar extends StatelessWidget {
     super.key,
     this.size = 50,
     this.imageUrl,
+    this.border,
     required this.initial,
     this.foregroundColor,
     this.backgroundColor,
@@ -29,6 +31,7 @@ class ImageAvatar extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
+          border: border,
           color: backgroundColor ?? context.colorScheme.containerHigh,
         ),
         child: imageUrl == null

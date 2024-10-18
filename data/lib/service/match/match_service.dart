@@ -70,6 +70,7 @@ class MatchService {
           pitch_type: PitchType.turf,
           created_by: '',
           match_status: MatchStatus.running,
+          updated_at: DateTime.now(),
         );
       }
 
@@ -163,8 +164,81 @@ class MatchService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> streamMatches() {
-    return _matchCollection.snapshots().asyncMap((snapshot) async {
+  Stream<List<MatchModel>> streamActiveRunningMatches() {
+    final DateTime now = DateTime.now();
+    final DateTime oneAndHalfHoursAgo =
+        now.subtract(Duration(hours: 1, minutes: 30));
+
+    final Timestamp timestamp = Timestamp.fromDate(oneAndHalfHoursAgo);
+
+    final filter = Filter.and(
+      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value),
+      Filter(FireStoreConst.updatedAt, isGreaterThan: timestamp),
+    );
+    return _matchCollection
+        .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final match = mainDoc.data();
+
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return match.copyWith(teams: teams);
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> streamUpcomingMatches() {
+    final DateTime now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final DateTime aMonthAfter = DateTime(now.year, now.month + 1, now.day);
+
+    final Timestamp timestampAfterMonth = Timestamp.fromDate(aMonthAfter);
+    final Timestamp timestampNow = Timestamp.fromDate(startOfDay);
+
+    final filter = Filter.and(
+      Filter(
+        FireStoreConst.matchStatus,
+        isEqualTo: MatchStatus.yetToStart.value,
+      ),
+      Filter(FireStoreConst.startAt, isGreaterThanOrEqualTo: timestampNow),
+      Filter(
+        FireStoreConst.startAt,
+        isLessThanOrEqualTo: timestampAfterMonth,
+      ),
+    );
+    return _matchCollection
+        .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((mainDoc) async {
+          final match = mainDoc.data();
+
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return match.copyWith(teams: teams);
+        }).toList(),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Stream<List<MatchModel>> streamFinishedMatches() {
+    final DateTime now = DateTime.now();
+    final DateTime fifteenDaysAgo =
+        DateTime(now.year, now.month, now.day).subtract(Duration(days: 15));
+
+    final Timestamp timestamp = Timestamp.fromDate(fifteenDaysAgo);
+
+    final filter = Filter.and(
+      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.finish.value),
+      Filter(FireStoreConst.updatedAt, isGreaterThan: timestamp),
+    );
+    return _matchCollection
+        .where(filter)
+        .snapshots()
+        .asyncMap((snapshot) async {
       return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
@@ -272,6 +346,7 @@ class MatchService {
         FireStoreConst.tossWinnerId: tossWinnerId,
         FireStoreConst.tossDecision: tossDecision.value,
         FireStoreConst.currentPlayingTeamId: currentPlayingTeam,
+        FireStoreConst.updatedAt: DateTime.now(),
       };
 
       await matchRef.update(tossDetails);
@@ -286,6 +361,7 @@ class MatchService {
 
       final Map<String, dynamic> matchStatus = {
         FireStoreConst.matchStatus: status.value,
+        FireStoreConst.updatedAt: DateTime.now(),
       };
 
       await matchRef.update(matchStatus);
@@ -347,6 +423,7 @@ class MatchService {
 
       transaction.update(matchRef, {
         FireStoreConst.teams: [battingTeam.toJson(), bowlingTeam.toJson()],
+        FireStoreConst.updatedAt: DateTime.now(),
       });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -360,7 +437,10 @@ class MatchService {
     try {
       final matchRef = _matchCollection.doc(matchId);
 
-      await matchRef.update({FireStoreConst.currentPlayingTeamId: teamId});
+      await matchRef.update({
+        FireStoreConst.currentPlayingTeamId: teamId,
+        FireStoreConst.updatedAt: DateTime.now(),
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -404,7 +484,10 @@ class MatchService {
 
         transaction.update(
           matchRef,
-          {FireStoreConst.teams: updatedTeams.map((e) => e.toJson())},
+          {
+            FireStoreConst.teams: updatedTeams.map((e) => e.toJson()).toList(),
+            FireStoreConst.updatedAt: DateTime.now(),
+          },
         );
       });
     } catch (error, stack) {
@@ -417,7 +500,10 @@ class MatchService {
     required RevisedTarget revisedTarget,
   }) async {
     await _matchCollection.doc(matchId).update(
-      {FireStoreConst.revisedTarget: revisedTarget.toJson()},
+      {
+        FireStoreConst.revisedTarget: revisedTarget.toJson(),
+        FireStoreConst.updatedAt: DateTime.now(),
+      },
     );
   }
 
@@ -484,6 +570,17 @@ class MatchService {
       }).toList();
 
       return squad;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
+    try {
+      return await _matchCollection
+          .where(FieldPath.documentId, whereIn: matchIds)
+          .get()
+          .then((value) => value.docs.map((e) => e.data()).toList());
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

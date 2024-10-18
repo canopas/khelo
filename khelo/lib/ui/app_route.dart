@@ -34,6 +34,7 @@ import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
 import 'flow/team/user_detail/user_detail_screen.dart';
+import 'flow/tournament/detail/tournament_detail_screen.dart';
 
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
@@ -58,6 +59,7 @@ class AppRoute {
   static const pathContactSelection = "/contact-selection";
   static const pathAddTournament = "/add-tournament";
   static const pathTeamSelection = "/team-selection";
+  static const pathTournamentDetail = "/tournament-detail";
 
   final String path;
   final String? name;
@@ -179,6 +181,11 @@ class AppRoute {
         pathTeamSelection,
         builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
       );
+
+  static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
+    pathTournamentDetail,
+    builder: (_) => TournamentDetailScreen(tournamentId: tournamentId),
+  );
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
         pathMatchDetailTab,
@@ -340,6 +347,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathTeamSelection,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathTournamentDetail,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

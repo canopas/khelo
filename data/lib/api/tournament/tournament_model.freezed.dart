@@ -518,6 +518,8 @@ TournamentMember _$TournamentMemberFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$TournamentMember {
   String get id => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel get user => throw _privateConstructorUsedError;
   TournamentMemberRole get role => throw _privateConstructorUsedError;
 
   /// Serializes this TournamentMember to a JSON map.
@@ -536,7 +538,12 @@ abstract class $TournamentMemberCopyWith<$Res> {
           TournamentMember value, $Res Function(TournamentMember) then) =
       _$TournamentMemberCopyWithImpl<$Res, TournamentMember>;
   @useResult
-  $Res call({String id, TournamentMemberRole role});
+  $Res call(
+      {String id,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel user,
+      TournamentMemberRole role});
+
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -555,6 +562,7 @@ class _$TournamentMemberCopyWithImpl<$Res, $Val extends TournamentMember>
   @override
   $Res call({
     Object? id = null,
+    Object? user = null,
     Object? role = null,
   }) {
     return _then(_value.copyWith(
@@ -562,11 +570,25 @@ class _$TournamentMemberCopyWithImpl<$Res, $Val extends TournamentMember>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       role: null == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as TournamentMemberRole,
     ) as $Val);
+  }
+
+  /// Create a copy of TournamentMember
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res> get user {
+    return $UserModelCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value) as $Val);
+    });
   }
 }
 
@@ -578,7 +600,13 @@ abstract class _$$TournamentMemberImplCopyWith<$Res>
       __$$TournamentMemberImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String id, TournamentMemberRole role});
+  $Res call(
+      {String id,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel user,
+      TournamentMemberRole role});
+
+  @override
+  $UserModelCopyWith<$Res> get user;
 }
 
 /// @nodoc
@@ -595,6 +623,7 @@ class __$$TournamentMemberImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? user = null,
     Object? role = null,
   }) {
     return _then(_$TournamentMemberImpl(
@@ -602,6 +631,10 @@ class __$$TournamentMemberImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      user: null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       role: null == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
@@ -611,10 +644,14 @@ class __$$TournamentMemberImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$TournamentMemberImpl implements _TournamentMember {
   const _$TournamentMemberImpl(
-      {required this.id, this.role = TournamentMemberRole.admin});
+      {required this.id,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      this.user = const UserModel(id: ''),
+      this.role = TournamentMemberRole.admin});
 
   factory _$TournamentMemberImpl.fromJson(Map<String, dynamic> json) =>
       _$$TournamentMemberImplFromJson(json);
@@ -622,12 +659,15 @@ class _$TournamentMemberImpl implements _TournamentMember {
   @override
   final String id;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final UserModel user;
+  @override
   @JsonKey()
   final TournamentMemberRole role;
 
   @override
   String toString() {
-    return 'TournamentMember(id: $id, role: $role)';
+    return 'TournamentMember(id: $id, user: $user, role: $role)';
   }
 
   @override
@@ -636,12 +676,13 @@ class _$TournamentMemberImpl implements _TournamentMember {
         (other.runtimeType == runtimeType &&
             other is _$TournamentMemberImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.user, user) || other.user == user) &&
             (identical(other.role, role) || other.role == role));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, role);
+  int get hashCode => Object.hash(runtimeType, id, user, role);
 
   /// Create a copy of TournamentMember
   /// with the given fields replaced by the non-null parameter values.
@@ -663,6 +704,8 @@ class _$TournamentMemberImpl implements _TournamentMember {
 abstract class _TournamentMember implements TournamentMember {
   const factory _TournamentMember(
       {required final String id,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final UserModel user,
       final TournamentMemberRole role}) = _$TournamentMemberImpl;
 
   factory _TournamentMember.fromJson(Map<String, dynamic> json) =
@@ -670,6 +713,9 @@ abstract class _TournamentMember implements TournamentMember {
 
   @override
   String get id;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel get user;
   @override
   TournamentMemberRole get role;
 
