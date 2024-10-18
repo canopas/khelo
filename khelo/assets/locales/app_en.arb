@@ -68,6 +68,7 @@
   "common_second_inning_title": "Second inning",
   "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
+  "common_verified_title": "Verified",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -181,6 +182,8 @@
   },
 
   "team_selection_screen_title": "Select Teams",
+  "team_selection_select_team_title": "Select teams",
+  "team_selection_verify_team_to_add_title": "Verify teams to add",
 
   "@_TOURNAMENT_TYPE":{
   },

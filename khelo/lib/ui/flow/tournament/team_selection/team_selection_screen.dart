@@ -5,9 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/string_extensions.dart';
+import 'package:khelo/ui/flow/tournament/team_selection/component/verification_team_list_sheet.dart';
 import 'package:khelo/ui/flow/tournament/team_selection/team_selection_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -17,10 +16,10 @@ import 'package:style/widgets/rounded_check_box.dart';
 import '../../../../components/create_team_cell.dart';
 import '../../../../components/error_screen.dart';
 import '../../../../components/error_snackbar.dart';
-import '../../../../components/image_avatar.dart';
 import '../../../../domain/extensions/widget_extension.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../team/search_team/components/team_member_sheet.dart';
+import 'component/team_profile_cell.dart';
 
 class TeamSelectionScreen extends ConsumerStatefulWidget {
   final List<TeamModel>? selectedTeams;
@@ -68,19 +67,15 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
               }
             }
 
-            for (final team in unverified) {
-              final res = await TeamMemberSheet.show<bool>(
+            if (unverified.isNotEmpty) {
+              final list =
+                  await VerificationTeamListSheet.show<List<TeamModel>>(
                 context,
-                team: team,
-                isForVerification: true,
+                verified: verified,
+                allTeams: state.selectedTeams,
               );
-
-              if (res == true && context.mounted) {
-                verified.add(team);
-              }
-            }
-
-            if (context.mounted) {
+              if (context.mounted && list != null) context.pop(list);
+            } else if (context.mounted) {
               context.pop(verified);
             }
           },
@@ -163,66 +158,20 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
   }) {
     final List<Widget> children = [];
     for (int index = 0; index < teams.length; index++) {
-      children.add(_teamProfileCell(context, state, teams[index]));
+      final team = teams[index];
+      children.add(TeamProfileCell(
+        team: team,
+        onTap: () => notifier.onTeamCellTap(team),
+        onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
+        trailing: RoundedCheckBox(
+            isSelected: state.selectedTeams.map((e) => e.id).contains(team.id),
+            onTap: (_) => notifier.onTeamCellTap(team)),
+      ));
       if (index != teams.length - 1 || showDividerAtLast) {
         children.add(Divider(color: context.colorScheme.outline));
       }
     }
     return children;
-  }
-
-  Widget _teamProfileCell(
-      BuildContext context, TeamSelectionViewState state, TeamModel team) {
-    return OnTapScale(
-      onTap: () => notifier.onTeamCellTap(team),
-      onLongTap: () => TeamMemberSheet.show<bool>(context, team: team),
-      child: Material(
-        type: MaterialType.transparency,
-        child: ListTile(
-          dense: true,
-          contentPadding: EdgeInsets.zero,
-          leading: ImageAvatar(
-            initial: team.name_initial ?? team.name.initials(limit: 1),
-            imageUrl: team.profile_img_url,
-            size: 40,
-          ),
-          title: Text(
-            team.name,
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          subtitle: Text.rich(
-            TextSpan(
-              text: team.city != null
-                  ? team.city!
-                  : context.l10n.common_not_specified_title,
-              style: AppTextStyle.body2
-                  .copyWith(color: context.colorScheme.textSecondary),
-              children: [
-                WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      constraints:
-                          const BoxConstraints(maxHeight: 4, maxWidth: 4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: context.colorScheme.textDisabled,
-                      ),
-                    )),
-                TextSpan(
-                  text: context.l10n.common_players_title(team.players.length),
-                ),
-              ],
-            ),
-          ),
-          trailing: RoundedCheckBox(
-              isSelected:
-                  state.selectedTeams.map((e) => e.id).contains(team.id),
-              onTap: (_) => notifier.onTeamCellTap(team)),
-        ),
-      ),
-    );
   }
 
   void _observeActionError() {

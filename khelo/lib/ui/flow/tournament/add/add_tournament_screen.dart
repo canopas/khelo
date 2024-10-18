@@ -136,8 +136,10 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
               AdaptiveOutlinedTile(
                 placeholder: context.l10n.add_tournament_team_selection,
                 headerText: context.l10n.add_tournament_team_selection,
-                title:
-                    context.l10n.add_tournament_teams_title(state.teams.length),
+                title: state.teams.isEmpty
+                    ? context.l10n.team_selection_select_team_title
+                    : context.l10n
+                        .add_tournament_teams_title(state.teams.length),
                 showTrailingIcon: true,
                 iconImage: Assets.images.icArrowForward,
                 onTap: () async {
