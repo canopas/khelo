@@ -766,7 +766,9 @@ abstract class _TournamentMember implements TournamentMember {
 mixin _$PlayerKeyStat {
   String get teamName => throw _privateConstructorUsedError;
   UserModel get player => throw _privateConstructorUsedError;
-  int get runs => throw _privateConstructorUsedError;
+  UserStat get stats => throw _privateConstructorUsedError;
+  KeyStatTag? get tag => throw _privateConstructorUsedError;
+  int? get value => throw _privateConstructorUsedError;
 
   /// Create a copy of PlayerKeyStat
   /// with the given fields replaced by the non-null parameter values.
@@ -781,9 +783,15 @@ abstract class $PlayerKeyStatCopyWith<$Res> {
           PlayerKeyStat value, $Res Function(PlayerKeyStat) then) =
       _$PlayerKeyStatCopyWithImpl<$Res, PlayerKeyStat>;
   @useResult
-  $Res call({String teamName, UserModel player, int runs});
+  $Res call(
+      {String teamName,
+      UserModel player,
+      UserStat stats,
+      KeyStatTag? tag,
+      int? value});
 
   $UserModelCopyWith<$Res> get player;
+  $UserStatCopyWith<$Res> get stats;
 }
 
 /// @nodoc
@@ -803,7 +811,9 @@ class _$PlayerKeyStatCopyWithImpl<$Res, $Val extends PlayerKeyStat>
   $Res call({
     Object? teamName = null,
     Object? player = null,
-    Object? runs = null,
+    Object? stats = null,
+    Object? tag = freezed,
+    Object? value = freezed,
   }) {
     return _then(_value.copyWith(
       teamName: null == teamName
@@ -814,10 +824,18 @@ class _$PlayerKeyStatCopyWithImpl<$Res, $Val extends PlayerKeyStat>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      runs: null == runs
-          ? _value.runs
-          : runs // ignore: cast_nullable_to_non_nullable
-              as int,
+      stats: null == stats
+          ? _value.stats
+          : stats // ignore: cast_nullable_to_non_nullable
+              as UserStat,
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as KeyStatTag?,
+      value: freezed == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -830,6 +848,16 @@ class _$PlayerKeyStatCopyWithImpl<$Res, $Val extends PlayerKeyStat>
       return _then(_value.copyWith(player: value) as $Val);
     });
   }
+
+  /// Create a copy of PlayerKeyStat
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserStatCopyWith<$Res> get stats {
+    return $UserStatCopyWith<$Res>(_value.stats, (value) {
+      return _then(_value.copyWith(stats: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -840,10 +868,17 @@ abstract class _$$PlayerKeyStatImplCopyWith<$Res>
       __$$PlayerKeyStatImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String teamName, UserModel player, int runs});
+  $Res call(
+      {String teamName,
+      UserModel player,
+      UserStat stats,
+      KeyStatTag? tag,
+      int? value});
 
   @override
   $UserModelCopyWith<$Res> get player;
+  @override
+  $UserStatCopyWith<$Res> get stats;
 }
 
 /// @nodoc
@@ -861,7 +896,9 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
   $Res call({
     Object? teamName = null,
     Object? player = null,
-    Object? runs = null,
+    Object? stats = null,
+    Object? tag = freezed,
+    Object? value = freezed,
   }) {
     return _then(_$PlayerKeyStatImpl(
       teamName: null == teamName
@@ -872,10 +909,18 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
           ? _value.player
           : player // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      runs: null == runs
-          ? _value.runs
-          : runs // ignore: cast_nullable_to_non_nullable
-              as int,
+      stats: null == stats
+          ? _value.stats
+          : stats // ignore: cast_nullable_to_non_nullable
+              as UserStat,
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as KeyStatTag?,
+      value: freezed == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -885,18 +930,26 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$PlayerKeyStatImpl implements _PlayerKeyStat {
   const _$PlayerKeyStatImpl(
-      {required this.teamName, required this.player, required this.runs});
+      {required this.teamName,
+      required this.player,
+      required this.stats,
+      this.tag,
+      this.value});
 
   @override
   final String teamName;
   @override
   final UserModel player;
   @override
-  final int runs;
+  final UserStat stats;
+  @override
+  final KeyStatTag? tag;
+  @override
+  final int? value;
 
   @override
   String toString() {
-    return 'PlayerKeyStat(teamName: $teamName, player: $player, runs: $runs)';
+    return 'PlayerKeyStat(teamName: $teamName, player: $player, stats: $stats, tag: $tag, value: $value)';
   }
 
   @override
@@ -907,11 +960,14 @@ class _$PlayerKeyStatImpl implements _PlayerKeyStat {
             (identical(other.teamName, teamName) ||
                 other.teamName == teamName) &&
             (identical(other.player, player) || other.player == player) &&
-            (identical(other.runs, runs) || other.runs == runs));
+            (identical(other.stats, stats) || other.stats == stats) &&
+            (identical(other.tag, tag) || other.tag == tag) &&
+            (identical(other.value, value) || other.value == value));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, teamName, player, runs);
+  int get hashCode =>
+      Object.hash(runtimeType, teamName, player, stats, tag, value);
 
   /// Create a copy of PlayerKeyStat
   /// with the given fields replaced by the non-null parameter values.
@@ -926,14 +982,20 @@ abstract class _PlayerKeyStat implements PlayerKeyStat {
   const factory _PlayerKeyStat(
       {required final String teamName,
       required final UserModel player,
-      required final int runs}) = _$PlayerKeyStatImpl;
+      required final UserStat stats,
+      final KeyStatTag? tag,
+      final int? value}) = _$PlayerKeyStatImpl;
 
   @override
   String get teamName;
   @override
   UserModel get player;
   @override
-  int get runs;
+  UserStat get stats;
+  @override
+  KeyStatTag? get tag;
+  @override
+  int? get value;
 
   /// Create a copy of PlayerKeyStat
   /// with the given fields replaced by the non-null parameter values.

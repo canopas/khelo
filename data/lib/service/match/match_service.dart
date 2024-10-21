@@ -532,18 +532,27 @@ class MatchService {
     List<MatchTeamModel> teamList,
   ) async {
     try {
-      final List<MatchTeamModel> teams = [];
+      final teamIds = teamList.map((e) => e.team_id).toList();
 
-      await Future.forEach(teamList, (e) async {
-        final TeamModel team = await _teamService.getTeamById(e.team_id);
-        final List<MatchPlayer> squad =
-            await getPlayerListFromPlayerIds(e.squad);
-        teams.add(
-          e.copyWith(team: team, squad: squad),
+      final teamsData = await Future.wait([
+        _teamService.getTeamsByIds(teamIds),
+        Future.wait(
+          teamList
+              .map((team) => getPlayerListFromPlayerIds(team.squad))
+              .toList(),
+        ),
+      ]);
+
+      final List<TeamModel> teams = teamsData[0] as List<TeamModel>;
+      final List<List<MatchPlayer>> squads =
+          teamsData[1] as List<List<MatchPlayer>>;
+
+      return List.generate(teamList.length, (index) {
+        return teamList[index].copyWith(
+          team: teams[index],
+          squad: squads[index],
         );
       });
-
-      return teams;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -558,7 +567,7 @@ class MatchService {
 
       final List<UserModel> users = await _userService.getUsersByIds(playerIds);
 
-      final List<MatchPlayer> squad = users.map((user) {
+      return users.map((user) {
         final matchPlayer =
             players.firstWhere((element) => element.id == user.id);
 
@@ -568,8 +577,6 @@ class MatchService {
           id: user.id,
         );
       }).toList();
-
-      return squad;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -577,13 +584,17 @@ class MatchService {
 
   Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
     try {
-      final List<MatchModel> matches = [];
-      for (var matchId in matchIds) {
-        final match = await getMatchById(matchId);
-        matches.add(match);
-      }
-
-      return matches;
+      final snapshot = await _matchCollection
+          .where(FieldPath.documentId, whereIn: matchIds)
+          .limit(10)
+          .get();
+      return Future.wait(
+        snapshot.docs.map((doc) async {
+          final match = doc.data();
+          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+          return match.copyWith(teams: teams);
+        }).toList(),
+      );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

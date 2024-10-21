@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../api/ball_score/ball_score_model.dart';
 import '../../api/match/match_model.dart';
 import '../../api/tournament/tournament_model.dart';
 import '../../errors/app_error.dart';
@@ -120,32 +121,27 @@ class TournamentService {
   }
 
   Future<List<PlayerKeyStat>> getKeyStats(List<MatchModel> matches) async {
-    final Map<String, PlayerKeyStat> playerStatsMap = {};
+    final List<PlayerKeyStat> playerStatsList = [];
+    final List<String> matchIds = matches.map((match) => match.id).toList();
+    final scores = await _ballScoreService.getBallScoresByMatchIds(matchIds);
 
-    for (var match in matches) {
-      for (var team in match.teams) {
-        for (var player in team.squad) {
-          final totalRuns =
-              await _ballScoreService.getPlayerTotalRuns(match.id, player.id);
+    for (final match in matches) {
+      for (final team in match.teams) {
+        for (final player in team.squad) {
+          final stats = scores.calculateUserStats(player.id);
 
-          if (totalRuns > 0) {
-            if (playerStatsMap.containsKey(player.id)) {
-              playerStatsMap[player.id] = playerStatsMap[player.id]!.copyWith(
-                runs: playerStatsMap[player.id]!.runs + totalRuns,
-              );
-            } else {
-              playerStatsMap[player.id] = PlayerKeyStat(
-                teamName: team.team.name,
-                player: player.player,
-                runs: totalRuns,
-              );
-            }
-          }
+          playerStatsList.add(
+            PlayerKeyStat(
+              player: player.player,
+              teamName: team.team.name,
+              stats: stats,
+            ),
+          );
         }
       }
     }
 
-    return playerStatsMap.values.toList()
-      ..sort((a, b) => b.runs.compareTo(a.runs));
+    return playerStatsList.getTopKeyStats()
+      ..sort((a, b) => b.value?.compareTo(a.value ?? 0) ?? 0);
   }
 }

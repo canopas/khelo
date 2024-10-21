@@ -82,34 +82,35 @@ class _TournamentDetailScreenState
       );
     }
 
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          pinned: true,
-          expandedHeight: 300,
-          backgroundColor: context.colorScheme.surface,
-          flexibleSpace: _flexibleTitle(context, state.tournament!),
-          actions: [
-            moreOptionButton(context),
-          ],
-        ),
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: SliverPersistentDelegate(
-            child: _tabSelection(context),
-            size: 70,
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) {
+        return [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 300,
+            backgroundColor: context.colorScheme.surface,
+            flexibleSpace: _flexibleTitle(context, state.tournament!),
+            actions: [
+              moreOptionButton(context),
+            ],
           ),
-        ),
-        SliverFillRemaining(
-          child: _content(context, state),
-        ),
-      ],
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: SliverPersistentDelegate(
+              child: _tabSelection(context),
+              size: 70,
+            ),
+          ),
+        ];
+      },
+      body: _content(context, state),
     );
   }
 
   Widget _content(BuildContext context, TournamentDetailState state) {
     return PageView(
       controller: _controller,
+      physics: const NeverScrollableScrollPhysics(),
       onPageChanged: notifier.onTabChange,
       children: [
         TournamentDetailOverviewTab(
@@ -155,14 +156,20 @@ class _TournamentDetailScreenState
       final isCollapsed = constraints.biggest.height < 150;
 
       return FlexibleSpaceBar(
+        centerTitle: true,
         title: isCollapsed
             ? AnimatedOpacity(
                 opacity: isCollapsed ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
-                child: Text(
-                  tournament.name,
-                  style: AppTextStyle.header2.copyWith(
-                    color: context.colorScheme.textPrimary,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 64, right: 48),
+                  child: Text(
+                    tournament.name,
+                    style: AppTextStyle.header2.copyWith(
+                      color: context.colorScheme.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    textScaler: TextScaler.noScaling,
                   ),
                 ),
               )
@@ -222,9 +229,15 @@ class _TournamentDetailScreenState
           backgroundColor: context.colorScheme.primary,
         ),
         const SizedBox(height: 16),
-        Text(
-          tournament.name,
-          style: AppTextStyle.header1.copyWith(color: Colors.white),
+        SizedBox(
+          width: context.mediaQuerySize.width - 32,
+          child: Text(
+            tournament.name,
+            style: AppTextStyle.header1.copyWith(color: Colors.white),
+            overflow: TextOverflow.ellipsis,
+            textScaler: TextScaler.noScaling,
+            maxLines: 2,
+          ),
         ),
         const SizedBox(height: 4),
         Row(

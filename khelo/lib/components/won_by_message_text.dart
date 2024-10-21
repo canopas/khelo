@@ -34,13 +34,13 @@ class WonByMessageText extends StatelessWidget {
       return Column(
         children: [
           Text(
-            '${matchResult!.teamName.initials(limit: 2)} Won',
+            '${matchResult!.teamName.initials(limit: 2)} ${context.l10n.score_board_won_title}',
             style: textStyle ??
                 AppTextStyle.subtitle2
                     .copyWith(color: context.colorScheme.textPrimary),
           ),
           Text(
-            'by ${matchResult!.winType.getString(context, matchResult!.difference)}',
+            '${context.l10n.score_board_by_title} ${matchResult!.winType.getString(context, matchResult!.difference)}',
             style: textStyle ??
                 AppTextStyle.caption.copyWith(
                   color: context.colorScheme.textDisabled,

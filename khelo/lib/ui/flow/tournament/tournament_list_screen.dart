@@ -145,6 +145,8 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
                     style: AppTextStyle.header4.copyWith(
                       color: context.colorScheme.textPrimary,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                   ),
                   const SizedBox(height: 4),
                   Text(

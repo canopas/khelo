@@ -102,12 +102,23 @@ _$PlayerKeyStatImpl _$$PlayerKeyStatImplFromJson(Map<String, dynamic> json) =>
     _$PlayerKeyStatImpl(
       teamName: json['teamName'] as String,
       player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
-      runs: (json['runs'] as num).toInt(),
+      stats: UserStat.fromJson(json['stats'] as Map<String, dynamic>),
+      tag: $enumDecodeNullable(_$KeyStatTagEnumMap, json['tag']),
+      value: (json['value'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$PlayerKeyStatImplToJson(_$PlayerKeyStatImpl instance) =>
     <String, dynamic>{
       'teamName': instance.teamName,
       'player': instance.player.toJson(),
-      'runs': instance.runs,
+      'stats': instance.stats.toJson(),
+      'tag': _$KeyStatTagEnumMap[instance.tag],
+      'value': instance.value,
     };
+
+const _$KeyStatTagEnumMap = {
+  KeyStatTag.mostRuns: 'mostRuns',
+  KeyStatTag.mostWickets: 'mostWickets',
+  KeyStatTag.mostFours: 'mostFours',
+  KeyStatTag.mostSixes: 'mostSixes',
+};

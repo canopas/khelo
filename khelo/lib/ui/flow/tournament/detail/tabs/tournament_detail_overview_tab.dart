@@ -35,8 +35,8 @@ class _TournamentDetailOverviewTabState
     return Container(
       color: context.colorScheme.containerLow,
       child: ListView(
-        padding: context.mediaQueryPadding.copyWith(top: 0) +
-            EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
+        padding: EdgeInsets.symmetric(horizontal: 16)
+            .copyWith(bottom: context.mediaQueryPadding.bottom + 40),
         children: [
           _featuredMatchesView(context, widget.tournament.matches),
           _keyStatsView(context, widget.tournament.keyStats),
@@ -185,6 +185,8 @@ class _TournamentDetailOverviewTabState
   }
 
   Widget _keyStatsCellView(BuildContext context, PlayerKeyStat keyStat) {
+    if (keyStat.tag == null && keyStat.value == null) return SizedBox();
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -198,13 +200,12 @@ class _TournamentDetailOverviewTabState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                context
-                    .l10n.tournament_detail_overview_key_stats_most_runs_title,
+                keyStat.tag!.getString(context),
                 style: AppTextStyle.body2
                     .copyWith(color: context.colorScheme.positive),
               ),
               Text(
-                keyStat.runs.toString(),
+                keyStat.value.toString(),
                 style: AppTextStyle.subtitle1.copyWith(
                   color: context.colorScheme.textPrimary,
                 ),
@@ -331,7 +332,7 @@ class _TournamentDetailOverviewTabState
               children: [
                 _infoCellView(
                   context,
-                  context.l10n.tournament_detail_overview_info_title,
+                  context.l10n.tournament_detail_overview_name_title,
                   tournament.name,
                 ),
                 Divider(color: context.colorScheme.outline, height: 1),
@@ -369,13 +370,14 @@ class _TournamentDetailOverviewTabState
             style: AppTextStyle.subtitle3
                 .copyWith(color: context.colorScheme.textSecondary),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 16),
           Expanded(
             child: Text(
               value,
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
               textAlign: TextAlign.end,
+              textScaler: TextScaler.noScaling,
             ),
           ),
         ],

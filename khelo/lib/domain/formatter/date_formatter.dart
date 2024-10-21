@@ -49,9 +49,9 @@ extension DateFormatter on DateTime {
 
     String day;
     if (isSameDay(today)) {
-      day = 'Today';
+      day = context.l10n.common_today;
     } else if (isSameDay(tomorrow)) {
-      day = 'Tomorrow';
+      day = context.l10n.common_tomorrow;
     } else if (year == today.year) {
       day = DateFormat('d MMM').format(this);
     } else {
