@@ -208,7 +208,7 @@ class _TournamentListScreenState extends ConsumerState<TournamentListScreen>
         text: DateFormatter.formatDateRange(
           context,
           startDate: tournament.start_date,
-          endDate: tournament.end_date!,
+          endDate: tournament.end_date,
           formatType: DateFormatType.dayMonth,
         ),
         style: AppTextStyle.caption
