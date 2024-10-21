@@ -64,9 +64,8 @@ extension DateFormatter on DateTime {
   static String formatDateRange(
     BuildContext context, {
     required DateTime startDate,
-    DateTime? endDate,
+    required DateTime endDate,
     required DateFormatType formatType,
   }) =>
-      endDate?.format(context, formatType) ??
-      "${startDate.format(context, formatType)} - ${endDate!.format(context, formatType)}";
+      "${startDate.format(context, formatType)} - ${endDate.format(context, formatType)}";
 }

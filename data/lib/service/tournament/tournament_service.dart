@@ -85,6 +85,7 @@ class TournamentService {
           created_by: '',
           type: TournamentType.other,
           start_date: DateTime.now(),
+          end_date: DateTime.now().add(const Duration(days: 1)),
         );
       } else {
         var tournament = snapshot.data()!;

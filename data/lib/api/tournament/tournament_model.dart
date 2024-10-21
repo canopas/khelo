@@ -26,7 +26,7 @@ class TournamentModel with _$TournamentModel {
     required String created_by,
     @TimeStampJsonConverter() DateTime? created_at,
     @TimeStampJsonConverter() required DateTime start_date,
-    @TimeStampJsonConverter() DateTime? end_date,
+    @TimeStampJsonConverter() required DateTime end_date,
     @Default([]) List<String> team_ids,
     @Default([]) List<String> match_ids,
     @JsonKey(includeFromJson: false, includeToJson: false)

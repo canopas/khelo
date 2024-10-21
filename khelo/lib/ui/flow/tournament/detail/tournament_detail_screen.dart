@@ -178,7 +178,7 @@ class _TournamentDetailScreenState
           children: [
             Container(
               decoration: BoxDecoration(
-                color: context.colorScheme.containerLow,
+                color: context.colorScheme.containerHigh,
                 image: (tournament.banner_img_url != null)
                     ? DecorationImage(
                         image: CachedNetworkImageProvider(
@@ -192,7 +192,7 @@ class _TournamentDetailScreenState
                       child: SvgPicture.asset(
                         Assets.images.icTournaments,
                         colorFilter: ColorFilter.mode(
-                          context.colorScheme.textPrimary,
+                          context.colorScheme.textSecondary,
                           BlendMode.srcIn,
                         ),
                       ),
@@ -233,7 +233,11 @@ class _TournamentDetailScreenState
           width: context.mediaQuerySize.width - 32,
           child: Text(
             tournament.name,
-            style: AppTextStyle.header1.copyWith(color: Colors.white),
+            style: AppTextStyle.header1.copyWith(
+              color: tournament.banner_img_url != null
+                  ? Colors.white
+                  : context.colorScheme.textPrimary,
+            ),
             overflow: TextOverflow.ellipsis,
             textScaler: TextScaler.noScaling,
             maxLines: 2,
@@ -247,7 +251,9 @@ class _TournamentDetailScreenState
               height: 24,
               width: 24,
               colorFilter: ColorFilter.mode(
-                Colors.white,
+                tournament.banner_img_url != null
+                    ? Colors.white
+                    : context.colorScheme.textPrimary,
                 BlendMode.srcIn,
               ),
             ),
@@ -256,7 +262,11 @@ class _TournamentDetailScreenState
               context.l10n.tournament_detail_start_from_title(tournament
                   .start_date
                   .format(context, DateFormatType.dayMonth)),
-              style: AppTextStyle.body1.copyWith(color: Colors.white),
+              style: AppTextStyle.body1.copyWith(
+                color: tournament.banner_img_url != null
+                    ? Colors.white
+                    : context.colorScheme.textPrimary,
+              ),
             ),
           ],
         )
