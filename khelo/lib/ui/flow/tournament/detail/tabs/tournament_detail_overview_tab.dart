@@ -82,14 +82,14 @@ class _TournamentDetailOverviewTabState
         children: [
           _buildTeamInfo(team: match.teams.first.team),
           const Spacer(),
-          Column(
-            children: [
-              if (match.matchResult != null) ...[
-                WonByMessageText(
-                  isTournament: true,
-                  matchResult: match.matchResult,
-                ),
-              ] else ...[
+          if (match.matchResult != null) ...[
+            WonByMessageText(
+              isTournament: true,
+              matchResult: match.matchResult,
+            ),
+          ] else ...[
+            Column(
+              children: [
                 Text(
                   match.start_at?.format(context, DateFormatType.time) ??
                       DateTime.now().format(context, DateFormatType.time),
@@ -103,8 +103,8 @@ class _TournamentDetailOverviewTabState
                       .copyWith(color: context.colorScheme.textPrimary),
                 ),
               ],
-            ],
-          ),
+            ),
+          ],
           const Spacer(),
           _buildTeamInfo(team: match.teams.last.team, isSecond: true),
         ],

@@ -44,7 +44,8 @@ Future<ProviderContainer> _initContainer() async {
 
   final container = ProviderContainer(
     overrides: [
-      sharedPreferencesProvider.overrideWithValue(prefs),
+      sharedPreferencesProvider
+          .overrideWith(() => MockSharedPreferencesNotifier(prefs)),
     ],
   );
   return container;

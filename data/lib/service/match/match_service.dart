@@ -584,9 +584,14 @@ class MatchService {
 
   Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
     try {
+      if (matchIds.length > 10) {
+        throw AppError.fromError(
+          "You can only query up to 10 matches at a time.",
+        );
+      }
+
       final snapshot = await _matchCollection
           .where(FieldPath.documentId, whereIn: matchIds)
-          .limit(10)
           .get();
       return Future.wait(
         snapshot.docs.map((doc) async {
