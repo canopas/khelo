@@ -569,11 +569,18 @@ abstract class _BallScoreModel implements BallScoreModel {
       throw _privateConstructorUsedError;
 }
 
+UserStat _$UserStatFromJson(Map<String, dynamic> json) {
+  return _UserStat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$UserStat {
   BattingStat? get battingStat => throw _privateConstructorUsedError;
   BowlingStat? get bowlingStat => throw _privateConstructorUsedError;
   FieldingStat? get fieldingStat => throw _privateConstructorUsedError;
+
+  /// Serializes this UserStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of UserStat
   /// with the given fields replaced by the non-null parameter values.
@@ -731,9 +738,12 @@ class __$$UserStatImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$UserStatImpl implements _UserStat {
   const _$UserStatImpl({this.battingStat, this.bowlingStat, this.fieldingStat});
+
+  factory _$UserStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserStatImplFromJson(json);
 
   @override
   final BattingStat? battingStat;
@@ -760,6 +770,7 @@ class _$UserStatImpl implements _UserStat {
                 other.fieldingStat == fieldingStat));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, battingStat, bowlingStat, fieldingStat);
@@ -771,6 +782,13 @@ class _$UserStatImpl implements _UserStat {
   @pragma('vm:prefer-inline')
   _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
       __$$UserStatImplCopyWithImpl<_$UserStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UserStatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _UserStat implements UserStat {
@@ -778,6 +796,9 @@ abstract class _UserStat implements UserStat {
       {final BattingStat? battingStat,
       final BowlingStat? bowlingStat,
       final FieldingStat? fieldingStat}) = _$UserStatImpl;
+
+  factory _UserStat.fromJson(Map<String, dynamic> json) =
+      _$UserStatImpl.fromJson;
 
   @override
   BattingStat? get battingStat;
@@ -794,6 +815,10 @@ abstract class _UserStat implements UserStat {
       throw _privateConstructorUsedError;
 }
 
+BattingStat _$BattingStatFromJson(Map<String, dynamic> json) {
+  return _BattingStat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$BattingStat {
   int get innings => throw _privateConstructorUsedError;
@@ -806,6 +831,9 @@ mixin _$BattingStat {
   int get fifties => throw _privateConstructorUsedError;
   int get hundreds => throw _privateConstructorUsedError;
   int get ducks => throw _privateConstructorUsedError;
+
+  /// Serializes this BattingStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of BattingStat
   /// with the given fields replaced by the non-null parameter values.
@@ -995,7 +1023,7 @@ class __$$BattingStatImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$BattingStatImpl implements _BattingStat {
   const _$BattingStatImpl(
       {this.innings = 0,
@@ -1008,6 +1036,9 @@ class _$BattingStatImpl implements _BattingStat {
       this.fifties = 0,
       this.hundreds = 0,
       this.ducks = 0});
+
+  factory _$BattingStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BattingStatImplFromJson(json);
 
   @override
   @JsonKey()
@@ -1066,6 +1097,7 @@ class _$BattingStatImpl implements _BattingStat {
             (identical(other.ducks, ducks) || other.ducks == ducks));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, innings, runScored, average,
       strikeRate, ballFaced, fours, sixes, fifties, hundreds, ducks);
@@ -1077,6 +1109,13 @@ class _$BattingStatImpl implements _BattingStat {
   @pragma('vm:prefer-inline')
   _$$BattingStatImplCopyWith<_$BattingStatImpl> get copyWith =>
       __$$BattingStatImplCopyWithImpl<_$BattingStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BattingStatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _BattingStat implements BattingStat {
@@ -1091,6 +1130,9 @@ abstract class _BattingStat implements BattingStat {
       final int fifties,
       final int hundreds,
       final int ducks}) = _$BattingStatImpl;
+
+  factory _BattingStat.fromJson(Map<String, dynamic> json) =
+      _$BattingStatImpl.fromJson;
 
   @override
   int get innings;
@@ -1121,6 +1163,10 @@ abstract class _BattingStat implements BattingStat {
       throw _privateConstructorUsedError;
 }
 
+BowlingStat _$BowlingStatFromJson(Map<String, dynamic> json) {
+  return _BowlingStat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$BowlingStat {
   int get innings => throw _privateConstructorUsedError;
@@ -1133,6 +1179,9 @@ mixin _$BowlingStat {
   double get average => throw _privateConstructorUsedError;
   double get strikeRate => throw _privateConstructorUsedError;
   double get economyRate => throw _privateConstructorUsedError;
+
+  /// Serializes this BowlingStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of BowlingStat
   /// with the given fields replaced by the non-null parameter values.
@@ -1322,7 +1371,7 @@ class __$$BowlingStatImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$BowlingStatImpl implements _BowlingStat {
   const _$BowlingStatImpl(
       {this.innings = 0,
@@ -1335,6 +1384,9 @@ class _$BowlingStatImpl implements _BowlingStat {
       this.average = 0.0,
       this.strikeRate = 0.0,
       this.economyRate = 0.0});
+
+  factory _$BowlingStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BowlingStatImplFromJson(json);
 
   @override
   @JsonKey()
@@ -1394,6 +1446,7 @@ class _$BowlingStatImpl implements _BowlingStat {
                 other.economyRate == economyRate));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1415,6 +1468,13 @@ class _$BowlingStatImpl implements _BowlingStat {
   @pragma('vm:prefer-inline')
   _$$BowlingStatImplCopyWith<_$BowlingStatImpl> get copyWith =>
       __$$BowlingStatImplCopyWithImpl<_$BowlingStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BowlingStatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _BowlingStat implements BowlingStat {
@@ -1429,6 +1489,9 @@ abstract class _BowlingStat implements BowlingStat {
       final double average,
       final double strikeRate,
       final double economyRate}) = _$BowlingStatImpl;
+
+  factory _BowlingStat.fromJson(Map<String, dynamic> json) =
+      _$BowlingStatImpl.fromJson;
 
   @override
   int get innings;
@@ -1459,11 +1522,18 @@ abstract class _BowlingStat implements BowlingStat {
       throw _privateConstructorUsedError;
 }
 
+FieldingStat _$FieldingStatFromJson(Map<String, dynamic> json) {
+  return _FieldingStat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$FieldingStat {
   int get catches => throw _privateConstructorUsedError;
   int get runOut => throw _privateConstructorUsedError;
   int get stumping => throw _privateConstructorUsedError;
+
+  /// Serializes this FieldingStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of FieldingStat
   /// with the given fields replaced by the non-null parameter values.
@@ -1563,10 +1633,13 @@ class __$$FieldingStatImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$FieldingStatImpl implements _FieldingStat {
   const _$FieldingStatImpl(
       {this.catches = 0, this.runOut = 0, this.stumping = 0});
+
+  factory _$FieldingStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FieldingStatImplFromJson(json);
 
   @override
   @JsonKey()
@@ -1594,6 +1667,7 @@ class _$FieldingStatImpl implements _FieldingStat {
                 other.stumping == stumping));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, catches, runOut, stumping);
 
@@ -1604,6 +1678,13 @@ class _$FieldingStatImpl implements _FieldingStat {
   @pragma('vm:prefer-inline')
   _$$FieldingStatImplCopyWith<_$FieldingStatImpl> get copyWith =>
       __$$FieldingStatImplCopyWithImpl<_$FieldingStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FieldingStatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _FieldingStat implements FieldingStat {
@@ -1611,6 +1692,9 @@ abstract class _FieldingStat implements FieldingStat {
       {final int catches,
       final int runOut,
       final int stumping}) = _$FieldingStatImpl;
+
+  factory _FieldingStat.fromJson(Map<String, dynamic> json) =
+      _$FieldingStatImpl.fromJson;
 
   @override
   int get catches;

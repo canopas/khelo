@@ -69,6 +69,9 @@
   "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
   "common_verified_title": "Verified",
+  "common_view_all": "View all",
+  "common_today": "Today",
+  "common_tomorrow": "Tomorrow",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -127,7 +130,7 @@
   "home_screen_set_up_match_title": "Set up a match in minutes.",
   "home_screen_create_match_btn": "Create match",
   "home_screen_set_up_team_title": "Set up a team in minutes.",
-  "home_screen_view_all_btn": "View all",
+  "home_screen_create_team_btn": "Create team",
   "home_screen_no_matches_title": "No Matches in this area!",
   "home_screen_no_matches_description_text": "Enjoy the freedom of creating your own cricket matches or teams.",
 
@@ -203,6 +206,19 @@
   "tournament_detail_matches_tab": "Matches",
   "tournament_detail_points_table_tab": "Points Table",
   "tournament_detail_stats_tab": "Stats",
+
+  "tournament_detail_overview_info_title": "Tournament info",
+  "tournament_detail_overview_name_title": "Tournament Name",
+  "tournament_detail_overview_type_title": "Type",
+  "tournament_detail_overview_duration_title": "Duration",
+  "tournament_detail_overview_teams_squads_title": "Teams Squads",
+  "tournament_detail_overview_key_stats_title": "Key Stats",
+  "tournament_detail_overview_featured_matches_title": "Featured Matches",
+
+  "tournament_detail_key_stat_most_runs_title": "Most Runs",
+  "tournament_detail_key_stat_most_wickets_title": "Most Wickets",
+  "tournament_detail_key_stat_most_fours_title": "Most Fours",
+  "tournament_detail_key_stat_most_sixes_title": "Most Sixes",
 
   "@_TOURNAMENT_TYPE":{
   },
@@ -743,6 +759,8 @@
   "score_board_w_title": "W",
   "score_board_o_title": "O",
   "score_board_won_by_title": " Won By ",
+  "score_board_won_title": "Won",
+  "score_board_by_title": "by",
   "score_board_choose_opening_batsmen_title": "Choose opening Batsmen",
   "score_board_choose_fielder_title": "Choose fielder",
   "score_board_injured_tag_title": "Injured",

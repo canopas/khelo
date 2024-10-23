@@ -23,8 +23,8 @@ _$TournamentModelImpl _$$TournamentModelImplFromJson(Map json) =>
           json['created_at'], const TimeStampJsonConverter().fromJson),
       start_date:
           const TimeStampJsonConverter().fromJson(json['start_date'] as Object),
-      end_date: _$JsonConverterFromJson<Object, DateTime>(
-          json['end_date'], const TimeStampJsonConverter().fromJson),
+      end_date:
+          const TimeStampJsonConverter().fromJson(json['end_date'] as Object),
       team_ids: (json['team_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -48,8 +48,7 @@ Map<String, dynamic> _$$TournamentModelImplToJson(
       'created_at': _$JsonConverterToJson<Object, DateTime>(
           instance.created_at, const TimeStampJsonConverter().toJson),
       'start_date': const TimeStampJsonConverter().toJson(instance.start_date),
-      'end_date': _$JsonConverterToJson<Object, DateTime>(
-          instance.end_date, const TimeStampJsonConverter().toJson),
+      'end_date': const TimeStampJsonConverter().toJson(instance.end_date),
       'team_ids': instance.team_ids,
       'match_ids': instance.match_ids,
     };
@@ -96,4 +95,29 @@ Map<String, dynamic> _$$TournamentMemberImplToJson(
 const _$TournamentMemberRoleEnumMap = {
   TournamentMemberRole.organizer: 'organizer',
   TournamentMemberRole.admin: 'admin',
+};
+
+_$PlayerKeyStatImpl _$$PlayerKeyStatImplFromJson(Map<String, dynamic> json) =>
+    _$PlayerKeyStatImpl(
+      teamName: json['teamName'] as String,
+      player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
+      stats: UserStat.fromJson(json['stats'] as Map<String, dynamic>),
+      tag: $enumDecodeNullable(_$KeyStatTagEnumMap, json['tag']),
+      value: (json['value'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$PlayerKeyStatImplToJson(_$PlayerKeyStatImpl instance) =>
+    <String, dynamic>{
+      'teamName': instance.teamName,
+      'player': instance.player.toJson(),
+      'stats': instance.stats.toJson(),
+      'tag': _$KeyStatTagEnumMap[instance.tag],
+      'value': instance.value,
+    };
+
+const _$KeyStatTagEnumMap = {
+  KeyStatTag.mostRuns: 'mostRuns',
+  KeyStatTag.mostWickets: 'mostWickets',
+  KeyStatTag.mostFours: 'mostFours',
+  KeyStatTag.mostSixes: 'mostSixes',
 };

@@ -314,3 +314,18 @@ extension TournamentTypeString on TournamentType {
     }
   }
 }
+
+extension TournamentKeyStatString on KeyStatTag {
+  String getString(BuildContext context) {
+    switch (this) {
+      case KeyStatTag.mostRuns:
+        return context.l10n.tournament_detail_key_stat_most_runs_title;
+      case KeyStatTag.mostWickets:
+        return context.l10n.tournament_detail_key_stat_most_wickets_title;
+      case KeyStatTag.mostFours:
+        return context.l10n.tournament_detail_key_stat_most_fours_title;
+      case KeyStatTag.mostSixes:
+        return context.l10n.tournament_detail_key_stat_most_sixes_title;
+    }
+  }
+}
