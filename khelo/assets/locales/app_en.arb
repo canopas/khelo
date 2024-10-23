@@ -215,6 +215,10 @@
   "tournament_detail_overview_key_stats_title": "Key Stats",
   "tournament_detail_overview_featured_matches_title": "Featured Matches",
 
+  "tournament_detail_teams_empty_title": "Create teams!",
+  "tournament_detail_teams_empty_description": "You don't have a teams yet. Create two to get started.",
+  "tournament_detail_teams_add_btn": "Add teams",
+
   "tournament_detail_key_stat_most_runs_title": "Most Runs",
   "tournament_detail_key_stat_most_wickets_title": "Most Wickets",
   "tournament_detail_key_stat_most_fours_title": "Most Fours",

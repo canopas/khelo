@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/service/tournament/tournament_service.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,18 @@ class TournamentDetailStateViewNotifier
     }
   }
 
+  void addTeams(List<TeamModel> teams) async {
+    if (state.tournament == null) return;
+    try {
+      final teamIds = teams.map((e) => e.id).toList();
+      await _tournamentService.updateTeamIds(state.tournament!.id, teamIds);
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint(
+          "TournamentDetailStateViewNotifier: error while adding teams -> $e");
+    }
+  }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
@@ -66,5 +79,6 @@ class TournamentDetailState with _$TournamentDetailState {
     @Default(false) bool loading,
     @Default(0) int selectedTab,
     Object? error,
+    Object? actionError,
   }) = _TournamentDetailState;
 }

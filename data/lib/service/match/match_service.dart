@@ -533,7 +533,10 @@ class MatchService {
   ) async {
     try {
       final teamIds = teamList.map((e) => e.team_id).toList();
-      final playerIds = teamList.expand((team) => team.squad).toList();
+
+      final playerIds = teamList
+          .expand((team) => team.squad.map((player) => player))
+          .toList();
 
       final teamsData = await Future.wait([
         _teamService.getTeamsByIds(teamIds),
@@ -544,7 +547,10 @@ class MatchService {
       final List<MatchPlayer> players = teamsData[1] as List<MatchPlayer>;
 
       final List<List<MatchPlayer>> squads = teamList.map((team) {
-        return players.where((player) => team.squad.contains(player)).toList();
+        final teamPlayerIds = team.squad.map((player) => player.id).toSet();
+        return players
+            .where((player) => teamPlayerIds.contains(player.id))
+            .toList();
       }).toList();
 
       return List.generate(teamList.length, (index) {

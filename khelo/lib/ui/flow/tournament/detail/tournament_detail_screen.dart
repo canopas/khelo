@@ -9,6 +9,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_overview_tab.dart';
+import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_teams_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
@@ -18,6 +19,7 @@ import 'package:style/text/app_text_style.dart';
 
 import '../../../../components/app_page.dart';
 import '../../../../components/error_screen.dart';
+import '../../../../components/error_snackbar.dart';
 import '../../../../domain/extensions/widget_extension.dart';
 import '../../../../gen/assets.gen.dart';
 
@@ -53,9 +55,22 @@ class _TournamentDetailScreenState
     runPostFrame(() => notifier.setData(widget.tournamentId));
   }
 
+  void _observeActionError(BuildContext context) {
+    ref.listen(
+        tournamentDetailStateProvider.select((value) => value.actionError),
+        (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _observeActionError(context);
+
     final state = ref.watch(tournamentDetailStateProvider);
+
     return AppPage(
       body: Builder(builder: (context) {
         return _body(context, state);
@@ -108,15 +123,22 @@ class _TournamentDetailScreenState
   }
 
   Widget _content(BuildContext context, TournamentDetailState state) {
-    return PageView(
-      controller: _controller,
-      physics: const NeverScrollableScrollPhysics(),
-      onPageChanged: notifier.onTabChange,
-      children: [
-        TournamentDetailOverviewTab(
-          tournament: state.tournament!,
-        ),
-      ],
+    return Container(
+      color: context.colorScheme.containerLow,
+      child: PageView(
+        controller: _controller,
+        physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: notifier.onTabChange,
+        children: [
+          TournamentDetailOverviewTab(
+            tournament: state.tournament!,
+          ),
+          TournamentDetailTeamsTab(
+            teams: state.tournament?.teams ?? [],
+            notifier: notifier,
+          ),
+        ],
+      ),
     );
   }
 
