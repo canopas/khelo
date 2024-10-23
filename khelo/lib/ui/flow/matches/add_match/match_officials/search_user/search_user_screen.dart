@@ -15,7 +15,11 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/search_text_field.dart';
 
 class SearchUserBottomSheet extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    String? emptyScreenTitle,
+    String? emptyScreenDescription,
+  }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
@@ -24,12 +28,22 @@ class SearchUserBottomSheet extends ConsumerWidget {
       useRootNavigator: true,
       backgroundColor: context.colorScheme.surface,
       builder: (context) {
-        return const SearchUserBottomSheet();
+        return SearchUserBottomSheet(
+          emptyScreenTitle: emptyScreenTitle,
+          emptyScreenDescription: emptyScreenDescription,
+        );
       },
     );
   }
 
-  const SearchUserBottomSheet({super.key});
+  final String? emptyScreenTitle;
+  final String? emptyScreenDescription;
+
+  const SearchUserBottomSheet({
+    super.key,
+    this.emptyScreenTitle,
+    this.emptyScreenDescription,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -67,10 +81,11 @@ class SearchUserBottomSheet extends ConsumerWidget {
         ? EmptyScreen(
             title: (state.searchController.text.isNotEmpty)
                 ? context.l10n.add_team_member_search_no_result_title
-                : context.l10n.search_user_empty_title,
+                : emptyScreenTitle ?? context.l10n.search_user_empty_title,
             description: (state.searchController.text.isNotEmpty)
                 ? context.l10n.add_team_member_search_description_text
-                : context.l10n.search_user_empty_description_text,
+                : emptyScreenDescription ??
+                    context.l10n.search_user_empty_description_text,
             isShowButton: false,
           )
         : ListView.separated(

@@ -99,6 +99,16 @@ class MatchService {
     }
   }
 
+  Future<int> getUserOwnedMatchesCount(String userId) {
+    return _matchCollection
+        .where(FireStoreConst.createdBy, isEqualTo: userId)
+        .count()
+        .get()
+        .then((snapshot) {
+      return snapshot.count ?? 0;
+    }).catchError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Stream<MatchSetting?> streamMatchSetting(String matchId) {
     return _matchSettingDocument(matchId)
         .snapshots()
@@ -499,12 +509,29 @@ class MatchService {
     required String matchId,
     required RevisedTarget revisedTarget,
   }) async {
-    await _matchCollection.doc(matchId).update(
-      {
-        FireStoreConst.revisedTarget: revisedTarget.toJson(),
-        FireStoreConst.updatedAt: DateTime.now(),
-      },
-    );
+    try {
+      await _matchCollection.doc(matchId).update(
+        {
+          FireStoreConst.revisedTarget: revisedTarget.toJson(),
+          FireStoreConst.updatedAt: DateTime.now(),
+        },
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> changeMatchOwner({
+    required String matchId,
+    required String ownerId,
+  }) async {
+    try {
+      await _matchCollection.doc(matchId).update(
+        {FireStoreConst.createdBy: ownerId},
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<void> deleteMatch(String matchId) async {

@@ -35,6 +35,8 @@ mixin _$EditProfileState {
   bool get isImageUploading => throw _privateConstructorUsedError;
   bool get isSaved => throw _privateConstructorUsedError;
   bool get isSaveInProgress => throw _privateConstructorUsedError;
+  bool get showDeleteConfirmationDialog => throw _privateConstructorUsedError;
+  bool get showTransferTeamsSheet => throw _privateConstructorUsedError;
 
   /// Create a copy of EditProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -65,7 +67,9 @@ abstract class $EditProfileStateCopyWith<$Res> {
       bool isButtonEnable,
       bool isImageUploading,
       bool isSaved,
-      bool isSaveInProgress});
+      bool isSaveInProgress,
+      bool showDeleteConfirmationDialog,
+      bool showTransferTeamsSheet});
 
   $UserModelCopyWith<$Res>? get currentUser;
 }
@@ -101,6 +105,8 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
     Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
+    Object? showDeleteConfirmationDialog = null,
+    Object? showTransferTeamsSheet = null,
   }) {
     return _then(_value.copyWith(
       dob: null == dob
@@ -164,6 +170,14 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
           ? _value.isSaveInProgress
           : isSaveInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
+      showDeleteConfirmationDialog: null == showDeleteConfirmationDialog
+          ? _value.showDeleteConfirmationDialog
+          : showDeleteConfirmationDialog // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showTransferTeamsSheet: null == showTransferTeamsSheet
+          ? _value.showTransferTeamsSheet
+          : showTransferTeamsSheet // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -206,7 +220,9 @@ abstract class _$$EditProfileStateImplCopyWith<$Res>
       bool isButtonEnable,
       bool isImageUploading,
       bool isSaved,
-      bool isSaveInProgress});
+      bool isSaveInProgress,
+      bool showDeleteConfirmationDialog,
+      bool showTransferTeamsSheet});
 
   @override
   $UserModelCopyWith<$Res>? get currentUser;
@@ -241,6 +257,8 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
     Object? isImageUploading = null,
     Object? isSaved = null,
     Object? isSaveInProgress = null,
+    Object? showDeleteConfirmationDialog = null,
+    Object? showTransferTeamsSheet = null,
   }) {
     return _then(_$EditProfileStateImpl(
       dob: null == dob
@@ -304,6 +322,14 @@ class __$$EditProfileStateImplCopyWithImpl<$Res>
           ? _value.isSaveInProgress
           : isSaveInProgress // ignore: cast_nullable_to_non_nullable
               as bool,
+      showDeleteConfirmationDialog: null == showDeleteConfirmationDialog
+          ? _value.showDeleteConfirmationDialog
+          : showDeleteConfirmationDialog // ignore: cast_nullable_to_non_nullable
+              as bool,
+      showTransferTeamsSheet: null == showTransferTeamsSheet
+          ? _value.showTransferTeamsSheet
+          : showTransferTeamsSheet // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -327,7 +353,9 @@ class _$EditProfileStateImpl implements _EditProfileState {
       this.isButtonEnable = false,
       this.isImageUploading = false,
       this.isSaved = false,
-      this.isSaveInProgress = false});
+      this.isSaveInProgress = false,
+      this.showDeleteConfirmationDialog = false,
+      this.showTransferTeamsSheet = false});
 
   @override
   final DateTime dob;
@@ -370,10 +398,16 @@ class _$EditProfileStateImpl implements _EditProfileState {
   @override
   @JsonKey()
   final bool isSaveInProgress;
+  @override
+  @JsonKey()
+  final bool showDeleteConfirmationDialog;
+  @override
+  @JsonKey()
+  final bool showTransferTeamsSheet;
 
   @override
   String toString() {
-    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, actionError: $actionError, currentUser: $currentUser, filePath: $filePath, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress)';
+    return 'EditProfileState(dob: $dob, nameController: $nameController, emailController: $emailController, locationController: $locationController, actionError: $actionError, currentUser: $currentUser, filePath: $filePath, imageUrl: $imageUrl, gender: $gender, battingStyle: $battingStyle, bowlingStyle: $bowlingStyle, playerRole: $playerRole, isButtonEnable: $isButtonEnable, isImageUploading: $isImageUploading, isSaved: $isSaved, isSaveInProgress: $isSaveInProgress, showDeleteConfirmationDialog: $showDeleteConfirmationDialog, showTransferTeamsSheet: $showTransferTeamsSheet)';
   }
 
   @override
@@ -409,7 +443,13 @@ class _$EditProfileStateImpl implements _EditProfileState {
                 other.isImageUploading == isImageUploading) &&
             (identical(other.isSaved, isSaved) || other.isSaved == isSaved) &&
             (identical(other.isSaveInProgress, isSaveInProgress) ||
-                other.isSaveInProgress == isSaveInProgress));
+                other.isSaveInProgress == isSaveInProgress) &&
+            (identical(other.showDeleteConfirmationDialog,
+                    showDeleteConfirmationDialog) ||
+                other.showDeleteConfirmationDialog ==
+                    showDeleteConfirmationDialog) &&
+            (identical(other.showTransferTeamsSheet, showTransferTeamsSheet) ||
+                other.showTransferTeamsSheet == showTransferTeamsSheet));
   }
 
   @override
@@ -430,7 +470,9 @@ class _$EditProfileStateImpl implements _EditProfileState {
       isButtonEnable,
       isImageUploading,
       isSaved,
-      isSaveInProgress);
+      isSaveInProgress,
+      showDeleteConfirmationDialog,
+      showTransferTeamsSheet);
 
   /// Create a copy of EditProfileState
   /// with the given fields replaced by the non-null parameter values.
@@ -459,7 +501,9 @@ abstract class _EditProfileState implements EditProfileState {
       final bool isButtonEnable,
       final bool isImageUploading,
       final bool isSaved,
-      final bool isSaveInProgress}) = _$EditProfileStateImpl;
+      final bool isSaveInProgress,
+      final bool showDeleteConfirmationDialog,
+      final bool showTransferTeamsSheet}) = _$EditProfileStateImpl;
 
   @override
   DateTime get dob;
@@ -493,6 +537,10 @@ abstract class _EditProfileState implements EditProfileState {
   bool get isSaved;
   @override
   bool get isSaveInProgress;
+  @override
+  bool get showDeleteConfirmationDialog;
+  @override
+  bool get showTransferTeamsSheet;
 
   /// Create a copy of EditProfileState
   /// with the given fields replaced by the non-null parameter values.

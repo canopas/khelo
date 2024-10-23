@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../extensions/context_extensions.dart';
 import '../text/app_text_style.dart';
+
+typedef TabTapMethodBuilder = void Function(
+    BuildContext context, void Function(int) onTabTap);
 
 class TabItem {
   final Widget tabIcon;
@@ -27,11 +31,14 @@ class TabItem {
 }
 
 class AppBottomNavigationBar extends StatefulWidget {
+  final TabTapMethodBuilder builder;
+
   final List<TabItem> tabs;
 
   const AppBottomNavigationBar({
     super.key,
     required this.tabs,
+    required this.builder,
   });
 
   @override
@@ -49,23 +56,35 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    widget.builder.call(context, onTab);
     final colors = context.colorScheme;
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _selectedIndex,
-      unselectedItemColor: colors.textDisabled,
-      selectedItemColor: colors.primary,
-      backgroundColor: colors.containerLowOnSurface,
-      selectedLabelStyle: AppTextStyle.caption.copyWith(color: colors.primary),
-      unselectedLabelStyle:
-          AppTextStyle.caption.copyWith(color: colors.textDisabled),
-      onTap: (index) {
-        onTab(index);
-        widget.tabs[index].onTap.call();
-      },
-      items: List.generate(
-        widget.tabs.length,
-        (index) => widget.tabs[index].toBottomNavigationBarItem(context),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: context.colorScheme.outline,
+            width: 1,
+          ),
+        ),
+      ),
+      child: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        unselectedItemColor: colors.textDisabled,
+        selectedItemColor: colors.primary,
+        backgroundColor: colors.surface,
+        selectedLabelStyle:
+            AppTextStyle.caption.copyWith(color: colors.primary),
+        unselectedLabelStyle:
+            AppTextStyle.caption.copyWith(color: colors.textDisabled),
+        onTap: (index) {
+          onTab(index);
+          widget.tabs[index].onTap.call();
+        },
+        items: List.generate(
+          widget.tabs.length,
+          (index) => widget.tabs[index].toBottomNavigationBarItem(context),
+        ),
       ),
     );
   }

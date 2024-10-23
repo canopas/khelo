@@ -1,8 +1,10 @@
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
@@ -15,6 +17,7 @@ import 'package:style/widgets/rounded_check_box.dart';
 import '../../../../../components/error_snackbar.dart';
 import '../../../../../components/user_detail_cell.dart';
 import '../../../../../gen/assets.gen.dart';
+import '../../../matches/add_match/match_officials/search_user/search_user_screen.dart';
 import '../../../matches/add_match/select_squad/components/user_detail_sheet.dart';
 
 class MakeTeamAdminScreen extends ConsumerStatefulWidget {
@@ -97,28 +100,69 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
   }
 
   Widget _body(BuildContext context, MakeTeamAdminState state) {
-    final members = widget.team.players
-        .where((element) => element.id != widget.team.created_by)
-        .toList();
-
-    final TeamPlayer owner = widget.team.players.firstWhere(
-        (element) => element.id == widget.team.created_by,
-        orElse: () => const TeamPlayer(id: ''));
-
     return Padding(
       padding: context.mediaQueryPadding,
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(vertical: 16),
-        itemCount: members.length + 1,
+        itemCount: state.players.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return (owner.id.isNotEmpty)
+            return (state.owner.id.isNotEmpty)
                 ? UserDetailCell(
-                    user: owner.user,
+                    user: state.owner,
                     showPhoneNumber: false,
                     padding:
                         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    onTap: () => UserDetailSheet.show(context, owner.user),
+                    onTap: () {
+                      if (state.currentUserId ==
+                          notifier.team.created_by_user.id) {
+                        showActionBottomSheet(context: context, items: [
+                          BottomSheetAction(
+                            title: (notifier.team.created_by_user.id !=
+                                    state.owner.id)
+                                ? context
+                                    .l10n.team_detail_remove_ownership_title
+                                : context
+                                    .l10n.team_detail_transfer_ownership_title,
+                            onTap: () async {
+                              context.pop();
+                              if (notifier.team.created_by_user.id !=
+                                  state.owner.id) {
+                                notifier.changeTeamOwner(
+                                    notifier.team.created_by_user);
+                                return;
+                              }
+                              final newOwner =
+                                  await SearchUserBottomSheet.show<UserModel>(
+                                context,
+                                emptyScreenTitle: context
+                                    .l10n.team_detail_transfer_ownership_title,
+                                emptyScreenDescription: context.l10n
+                                    .team_detail_transfer_ownership_description,
+                              );
+                              if (context.mounted && newOwner != null) {
+                                notifier.changeTeamOwner(newOwner);
+                              }
+                            },
+                          ),
+                          if (notifier.team.players
+                              .map((e) => e.id)
+                              .contains(state.owner.id)) // is part player
+                            BottomSheetAction(
+                              title: state.selectedPlayerIds
+                                      .contains(state.owner.id)
+                                  ? context.l10n.team_detail_remove_admin
+                                  : context.l10n.team_detail_make_admin,
+                              onTap: () {
+                                context.pop();
+                                notifier.selectAdmin(state.owner);
+                              },
+                            )
+                        ]);
+                      } else {
+                        UserDetailSheet.show(context, state.owner);
+                      }
+                    },
                     trailing: Text(
                         context.l10n.team_detail_make_admin_owner_title,
                         style: AppTextStyle.body2
@@ -127,20 +171,19 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                 : const SizedBox();
           }
 
-          final player = members[index - 1];
+          final player = state.players[index - 1];
           return UserDetailCell(
-              user: player.user,
+              user: player,
               showPhoneNumber: false,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              onTap: () => UserDetailSheet.show(context, player.user),
+              onTap: () => UserDetailSheet.show(context, player),
               trailing: RoundedCheckBox(
-                isSelected: state.selectedPlayers
-                    .any((element) => element.user == player.user),
+                isSelected: state.selectedPlayerIds.contains(player.id),
                 onTap: (_) => notifier.selectAdmin(player),
               ));
         },
         separatorBuilder: (context, index) =>
-            (index == 0 && owner.id.isNotEmpty)
+            (index == 0 && state.owner.id.isNotEmpty)
                 ? Divider(
                     height: 24,
                     thickness: 1,

@@ -10,7 +10,7 @@ import 'package:style/text/app_text_style.dart';
 
 class UserDetailCell extends StatelessWidget {
   final UserModel user;
-  final Function()? onTap;
+  final VoidCallback? onTap;
   final Widget? trailing;
   final EdgeInsets? padding;
   final bool showPhoneNumber;

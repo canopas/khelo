@@ -15,7 +15,7 @@ class UserCellView extends StatelessWidget {
   final String? subtitle;
   final bool disableCell;
   final bool isSelected;
-  final Function() onTap;
+  final VoidCallback onTap;
 
   const UserCellView({
     super.key,

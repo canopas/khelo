@@ -122,7 +122,7 @@ class SelectAdminAndCaptainDialog extends ConsumerWidget {
     BuildContext context, {
     required String title,
     required bool isSelected,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return OnTapScale(
         onTap: () {
