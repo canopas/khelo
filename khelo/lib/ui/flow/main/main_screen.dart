@@ -8,7 +8,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
-import 'package:khelo/ui/flow/my_game/my_game_tab_view_model.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -35,8 +34,6 @@ class _MainScreenState extends ConsumerState<MainScreen>
   void Function(int) onTabChange = (_) {};
   late final NotificationHandler notificationHandler;
 
-  int myCricketInitialTab = 0;
-
   @override
   void initState() {
     super.initState();
@@ -62,19 +59,10 @@ class _MainScreenState extends ConsumerState<MainScreen>
     _observerShowNotificationPermissionPrompt(context);
     final List<Widget> widgets = <Widget>[
       const HomeScreen(),
-      MyGameTabScreen(
-          initialTab: myCricketInitialTab,
-          onTabChange: (index) {
-            myCricketInitialTab = index;
-            setState(() {});
-          }),
+      const MyGameTabScreen(),
       const UserStatScreen(),
-      ProfileScreen(changeTabToMyCricketTeamList: () {
+      ProfileScreen(changeTabToMyCricket: () {
         changeTab(1);
-        myCricketInitialTab = 1;
-        ref.read(myGameTabViewStateProvider.notifier).onTabChange(1);
-        onTabChange.call(1);
-        setState(() {});
       }),
     ];
 
@@ -210,6 +198,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
       _cupertinoTabController.index = tabNumber;
     } else {
       _materialPageController.jumpToPage(tabNumber);
+      onTabChange.call(tabNumber);
     }
   }
 }

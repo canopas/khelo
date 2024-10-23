@@ -58,12 +58,12 @@ class TransferTeamsSheet extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             context.l10n.transfer_teams_description,
-            style: AppTextStyle.body2
+            style: AppTextStyle.body1
                 .copyWith(color: context.colorScheme.textSecondary),
           ),
           const SizedBox(height: 24),
           PrimaryButton(
-            context.l10n.transfer_teams_go_to_teams,
+            context.l10n.transfer_teams_go_to_my_cricket,
             onPressed: onButtonTap,
           ),
         ],

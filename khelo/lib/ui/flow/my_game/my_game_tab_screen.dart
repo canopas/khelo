@@ -13,14 +13,7 @@ import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 
 class MyGameTabScreen extends ConsumerStatefulWidget {
-  final int? initialTab;
-  final Function(int) onTabChange;
-
-  const MyGameTabScreen({
-    super.key,
-    this.initialTab,
-    required this.onTabChange,
-  });
+  const MyGameTabScreen({super.key});
 
   @override
   ConsumerState createState() => _MyGameTabScreenState();
@@ -44,8 +37,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _controller = PageController(
-      initialPage:
-          widget.initialTab ?? ref.read(myGameTabViewStateProvider).selectedTab,
+      initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
     );
   }
 
@@ -89,7 +81,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
             child: PageView(
               controller: _controller,
               onPageChanged: (tab) {
-                widget.onTabChange(tab);
                 notifier.onTabChange(tab);
                 setState(() {});
               },

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../api/team/team_model.dart';
@@ -36,17 +37,9 @@ class TeamService {
     try {
       final teamDoc = await _teamsCollection.doc(teamId).get();
       final team = teamDoc.data();
-      final users = await getMemberListFromUserIds(
-        team?.players.map((e) => e.id).toList() ?? [],
-      );
-
-      final players = team?.players.map((player) {
-        final user = users.firstWhere((element) => element.id == player.id);
-        return player.copyWith(user: user);
-      }).toList();
-
-      return team?.copyWith(players: players ?? []) ??
-          deActiveDummyTeamModel(teamId);
+      return team != null
+          ? await fetchDetailsOfTeam(team)
+          : deActiveDummyTeamModel(teamId);
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -55,18 +48,9 @@ class TeamService {
   Stream<TeamModel> streamTeamById(String teamId) {
     return _teamsCollection.doc(teamId).snapshots().asyncMap((teamDoc) async {
       final team = teamDoc.data();
-
-      final users = await getMemberListFromUserIds(
-        team?.players.map((e) => e.id).toList() ?? [],
-      );
-
-      final players = team?.players.map((player) {
-        final user = users.firstWhere((element) => element.id == player.id);
-        return player.copyWith(user: user);
-      }).toList();
-
-      return team?.copyWith(players: players ?? []) ??
-          deActiveDummyTeamModel(teamId);
+      return team != null
+          ? await fetchDetailsOfTeam(team)
+          : deActiveDummyTeamModel(teamId);
     }).handleError((error, stack) => AppError.fromError(error, stack));
   }
 
@@ -86,22 +70,11 @@ class TeamService {
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          final team = mainDoc.data();
-
-          final users = await getMemberListFromUserIds(
-            team.players.map((e) => e.id).toList(),
-          );
-
-          final players = team.players.map((player) {
-            final user = users.firstWhere((element) => element.id == player.id);
-            return player.copyWith(user: user);
-          }).toList();
-
-          return team.copyWith(players: players);
-        }).toList(),
+      final teams = await Future.wait(
+        snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),
       );
+
+      return teams;
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
@@ -119,26 +92,15 @@ class TeamService {
         .where(filter)
         .snapshots()
         .asyncMap((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          final team = mainDoc.data();
-
-          final users = await getMemberListFromUserIds(
-            team.players.map((e) => e.id).toList(),
-          );
-
-          final players = team.players.map((player) {
-            final user = users.firstWhere((element) => element.id == player.id);
-            return player.copyWith(user: user);
-          }).toList();
-
-          return team.copyWith(players: players);
-        }).toList(),
+      final teams = await Future.wait(
+        snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),
       );
+
+      return teams;
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Future<List<TeamModel>> getUserOwnedTeams(String userId) {
+  Future<int> getUserOwnedTeamsCount(String userId) {
     final currentPlayer = TeamPlayer(
       id: userId,
       role: TeamPlayerRole.admin,
@@ -148,23 +110,8 @@ class TeamService {
       Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.teamPlayers, arrayContains: currentPlayer.toJson()),
     );
-    return _teamsCollection.where(filter).get().then((snapshot) async {
-      return await Future.wait(
-        snapshot.docs.map((mainDoc) async {
-          final team = mainDoc.data();
-
-          final users = await getMemberListFromUserIds(
-            team.players.map((e) => e.id).toList(),
-          );
-
-          final players = team.players.map((player) {
-            final user = users.firstWhere((element) => element.id == player.id);
-            return player.copyWith(user: user);
-          }).toList();
-
-          return team.copyWith(players: players);
-        }).toList(),
-      );
+    return _teamsCollection.where(filter).count().get().then((snapshot) {
+      return snapshot.count ?? 0;
     }).catchError((error, stack) => throw AppError.fromError(error, stack));
   }
 
@@ -202,11 +149,15 @@ class TeamService {
 
   Future<void> editPlayersToTeam(
     String teamId,
+    String ownerId,
     List<TeamPlayer> players,
   ) async {
     try {
       await _teamsCollection.doc(teamId).update(
-        {FireStoreConst.teamPlayers: players.map((e) => e.toJson()).toList()},
+        {
+          FireStoreConst.teamPlayers: players.map((e) => e.toJson()).toList(),
+          FireStoreConst.createdBy: ownerId,
+        },
       );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -256,22 +207,9 @@ class TeamService {
           )
           .get();
 
-      final List<TeamModel> teams = [];
-
-      for (final mainDoc in snapshot.docs) {
-        final team = mainDoc.data();
-
-        final users = await getMemberListFromUserIds(
-          team.players.map((e) => e.id).toList(),
-        );
-
-        final players = team.players.map((player) {
-          final user = users.firstWhere((element) => element.id == player.id);
-          return player.copyWith(user: user);
-        }).toList();
-
-        teams.add(team.copyWith(players: players));
-      }
+      final teams = await Future.wait(
+        snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),
+      );
 
       return teams;
     } catch (error, stack) {
@@ -288,10 +226,41 @@ class TeamService {
   }
 
   // Helper Method
+  Future<TeamModel> fetchDetailsOfTeam(TeamModel team) async {
+    final users = await getMemberListFromUserIds(
+      team.players.map((e) => e.id).toList(),
+    );
+
+    final players = team.players.map((player) {
+      final user = users.firstWhere((element) => element.id == player.id);
+      return player.copyWith(user: user);
+    }).toList();
+
+    UserModel? createdBy;
+    if (team.created_by != null) {
+      createdBy = users.firstWhereOrNull((e) => e.id == team.created_by) ??
+          await getUserFromUserId(team.created_by!);
+    }
+
+    return team.copyWith(
+      players: players,
+      created_by_user: createdBy ?? team.created_by_user,
+    );
+  }
+
   Future<List<UserModel>> getMemberListFromUserIds(List<String> users) async {
     try {
       final userList = await _userService.getUsersByIds(users);
       return userList;
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<UserModel> getUserFromUserId(String userId) async {
+    try {
+      final user = await _userService.getUser(userId);
+      return user ?? deActiveDummyUserAccount(userId);
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
