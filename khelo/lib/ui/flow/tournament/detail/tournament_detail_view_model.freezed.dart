@@ -20,6 +20,7 @@ mixin _$TournamentDetailState {
   bool get loading => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -38,7 +39,8 @@ abstract class $TournamentDetailStateCopyWith<$Res> {
       {TournamentModel? tournament,
       bool loading,
       int selectedTab,
-      Object? error});
+      Object? error,
+      Object? actionError});
 
   $TournamentModelCopyWith<$Res>? get tournament;
 }
@@ -63,6 +65,7 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
     Object? loading = null,
     Object? selectedTab = null,
     Object? error = freezed,
+    Object? actionError = freezed,
   }) {
     return _then(_value.copyWith(
       tournament: freezed == tournament
@@ -78,6 +81,7 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
           : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
     ) as $Val);
   }
 
@@ -109,7 +113,8 @@ abstract class _$$TournamentDetailStateImplCopyWith<$Res>
       {TournamentModel? tournament,
       bool loading,
       int selectedTab,
-      Object? error});
+      Object? error,
+      Object? actionError});
 
   @override
   $TournamentModelCopyWith<$Res>? get tournament;
@@ -133,6 +138,7 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
     Object? loading = null,
     Object? selectedTab = null,
     Object? error = freezed,
+    Object? actionError = freezed,
   }) {
     return _then(_$TournamentDetailStateImpl(
       tournament: freezed == tournament
@@ -148,6 +154,7 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
           : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
       error: freezed == error ? _value.error : error,
+      actionError: freezed == actionError ? _value.actionError : actionError,
     ));
   }
 }
@@ -159,7 +166,8 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       {this.tournament = null,
       this.loading = false,
       this.selectedTab = 0,
-      this.error});
+      this.error,
+      this.actionError});
 
   @override
   @JsonKey()
@@ -172,10 +180,12 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
   final int selectedTab;
   @override
   final Object? error;
+  @override
+  final Object? actionError;
 
   @override
   String toString() {
-    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error)';
+    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError)';
   }
 
   @override
@@ -188,12 +198,19 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab) &&
-            const DeepCollectionEquality().equals(other.error, error));
+            const DeepCollectionEquality().equals(other.error, error) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, tournament, loading, selectedTab,
-      const DeepCollectionEquality().hash(error));
+  int get hashCode => Object.hash(
+      runtimeType,
+      tournament,
+      loading,
+      selectedTab,
+      const DeepCollectionEquality().hash(error),
+      const DeepCollectionEquality().hash(actionError));
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -210,7 +227,8 @@ abstract class _TournamentDetailState implements TournamentDetailState {
       {final TournamentModel? tournament,
       final bool loading,
       final int selectedTab,
-      final Object? error}) = _$TournamentDetailStateImpl;
+      final Object? error,
+      final Object? actionError}) = _$TournamentDetailStateImpl;
 
   @override
   TournamentModel? get tournament;
@@ -220,6 +238,8 @@ abstract class _TournamentDetailState implements TournamentDetailState {
   int get selectedTab;
   @override
   Object? get error;
+  @override
+  Object? get actionError;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
