@@ -18,6 +18,7 @@
   "common_retry_title": "Retry",
   "common_submit_title": "Submit",
   "common_not_now": "Not now",
+  "common_create": "Create",
   "common_not_specified_title": "Not Specified",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
@@ -31,10 +32,19 @@
       "count": {}
     }
   },
+  "common_players_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
+  "@common_players_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
   "common_tie_title": "Tie",
   "common_wicket_taken_title": " Wicket taken",
   "common_matches_title": "Matches",
   "common_edit_team_title": "Edit team",
+  "common_create_team_title": "Create team",
+  "common_create_team_description": "Create Your Dream Cricket Team Today!",
+  "common_your_teams_title": "Your Teams",
   "common_location_title": "Location",
   "common_gender_title": "Gender",
   "common_batting_style_title": "Batting style",
@@ -58,6 +68,10 @@
   "common_second_inning_title": "Second inning",
   "common_qr_code_title": "QR Code",
   "common_verify_title": "Verify",
+  "common_verified_title": "Verified",
+  "common_view_all": "View all",
+  "common_today": "Today",
+  "common_tomorrow": "Tomorrow",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -117,7 +131,6 @@
   "home_screen_create_match_btn": "Create match",
   "home_screen_set_up_team_title": "Set up a team in minutes.",
   "home_screen_create_team_btn": "Create team",
-  "home_screen_view_all_btn": "View all",
   "home_screen_no_matches_title": "No Matches in this area!",
   "home_screen_no_matches_description_text": "Enjoy the freedom of creating your own cricket matches or teams.",
 
@@ -138,8 +151,102 @@
 
   "@_MY_CRICKET": {
   },
-  "my_game_teams_tab_title": "Teams",
+  "my_cricket_teams_tab_title": "Teams",
   "my_cricket_screen_title": "My Cricket",
+  "my_cricket_tournament_title": "Tournament",
+
+  "@_ADD_TOURNAMENT": {
+  },
+  "add_tournament_screen_title": "Add Tournament",
+  "add_tournament_name": "Tournament Name",
+  "add_tournament_type": "Tournament Type",
+  "add_tournament_type_placeholder": "Select tournament type",
+  "add_tournament_start_date": "Start Date",
+  "add_tournament_end_date": "End Date",
+  "add_tournament_team_selection": "Team selection",
+  "add_tournament_match_selection": "Match selection",
+  "add_tournament_edit_banner": "Edit banner",
+  "add_tournament_add_banner_placeholder": "Add banner image",
+  "add_tournament_date_error": "End date should be greater than start date",
+  "add_tournament_teams_title": "{count, plural, =0{No teams} =1{{count} Team} other{{count} Teams}}",
+  "@add_tournament_teams_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "tournament_list_empty_list_title": "No tournaments created",
+  "tournament_list_empty_list_description": "Tap on the “ + ” icon to create a tournament",
+  "tournament_list_match_title": "{count, plural, =0{No matches} =1{{count} Match} other{{count} Matches}}",
+  "@tournament_list_match_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+
+  "team_selection_screen_title": "Select Teams",
+  "team_selection_select_team_title": "Select teams",
+  "team_selection_verify_team_to_add_title": "Verify teams to add",
+
+  "@_TOURNAMENT_DETAIL": {
+  },
+  "tournament_detail_not_found_title": "No Tournament found",
+  "tournament_detail_not_found_description": "The tournament you are looking for is not available.",
+  "tournament_detail_start_from_title": "Start from {date}",
+  "@tournament_detail_start_from_title": {
+    "description": "Start from {date}",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tournament_detail_overview_tab": "Overview",
+  "tournament_detail_teams_tab": "Teams",
+  "tournament_detail_matches_tab": "Matches",
+  "tournament_detail_points_table_tab": "Points Table",
+  "tournament_detail_stats_tab": "Stats",
+
+  "tournament_detail_overview_info_title": "Tournament info",
+  "tournament_detail_overview_name_title": "Tournament Name",
+  "tournament_detail_overview_type_title": "Type",
+  "tournament_detail_overview_duration_title": "Duration",
+  "tournament_detail_overview_teams_squads_title": "Teams Squads",
+  "tournament_detail_overview_key_stats_title": "Key Stats",
+  "tournament_detail_overview_featured_matches_title": "Featured Matches",
+
+  "tournament_detail_teams_empty_title": "Select Your Teams!",
+  "tournament_detail_teams_empty_description": "You haven't added any teams to this tournament yet. Please select or create teams to get started.",
+  "tournament_detail_teams_select_btn": "Add teams",
+
+  "tournament_detail_key_stat_most_runs_title": "Most Runs",
+  "tournament_detail_key_stat_most_wickets_title": "Most Wickets",
+  "tournament_detail_key_stat_most_fours_title": "Most Fours",
+  "tournament_detail_key_stat_most_sixes_title": "Most Sixes",
+
+  "@_TOURNAMENT_TYPE":{
+  },
+  "tournament_type_knock_out": "Knockout",
+  "tournament_type_mini_robin": "Mini Robin",
+  "tournament_type_box_league": "Box League",
+  "tournament_type_double_out": "Double Out",
+  "tournament_type_super_over": "Super Over",
+  "tournament_type_best_of": "Best Of",
+  "tournament_type_gully": "Gully",
+  "tournament_type_mixed": "Mixed",
+  "tournament_type_other": "Other",
+
+  "tournament_type_knock_out_description": "Teams face off in a single elimination, with the loser immediately knocked out.",
+  "tournament_type_mini_robin_description": "A smaller round-robin format where each team plays once against all others.",
+  "tournament_type_box_league_description": "Teams are divided into groups, with top teams advancing to the knockout stage.",
+  "tournament_type_double_out_description": "Teams get two chances before being knocked out, with a winners and losers bracket.",
+  "tournament_type_super_over_description": "A knockout format with a super over to decide tied matches.",
+  "tournament_type_best_of_description": "Teams play a series of matches, and the first to win the majority is the champion.",
+  "tournament_type_gully_description": "Casual street-style cricket with short games and flexible rules.",
+  "tournament_type_mixed_description": "Teams are randomly mixed, creating fun and unpredictable matches",
+  "tournament_type_other_description": "A custom format for tournaments with unique rules or structures.",
+
+
 
   "add_team_screen_title": "Add Team",
   "add_team_edit_team_screen_title": "Edit Team",
@@ -253,17 +360,9 @@
   "search_user_empty_title": "Time to gather your officials!",
   "search_user_empty_description_text": "Search and assign officials for your next match. Get ready for cricket action!",
   "search_team_screen_title": "Search Team",
-  "search_team_your_teams_title": "Your Teams",
   "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",
   "search_team_search_placeholder_title": "Search team name",
-  "search_team_create_team_title": "Create team",
-  "search_team_create_team_description": "Create Your Dream Cricket Team Today!",
-  "search_team_player_title": "{count, plural, =0{{count} Players} =1{{count} Player} other{{count} Players}}",
-  "@search_team_player_title": {
-    "placeholders": {
-      "count": {}
-    }
-  },
+
   "power_play_text": "Power play {count}",
   "@power_play_text": {
     "description": "Power play {count}",
@@ -668,6 +767,8 @@
   "score_board_w_title": "W",
   "score_board_o_title": "O",
   "score_board_won_by_title": " Won By ",
+  "score_board_won_title": "Won",
+  "score_board_by_title": "by",
   "score_board_choose_opening_batsmen_title": "Choose opening Batsmen",
   "score_board_choose_fielder_title": "Choose fielder",
   "score_board_injured_tag_title": "Injured",
@@ -690,8 +791,8 @@
   "score_board_penalty_run_title": "Penalty run",
   "score_board_awarded_to_text": "Awarded to - ?",
   "score_board_continue_with_injured_player_title": "Continue with injured player",
-  "score_board_not_show_for_less_run_title": "Don't show for 1s, 2s and 3s",
-  "score_board_not_show_for_dot_ball_title": "Don't show for dot balls",
+  "score_board_show_wheel_for_less_run_title": "Show wheel for 1s, 2s and 3s",
+  "score_board_show_wheel_for_dot_ball_title": "Show wheel for dot balls",
   "score_board_select_fielding_position_title": "Select fielding position",
   "score_board_pause_title": "Pause",
   "score_board_revised_target_title": "Revised target",

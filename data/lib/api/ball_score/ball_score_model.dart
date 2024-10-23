@@ -141,6 +141,9 @@ class UserStat with _$UserStat {
     BowlingStat? bowlingStat,
     FieldingStat? fieldingStat,
   }) = _UserStat;
+
+  factory UserStat.fromJson(Map<String, dynamic> json) =>
+      _$UserStatFromJson(json);
 }
 
 @freezed
@@ -157,6 +160,9 @@ class BattingStat with _$BattingStat {
     @Default(0) int hundreds,
     @Default(0) int ducks,
   }) = _BattingStat;
+
+  factory BattingStat.fromJson(Map<String, dynamic> json) =>
+      _$BattingStatFromJson(json);
 }
 
 @freezed
@@ -173,6 +179,9 @@ class BowlingStat with _$BowlingStat {
     @Default(0.0) double strikeRate,
     @Default(0.0) double economyRate,
   }) = _BowlingStat;
+
+  factory BowlingStat.fromJson(Map<String, dynamic> json) =>
+      _$BowlingStatFromJson(json);
 }
 
 @freezed
@@ -182,6 +191,9 @@ class FieldingStat with _$FieldingStat {
     @Default(0) int runOut,
     @Default(0) int stumping,
   }) = _FieldingStat;
+
+  factory FieldingStat.fromJson(Map<String, dynamic> json) =>
+      _$FieldingStatFromJson(json);
 }
 
 @freezed

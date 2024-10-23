@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,12 +26,15 @@ import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
+import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
+import 'package:khelo/ui/flow/tournament/team_selection/team_selection_screen.dart';
 
 import 'flow/home/view_all/home_view_all_screen.dart';
 import 'flow/main/main_screen.dart';
 import 'flow/settings/support/contact_support_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
 import 'flow/team/user_detail/user_detail_screen.dart';
+import 'flow/tournament/detail/tournament_detail_screen.dart';
 
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
@@ -53,6 +57,9 @@ class AppRoute {
   static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
   static const pathContactSelection = "/contact-selection";
+  static const pathAddTournament = "/add-tournament";
+  static const pathTeamSelection = "/team-selection";
+  static const pathTournamentDetail = "/tournament-detail";
 
   final String path;
   final String? name;
@@ -164,6 +171,21 @@ class AppRoute {
           defaultTeam: defaultTeam,
         ),
       );
+
+  static AppRoute addTournament() => AppRoute(
+        pathAddTournament,
+        builder: (_) => const AddTournamentScreen(),
+      );
+
+  static AppRoute teamSelection({List<TeamModel>? selectedTeams}) => AppRoute(
+        pathTeamSelection,
+        builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
+      );
+
+  static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
+    pathTournamentDetail,
+    builder: (_) => TournamentDetailScreen(tournamentId: tournamentId),
+  );
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
         pathMatchDetailTab,
@@ -317,6 +339,18 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddMatch,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathAddTournament,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathTeamSelection,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathTournamentDetail,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

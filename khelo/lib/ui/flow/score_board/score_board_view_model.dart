@@ -35,6 +35,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final BallScoreService _ballScoreService;
   StreamSubscription<MatchModel?>? _matchStreamSubscription;
   StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
+  StreamSubscription<MatchSetting?>? _matchSettingSubscription;
   final StreamController<MatchModel> _matchStreamController =
       StreamController<MatchModel>.broadcast();
   String? matchId;
@@ -48,6 +49,18 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   void setData(String matchId) {
     this.matchId = matchId;
     _loadMatchesAndInning();
+    _loadMatchSetting();
+  }
+
+  void _loadMatchSetting() {
+    if (matchId == null) return;
+    _matchSettingSubscription =
+        _matchService.streamMatchSetting(matchId!).listen((setting) {
+      state = state.copyWith(matchSetting: setting ?? state.matchSetting);
+    }, onError: (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: Error while loading match setting. $e");
+    });
   }
 
   Stream<List<BallScoreChange>> _loadBallScoresStream(
@@ -528,8 +541,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         tapped == ScoreButton.three;
 
     return (tapped != ScoreButton.undo &&
-        ((isDotBall && state.showForDotBall) ||
-            (isLessRuns && state.showForLessRun) ||
+        ((isDotBall && state.matchSetting.show_wagon_wheel_for_dot_ball) ||
+            (isLessRuns && state.matchSetting.show_wagon_wheel_for_less_run) ||
             (!isDotBall && !isLessRuns)));
   }
 
@@ -791,13 +804,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       }
     });
 
-    final totalWicket = state.continueWithInjuredPlayers
+    final totalWicket = state.matchSetting.continue_with_injured_player
         ? (battingSquad?.length ?? 0)
         : (battingSquad?.length ?? 0) - injuredCount;
     return yetToPlayCount == 0 &&
         playingCount == 1 &&
         state.otherInning!.total_wickets == totalWicket - 1 &&
-        (state.continueWithInjuredPlayers ? injuredCount == 0 : true);
+        (state.matchSetting.continue_with_injured_player
+            ? injuredCount == 0
+            : true);
   }
 
   bool _isAllDeliveryDelivered() {
@@ -1119,7 +1134,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           previousScoresList:
               runningInning.index == 3 ? List.empty() : state.currentScoresList,
           currentScoresList: List.empty(),
-          continueWithInjuredPlayers: true,
           showSelectPlayerSheet: DateTime.now(),
           ballScoreQueryListenerSet: runningInning.index == 3
               ? false
@@ -1211,8 +1225,36 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void onContinueWithInjuredPlayersChange(bool isContinue) {
-    state = state.copyWith(continueWithInjuredPlayers: isContinue);
+  void onToggleMatchOptionChange(bool isTrue, MatchOption option) {
+    MatchSetting setting = state.matchSetting;
+    switch (option) {
+      case MatchOption.continueWithInjuredPlayer:
+        setting = setting.copyWith(continue_with_injured_player: isTrue);
+        break;
+      case MatchOption.showForLessRuns:
+        setting = setting.copyWith(show_wagon_wheel_for_less_run: isTrue);
+        break;
+      case MatchOption.showForDotBall:
+        setting = setting.copyWith(show_wagon_wheel_for_dot_ball: isTrue);
+        break;
+      default:
+        return;
+    }
+    _updateMatchSetting(setting);
+  }
+
+  Future<void> _updateMatchSetting(MatchSetting setting) async {
+    final matchId = this.matchId ?? state.match?.id;
+    if (matchId == null) return;
+    state = state.copyWith(actionError: null);
+    try {
+      await _matchService.updateMatchSetting(matchId, setting);
+      state = state.copyWith(matchSetting: setting);
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint(
+          "ScoreBoardViewNotifier: Error while update match setting -> $e");
+    }
   }
 
   Future<void> setPlayers({
@@ -1461,17 +1503,19 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     return teamPlayers ?? [];
   }
 
-  void onFieldingPositionSelected(
+  Future<void> onFieldingPositionSelected(
     ScoreButton tapped,
     bool isLongTapped,
     FieldingPositionType position,
     bool showForLessRun,
     bool showForDotBall,
-  ) {
-    state = state.copyWith(
-        position: position,
-        showForDotBall: showForDotBall,
-        showForLessRun: showForLessRun);
+  ) async {
+    final setting = state.matchSetting.copyWith(
+      show_wagon_wheel_for_less_run: showForLessRun,
+      show_wagon_wheel_for_dot_ball: showForDotBall,
+    );
+    await _updateMatchSetting(setting);
+    state = state.copyWith(position: position);
     _handleAddingBall(tapped, isLongTapped);
   }
 
@@ -1519,12 +1563,14 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   _cancelStreamSubscription() async {
     await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
+    await _matchSettingSubscription?.cancel();
     await _matchStreamController.close();
   }
 
   void onResume() {
     _cancelStreamSubscription();
     _loadMatchesAndInning();
+    _loadMatchSetting();
   }
 
   @override
@@ -1574,14 +1620,12 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     @Default([]) List<InningModel> allInnings,
     @Default([]) List<BallScoreModel> currentScoresList,
     @Default([]) List<BallScoreModel> previousScoresList,
+    @Default(MatchSetting()) MatchSetting matchSetting,
     @Default(false) bool loading,
     @Default(false) bool pop,
-    @Default(true) bool continueWithInjuredPlayers,
     @Default(false) bool ballScoreQueryListenerSet,
     @Default(true) bool isMatchUpdated,
     @Default(false) bool isActionInProgress,
-    @Default(true) bool showForLessRun,
-    @Default(true) bool showForDotBall,
     @Default(0) int ballCount,
     @Default(1) int overCount,
     @Default(0) int lastAssignedIndex,
@@ -1641,6 +1685,8 @@ enum MatchOption {
   reviseTarget,
   pauseScoring,
   continueWithInjuredPlayer,
+  showForLessRuns,
+  showForDotBall,
   addSubstitute,
   handOverScoring,
   endMatch;
@@ -1663,6 +1709,21 @@ enum MatchOption {
         return context.l10n.score_board_option_end_match;
       case MatchOption.handOverScoring:
         return context.l10n.score_board_option_handover_scoring;
+      case MatchOption.showForLessRuns:
+        return context.l10n.score_board_show_wheel_for_less_run_title;
+      case MatchOption.showForDotBall:
+        return context.l10n.score_board_show_wheel_for_dot_ball_title;
+    }
+  }
+
+  bool showToggle() {
+    switch (this) {
+      case MatchOption.continueWithInjuredPlayer:
+      case MatchOption.showForLessRuns:
+      case MatchOption.showForDotBall:
+        return true;
+      default:
+        return false;
     }
   }
 }

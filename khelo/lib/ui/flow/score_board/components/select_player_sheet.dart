@@ -272,7 +272,8 @@ class _SelectPlayerSheetState extends ConsumerState<SelectPlayerSheet> {
       defaultEnabled: isEnabled,
       onTap: (value) => setState(() {
         isEnabled = !isEnabled;
-        notifier.onContinueWithInjuredPlayersChange(isEnabled);
+        notifier.onToggleMatchOptionChange(
+            isEnabled, MatchOption.continueWithInjuredPlayer);
         if (!isEnabled) {
           if (batsMan1?.performance
                   .firstWhereOrNull(

@@ -22,6 +22,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_arrow_down.svg
   String get icArrowDown => 'assets/images/ic_arrow_down.svg';
 
+  /// File path: assets/images/ic_arrow_forward.svg
+  String get icArrowForward => 'assets/images/ic_arrow_forward.svg';
+
   /// File path: assets/images/ic_bat_selected.svg
   String get icBatSelected => 'assets/images/ic_bat_selected.svg';
 
@@ -115,6 +118,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_time.svg
   String get icTime => 'assets/images/ic_time.svg';
 
+  /// File path: assets/images/ic_tournaments.svg
+  String get icTournaments => 'assets/images/ic_tournaments.svg';
+
   /// File path: assets/images/ic_umpire.svg
   String get icUmpire => 'assets/images/ic_umpire.svg';
 
@@ -145,6 +151,7 @@ class $AssetsImagesGen {
         bowler,
         icAboutUs,
         icArrowDown,
+        icArrowForward,
         icBatSelected,
         icBin,
         icCalendar,
@@ -176,6 +183,7 @@ class $AssetsImagesGen {
         icStats,
         icTermsConditions,
         icTime,
+        icTournaments,
         icUmpire,
         introCricketDark,
         introCricketLight,

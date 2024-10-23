@@ -15,6 +15,7 @@ class ProfileImageAvatar extends StatelessWidget {
   final String? filePath;
   final String? placeHolderImage;
   final bool isLoading;
+  final Alignment alignment;
   final VoidCallback onEditButtonTap;
 
   const ProfileImageAvatar({
@@ -25,11 +26,13 @@ class ProfileImageAvatar extends StatelessWidget {
     this.placeHolderImage,
     required this.isLoading,
     required this.onEditButtonTap,
+    this.alignment = Alignment.center,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Align(
+      alignment: alignment,
       child: SizedBox(
         height: size,
         width: size,

@@ -1,12 +1,15 @@
 class FireStoreConst {
   // collection
   static const String matchesCollection = "matches";
+  static const String matchSettingsSubCollection = "match_settings";
+  static const String settingDocument = "setting";
   static const String teamsCollection = "teams";
   static const String inningsCollection = "innings";
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";
   static const String userSessionCollection = "user_sessions";
   static const String supportCollection = "contact_support";
+  static const String tournamentCollection = "tournaments";
 
   // matches field const
   static const String id = "id";
@@ -23,6 +26,8 @@ class FireStoreConst {
   static const String teamIds = "team_ids";
   static const String teamCreatorIds = "team_creator_ids";
   static const String revisedTarget = "revised_target";
+  static const String updatedAt = "updated_at";
+  static const String startAt = "start_at";
 
   // innings field const
   static const String matchId = "match_id";
@@ -50,6 +55,9 @@ class FireStoreConst {
   static const String notifications = "notifications";
   static const String phone = "phone";
   static const String name = "name";
+
+  // tournament field const
+  static const String members = "members";
 }
 
 class DataConfig {

@@ -1,5 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -262,6 +263,69 @@ extension WinnerByTypeString on WinnerByType {
         return context.l10n.common_wickets_title(difference);
       case WinnerByType.tie:
         return context.l10n.common_tie_title;
+    }
+  }
+}
+
+extension TournamentTypeString on TournamentType {
+  String getString(BuildContext context) {
+    switch (this) {
+      case TournamentType.knockOut:
+        return context.l10n.tournament_type_knock_out;
+      case TournamentType.miniRobin:
+        return context.l10n.tournament_type_mini_robin;
+      case TournamentType.boxLeague:
+        return context.l10n.tournament_type_box_league;
+      case TournamentType.doubleOut:
+        return context.l10n.tournament_type_double_out;
+      case TournamentType.superOver:
+        return context.l10n.tournament_type_super_over;
+      case TournamentType.bestOf:
+        return context.l10n.tournament_type_best_of;
+      case TournamentType.gully:
+        return context.l10n.tournament_type_gully;
+      case TournamentType.mixed:
+        return context.l10n.tournament_type_mixed;
+      case TournamentType.other:
+        return context.l10n.tournament_type_other;
+    }
+  }
+
+  String getDescriptionString(BuildContext context) {
+    switch (this) {
+      case TournamentType.knockOut:
+        return context.l10n.tournament_type_knock_out_description;
+      case TournamentType.miniRobin:
+        return context.l10n.tournament_type_mini_robin_description;
+      case TournamentType.boxLeague:
+        return context.l10n.tournament_type_box_league_description;
+      case TournamentType.doubleOut:
+        return context.l10n.tournament_type_double_out_description;
+      case TournamentType.superOver:
+        return context.l10n.tournament_type_super_over_description;
+      case TournamentType.bestOf:
+        return context.l10n.tournament_type_best_of_description;
+      case TournamentType.gully:
+        return context.l10n.tournament_type_gully_description;
+      case TournamentType.mixed:
+        return context.l10n.tournament_type_mixed_description;
+      case TournamentType.other:
+        return context.l10n.tournament_type_other_description;
+    }
+  }
+}
+
+extension TournamentKeyStatString on KeyStatTag {
+  String getString(BuildContext context) {
+    switch (this) {
+      case KeyStatTag.mostRuns:
+        return context.l10n.tournament_detail_key_stat_most_runs_title;
+      case KeyStatTag.mostWickets:
+        return context.l10n.tournament_detail_key_stat_most_wickets_title;
+      case KeyStatTag.mostFours:
+        return context.l10n.tournament_detail_key_stat_most_fours_title;
+      case KeyStatTag.mostSixes:
+        return context.l10n.tournament_detail_key_stat_most_sixes_title;
     }
   }
 }
