@@ -127,7 +127,6 @@ class _TournamentDetailScreenState
       color: context.colorScheme.containerLow,
       child: PageView(
         controller: _controller,
-        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: notifier.onTabChange,
         children: [
           TournamentDetailOverviewTab(
@@ -135,7 +134,7 @@ class _TournamentDetailScreenState
           ),
           TournamentDetailTeamsTab(
             teams: state.tournament?.teams ?? [],
-            notifier: notifier,
+            onSelected: notifier.onTeamsSelected,
           ),
         ],
       ),

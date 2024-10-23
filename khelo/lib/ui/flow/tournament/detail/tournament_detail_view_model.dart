@@ -53,7 +53,7 @@ class TournamentDetailStateViewNotifier
     }
   }
 
-  void addTeams(List<TeamModel> teams) async {
+  void onTeamsSelected(List<TeamModel> teams) async {
     if (state.tournament == null) return;
     try {
       final teamIds = teams.map((e) => e.id).toList();
@@ -61,7 +61,7 @@ class TournamentDetailStateViewNotifier
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint(
-          "TournamentDetailStateViewNotifier: error while adding teams -> $e");
+          "TournamentDetailStateViewNotifier: error while selecting teams -> $e");
     }
   }
 

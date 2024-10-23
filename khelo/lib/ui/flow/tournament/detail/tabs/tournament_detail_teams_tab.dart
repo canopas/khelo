@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
-import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
@@ -18,12 +17,12 @@ import '../../../../app_route.dart';
 
 class TournamentDetailTeamsTab extends ConsumerWidget {
   final List<TeamModel> teams;
-  final TournamentDetailStateViewNotifier notifier;
+  final Function(List<TeamModel>) onSelected;
 
   const TournamentDetailTeamsTab({
     super.key,
     required this.teams,
-    required this.notifier,
+    required this.onSelected,
   });
 
   @override
@@ -97,13 +96,13 @@ class TournamentDetailTeamsTab extends ConsumerWidget {
   Widget _stickyButton(BuildContext context) {
     return BottomStickyOverlay(
       child: PrimaryButton(
-        context.l10n.tournament_detail_teams_add_btn,
+        context.l10n.tournament_detail_teams_select_btn,
         onPressed: () async {
           final selectedTeams =
               await AppRoute.teamSelection(selectedTeams: teams)
                   .push<List<TeamModel>>(context);
           if (context.mounted && selectedTeams != null) {
-            notifier.addTeams(selectedTeams);
+            onSelected.call(selectedTeams);
           }
         },
       ),

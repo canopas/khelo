@@ -534,9 +534,7 @@ class MatchService {
     try {
       final teamIds = teamList.map((e) => e.team_id).toList();
 
-      final playerIds = teamList
-          .expand((team) => team.squad.map((player) => player))
-          .toList();
+      final playerIds = teamList.expand((team) => team.squad).toList();
 
       final teamsData = await Future.wait([
         _teamService.getTeamsByIds(teamIds),
