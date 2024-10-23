@@ -94,7 +94,7 @@ class EditProfileScreen extends ConsumerWidget {
                 if (!isToCreateAccount) ...[
                   _deleteButton(
                     context,
-                    onDelete: notifier.fetchUserTeams,
+                    onDelete: notifier.checkUserOwnershipAndShowDialog,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(16),
@@ -361,7 +361,7 @@ class EditProfileScreen extends ConsumerWidget {
   void _observeShowDeleteConfirmationDialog(
     BuildContext context,
     WidgetRef ref,
-      VoidCallback onDeleteTap,
+    VoidCallback onDeleteTap,
   ) {
     ref.listen(
         editProfileStateProvider.select(

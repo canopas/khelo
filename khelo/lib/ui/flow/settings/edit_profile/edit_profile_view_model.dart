@@ -180,7 +180,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
     }
   }
 
-  Future<void> fetchUserTeams() async {
+  Future<void> checkUserOwnershipAndShowDialog() async {
     try {
       final userId = state.currentUser?.id;
       if (userId == null) return;
