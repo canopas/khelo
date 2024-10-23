@@ -533,19 +533,19 @@ class MatchService {
   ) async {
     try {
       final teamIds = teamList.map((e) => e.team_id).toList();
+      final playerIds = teamList.expand((team) => team.squad).toList();
 
       final teamsData = await Future.wait([
         _teamService.getTeamsByIds(teamIds),
-        Future.wait(
-          teamList
-              .map((team) => getPlayerListFromPlayerIds(team.squad))
-              .toList(),
-        ),
+        getPlayerListFromPlayerIds(playerIds),
       ]);
 
       final List<TeamModel> teams = teamsData[0] as List<TeamModel>;
-      final List<List<MatchPlayer>> squads =
-          teamsData[1] as List<List<MatchPlayer>>;
+      final List<MatchPlayer> players = teamsData[1] as List<MatchPlayer>;
+
+      final List<List<MatchPlayer>> squads = teamList.map((team) {
+        return players.where((player) => team.squad.contains(player)).toList();
+      }).toList();
 
       return List.generate(teamList.length, (index) {
         return teamList[index].copyWith(
@@ -583,23 +583,24 @@ class MatchService {
   }
 
   Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
+    final List<MatchModel> matches = [];
     try {
-      if (matchIds.length > 10) {
-        throw AppError.fromError(
-          "You can only query up to 10 matches at a time.",
+      if (matchIds.isEmpty) return [];
+      for (final tenIds in matchIds.chunked(10)) {
+        final snapshot = await _matchCollection
+            .where(FieldPath.documentId, whereIn: tenIds)
+            .get();
+        final matchList = await Future.wait(
+          snapshot.docs.map((doc) async {
+            final match = doc.data();
+            final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+            return match.copyWith(teams: teams);
+          }).toList(),
         );
-      }
 
-      final snapshot = await _matchCollection
-          .where(FieldPath.documentId, whereIn: matchIds)
-          .get();
-      return Future.wait(
-        snapshot.docs.map((doc) async {
-          final match = doc.data();
-          final List<MatchTeamModel> teams = await getTeamsList(match.teams);
-          return match.copyWith(teams: teams);
-        }).toList(),
-      );
+        matches.addAll(matchList);
+      }
+      return matches;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
