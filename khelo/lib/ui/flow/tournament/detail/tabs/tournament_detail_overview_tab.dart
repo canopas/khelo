@@ -32,18 +32,15 @@ class _TournamentDetailOverviewTabState
     extends ConsumerState<TournamentDetailOverviewTab> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: context.colorScheme.containerLow,
-      child: ListView(
-        padding: context.mediaQueryPadding.copyWith(top: 0) +
-            EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
-        children: [
-          _featuredMatchesView(context, widget.tournament.matches),
-          _keyStatsView(context, widget.tournament.keyStats),
-          _teamsSquadsView(context, widget.tournament.teams),
-          _infoView(context, widget.tournament),
-        ],
-      ),
+    return ListView(
+      padding: context.mediaQueryPadding.copyWith(top: 0) +
+          EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
+      children: [
+        _featuredMatchesView(context, widget.tournament.matches),
+        _keyStatsView(context, widget.tournament.keyStats),
+        _teamsSquadsView(context, widget.tournament.teams),
+        _infoView(context, widget.tournament),
+      ],
     );
   }
 
@@ -258,7 +255,7 @@ class _TournamentDetailOverviewTabState
         children: [
           _header(
             context,
-            showViewAll: teams.length >= 3,
+            showViewAll: teams.length > 3,
             title: context.l10n.tournament_detail_overview_teams_squads_title,
             onViewAll: () {},
           ),

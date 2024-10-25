@@ -4,6 +4,8 @@ import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
+import 'package:data/service/match/match_service.dart';
+import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:data/utils/constant/firebase_storage_constant.dart';
@@ -22,6 +24,8 @@ final editProfileStateProvider = StateNotifierProvider.autoDispose<
     ref.read(fileUploadServiceProvider),
     ref.read(userServiceProvider),
     ref.read(authServiceProvider),
+    ref.read(teamServiceProvider),
+    ref.read(matchServiceProvider),
     ref.read(currentUserPod),
     ref.read(currentUserJsonPod.notifier),
   );
@@ -33,12 +37,16 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final FileUploadService _fileUploadService;
   final UserService userService;
   final AuthService _authService;
+  final TeamService _teamService;
+  final MatchService _matchService;
   final StateController<String?> _userJsonController;
 
   EditProfileViewNotifier(
     this._fileUploadService,
     this.userService,
     this._authService,
+    this._teamService,
+    this._matchService,
     UserModel? user,
     this._userJsonController,
   ) : super(EditProfileState(
@@ -172,6 +180,31 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
     }
   }
 
+  Future<void> checkUserOwnershipAndShowDialog() async {
+    try {
+      final userId = state.currentUser?.id;
+      if (userId == null) return;
+      state = state.copyWith(
+        showDeleteConfirmationDialog: false,
+        showTransferTeamsSheet: false,
+      );
+
+      final [matchCount, teamCount] = await Future.wait([
+        _matchService.getUserOwnedMatchesCount(userId),
+        _teamService.getUserOwnedTeamsCount(userId)
+      ]);
+      if (teamCount == 0 && matchCount == 0) {
+        state = state.copyWith(showDeleteConfirmationDialog: true);
+      } else {
+        state = state.copyWith(showTransferTeamsSheet: true);
+      }
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint(
+          "EditProfileViewNotifier: error while fetching user teams -> $e");
+    }
+  }
+
   Future<void> _reAuthenticateAndDelete() async {
     try {
       final userProfileImageUrl = state.currentUser!.profile_img_url;
@@ -228,5 +261,7 @@ class EditProfileState with _$EditProfileState {
     @Default(false) bool isImageUploading,
     @Default(false) bool isSaved,
     @Default(false) bool isSaveInProgress,
+    @Default(false) bool showDeleteConfirmationDialog,
+    @Default(false) bool showTransferTeamsSheet,
   }) = _EditProfileState;
 }

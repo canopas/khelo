@@ -165,7 +165,7 @@ class _AddTossDetailScreenState extends ConsumerState<AddTossDetailScreen> {
     String? initial,
     required String title,
     required bool isSelected,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return Expanded(
       child: OnTapScale(

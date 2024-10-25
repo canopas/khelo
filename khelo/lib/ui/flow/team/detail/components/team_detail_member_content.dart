@@ -60,7 +60,7 @@ class TeamDetailMemberContent extends ConsumerWidget {
     }
   }
 
-  Widget _addMemberButton(BuildContext context, {required Function() onTap}) {
+  Widget _addMemberButton(BuildContext context, {required VoidCallback onTap}) {
     return OnTapScale(
       onTap: onTap,
       child: Padding(

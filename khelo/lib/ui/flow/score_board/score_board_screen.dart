@@ -12,6 +12,7 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/flow/matches/add_match/match_officials/search_user/search_user_screen.dart';
 import 'package:khelo/ui/flow/score_board/add_substitute_sheet/add_substitute_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_extra_sheet.dart';
 import 'package:khelo/ui/flow/score_board/components/add_penalty_run_sheet.dart';
@@ -76,6 +77,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     _observeShowPauseScoringSheet(context, ref);
     _observeShowAddPenaltyRunSheet(context, ref);
     _observeShowAddSubstituteSheet(context, ref);
+    _observeHandOverScoringSheet(context, ref);
     _observeEndMatchSheet(context, ref);
     _observeInvalidUndoToast(context, ref);
 
@@ -625,6 +627,25 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
         );
         if (context.mounted && player != null) {
           notifier.addSubstitute(player);
+        }
+      }
+    });
+  }
+
+  void _observeHandOverScoringSheet(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        scoreBoardStateProvider.select(
+            (value) => value.showHandOverScoringSheet), (previous, next) async {
+      if (next != null) {
+        final newOwner = await SearchUserBottomSheet.show<UserModel>(
+          context,
+          emptyScreenTitle:
+              context.l10n.score_board_handover_scoring_empty_title,
+          emptyScreenDescription:
+              context.l10n.score_board_handover_scoring_empty_description,
+        );
+        if (context.mounted && newOwner != null) {
+          notifier.changeMatchOwner(newOwner);
         }
       }
     });

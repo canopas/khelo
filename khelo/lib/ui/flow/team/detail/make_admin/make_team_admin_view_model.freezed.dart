@@ -17,10 +17,13 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MakeTeamAdminState {
   Object? get actionError => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   bool get pop => throw _privateConstructorUsedError;
   bool get isButtonEnabled => throw _privateConstructorUsedError;
   bool get showSelectionError => throw _privateConstructorUsedError;
-  List<TeamPlayer> get selectedPlayers => throw _privateConstructorUsedError;
+  UserModel get owner => throw _privateConstructorUsedError;
+  List<UserModel> get players => throw _privateConstructorUsedError;
+  List<String> get selectedPlayerIds => throw _privateConstructorUsedError;
 
   /// Create a copy of MakeTeamAdminState
   /// with the given fields replaced by the non-null parameter values.
@@ -37,10 +40,15 @@ abstract class $MakeTeamAdminStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? actionError,
+      String? currentUserId,
       bool pop,
       bool isButtonEnabled,
       bool showSelectionError,
-      List<TeamPlayer> selectedPlayers});
+      UserModel owner,
+      List<UserModel> players,
+      List<String> selectedPlayerIds});
+
+  $UserModelCopyWith<$Res> get owner;
 }
 
 /// @nodoc
@@ -59,13 +67,20 @@ class _$MakeTeamAdminStateCopyWithImpl<$Res, $Val extends MakeTeamAdminState>
   @override
   $Res call({
     Object? actionError = freezed,
+    Object? currentUserId = freezed,
     Object? pop = null,
     Object? isButtonEnabled = null,
     Object? showSelectionError = null,
-    Object? selectedPlayers = null,
+    Object? owner = null,
+    Object? players = null,
+    Object? selectedPlayerIds = null,
   }) {
     return _then(_value.copyWith(
       actionError: freezed == actionError ? _value.actionError : actionError,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       pop: null == pop
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
@@ -78,11 +93,29 @@ class _$MakeTeamAdminStateCopyWithImpl<$Res, $Val extends MakeTeamAdminState>
           ? _value.showSelectionError
           : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
-      selectedPlayers: null == selectedPlayers
-          ? _value.selectedPlayers
-          : selectedPlayers // ignore: cast_nullable_to_non_nullable
-              as List<TeamPlayer>,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as UserModel,
+      players: null == players
+          ? _value.players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      selectedPlayerIds: null == selectedPlayerIds
+          ? _value.selectedPlayerIds
+          : selectedPlayerIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
+  }
+
+  /// Create a copy of MakeTeamAdminState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res> get owner {
+    return $UserModelCopyWith<$Res>(_value.owner, (value) {
+      return _then(_value.copyWith(owner: value) as $Val);
+    });
   }
 }
 
@@ -96,10 +129,16 @@ abstract class _$$MakeTeamAdminStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? actionError,
+      String? currentUserId,
       bool pop,
       bool isButtonEnabled,
       bool showSelectionError,
-      List<TeamPlayer> selectedPlayers});
+      UserModel owner,
+      List<UserModel> players,
+      List<String> selectedPlayerIds});
+
+  @override
+  $UserModelCopyWith<$Res> get owner;
 }
 
 /// @nodoc
@@ -116,13 +155,20 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? actionError = freezed,
+    Object? currentUserId = freezed,
     Object? pop = null,
     Object? isButtonEnabled = null,
     Object? showSelectionError = null,
-    Object? selectedPlayers = null,
+    Object? owner = null,
+    Object? players = null,
+    Object? selectedPlayerIds = null,
   }) {
     return _then(_$MakeTeamAdminStateImpl(
       actionError: freezed == actionError ? _value.actionError : actionError,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       pop: null == pop
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
@@ -135,10 +181,18 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
           ? _value.showSelectionError
           : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
-      selectedPlayers: null == selectedPlayers
-          ? _value._selectedPlayers
-          : selectedPlayers // ignore: cast_nullable_to_non_nullable
-              as List<TeamPlayer>,
+      owner: null == owner
+          ? _value.owner
+          : owner // ignore: cast_nullable_to_non_nullable
+              as UserModel,
+      players: null == players
+          ? _value._players
+          : players // ignore: cast_nullable_to_non_nullable
+              as List<UserModel>,
+      selectedPlayerIds: null == selectedPlayerIds
+          ? _value._selectedPlayerIds
+          : selectedPlayerIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -148,14 +202,20 @@ class __$$MakeTeamAdminStateImplCopyWithImpl<$Res>
 class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
   const _$MakeTeamAdminStateImpl(
       {this.actionError,
+      this.currentUserId,
       this.pop = false,
       this.isButtonEnabled = false,
       this.showSelectionError = false,
-      final List<TeamPlayer> selectedPlayers = const []})
-      : _selectedPlayers = selectedPlayers;
+      this.owner = const UserModel(id: ''),
+      final List<UserModel> players = const [],
+      final List<String> selectedPlayerIds = const []})
+      : _players = players,
+        _selectedPlayerIds = selectedPlayerIds;
 
   @override
   final Object? actionError;
+  @override
+  final String? currentUserId;
   @override
   @JsonKey()
   final bool pop;
@@ -165,18 +225,31 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
   @override
   @JsonKey()
   final bool showSelectionError;
-  final List<TeamPlayer> _selectedPlayers;
   @override
   @JsonKey()
-  List<TeamPlayer> get selectedPlayers {
-    if (_selectedPlayers is EqualUnmodifiableListView) return _selectedPlayers;
+  final UserModel owner;
+  final List<UserModel> _players;
+  @override
+  @JsonKey()
+  List<UserModel> get players {
+    if (_players is EqualUnmodifiableListView) return _players;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_selectedPlayers);
+    return EqualUnmodifiableListView(_players);
+  }
+
+  final List<String> _selectedPlayerIds;
+  @override
+  @JsonKey()
+  List<String> get selectedPlayerIds {
+    if (_selectedPlayerIds is EqualUnmodifiableListView)
+      return _selectedPlayerIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedPlayerIds);
   }
 
   @override
   String toString() {
-    return 'MakeTeamAdminState(actionError: $actionError, pop: $pop, isButtonEnabled: $isButtonEnabled, showSelectionError: $showSelectionError, selectedPlayers: $selectedPlayers)';
+    return 'MakeTeamAdminState(actionError: $actionError, currentUserId: $currentUserId, pop: $pop, isButtonEnabled: $isButtonEnabled, showSelectionError: $showSelectionError, owner: $owner, players: $players, selectedPlayerIds: $selectedPlayerIds)';
   }
 
   @override
@@ -186,23 +259,30 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
             other is _$MakeTeamAdminStateImpl &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             (identical(other.pop, pop) || other.pop == pop) &&
             (identical(other.isButtonEnabled, isButtonEnabled) ||
                 other.isButtonEnabled == isButtonEnabled) &&
             (identical(other.showSelectionError, showSelectionError) ||
                 other.showSelectionError == showSelectionError) &&
+            (identical(other.owner, owner) || other.owner == owner) &&
+            const DeepCollectionEquality().equals(other._players, _players) &&
             const DeepCollectionEquality()
-                .equals(other._selectedPlayers, _selectedPlayers));
+                .equals(other._selectedPlayerIds, _selectedPlayerIds));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(actionError),
+      currentUserId,
       pop,
       isButtonEnabled,
       showSelectionError,
-      const DeepCollectionEquality().hash(_selectedPlayers));
+      owner,
+      const DeepCollectionEquality().hash(_players),
+      const DeepCollectionEquality().hash(_selectedPlayerIds));
 
   /// Create a copy of MakeTeamAdminState
   /// with the given fields replaced by the non-null parameter values.
@@ -217,13 +297,18 @@ class _$MakeTeamAdminStateImpl implements _MakeTeamAdminState {
 abstract class _MakeTeamAdminState implements MakeTeamAdminState {
   const factory _MakeTeamAdminState(
       {final Object? actionError,
+      final String? currentUserId,
       final bool pop,
       final bool isButtonEnabled,
       final bool showSelectionError,
-      final List<TeamPlayer> selectedPlayers}) = _$MakeTeamAdminStateImpl;
+      final UserModel owner,
+      final List<UserModel> players,
+      final List<String> selectedPlayerIds}) = _$MakeTeamAdminStateImpl;
 
   @override
   Object? get actionError;
+  @override
+  String? get currentUserId;
   @override
   bool get pop;
   @override
@@ -231,7 +316,11 @@ abstract class _MakeTeamAdminState implements MakeTeamAdminState {
   @override
   bool get showSelectionError;
   @override
-  List<TeamPlayer> get selectedPlayers;
+  UserModel get owner;
+  @override
+  List<UserModel> get players;
+  @override
+  List<String> get selectedPlayerIds;
 
   /// Create a copy of MakeTeamAdminState
   /// with the given fields replaced by the non-null parameter values.

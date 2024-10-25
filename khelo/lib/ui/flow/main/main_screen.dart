@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:data/service/device/device_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +29,9 @@ class MainScreen extends ConsumerStatefulWidget {
 
 class _MainScreenState extends ConsumerState<MainScreen>
     with WidgetsBindingObserver {
-  static final List<Widget> _widgets = <Widget>[
-    const HomeScreen(),
-    const MyGameTabScreen(),
-    const UserStatScreen(),
-    const ProfileScreen(),
-  ];
-
   final _materialPageController = PageController();
   final _cupertinoTabController = CupertinoTabController();
+  void Function(int) onTabChange = (_) {};
   late final NotificationHandler notificationHandler;
 
   @override
@@ -62,10 +57,19 @@ class _MainScreenState extends ConsumerState<MainScreen>
   @override
   Widget build(BuildContext context) {
     _observerShowNotificationPermissionPrompt(context);
+    final List<Widget> widgets = <Widget>[
+      const HomeScreen(),
+      const MyGameTabScreen(),
+      const UserStatScreen(),
+      ProfileScreen(changeTabToMyCricket: () {
+        changeTab(1);
+      }),
+    ];
+
     if (Platform.isIOS) {
-      return _cupertinoTabs(context);
+      return _cupertinoTabs(context, widgets);
     }
-    return _materialTabs(context);
+    return _materialTabs(context, widgets);
   }
 
   void _observerShowNotificationPermissionPrompt(BuildContext context) {
@@ -90,32 +94,43 @@ class _MainScreenState extends ConsumerState<MainScreen>
     });
   }
 
-  Widget _cupertinoTabs(BuildContext context) => CupertinoTabScaffold(
+  Widget _cupertinoTabs(BuildContext context, List<Widget> widgets) =>
+      CupertinoTabScaffold(
         backgroundColor: context.colorScheme.surface,
         controller: _cupertinoTabController,
         tabBar: CupertinoTabBar(
-          backgroundColor: context.colorScheme.containerLowOnSurface,
+          backgroundColor: context.colorScheme.surface,
           height: 65,
-          border: null,
+          border: Border(
+            top: BorderSide(
+              color: context.colorScheme.outline,
+              width: 1,
+            ),
+          ),
           items: _tabItems(context)
               .map((e) => e.toBottomNavigationBarItem(context))
               .toList(),
         ),
         tabBuilder: (BuildContext context, int index) {
           return CupertinoTabView(
-            builder: (BuildContext context) => _widgets[index],
+            builder: (BuildContext context) => widgets[index],
           );
         },
       );
 
-  Widget _materialTabs(BuildContext context) => Scaffold(
+  Widget _materialTabs(BuildContext context, List<Widget> widgets) => Scaffold(
         backgroundColor: context.colorScheme.surface,
         body: PageView(
           controller: _materialPageController,
           physics: const NeverScrollableScrollPhysics(),
-          children: _widgets,
+          children: widgets,
         ),
-        bottomNavigationBar: AppBottomNavigationBar(tabs: _tabItems(context)),
+        bottomNavigationBar: AppBottomNavigationBar(
+          tabs: _tabItems(context),
+          builder: (BuildContext context, void Function(int) onTabTap) {
+            onTabChange = onTabTap;
+          },
+        ),
       );
 
   List<TabItem> _tabItems(BuildContext context) => [
@@ -176,5 +191,14 @@ class _MainScreenState extends ConsumerState<MainScreen>
                   : context.colorScheme.textDisabled,
               BlendMode.srcIn)),
     );
+  }
+
+  void changeTab(int tabNumber) {
+    if (Platform.isIOS) {
+      _cupertinoTabController.index = tabNumber;
+    } else {
+      _materialPageController.jumpToPage(tabNumber);
+      onTabChange.call(tabNumber);
+    }
   }
 }

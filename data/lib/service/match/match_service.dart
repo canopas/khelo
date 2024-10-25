@@ -99,6 +99,16 @@ class MatchService {
     }
   }
 
+  Future<int> getUserOwnedMatchesCount(String userId) {
+    return _matchCollection
+        .where(FireStoreConst.createdBy, isEqualTo: userId)
+        .count()
+        .get()
+        .then((snapshot) {
+      return snapshot.count ?? 0;
+    }).catchError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Stream<MatchSetting?> streamMatchSetting(String matchId) {
     return _matchSettingDocument(matchId)
         .snapshots()
@@ -499,12 +509,29 @@ class MatchService {
     required String matchId,
     required RevisedTarget revisedTarget,
   }) async {
-    await _matchCollection.doc(matchId).update(
-      {
-        FireStoreConst.revisedTarget: revisedTarget.toJson(),
-        FireStoreConst.updatedAt: DateTime.now(),
-      },
-    );
+    try {
+      await _matchCollection.doc(matchId).update(
+        {
+          FireStoreConst.revisedTarget: revisedTarget.toJson(),
+          FireStoreConst.updatedAt: DateTime.now(),
+        },
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> changeMatchOwner({
+    required String matchId,
+    required String ownerId,
+  }) async {
+    try {
+      await _matchCollection.doc(matchId).update(
+        {FireStoreConst.createdBy: ownerId},
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<void> deleteMatch(String matchId) async {
@@ -533,6 +560,7 @@ class MatchService {
   ) async {
     try {
       final teamIds = teamList.map((e) => e.team_id).toList();
+
       final playerIds = teamList.expand((team) => team.squad).toList();
 
       final teamsData = await Future.wait([
@@ -544,7 +572,10 @@ class MatchService {
       final List<MatchPlayer> players = teamsData[1] as List<MatchPlayer>;
 
       final List<List<MatchPlayer>> squads = teamList.map((team) {
-        return players.where((player) => team.squad.contains(player)).toList();
+        final teamPlayerIds = team.squad.map((player) => player.id).toSet();
+        return players
+            .where((player) => teamPlayerIds.contains(player.id))
+            .toList();
       }).toList();
 
       return List.generate(teamList.length, (index) {

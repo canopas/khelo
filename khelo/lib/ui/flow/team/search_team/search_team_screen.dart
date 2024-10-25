@@ -17,6 +17,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 import 'package:style/text/search_text_field.dart';
+import 'package:style/widgets/rounded_check_box.dart';
 
 import '../../../../components/create_team_cell.dart';
 import '../../../../gen/assets.gen.dart';
@@ -207,7 +208,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
             ),
           ),
           trailing: (team.id == state.selectedTeam?.id)
-              ? SvgPicture.asset(Assets.images.icRoundedCheck)
+              ? RoundedCheckBox(isSelected: true, onTap: null)
               : null,
         ),
       ),

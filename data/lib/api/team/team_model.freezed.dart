@@ -27,6 +27,8 @@ mixin _$TeamModel {
   String? get name_initial => throw _privateConstructorUsedError;
   String? get profile_img_url => throw _privateConstructorUsedError;
   String? get created_by => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel get created_by_user => throw _privateConstructorUsedError;
   DateTime? get created_at => throw _privateConstructorUsedError;
   @TimeStampJsonConverter()
   DateTime? get created_time => throw _privateConstructorUsedError;
@@ -56,9 +58,13 @@ abstract class $TeamModelCopyWith<$Res> {
       String? name_initial,
       String? profile_img_url,
       String? created_by,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      UserModel created_by_user,
       DateTime? created_at,
       @TimeStampJsonConverter() DateTime? created_time,
       @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
+
+  $UserModelCopyWith<$Res> get created_by_user;
 }
 
 /// @nodoc
@@ -83,6 +89,7 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
     Object? name_initial = freezed,
     Object? profile_img_url = freezed,
     Object? created_by = freezed,
+    Object? created_by_user = null,
     Object? created_at = freezed,
     Object? created_time = freezed,
     Object? players = null,
@@ -116,6 +123,10 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
           ? _value.created_by
           : created_by // ignore: cast_nullable_to_non_nullable
               as String?,
+      created_by_user: null == created_by_user
+          ? _value.created_by_user
+          : created_by_user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       created_at: freezed == created_at
           ? _value.created_at
           : created_at // ignore: cast_nullable_to_non_nullable
@@ -129,6 +140,16 @@ class _$TeamModelCopyWithImpl<$Res, $Val extends TeamModel>
           : players // ignore: cast_nullable_to_non_nullable
               as List<TeamPlayer>,
     ) as $Val);
+  }
+
+  /// Create a copy of TeamModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res> get created_by_user {
+    return $UserModelCopyWith<$Res>(_value.created_by_user, (value) {
+      return _then(_value.copyWith(created_by_user: value) as $Val);
+    });
   }
 }
 
@@ -148,9 +169,14 @@ abstract class _$$TeamModelImplCopyWith<$Res>
       String? name_initial,
       String? profile_img_url,
       String? created_by,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      UserModel created_by_user,
       DateTime? created_at,
       @TimeStampJsonConverter() DateTime? created_time,
       @JsonKey(name: FireStoreConst.teamPlayers) List<TeamPlayer> players});
+
+  @override
+  $UserModelCopyWith<$Res> get created_by_user;
 }
 
 /// @nodoc
@@ -173,6 +199,7 @@ class __$$TeamModelImplCopyWithImpl<$Res>
     Object? name_initial = freezed,
     Object? profile_img_url = freezed,
     Object? created_by = freezed,
+    Object? created_by_user = null,
     Object? created_at = freezed,
     Object? created_time = freezed,
     Object? players = null,
@@ -206,6 +233,10 @@ class __$$TeamModelImplCopyWithImpl<$Res>
           ? _value.created_by
           : created_by // ignore: cast_nullable_to_non_nullable
               as String?,
+      created_by_user: null == created_by_user
+          ? _value.created_by_user
+          : created_by_user // ignore: cast_nullable_to_non_nullable
+              as UserModel,
       created_at: freezed == created_at
           ? _value.created_at
           : created_at // ignore: cast_nullable_to_non_nullable
@@ -234,6 +265,8 @@ class _$TeamModelImpl implements _TeamModel {
       this.name_initial,
       this.profile_img_url,
       this.created_by,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      this.created_by_user = const UserModel(id: ''),
       this.created_at,
       @TimeStampJsonConverter() this.created_time,
       @JsonKey(name: FireStoreConst.teamPlayers)
@@ -258,6 +291,9 @@ class _$TeamModelImpl implements _TeamModel {
   @override
   final String? created_by;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final UserModel created_by_user;
+  @override
   final DateTime? created_at;
   @override
   @TimeStampJsonConverter()
@@ -273,7 +309,7 @@ class _$TeamModelImpl implements _TeamModel {
 
   @override
   String toString() {
-    return 'TeamModel(id: $id, name: $name, name_lowercase: $name_lowercase, city: $city, name_initial: $name_initial, profile_img_url: $profile_img_url, created_by: $created_by, created_at: $created_at, created_time: $created_time, players: $players)';
+    return 'TeamModel(id: $id, name: $name, name_lowercase: $name_lowercase, city: $city, name_initial: $name_initial, profile_img_url: $profile_img_url, created_by: $created_by, created_by_user: $created_by_user, created_at: $created_at, created_time: $created_time, players: $players)';
   }
 
   @override
@@ -292,6 +328,8 @@ class _$TeamModelImpl implements _TeamModel {
                 other.profile_img_url == profile_img_url) &&
             (identical(other.created_by, created_by) ||
                 other.created_by == created_by) &&
+            (identical(other.created_by_user, created_by_user) ||
+                other.created_by_user == created_by_user) &&
             (identical(other.created_at, created_at) ||
                 other.created_at == created_at) &&
             (identical(other.created_time, created_time) ||
@@ -310,6 +348,7 @@ class _$TeamModelImpl implements _TeamModel {
       name_initial,
       profile_img_url,
       created_by,
+      created_by_user,
       created_at,
       created_time,
       const DeepCollectionEquality().hash(_players));
@@ -339,6 +378,8 @@ abstract class _TeamModel implements TeamModel {
       final String? name_initial,
       final String? profile_img_url,
       final String? created_by,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final UserModel created_by_user,
       final DateTime? created_at,
       @TimeStampJsonConverter() final DateTime? created_time,
       @JsonKey(name: FireStoreConst.teamPlayers)
@@ -361,6 +402,9 @@ abstract class _TeamModel implements TeamModel {
   String? get profile_img_url;
   @override
   String? get created_by;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel get created_by_user;
   @override
   DateTime? get created_at;
   @override

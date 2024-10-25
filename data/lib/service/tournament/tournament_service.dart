@@ -145,4 +145,14 @@ class TournamentService {
     return playerStatsList.getTopKeyStats()
       ..sort((a, b) => b.value?.compareTo(a.value ?? 0) ?? 0);
   }
+
+  Future<void> updateTeamIds(String tournamentId, List<String> teamIds) async {
+    try {
+      await _tournamentCollection
+          .doc(tournamentId)
+          .update({FireStoreConst.teamIds: teamIds});
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }
