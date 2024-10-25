@@ -261,18 +261,15 @@ class _TournamentDetailOverviewTabState
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 130,
-            child: ListView.separated(
-              shrinkWrap: true,
+            height: 136,
+            child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) => _teamCellView(
-                context,
-                teams[index],
+              child: Row(
+                children:
+                    teams.map((team) => _teamCellView(context, team)).toList(),
               ),
-              separatorBuilder: (context, index) => const SizedBox(width: 16),
-              itemCount: teams.length,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -284,6 +281,7 @@ class _TournamentDetailOverviewTabState
       child: Container(
         width: 120,
         padding: EdgeInsets.all(16),
+        margin: EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
@@ -303,6 +301,7 @@ class _TournamentDetailOverviewTabState
                   color: context.colorScheme.textPrimary,
                 ),
                 textAlign: TextAlign.center,
+                textScaler: TextScaler.noScaling,
               ),
             )
           ],
