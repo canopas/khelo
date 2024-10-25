@@ -18,6 +18,7 @@ class MatchDetailCell extends StatelessWidget {
   final bool showStatusTag;
   final bool showActionButtons;
   final VoidCallback? onActionTap;
+  final Color? backgroundColor;
 
   const MatchDetailCell({
     super.key,
@@ -25,6 +26,7 @@ class MatchDetailCell extends StatelessWidget {
     required this.onTap,
     this.showStatusTag = true,
     this.showActionButtons = false,
+    this.backgroundColor,
     this.onActionTap,
   });
 
@@ -35,7 +37,7 @@ class MatchDetailCell extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: context.colorScheme.containerLow,
+          color: backgroundColor ?? context.colorScheme.containerLow,
           border: Border.all(color: context.colorScheme.outline),
           borderRadius: BorderRadius.circular(16),
         ),
