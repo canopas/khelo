@@ -138,7 +138,10 @@ class _TournamentDetailScreenState
             onSelected: notifier.onTeamsSelected,
           ),
           TournamentDetailMatchesTab(
-            matches: state.tournament!.matches,
+            teams: state.tournament!.teams,
+            filteredMatches: state.filteredMatches,
+            onMatchFilter: notifier.onMatchFilter,
+            onSelected: notifier.onMatchesSelected,
           ),
         ],
       ),

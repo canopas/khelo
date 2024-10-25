@@ -58,6 +58,7 @@ class FireStoreConst {
 
   // tournament field const
   static const String members = "members";
+  static const String matchIds = "match_ids";
 }
 
 class DataConfig {

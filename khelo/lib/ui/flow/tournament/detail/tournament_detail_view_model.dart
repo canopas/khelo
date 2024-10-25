@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/service/tournament/tournament_service.dart';
@@ -40,6 +41,7 @@ class TournamentDetailStateViewNotifier
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
       state = state.copyWith(tournament: tournament, loading: false);
+      onMatchFilter(null);
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -65,6 +67,43 @@ class TournamentDetailStateViewNotifier
     }
   }
 
+  void onMatchesSelected(List<MatchModel> matches) async {
+    if (state.tournament == null) return;
+    try {
+      final matchIds = matches.map((e) => e.id).toList();
+      await _tournamentService.updateMatchIds(state.tournament!.id, matchIds);
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint(
+          "TournamentDetailStateViewNotifier: error while selecting matches -> $e");
+    }
+  }
+
+  void onMatchFilter(String? filter) {
+    if (state.tournament == null) return;
+
+    final matches = state.tournament!.matches;
+
+    if (filter == null) {
+      state = state.copyWith(filteredMatches: matches);
+      return;
+    }
+    final names = state.tournament!.teams.map((e) => e.name).toList();
+
+    if (names.contains(filter)) {
+      final filteredMatches = matches.where((match) {
+        return match.teams.any((team) => team.team.name == filter);
+      }).toList();
+
+      state = state.copyWith(
+        matchFilter: filter,
+        filteredMatches: filteredMatches,
+      );
+    } else {
+      state = state.copyWith(matchFilter: filter, filteredMatches: matches);
+    }
+  }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
@@ -80,5 +119,7 @@ class TournamentDetailState with _$TournamentDetailState {
     @Default(0) int selectedTab,
     Object? error,
     Object? actionError,
+    @Default(null) String? matchFilter,
+    @Default([]) List<MatchModel> filteredMatches,
   }) = _TournamentDetailState;
 }

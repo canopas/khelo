@@ -219,6 +219,12 @@
   "tournament_detail_teams_empty_description": "You haven't added any teams to this tournament yet. Please select or create teams to get started.",
   "tournament_detail_teams_select_btn": "Add teams",
 
+  "tournament_detail_matches_empty_title": "Schedule Your Matches!",
+  "tournament_detail_matches_empty_description": "Create matches to kick off your tournament and get the games started!",
+  "tournament_detail_matches_add_btn": "Add matches",
+  "tournament_detail_matches_filter_by_teams_title": "Filter by teams",
+  "tournament_detail_matches_filter_all_teams_option": "All Teams",
+
   "tournament_detail_key_stat_most_runs_title": "Most Runs",
   "tournament_detail_key_stat_most_wickets_title": "Most Wickets",
   "tournament_detail_key_stat_most_fours_title": "Most Fours",
