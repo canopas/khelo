@@ -239,6 +239,16 @@
   "tournament_detail_stats_avg_title": "Avg",
   "tournament_detail_stats_runs_title": "Runs",
 
+  "tournament_detail_points_table_points_title": "Points",
+  "tournament_detail_points_table_empty_title": "No Points Yet!",
+  "tournament_detail_points_table_empty_description": "You don't have any points yet. Join a match to start earning points!",
+  "tournament_detail_points_table_team": "Team",
+  "tournament_detail_points_table_match": "M",
+  "tournament_detail_points_table_wins": "W",
+  "tournament_detail_points_table_losses": "L",
+  "tournament_detail_points_table_pts": "Pts",
+  "tournament_detail_points_table_nrr": "NRR",
+
   "@_TOURNAMENT_TYPE":{
   },
   "tournament_type_knock_out": "Knockout",
