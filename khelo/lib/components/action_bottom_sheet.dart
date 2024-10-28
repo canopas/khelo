@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/extensions/column_extensions.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../gen/assets.gen.dart';
 
 Future<T?> showActionBottomSheet<T>({
   required BuildContext context,
@@ -60,6 +63,7 @@ class BottomSheetAction extends StatelessWidget {
   final Widget? child;
   final bool enabled;
   final String? subTitle;
+  final bool showCheck;
   final VoidCallback? onTap;
 
   const BottomSheetAction({
@@ -67,6 +71,7 @@ class BottomSheetAction extends StatelessWidget {
     this.icon,
     required this.title,
     this.enabled = true,
+    this.showCheck = false,
     this.child,
     this.subTitle,
     this.onTap,
@@ -105,6 +110,16 @@ class BottomSheetAction extends StatelessWidget {
                     ),
                   ],
                 ],
+              ),
+            ),
+            Visibility(
+              visible: showCheck,
+              child: SvgPicture.asset(
+                Assets.images.icCheck,
+                colorFilter: ColorFilter.mode(
+                  context.colorScheme.primary,
+                  BlendMode.srcATop,
+                ),
               ),
             ),
             Visibility(

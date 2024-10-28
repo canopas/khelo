@@ -17,10 +17,12 @@ import '../../../../../components/image_avatar.dart';
 
 class TournamentDetailOverviewTab extends ConsumerStatefulWidget {
   final TournamentModel tournament;
+  final PageController controller;
 
   const TournamentDetailOverviewTab({
     super.key,
     required this.tournament,
+    required this.controller,
   });
 
   @override
@@ -234,6 +236,7 @@ class _TournamentDetailOverviewTabState
                       style: AppTextStyle.caption.copyWith(
                         color: context.colorScheme.textDisabled,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     )
                   ],
                 ),
