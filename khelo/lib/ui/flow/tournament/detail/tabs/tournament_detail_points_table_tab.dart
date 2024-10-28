@@ -47,7 +47,7 @@ class TournamentDetailPointsTableTab extends ConsumerWidget {
   Widget _buildTable(BuildContext context) {
     final headers = [
       context.l10n.tournament_detail_points_table_team,
-      context.l10n.tournament_detail_points_table_match,
+      context.l10n.common_m_title,
       context.l10n.tournament_detail_points_table_wins,
       context.l10n.tournament_detail_points_table_losses,
       context.l10n.tournament_detail_points_table_pts,

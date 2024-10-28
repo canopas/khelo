@@ -69,7 +69,7 @@ class TournamentDetailStatsTab extends ConsumerWidget {
   Widget _playerStatsView(BuildContext context, TournamentDetailState state) {
     final headers = [
       context.l10n.tournament_detail_stats_player_title,
-      context.l10n.tournament_detail_stats_m_title,
+      context.l10n.common_m_title,
       context.l10n.tournament_detail_stats_avg_title,
       context.l10n.tournament_detail_stats_runs_title,
     ];
