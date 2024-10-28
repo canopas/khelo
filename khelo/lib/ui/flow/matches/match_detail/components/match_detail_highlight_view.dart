@@ -3,7 +3,6 @@ import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/empty_screen.dart';
@@ -14,8 +13,6 @@ import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.d
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
-
-import '../../../../../gen/assets.gen.dart';
 
 class MatchDetailHighlightView extends ConsumerWidget {
   const MatchDetailHighlightView({super.key});
@@ -181,10 +178,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
             .map((option) => BottomSheetAction(
                   title: option.getString(context),
                   enabled: highlightFilterOption != option,
-                  child: _checkWidget(
-                    context,
-                    isShowCheck: highlightFilterOption == option,
-                  ),
+                  showCheck: highlightFilterOption == option,
                   onTap: () {
                     context.pop();
                     onTap(option);
@@ -205,10 +199,7 @@ class MatchDetailHighlightView extends ConsumerWidget {
               ?.map((match) => BottomSheetAction(
                     title: match.team.name,
                     enabled: highlightTeamId != match.team.id,
-                    child: _checkWidget(
-                      context,
-                      isShowCheck: highlightTeamId == match.team.id,
-                    ),
+                    showCheck: highlightTeamId == match.team.id,
                     onTap: () {
                       context.pop();
                       onTap(match.team.id);
@@ -218,18 +209,4 @@ class MatchDetailHighlightView extends ConsumerWidget {
           [],
     );
   }
-
-  Widget? _checkWidget(
-    BuildContext context, {
-    required bool isShowCheck,
-  }) =>
-      isShowCheck
-          ? SvgPicture.asset(
-              Assets.images.icCheck,
-              colorFilter: ColorFilter.mode(
-                context.colorScheme.primary,
-                BlendMode.srcATop,
-              ),
-            )
-          : null;
 }

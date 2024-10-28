@@ -10,6 +10,7 @@ import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_matches_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_overview_tab.dart';
+import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_stats_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_teams_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
 import 'package:style/button/more_option_button.dart';
@@ -132,16 +133,20 @@ class _TournamentDetailScreenState
         children: [
           TournamentDetailOverviewTab(
             tournament: state.tournament!,
+            controller: _controller,
           ),
           TournamentDetailTeamsTab(
             teams: state.tournament?.teams ?? [],
             onSelected: notifier.onTeamsSelected,
           ),
           TournamentDetailMatchesTab(
-            teams: state.tournament!.teams,
-            filteredMatches: state.filteredMatches,
             onMatchFilter: notifier.onMatchFilter,
             onSelected: notifier.onMatchesSelected,
+          ),
+          //Temporary tab
+          Container(),
+          TournamentDetailStatsTab(
+            onFiltered: notifier.onStatFilter,
           ),
         ],
       ),

@@ -42,6 +42,7 @@ class TournamentDetailStateViewNotifier
         .listen((tournament) {
       state = state.copyWith(tournament: tournament, loading: false);
       onMatchFilter(null);
+      onStatFilter(null);
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -104,6 +105,16 @@ class TournamentDetailStateViewNotifier
     }
   }
 
+  void onStatFilter(KeyStatTag? tag) {
+    if (state.tournament == null) return;
+
+    final filteredStats = state.tournament!.keyStats
+        .where((element) => element.tag == (tag ?? state.statFilter))
+        .toList();
+    state = state.copyWith(
+        filteredStats: filteredStats, statFilter: tag ?? state.statFilter);
+  }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
@@ -121,5 +132,7 @@ class TournamentDetailState with _$TournamentDetailState {
     Object? actionError,
     @Default(null) String? matchFilter,
     @Default([]) List<MatchModel> filteredMatches,
+    @Default(KeyStatTag.mostRuns) KeyStatTag statFilter,
+    @Default([]) List<PlayerKeyStat> filteredStats,
   }) = _TournamentDetailState;
 }
