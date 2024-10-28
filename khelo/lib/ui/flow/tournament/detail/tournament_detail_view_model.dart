@@ -40,7 +40,12 @@ class TournamentDetailStateViewNotifier
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      state = state.copyWith(tournament: tournament, loading: false);
+      final teamPoints = _calculatePointsTable(tournament);
+      state = state.copyWith(
+        tournament: tournament,
+        teamPoints: teamPoints,
+        loading: false,
+      );
       onMatchFilter(null);
       onStatFilter(null);
     }, onError: (e) {
@@ -115,6 +120,93 @@ class TournamentDetailStateViewNotifier
         filteredStats: filteredStats, statFilter: tag ?? state.statFilter);
   }
 
+  List<TeamPoint> _calculatePointsTable(TournamentModel tournament) {
+    List<TeamPoint> teamPoints = [];
+
+    final finishedMatches = _filterFinishedMatches(tournament.matches);
+
+    if (finishedMatches.isEmpty) return [];
+
+    for (final team in tournament.teams) {
+      final matches = finishedMatches
+          .where((element) => element.team_ids.contains(team.id))
+          .toList();
+      final teamStat = _teamStat(team.id, matches);
+      //If team has won then add 2 points and tie then add 1 point
+      final points = teamStat.status.win * 2 + teamStat.status.tie;
+      teamPoints.add(TeamPoint(
+        team: team,
+        stat: teamStat,
+        points: points,
+        matchCount: matches.length,
+      ));
+    }
+    return teamPoints..sort((a, b) => b.points.compareTo(a.points));
+  }
+
+  TeamStat _teamStat(String teamId, List<MatchModel> matches) {
+    if (matches.isEmpty) return const TeamStat();
+    return TeamStat(
+      played: matches.length,
+      status: _teamMatchStatus(teamId, matches),
+      run_rate: _runRate(teamId, matches),
+    );
+  }
+
+  List<MatchModel> _filterFinishedMatches(List<MatchModel> matches) {
+    return matches
+        .where((match) => match.match_status == MatchStatus.finish)
+        .toList();
+  }
+
+  double _runRate(String teamId, List<MatchModel> finishedMatches) {
+    final runs = finishedMatches
+        .map((match) => _getTeam(match, teamId))
+        .fold<int>(0, (totalRuns, team) => totalRuns + team.run);
+
+    final totalOvers = finishedMatches
+        .map((match) => _getTeam(match, teamId))
+        .fold<double>(0.0, (total, team) => total + team.over);
+
+    return totalOvers > 0 ? runs / totalOvers : 0;
+  }
+
+  MatchTeamModel _getTeam(MatchModel match, String teamId) =>
+      match.teams.firstWhere((team) => team.team.id == teamId);
+
+  TeamMatchStatus _teamMatchStatus(
+      String teamId, List<MatchModel> finishedMatches) {
+    return finishedMatches.fold<TeamMatchStatus>(
+      const TeamMatchStatus(),
+      (status, match) {
+        final firstTeam = match.teams.firstWhere((team) =>
+            team.team.id ==
+            (match.toss_decision == TossDecision.bat
+                ? match.toss_winner_id
+                : match.teams
+                    .firstWhere((team) => team.team.id != match.toss_winner_id)
+                    .team
+                    .id));
+
+        final secondTeam =
+            match.teams.firstWhere((team) => team.team.id != firstTeam.team.id);
+
+        if (firstTeam.run == secondTeam.run) {
+          return TeamMatchStatus(
+              win: status.win, lost: status.lost, tie: status.tie + 1);
+        } else if ((firstTeam.run > secondTeam.run &&
+                firstTeam.team.id == teamId) ||
+            (firstTeam.run < secondTeam.run && secondTeam.team.id == teamId)) {
+          return TeamMatchStatus(
+              win: status.win + 1, lost: status.lost, tie: status.tie);
+        } else {
+          return TeamMatchStatus(
+              win: status.win, lost: status.lost + 1, tie: status.tie);
+        }
+      },
+    );
+  }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
@@ -134,5 +226,6 @@ class TournamentDetailState with _$TournamentDetailState {
     @Default([]) List<MatchModel> filteredMatches,
     @Default(KeyStatTag.mostRuns) KeyStatTag statFilter,
     @Default([]) List<PlayerKeyStat> filteredStats,
+    @Default([]) List<TeamPoint> teamPoints,
   }) = _TournamentDetailState;
 }

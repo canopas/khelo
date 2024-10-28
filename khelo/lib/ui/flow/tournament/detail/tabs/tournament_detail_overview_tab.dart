@@ -17,12 +17,10 @@ import '../../../../../components/image_avatar.dart';
 
 class TournamentDetailOverviewTab extends ConsumerStatefulWidget {
   final TournamentModel tournament;
-  final PageController controller;
 
   const TournamentDetailOverviewTab({
     super.key,
     required this.tournament,
-    required this.controller,
   });
 
   @override

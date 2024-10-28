@@ -110,6 +110,16 @@ enum KeyStatTag {
   mostSixes;
 }
 
+@freezed
+class TeamPoint with _$TeamPoint {
+  const factory TeamPoint({
+    required TeamModel team,
+    required int points,
+    required TeamStat stat,
+    required int matchCount,
+  }) = _TeamPoint;
+}
+
 extension PlayerKeyStatListExtensions on List<PlayerKeyStat> {
   List<PlayerKeyStat> getTopKeyStats() {
     final Map<String, PlayerKeyStat> playerMap = {};

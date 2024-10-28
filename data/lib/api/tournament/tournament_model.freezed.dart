@@ -1004,3 +1004,215 @@ abstract class _PlayerKeyStat implements PlayerKeyStat {
   _$$PlayerKeyStatImplCopyWith<_$PlayerKeyStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$TeamPoint {
+  TeamModel get team => throw _privateConstructorUsedError;
+  int get points => throw _privateConstructorUsedError;
+  TeamStat get stat => throw _privateConstructorUsedError;
+  int get matchCount => throw _privateConstructorUsedError;
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TeamPointCopyWith<TeamPoint> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TeamPointCopyWith<$Res> {
+  factory $TeamPointCopyWith(TeamPoint value, $Res Function(TeamPoint) then) =
+      _$TeamPointCopyWithImpl<$Res, TeamPoint>;
+  @useResult
+  $Res call({TeamModel team, int points, TeamStat stat, int matchCount});
+
+  $TeamModelCopyWith<$Res> get team;
+  $TeamStatCopyWith<$Res> get stat;
+}
+
+/// @nodoc
+class _$TeamPointCopyWithImpl<$Res, $Val extends TeamPoint>
+    implements $TeamPointCopyWith<$Res> {
+  _$TeamPointCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team = null,
+    Object? points = null,
+    Object? stat = null,
+    Object? matchCount = null,
+  }) {
+    return _then(_value.copyWith(
+      team: null == team
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as TeamModel,
+      points: null == points
+          ? _value.points
+          : points // ignore: cast_nullable_to_non_nullable
+              as int,
+      stat: null == stat
+          ? _value.stat
+          : stat // ignore: cast_nullable_to_non_nullable
+              as TeamStat,
+      matchCount: null == matchCount
+          ? _value.matchCount
+          : matchCount // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamModelCopyWith<$Res> get team {
+    return $TeamModelCopyWith<$Res>(_value.team, (value) {
+      return _then(_value.copyWith(team: value) as $Val);
+    });
+  }
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TeamStatCopyWith<$Res> get stat {
+    return $TeamStatCopyWith<$Res>(_value.stat, (value) {
+      return _then(_value.copyWith(stat: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$TeamPointImplCopyWith<$Res>
+    implements $TeamPointCopyWith<$Res> {
+  factory _$$TeamPointImplCopyWith(
+          _$TeamPointImpl value, $Res Function(_$TeamPointImpl) then) =
+      __$$TeamPointImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({TeamModel team, int points, TeamStat stat, int matchCount});
+
+  @override
+  $TeamModelCopyWith<$Res> get team;
+  @override
+  $TeamStatCopyWith<$Res> get stat;
+}
+
+/// @nodoc
+class __$$TeamPointImplCopyWithImpl<$Res>
+    extends _$TeamPointCopyWithImpl<$Res, _$TeamPointImpl>
+    implements _$$TeamPointImplCopyWith<$Res> {
+  __$$TeamPointImplCopyWithImpl(
+      _$TeamPointImpl _value, $Res Function(_$TeamPointImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? team = null,
+    Object? points = null,
+    Object? stat = null,
+    Object? matchCount = null,
+  }) {
+    return _then(_$TeamPointImpl(
+      team: null == team
+          ? _value.team
+          : team // ignore: cast_nullable_to_non_nullable
+              as TeamModel,
+      points: null == points
+          ? _value.points
+          : points // ignore: cast_nullable_to_non_nullable
+              as int,
+      stat: null == stat
+          ? _value.stat
+          : stat // ignore: cast_nullable_to_non_nullable
+              as TeamStat,
+      matchCount: null == matchCount
+          ? _value.matchCount
+          : matchCount // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TeamPointImpl implements _TeamPoint {
+  const _$TeamPointImpl(
+      {required this.team,
+      required this.points,
+      required this.stat,
+      required this.matchCount});
+
+  @override
+  final TeamModel team;
+  @override
+  final int points;
+  @override
+  final TeamStat stat;
+  @override
+  final int matchCount;
+
+  @override
+  String toString() {
+    return 'TeamPoint(team: $team, points: $points, stat: $stat, matchCount: $matchCount)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TeamPointImpl &&
+            (identical(other.team, team) || other.team == team) &&
+            (identical(other.points, points) || other.points == points) &&
+            (identical(other.stat, stat) || other.stat == stat) &&
+            (identical(other.matchCount, matchCount) ||
+                other.matchCount == matchCount));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, team, points, stat, matchCount);
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TeamPointImplCopyWith<_$TeamPointImpl> get copyWith =>
+      __$$TeamPointImplCopyWithImpl<_$TeamPointImpl>(this, _$identity);
+}
+
+abstract class _TeamPoint implements TeamPoint {
+  const factory _TeamPoint(
+      {required final TeamModel team,
+      required final int points,
+      required final TeamStat stat,
+      required final int matchCount}) = _$TeamPointImpl;
+
+  @override
+  TeamModel get team;
+  @override
+  int get points;
+  @override
+  TeamStat get stat;
+  @override
+  int get matchCount;
+
+  /// Create a copy of TeamPoint
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TeamPointImplCopyWith<_$TeamPointImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
