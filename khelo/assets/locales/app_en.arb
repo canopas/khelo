@@ -233,7 +233,7 @@
 
   "tournament_detail_points_table_points_title": "Points",
   "tournament_detail_points_table_empty_title": "No Points Yet!",
-  "tournament_detail_points_table_empty_description": "You don't have any match results yet. Join a match to start earning points for your team!",
+  "tournament_detail_points_table_empty_description": "The points table will be updated once matches begin. Stay tuned for the latest standings!",
   "tournament_detail_points_table_team": "Team",
   "tournament_detail_points_table_wins": "W",
   "tournament_detail_points_table_losses": "L",
