@@ -8,7 +8,7 @@ import '../../../../../gen/assets.gen.dart';
 class FilterTabView extends StatelessWidget {
   final String title;
   final String filterValue;
-  final Function() onFilter;
+  final VoidCallback onFilter;
 
   const FilterTabView({
     super.key,

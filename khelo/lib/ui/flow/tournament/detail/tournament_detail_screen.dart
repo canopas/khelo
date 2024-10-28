@@ -143,6 +143,7 @@ class _TournamentDetailScreenState
             onMatchFilter: notifier.onMatchFilter,
             onSelected: notifier.onMatchesSelected,
           ),
+          //Temporary tab
           Container(),
           TournamentDetailStatsTab(
             onFiltered: notifier.onStatFilter,
