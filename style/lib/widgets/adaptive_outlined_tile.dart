@@ -11,6 +11,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
   final int? maxLines;
   final String placeholder;
   final bool showTrailingIcon;
+  final bool enabled;
   final String? iconImage;
   final Function()? onTap;
 
@@ -21,6 +22,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
     this.title,
     this.maxLines,
     required this.placeholder,
+    this.enabled = true,
     this.showTrailingIcon = false,
     this.iconImage,
     this.onTap,
@@ -55,6 +57,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
         ],
         OnTapScale(
           onTap: onTap,
+          enabled: enabled,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
@@ -73,7 +76,7 @@ class AdaptiveOutlinedTile extends StatelessWidget {
                             : context.colorScheme.textSecondary),
                   ),
                 ),
-                if (showTrailingIcon) ...[
+                if (showTrailingIcon && enabled) ...[
                   SvgPicture.asset(
                     iconImage ?? "assets/images/ic_arrow_down.svg",
                     height: 18,

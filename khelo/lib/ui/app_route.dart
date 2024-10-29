@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -172,9 +173,9 @@ class AppRoute {
         ),
       );
 
-  static AppRoute addTournament() => AppRoute(
+  static AppRoute addTournament({TournamentModel? editTournament}) => AppRoute(
         pathAddTournament,
-        builder: (_) => const AddTournamentScreen(),
+        builder: (_) => AddTournamentScreen(editTournament: editTournament),
       );
 
   static AppRoute teamSelection({List<TeamModel>? selectedTeams}) => AppRoute(
@@ -183,9 +184,9 @@ class AppRoute {
       );
 
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
-    pathTournamentDetail,
-    builder: (_) => TournamentDetailScreen(tournamentId: tournamentId),
-  );
+        pathTournamentDetail,
+        builder: (_) => TournamentDetailScreen(tournamentId: tournamentId),
+      );
 
   static AppRoute matchDetailTab({required String matchId}) => AppRoute(
         pathMatchDetailTab,

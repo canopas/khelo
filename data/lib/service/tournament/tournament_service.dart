@@ -172,4 +172,12 @@ class TournamentService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Future<void> deleteTournament(String tournamentId) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).delete();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }

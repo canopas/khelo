@@ -1,12 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_matches_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_overview_tab.dart';
@@ -20,6 +23,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../../components/action_bottom_sheet.dart';
 import '../../../../components/app_page.dart';
 import '../../../../components/error_screen.dart';
 import '../../../../components/error_snackbar.dart';
@@ -108,9 +112,16 @@ class _TournamentDetailScreenState
             expandedHeight: 300,
             backgroundColor: context.colorScheme.surface,
             flexibleSpace: _flexibleTitle(context, state.tournament!),
-            actions: [
-              moreOptionButton(context),
-            ],
+            actions: state.tournament!.created_by == state.currentUserId ||
+                    state.tournament!.members
+                        .any((element) => element.id == state.currentUserId)
+                ? [
+                    moreOptionButton(
+                      context,
+                      onPressed: () => _moreActionButton(context, state),
+                    ),
+                  ]
+                : null,
           ),
           SliverPersistentHeader(
             pinned: true,
@@ -136,7 +147,6 @@ class _TournamentDetailScreenState
             tournament: state.tournament!,
           ),
           TournamentDetailTeamsTab(
-            teams: state.tournament?.teams ?? [],
             onSelected: notifier.onTeamsSelected,
           ),
           TournamentDetailMatchesTab(
@@ -306,5 +316,47 @@ class _TournamentDetailScreenState
         )
       ],
     );
+  }
+
+  void _moreActionButton(
+    BuildContext context,
+    TournamentDetailState state,
+  ) async {
+    return showActionBottomSheet(context: context, items: [
+      BottomSheetAction(
+        title: context.l10n.tournament_detail_teams_select_btn,
+        onTap: () async {
+          context.pop();
+          final selectedTeams = await AppRoute.teamSelection(
+                  selectedTeams: state.tournament!.teams)
+              .push<List<TeamModel>>(context);
+          if (context.mounted && selectedTeams != null) {
+            notifier.onTeamsSelected(selectedTeams);
+          }
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.tournament_detail_matches_add_btn,
+        onTap: () async {
+          context.pop();
+          // TODO: Add matches
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.tournament_detail_members_title,
+        onTap: () async {
+          context.pop();
+          // TODO:Members page
+        },
+      ),
+      BottomSheetAction(
+        title: context.l10n.tournament_detail_edit_title,
+        onTap: () async {
+          context.pop();
+          AppRoute.addTournament(editTournament: state.tournament!)
+              .push(context);
+        },
+      ),
+    ]);
   }
 }
