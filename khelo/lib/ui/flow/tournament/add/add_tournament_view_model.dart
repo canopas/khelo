@@ -42,8 +42,24 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
           currentUserId: userId,
         ));
 
+  TournamentModel? _editedTournament;
+
   void setUserId(String? userId) {
     state = state.copyWith(currentUserId: userId);
+  }
+
+  void setData(TournamentModel? editedTournament) {
+    _editedTournament = editedTournament;
+    state.nameController.text = editedTournament?.name ?? '';
+    state = state.copyWith(
+      bannerImgUrl: editedTournament?.banner_img_url,
+      profileImgUrl: editedTournament?.profile_img_url,
+      startDate: editedTournament?.start_date ?? DateTime.now(),
+      endDate: editedTournament?.end_date ??
+          DateTime.now().add(const Duration(days: 1)),
+      selectedType: editedTournament?.type ?? TournamentType.knockOut,
+      teams: editedTournament?.teams ?? [],
+    );
   }
 
   Future<void> onImageChange({
@@ -51,7 +67,11 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     bool isBanner = false,
   }) async {
     try {
-      state = state.copyWith(imageUploading: true, actionError: null);
+      state = state.copyWith(
+        imageUploading: true,
+        actionError: null,
+        enableButton: _editedTournament != null,
+      );
       if (await File(imagePath).isFileUnderMaxSize()) {
         isBanner
             ? state =
@@ -72,19 +92,28 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
   void onChange() {
     final name = state.nameController.text.trim();
 
-    state = state.copyWith(enableButton: name.isNotEmpty);
+    state = state.copyWith(
+      enableButton: name.isNotEmpty && _editedTournament?.name != name ||
+          _editedTournament?.type != state.selectedType ||
+          _editedTournament?.start_date != state.startDate ||
+          _editedTournament?.end_date != state.endDate ||
+          _editedTournament?.teams != state.teams,
+    );
   }
 
   void onSelectType(TournamentType type) {
     state = state.copyWith(selectedType: type);
+    onChange();
   }
 
   void onStartDate(DateTime startDate) {
     state = state.copyWith(startDate: startDate);
+    onChange();
   }
 
   void onEndDate(DateTime endDate) {
     state = state.copyWith(endDate: endDate);
+    onChange();
   }
 
   void addTournament() async {
@@ -119,20 +148,21 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
       }
 
       final tournament = TournamentModel(
-        id: tournamentId,
+        id: _editedTournament?.id ?? tournamentId,
         name: name,
         type: state.selectedType,
         start_date: state.startDate,
         end_date: state.endDate,
-        created_at: DateTime.now(),
-        created_by: state.currentUserId!,
+        created_at: _editedTournament?.created_at ?? DateTime.now(),
+        created_by: _editedTournament?.created_by ?? state.currentUserId!,
         team_ids: state.teams.map((e) => e.id).toList(),
-        members: [
-          TournamentMember(
-            id: state.currentUserId!,
-            role: TournamentMemberRole.organizer,
-          ),
-        ],
+        members: _editedTournament?.members ??
+            [
+              TournamentMember(
+                id: state.currentUserId!,
+                role: TournamentMemberRole.organizer,
+              ),
+            ],
         profile_img_url: state.profileImgUrl,
         banner_img_url: state.bannerImgUrl,
       );
@@ -150,6 +180,17 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
 
   void onSelectTeam(List<TeamModel> selectedTeams) {
     state = state.copyWith(teams: selectedTeams);
+    onChange();
+  }
+
+  void deleteTournament() async {
+    try {
+      await _tournamentService.deleteTournament(_editedTournament!.id);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
+      debugPrint(
+          "AddTournamentViewNotifier: error while deleting tournament -> $error");
+    }
   }
 
   @override

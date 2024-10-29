@@ -21,6 +21,7 @@ mixin _$TournamentDetailState {
   int get selectedTab => throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   String? get matchFilter => throw _privateConstructorUsedError;
   List<MatchModel> get filteredMatches => throw _privateConstructorUsedError;
   KeyStatTag get statFilter => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $TournamentDetailStateCopyWith<$Res> {
       int selectedTab,
       Object? error,
       Object? actionError,
+      String? currentUserId,
       String? matchFilter,
       List<MatchModel> filteredMatches,
       KeyStatTag statFilter,
@@ -76,6 +78,7 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
     Object? selectedTab = null,
     Object? error = freezed,
     Object? actionError = freezed,
+    Object? currentUserId = freezed,
     Object? matchFilter = freezed,
     Object? filteredMatches = null,
     Object? statFilter = null,
@@ -97,6 +100,10 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
               as int,
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matchFilter: freezed == matchFilter
           ? _value.matchFilter
           : matchFilter // ignore: cast_nullable_to_non_nullable
@@ -150,6 +157,7 @@ abstract class _$$TournamentDetailStateImplCopyWith<$Res>
       int selectedTab,
       Object? error,
       Object? actionError,
+      String? currentUserId,
       String? matchFilter,
       List<MatchModel> filteredMatches,
       KeyStatTag statFilter,
@@ -179,6 +187,7 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
     Object? selectedTab = null,
     Object? error = freezed,
     Object? actionError = freezed,
+    Object? currentUserId = freezed,
     Object? matchFilter = freezed,
     Object? filteredMatches = null,
     Object? statFilter = null,
@@ -200,6 +209,10 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
               as int,
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       matchFilter: freezed == matchFilter
           ? _value.matchFilter
           : matchFilter // ignore: cast_nullable_to_non_nullable
@@ -233,6 +246,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       this.selectedTab = 0,
       this.error,
       this.actionError,
+      this.currentUserId,
       this.matchFilter = null,
       final List<MatchModel> filteredMatches = const [],
       this.statFilter = KeyStatTag.mostRuns,
@@ -255,6 +269,8 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
   final Object? error;
   @override
   final Object? actionError;
+  @override
+  final String? currentUserId;
   @override
   @JsonKey()
   final String? matchFilter;
@@ -290,7 +306,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
 
   @override
   String toString() {
-    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, matchFilter: $matchFilter, filteredMatches: $filteredMatches, statFilter: $statFilter, filteredStats: $filteredStats, teamPoints: $teamPoints)';
+    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, currentUserId: $currentUserId, matchFilter: $matchFilter, filteredMatches: $filteredMatches, statFilter: $statFilter, filteredStats: $filteredStats, teamPoints: $teamPoints)';
   }
 
   @override
@@ -306,6 +322,8 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             (identical(other.matchFilter, matchFilter) ||
                 other.matchFilter == matchFilter) &&
             const DeepCollectionEquality()
@@ -326,6 +344,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       selectedTab,
       const DeepCollectionEquality().hash(error),
       const DeepCollectionEquality().hash(actionError),
+      currentUserId,
       matchFilter,
       const DeepCollectionEquality().hash(_filteredMatches),
       statFilter,
@@ -349,6 +368,7 @@ abstract class _TournamentDetailState implements TournamentDetailState {
       final int selectedTab,
       final Object? error,
       final Object? actionError,
+      final String? currentUserId,
       final String? matchFilter,
       final List<MatchModel> filteredMatches,
       final KeyStatTag statFilter,
@@ -365,6 +385,8 @@ abstract class _TournamentDetailState implements TournamentDetailState {
   Object? get error;
   @override
   Object? get actionError;
+  @override
+  String? get currentUserId;
   @override
   String? get matchFilter;
   @override

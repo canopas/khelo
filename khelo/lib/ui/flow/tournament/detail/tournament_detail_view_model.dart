@@ -4,6 +4,7 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/service/tournament/tournament_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -12,8 +13,10 @@ part 'tournament_detail_view_model.freezed.dart';
 
 final tournamentDetailStateProvider = StateNotifierProvider.autoDispose<
     TournamentDetailStateViewNotifier, TournamentDetailState>(
-  (ref) =>
-      TournamentDetailStateViewNotifier(ref.read(tournamentServiceProvider)),
+  (ref) => TournamentDetailStateViewNotifier(
+    ref.read(tournamentServiceProvider),
+    ref.read(currentUserPod)?.id,
+  ),
 );
 
 class TournamentDetailStateViewNotifier
@@ -21,8 +24,10 @@ class TournamentDetailStateViewNotifier
   final TournamentService _tournamentService;
   StreamSubscription? _tournamentSubscription;
 
-  TournamentDetailStateViewNotifier(this._tournamentService)
-      : super(const TournamentDetailState());
+  TournamentDetailStateViewNotifier(
+    this._tournamentService,
+    String? userId,
+  ) : super(TournamentDetailState(currentUserId: userId));
 
   String? _tournamentId;
 
@@ -222,6 +227,7 @@ class TournamentDetailState with _$TournamentDetailState {
     @Default(0) int selectedTab,
     Object? error,
     Object? actionError,
+    String? currentUserId,
     @Default(null) String? matchFilter,
     @Default([]) List<MatchModel> filteredMatches,
     @Default(KeyStatTag.mostRuns) KeyStatTag statFilter,

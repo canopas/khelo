@@ -5,8 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/bottom_sticky_overlay.dart';
-import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -14,38 +12,44 @@ import '../../../../../components/empty_screen.dart';
 import '../../../../../components/image_avatar.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../app_route.dart';
+import '../tournament_detail_view_model.dart';
 
 class TournamentDetailTeamsTab extends ConsumerWidget {
-  final List<TeamModel> teams;
   final Function(List<TeamModel>) onSelected;
 
   const TournamentDetailTeamsTab({
     super.key,
-    required this.teams,
     required this.onSelected,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (teams.isEmpty) {
-      return Stack(
-        children: [
-          EmptyScreen(
-            title: context.l10n.tournament_detail_teams_empty_title,
-            description: context.l10n.tournament_detail_teams_empty_description,
-            isShowButton: false,
-          ),
-          _stickyButton(context),
-        ],
+    final state = ref.watch(tournamentDetailStateProvider);
+    if (state.tournament!.teams.isNotEmpty) {
+      return EmptyScreen(
+        title: context.l10n.tournament_detail_teams_empty_title,
+        description: context.l10n.tournament_detail_teams_empty_description,
+        isShowButton: state.tournament!.created_by == state.currentUserId ||
+            state.tournament!.members
+                .any((element) => element.id == state.currentUserId),
+        buttonTitle: context.l10n.tournament_detail_teams_select_btn,
+        onTap: () async {
+          final selectedTeams = await AppRoute.teamSelection(
+                  selectedTeams: state.tournament!.teams)
+              .push<List<TeamModel>>(context);
+          if (context.mounted && selectedTeams != null) {
+            onSelected.call(selectedTeams);
+          }
+        },
       );
     }
 
     return ListView.separated(
-      itemCount: teams.length,
+      itemCount: state.tournament!.teams.length,
       padding: context.mediaQueryPadding.copyWith(top: 0) +
           EdgeInsets.all(16).copyWith(bottom: 24),
       itemBuilder: (context, index) {
-        return _teamCellView(context, teams[index]);
+        return _teamCellView(context, state.tournament!.teams[index]);
       },
       separatorBuilder: (context, index) => SizedBox(height: 16),
     );
@@ -89,22 +93,6 @@ class TournamentDetailTeamsTab extends ConsumerWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _stickyButton(BuildContext context) {
-    return BottomStickyOverlay(
-      child: PrimaryButton(
-        context.l10n.tournament_detail_teams_select_btn,
-        onPressed: () async {
-          final selectedTeams =
-              await AppRoute.teamSelection(selectedTeams: teams)
-                  .push<List<TeamModel>>(context);
-          if (context.mounted && selectedTeams != null) {
-            onSelected.call(selectedTeams);
-          }
-        },
       ),
     );
   }

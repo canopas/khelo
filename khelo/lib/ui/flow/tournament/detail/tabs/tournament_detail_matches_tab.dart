@@ -7,8 +7,7 @@ import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/detail/components/filter_tab_view.dart';
-import 'package:style/button/bottom_sticky_overlay.dart';
-import 'package:style/button/primary_button.dart';
+
 import 'package:style/extensions/context_extensions.dart';
 
 import '../../../../../components/action_bottom_sheet.dart';
@@ -30,16 +29,16 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
     final state = ref.watch(tournamentDetailStateProvider);
 
     if (state.filteredMatches.isEmpty) {
-      return Stack(
-        children: [
-          EmptyScreen(
-            title: context.l10n.tournament_detail_matches_empty_title,
-            description:
-                context.l10n.tournament_detail_matches_empty_description,
-            isShowButton: false,
-          ),
-          _stickyButton(context),
-        ],
+      return EmptyScreen(
+        title: context.l10n.tournament_detail_matches_empty_title,
+        description: context.l10n.tournament_detail_matches_empty_description,
+        buttonTitle: context.l10n.tournament_detail_matches_add_btn,
+        isShowButton: state.tournament!.created_by == state.currentUserId ||
+            state.tournament!.members
+                .any((element) => element.id == state.currentUserId),
+        onTap: () {
+          onSelected.call([]);
+        },
       );
     }
 
@@ -99,16 +98,5 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
                   },
                 ))
             .toList());
-  }
-
-  Widget _stickyButton(BuildContext context) {
-    return BottomStickyOverlay(
-      child: PrimaryButton(
-        context.l10n.tournament_detail_matches_add_btn,
-        onPressed: () {
-          onSelected.call([]);
-        },
-      ),
-    );
   }
 }
