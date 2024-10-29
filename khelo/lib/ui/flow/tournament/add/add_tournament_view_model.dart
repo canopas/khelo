@@ -70,7 +70,6 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
       state = state.copyWith(
         imageUploading: true,
         actionError: null,
-        enableButton: _editedTournament != null,
       );
       if (await File(imagePath).isFileUnderMaxSize()) {
         isBanner
@@ -83,6 +82,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
             imageUploading: false,
             actionError: const LargeAttachmentUploadError());
       }
+      onChange();
     } catch (e) {
       state = state.copyWith(imageUploading: false, actionError: e);
       debugPrint("AddTournamentViewNotifier: error while image upload -> $e");
@@ -93,11 +93,14 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
     final name = state.nameController.text.trim();
 
     state = state.copyWith(
-      enableButton: name.isNotEmpty && _editedTournament?.name != name ||
-          _editedTournament?.type != state.selectedType ||
-          _editedTournament?.start_date != state.startDate ||
-          _editedTournament?.end_date != state.endDate ||
-          _editedTournament?.teams != state.teams,
+      enableButton: name.isNotEmpty &&
+          (_editedTournament?.name != name ||
+              _editedTournament?.type != state.selectedType ||
+              _editedTournament?.start_date != state.startDate ||
+              _editedTournament?.end_date != state.endDate ||
+              _editedTournament?.teams != state.teams ||
+              state.profilePath != null ||
+              state.bannerPath != null),
     );
   }
 
