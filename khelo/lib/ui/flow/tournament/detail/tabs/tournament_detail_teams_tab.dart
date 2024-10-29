@@ -25,7 +25,7 @@ class TournamentDetailTeamsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tournamentDetailStateProvider);
-    if (state.tournament!.teams.isNotEmpty) {
+    if (state.tournament!.teams.isEmpty) {
       return EmptyScreen(
         title: context.l10n.tournament_detail_teams_empty_title,
         description: context.l10n.tournament_detail_teams_empty_description,
