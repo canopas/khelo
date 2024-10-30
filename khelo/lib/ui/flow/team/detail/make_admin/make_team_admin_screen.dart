@@ -152,7 +152,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                               title: state.selectedPlayerIds
                                       .contains(state.owner.id)
                                   ? context.l10n.common_remove_admin
-                                  : context.l10n.team_detail_make_admin,
+                                  : context.l10n.common_make_admin,
                               onTap: () {
                                 context.pop();
                                 notifier.selectAdmin(state.owner);

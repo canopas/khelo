@@ -1,5 +1,6 @@
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
+import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,12 +10,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'tournament_detail_members_view_model.freezed.dart';
 
 final tournamentDetailMembersStateProvider = StateNotifierProvider.autoDispose<
-    TournamentDetailMembersViewNotifier, TournamentDetailMembersState>(
-  (ref) => TournamentDetailMembersViewNotifier(
+    TournamentDetailMembersViewNotifier, TournamentDetailMembersState>((ref) {
+  final notifier = TournamentDetailMembersViewNotifier(
     ref.read(tournamentServiceProvider),
     ref.read(currentUserPod)?.id,
-  ),
-);
+  );
+  ref.listen(currentUserPod, (previous, next) {
+    notifier._setUserId(next?.id);
+  });
+  return notifier;
+});
 
 class TournamentDetailMembersViewNotifier
     extends StateNotifier<TournamentDetailMembersState> {
@@ -25,6 +30,10 @@ class TournamentDetailMembersViewNotifier
 
   void setData(List<TournamentMember> members) {
     state = state.copyWith(members: members);
+  }
+
+  void _setUserId(String? userId) {
+    state = state.copyWith(currentUserId: userId);
   }
 
   void addTournamentMember(String tournamentId, UserModel user) async {
@@ -67,9 +76,10 @@ class TournamentDetailMembersViewNotifier
     TournamentMemberRole role,
   ) async {
     try {
-      final members = state.members.toList();
-      final index = members.indexOf(member);
-      members[index] = member.copyWith(role: role);
+      final members = state.members.toList().updateWhere(
+            where: (element) => element.id == member.id,
+            updated: (element) => element.copyWith(role: role),
+          );
 
       await _tournamentService.updateTournamentMembers(tournamentId, members);
 
@@ -117,4 +127,12 @@ class TournamentDetailMembersState with _$TournamentDetailMembersState {
     String? currentUserId,
     @Default([]) List<TournamentMember> members,
   }) = _TournamentDetailMembersState;
+}
+
+enum TournamentMemberActionType {
+  removeSelf,
+  transferOwnership,
+  makeOrganizer,
+  removeMember,
+  makeAdmin,
 }
