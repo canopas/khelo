@@ -199,59 +199,35 @@ class _TournamentDetailMembersScreenState
     }
 
     List<BottomSheetAction> actions = availableActions.map((actionType) {
-      switch (actionType) {
-        case TournamentMemberActionType.removeSelf:
-          return BottomSheetAction(
-            title: context.l10n.tournament_members_remove_self,
-            onTap: () async {
-              context.pop();
-              notifier.removeTournamentMember(tournament.id, member);
-            },
-          );
-        case TournamentMemberActionType.transferOwnership:
-          return BottomSheetAction(
-            title: context.l10n.common_transfer_ownership,
-            onTap: () async {
-              context.pop();
-              final newOwner = await SearchUserBottomSheet.show<UserModel>(
-                context,
-                emptyScreenTitle: context.l10n.common_transfer_ownership,
-                emptyScreenDescription: context
-                    .l10n.tournament_members_transfer_ownership_description,
+      return BottomSheetAction(
+        title: actionType.getString(context),
+        onTap: () async {
+          context.pop();
+          if (actionType == TournamentMemberActionType.transferOwnership) {
+            final newOwner = await SearchUserBottomSheet.show<UserModel>(
+              context,
+              emptyScreenTitle: context.l10n.common_transfer_ownership,
+              emptyScreenDescription: context
+                  .l10n.tournament_members_transfer_ownership_description,
+            );
+            if (context.mounted && newOwner != null) {
+              notifier.handleMemberAction(
+                tournamentId: tournament.id,
+                member: member,
+                newOwner: newOwner,
+                action: actionType,
               );
-              if (context.mounted && newOwner != null) {
-                notifier.changeTournamentOwner(tournament.id, member, newOwner);
-                context.pop();
-              }
-            },
-          );
-        case TournamentMemberActionType.makeOrganizer:
-          return BottomSheetAction(
-            title: context.l10n.tournament_members_make_organizer,
-            onTap: () async {
               context.pop();
-              notifier.updateMemberRole(
-                  tournament.id, member, TournamentMemberRole.organizer);
-            },
-          );
-        case TournamentMemberActionType.removeMember:
-          return BottomSheetAction(
-            title: context.l10n.tournament_members_remove_member,
-            onTap: () async {
-              context.pop();
-              notifier.removeTournamentMember(tournament.id, member);
-            },
-          );
-        case TournamentMemberActionType.makeAdmin:
-          return BottomSheetAction(
-            title: context.l10n.common_make_admin,
-            onTap: () async {
-              context.pop();
-              notifier.updateMemberRole(
-                  tournament.id, member, TournamentMemberRole.admin);
-            },
-          );
-      }
+            }
+          } else {
+            notifier.handleMemberAction(
+              tournamentId: tournament.id,
+              member: member,
+              action: actionType,
+            );
+          }
+        },
+      );
     }).toList();
 
     return showActionBottomSheet(context: context, items: actions);

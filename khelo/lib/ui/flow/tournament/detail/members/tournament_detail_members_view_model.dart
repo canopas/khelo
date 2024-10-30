@@ -6,6 +6,7 @@ import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 
 part 'tournament_detail_members_view_model.freezed.dart';
 
@@ -52,6 +53,30 @@ class TournamentDetailMembersViewNotifier
       state = state.copyWith(actionError: error);
       debugPrint(
           "TournamentDetailMembersViewNotifier: error while adding tournament member -> $error");
+    }
+  }
+
+  void handleMemberAction({
+    required String tournamentId,
+    required TournamentMember member,
+    UserModel? newOwner,
+    required TournamentMemberActionType action,
+  }) async {
+    switch (action) {
+      case TournamentMemberActionType.removeSelf:
+      case TournamentMemberActionType.removeMember:
+        removeTournamentMember(tournamentId, member);
+
+      case TournamentMemberActionType.makeAdmin:
+        updateMemberRole(tournamentId, member, TournamentMemberRole.admin);
+
+      case TournamentMemberActionType.makeOrganizer:
+        updateMemberRole(tournamentId, member, TournamentMemberRole.organizer);
+
+      case TournamentMemberActionType.transferOwnership:
+        if (newOwner != null) {
+          changeTournamentOwner(tournamentId, member, newOwner);
+        }
     }
   }
 
@@ -134,5 +159,20 @@ enum TournamentMemberActionType {
   transferOwnership,
   makeOrganizer,
   removeMember,
-  makeAdmin,
+  makeAdmin;
+
+  String getString(BuildContext context) {
+    switch (this) {
+      case TournamentMemberActionType.removeSelf:
+        return context.l10n.tournament_members_remove_self;
+      case TournamentMemberActionType.transferOwnership:
+        return context.l10n.common_transfer_ownership;
+      case TournamentMemberActionType.makeOrganizer:
+        return context.l10n.tournament_members_make_organizer;
+      case TournamentMemberActionType.removeMember:
+        return context.l10n.tournament_members_remove_member;
+      case TournamentMemberActionType.makeAdmin:
+        return context.l10n.common_make_admin;
+    }
+  }
 }
