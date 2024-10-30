@@ -271,7 +271,13 @@ class TeamService {
       return await _teamsCollection
           .where(FieldPath.documentId, whereIn: teamIds)
           .get()
-          .then((value) => value.docs.map((e) => e.data()).toList());
+          .then((snapshot) async {
+        final teams = await Future.wait(
+          snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),
+        );
+
+        return teams;
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

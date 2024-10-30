@@ -4,7 +4,6 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/tournament/tournament_service.dart';
-import 'package:data/utils/grouping_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -44,7 +43,7 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      _scheduler = MatchScheduler(tournament.teams, {0: tournament.matches});
+      _scheduler = MatchScheduler(tournament.teams, tournament.matches);
 
       state = state.copyWith(
         tournament: tournament,
@@ -59,20 +58,8 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
   }
 
   void _scheduleMatches() {
-    final scheduledMatches = _scheduler.scheduleKnockOutMatchV2();
-
-    final list = scheduledMatches.entries
-        .map((e) => e.value)
-        .expand((element) => element);
-
-    final GroupedMatchMap groupedMatches =
-        groupByTwoFields<MatchModel, MatchGroup, int>(
-      list.toList(),
-      primaryGroupByKey: (match) => match.match_group ?? MatchGroup.round,
-      secondaryGroupByKey: (match) => match.match_group_number ?? 1,
-    );
-
-    state = state.copyWith(matches: groupedMatches);
+    final scheduledMatches = _scheduler.scheduleKnockOutMatches();
+    state = state.copyWith(matches: scheduledMatches);
   }
 
   Future<void> _search(String searchKey) async {

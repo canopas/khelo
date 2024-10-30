@@ -104,8 +104,9 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
                   final roundNumber = roundEntry.key;
                   final matches = roundEntry.value;
 
-                  final roundDisplay =
-                      "${group.getString(context)} $roundNumber";
+                  final roundDisplay = group == MatchGroup.finals
+                      ? group.getString(context)
+                      : "${group.getString(context)} $roundNumber";
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +184,10 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
   }
 
   Widget _matchCell(
-      BuildContext context, MatchSelectionState state, MatchModel match) {
+    BuildContext context,
+    MatchSelectionState state,
+    MatchModel match,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16),
       margin: EdgeInsets.only(bottom: 16, left: 16, right: 16),
