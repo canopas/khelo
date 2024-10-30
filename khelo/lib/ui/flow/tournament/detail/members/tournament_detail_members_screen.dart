@@ -1,0 +1,274 @@
+import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/api/user/user_models.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
+import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/empty_screen.dart';
+import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
+
+import 'package:khelo/ui/flow/tournament/detail/members/tournament_detail_members_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
+import 'package:style/extensions/context_extensions.dart';
+import 'package:style/text/app_text_style.dart';
+
+import '../../../../../components/error_snackbar.dart';
+import '../../../matches/add_match/match_officials/search_user/search_user_screen.dart';
+
+class TournamentDetailMembersScreen extends ConsumerStatefulWidget {
+  final TournamentModel tournament;
+
+  const TournamentDetailMembersScreen({
+    super.key,
+    required this.tournament,
+  });
+
+  @override
+  ConsumerState<TournamentDetailMembersScreen> createState() =>
+      _TournamentDetailMembersScreenState();
+}
+
+class _TournamentDetailMembersScreenState
+    extends ConsumerState<TournamentDetailMembersScreen> {
+  late TournamentDetailMembersViewNotifier notifier;
+
+  @override
+  void initState() {
+    super.initState();
+    notifier = ref.read(tournamentDetailMembersStateProvider.notifier);
+    runPostFrame(() => notifier.setData(widget.tournament.members));
+  }
+
+  void _observeActionError(BuildContext context, WidgetRef ref) {
+    ref.listen(
+        tournamentDetailMembersStateProvider
+            .select((value) => value.actionError), (previous, next) {
+      if (next != null) {
+        showErrorSnackBar(context: context, error: next);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _observeActionError(context, ref);
+
+    final state = ref.watch(tournamentDetailMembersStateProvider);
+
+    return AppPage(
+      title: context.l10n.tournament_detail_members_title,
+      actions: state.currentUserId == widget.tournament.created_by
+          ? [
+              actionButton(
+                context,
+                icon: Icon(
+                  Icons.add,
+                  color: context.colorScheme.textPrimary,
+                ),
+                onPressed: () async {
+                  final user = await SearchUserBottomSheet.show<UserModel>(
+                    context,
+                    emptyScreenTitle: context
+                        .l10n.tournament_members_search_member_empty_title,
+                    emptyScreenDescription: context.l10n
+                        .tournament_members_search_member_empty_description,
+                  );
+
+                  if (user != null && mounted) {
+                    notifier.addTournamentMember(widget.tournament.id, user);
+                  }
+                },
+              )
+            ]
+          : null,
+      body: Builder(builder: (context) {
+        return _body(context, state);
+      }),
+    );
+  }
+
+  Widget _body(BuildContext context, TournamentDetailMembersState state) {
+    if (state.members.isEmpty) {
+      return EmptyScreen(
+        title: context.l10n.tournament_members_empty_title,
+        description: context.l10n.tournament_members_empty_description,
+        isShowButton: false,
+      );
+    }
+    final currantUserRole = state.members
+        .firstWhere(
+          (element) => element.id == state.currentUserId,
+        )
+        .role;
+
+    return ListView.separated(
+      padding: context.mediaQueryPadding + EdgeInsets.symmetric(vertical: 16),
+      itemCount: state.members.length,
+      itemBuilder: (context, index) {
+        return OnTapScale(
+            onTap: () {
+              _showActionSheet(
+                context,
+                member: state.members[index],
+                currentUserRole: currantUserRole,
+                currentUserId: state.currentUserId,
+                tournament: widget.tournament,
+              );
+            },
+            child: _memberCellView(context, state.members[index]));
+      },
+      separatorBuilder: (context, index) => Divider(
+        color: context.colorScheme.outline,
+      ),
+    );
+  }
+
+  Widget _memberCellView(BuildContext context, TournamentMember member) {
+    return Material(
+        type: MaterialType.transparency,
+        child: ListTile(
+          leading: ImageAvatar(
+            initial: member.user.nameInitial,
+            imageUrl: member.user.profile_img_url,
+            size: 40,
+          ),
+          title: Text(
+            member.user.name ?? '',
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
+          subtitle: Text(
+            member.role.name,
+            style: AppTextStyle.subtitle2
+                .copyWith(color: context.colorScheme.textSecondary),
+          ),
+          trailing: widget.tournament.created_by == member.id
+              ? Text(
+                  context.l10n.common_owner,
+                  style: AppTextStyle.body2.copyWith(
+                    color: context.colorScheme.primary,
+                  ),
+                )
+              : null,
+        ));
+  }
+
+  void _showActionSheet(
+    BuildContext context, {
+    required TournamentMember member,
+    required TournamentMemberRole currentUserRole,
+    required String? currentUserId,
+    required TournamentModel tournament,
+  }) async {
+    if (currentUserRole == TournamentMemberRole.admin &&
+        member.id == tournament.created_by) {
+      return;
+    }
+
+    List<BottomSheetAction> actions = [];
+    bool isOwner = currentUserId == tournament.created_by;
+
+    if (currentUserId == member.id && !isOwner) {
+      actions.add(
+        BottomSheetAction(
+          title: context.l10n.tournament_members_remove_self,
+          onTap: () async {
+            context.pop();
+            notifier.removeTournamentMember(tournament.id, member);
+          },
+        ),
+      );
+    }
+
+    if (isOwner) {
+      if (currentUserId == member.id) {
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.common_transfer_ownership,
+            onTap: () async {
+              context.pop();
+              final newOwner = await SearchUserBottomSheet.show<UserModel>(
+                context,
+                emptyScreenTitle: context.l10n.common_transfer_ownership,
+                emptyScreenDescription:
+                    context.l10n.team_detail_transfer_ownership_description,
+              );
+              if (context.mounted && newOwner != null) {
+                notifier.changeTournamentOwner(tournament.id, member, newOwner);
+                context.pop();
+              }
+            },
+          ),
+        );
+      } else if (member.role == TournamentMemberRole.admin) {
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.tournament_members_make_organizer,
+            onTap: () async {
+              context.pop();
+              notifier.updateMemberRole(
+                  tournament.id, member, TournamentMemberRole.organizer);
+            },
+          ),
+        );
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.tournament_members_remove_member,
+            onTap: () async {
+              context.pop();
+              notifier.removeTournamentMember(tournament.id, member);
+            },
+          ),
+        );
+      } else {
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.common_make_admin,
+            onTap: () async {
+              context.pop();
+              notifier.updateMemberRole(
+                  tournament.id, member, TournamentMemberRole.admin);
+            },
+          ),
+        );
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.tournament_members_remove_member,
+            onTap: () async {
+              context.pop();
+              notifier.removeTournamentMember(tournament.id, member);
+            },
+          ),
+        );
+      }
+    } else if (currentUserRole == TournamentMemberRole.organizer) {
+      if (member.role != TournamentMemberRole.admin) {
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.common_make_admin,
+            onTap: () async {
+              context.pop();
+              notifier.updateMemberRole(
+                  tournament.id, member, TournamentMemberRole.admin);
+            },
+          ),
+        );
+        actions.add(
+          BottomSheetAction(
+            title: context.l10n.tournament_members_remove_member,
+            onTap: () async {
+              context.pop();
+              notifier.removeTournamentMember(tournament.id, member);
+            },
+          ),
+        );
+      }
+    }
+
+    return await showActionBottomSheet(context: context, items: actions);
+  }
+}

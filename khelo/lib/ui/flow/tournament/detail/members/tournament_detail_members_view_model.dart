@@ -1,0 +1,120 @@
+import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/api/user/user_models.dart';
+import 'package:data/service/tournament/tournament_service.dart';
+import 'package:data/storage/app_preferences.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'tournament_detail_members_view_model.freezed.dart';
+
+final tournamentDetailMembersStateProvider = StateNotifierProvider.autoDispose<
+    TournamentDetailMembersViewNotifier, TournamentDetailMembersState>(
+  (ref) => TournamentDetailMembersViewNotifier(
+    ref.read(tournamentServiceProvider),
+    ref.read(currentUserPod)?.id,
+  ),
+);
+
+class TournamentDetailMembersViewNotifier
+    extends StateNotifier<TournamentDetailMembersState> {
+  final TournamentService _tournamentService;
+
+  TournamentDetailMembersViewNotifier(this._tournamentService, String? userId)
+      : super(TournamentDetailMembersState(currentUserId: userId));
+
+  void setData(List<TournamentMember> members) {
+    state = state.copyWith(members: members);
+  }
+
+  void addTournamentMember(String tournamentId, UserModel user) async {
+    try {
+      final member = TournamentMember(
+        id: user.id,
+        role: TournamentMemberRole.admin,
+      );
+
+      final members = {...state.members, member.copyWith(user: user)}.toList();
+
+      await _tournamentService.updateTournamentMembers(tournamentId, members);
+
+      state = state.copyWith(members: members);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
+      debugPrint(
+          "TournamentDetailMembersViewNotifier: error while adding tournament member -> $error");
+    }
+  }
+
+  void removeTournamentMember(
+      String tournamentId, TournamentMember member) async {
+    try {
+      await _tournamentService.removeTournamentMember(tournamentId, member);
+      final members = state.members.toList();
+      members.removeWhere((element) => element.id == member.id);
+
+      state = state.copyWith(members: members);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
+      debugPrint(
+          "TournamentDetailMembersViewNotifier: error while removing tournament member -> $error");
+    }
+  }
+
+  void updateMemberRole(
+    String tournamentId,
+    TournamentMember member,
+    TournamentMemberRole role,
+  ) async {
+    try {
+      final members = state.members.toList();
+      final index = members.indexOf(member);
+      members[index] = member.copyWith(role: role);
+
+      await _tournamentService.updateTournamentMembers(tournamentId, members);
+
+      state = state.copyWith(members: members);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
+      debugPrint(
+          "TournamentDetailMembersViewNotifier: error while updating tournament member role-> $error");
+    }
+  }
+
+  void changeTournamentOwner(
+    String tournamentId,
+    TournamentMember oldOwner,
+    UserModel newOwnerUser,
+  ) async {
+    try {
+      final newOwner = TournamentMember(
+        id: newOwnerUser.id,
+        role: TournamentMemberRole.organizer,
+      );
+
+      final members = state.members.toList();
+      members.removeWhere(
+          (member) => member.id == oldOwner.id || member.id == newOwnerUser.id);
+      members.add(newOwner.copyWith(user: newOwnerUser));
+
+      await _tournamentService.changeTournamentOwner(
+          tournamentId, newOwner.id, members);
+
+      state = state.copyWith(members: members);
+    } catch (error) {
+      state = state.copyWith(actionError: error);
+      debugPrint(
+        "TournamentDetailMembersViewNotifier: error while changing tournament owner -> $error",
+      );
+    }
+  }
+}
+
+@freezed
+class TournamentDetailMembersState with _$TournamentDetailMembersState {
+  const factory TournamentDetailMembersState({
+    Object? actionError,
+    String? currentUserId,
+    @Default([]) List<TournamentMember> members,
+  }) = _TournamentDetailMembersState;
+}

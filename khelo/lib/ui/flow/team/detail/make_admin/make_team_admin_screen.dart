@@ -49,7 +49,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
     _observeActionError();
     final state = ref.watch(makeTeamAdminStateProvider);
     return AppPage(
-      title: context.l10n.team_detail_make_admin_screen_title,
+      title: context.l10n.common_make_admin,
       actions: [
         actionButton(context,
             onPressed: state.isButtonEnabled ? notifier.onSave : null,
@@ -123,7 +123,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                                 ? context
                                     .l10n.team_detail_remove_ownership_title
                                 : context
-                                    .l10n.team_detail_transfer_ownership_title,
+                                    .l10n.common_transfer_ownership,
                             onTap: () async {
                               context.pop();
                               if (notifier.team.created_by_user.id !=
@@ -136,7 +136,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                                   await SearchUserBottomSheet.show<UserModel>(
                                 context,
                                 emptyScreenTitle: context
-                                    .l10n.team_detail_transfer_ownership_title,
+                                    .l10n.common_transfer_ownership,
                                 emptyScreenDescription: context.l10n
                                     .team_detail_transfer_ownership_description,
                               );
@@ -151,7 +151,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                             BottomSheetAction(
                               title: state.selectedPlayerIds
                                       .contains(state.owner.id)
-                                  ? context.l10n.team_detail_remove_admin
+                                  ? context.l10n.common_remove_admin
                                   : context.l10n.team_detail_make_admin,
                               onTap: () {
                                 context.pop();
@@ -164,7 +164,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                       }
                     },
                     trailing: Text(
-                        context.l10n.team_detail_make_admin_owner_title,
+                        context.l10n.common_owner,
                         style: AppTextStyle.body2
                             .copyWith(color: context.colorScheme.primary)),
                   )
