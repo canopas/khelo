@@ -9,11 +9,12 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/confirmation_dialog.dart';
 import 'package:khelo/components/error_snackbar.dart';
 import 'package:khelo/components/profile_image_avatar.dart';
-import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:khelo/ui/flow/settings/edit_profile/component/transfer_teams_sheet.dart';
 import 'package:khelo/ui/flow/settings/edit_profile/edit_profile_view_model.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/primary_button.dart';
@@ -39,6 +40,8 @@ class EditProfileScreen extends ConsumerWidget {
 
     _observeActionError(context, ref);
     _observeIsSaved(context, ref);
+    _observeShowDeleteConfirmationDialog(context, ref, notifier.onDeleteTap);
+    _observeShowTransferTeamsSheet(context, ref);
 
     return AppPage(
       title: isToCreateAccount
@@ -63,50 +66,48 @@ class EditProfileScreen extends ConsumerWidget {
       ],
       body: Builder(
         builder: (context) {
-          return ListView(
-            padding: context.mediaQueryPadding + const EdgeInsets.all(16.0),
-            children: [
-              ProfileImageAvatar(
-                  size: profileViewHeight,
-                  placeHolderImage: Assets.images.icProfileThin,
-                  imageUrl: state.imageUrl,
-                  filePath: state.filePath,
-                  isLoading: state.isImageUploading,
-                  onEditButtonTap: () async {
-                    final imagePath =
-                        await ImagePickerSheet.show<String>(context, true);
-                    if (imagePath != null) {
-                      notifier.onImageChange(imagePath);
-                    }
-                  }),
-              const SizedBox(height: 24),
-              _userContactDetailsView(context, notifier, state),
-              const SizedBox(height: 24),
-              _userPersonalDetailsView(context, notifier, state),
-              const SizedBox(height: 24),
-              _userPlayStyleView(context, notifier, state),
-              const SizedBox(height: 24),
-              if (!isToCreateAccount) ...[
-                _deleteButton(
-                  context,
-                  onDelete: () => showConfirmationDialog(context,
-                      title: context.l10n.common_delete_title,
-                      message: context.l10n.alert_confirm_default_message(
-                          context.l10n.common_delete_title.toLowerCase()),
-                      confirmBtnText: context.l10n.common_delete_title,
-                      onConfirm: notifier.onDeleteTap),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    context.l10n.edit_profile_delete_account_description_text,
-                    style: AppTextStyle.body2.copyWith(
-                      color: context.colorScheme.textDisabled,
+          return Padding(
+            padding: context.mediaQueryPadding,
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
+              children: [
+                ProfileImageAvatar(
+                    size: profileViewHeight,
+                    placeHolderImage: Assets.images.icProfileThin,
+                    imageUrl: state.imageUrl,
+                    filePath: state.filePath,
+                    isLoading: state.isImageUploading,
+                    onEditButtonTap: () async {
+                      final imagePath =
+                          await ImagePickerSheet.show<String>(context, true);
+                      if (imagePath != null) {
+                        notifier.onImageChange(imagePath);
+                      }
+                    }),
+                const SizedBox(height: 24),
+                _userContactDetailsView(context, notifier, state),
+                const SizedBox(height: 24),
+                _userPersonalDetailsView(context, notifier, state),
+                const SizedBox(height: 24),
+                _userPlayStyleView(context, notifier, state),
+                const SizedBox(height: 24),
+                if (!isToCreateAccount) ...[
+                  _deleteButton(
+                    context,
+                    onDelete: notifier.checkUserOwnershipAndShowDialog,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      context.l10n.edit_profile_delete_account_description_text,
+                      style: AppTextStyle.body2.copyWith(
+                        color: context.colorScheme.textDisabled,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           );
         },
       ),
@@ -309,7 +310,7 @@ class EditProfileScreen extends ConsumerWidget {
 
   Widget _deleteButton(
     BuildContext context, {
-    required Function() onDelete,
+    required VoidCallback onDelete,
   }) {
     return PrimaryButton(
       onPressed: onDelete,
@@ -337,6 +338,46 @@ class EditProfileScreen extends ConsumerWidget {
         } else {
           context.pop();
         }
+      }
+    });
+  }
+
+  void _observeShowDeleteConfirmationDialog(
+    BuildContext context,
+    WidgetRef ref,
+    VoidCallback onDeleteTap,
+  ) {
+    ref.listen(
+        editProfileStateProvider.select(
+            (state) => state.showDeleteConfirmationDialog), (previous, next) {
+      if (next) {
+        showConfirmationDialog(
+          context,
+          title: context.l10n.common_delete_title,
+          message: context.l10n.alert_confirm_default_message(
+              context.l10n.common_delete_title.toLowerCase()),
+          confirmBtnText: context.l10n.common_delete_title,
+          onConfirm: onDeleteTap,
+        );
+      }
+    });
+  }
+
+  void _observeShowTransferTeamsSheet(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        editProfileStateProvider
+            .select((state) => state.showTransferTeamsSheet), (previous, next) {
+      if (next) {
+        TransferTeamsSheet.show(
+          context,
+          onButtonTap: () {
+            context.pop();
+            context.pop(true);
+          },
+        );
       }
     });
   }

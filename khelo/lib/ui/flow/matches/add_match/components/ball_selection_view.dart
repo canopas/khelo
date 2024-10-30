@@ -48,7 +48,7 @@ class BallSelectionView extends StatelessWidget {
     required String title,
     required String image,
     required bool isSelected,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return OnTapScale(
       onTap: () => onTap(),

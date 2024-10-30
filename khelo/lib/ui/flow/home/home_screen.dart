@@ -173,7 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BuildContext context, {
     required String header,
     required bool isViewAllShow,
-    required Function() onViewAll,
+    required VoidCallback onViewAll,
   }) {
     return OnTapScale(
       onTap: onViewAll,
@@ -193,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Visibility(
                 visible: isViewAllShow,
                 child: Text(
-                  context.l10n.home_screen_view_all_btn,
+                  context.l10n.common_view_all,
                   style: AppTextStyle.button.copyWith(
                     color: context.colorScheme.primary,
                   ),
@@ -311,7 +311,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BuildContext context, {
     required String title,
     required String btnText,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return OnTapScale(
       onTap: onTap,

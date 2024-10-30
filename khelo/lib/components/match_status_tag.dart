@@ -9,7 +9,7 @@ import 'package:style/text/app_text_style.dart';
 
 class MatchStatusTag extends StatelessWidget {
   final MatchStatus status;
-  final Function()? onTap;
+  final VoidCallback? onTap;
 
   const MatchStatusTag({
     super.key,

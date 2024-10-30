@@ -40,8 +40,8 @@ dependencies:
   uuid: ^4.5.1
 
   # state management
-  flutter_riverpod: ^2.5.1
-  hooks_riverpod: ^2.5.2
+  flutter_riverpod: 2.5.3
+  hooks_riverpod: ^2.5.4
 
 dev_dependencies:
   flutter_test:

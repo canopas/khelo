@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-void runPostFrame(Function() block) {
+void runPostFrame(VoidCallback block) {
   WidgetsBinding.instance.addPostFrameCallback((_) async {
     block();
   });

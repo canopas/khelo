@@ -99,6 +99,16 @@ class MatchService {
     }
   }
 
+  Future<int> getUserOwnedMatchesCount(String userId) {
+    return _matchCollection
+        .where(FireStoreConst.createdBy, isEqualTo: userId)
+        .count()
+        .get()
+        .then((snapshot) {
+      return snapshot.count ?? 0;
+    }).catchError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Stream<MatchSetting?> streamMatchSetting(String matchId) {
     return _matchSettingDocument(matchId)
         .snapshots()
@@ -499,12 +509,29 @@ class MatchService {
     required String matchId,
     required RevisedTarget revisedTarget,
   }) async {
-    await _matchCollection.doc(matchId).update(
-      {
-        FireStoreConst.revisedTarget: revisedTarget.toJson(),
-        FireStoreConst.updatedAt: DateTime.now(),
-      },
-    );
+    try {
+      await _matchCollection.doc(matchId).update(
+        {
+          FireStoreConst.revisedTarget: revisedTarget.toJson(),
+          FireStoreConst.updatedAt: DateTime.now(),
+        },
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> changeMatchOwner({
+    required String matchId,
+    required String ownerId,
+  }) async {
+    try {
+      await _matchCollection.doc(matchId).update(
+        {FireStoreConst.createdBy: ownerId},
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<void> deleteMatch(String matchId) async {
@@ -532,18 +559,31 @@ class MatchService {
     List<MatchTeamModel> teamList,
   ) async {
     try {
-      final List<MatchTeamModel> teams = [];
+      final teamIds = teamList.map((e) => e.team_id).toList();
 
-      await Future.forEach(teamList, (e) async {
-        final TeamModel team = await _teamService.getTeamById(e.team_id);
-        final List<MatchPlayer> squad =
-            await getPlayerListFromPlayerIds(e.squad);
-        teams.add(
-          e.copyWith(team: team, squad: squad),
+      final playerIds = teamList.expand((team) => team.squad).toList();
+
+      final teamsData = await Future.wait([
+        _teamService.getTeamsByIds(teamIds),
+        getPlayerListFromPlayerIds(playerIds),
+      ]);
+
+      final List<TeamModel> teams = teamsData[0] as List<TeamModel>;
+      final List<MatchPlayer> players = teamsData[1] as List<MatchPlayer>;
+
+      final List<List<MatchPlayer>> squads = teamList.map((team) {
+        final teamPlayerIds = team.squad.map((player) => player.id).toSet();
+        return players
+            .where((player) => teamPlayerIds.contains(player.id))
+            .toList();
+      }).toList();
+
+      return List.generate(teamList.length, (index) {
+        return teamList[index].copyWith(
+          team: teams[index],
+          squad: squads[index],
         );
       });
-
-      return teams;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -558,7 +598,7 @@ class MatchService {
 
       final List<UserModel> users = await _userService.getUsersByIds(playerIds);
 
-      final List<MatchPlayer> squad = users.map((user) {
+      return users.map((user) {
         final matchPlayer =
             players.firstWhere((element) => element.id == user.id);
 
@@ -568,19 +608,30 @@ class MatchService {
           id: user.id,
         );
       }).toList();
-
-      return squad;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
   }
 
   Future<List<MatchModel>> getMatchesByIds(List<String> matchIds) async {
+    final List<MatchModel> matches = [];
     try {
-      return await _matchCollection
-          .where(FieldPath.documentId, whereIn: matchIds)
-          .get()
-          .then((value) => value.docs.map((e) => e.data()).toList());
+      if (matchIds.isEmpty) return [];
+      for (final tenIds in matchIds.chunked(10)) {
+        final snapshot = await _matchCollection
+            .where(FieldPath.documentId, whereIn: tenIds)
+            .get();
+        final matchList = await Future.wait(
+          snapshot.docs.map((doc) async {
+            final match = doc.data();
+            final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+            return match.copyWith(teams: teams);
+          }).toList(),
+        );
+
+        matches.addAll(matchList);
+      }
+      return matches;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

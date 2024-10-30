@@ -1,10 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../../converter/timestamp_json_converter.dart';
 import '../../utils/constant/firestore_constant.dart';
 import '../user/user_models.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'team_model.freezed.dart';
 
@@ -21,6 +22,9 @@ abstract class TeamModel with _$TeamModel {
     String? name_initial,
     String? profile_img_url,
     String? created_by,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(UserModel(id: ''))
+    UserModel created_by_user,
     DateTime? created_at,
     @TimeStampJsonConverter() DateTime? created_time,
     @JsonKey(name: FireStoreConst.teamPlayers)

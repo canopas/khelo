@@ -38,7 +38,6 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
     _controller = PageController(
       initialPage: ref.read(myGameTabViewStateProvider).selectedTab,
     );

@@ -48,7 +48,7 @@ class PitchSelectionView extends StatelessWidget {
     required BuildContext context,
     required String title,
     required bool isSelected,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.only(right: 8),

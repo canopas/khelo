@@ -10,10 +10,12 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/profile_image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/gen/assets.gen.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/bottom_sticky_overlay.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -25,12 +27,15 @@ import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/action_bottom_sheet.dart';
 import '../../../../components/app_page.dart';
+import '../../../../components/confirmation_dialog.dart';
 import '../../../../components/error_snackbar.dart';
 import '../../../../components/image_picker_sheet.dart';
 import '../../../../domain/formatter/date_formatter.dart';
 
 class AddTournamentScreen extends ConsumerStatefulWidget {
-  const AddTournamentScreen({super.key});
+  final TournamentModel? editTournament;
+
+  const AddTournamentScreen({super.key, this.editTournament});
 
   @override
   ConsumerState<AddTournamentScreen> createState() =>
@@ -44,6 +49,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(addTournamentStateProvider.notifier);
+    runPostFrame(() => notifier.setData(widget.editTournament));
   }
 
   void _observeActionError(BuildContext context, WidgetRef ref) {
@@ -80,13 +86,45 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
     _observePop(context, ref);
 
     final state = ref.watch(addTournamentStateProvider);
+    final isOrganizer = widget.editTournament == null ||
+        (state.currentUserId == widget.editTournament?.created_by ||
+            widget.editTournament!.members
+                .any((e) => e.id == state.currentUserId && e.role.isOrganizer));
 
     return AppPage(
-      title: context.l10n.add_tournament_screen_title,
+      title: widget.editTournament == null
+          ? context.l10n.add_tournament_screen_title
+          : context.l10n.tournament_detail_edit_title,
+      actions: isOrganizer
+          ? [
+              actionButton(
+                context,
+                onPressed: () => showConfirmationDialog(
+                  context,
+                  title: context.l10n.add_tournament_delete_title,
+                  message: context.l10n.add_tournament_delete_description,
+                  confirmBtnText: context.l10n.common_delete_title,
+                  onConfirm: () {
+                    notifier.deleteTournament();
+                    context.pop();
+                    context.pop();
+                  },
+                ),
+                icon: SvgPicture.asset(
+                  Assets.images.icBin,
+                  height: 24,
+                  width: 24,
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                      context.colorScheme.alert, BlendMode.srcATop),
+                ),
+              )
+            ]
+          : null,
       body: Builder(
         builder: (context) => Stack(
           children: [
-            _body(context, state),
+            _body(context, isOrganizer, state),
             _stickyButton(context, state),
           ],
         ),
@@ -94,7 +132,8 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
     );
   }
 
-  Widget _body(BuildContext context, AddTournamentState state) {
+  Widget _body(
+      BuildContext context, bool isOrganizer, AddTournamentState state) {
     return ListView(
       padding: context.mediaQueryPadding + BottomStickyOverlay.padding,
       children: [
@@ -105,6 +144,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
             children: [
               AppTextField(
                 controller: state.nameController,
+                enabled: isOrganizer,
                 label: context.l10n.add_tournament_name,
                 onChanged: (_) => notifier.onChange(),
                 contentPadding:
@@ -122,6 +162,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                 headerText: context.l10n.add_tournament_type,
                 title: state.selectedType.getString(context),
                 showTrailingIcon: true,
+                enabled: isOrganizer,
                 onTap: () {
                   _selectTypeSheet(
                     context,
@@ -306,7 +347,9 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
   ) {
     return BottomStickyOverlay(
       child: PrimaryButton(
-        context.l10n.common_create,
+        widget.editTournament == null
+            ? context.l10n.common_create
+            : context.l10n.common_edit,
         progress: state.loading,
         enabled: state.enableButton,
         onPressed: notifier.addTournament,

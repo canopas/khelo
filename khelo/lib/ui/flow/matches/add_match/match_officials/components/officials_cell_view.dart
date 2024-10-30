@@ -11,8 +11,8 @@ class OfficialsCellView extends StatelessWidget {
   final MatchOfficials type;
   final UserModel? user;
   final bool isWholeCellTappable;
-  final Function() onCardTap;
-  final Function()? onRemoveTap;
+  final VoidCallback onCardTap;
+  final VoidCallback? onRemoveTap;
 
   const OfficialsCellView({
     super.key,
@@ -71,7 +71,7 @@ class OfficialsCellView extends StatelessWidget {
 
   Widget _removeUserButton(
     BuildContext context, {
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return OnTapScale(
       onTap: onTap,

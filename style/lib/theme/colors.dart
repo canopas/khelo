@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../text/app_text_style.dart';
 
 const primaryLightColor = Color(0xFF01579B);
-const primaryDarkColor = Color(0xFF0075D1);
+const primaryDarkColor = Color(0xFF66BDFF);
 
 const primaryVariantLightColor = Color(0x4D01579B);
 const primaryVariantDarkColor = Color(0x6601579B);
@@ -111,7 +111,7 @@ final ThemeData materialThemeDataDark = _materialDarkTheme.copyWith(
     primary: primaryDarkColor,
     secondary: secondaryColor,
     surface: surfaceDarkColor,
-    onPrimary: textPrimaryDarkColor,
+    onPrimary: textPrimaryLightColor,
     onSecondary: textSecondaryLightColor,
     onSurface: textPrimaryDarkColor,
   ),
@@ -146,7 +146,6 @@ class AppColorScheme {
   final Color warning;
   final Color info;
   final Color onPrimary;
-  final Color onPrimaryVariant;
   final Color onSecondary;
   final Color onDisabled;
   final ThemeMode themeMode;
@@ -171,7 +170,6 @@ class AppColorScheme {
     required this.warning,
     required this.info,
     required this.onPrimary,
-    required this.onPrimaryVariant,
     required this.onSecondary,
     required this.onDisabled,
     required this.themeMode,
@@ -208,7 +206,6 @@ final appColorSchemeLight = AppColorScheme(
   warning: awarenessWarningColor,
   info: awarenessInfoColor,
   onPrimary: textPrimaryDarkColor,
-  onPrimaryVariant: textPrimaryLightColor,
   onSecondary: textSecondaryDarkColor,
   onDisabled: textDisabledLightColor,
   themeMode: ThemeMode.light,
@@ -233,8 +230,7 @@ final appColorSchemeDark = AppColorScheme(
   alert: awarenessAlertColor,
   warning: awarenessWarningColor,
   info: awarenessInfoColor,
-  onPrimary: textPrimaryDarkColor,
-  onPrimaryVariant: textPrimaryLightColor,
+  onPrimary: textPrimaryLightColor,
   onSecondary: textSecondaryDarkColor,
   onDisabled: textDisabledLightColor,
   themeMode: ThemeMode.dark,

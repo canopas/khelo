@@ -6,7 +6,7 @@ import 'package:style/text/app_text_style.dart';
 
 class RoundedCheckBox extends StatelessWidget {
   final bool isSelected;
-  final Function(bool) onTap;
+  final Function(bool)? onTap;
 
   const RoundedCheckBox({
     super.key,
@@ -17,7 +17,8 @@ class RoundedCheckBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OnTapScale(
-      onTap: () => onTap(!isSelected),
+      enabled: onTap != null,
+      onTap: () => onTap?.call(!isSelected),
       child: Container(
         height: 24,
         width: 24,

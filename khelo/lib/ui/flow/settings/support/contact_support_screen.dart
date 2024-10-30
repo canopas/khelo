@@ -76,48 +76,52 @@ class _ContactSupportScreenState extends ConsumerState<ContactSupportScreen> {
   }
 
   Widget _body(BuildContext context, ContactSupportViewState state) {
-    return ListView(
-      padding: context.mediaQueryPadding + const EdgeInsets.all(16),
-      children: [
-        _textInputField(
-          context,
-          placeholderText: context.l10n.contact_support_title_placeholder_text,
-          controller: state.titleController,
-          onChanged: (value) => notifier.onValueChange(),
-        ),
-        const SizedBox(height: 16),
-        _textInputField(
-          context,
-          placeholderText:
-              context.l10n.contact_support_description_placeholder_text,
-          controller: state.descriptionController,
-          maxLines: 8,
-        ),
-        const SizedBox(height: 16),
-        _attachmentButton(
-          context: context,
-          onAttachmentTap: notifier.pickAttachments,
-        ),
-        ListView.separated(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: state.attachments.length,
-          itemBuilder: (context, index) => AttachmentItem(
-            path: state.attachments[index].path,
-            isLoading: state.attachments[index].uploadStatus.isUploading,
-            onCancelTap: () => notifier.removeAttachment(index),
+    return Padding(
+      padding: context.mediaQueryPadding,
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _textInputField(
+            context,
+            placeholderText:
+                context.l10n.contact_support_title_placeholder_text,
+            controller: state.titleController,
+            onChanged: (value) => notifier.onValueChange(),
           ),
-          separatorBuilder: (context, index) => const SizedBox(height: 8),
-        ),
-        const SizedBox(height: 16),
-        PrimaryButton(
-          enabled: !state.submitting && state.enableSubmit,
-          progress: state.submitting,
-          context.l10n.common_submit_title,
-          onPressed: notifier.submitSupportCase,
-        ),
-      ],
+          const SizedBox(height: 16),
+          _textInputField(
+            context,
+            placeholderText:
+                context.l10n.contact_support_description_placeholder_text,
+            controller: state.descriptionController,
+            maxLines: 8,
+          ),
+          const SizedBox(height: 16),
+          _attachmentButton(
+            context: context,
+            onAttachmentTap: notifier.pickAttachments,
+          ),
+          ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.attachments.length,
+            itemBuilder: (context, index) => AttachmentItem(
+              path: state.attachments[index].path,
+              isLoading: state.attachments[index].uploadStatus.isUploading,
+              onCancelTap: () => notifier.removeAttachment(index),
+            ),
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
+          ),
+          const SizedBox(height: 16),
+          PrimaryButton(
+            enabled: !state.submitting && state.enableSubmit,
+            progress: state.submitting,
+            context.l10n.common_submit_title,
+            onPressed: notifier.submitSupportCase,
+          ),
+        ],
+      ),
     );
   }
 

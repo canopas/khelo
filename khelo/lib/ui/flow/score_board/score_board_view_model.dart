@@ -468,6 +468,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         state = state.copyWith(showEndMatchSheet: DateTime.now());
       case MatchOption.reviseTarget:
         state = state.copyWith(showReviseTargetSheet: DateTime.now());
+      case MatchOption.handOverScoring:
+        state = state.copyWith(showHandOverScoringSheet: DateTime.now());
       default:
         return;
     }
@@ -1541,6 +1543,23 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         matchId: matchId, revisedTarget: revisedTarget);
   }
 
+  Future<void> changeMatchOwner(UserModel newOwner) async {
+    try {
+      if (state.match?.created_by != newOwner.id) {
+        state = state.copyWith(actionError: null, isActionInProgress: true);
+        await _matchService.changeMatchOwner(
+          matchId: state.match?.id ?? '',
+          ownerId: newOwner.id,
+        );
+        state = state.copyWith(isActionInProgress: false, pop: true);
+      }
+    } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while changing match owner -> $e");
+      state = state.copyWith(actionError: e, isActionInProgress: false);
+    }
+  }
+
   _cancelStreamSubscription() async {
     await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
@@ -1594,6 +1613,7 @@ class ScoreBoardViewState with _$ScoreBoardViewState {
     DateTime? showAddSubstituteSheet,
     DateTime? invalidUndoToast,
     DateTime? showReviseTargetSheet,
+    DateTime? showHandOverScoringSheet,
     ScoreButton? tappedButton,
     bool? isLongTap,
     FieldingPositionType? position,
@@ -1668,6 +1688,7 @@ enum MatchOption {
   showForLessRuns,
   showForDotBall,
   addSubstitute,
+  handOverScoring,
   endMatch;
 
   String getTitle(BuildContext context) {
@@ -1686,6 +1707,8 @@ enum MatchOption {
         return context.l10n.score_board_add_substitute_title;
       case MatchOption.endMatch:
         return context.l10n.score_board_option_end_match;
+      case MatchOption.handOverScoring:
+        return context.l10n.score_board_option_handover_scoring;
       case MatchOption.showForLessRuns:
         return context.l10n.score_board_show_wheel_for_less_run_title;
       case MatchOption.showForDotBall:

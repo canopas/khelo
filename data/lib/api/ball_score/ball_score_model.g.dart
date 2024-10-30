@@ -108,6 +108,96 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
+_$UserStatImpl _$$UserStatImplFromJson(Map<String, dynamic> json) =>
+    _$UserStatImpl(
+      battingStat: json['battingStat'] == null
+          ? null
+          : BattingStat.fromJson(json['battingStat'] as Map<String, dynamic>),
+      bowlingStat: json['bowlingStat'] == null
+          ? null
+          : BowlingStat.fromJson(json['bowlingStat'] as Map<String, dynamic>),
+      fieldingStat: json['fieldingStat'] == null
+          ? null
+          : FieldingStat.fromJson(json['fieldingStat'] as Map<String, dynamic>),
+    );
+
+Map<String, dynamic> _$$UserStatImplToJson(_$UserStatImpl instance) =>
+    <String, dynamic>{
+      'battingStat': instance.battingStat,
+      'bowlingStat': instance.bowlingStat,
+      'fieldingStat': instance.fieldingStat,
+    };
+
+_$BattingStatImpl _$$BattingStatImplFromJson(Map<String, dynamic> json) =>
+    _$BattingStatImpl(
+      innings: (json['innings'] as num?)?.toInt() ?? 0,
+      runScored: (json['runScored'] as num?)?.toInt() ?? 0,
+      average: (json['average'] as num?)?.toDouble() ?? 0.0,
+      strikeRate: (json['strikeRate'] as num?)?.toDouble() ?? 0.0,
+      ballFaced: (json['ballFaced'] as num?)?.toInt() ?? 0,
+      fours: (json['fours'] as num?)?.toInt() ?? 0,
+      sixes: (json['sixes'] as num?)?.toInt() ?? 0,
+      fifties: (json['fifties'] as num?)?.toInt() ?? 0,
+      hundreds: (json['hundreds'] as num?)?.toInt() ?? 0,
+      ducks: (json['ducks'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$BattingStatImplToJson(_$BattingStatImpl instance) =>
+    <String, dynamic>{
+      'innings': instance.innings,
+      'runScored': instance.runScored,
+      'average': instance.average,
+      'strikeRate': instance.strikeRate,
+      'ballFaced': instance.ballFaced,
+      'fours': instance.fours,
+      'sixes': instance.sixes,
+      'fifties': instance.fifties,
+      'hundreds': instance.hundreds,
+      'ducks': instance.ducks,
+    };
+
+_$BowlingStatImpl _$$BowlingStatImplFromJson(Map<String, dynamic> json) =>
+    _$BowlingStatImpl(
+      innings: (json['innings'] as num?)?.toInt() ?? 0,
+      wicketTaken: (json['wicketTaken'] as num?)?.toInt() ?? 0,
+      balls: (json['balls'] as num?)?.toInt() ?? 0,
+      runsConceded: (json['runsConceded'] as num?)?.toInt() ?? 0,
+      maiden: (json['maiden'] as num?)?.toInt() ?? 0,
+      noBalls: (json['noBalls'] as num?)?.toInt() ?? 0,
+      wideBalls: (json['wideBalls'] as num?)?.toInt() ?? 0,
+      average: (json['average'] as num?)?.toDouble() ?? 0.0,
+      strikeRate: (json['strikeRate'] as num?)?.toDouble() ?? 0.0,
+      economyRate: (json['economyRate'] as num?)?.toDouble() ?? 0.0,
+    );
+
+Map<String, dynamic> _$$BowlingStatImplToJson(_$BowlingStatImpl instance) =>
+    <String, dynamic>{
+      'innings': instance.innings,
+      'wicketTaken': instance.wicketTaken,
+      'balls': instance.balls,
+      'runsConceded': instance.runsConceded,
+      'maiden': instance.maiden,
+      'noBalls': instance.noBalls,
+      'wideBalls': instance.wideBalls,
+      'average': instance.average,
+      'strikeRate': instance.strikeRate,
+      'economyRate': instance.economyRate,
+    };
+
+_$FieldingStatImpl _$$FieldingStatImplFromJson(Map<String, dynamic> json) =>
+    _$FieldingStatImpl(
+      catches: (json['catches'] as num?)?.toInt() ?? 0,
+      runOut: (json['runOut'] as num?)?.toInt() ?? 0,
+      stumping: (json['stumping'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$FieldingStatImplToJson(_$FieldingStatImpl instance) =>
+    <String, dynamic>{
+      'catches': instance.catches,
+      'runOut': instance.runOut,
+      'stumping': instance.stumping,
+    };
+
 _$OverStatModelImpl _$$OverStatModelImplFromJson(Map<String, dynamic> json) =>
     _$OverStatModelImpl(
       run: (json['run'] as num?)?.toInt() ?? 0,

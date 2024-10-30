@@ -80,7 +80,7 @@ class OverDetailView extends StatelessWidget {
     BuildContext context, {
     required String title,
     required Widget trailing,
-    Function()? onTap,
+        VoidCallback? onTap,
   }) {
     return OnTapScale(
       onTap: onTap,
@@ -127,7 +127,7 @@ class OverDetailView extends StatelessWidget {
   Widget _stepperView(
     BuildContext context,
     TextEditingController controller, {
-    required Function() onChanged,
+    required VoidCallback onChanged,
     required Function(bool) onStepperActionTap,
   }) {
     return Container(
@@ -188,7 +188,7 @@ class OverDetailView extends StatelessWidget {
     BuildContext context, {
     bool isPlus = true,
     bool isEnabled = true,
-    required Function() onTap,
+    required VoidCallback onTap,
   }) {
     return OnTapScale(
       onTap: onTap,
