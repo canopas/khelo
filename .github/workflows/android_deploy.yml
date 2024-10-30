@@ -1,10 +1,10 @@
 name: Publish to Google Play Store
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+on: push
+#  push:
+#    branches:
+#      - main
+#  workflow_dispatch:
 
 jobs:
   deploy_internal_android:
@@ -37,21 +37,6 @@ jobs:
         env:
           FIREBASE_OPTIONS_BASE64: ${{ secrets.FIREBASE_OPTIONS_BASE64 }}
           GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
-
-        run: |
-          cd khelo
-          echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
-          echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -di > android/app/google-services.json
-
-      - name: Install Dependencies
-        run: |
-          cd data && flutter clean && flutter pub get
-          cd ../style && flutter clean && flutter pub get
-          cd ../khelo && flutter clean && flutter pub get
-          cd ..
-
-      - name: Deploy Internally
-        env:
           APP_PLAY_SERVICE_JSON: ${{ secrets.APP_PLAY_SERVICE_JSON_BASE64 }}
           APKSIGN_KEYSTORE_BASE64: ${{ secrets.APKSIGN_KEYSTORE_BASE64 }}
           APKSIGN_KEYSTORE_PASS: ${{ secrets.APKSIGN_KEYSTORE_PASS }}
@@ -59,6 +44,17 @@ jobs:
           APKSIGN_KEY_PASS: ${{ secrets.APKSIGN_KEY_PASS }}
 
         run: |
+          cd khelo
+          echo $FIREBASE_OPTIONS_BASE64 | base64 -di > lib/firebase_options.dart
+          echo $GOOGLE_SERVICES_JSON_BASE64 | base64 -di > android/app/google-services.json
+          
+          echo Installing dependencies
+          cd data && flutter clean && flutter pub get
+          cd ../style && flutter clean && flutter pub get
+          cd ../khelo && flutter clean && flutter pub get
+          cd ..
+          
+          echo Deploy Internally
           echo  $APKSIGN_KEYSTORE_BASE64 | base64 -di > release.keystore
           export APKSIGN_KEYSTORE=`pwd`/release.keystore
           cd khelo
