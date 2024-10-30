@@ -65,22 +65,26 @@ class TournamentDetailMembersViewNotifier
     switch (action) {
       case TournamentMemberActionType.removeSelf:
       case TournamentMemberActionType.removeMember:
-        removeTournamentMember(tournamentId, member);
+        _removeTournamentMember(tournamentId, member);
+        break;
 
       case TournamentMemberActionType.makeAdmin:
-        updateMemberRole(tournamentId, member, TournamentMemberRole.admin);
+        _updateMemberRole(tournamentId, member, TournamentMemberRole.admin);
+        break;
 
       case TournamentMemberActionType.makeOrganizer:
-        updateMemberRole(tournamentId, member, TournamentMemberRole.organizer);
+        _updateMemberRole(tournamentId, member, TournamentMemberRole.organizer);
+        break;
 
       case TournamentMemberActionType.transferOwnership:
         if (newOwner != null) {
-          changeTournamentOwner(tournamentId, member, newOwner);
+          _changeTournamentOwner(tournamentId, member, newOwner);
         }
+        break;
     }
   }
 
-  void removeTournamentMember(
+  void _removeTournamentMember(
       String tournamentId, TournamentMember member) async {
     try {
       await _tournamentService.removeTournamentMember(tournamentId, member);
@@ -95,7 +99,7 @@ class TournamentDetailMembersViewNotifier
     }
   }
 
-  void updateMemberRole(
+  void _updateMemberRole(
     String tournamentId,
     TournamentMember member,
     TournamentMemberRole role,
@@ -116,7 +120,7 @@ class TournamentDetailMembersViewNotifier
     }
   }
 
-  void changeTournamentOwner(
+  void _changeTournamentOwner(
     String tournamentId,
     TournamentMember oldOwner,
     UserModel newOwnerUser,
