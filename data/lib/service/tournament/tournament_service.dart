@@ -160,14 +160,24 @@ class TournamentService {
     }
   }
 
-  Future<void> updateMatchIds(
-    String tournamentId,
-    List<String> matchIds,
-  ) async {
+  Future<void> removeMatchFromTournament(
+      String tournamentId,
+      String matchId,
+      ) async {
     try {
-      await _tournamentCollection
-          .doc(tournamentId)
-          .update({FireStoreConst.matchIds: matchIds});
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.matchIds: FieldValue.arrayRemove([matchId]),
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> addMatchInTournament(String tournamentId, String matchId) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.matchIds: FieldValue.arrayUnion([matchId]),
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

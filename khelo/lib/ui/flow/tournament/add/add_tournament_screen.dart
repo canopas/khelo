@@ -192,33 +192,6 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                   }
                 },
               ),
-              const SizedBox(height: 16),
-              AdaptiveOutlinedTile(
-                placeholder: context.l10n.add_tournament_match_selection,
-                headerText: context.l10n.add_tournament_match_selection,
-                title: state.matches.isEmpty
-                    ? context.l10n.match_selection_select_matches_title
-                    : context.l10n
-                        .add_tournament_teams_title(state.teams.length),
-                showTrailingIcon: true,
-                iconImage: Assets.images.icArrowForward,
-                onTap: () async {
-                  if (state.teams.length >=
-                      state.selectedType.minTeamRequirement) {
-                    await AppRoute.matchSelection(
-                            tournamentId: '',
-                            teams: state.teams,
-                            matches: state.matches)
-                        .push(context);
-                  } else {
-                    showErrorSnackBar(
-                        context: context,
-                        error: context.l10n
-                            .add_tournament_select_min_team_error(
-                                state.selectedType.minTeamRequirement));
-                  }
-                },
-              ),
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,6 @@ import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/detail/components/filter_tab_view.dart';
-
 import 'package:style/extensions/context_extensions.dart';
 
 import '../../../../../components/action_bottom_sheet.dart';
@@ -16,12 +14,12 @@ import '../tournament_detail_view_model.dart';
 
 class TournamentDetailMatchesTab extends ConsumerWidget {
   final Function(String) onMatchFilter;
-  final Function(List<MatchModel>) onSelected;
+  final VoidCallback onAddMatchTap;
 
   const TournamentDetailMatchesTab({
     super.key,
     required this.onMatchFilter,
-    required this.onSelected,
+    required this.onAddMatchTap,
   });
 
   @override
@@ -36,9 +34,7 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
         isShowButton: state.tournament!.created_by == state.currentUserId ||
             state.tournament!.members
                 .any((element) => element.id == state.currentUserId),
-        onTap: () {
-          onSelected.call([]);
-        },
+        onTap: onAddMatchTap,
       );
     }
 

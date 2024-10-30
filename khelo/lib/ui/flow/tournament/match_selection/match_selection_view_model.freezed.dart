@@ -19,7 +19,8 @@ mixin _$MatchSelectionState {
   TextEditingController get searchController =>
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
-  String? get tournamentId => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
+  TournamentModel? get tournament => throw _privateConstructorUsedError;
   Map<MatchGroup, Map<int, List<MatchModel>>> get searchResults =>
       throw _privateConstructorUsedError;
   Map<MatchGroup, Map<int, List<MatchModel>>> get matches =>
@@ -43,11 +44,14 @@ abstract class $MatchSelectionStateCopyWith<$Res> {
   $Res call(
       {TextEditingController searchController,
       Object? error,
-      String? tournamentId,
+      Object? actionError,
+      TournamentModel? tournament,
       Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
       Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       bool loading,
       bool searchInProgress});
+
+  $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
@@ -67,7 +71,8 @@ class _$MatchSelectionStateCopyWithImpl<$Res, $Val extends MatchSelectionState>
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
-    Object? tournamentId = freezed,
+    Object? actionError = freezed,
+    Object? tournament = freezed,
     Object? searchResults = null,
     Object? matches = null,
     Object? loading = null,
@@ -79,10 +84,11 @@ class _$MatchSelectionStateCopyWithImpl<$Res, $Val extends MatchSelectionState>
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
-      tournamentId: freezed == tournamentId
-          ? _value.tournamentId
-          : tournamentId // ignore: cast_nullable_to_non_nullable
-              as String?,
+      actionError: freezed == actionError ? _value.actionError : actionError,
+      tournament: freezed == tournament
+          ? _value.tournament
+          : tournament // ignore: cast_nullable_to_non_nullable
+              as TournamentModel?,
       searchResults: null == searchResults
           ? _value.searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -101,6 +107,20 @@ class _$MatchSelectionStateCopyWithImpl<$Res, $Val extends MatchSelectionState>
               as bool,
     ) as $Val);
   }
+
+  /// Create a copy of MatchSelectionState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TournamentModelCopyWith<$Res>? get tournament {
+    if (_value.tournament == null) {
+      return null;
+    }
+
+    return $TournamentModelCopyWith<$Res>(_value.tournament!, (value) {
+      return _then(_value.copyWith(tournament: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -114,11 +134,15 @@ abstract class _$$MatchSelectionStateImplCopyWith<$Res>
   $Res call(
       {TextEditingController searchController,
       Object? error,
-      String? tournamentId,
+      Object? actionError,
+      TournamentModel? tournament,
       Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
       Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       bool loading,
       bool searchInProgress});
+
+  @override
+  $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
@@ -136,7 +160,8 @@ class __$$MatchSelectionStateImplCopyWithImpl<$Res>
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
-    Object? tournamentId = freezed,
+    Object? actionError = freezed,
+    Object? tournament = freezed,
     Object? searchResults = null,
     Object? matches = null,
     Object? loading = null,
@@ -148,10 +173,11 @@ class __$$MatchSelectionStateImplCopyWithImpl<$Res>
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
-      tournamentId: freezed == tournamentId
-          ? _value.tournamentId
-          : tournamentId // ignore: cast_nullable_to_non_nullable
-              as String?,
+      actionError: freezed == actionError ? _value.actionError : actionError,
+      tournament: freezed == tournament
+          ? _value.tournament
+          : tournament // ignore: cast_nullable_to_non_nullable
+              as TournamentModel?,
       searchResults: null == searchResults
           ? _value._searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -178,7 +204,8 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
   const _$MatchSelectionStateImpl(
       {required this.searchController,
       this.error,
-      this.tournamentId,
+      this.actionError,
+      this.tournament,
       final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults = const {
         MatchGroup.round: {0: []}
       },
@@ -195,7 +222,9 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
   @override
   final Object? error;
   @override
-  final String? tournamentId;
+  final Object? actionError;
+  @override
+  final TournamentModel? tournament;
   final Map<MatchGroup, Map<int, List<MatchModel>>> _searchResults;
   @override
   @JsonKey()
@@ -223,7 +252,7 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
 
   @override
   String toString() {
-    return 'MatchSelectionState(searchController: $searchController, error: $error, tournamentId: $tournamentId, searchResults: $searchResults, matches: $matches, loading: $loading, searchInProgress: $searchInProgress)';
+    return 'MatchSelectionState(searchController: $searchController, error: $error, actionError: $actionError, tournament: $tournament, searchResults: $searchResults, matches: $matches, loading: $loading, searchInProgress: $searchInProgress)';
   }
 
   @override
@@ -234,8 +263,10 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
             (identical(other.searchController, searchController) ||
                 other.searchController == searchController) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.tournamentId, tournamentId) ||
-                other.tournamentId == tournamentId) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
+            (identical(other.tournament, tournament) ||
+                other.tournament == tournament) &&
             const DeepCollectionEquality()
                 .equals(other._searchResults, _searchResults) &&
             const DeepCollectionEquality().equals(other._matches, _matches) &&
@@ -249,7 +280,8 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
       runtimeType,
       searchController,
       const DeepCollectionEquality().hash(error),
-      tournamentId,
+      const DeepCollectionEquality().hash(actionError),
+      tournament,
       const DeepCollectionEquality().hash(_searchResults),
       const DeepCollectionEquality().hash(_matches),
       loading,
@@ -269,7 +301,8 @@ abstract class _MatchSelectionState implements MatchSelectionState {
   const factory _MatchSelectionState(
       {required final TextEditingController searchController,
       final Object? error,
-      final String? tournamentId,
+      final Object? actionError,
+      final TournamentModel? tournament,
       final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
       final Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       final bool loading,
@@ -280,7 +313,9 @@ abstract class _MatchSelectionState implements MatchSelectionState {
   @override
   Object? get error;
   @override
-  String? get tournamentId;
+  Object? get actionError;
+  @override
+  TournamentModel? get tournament;
   @override
   Map<MatchGroup, Map<int, List<MatchModel>>> get searchResults;
   @override

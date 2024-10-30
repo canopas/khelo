@@ -1,5 +1,4 @@
 import 'package:data/api/match/match_model.dart';
-import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,14 +25,10 @@ import '../../../../gen/assets.gen.dart';
 
 class MatchSelectionScreen extends ConsumerStatefulWidget {
   final String tournamentId;
-  final List<TeamModel> teams;
-  final List<MatchModel> matches;
 
   const MatchSelectionScreen({
     super.key,
     required this.tournamentId,
-    required this.teams,
-    required this.matches,
   });
 
   @override
@@ -46,8 +41,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
   @override
   void initState() {
     notifier = ref.read(matchSelectionStateProvider.notifier);
-    runPostFrame(() =>
-        notifier.setData(widget.tournamentId, widget.teams, widget.matches));
+    runPostFrame(() => notifier.setData(widget.tournamentId));
     super.initState();
   }
 
@@ -71,7 +65,6 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
                 items: option
                     .map((group) => BottomSheetAction(
                         title: group.getString(context),
-                        // TODO: show check mark after main branch merge
                         onTap: () {
                           context.pop();
                           notifier.addGroup(group);
@@ -134,7 +127,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
                             ),
                             _addButton(context, onPressed: () {
                               AppRoute.addMatch(
-                                tournamentId: state.tournamentId,
+                                tournamentId: state.tournament?.id,
                                 group: group,
                                 groupNumber: roundNumber,
                               ).push(context);
@@ -264,7 +257,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
       onTap: () => match.id.isNotEmpty
           ? AppRoute.addMatch(matchId: match.id).push(context)
           : AppRoute.addMatch(
-                  tournamentId: state.tournamentId,
+                  tournamentId: state.tournament?.id,
                   groupNumber: match.match_group_number,
                   group: match.match_group,
                   defaultOpponent: match.teams.last.team,

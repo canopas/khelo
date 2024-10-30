@@ -196,18 +196,9 @@ class AppRoute {
         builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
       );
 
-  static AppRoute matchSelection({
-    required String tournamentId,
-    required List<TeamModel> teams,
-    required List<MatchModel> matches,
-  }) =>
-      AppRoute(
+  static AppRoute matchSelection({required String tournamentId}) => AppRoute(
         pathMatchSelection,
-        builder: (_) => MatchSelectionScreen(
-          teams: teams,
-          matches: matches,
-          tournamentId: tournamentId,
-        ),
+        builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
       );
 
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(

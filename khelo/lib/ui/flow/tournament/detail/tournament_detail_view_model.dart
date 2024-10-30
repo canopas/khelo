@@ -78,18 +78,6 @@ class TournamentDetailStateViewNotifier
     }
   }
 
-  void onMatchesSelected(List<MatchModel> matches) async {
-    if (state.tournament == null) return;
-    try {
-      final matchIds = matches.map((e) => e.id).toList();
-      await _tournamentService.updateMatchIds(state.tournament!.id, matchIds);
-    } catch (e) {
-      state = state.copyWith(actionError: e);
-      debugPrint(
-          "TournamentDetailStateViewNotifier: error while selecting matches -> $e");
-    }
-  }
-
   void onMatchFilter(String? filter) {
     if (state.tournament == null) return;
 

@@ -60,6 +60,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
           DateTime.now().add(const Duration(days: 1)),
       selectedType: editedTournament?.type ?? TournamentType.knockOut,
       teams: editedTournament?.teams ?? [],
+      matches: editedTournament?.matches ?? [],
     );
   }
 
@@ -160,6 +161,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         created_at: _editedTournament?.created_at ?? DateTime.now(),
         created_by: _editedTournament?.created_by ?? state.currentUserId!,
         team_ids: state.teams.map((e) => e.id).toList(),
+        match_ids: state.matches.map((e) => e.id).toList(),
         members: _editedTournament?.members ??
             [
               TournamentMember(

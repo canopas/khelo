@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,7 @@ final addMatchViewStateProvider =
         (ref) {
   final notifier = AddMatchViewNotifier(
     ref.read(matchServiceProvider),
+    ref.read(tournamentServiceProvider),
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
@@ -26,6 +28,7 @@ final addMatchViewStateProvider =
 
 class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   final MatchService _matchService;
+  final TournamentService _tournamentService;
   String? matchId;
   MatchModel? editMatch;
   String? tournamentId;
@@ -34,7 +37,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   int? groupNumber;
   String? _currentUserId;
 
-  AddMatchViewNotifier(this._matchService, this._currentUserId)
+  AddMatchViewNotifier(
+      this._matchService, this._tournamentService, this._currentUserId)
       : super(AddMatchViewState(
           totalOverController: TextEditingController(text: "10"),
           overPerBowlerController: TextEditingController(text: "2"),
@@ -228,6 +232,10 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
       matchId = await _matchService.updateMatch(match);
 
+      if(tournamentId != null && editMatch == null){
+        await _tournamentService.addMatchInTournament(tournamentId!, matchId!);
+      }
+
       state = state.copyWith(
           isAddMatchInProgress: false,
           pushTossDetailScreen:
@@ -368,6 +376,10 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     state = state.copyWith(actionError: null);
     try {
       await _matchService.deleteMatch(matchId!);
+      if (tournamentId != null) {
+        await _tournamentService.removeMatchFromTournament(
+            tournamentId!, matchId!);
+      }
       state = state.copyWith(match: editMatch);
     } catch (e) {
       state = state.copyWith(actionError: e);
