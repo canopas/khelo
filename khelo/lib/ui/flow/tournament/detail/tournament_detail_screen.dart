@@ -346,7 +346,7 @@ class _TournamentDetailScreenState
         title: context.l10n.tournament_detail_members_title,
         onTap: () async {
           context.pop();
-          // TODO:Members page
+          AppRoute.memberSelection(tournament: state.tournament!).push(context);
         },
       ),
       BottomSheetAction(

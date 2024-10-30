@@ -180,4 +180,45 @@ class TournamentService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Future<void> updateTournamentMembers(
+    String tournamentId,
+    List<TournamentMember> members,
+  ) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.members: members.map((e) => e.toJson()).toList(),
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> removeTournamentMember(
+    String tournamentId,
+    TournamentMember member,
+  ) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.members: FieldValue.arrayRemove([member.toJson()]),
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> changeTournamentOwner(
+    String tournamentId,
+    String? newOwnerId,
+    List<TournamentMember> members,
+  ) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.createdBy: newOwnerId,
+        FireStoreConst.members: members.map((e) => e.toJson()).toList(),
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }

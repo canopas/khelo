@@ -28,6 +28,7 @@ import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
+import 'package:khelo/ui/flow/tournament/detail/members/tournament_detail_members_screen.dart';
 import 'package:khelo/ui/flow/tournament/team_selection/team_selection_screen.dart';
 
 import 'flow/home/view_all/home_view_all_screen.dart';
@@ -61,6 +62,7 @@ class AppRoute {
   static const pathAddTournament = "/add-tournament";
   static const pathTeamSelection = "/team-selection";
   static const pathTournamentDetail = "/tournament-detail";
+  static const pathMemberSelection = "/member-selection";
 
   final String path;
   final String? name;
@@ -181,6 +183,14 @@ class AppRoute {
   static AppRoute teamSelection({List<TeamModel>? selectedTeams}) => AppRoute(
         pathTeamSelection,
         builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
+      );
+
+  static AppRoute memberSelection({required TournamentModel tournament}) =>
+      AppRoute(
+        pathMemberSelection,
+        builder: (_) => TournamentDetailMembersScreen(
+          tournament: tournament,
+        ),
       );
 
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
@@ -348,6 +358,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathTeamSelection,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathMemberSelection,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(
