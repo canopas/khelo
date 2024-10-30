@@ -8,6 +8,7 @@
   "common_cancel_title": "Cancel",
   "common_sign_out_title": "Sign out",
   "common_add_title": "Add",
+  "common_edit_title": "Edit",
   "common_remove_title": "Remove",
   "common_reset_title": "Reset",
   "common_okay_title": "Okay",
@@ -165,6 +166,7 @@
   "add_tournament_edit_banner": "Edit banner",
   "add_tournament_add_banner_placeholder": "Add banner image",
   "add_tournament_date_error": "End date should be greater than start date",
+  "add_tournament_select_min_team_error": "Please select minimum {count} teams",
   "add_tournament_teams_title": "{count, plural, =0{No teams} =1{{count} Team} other{{count} Teams}}",
   "@add_tournament_teams_title": {
     "placeholders": {
@@ -184,6 +186,10 @@
   "team_selection_screen_title": "Select Teams",
   "team_selection_select_team_title": "Select teams",
   "team_selection_verify_team_to_add_title": "Verify teams to add",
+
+  "match_selection_screen_title": "Select Matches",
+  "match_selection_select_matches_title": "Select matches",
+  "match_selection_round_title": "Round {round}",
 
   "@_TOURNAMENT_DETAIL": {
   },
@@ -216,17 +222,15 @@
   "tournament_type_mixed": "Mixed",
   "tournament_type_other": "Other",
 
-  "tournament_type_knock_out_description": "Teams face off in a single elimination, with the loser immediately knocked out.",
-  "tournament_type_mini_robin_description": "A smaller round-robin format where each team plays once against all others.",
-  "tournament_type_box_league_description": "Teams are divided into groups, with top teams advancing to the knockout stage.",
-  "tournament_type_double_out_description": "Teams get two chances before being knocked out, with a winners and losers bracket.",
-  "tournament_type_super_over_description": "A knockout format with a super over to decide tied matches.",
-  "tournament_type_best_of_description": "Teams play a series of matches, and the first to win the majority is the champion.",
-  "tournament_type_gully_description": "Casual street-style cricket with short games and flexible rules.",
-  "tournament_type_mixed_description": "Teams are randomly mixed, creating fun and unpredictable matches",
-  "tournament_type_other_description": "A custom format for tournaments with unique rules or structures.",
-
-
+  "tournament_type_knock_out_description": "Teams face off in a single elimination, with the loser immediately knocked out.\nMinimum {count} teams required.",
+  "tournament_type_mini_robin_description": "A smaller round-robin format where each team plays once against all others.\nMinimum {count} teams required.",
+  "tournament_type_box_league_description": "Teams are divided into groups, with top teams advancing to the knockout stage.\nMinimum {count} teams required.",
+  "tournament_type_double_out_description": "Teams get two chances before being knocked out, with a winners and losers bracket.\nMinimum {count} teams required.",
+  "tournament_type_super_over_description": "A knockout format with a super over to decide tied matches.\nMinimum {count} teams required.",
+  "tournament_type_best_of_description": "Teams play a series of matches, and the first to win the majority is the champion.\nMinimum {count} teams required.",
+  "tournament_type_gully_description": "Casual street-style cricket with short games and flexible rules.\nMinimum {count} teams required.",
+  "tournament_type_mixed_description": "Teams are randomly mixed, creating fun and unpredictable matches.\nMinimum {count} teams required.",
+  "tournament_type_other_description": "A custom format for tournaments with unique rules or structures.\nMinimum {count} teams required.",
 
   "add_team_screen_title": "Add Team",
   "add_team_edit_team_screen_title": "Edit Team",

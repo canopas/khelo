@@ -52,7 +52,8 @@ class TournamentMember with _$TournamentMember {
   const factory TournamentMember({
     required String id,
     @JsonKey(includeToJson: false, includeFromJson: false)
-    @Default(UserModel(id: '')) UserModel user,
+    @Default(UserModel(id: ''))
+    UserModel user,
     @Default(TournamentMemberRole.admin) TournamentMemberRole role,
   }) = _TournamentMember;
 
@@ -62,19 +63,20 @@ class TournamentMember with _$TournamentMember {
 
 @JsonEnum(valueField: "value")
 enum TournamentType {
-  knockOut(1),
-  miniRobin(2),
-  boxLeague(3),
-  doubleOut(4),
-  superOver(5),
-  bestOf(6),
-  gully(7),
-  mixed(8),
-  other(9);
+  knockOut(1, minTeamRequirement: 2),
+  miniRobin(2, minTeamRequirement: 3),
+  boxLeague(3, minTeamRequirement: 4),
+  doubleOut(4, minTeamRequirement: 4),
+  superOver(5, minTeamRequirement: 2),
+  bestOf(6, minTeamRequirement: 2),
+  gully(7, minTeamRequirement: 2),
+  mixed(8, minTeamRequirement: 2),
+  other(9, minTeamRequirement: 2);
 
   final int value;
+  final int minTeamRequirement;
 
-  const TournamentType(this.value);
+  const TournamentType(this.value, {required this.minTeamRequirement});
 }
 
 enum TournamentMemberRole {

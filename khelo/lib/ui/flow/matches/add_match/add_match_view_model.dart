@@ -27,6 +27,11 @@ final addMatchViewStateProvider =
 class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
   final MatchService _matchService;
   String? matchId;
+  MatchModel? editMatch;
+  String? tournamentId;
+  bool? isForTournament;
+  MatchGroup? group;
+  int? groupNumber;
   String? _currentUserId;
 
   AddMatchViewNotifier(this._matchService, this._currentUserId)
@@ -38,12 +43,26 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           matchTime: DateTime.now(),
         ));
 
-  void setData(String? matchId, TeamModel? defaultTeam) {
+  void setData(
+    String? matchId,
+    TeamModel? defaultTeam,
+    TeamModel? defaultOpponent,
+    String? tournamentId,
+    MatchGroup? group,
+    int? groupNumber,
+  ) {
     this.matchId = matchId;
+    this.tournamentId = tournamentId;
+    this.groupNumber = groupNumber;
+    this.group = group;
+
     if (matchId != null) {
       getMatchById();
     } else if (defaultTeam != null) {
       onTeamSelect(defaultTeam, TeamType.a);
+      if (defaultOpponent != null) {
+        onTeamSelect(defaultOpponent, TeamType.b);
+      }
     } else {
       onTextChange();
     }
@@ -77,12 +96,16 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           ? Officials(MatchOfficials.referee, match.referee!)
           : null;
 
+      editMatch = match;
+      tournamentId = match.tournament_id;
+      group = match.match_group;
+      groupNumber = match.match_group_number;
+
       state.totalOverController.text = match.number_of_over.toString();
       state.overPerBowlerController.text = match.over_per_bowler.toString();
       state.cityController.text = match.city.toString();
       state.groundController.text = match.ground.toString();
       state = state.copyWith(
-          match: match,
           matchTime: match.start_at ?? match.start_time ?? DateTime.now(),
           teamA: match.teams.first.team,
           teamACaptainId: match.teams.first.captain_id,
@@ -184,6 +207,9 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           power_play_overs3: state.thirdPowerPlay ?? [],
           city: city,
           ground: ground,
+          match_group_number: groupNumber,
+          match_group: group,
+          tournament_id: tournamentId,
           start_time: state.matchTime,
           start_at: state.matchTime,
           updated_at: DateTime.now(),
@@ -193,10 +219,10 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           umpire_ids: umpireIds,
           scorer_ids: scorerIds,
           commentator_ids: commentatorIds,
-          toss_decision: state.match?.toss_decision,
-          toss_winner_id: state.match?.toss_winner_id,
+          toss_decision: editMatch?.toss_decision,
+          toss_winner_id: editMatch?.toss_winner_id,
           referee_id: refereeId,
-          current_playing_team_id: state.match?.current_playing_team_id,
+          current_playing_team_id: editMatch?.current_playing_team_id,
           match_status:
               startMatch ? MatchStatus.running : MatchStatus.yetToStart);
 
@@ -205,8 +231,8 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
       state = state.copyWith(
           isAddMatchInProgress: false,
           pushTossDetailScreen:
-              startMatch ? state.match?.toss_winner_id == null : null,
-          pop: !startMatch);
+              startMatch ? editMatch?.toss_winner_id == null : null,
+          match: !startMatch ? match : null);
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("AddMatchViewNotifier: error while adding match -> $e");
@@ -342,7 +368,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     state = state.copyWith(actionError: null);
     try {
       await _matchService.deleteMatch(matchId!);
-      state = state.copyWith(pop: true);
+      state = state.copyWith(match: editMatch);
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("AddMatchViewNotifier: error while delete Match -> $e");
@@ -369,7 +395,6 @@ class AddMatchViewState with _$AddMatchViewState {
     required TextEditingController groundController,
     Object? error,
     Object? actionError,
-    MatchModel? match,
     TeamModel? teamA,
     TeamModel? teamB,
     List<MatchPlayer>? squadA,
@@ -391,7 +416,7 @@ class AddMatchViewState with _$AddMatchViewState {
     AddMatchErrorType? startBtnError,
     @Default(false) bool isAddMatchInProgress,
     @Default(null) bool? pushTossDetailScreen,
-    @Default(null) bool? pop,
+    @Default(null) MatchModel? match,
   }) = _AddMatchViewState;
 }
 

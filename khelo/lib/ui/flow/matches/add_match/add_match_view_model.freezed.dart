@@ -27,7 +27,6 @@ mixin _$AddMatchViewState {
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   Object? get actionError => throw _privateConstructorUsedError;
-  MatchModel? get match => throw _privateConstructorUsedError;
   TeamModel? get teamA => throw _privateConstructorUsedError;
   TeamModel? get teamB => throw _privateConstructorUsedError;
   List<MatchPlayer>? get squadA => throw _privateConstructorUsedError;
@@ -49,7 +48,7 @@ mixin _$AddMatchViewState {
   AddMatchErrorType? get startBtnError => throw _privateConstructorUsedError;
   bool get isAddMatchInProgress => throw _privateConstructorUsedError;
   bool? get pushTossDetailScreen => throw _privateConstructorUsedError;
-  bool? get pop => throw _privateConstructorUsedError;
+  MatchModel? get match => throw _privateConstructorUsedError;
 
   /// Create a copy of AddMatchViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -72,7 +71,6 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       TextEditingController groundController,
       Object? error,
       Object? actionError,
-      MatchModel? match,
       TeamModel? teamA,
       TeamModel? teamB,
       List<MatchPlayer>? squadA,
@@ -94,11 +92,11 @@ abstract class $AddMatchViewStateCopyWith<$Res> {
       AddMatchErrorType? startBtnError,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
-      bool? pop});
+      MatchModel? match});
 
-  $MatchModelCopyWith<$Res>? get match;
   $TeamModelCopyWith<$Res>? get teamA;
   $TeamModelCopyWith<$Res>? get teamB;
+  $MatchModelCopyWith<$Res>? get match;
 }
 
 /// @nodoc
@@ -123,7 +121,6 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? groundController = null,
     Object? error = freezed,
     Object? actionError = freezed,
-    Object? match = freezed,
     Object? teamA = freezed,
     Object? teamB = freezed,
     Object? squadA = freezed,
@@ -145,7 +142,7 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
     Object? startBtnError = freezed,
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
-    Object? pop = freezed,
+    Object? match = freezed,
   }) {
     return _then(_value.copyWith(
       matchTime: null == matchTime
@@ -170,10 +167,6 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
               as TextEditingController,
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      match: freezed == match
-          ? _value.match
-          : match // ignore: cast_nullable_to_non_nullable
-              as MatchModel?,
       teamA: freezed == teamA
           ? _value.teamA
           : teamA // ignore: cast_nullable_to_non_nullable
@@ -258,25 +251,11 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
           ? _value.pushTossDetailScreen
           : pushTossDetailScreen // ignore: cast_nullable_to_non_nullable
               as bool?,
-      pop: freezed == pop
-          ? _value.pop
-          : pop // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      match: freezed == match
+          ? _value.match
+          : match // ignore: cast_nullable_to_non_nullable
+              as MatchModel?,
     ) as $Val);
-  }
-
-  /// Create a copy of AddMatchViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $MatchModelCopyWith<$Res>? get match {
-    if (_value.match == null) {
-      return null;
-    }
-
-    return $MatchModelCopyWith<$Res>(_value.match!, (value) {
-      return _then(_value.copyWith(match: value) as $Val);
-    });
   }
 
   /// Create a copy of AddMatchViewState
@@ -306,6 +285,20 @@ class _$AddMatchViewStateCopyWithImpl<$Res, $Val extends AddMatchViewState>
       return _then(_value.copyWith(teamB: value) as $Val);
     });
   }
+
+  /// Create a copy of AddMatchViewState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $MatchModelCopyWith<$Res>? get match {
+    if (_value.match == null) {
+      return null;
+    }
+
+    return $MatchModelCopyWith<$Res>(_value.match!, (value) {
+      return _then(_value.copyWith(match: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -324,7 +317,6 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       TextEditingController groundController,
       Object? error,
       Object? actionError,
-      MatchModel? match,
       TeamModel? teamA,
       TeamModel? teamB,
       List<MatchPlayer>? squadA,
@@ -346,14 +338,14 @@ abstract class _$$AddMatchViewStateImplCopyWith<$Res>
       AddMatchErrorType? startBtnError,
       bool isAddMatchInProgress,
       bool? pushTossDetailScreen,
-      bool? pop});
+      MatchModel? match});
 
-  @override
-  $MatchModelCopyWith<$Res>? get match;
   @override
   $TeamModelCopyWith<$Res>? get teamA;
   @override
   $TeamModelCopyWith<$Res>? get teamB;
+  @override
+  $MatchModelCopyWith<$Res>? get match;
 }
 
 /// @nodoc
@@ -376,7 +368,6 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? groundController = null,
     Object? error = freezed,
     Object? actionError = freezed,
-    Object? match = freezed,
     Object? teamA = freezed,
     Object? teamB = freezed,
     Object? squadA = freezed,
@@ -398,7 +389,7 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
     Object? startBtnError = freezed,
     Object? isAddMatchInProgress = null,
     Object? pushTossDetailScreen = freezed,
-    Object? pop = freezed,
+    Object? match = freezed,
   }) {
     return _then(_$AddMatchViewStateImpl(
       matchTime: null == matchTime
@@ -423,10 +414,6 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
               as TextEditingController,
       error: freezed == error ? _value.error : error,
       actionError: freezed == actionError ? _value.actionError : actionError,
-      match: freezed == match
-          ? _value.match
-          : match // ignore: cast_nullable_to_non_nullable
-              as MatchModel?,
       teamA: freezed == teamA
           ? _value.teamA
           : teamA // ignore: cast_nullable_to_non_nullable
@@ -511,10 +498,10 @@ class __$$AddMatchViewStateImplCopyWithImpl<$Res>
           ? _value.pushTossDetailScreen
           : pushTossDetailScreen // ignore: cast_nullable_to_non_nullable
               as bool?,
-      pop: freezed == pop
-          ? _value.pop
-          : pop // ignore: cast_nullable_to_non_nullable
-              as bool?,
+      match: freezed == match
+          ? _value.match
+          : match // ignore: cast_nullable_to_non_nullable
+              as MatchModel?,
     ));
   }
 }
@@ -530,7 +517,6 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       required this.groundController,
       this.error,
       this.actionError,
-      this.match,
       this.teamA,
       this.teamB,
       final List<MatchPlayer>? squadA,
@@ -552,7 +538,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
       this.startBtnError,
       this.isAddMatchInProgress = false,
       this.pushTossDetailScreen = null,
-      this.pop = null})
+      this.match = null})
       : _squadA = squadA,
         _squadB = squadB,
         _officials = officials,
@@ -574,8 +560,6 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   final Object? error;
   @override
   final Object? actionError;
-  @override
-  final MatchModel? match;
   @override
   final TeamModel? teamA;
   @override
@@ -677,11 +661,11 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
   final bool? pushTossDetailScreen;
   @override
   @JsonKey()
-  final bool? pop;
+  final MatchModel? match;
 
   @override
   String toString() {
-    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, actionError: $actionError, match: $match, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, saveBtnError: $saveBtnError, startBtnError: $startBtnError, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, pop: $pop)';
+    return 'AddMatchViewState(matchTime: $matchTime, totalOverController: $totalOverController, overPerBowlerController: $overPerBowlerController, cityController: $cityController, groundController: $groundController, error: $error, actionError: $actionError, teamA: $teamA, teamB: $teamB, squadA: $squadA, squadB: $squadB, teamACaptainId: $teamACaptainId, teamBCaptainId: $teamBCaptainId, teamAAdminId: $teamAAdminId, teamBAdminId: $teamBAdminId, officials: $officials, firstPowerPlay: $firstPowerPlay, secondPowerPlay: $secondPowerPlay, thirdPowerPlay: $thirdPowerPlay, pitchType: $pitchType, matchType: $matchType, ballType: $ballType, loading: $loading, isPowerPlayButtonEnable: $isPowerPlayButtonEnable, saveBtnError: $saveBtnError, startBtnError: $startBtnError, isAddMatchInProgress: $isAddMatchInProgress, pushTossDetailScreen: $pushTossDetailScreen, match: $match)';
   }
 
   @override
@@ -703,7 +687,6 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
                 .equals(other.actionError, actionError) &&
-            (identical(other.match, match) || other.match == match) &&
             (identical(other.teamA, teamA) || other.teamA == teamA) &&
             (identical(other.teamB, teamB) || other.teamB == teamB) &&
             const DeepCollectionEquality().equals(other._squadA, _squadA) &&
@@ -742,7 +725,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
                 other.isAddMatchInProgress == isAddMatchInProgress) &&
             (identical(other.pushTossDetailScreen, pushTossDetailScreen) ||
                 other.pushTossDetailScreen == pushTossDetailScreen) &&
-            (identical(other.pop, pop) || other.pop == pop));
+            (identical(other.match, match) || other.match == match));
   }
 
   @override
@@ -755,7 +738,6 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         groundController,
         const DeepCollectionEquality().hash(error),
         const DeepCollectionEquality().hash(actionError),
-        match,
         teamA,
         teamB,
         const DeepCollectionEquality().hash(_squadA),
@@ -777,7 +759,7 @@ class _$AddMatchViewStateImpl implements _AddMatchViewState {
         startBtnError,
         isAddMatchInProgress,
         pushTossDetailScreen,
-        pop
+        match
       ]);
 
   /// Create a copy of AddMatchViewState
@@ -799,7 +781,6 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       required final TextEditingController groundController,
       final Object? error,
       final Object? actionError,
-      final MatchModel? match,
       final TeamModel? teamA,
       final TeamModel? teamB,
       final List<MatchPlayer>? squadA,
@@ -821,7 +802,7 @@ abstract class _AddMatchViewState implements AddMatchViewState {
       final AddMatchErrorType? startBtnError,
       final bool isAddMatchInProgress,
       final bool? pushTossDetailScreen,
-      final bool? pop}) = _$AddMatchViewStateImpl;
+      final MatchModel? match}) = _$AddMatchViewStateImpl;
 
   @override
   DateTime get matchTime;
@@ -837,8 +818,6 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   Object? get error;
   @override
   Object? get actionError;
-  @override
-  MatchModel? get match;
   @override
   TeamModel? get teamA;
   @override
@@ -882,7 +861,7 @@ abstract class _AddMatchViewState implements AddMatchViewState {
   @override
   bool? get pushTossDetailScreen;
   @override
-  bool? get pop;
+  MatchModel? get match;
 
   /// Create a copy of AddMatchViewState
   /// with the given fields replaced by the non-null parameter values.

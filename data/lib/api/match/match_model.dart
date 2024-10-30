@@ -18,6 +18,9 @@ class MatchModel with _$MatchModel {
   const factory MatchModel({
     required String id,
     required List<MatchTeamModel> teams,
+    String? tournament_id,
+    MatchGroup? match_group,
+    int? match_group_number,
     required MatchType match_type,
     required int number_of_over,
     required int over_per_bowler,
@@ -311,6 +314,18 @@ enum TossDecision {
   final int value;
 
   const TossDecision(this.value);
+}
+
+@JsonEnum(valueField: "value")
+enum MatchGroup {
+  round(1),
+  quarterfinal(2),
+  semifinal(3),
+  finals(4);
+
+  final int value;
+
+  const MatchGroup(this.value);
 }
 
 @freezed
