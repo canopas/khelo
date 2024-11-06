@@ -141,8 +141,7 @@ class TournamentService {
         }
       }
     }
-    final keyStats = playerStatsList.getTopKeyStats()
-      ..sort((a, b) => b.value?.compareTo(a.value ?? 0) ?? 0);
+    final keyStats = playerStatsList.getTopKeyStats();
 
     return keyStats.where((element) => element.player.isActive).toList();
   }
