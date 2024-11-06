@@ -259,9 +259,9 @@ enum KeyStatFilterTag {
       case KeyStatFilterTag.wickets:
         return context.l10n.key_stat_filter_wickets;
       case KeyStatFilterTag.battingAverage:
-        return context.l10n.key_stat_filter_batting_average;
+        return context.l10n.common_batting_average_title;
       case KeyStatFilterTag.bowlingAverage:
-        return context.l10n.key_stat_filter_bowling_average;
+        return context.l10n.common_bowling_average_title;
       case KeyStatFilterTag.mostHundreds:
         return context.l10n.key_stat_filter_most_hundreds;
       case KeyStatFilterTag.mostFifties:
