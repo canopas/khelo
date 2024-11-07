@@ -121,68 +121,57 @@ class TournamentDetailStateViewNotifier
 
     var filteredStats = state.tournament!.keyStats;
 
-    switch (tag) {
-      case KeyStatFilterTag.runs:
-        filteredStats = filteredStats
-            .where((element) => (element.stats.battingStat?.runScored ?? 0) > 0)
-            .toList();
-        break;
-      case KeyStatFilterTag.wickets:
-        filteredStats = filteredStats
-            .where((element) =>
-                (element.stats.bowlingStat?.wicketTaken ?? 0.0) > 0.0)
-            .toList();
-        break;
-      case KeyStatFilterTag.battingAverage:
-        filteredStats = filteredStats
-            .where(
-                (element) => (element.stats.battingStat?.average ?? 0.0) > 0.0)
-            .toList();
-        break;
-      case KeyStatFilterTag.bowlingAverage:
-        filteredStats = filteredStats
-            .where(
-                (element) => (element.stats.bowlingStat?.average ?? 0.0) > 0.0)
-            .toList();
-        break;
-      case KeyStatFilterTag.mostHundreds:
-        filteredStats = filteredStats
-            .where((e) => (e.stats.battingStat?.hundreds ?? 0) > 0)
-            .toList()
-          ..sort((a, b) => (b.stats.battingStat?.hundreds ?? 0)
-              .compareTo(a.stats.battingStat?.hundreds ?? 0));
-        break;
-      case KeyStatFilterTag.mostFifties:
-        filteredStats = filteredStats
-            .where((e) => (e.stats.battingStat?.fifties ?? 0) > 0)
-            .toList()
-          ..sort((a, b) => (b.stats.battingStat?.fifties ?? 0)
-              .compareTo(a.stats.battingStat?.fifties ?? 0));
-        break;
-      case KeyStatFilterTag.sixes:
-        filteredStats = filteredStats
-            .where((e) => (e.stats.battingStat?.sixes ?? 0) > 0)
-            .toList();
-        break;
-      case KeyStatFilterTag.fours:
-        filteredStats = filteredStats
-            .where((e) => (e.stats.battingStat?.fours ?? 0) > 0)
-            .toList();
-        break;
-      case KeyStatFilterTag.boundaries:
-        filteredStats = filteredStats
-            .where((e) =>
-                (e.stats.battingStat?.fours ?? 0) +
-                    (e.stats.battingStat?.sixes ?? 0) >
-                0)
-            .toList()
-          ..sort((a, b) => ((b.stats.battingStat?.fours ?? 0) +
-                  (b.stats.battingStat?.sixes ?? 0))
-              .compareTo((a.stats.battingStat?.fours ?? 0) +
-                  (a.stats.battingStat?.sixes ?? 0)));
-        break;
-      case null:
-        break;
+    filteredStats = filteredStats.where((e) {
+      switch (tag) {
+        case KeyStatFilterTag.runs:
+          return (e.stats.battingStat?.runScored ?? 0) > 0;
+        case KeyStatFilterTag.wickets:
+          return (e.stats.bowlingStat?.wicketTaken ?? 0.0) > 0.0;
+        case KeyStatFilterTag.battingAverage:
+          return (e.stats.battingStat?.average ?? 0.0) > 0.0;
+        case KeyStatFilterTag.bowlingAverage:
+          return (e.stats.bowlingStat?.average ?? 0.0) > 0.0;
+        case KeyStatFilterTag.mostHundreds:
+          return (e.stats.battingStat?.hundreds ?? 0) > 0;
+        case KeyStatFilterTag.mostFifties:
+          return (e.stats.battingStat?.fifties ?? 0) > 0;
+        case KeyStatFilterTag.sixes:
+          return (e.stats.battingStat?.sixes ?? 0) > 0;
+        case KeyStatFilterTag.fours:
+          return (e.stats.battingStat?.fours ?? 0) > 0;
+        case KeyStatFilterTag.boundaries:
+          return (e.stats.battingStat?.fours ?? 0) +
+                  (e.stats.battingStat?.sixes ?? 0) >
+              0;
+        case null:
+          return false;
+      }
+    }).toList();
+
+    if (tag == KeyStatFilterTag.mostHundreds ||
+        tag == KeyStatFilterTag.mostFifties ||
+        tag == KeyStatFilterTag.boundaries) {
+      filteredStats.sort((a, b) {
+        int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
+          switch (tag) {
+            case KeyStatFilterTag.mostHundreds:
+              return (y.stats.battingStat?.hundreds ?? 0)
+                  .compareTo(x.stats.battingStat?.hundreds ?? 0);
+            case KeyStatFilterTag.mostFifties:
+              return (y.stats.battingStat?.fifties ?? 0)
+                  .compareTo(x.stats.battingStat?.fifties ?? 0);
+            case KeyStatFilterTag.boundaries:
+              return ((y.stats.battingStat?.fours ?? 0) +
+                      (y.stats.battingStat?.sixes ?? 0))
+                  .compareTo((x.stats.battingStat?.fours ?? 0) +
+                      (x.stats.battingStat?.sixes ?? 0));
+            default:
+              return 0;
+          }
+        }
+
+        return compareByTag(a, b);
+      });
     }
 
     state = state.copyWith(

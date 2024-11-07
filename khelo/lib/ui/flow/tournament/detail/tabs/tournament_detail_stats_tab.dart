@@ -2,11 +2,12 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
-import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/chip_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -198,6 +199,7 @@ class TournamentDetailStatsTab extends ConsumerWidget {
     required Function(KeyStatFilterTag) onTap,
     KeyStatFilterTag? selectedTag,
   }) async {
+    HapticFeedback.mediumImpact();
     return await showModalBottomSheet(
       context: context,
       showDragHandle: true,
@@ -216,31 +218,13 @@ class TournamentDetailStatsTab extends ConsumerWidget {
             runSpacing: 8,
             children: KeyStatFilterTag.values.map(
               (element) {
-                final isSelected = selectedTag == element;
-                return OnTapScale(
+                return ChipButton(
+                  title: element.getString(context),
+                  isSelected: selectedTag == element,
                   onTap: () {
                     context.pop();
                     onTap(element);
                   },
-                  child: Chip(
-                    label: Text(
-                      element.getString(context),
-                      style: AppTextStyle.body2.copyWith(
-                        color: isSelected
-                            ? context.colorScheme.onPrimary
-                            : context.colorScheme.textSecondary,
-                      ),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    side: const BorderSide(color: Colors.transparent),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    backgroundColor: isSelected
-                        ? context.colorScheme.primary
-                        : context.colorScheme.containerLowOnSurface,
-                  ),
                 );
               },
             ).toList(),
