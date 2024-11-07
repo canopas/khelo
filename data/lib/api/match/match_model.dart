@@ -356,7 +356,7 @@ extension TeamStatExtension on List<MatchModel> {
       wickets += team.wicket;
 
       battingAverageTotal +=
-          team.wicket > 0 ? team.run / team.wicket : team.run;
+          opponentTeam.wicket > 0 ? team.run / opponentTeam.wicket : 0;
       if (team.wicket > 0) {
         bowlingAverageTotal += opponentTeam.run / team.wicket;
       }
