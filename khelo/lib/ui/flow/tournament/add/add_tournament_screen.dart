@@ -95,7 +95,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
       title: widget.editTournament == null
           ? context.l10n.add_tournament_screen_title
           : context.l10n.tournament_detail_edit_title,
-      actions: isOrganizer
+      actions: (widget.editTournament != null && isOrganizer)
           ? [
               actionButton(
                 context,
