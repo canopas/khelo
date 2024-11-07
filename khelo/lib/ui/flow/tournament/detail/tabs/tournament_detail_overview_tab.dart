@@ -150,6 +150,9 @@ class _TournamentDetailOverviewTabState
   Widget _keyStatsView(BuildContext context, List<PlayerKeyStat> keyStats) {
     if (keyStats.isEmpty) return SizedBox();
 
+    final keyStatsList = List.of(keyStats)
+      ..sort((a, b) => b.value?.compareTo(a.value ?? 0) ?? 0);
+
     return Padding(
       padding: const EdgeInsets.only(top: 24),
       child: Column(
@@ -157,7 +160,7 @@ class _TournamentDetailOverviewTabState
         children: [
           _header(
             context,
-            showViewAll: keyStats.length > 4,
+            showViewAll: keyStatsList.length > 4,
             title: context.l10n.tournament_detail_overview_key_stats_title,
             onViewAll: () {},
           ),
@@ -165,7 +168,7 @@ class _TournamentDetailOverviewTabState
           GridView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: keyStats.take(4).length,
+            itemCount: keyStatsList.take(4).length,
             padding: EdgeInsets.zero,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -174,7 +177,7 @@ class _TournamentDetailOverviewTabState
               mainAxisExtent: 115,
             ),
             itemBuilder: (context, index) =>
-                _keyStatsCellView(context, keyStats[index]),
+                _keyStatsCellView(context, keyStatsList[index]),
           )
         ],
       ),

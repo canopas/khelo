@@ -7,10 +7,9 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/flow/score_board/components/bottom_sheet_wrapper.dart';
 import 'package:khelo/ui/flow/score_board/score_board_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/chip_button.dart';
 import 'package:style/button/primary_button.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
 
 class SelectWicketTypeSheet extends ConsumerStatefulWidget {
   static Future<T?> show<T>(BuildContext context) {
@@ -64,26 +63,10 @@ class _SelectWicketTypeSheetState extends ConsumerState<SelectWicketTypeSheet> {
       children: WicketType.values.map(
         (element) {
           final isSelected = selectedType == element;
-          return OnTapScale(
+          return ChipButton(
+            isSelected: isSelected,
+            title: element.getString(context),
             onTap: () => setState(() => selectedType = element),
-            child: Chip(
-              label: Text(
-                element.getString(context),
-                style: AppTextStyle.body2.copyWith(
-                  color: isSelected
-                      ? context.colorScheme.onPrimary
-                      : context.colorScheme.textSecondary,
-                ),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              side: const BorderSide(color: Colors.transparent),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              backgroundColor: isSelected
-                  ? context.colorScheme.primary
-                  : context.colorScheme.containerLowOnSurface,
-            ),
           );
         },
       ).toList(),

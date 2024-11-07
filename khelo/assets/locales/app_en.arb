@@ -240,6 +240,14 @@
   "tournament_detail_key_stat_most_fours_title": "Most Fours",
   "tournament_detail_key_stat_most_sixes_title": "Most Sixes",
 
+  "key_stat_filter_runs": "Runs",
+  "key_stat_filter_wickets": "Wickets",
+  "key_stat_filter_fours": "Fours",
+  "key_stat_filter_sixes": "Sixes",
+  "key_stat_filter_most_hundreds": "Most hundreds",
+  "key_stat_filter_most_fifties": "Most fifties",
+  "key_stat_filter_boundaries": "Boundaries",
+
   "tournament_detail_points_table_points_title": "Points",
   "tournament_detail_points_table_empty_title": "No Points Yet!",
   "tournament_detail_points_table_empty_description": "The points table will be updated once matches begin. Stay tuned for the latest standings!",

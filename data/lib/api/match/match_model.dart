@@ -336,3 +336,105 @@ class TeamStat with _$TeamStat {
     @Default(0.0) double run_rate,
   }) = _TeamStat;
 }
+
+extension TeamStatExtension on List<MatchModel> {
+  TeamStat teamStat(String teamId) {
+    if (isEmpty) return const TeamStat();
+
+    var runs = 0;
+    var wickets = 0;
+    var battingAverageTotal = 0.0;
+    var bowlingAverageTotal = 0.0;
+    var highestRuns = 0;
+    var lowestRuns = double.maxFinite.toInt();
+
+    for (final match in this) {
+      final team = _getTeam(match, teamId);
+      final opponentTeam = _getOpponentTeam(match, teamId);
+
+      runs += team.run;
+      wickets += team.wicket;
+
+      battingAverageTotal +=
+          opponentTeam.wicket > 0 ? team.run / opponentTeam.wicket : 0;
+      if (team.wicket > 0) {
+        bowlingAverageTotal += opponentTeam.run / team.wicket;
+      }
+
+      if (team.run > highestRuns) highestRuns = team.run;
+      if (team.run < lowestRuns) lowestRuns = team.run;
+    }
+
+    final bowlingAverage = length > 0.0 ? bowlingAverageTotal / length : 0.0;
+
+    return TeamStat(
+      played: length,
+      status: _teamMatchStatus(teamId),
+      run_rate: _runRate(teamId, runs),
+      runs: runs,
+      wickets: wickets,
+      batting_average: battingAverageTotal,
+      bowling_average: bowlingAverage,
+      highest_runs: highestRuns,
+      lowest_runs: lowestRuns == double.maxFinite.toInt() ? 0 : lowestRuns,
+    );
+  }
+
+  TeamMatchStatus _teamMatchStatus(String teamId) {
+    return fold<TeamMatchStatus>(
+      const TeamMatchStatus(),
+      (status, match) {
+        final firstTeam = match.teams.firstWhere(
+          (team) =>
+              team.team.id ==
+              (match.toss_decision == TossDecision.bat
+                  ? match.toss_winner_id
+                  : match.teams
+                      .firstWhere(
+                        (team) => team.team.id != match.toss_winner_id,
+                      )
+                      .team
+                      .id),
+        );
+
+        final secondTeam =
+            match.teams.firstWhere((team) => team.team.id != firstTeam.team.id);
+
+        if (firstTeam.run == secondTeam.run) {
+          return TeamMatchStatus(
+            win: status.win,
+            lost: status.lost,
+            tie: status.tie + 1,
+          );
+        } else if ((firstTeam.run > secondTeam.run &&
+                firstTeam.team.id == teamId) ||
+            (firstTeam.run < secondTeam.run && secondTeam.team.id == teamId)) {
+          return TeamMatchStatus(
+            win: status.win + 1,
+            lost: status.lost,
+            tie: status.tie,
+          );
+        } else {
+          return TeamMatchStatus(
+            win: status.win,
+            lost: status.lost + 1,
+            tie: status.tie,
+          );
+        }
+      },
+    );
+  }
+
+  MatchTeamModel _getTeam(MatchModel match, String teamId) =>
+      match.teams.firstWhere((team) => team.team.id == teamId);
+
+  MatchTeamModel _getOpponentTeam(MatchModel match, String teamId) =>
+      match.teams.firstWhere((team) => team.team.id != teamId);
+
+  double _runRate(String teamId, int runs) {
+    final totalOvers = map((match) => _getTeam(match, teamId))
+        .fold<double>(0.0, (total, team) => total + team.over);
+
+    return totalOvers > 0 ? runs / totalOvers : 0;
+  }
+}
