@@ -175,7 +175,11 @@ class TournamentDetailStateViewNotifier
     }
 
     state = state.copyWith(
-      filteredStats: filteredStats,
+      filteredStats: filteredStats
+        ..sort(
+          (a, b) => (b.stats.battingStat?.runScored ?? 0)
+              .compareTo(a.stats.battingStat?.runScored ?? 0),
+        ),
       selectedFilterTag: tag,
     );
   }

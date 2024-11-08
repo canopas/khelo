@@ -25,6 +25,7 @@ import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+import 'package:style/theme/colors.dart';
 
 import '../../../../components/action_bottom_sheet.dart';
 import '../../../../components/app_page.dart';
@@ -125,7 +126,7 @@ class _TournamentDetailScreenState
                       size: 20,
                       backgroundColor: context
                           .colorScheme.containerHighOnSurface
-                          .withOpacity(0.3),
+                          .withOpacity(0.4),
                       onPressed: () => _moreActionButton(context, state),
                     ),
                   ]
@@ -259,8 +260,8 @@ class _TournamentDetailScreenState
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    context.colorScheme.surface.withOpacity(0.2),
-                    context.colorScheme.surface.withOpacity(0.8),
+                    surfaceDarkColor.withOpacity(0.2),
+                    surfaceDarkColor.withOpacity(0.8),
                   ],
                 ),
               ),
@@ -289,7 +290,7 @@ class _TournamentDetailScreenState
           size: 80,
           imageUrl: tournament.profile_img_url,
           border: Border.all(
-            color: Colors.white,
+            color: surfaceLightColor,
             width: 1.5,
           ),
           backgroundColor: context.colorScheme.primary,
@@ -300,7 +301,7 @@ class _TournamentDetailScreenState
           child: Text(
             tournament.name,
             style: AppTextStyle.header1.copyWith(
-              color: context.colorScheme.textPrimary,
+              color: surfaceLightColor,
             ),
             overflow: TextOverflow.ellipsis,
             textScaler: TextScaler.noScaling,
@@ -315,7 +316,7 @@ class _TournamentDetailScreenState
               height: 24,
               width: 24,
               colorFilter: ColorFilter.mode(
-                context.colorScheme.textPrimary,
+                surfaceLightColor,
                 BlendMode.srcIn,
               ),
             ),
@@ -325,7 +326,7 @@ class _TournamentDetailScreenState
                   .start_date
                   .format(context, DateFormatType.dayMonth)),
               style: AppTextStyle.body1.copyWith(
-                color: context.colorScheme.textPrimary,
+                color: surfaceLightColor,
               ),
             ),
           ],
@@ -384,7 +385,7 @@ class _TournamentDetailScreenState
           width: 28,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: context.colorScheme.containerHighOnSurface.withOpacity(0.3),
+            color: context.colorScheme.containerHighOnSurface.withOpacity(0.4),
           ),
           child: Icon(
             Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
