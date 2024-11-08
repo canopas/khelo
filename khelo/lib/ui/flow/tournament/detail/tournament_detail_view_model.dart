@@ -53,7 +53,7 @@ class TournamentDetailStateViewNotifier
         loading: false,
       );
       onMatchFilter(null);
-      onStatFilter(null);
+      onStatFilter(state.selectedFilterTag);
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -116,13 +116,15 @@ class TournamentDetailStateViewNotifier
     }
   }
 
-  void onStatFilter(KeyStatFilterTag? tag) {
+  void onStatFilter(KeyStatFilterTag tag) {
     if (state.tournament == null) return;
 
     var filteredStats = state.tournament!.keyStats;
 
     filteredStats = filteredStats.where((e) {
       switch (tag) {
+        case KeyStatFilterTag.all:
+          return true;
         case KeyStatFilterTag.runs:
           return (e.stats.battingStat?.runScored ?? 0) > 0;
         case KeyStatFilterTag.wickets:
@@ -143,40 +145,38 @@ class TournamentDetailStateViewNotifier
           return (e.stats.battingStat?.fours ?? 0) +
                   (e.stats.battingStat?.sixes ?? 0) >
               0;
-        case null:
-          return false;
       }
     }).toList();
 
-    if (tag == KeyStatFilterTag.mostHundreds ||
-        tag == KeyStatFilterTag.mostFifties ||
-        tag == KeyStatFilterTag.boundaries) {
-      filteredStats.sort((a, b) {
-        int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
-          switch (tag) {
-            case KeyStatFilterTag.mostHundreds:
-              return (y.stats.battingStat?.hundreds ?? 0)
-                  .compareTo(x.stats.battingStat?.hundreds ?? 0);
-            case KeyStatFilterTag.mostFifties:
-              return (y.stats.battingStat?.fifties ?? 0)
-                  .compareTo(x.stats.battingStat?.fifties ?? 0);
-            case KeyStatFilterTag.boundaries:
-              return ((y.stats.battingStat?.fours ?? 0) +
-                      (y.stats.battingStat?.sixes ?? 0))
-                  .compareTo((x.stats.battingStat?.fours ?? 0) +
-                      (x.stats.battingStat?.sixes ?? 0));
-            default:
-              return 0;
-          }
+    filteredStats.sort((a, b) {
+      int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
+        switch (tag) {
+          case KeyStatFilterTag.mostHundreds:
+            return (y.stats.battingStat?.hundreds ?? 0)
+                .compareTo(x.stats.battingStat?.hundreds ?? 0);
+          case KeyStatFilterTag.mostFifties:
+            return (y.stats.battingStat?.fifties ?? 0)
+                .compareTo(x.stats.battingStat?.fifties ?? 0);
+          case KeyStatFilterTag.boundaries:
+            return ((y.stats.battingStat?.fours ?? 0) +
+                    (y.stats.battingStat?.sixes ?? 0))
+                .compareTo((x.stats.battingStat?.fours ?? 0) +
+                    (x.stats.battingStat?.sixes ?? 0));
+          default:
+            return (b.stats.battingStat?.runScored ?? 0)
+                .compareTo(a.stats.battingStat?.runScored ?? 0);
         }
+      }
 
-        return compareByTag(a, b);
-      });
-    }
+      return compareByTag(a, b);
+    });
+
+    filteredStats.sort((a, b) => (b.stats.battingStat?.runScored ?? 0)
+        .compareTo(a.stats.battingStat?.runScored ?? 0));
 
     state = state.copyWith(
       filteredStats: filteredStats,
-      selectedFilterTag: tag ?? state.selectedFilterTag,
+      selectedFilterTag: tag,
     );
   }
 
@@ -224,13 +224,14 @@ class TournamentDetailState with _$TournamentDetailState {
     String? currentUserId,
     @Default(null) String? matchFilter,
     @Default([]) List<MatchModel> filteredMatches,
-    @Default(KeyStatFilterTag.runs) KeyStatFilterTag selectedFilterTag,
+    @Default(KeyStatFilterTag.all) KeyStatFilterTag selectedFilterTag,
     @Default([]) List<PlayerKeyStat> filteredStats,
     @Default([]) List<TeamPoint> teamPoints,
   }) = _TournamentDetailState;
 }
 
 enum KeyStatFilterTag {
+  all,
   runs,
   wickets,
   battingAverage,
@@ -243,6 +244,8 @@ enum KeyStatFilterTag {
 
   String getString(BuildContext context) {
     switch (this) {
+      case KeyStatFilterTag.all:
+        return context.l10n.key_stat_all;
       case KeyStatFilterTag.runs:
         return context.l10n.key_stat_filter_runs;
       case KeyStatFilterTag.wickets:

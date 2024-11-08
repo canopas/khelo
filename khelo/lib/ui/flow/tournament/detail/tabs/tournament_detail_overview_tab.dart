@@ -15,31 +15,26 @@ import 'package:style/text/app_text_style.dart';
 
 import '../../../../../components/image_avatar.dart';
 
-class TournamentDetailOverviewTab extends ConsumerStatefulWidget {
+class TournamentDetailOverviewTab extends ConsumerWidget {
   final TournamentModel tournament;
+  final PageController controller;
 
   const TournamentDetailOverviewTab({
     super.key,
     required this.tournament,
+    required this.controller,
   });
 
   @override
-  ConsumerState<TournamentDetailOverviewTab> createState() =>
-      _TournamentDetailOverviewTabState();
-}
-
-class _TournamentDetailOverviewTabState
-    extends ConsumerState<TournamentDetailOverviewTab> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ListView(
       padding: context.mediaQueryPadding.copyWith(top: 0) +
           EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
       children: [
-        _featuredMatchesView(context, widget.tournament.matches),
-        _keyStatsView(context, widget.tournament.keyStats),
-        _teamsSquadsView(context, widget.tournament.teams),
-        _infoView(context, widget.tournament),
+        _featuredMatchesView(context, tournament.matches),
+        _keyStatsView(context, tournament.keyStats),
+        _teamsSquadsView(context, tournament.teams),
+        _infoView(context, tournament),
       ],
     );
   }
@@ -56,7 +51,7 @@ class _TournamentDetailOverviewTabState
             title:
                 context.l10n.tournament_detail_overview_featured_matches_title,
             showViewAll: matches.length > 3,
-            onViewAll: () {},
+            onViewAll: () => controller.jumpToPage(2),
           ),
           ...List.generate(
             matches.take(3).length,
@@ -68,48 +63,56 @@ class _TournamentDetailOverviewTabState
   }
 
   Widget _matchCellView(BuildContext context, MatchModel match) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      margin: EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          _buildTeamInfo(team: match.teams.first.team),
-          const Spacer(),
-          if (match.matchResult != null) ...[
-            WonByMessageText(
-              isTournament: true,
-              matchResult: match.matchResult,
-            ),
-          ] else ...[
-            Column(
-              children: [
-                Text(
-                  match.start_at?.format(context, DateFormatType.time) ??
-                      DateTime.now().format(context, DateFormatType.time),
-                  style: AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textDisabled),
-                ),
-                Text(
-                  match.start_at?.relativeTime(context) ??
-                      DateTime.now().relativeTime(context),
-                  style: AppTextStyle.subtitle2
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-              ],
+    return OnTapScale(
+      onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        margin: EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            _buildTeamInfo(context, team: match.teams.first.team),
+            const Spacer(),
+            if (match.matchResult != null) ...[
+              WonByMessageText(
+                isTournament: true,
+                matchResult: match.matchResult,
+              ),
+            ] else ...[
+              Column(
+                children: [
+                  Text(
+                    match.start_at?.format(context, DateFormatType.time) ??
+                        DateTime.now().format(context, DateFormatType.time),
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textDisabled),
+                  ),
+                  Text(
+                    match.start_at?.relativeTime(context) ??
+                        DateTime.now().relativeTime(context),
+                    style: AppTextStyle.subtitle2
+                        .copyWith(color: context.colorScheme.textPrimary),
+                  ),
+                ],
+              ),
+            ],
+            const Spacer(),
+            _buildTeamInfo(
+              context,
+              team: match.teams.last.team,
+              isSecond: true,
             ),
           ],
-          const Spacer(),
-          _buildTeamInfo(team: match.teams.last.team, isSecond: true),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildTeamInfo({
+  Widget _buildTeamInfo(
+    BuildContext context, {
     required TeamModel team,
     bool isSecond = false,
   }) {
@@ -162,7 +165,7 @@ class _TournamentDetailOverviewTabState
             context,
             showViewAll: keyStatsList.length > 4,
             title: context.l10n.tournament_detail_overview_key_stats_title,
-            onViewAll: () {},
+            onViewAll: () => controller.jumpToPage(4),
           ),
           const SizedBox(height: 8),
           GridView.builder(
@@ -261,7 +264,7 @@ class _TournamentDetailOverviewTabState
             context,
             showViewAll: teams.length > 3,
             title: context.l10n.tournament_detail_overview_teams_squads_title,
-            onViewAll: () {},
+            onViewAll: () => controller.jumpToPage(1),
           ),
           const SizedBox(height: 8),
           SizedBox(

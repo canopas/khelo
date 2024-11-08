@@ -249,7 +249,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       this.currentUserId,
       this.matchFilter = null,
       final List<MatchModel> filteredMatches = const [],
-      this.selectedFilterTag = KeyStatFilterTag.runs,
+      this.selectedFilterTag = KeyStatFilterTag.all,
       final List<PlayerKeyStat> filteredStats = const [],
       final List<TeamPoint> teamPoints = const []})
       : _filteredMatches = filteredMatches,
