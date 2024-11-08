@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
 import '../../storage/app_preferences.dart';
+import '../../storage/provider/preferences_provider.dart';
 import '../user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +26,8 @@ class AuthService {
   final FirebaseAuth _auth;
   final UserService _userService;
 
-  final StateController<String?> _currentUserNotifier;
-  final StateController<String?> _userSessionNotifier;
+  final PreferenceNotifier<String?> _currentUserNotifier;
+  final PreferenceNotifier<String?> _userSessionNotifier;
 
   AuthService(
     this._auth,
