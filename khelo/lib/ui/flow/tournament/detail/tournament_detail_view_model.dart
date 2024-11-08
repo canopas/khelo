@@ -148,38 +148,34 @@ class TournamentDetailStateViewNotifier
       }
     }).toList();
 
-    if (tag == KeyStatFilterTag.mostHundreds ||
-        tag == KeyStatFilterTag.mostFifties ||
-        tag == KeyStatFilterTag.boundaries) {
-      filteredStats.sort((a, b) {
-        int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
-          switch (tag) {
-            case KeyStatFilterTag.mostHundreds:
-              return (y.stats.battingStat?.hundreds ?? 0)
-                  .compareTo(x.stats.battingStat?.hundreds ?? 0);
-            case KeyStatFilterTag.mostFifties:
-              return (y.stats.battingStat?.fifties ?? 0)
-                  .compareTo(x.stats.battingStat?.fifties ?? 0);
-            case KeyStatFilterTag.boundaries:
-              return ((y.stats.battingStat?.fours ?? 0) +
-                      (y.stats.battingStat?.sixes ?? 0))
-                  .compareTo((x.stats.battingStat?.fours ?? 0) +
-                      (x.stats.battingStat?.sixes ?? 0));
-            default:
-              return 0;
-          }
+    filteredStats.sort((a, b) {
+      int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
+        switch (tag) {
+          case KeyStatFilterTag.mostHundreds:
+            return (y.stats.battingStat?.hundreds ?? 0)
+                .compareTo(x.stats.battingStat?.hundreds ?? 0);
+          case KeyStatFilterTag.mostFifties:
+            return (y.stats.battingStat?.fifties ?? 0)
+                .compareTo(x.stats.battingStat?.fifties ?? 0);
+          case KeyStatFilterTag.boundaries:
+            return ((y.stats.battingStat?.fours ?? 0) +
+                    (y.stats.battingStat?.sixes ?? 0))
+                .compareTo((x.stats.battingStat?.fours ?? 0) +
+                    (x.stats.battingStat?.sixes ?? 0));
+          default:
+            return (b.stats.battingStat?.runScored ?? 0)
+                .compareTo(a.stats.battingStat?.runScored ?? 0);
         }
+      }
 
-        return compareByTag(a, b);
-      });
-    }
+      return compareByTag(a, b);
+    });
+
+    filteredStats.sort((a, b) => (b.stats.battingStat?.runScored ?? 0)
+        .compareTo(a.stats.battingStat?.runScored ?? 0));
 
     state = state.copyWith(
-      filteredStats: filteredStats
-        ..sort(
-          (a, b) => (b.stats.battingStat?.runScored ?? 0)
-              .compareTo(a.stats.battingStat?.runScored ?? 0),
-        ),
+      filteredStats: filteredStats,
       selectedFilterTag: tag,
     );
   }
