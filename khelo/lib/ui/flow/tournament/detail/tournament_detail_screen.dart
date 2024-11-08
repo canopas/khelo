@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
@@ -17,6 +19,7 @@ import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_points_ta
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_stats_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_teams_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -111,6 +114,7 @@ class _TournamentDetailScreenState
             pinned: true,
             expandedHeight: 300,
             backgroundColor: context.colorScheme.surface,
+            leading: _backButton(context),
             flexibleSpace: _flexibleTitle(context, state.tournament!),
             actions: state.tournament!.created_by == state.currentUserId ||
                     state.tournament!.members
@@ -118,6 +122,10 @@ class _TournamentDetailScreenState
                 ? [
                     moreOptionButton(
                       context,
+                      size: 20,
+                      backgroundColor: context
+                          .colorScheme.containerHighOnSurface
+                          .withOpacity(0.3),
                       onPressed: () => _moreActionButton(context, state),
                     ),
                   ]
@@ -145,6 +153,7 @@ class _TournamentDetailScreenState
         children: [
           TournamentDetailOverviewTab(
             tournament: state.tournament!,
+            controller: _controller,
           ),
           TournamentDetailTeamsTab(
             onSelected: notifier.onTeamsSelected,
@@ -243,6 +252,19 @@ class _TournamentDetailScreenState
                     )
                   : null,
             ),
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    context.colorScheme.surface.withOpacity(0.2),
+                    context.colorScheme.surface.withOpacity(0.8),
+                  ],
+                ),
+              ),
+            ),
             Positioned(
               left: 16,
               bottom: 24,
@@ -278,9 +300,7 @@ class _TournamentDetailScreenState
           child: Text(
             tournament.name,
             style: AppTextStyle.header1.copyWith(
-              color: tournament.banner_img_url != null
-                  ? Colors.white
-                  : context.colorScheme.textPrimary,
+              color: context.colorScheme.textPrimary,
             ),
             overflow: TextOverflow.ellipsis,
             textScaler: TextScaler.noScaling,
@@ -295,9 +315,7 @@ class _TournamentDetailScreenState
               height: 24,
               width: 24,
               colorFilter: ColorFilter.mode(
-                tournament.banner_img_url != null
-                    ? Colors.white
-                    : context.colorScheme.textPrimary,
+                context.colorScheme.textPrimary,
                 BlendMode.srcIn,
               ),
             ),
@@ -307,9 +325,7 @@ class _TournamentDetailScreenState
                   .start_date
                   .format(context, DateFormatType.dayMonth)),
               style: AppTextStyle.body1.copyWith(
-                color: tournament.banner_img_url != null
-                    ? Colors.white
-                    : context.colorScheme.textPrimary,
+                color: context.colorScheme.textPrimary,
               ),
             ),
           ],
@@ -358,5 +374,23 @@ class _TournamentDetailScreenState
         },
       ),
     ]);
+  }
+
+  Widget _backButton(BuildContext context) {
+    return actionButton(context,
+        onPressed: context.pop,
+        icon: Container(
+          height: 28,
+          width: 28,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: context.colorScheme.containerHighOnSurface.withOpacity(0.3),
+          ),
+          child: Icon(
+            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            size: 20,
+            color: context.colorScheme.textPrimary,
+          ),
+        ));
   }
 }

@@ -240,6 +240,7 @@
   "tournament_detail_key_stat_most_fours_title": "Most Fours",
   "tournament_detail_key_stat_most_sixes_title": "Most Sixes",
 
+  "key_stat_all": "All",
   "key_stat_filter_runs": "Runs",
   "key_stat_filter_wickets": "Wickets",
   "key_stat_filter_fours": "Fours",

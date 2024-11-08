@@ -53,7 +53,7 @@ class TournamentDetailStateViewNotifier
         loading: false,
       );
       onMatchFilter(null);
-      onStatFilter(null);
+      onStatFilter(state.selectedFilterTag);
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -116,13 +116,15 @@ class TournamentDetailStateViewNotifier
     }
   }
 
-  void onStatFilter(KeyStatFilterTag? tag) {
+  void onStatFilter(KeyStatFilterTag tag) {
     if (state.tournament == null) return;
 
     var filteredStats = state.tournament!.keyStats;
 
     filteredStats = filteredStats.where((e) {
       switch (tag) {
+        case KeyStatFilterTag.all:
+          return true;
         case KeyStatFilterTag.runs:
           return (e.stats.battingStat?.runScored ?? 0) > 0;
         case KeyStatFilterTag.wickets:
@@ -143,8 +145,6 @@ class TournamentDetailStateViewNotifier
           return (e.stats.battingStat?.fours ?? 0) +
                   (e.stats.battingStat?.sixes ?? 0) >
               0;
-        case null:
-          return false;
       }
     }).toList();
 
@@ -176,7 +176,7 @@ class TournamentDetailStateViewNotifier
 
     state = state.copyWith(
       filteredStats: filteredStats,
-      selectedFilterTag: tag ?? state.selectedFilterTag,
+      selectedFilterTag: tag,
     );
   }
 
@@ -224,13 +224,14 @@ class TournamentDetailState with _$TournamentDetailState {
     String? currentUserId,
     @Default(null) String? matchFilter,
     @Default([]) List<MatchModel> filteredMatches,
-    @Default(KeyStatFilterTag.runs) KeyStatFilterTag selectedFilterTag,
+    @Default(KeyStatFilterTag.all) KeyStatFilterTag selectedFilterTag,
     @Default([]) List<PlayerKeyStat> filteredStats,
     @Default([]) List<TeamPoint> teamPoints,
   }) = _TournamentDetailState;
 }
 
 enum KeyStatFilterTag {
+  all,
   runs,
   wickets,
   battingAverage,
@@ -243,6 +244,8 @@ enum KeyStatFilterTag {
 
   String getString(BuildContext context) {
     switch (this) {
+      case KeyStatFilterTag.all:
+        return context.l10n.key_stat_all;
       case KeyStatFilterTag.runs:
         return context.l10n.key_stat_filter_runs;
       case KeyStatFilterTag.wickets:
