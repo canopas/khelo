@@ -55,7 +55,7 @@ class _TournamentItemState extends State<TournamentItem> {
       onTap: () => AppRoute.tournamentDetail(tournamentId: widget.tournament.id)
           .push(context),
       child: Container(
-        width: 360,
+        width: context.mediaQuerySize.width * 0.85,
         padding: EdgeInsets.all(16),
         margin: widget.margin,
         decoration: BoxDecoration(
