@@ -43,8 +43,8 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      _scheduler = MatchScheduler(
-          tournament.teams, tournament.matches, TournamentType.knockOut);
+      _scheduler =
+          MatchScheduler(tournament.teams, tournament.matches, tournament.type);
       final scheduledMatches = _scheduler.scheduleMatchesByType();
       final sorted = SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
           scheduledMatches, (a, b) => a.index.compareTo(b.index));

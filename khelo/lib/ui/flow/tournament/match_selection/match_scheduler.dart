@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
@@ -45,7 +46,8 @@ class MatchScheduler {
   GroupedMatchMap scheduleMatchesByType() {
     switch (matchType) {
       case TournamentType.knockOut:
-        return scheduleKnockOutMatchesWithArguments(scheduledMatches, teams);
+        return scheduleKnockOutMatchesWithArguments(scheduledMatches, teams,
+            addInitialRound: true);
       case TournamentType.miniRobin:
         return scheduleMiniRoundRobinMatches();
       case TournamentType.boxLeague:
@@ -63,11 +65,18 @@ class MatchScheduler {
 
   GroupedMatchMap scheduleKnockOutMatchesWithArguments(
     GroupedMatchMap matches,
-    List<TeamModel> teams,
-  ) {
-    final GroupedMatchMap additionalScheduledMatches = matches;
+    List<TeamModel> teams, {
+    bool addInitialRound = false,
+  }) {
     final List<TeamModel> teamPool = List.of(teams);
-
+    if (addInitialRound && !matches.containsKey(MatchGroup.round)) {
+      matches.addAll({
+        MatchGroup.round: {1: []}
+      });
+    }
+    final GroupedMatchMap additionalScheduledMatches =
+        SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
+            matches, (a, b) => a.index.compareTo(b.index));
     final GroupedMatchMap tempScheduledMatches = {};
     while (teamPool.length > 1) {
       additionalScheduledMatches.forEach((group, groupNumbers) {
@@ -457,10 +466,11 @@ class MatchScheduler {
   }
 
   void addWinnerTeamsBackToTeam(
-      List<MatchModel> matches,
-      List<TeamModel> teams,
-      ) {
-    final winners = matches.where((match) => match.matchResult != null).expand((match) {
+    List<MatchModel> matches,
+    List<TeamModel> teams,
+  ) {
+    final winners =
+        matches.where((match) => match.matchResult != null).expand((match) {
       if (match.matchResult!.winType == WinnerByType.tie) {
         final teamWithHigherRunRate = match.teams.reduce((team1, team2) {
           double runRate1 = team1.run / team1.over;
@@ -470,7 +480,9 @@ class MatchScheduler {
         return [teamWithHigherRunRate.team];
       } else {
         return [
-          match.teams.firstWhere((team) => team.team.id == match.matchResult!.teamId).team
+          match.teams
+              .firstWhere((team) => team.team.id == match.matchResult!.teamId)
+              .team
         ];
       }
     }).toList();
