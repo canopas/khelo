@@ -13,6 +13,7 @@ import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
+import 'package:khelo/ui/flow/tournament/detail/components/flexible_space.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_matches_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_overview_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_points_table_tab.dart';
@@ -116,7 +117,7 @@ class _TournamentDetailScreenState
             expandedHeight: 300,
             backgroundColor: context.colorScheme.surface,
             leading: _backButton(context),
-            flexibleSpace: _flexibleTitle(context, state.tournament!),
+            flexibleSpace: FlexibleSpace(tournament: state.tournament!),
             actions: state.tournament!.created_by == state.currentUserId ||
                     state.tournament!.members
                         .any((element) => element.id == state.currentUserId)
@@ -201,137 +202,6 @@ class _TournamentDetailScreenState
           ),
         ),
       ),
-    );
-  }
-
-  Widget _flexibleTitle(BuildContext context, TournamentModel tournament) {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-      final isCollapsed = constraints.biggest.height < 150;
-
-      return FlexibleSpaceBar(
-        centerTitle: true,
-        title: isCollapsed
-            ? AnimatedOpacity(
-                opacity: isCollapsed ? 1 : 0,
-                duration: const Duration(milliseconds: 100),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 64, right: 48),
-                  child: Text(
-                    tournament.name,
-                    style: AppTextStyle.header2.copyWith(
-                      color: context.colorScheme.textPrimary,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    textScaler: TextScaler.noScaling,
-                  ),
-                ),
-              )
-            : null,
-        background: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: context.colorScheme.containerHigh,
-                image: (tournament.banner_img_url != null)
-                    ? DecorationImage(
-                        image: CachedNetworkImageProvider(
-                            tournament.banner_img_url ?? ''),
-                        fit: BoxFit.fill,
-                      )
-                    : null,
-              ),
-              child: (tournament.banner_img_url == null)
-                  ? Center(
-                      child: SvgPicture.asset(
-                        Assets.images.icTournaments,
-                        colorFilter: ColorFilter.mode(
-                          context.colorScheme.textSecondary,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    )
-                  : null,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.transparent,
-                    surfaceDarkColor.withOpacity(0.2),
-                    surfaceDarkColor.withOpacity(0.8),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 16,
-              bottom: 24,
-              child: AnimatedOpacity(
-                opacity: isCollapsed ? 0 : 1,
-                duration: const Duration(milliseconds: 100),
-                child: _profileView(context, tournament),
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _profileView(BuildContext context, TournamentModel tournament) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ImageAvatar(
-          initial: tournament.name.characters.first.toUpperCase(),
-          size: 80,
-          imageUrl: tournament.profile_img_url,
-          border: Border.all(
-            color: surfaceLightColor,
-            width: 1.5,
-          ),
-          backgroundColor: context.colorScheme.primary,
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          width: context.mediaQuerySize.width - 32,
-          child: Text(
-            tournament.name,
-            style: AppTextStyle.header1.copyWith(
-              color: surfaceLightColor,
-            ),
-            overflow: TextOverflow.ellipsis,
-            textScaler: TextScaler.noScaling,
-            maxLines: 2,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Row(
-          children: [
-            SvgPicture.asset(
-              Assets.images.icCalendar,
-              height: 24,
-              width: 24,
-              colorFilter: ColorFilter.mode(
-                surfaceLightColor,
-                BlendMode.srcIn,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(
-              context.l10n.tournament_detail_start_from_title(tournament
-                  .start_date
-                  .format(context, DateFormatType.dayMonth)),
-              style: AppTextStyle.body1.copyWith(
-                color: surfaceLightColor,
-              ),
-            ),
-          ],
-        )
-      ],
     );
   }
 

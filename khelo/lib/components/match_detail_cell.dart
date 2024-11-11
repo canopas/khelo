@@ -60,8 +60,8 @@ class MatchDetailCell extends StatelessWidget {
               children: [
                 Expanded(child: _winnerMessageText(context)),
                 if (showStatusTag) ...[
-                  MatchStatusTag(
-                    status: match.match_status,
+                  StatusTag(
+                    matchStatus: match.match_status,
                     onTap: showActionButtons &&
                             match.match_status != MatchStatus.finish &&
                             match.match_status != MatchStatus.abandoned

@@ -54,6 +54,61 @@ class TournamentService {
     }
   }
 
+  Stream<List<TournamentModel>> streamActiveTournaments() {
+    final currentDate = DateTime.now();
+    final date30DaysAgo = currentDate.subtract(Duration(days: 30));
+
+    return _tournamentCollection
+        .where(FireStoreConst.endDate, isGreaterThanOrEqualTo: date30DaysAgo)
+        .snapshots()
+        .asyncMap(
+      (event) async {
+        return await Future.wait(
+          event.docs.map(
+            (e) async {
+              final tournament = e.data();
+              final matchIds = tournament.match_ids;
+              if (matchIds.isNotEmpty) {
+                final matches = await _matchService.getMatchesByIds(matchIds);
+                final status = getTournamentStatus(matches);
+                return tournament.copyWith(matches: matches, status: status);
+              }
+              return tournament;
+            },
+          ),
+        );
+      },
+    ).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<List<TournamentModel>> getTournaments({
+    String? lastMatchId,
+    int limit = 10,
+  }) async {
+    var query = _tournamentCollection.orderBy(FieldPath.documentId);
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+
+    final snapshot = await query.limit(limit).get();
+
+    return Future.wait(
+      snapshot.docs.map(
+        (e) async {
+          final tournament = e.data();
+          final matchIds = tournament.match_ids;
+          if (matchIds.isNotEmpty) {
+            final matches = await _matchService.getMatchesByIds(matchIds);
+            final status = getTournamentStatus(matches);
+            return tournament.copyWith(matches: matches, status: status);
+          }
+          return tournament;
+        },
+      ),
+    );
+  }
+
   Stream<List<TournamentModel>> streamCurrentUserRelatedMatches(String userId) {
     final currentMember = TournamentMember(id: userId);
 
@@ -219,5 +274,23 @@ class TournamentService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  TournamentStatus getTournamentStatus(List<MatchModel> matches) {
+    final bool anyRunning =
+        matches.any((match) => match.match_status == MatchStatus.running);
+    final bool allYetToStart =
+        matches.every((match) => match.match_status == MatchStatus.yetToStart);
+    final bool allFinishedOrAbandoned = matches.every(
+      (match) =>
+          match.match_status == MatchStatus.abandoned ||
+          match.match_status == MatchStatus.finish,
+    );
+
+    if (anyRunning) return TournamentStatus.running;
+    if (allYetToStart) return TournamentStatus.upcoming;
+    if (allFinishedOrAbandoned) return TournamentStatus.finish;
+
+    return TournamentStatus.finish;
   }
 }

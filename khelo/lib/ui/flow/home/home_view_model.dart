@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +16,10 @@ part 'home_view_model.freezed.dart';
 final homeViewStateProvider =
     StateNotifierProvider.autoDispose<HomeViewNotifier, HomeViewState>(
   (ref) {
-    final notifier = HomeViewNotifier(ref.read(matchServiceProvider));
+    final notifier = HomeViewNotifier(
+      ref.read(matchServiceProvider),
+      ref.read(tournamentServiceProvider),
+    );
     ref.listen(
         hasUserSession, (_, next) => notifier._onUserSessionUpdate(next));
     return notifier;
@@ -23,10 +28,14 @@ final homeViewStateProvider =
 
 class HomeViewNotifier extends StateNotifier<HomeViewState> {
   final MatchService _matchService;
+  final TournamentService _tournamentService;
   StreamSubscription? _streamSubscription;
 
-  HomeViewNotifier(this._matchService) : super(const HomeViewState()) {
-    loadMatches();
+  HomeViewNotifier(
+    this._matchService,
+    this._tournamentService,
+  ) : super(const HomeViewState()) {
+    loadData();
   }
 
   void _onUserSessionUpdate(bool hasSession) {
@@ -35,24 +44,27 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     }
   }
 
-  void loadMatches() async {
+  void loadData() async {
     _streamSubscription?.cancel();
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    final matchCombiner = combineLatest3(
-        _matchService.streamActiveRunningMatches(),
-        _matchService.streamUpcomingMatches(),
-        _matchService.streamFinishedMatches());
+    final combineFutures = combineLatest4(
+      _matchService.streamActiveRunningMatches(),
+      _matchService.streamUpcomingMatches(),
+      _matchService.streamFinishedMatches(),
+      _tournamentService.streamActiveTournaments(),
+    );
 
-    _streamSubscription = matchCombiner.listen(
-      (allMatches) {
+    _streamSubscription = combineFutures.listen(
+      (results) {
         state = state.copyWith(
-          matches: [...allMatches.$1, ...allMatches.$2, ...allMatches.$3],
+          matches: [...results.$1, ...results.$2, ...results.$3],
           groupMatches: {
-            MatchStatusLabel.live: allMatches.$1,
-            MatchStatusLabel.upcoming: allMatches.$2,
-            MatchStatusLabel.finished: allMatches.$3,
+            MatchStatusLabel.live: results.$1,
+            MatchStatusLabel.upcoming: results.$2,
+            MatchStatusLabel.finished: results.$3,
           },
+          tournaments: results.$4,
           loading: false,
           error: null,
         );
@@ -77,6 +89,7 @@ class HomeViewState with _$HomeViewState {
     Object? error,
     @Default(false) bool loading,
     @Default([]) List<MatchModel> matches,
+    @Default([]) List<TournamentModel> tournaments,
     @Default({}) Map<MatchStatusLabel, List<MatchModel>> groupMatches,
   }) = _HomeViewState;
 }

@@ -1,4 +1,5 @@
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -7,31 +8,38 @@ import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-class MatchStatusTag extends StatelessWidget {
-  final MatchStatus status;
+class StatusTag extends StatelessWidget {
+  final MatchStatus? matchStatus;
+  final TournamentStatus? tournamentStatus;
   final VoidCallback? onTap;
 
-  const MatchStatusTag({
+  const StatusTag({
     super.key,
     this.onTap,
-    required this.status,
+    this.matchStatus,
+    this.tournamentStatus,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (matchStatus == null && tournamentStatus == null) {
+      return const SizedBox();
+    }
     return OnTapScale(
       onTap: onTap,
       enabled: onTap != null,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         decoration: BoxDecoration(
-          color: status.getColor(context),
+          color: matchStatus?.getColor(context) ??
+              tournamentStatus?.getColor(context),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
           children: [
             if (onTap != null) ...[
-              status == MatchStatus.running
+              matchStatus == MatchStatus.running ||
+                      tournamentStatus == TournamentStatus.running
                   ? Icon(
                       CupertinoIcons.play,
                       size: 16,
@@ -47,7 +55,9 @@ class MatchStatusTag extends StatelessWidget {
               const SizedBox(width: 2)
             ],
             Text(
-              status.getString(context),
+              matchStatus?.getString(context) ??
+                  tournamentStatus?.getString(context) ??
+                  '',
               style: AppTextStyle.caption
                   .copyWith(color: context.colorScheme.onPrimary),
             ),

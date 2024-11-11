@@ -46,8 +46,8 @@ class FinalScoreView extends ConsumerWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16, bottom: 24),
-            child: MatchStatusTag(
-                status: state.match?.match_status ?? MatchStatus.running),
+            child: StatusTag(
+                matchStatus: state.match?.match_status ?? MatchStatus.running),
           ),
         ],
       ));
