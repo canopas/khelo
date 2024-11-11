@@ -197,6 +197,10 @@
   "match_selection_screen_title": "Select Matches",
   "match_selection_select_matches_title": "Select matches",
   "match_selection_round_title": "Round {round}",
+  "match_selection_no_matches_title": "No Matches Scheduled Yet",
+  "match_selection_no_matches_description": "There are currently no matches scheduled. Tap the '+' button to schedule new matches and get the action started!",
+  "match_selection_not_found_title": "No Matches Found for {team}",
+  "match_selection_not_found_description": "It seems like there are no upcoming or past matches scheduled for {team} at the moment. Please check back later or ensure the team is added to the match schedule.",
 
   "@_TOURNAMENT_DETAIL": {
   },

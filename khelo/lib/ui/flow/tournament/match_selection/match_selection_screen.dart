@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
+import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -56,6 +57,14 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
           context,
           onPressed: () {
             final option = MatchGroup.values.toList();
+            if (state.matches.containsKey(MatchGroup.quarterfinal)) {
+              option.remove(MatchGroup.quarterfinal);
+            }
+
+            if (state.matches.containsKey(MatchGroup.semifinal)) {
+              option.remove(MatchGroup.semifinal);
+            }
+
             if (state.matches.containsKey(MatchGroup.finals)) {
               option.remove(MatchGroup.finals);
             }
@@ -86,67 +95,92 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
     BuildContext context,
     MatchSelectionState state,
   ) {
+    if (state.loading) {
+      return Center(child: AppProgressIndicator());
+    }
+
     return Column(
       children: [
         Padding(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: _searchTextField(context, notifier, state),
         ),
-        Expanded(
-          child: ListView(
-            children: state.matches.entries.map((entry) {
-              final group = entry.key;
-              final roundsMap = entry.value;
+        _buildListView(context, state),
+      ],
+    );
+  }
+
+  Widget _buildListView(BuildContext context, MatchSelectionState state) {
+    final matches = state.searchController.text.isNotEmpty
+        ? state.searchResults
+        : state.matches;
+
+    if (matches.isEmpty) {
+      return Expanded(
+        child: EmptyScreen(
+          title: state.searchController.text.isEmpty
+              ? context.l10n.match_selection_no_matches_title
+              : context.l10n
+                  .match_selection_not_found_title(state.searchController.text),
+          description: state.searchController.text.isEmpty
+              ? context.l10n.match_selection_no_matches_description
+              : context.l10n.match_selection_not_found_description(
+                  state.searchController.text),
+          isShowButton: false,
+        ),
+      );
+    }
+    return Expanded(
+      child: ListView(
+        children: matches.entries.map((entry) {
+          final group = entry.key;
+          final roundsMap = entry.value;
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: roundsMap.entries.map((roundEntry) {
+              final roundNumber = roundEntry.key;
+              final matches = roundEntry.value;
+
+              final roundDisplay = group == MatchGroup.round
+                  ? "${group.getString(context)} $roundNumber"
+                  : group.getString(context);
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: roundsMap.entries.map((roundEntry) {
-                  final roundNumber = roundEntry.key;
-                  final matches = roundEntry.value;
-
-                  final roundDisplay = group == MatchGroup.finals
-                      ? group.getString(context)
-                      : "${group.getString(context)} $roundNumber";
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        color: context.colorScheme.containerLow,
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                roundDisplay,
-                                style: AppTextStyle.header3.copyWith(
-                                  color: context.colorScheme.textPrimary,
-                                ),
-                              ),
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: context.colorScheme.containerLow,
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            roundDisplay,
+                            style: AppTextStyle.header3.copyWith(
+                              color: context.colorScheme.textPrimary,
                             ),
-                            _addButton(context, onPressed: () {
-                              AppRoute.addMatch(
-                                tournamentId: state.tournament?.id,
-                                group: group,
-                                groupNumber: roundNumber,
-                              ).push(context);
-                            }),
-                          ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 16),
-                      ...matches
-                          .map((match) => _matchCell(context, state, match)),
-                    ],
-                  );
-                }).toList(),
+                        _addButton(context, onPressed: () {
+                          AppRoute.addMatch(
+                            tournamentId: state.tournament?.id,
+                            group: group,
+                            groupNumber: roundNumber,
+                          ).push(context);
+                        }),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  ...matches.map((match) => _matchCell(context, state, match)),
+                ],
               );
             }).toList(),
-          ),
-        )
-      ],
+          );
+        }).toList(),
+      ),
     );
   }
 

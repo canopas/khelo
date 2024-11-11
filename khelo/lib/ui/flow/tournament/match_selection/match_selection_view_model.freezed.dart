@@ -206,12 +206,9 @@ class _$MatchSelectionStateImpl implements _MatchSelectionState {
       this.error,
       this.actionError,
       this.tournament,
-      final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults = const {
-        MatchGroup.round: {0: []}
-      },
-      final Map<MatchGroup, Map<int, List<MatchModel>>> matches = const {
-        MatchGroup.round: {0: []}
-      },
+      final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults =
+          const {},
+      final Map<MatchGroup, Map<int, List<MatchModel>>> matches = const {},
       this.loading = false,
       this.searchInProgress = false})
       : _searchResults = searchResults,

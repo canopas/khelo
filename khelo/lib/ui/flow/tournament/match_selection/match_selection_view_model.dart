@@ -13,10 +13,9 @@ part 'match_selection_view_model.freezed.dart';
 
 typedef GroupedMatchMap = Map<MatchGroup, Map<int, List<MatchModel>>>;
 
-final matchSelectionStateProvider =
-    StateNotifierProvider<MatchSelectionViewNotifier, MatchSelectionState>(
-        (ref) =>
-            MatchSelectionViewNotifier(ref.read(tournamentServiceProvider)));
+final matchSelectionStateProvider = StateNotifierProvider.autoDispose<
+        MatchSelectionViewNotifier, MatchSelectionState>(
+    (ref) => MatchSelectionViewNotifier(ref.read(tournamentServiceProvider)));
 
 class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
   final TournamentService _tournamentService;
@@ -43,23 +42,41 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      _scheduler = MatchScheduler(tournament.teams, tournament.matches);
+      // _scheduler = MatchScheduler(tournament.teams, tournament.matches);
+      final DataClass data = DataClass();
+      _scheduler =
+          MatchScheduler(data.teams, data.matches, TournamentType.miniRobin);
+      final scheduledMatches = _scheduler.scheduleMatchesByType();
+
+      scheduledMatches.forEach((grp, grpNum) {
+        debugPrint("GROUP: $grp");
+        grpNum.forEach((number, matches) {
+          debugPrint("NUMBER: $number");
+          debugPrint("MATCHES: \n");
+
+          final temp = matches
+              .map(
+                (e) => e.teams
+                    .map(
+                      (e) => e.team.name,
+                    )
+                    .join("  VS  "),
+              )
+              .join("\n");
+          debugPrint(temp);
+        });
+      });
 
       state = state.copyWith(
         tournament: tournament,
+        matches: scheduledMatches,
         loading: false,
       );
-      _scheduleMatches();
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
           "MatchSelectionViewNotifier: error while loading tournament -> $e");
     });
-  }
-
-  void _scheduleMatches() {
-    final scheduledMatches = _scheduler.scheduleKnockOutMatches();
-    state = state.copyWith(matches: scheduledMatches);
   }
 
   Future<void> _search(String searchKey) async {
@@ -157,14 +174,8 @@ class MatchSelectionState with _$MatchSelectionState {
     Object? error,
     Object? actionError,
     TournamentModel? tournament,
-    @Default({
-      MatchGroup.round: {0: []}
-    })
-    GroupedMatchMap searchResults,
-    @Default({
-      MatchGroup.round: {0: []}
-    })
-    GroupedMatchMap matches,
+    @Default({}) GroupedMatchMap searchResults,
+    @Default({}) GroupedMatchMap matches,
     @Default(false) bool loading,
     @Default(false) bool searchInProgress,
   }) = _MatchSelectionState;
