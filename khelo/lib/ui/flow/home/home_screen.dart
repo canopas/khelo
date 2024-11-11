@@ -157,6 +157,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: tournaments
                   .map((tournament) => TournamentItem(
                         tournament: tournament,
