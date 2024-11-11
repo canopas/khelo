@@ -7,6 +7,7 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/flow/tournament/team_selection/component/verification_team_list_sheet.dart';
 import 'package:khelo/ui/flow/tournament/team_selection/team_selection_view_model.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -51,7 +52,8 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
     return AppPage(
       title: context.l10n.team_selection_screen_title,
       actions: [
-        IconButton(
+        actionButton(
+          context,
           onPressed: () async {
             final userTeams = state.userTeams.map((e) => e.id).toSet();
             final previouslySelected = notifier.selectedIds.toSet();

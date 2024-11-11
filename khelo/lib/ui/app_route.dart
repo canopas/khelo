@@ -220,13 +220,17 @@ class AppRoute {
       AppRoute(pathMakeTeamAdmin,
           builder: (context) => MakeTeamAdminScreen(team: team));
 
-  static AppRoute searchTeam(
-          {List<String>? excludedIds, required bool onlyUserTeams}) =>
+  static AppRoute searchTeam({
+    List<String>? excludedIds,
+    required bool onlyUserTeams,
+    String? tournamentId,
+  }) =>
       AppRoute(
         pathSearchTeam,
         builder: (_) => SearchTeamScreen(
           excludedIds: excludedIds,
           onlyUserTeams: onlyUserTeams,
+          tournamentId: tournamentId,
         ),
       );
 

@@ -54,6 +54,32 @@ class TournamentService {
     }
   }
 
+  Future<TournamentModel> getTournamentById(String id) async {
+    try {
+      final snapshot = await _tournamentCollection.doc(id).get();
+      var tournament = snapshot.data();
+      if (tournament != null) {
+        final teamIds = tournament.team_ids;
+        if (teamIds.isNotEmpty) {
+          final teams = await _teamService.getTeamsByIds(teamIds);
+          tournament = tournament.copyWith(teams: teams);
+        }
+        return tournament;
+      } else {
+        return TournamentModel(
+          id: '',
+          name: '',
+          type: TournamentType.knockOut,
+          created_by: '',
+          start_date: DateTime.now(),
+          end_date: DateTime.now(),
+        );
+      }
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Stream<List<TournamentModel>> streamCurrentUserRelatedMatches(String userId) {
     final currentMember = TournamentMember(id: userId);
 
@@ -161,9 +187,9 @@ class TournamentService {
   }
 
   Future<void> removeMatchFromTournament(
-      String tournamentId,
-      String matchId,
-      ) async {
+    String tournamentId,
+    String matchId,
+  ) async {
     try {
       await _tournamentCollection.doc(tournamentId).update({
         FireStoreConst.matchIds: FieldValue.arrayRemove([matchId]),

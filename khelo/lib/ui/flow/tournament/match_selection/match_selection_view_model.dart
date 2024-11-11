@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
@@ -42,34 +43,15 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      // _scheduler = MatchScheduler(tournament.teams, tournament.matches);
-      final DataClass data = DataClass();
-      _scheduler =
-          MatchScheduler(data.teams, data.matches, TournamentType.miniRobin);
+      _scheduler = MatchScheduler(
+          tournament.teams, tournament.matches, TournamentType.knockOut);
       final scheduledMatches = _scheduler.scheduleMatchesByType();
-
-      scheduledMatches.forEach((grp, grpNum) {
-        debugPrint("GROUP: $grp");
-        grpNum.forEach((number, matches) {
-          debugPrint("NUMBER: $number");
-          debugPrint("MATCHES: \n");
-
-          final temp = matches
-              .map(
-                (e) => e.teams
-                    .map(
-                      (e) => e.team.name,
-                    )
-                    .join("  VS  "),
-              )
-              .join("\n");
-          debugPrint(temp);
-        });
-      });
+      final sorted = SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
+          scheduledMatches, (a, b) => a.index.compareTo(b.index));
 
       state = state.copyWith(
         tournament: tournament,
-        matches: scheduledMatches,
+        matches: sorted,
         loading: false,
       );
     }, onError: (e) {
@@ -120,8 +102,10 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
 
     groupEntry[nextRound] = [];
     matches[group] = groupEntry;
+    final sorted = SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
+        matches, (a, b) => a.index.compareTo(b.index));
 
-    state = state.copyWith(matches: matches);
+    state = state.copyWith(matches: sorted);
   }
 
   GroupedMatchMap filterMatches(GroupedMatchMap matches, String searchedWord) {

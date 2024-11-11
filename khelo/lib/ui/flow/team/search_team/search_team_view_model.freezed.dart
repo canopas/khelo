@@ -20,6 +20,7 @@ mixin _$SearchTeamState {
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
   TeamModel? get selectedTeam => throw _privateConstructorUsedError;
+  TournamentModel? get tournament => throw _privateConstructorUsedError;
   List<TeamModel> get searchResults => throw _privateConstructorUsedError;
   List<TeamModel> get userTeams => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
@@ -43,6 +44,7 @@ abstract class $SearchTeamStateCopyWith<$Res> {
       {TextEditingController searchController,
       Object? error,
       TeamModel? selectedTeam,
+      TournamentModel? tournament,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
       bool loading,
@@ -50,6 +52,7 @@ abstract class $SearchTeamStateCopyWith<$Res> {
       bool searchInProgress});
 
   $TeamModelCopyWith<$Res>? get selectedTeam;
+  $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
@@ -70,6 +73,7 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
     Object? searchController = null,
     Object? error = freezed,
     Object? selectedTeam = freezed,
+    Object? tournament = freezed,
     Object? searchResults = null,
     Object? userTeams = null,
     Object? loading = null,
@@ -86,6 +90,10 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
           ? _value.selectedTeam
           : selectedTeam // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      tournament: freezed == tournament
+          ? _value.tournament
+          : tournament // ignore: cast_nullable_to_non_nullable
+              as TournamentModel?,
       searchResults: null == searchResults
           ? _value.searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -122,6 +130,20 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
       return _then(_value.copyWith(selectedTeam: value) as $Val);
     });
   }
+
+  /// Create a copy of SearchTeamState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TournamentModelCopyWith<$Res>? get tournament {
+    if (_value.tournament == null) {
+      return null;
+    }
+
+    return $TournamentModelCopyWith<$Res>(_value.tournament!, (value) {
+      return _then(_value.copyWith(tournament: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -136,6 +158,7 @@ abstract class _$$SearchTeamStateImplCopyWith<$Res>
       {TextEditingController searchController,
       Object? error,
       TeamModel? selectedTeam,
+      TournamentModel? tournament,
       List<TeamModel> searchResults,
       List<TeamModel> userTeams,
       bool loading,
@@ -144,6 +167,8 @@ abstract class _$$SearchTeamStateImplCopyWith<$Res>
 
   @override
   $TeamModelCopyWith<$Res>? get selectedTeam;
+  @override
+  $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
@@ -162,6 +187,7 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
     Object? searchController = null,
     Object? error = freezed,
     Object? selectedTeam = freezed,
+    Object? tournament = freezed,
     Object? searchResults = null,
     Object? userTeams = null,
     Object? loading = null,
@@ -178,6 +204,10 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
           ? _value.selectedTeam
           : selectedTeam // ignore: cast_nullable_to_non_nullable
               as TeamModel?,
+      tournament: freezed == tournament
+          ? _value.tournament
+          : tournament // ignore: cast_nullable_to_non_nullable
+              as TournamentModel?,
       searchResults: null == searchResults
           ? _value._searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
@@ -209,6 +239,7 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       {required this.searchController,
       this.error,
       this.selectedTeam,
+      this.tournament,
       final List<TeamModel> searchResults = const [],
       final List<TeamModel> userTeams = const [],
       this.loading = false,
@@ -223,6 +254,8 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
   final Object? error;
   @override
   final TeamModel? selectedTeam;
+  @override
+  final TournamentModel? tournament;
   final List<TeamModel> _searchResults;
   @override
   @JsonKey()
@@ -253,7 +286,7 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
 
   @override
   String toString() {
-    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, searchResults: $searchResults, userTeams: $userTeams, loading: $loading, showSelectionError: $showSelectionError, searchInProgress: $searchInProgress)';
+    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, tournament: $tournament, searchResults: $searchResults, userTeams: $userTeams, loading: $loading, showSelectionError: $showSelectionError, searchInProgress: $searchInProgress)';
   }
 
   @override
@@ -266,6 +299,8 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.selectedTeam, selectedTeam) ||
                 other.selectedTeam == selectedTeam) &&
+            (identical(other.tournament, tournament) ||
+                other.tournament == tournament) &&
             const DeepCollectionEquality()
                 .equals(other._searchResults, _searchResults) &&
             const DeepCollectionEquality()
@@ -283,6 +318,7 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       searchController,
       const DeepCollectionEquality().hash(error),
       selectedTeam,
+      tournament,
       const DeepCollectionEquality().hash(_searchResults),
       const DeepCollectionEquality().hash(_userTeams),
       loading,
@@ -304,6 +340,7 @@ abstract class _SearchTeamState implements SearchTeamState {
       {required final TextEditingController searchController,
       final Object? error,
       final TeamModel? selectedTeam,
+      final TournamentModel? tournament,
       final List<TeamModel> searchResults,
       final List<TeamModel> userTeams,
       final bool loading,
@@ -316,6 +353,8 @@ abstract class _SearchTeamState implements SearchTeamState {
   Object? get error;
   @override
   TeamModel? get selectedTeam;
+  @override
+  TournamentModel? get tournament;
   @override
   List<TeamModel> get searchResults;
   @override

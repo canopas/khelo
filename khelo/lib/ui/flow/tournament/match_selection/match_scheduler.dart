@@ -9,129 +9,6 @@ import 'package:data/utils/grouping_utils.dart';
 
 import 'match_selection_view_model.dart';
 
-class DataClass {
-  final List<TeamModel> teams = [
-    TeamModel(id: "1", name: "A", name_lowercase: "a"),
-    TeamModel(id: "2", name: "B", name_lowercase: "b"),
-    TeamModel(id: "3", name: "C", name_lowercase: "c"),
-    TeamModel(id: "4", name: "D", name_lowercase: "d"),
-    TeamModel(id: "5", name: "E", name_lowercase: "e"),
-    TeamModel(id: "6", name: "F", name_lowercase: "f"),
-    TeamModel(id: "7", name: "G", name_lowercase: "g"),
-    TeamModel(id: "8", name: "H", name_lowercase: "h"),
-    TeamModel(id: "9", name: "I", name_lowercase: "i"),
-    TeamModel(id: "10", name: "J", name_lowercase: "j"),
-    TeamModel(id: "11", name: "K", name_lowercase: "k"),
-    TeamModel(id: "12", name: "L", name_lowercase: "l"),
-    TeamModel(id: "13", name: "M", name_lowercase: "m"),
-    // TeamModel(id: "14", name: "N", name_lowercase: "n"),
-    // TeamModel(id: "15", name: "O", name_lowercase: "o"),
-    // TeamModel(id: "16", name: "P", name_lowercase: "p"),
-    // TeamModel(id: "17", name: "Q", name_lowercase: "q"),
-    // TeamModel(id: "18", name: "R", name_lowercase: "r"),
-    // TeamModel(id: "19", name: "S", name_lowercase: "s"),
-    // TeamModel(id: "20", name: "T", name_lowercase: "t"),
-    // TeamModel(id: "21", name: "U", name_lowercase: "u"),
-    // TeamModel(id: "22", name: "V", name_lowercase: "v"),
-    // TeamModel(id: "23", name: "W", name_lowercase: "w"),
-    // TeamModel(id: "24", name: "X", name_lowercase: "x"),
-    // TeamModel(id: "25", name: "Y", name_lowercase: "y"),
-    // TeamModel(id: "26", name: "Z", name_lowercase: "z"),
-  ];
-
-  final MatchModel defaultMatchModel = MatchModel(
-    id: "",
-    teams: [],
-    match_type: MatchType.limitedOvers,
-    number_of_over: 4,
-    over_per_bowler: 2,
-    city: "Surat",
-    ground: "Surat",
-    ball_type: BallType.leather,
-    pitch_type: PitchType.cement,
-    created_by: "",
-    match_status: MatchStatus.yetToStart,
-    match_group: MatchGroup.round,
-    match_group_number: 1,
-  );
-  late List<MatchModel> matches;
-
-  DataClass() {
-    matches = [
-      defaultMatchModel.copyWith(
-        match_group: MatchGroup.round,
-        match_group_number: 1,
-        teams: [
-          MatchTeamModel(
-              team_id: teams[0].id,
-              team: teams[0],
-              over: 2,
-              run: 20,
-              wicket: 2),
-          MatchTeamModel(
-              team_id: teams[1].id,
-              team: teams[1],
-              over: 1.4,
-              run: 22,
-              wicket: 3)
-        ],
-        match_status: MatchStatus.finish,
-        toss_winner_id: teams[0].id,
-        toss_decision: TossDecision.bat,
-      ),
-      defaultMatchModel.copyWith(
-        match_group: MatchGroup.round,
-        match_group_number: 1,
-        teams: [
-          MatchTeamModel(
-              team_id: teams[2].id,
-              team: teams[2],
-              over: 2,
-              run: 20,
-              wicket: 2),
-          MatchTeamModel(
-              team_id: teams[3].id,
-              team: teams[3],
-              over: 1.4,
-              run: 22,
-              wicket: 3)
-        ],
-        match_status: MatchStatus.finish,
-        toss_winner_id: teams[3].id,
-        toss_decision: TossDecision.bat,
-      ),
-      defaultMatchModel.copyWith(
-        match_group: MatchGroup.round,
-        match_group_number: 1,
-        teams: [
-          MatchTeamModel(
-              team_id: teams[4].id,
-              team: teams[4],
-              over: 2,
-              run: 20,
-              wicket: 2),
-          MatchTeamModel(
-              team_id: teams[5].id,
-              team: teams[5],
-              over: 1.4,
-              run: 22,
-              wicket: 3)
-        ],
-        match_status: MatchStatus.finish,
-        toss_winner_id: teams[4].id,
-        toss_decision: TossDecision.bat,
-      ),
-      defaultMatchModel.copyWith(
-        match_group: MatchGroup.semifinal,
-        match_group_number: 1,
-        teams: [teams[1], teams[3]]
-            .map((e) => MatchTeamModel(team_id: e.id, team: e))
-            .toList(),
-      ),
-    ];
-  }
-}
-
 class TeamPoints {
   TeamModel team;
   int points;
@@ -168,7 +45,7 @@ class MatchScheduler {
   GroupedMatchMap scheduleMatchesByType() {
     switch (matchType) {
       case TournamentType.knockOut:
-        return scheduleKnockOutMatches();
+        return scheduleKnockOutMatchesWithArguments(scheduledMatches, teams);
       case TournamentType.miniRobin:
         return scheduleMiniRoundRobinMatches();
       case TournamentType.boxLeague:
@@ -184,12 +61,14 @@ class MatchScheduler {
     }
   }
 
-  GroupedMatchMap scheduleKnockOutMatches() {
-    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
+  GroupedMatchMap scheduleKnockOutMatchesWithArguments(
+    GroupedMatchMap matches,
+    List<TeamModel> teams,
+  ) {
+    final GroupedMatchMap additionalScheduledMatches = matches;
     final List<TeamModel> teamPool = List.of(teams);
 
     final GroupedMatchMap tempScheduledMatches = {};
-
     while (teamPool.length > 1) {
       additionalScheduledMatches.forEach((group, groupNumbers) {
         groupNumbers.forEach((number, matches) {
@@ -430,51 +309,6 @@ class MatchScheduler {
     return {};
   }
 
-  GroupedMatchMap scheduleKnockOutMatchesWithArguments(
-    GroupedMatchMap matches,
-    List<TeamModel> teams,
-  ) {
-    final GroupedMatchMap additionalScheduledMatches = matches;
-    final List<TeamModel> teamPool = List.of(teams);
-
-    final GroupedMatchMap tempScheduledMatches = {};
-    while (teamPool.length > 1) {
-      additionalScheduledMatches.forEach((group, groupNumbers) {
-        groupNumbers.forEach((number, matches) {
-          removeAlreadyScheduledTeams(matches, teamPool);
-
-          final teamPairs = createTeamPairsForKnockout(teamPool);
-          addMatches(matches, teamPairs, group, number);
-
-          teamPool.removeWhere((team) => teamPairs
-              .any((element) => element.length == 2 && element.contains(team)));
-
-          addWinnerTeamsBackToTeam(matches, teamPool);
-
-          if (teamPool.length <= 1) {
-            return;
-          }
-          final expectedQualifier = matches.length;
-          if (expectedQualifier > 8) {
-            addRoundToGroupMap(tempScheduledMatches, number);
-          } else if (expectedQualifier > 4) {
-            addNewGroupToGroupMap(
-                tempScheduledMatches, MatchGroup.quarterfinal);
-          } else if (expectedQualifier > 2) {
-            addNewGroupToGroupMap(tempScheduledMatches, MatchGroup.semifinal);
-          } else if (expectedQualifier == 2) {
-            addNewGroupToGroupMap(tempScheduledMatches, MatchGroup.finals);
-          }
-        });
-      });
-
-      additionalScheduledMatches.addAll(tempScheduledMatches);
-      tempScheduledMatches.clear();
-    }
-
-    return additionalScheduledMatches;
-  }
-
   // Helper functions
   int calculateMatchesPerTeam(int teamCount) {
     if (teamCount <= 1) {
@@ -623,18 +457,25 @@ class MatchScheduler {
   }
 
   void addWinnerTeamsBackToTeam(
-    List<MatchModel> matches,
-    List<TeamModel> teams,
-  ) {
-    // TODO: handle tie and point system
-    final winner = matches
-        .where((match) => match.matchResult != null)
-        .map((match) => match.teams
-            .firstWhere((team) => team.team.id == match.matchResult!.teamId)
-            .team)
-        .toList();
+      List<MatchModel> matches,
+      List<TeamModel> teams,
+      ) {
+    final winners = matches.where((match) => match.matchResult != null).expand((match) {
+      if (match.matchResult!.winType == WinnerByType.tie) {
+        final teamWithHigherRunRate = match.teams.reduce((team1, team2) {
+          double runRate1 = team1.run / team1.over;
+          double runRate2 = team2.run / team2.over;
+          return runRate1 >= runRate2 ? team1 : team2;
+        });
+        return [teamWithHigherRunRate.team];
+      } else {
+        return [
+          match.teams.firstWhere((team) => team.team.id == match.matchResult!.teamId).team
+        ];
+      }
+    }).toList();
 
-    teams.addAll(winner);
+    teams.addAll(winners);
   }
 
   void addRoundToGroupMap(

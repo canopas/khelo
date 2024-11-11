@@ -202,7 +202,8 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            IconButton(
+            actionButton(
+              context,
               onPressed: () => context.pop(),
               icon: Icon(
                 Icons.close,
