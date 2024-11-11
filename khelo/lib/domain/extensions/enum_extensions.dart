@@ -328,13 +328,13 @@ extension MatchGroupString on MatchGroup {
   String getString(BuildContext context) {
     switch (this) {
       case MatchGroup.round:
-        return "Round";
+        return context.l10n.match_group_round_title;
       case MatchGroup.quarterfinal:
-        return "Quarter final";
+        return context.l10n.match_group_quarter_final_title;
       case MatchGroup.semifinal:
-        return "Semi final";
+        return context.l10n.match_group_semi_final_title;
       case MatchGroup.finals:
-        return "Final";
+        return context.l10n.match_group_final_title;
     }
   }
 }

@@ -201,6 +201,10 @@
   "match_selection_no_matches_description": "There are currently no matches scheduled. Tap the '+' button to schedule new matches and get the action started!",
   "match_selection_not_found_title": "No Matches Found for {team}",
   "match_selection_not_found_description": "It seems like there are no upcoming or past matches scheduled for {team} at the moment. Please check back later or ensure the team is added to the match schedule.",
+  "match_group_round_title": "Round",
+  "match_group_quarter_final_title": "Quarter final",
+  "match_group_semi_final_title": "Semi final",
+  "match_group_final_title": "Final",
 
   "@_TOURNAMENT_DETAIL": {
   },

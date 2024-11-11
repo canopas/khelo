@@ -333,31 +333,32 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
               style: AppTextStyle.caption
                   .copyWith(color: context.colorScheme.textDisabled)),
         ),
-        Flexible(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SvgPicture.asset(
-                Assets.images.icLocation,
-                height: 20,
-                width: 20,
-                colorFilter: ColorFilter.mode(
-                  context.colorScheme.textDisabled,
-                  BlendMode.srcATop,
+        if (match.ground.isNotEmpty)
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SvgPicture.asset(
+                  Assets.images.icLocation,
+                  height: 20,
+                  width: 20,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.textDisabled,
+                    BlendMode.srcATop,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  match.ground,
-                  style: AppTextStyle.caption
-                      .copyWith(color: context.colorScheme.textDisabled),
-                  overflow: TextOverflow.ellipsis,
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    match.ground,
+                    style: AppTextStyle.caption
+                        .copyWith(color: context.colorScheme.textDisabled),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
       ]),
     );
   }
