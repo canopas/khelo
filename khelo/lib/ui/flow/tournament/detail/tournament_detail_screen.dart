@@ -1,16 +1,11 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:data/api/team/team_model.dart';
-import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/empty_screen.dart';
-import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/tournament/components/sliver_header_delegate.dart';
 import 'package:khelo/ui/flow/tournament/detail/components/flexible_space.dart';
@@ -25,15 +20,12 @@ import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
-import 'package:style/theme/colors.dart';
 
 import '../../../../components/action_bottom_sheet.dart';
 import '../../../../components/app_page.dart';
 import '../../../../components/error_screen.dart';
 import '../../../../components/error_snackbar.dart';
 import '../../../../domain/extensions/widget_extension.dart';
-import '../../../../gen/assets.gen.dart';
 
 class TournamentDetailScreen extends ConsumerStatefulWidget {
   final String tournamentId;
