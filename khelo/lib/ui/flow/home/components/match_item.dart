@@ -1,6 +1,6 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
-import 'package:khelo/components/tournament_bedge.dart';
+import 'package:khelo/components/tournament_badge.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';

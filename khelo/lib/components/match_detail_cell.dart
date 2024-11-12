@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/match_status_tag.dart';
-import 'package:khelo/components/tournament_bedge.dart';
+import 'package:khelo/components/tournament_badge.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
