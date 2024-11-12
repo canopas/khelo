@@ -503,8 +503,8 @@ class MatchScheduler {
         matches.where((match) => match.matchResult != null).expand((match) {
       if (match.matchResult!.winType == WinnerByType.tie) {
         final teamWithHigherRunRate = match.teams.reduce((team1, team2) {
-          double runRate1 = team1.run / team1.over;
-          double runRate2 = team2.run / team2.over;
+          double runRate1 = team1.over > 0 ? team1.run / team1.over : 0;
+          double runRate2 = team2.over > 0 ? team2.run / team2.over : 0;
           return runRate1 >= runRate2 ? team1 : team2;
         });
         return [teamWithHigherRunRate.team];
