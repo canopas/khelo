@@ -232,7 +232,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
       matchId = await _matchService.updateMatch(match);
 
-      if(tournamentId != null && editMatch == null){
+      if(tournamentId != null && editMatch == null && matchId != null) {
         await _tournamentService.addMatchInTournament(tournamentId!, matchId!);
       }
 

@@ -366,14 +366,14 @@ class _TournamentDetailScreenState
       return;
     }
     if (state.tournament!.teams.length >=
-        state.tournament!.type.minTeamRequirement) {
+        state.tournament!.type.minTeamReq) {
       await AppRoute.matchSelection(tournamentId: state.tournament!.id)
           .push(context);
     } else {
       showErrorSnackBar(
           context: context,
           error: context.l10n.add_tournament_select_min_team_error(
-              state.tournament!.type.minTeamRequirement));
+              state.tournament!.type.minTeamReq));
     }
   }
 }

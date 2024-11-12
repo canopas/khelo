@@ -67,20 +67,20 @@ class TournamentMember with _$TournamentMember {
 
 @JsonEnum(valueField: "value")
 enum TournamentType {
-  knockOut(1, minTeamRequirement: 2),
-  miniRobin(2, minTeamRequirement: 3),
-  boxLeague(3, minTeamRequirement: 4),
-  doubleOut(4, minTeamRequirement: 4),
-  superOver(5, minTeamRequirement: 2),
-  bestOf(6, minTeamRequirement: 2),
-  gully(7, minTeamRequirement: 2),
-  mixed(8, minTeamRequirement: 2),
-  other(9, minTeamRequirement: 2);
+  knockOut(1, minTeamReq: 2),
+  miniRobin(2, minTeamReq: 3),
+  boxLeague(3, minTeamReq: 4),
+  doubleOut(4, minTeamReq: 4),
+  superOver(5, minTeamReq: 2),
+  bestOf(6, minTeamReq: 2),
+  gully(7, minTeamReq: 2),
+  mixed(8, minTeamReq: 2),
+  other(9, minTeamReq: 2);
 
   final int value;
-  final int minTeamRequirement;
+  final int minTeamReq;
 
-  const TournamentType(this.value, {required this.minTeamRequirement});
+  const TournamentType(this.value, {required this.minTeamReq});
 }
 
 enum TournamentMemberRole {

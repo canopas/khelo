@@ -41,9 +41,9 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
 
   @override
   void initState() {
+    super.initState();
     notifier = ref.read(matchSelectionStateProvider.notifier);
     runPostFrame(() => notifier.setData(widget.tournamentId));
-    super.initState();
   }
 
   @override
@@ -131,56 +131,66 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
       );
     }
     return Expanded(
-      child: ListView(
-        children: matches.entries.map((entry) {
-          final group = entry.key;
-          final roundsMap = entry.value;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: roundsMap.entries.map((roundEntry) {
-              final roundNumber = roundEntry.key;
-              final matches = roundEntry.value;
-
-              final roundDisplay = group == MatchGroup.round
-                  ? "${group.getString(context)} $roundNumber"
-                  : group.getString(context);
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    color: context.colorScheme.containerLow,
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            roundDisplay,
-                            style: AppTextStyle.header3.copyWith(
-                              color: context.colorScheme.textPrimary,
-                            ),
-                          ),
-                        ),
-                        _addButton(context, onPressed: () {
-                          AppRoute.addMatch(
-                            tournamentId: state.tournament?.id,
-                            group: group,
-                            groupNumber: roundNumber,
-                          ).push(context);
-                        }),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  ...matches.map((match) => _matchCell(context, state, match)),
-                ],
-              );
-            }).toList(),
-          );
-        }).toList(),
+      child: ListView.builder(
+        itemCount: matches.length,
+        itemBuilder: (context, index) {
+          final entry = matches.entries.elementAt(index);
+          return _buildMatchGroupList(
+              state.tournament?.id, entry.key, entry.value);
+        },
       ),
+    );
+  }
+
+  Widget _buildMatchGroupList(
+    String? tournamentId,
+    MatchGroup group,
+    Map<int, List<MatchModel>> roundsMap,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: roundsMap.entries
+          .map((roundEntry) => _buildRoundList(
+              tournamentId, group, roundEntry.key, roundEntry.value))
+          .toList(),
+    );
+  }
+
+  Widget _buildRoundList(String? tournamentId, MatchGroup group, int number,
+      List<MatchModel> matches) {
+    final roundDisplay = group == MatchGroup.round
+        ? "${group.getString(context)} $number"
+        : group.getString(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: double.infinity,
+          color: context.colorScheme.containerLow,
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  roundDisplay,
+                  style: AppTextStyle.header3.copyWith(
+                    color: context.colorScheme.textPrimary,
+                  ),
+                ),
+              ),
+              _addButton(context, onPressed: () {
+                AppRoute.addMatch(
+                  tournamentId: tournamentId,
+                  group: group,
+                  groupNumber: number,
+                ).push(context);
+              }),
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+        ...matches.map((match) => _matchCell(context, tournamentId, match)),
+      ],
     );
   }
 
@@ -219,7 +229,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
 
   Widget _matchCell(
     BuildContext context,
-    MatchSelectionState state,
+    String? tournamentId,
     MatchModel match,
   ) {
     return Container(
@@ -257,7 +267,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
                         .copyWith(color: context.colorScheme.textPrimary),
                   ),
                 ),
-                _secondaryAddEditButton(context, state, match),
+                _secondaryAddEditButton(context, tournamentId, match),
               ],
             ),
           ),
@@ -290,12 +300,12 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
   }
 
   Widget _secondaryAddEditButton(
-      BuildContext context, MatchSelectionState state, MatchModel match) {
+      BuildContext context, String? tournamentId, MatchModel match) {
     return OnTapScale(
       onTap: () => match.id.isNotEmpty
           ? AppRoute.addMatch(matchId: match.id).push(context)
           : AppRoute.addMatch(
-                  tournamentId: state.tournament?.id,
+                  tournamentId: tournamentId,
                   groupNumber: match.match_group_number,
                   group: match.match_group,
                   defaultOpponent: match.teams.last.team,

@@ -61,28 +61,7 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         actionButton(
           context,
           onPressed: state.selectedTeam != null
-              ? () async {
-                  if (state.userTeams
-                          .any((team) => team.id == state.selectedTeam?.id) ||
-                      (state.tournament?.team_ids.any(
-                              (element) => element == state.selectedTeam?.id) ??
-                          false)) {
-                    await notifier.addTeamToTournamentIfNeeded();
-                    if (context.mounted) {
-                      context.pop(state.selectedTeam);
-                    }
-                  } else {
-                    final res = await TeamMemberSheet.show<bool>(
-                      context,
-                      team: state.selectedTeam!,
-                      isForVerification: true,
-                    );
-                    await notifier.addTeamToTournamentIfNeeded();
-                    if (res != null && res && context.mounted) {
-                      context.pop(state.selectedTeam);
-                    }
-                  }
-                }
+              ? () => _handleSaveAction(context, state)
               : null,
           icon: SvgPicture.asset(
             Assets.images.icCheck,
@@ -107,6 +86,31 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSaveAction(
+    BuildContext context,
+    SearchTeamState state,
+  ) async {
+    if (state.userTeams.any((team) => team.id == state.selectedTeam?.id) ||
+        (state.tournament?.team_ids
+                .any((element) => element == state.selectedTeam?.id) ??
+            false)) {
+      await notifier.addTeamToTournamentIfNeeded();
+      if (context.mounted) {
+        context.pop(state.selectedTeam);
+      }
+    } else {
+      final res = await TeamMemberSheet.show<bool>(
+        context,
+        team: state.selectedTeam!,
+        isForVerification: true,
+      );
+      await notifier.addTeamToTournamentIfNeeded();
+      if (res != null && res && context.mounted) {
+        context.pop(state.selectedTeam);
+      }
+    }
   }
 
   Widget _searchTextField(

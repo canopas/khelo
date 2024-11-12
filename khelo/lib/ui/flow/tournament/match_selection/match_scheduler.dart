@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/extensions/double_extensions.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/utils/grouping_utils.dart';
 
@@ -13,13 +14,17 @@ import 'match_selection_view_model.dart';
 class TeamPoints {
   TeamModel team;
   int points;
-  int runRate;
+  double runRate;
+  int runs;
+  double oversFaced;
   int wickets;
 
   TeamPoints({
     required this.team,
     required this.points,
     required this.runRate,
+    required this.runs,
+    required this.oversFaced,
     required this.wickets,
   });
 }
@@ -156,13 +161,10 @@ class MatchScheduler {
       tempRound.clear();
     }
     rounds.forEach((key, matches) {
-      final matchResults =
-          matches.map((e) => e.matchResult).whereType<MatchResult>().toList();
-
       final teams =
           matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
 
-      final points = calculateTeamPoints(matchResults, teams);
+      final points = calculateTeamPoints(matches, teams);
       teamPoints.add(points);
     });
 
@@ -245,13 +247,10 @@ class MatchScheduler {
       tempRound.clear();
     }
     rounds.forEach((key, matches) {
-      final matchResults =
-          matches.map((e) => e.matchResult).whereType<MatchResult>().toList();
-
       final teams =
           matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
 
-      final points = calculateTeamPoints(matchResults, teams);
+      final points = calculateTeamPoints(matches, teams);
       teamPoints.add(points);
     });
 
@@ -333,40 +332,71 @@ class MatchScheduler {
   }
 
   List<TeamPoints> calculateTeamPoints(
-      List<MatchResult> roundsResults, List<TeamModel> teams) {
+      List<MatchModel> matches, List<TeamModel> teams) {
     List<TeamPoints> teamPoints = teams
-        .map(
-            (team) => TeamPoints(team: team, points: 0, runRate: 0, wickets: 0))
+        .map((team) => TeamPoints(
+              team: team,
+              points: 0,
+              runRate: 0,
+              wickets: 0,
+              runs: 0,
+              oversFaced: 0,
+            ))
         .toList();
 
-    for (var match in roundsResults) {
-      if (match.winType == WinnerByType.run) {
-        var winningTeam =
-            teamPoints.firstWhere((team) => team.team.id == match.teamId);
-        winningTeam.points += 2;
-        winningTeam.runRate += match.difference;
-      } else if (match.winType == WinnerByType.wicket) {
-        var winningTeam =
-            teamPoints.firstWhere((team) => team.team.id == match.teamId);
-        winningTeam.points += 2;
-        winningTeam.wickets += match.difference;
-      } else if (match.winType == WinnerByType.tie) {
-        var team1 =
-            teamPoints.firstWhere((team) => team.team.id == match.teamId);
-        var team2 =
-            teamPoints.firstWhere((team) => team.team.id != match.teamId);
-        team1.points += 1;
-        team2.points += 1;
+    for (var match in matches) {
+      if (match.matchResult == null) {
+        continue;
+      }
+      MatchResult result = match.matchResult!;
+
+      var team1Data = match.teams.first;
+      var team2Data = match.teams.last;
+
+      var team1Points =
+          teamPoints.firstWhere((team) => team.team.id == team1Data.team_id);
+      var team2Points =
+          teamPoints.firstWhere((team) => team.team.id == team2Data.team_id);
+
+      team1Points.runs += team1Data.run;
+      team1Points.oversFaced.add(team1Data.over.toBalls());
+      team1Points.wickets += team1Data.wicket;
+
+      team2Points.runs += team2Data.run;
+      team2Points.oversFaced.add(team2Data.over.toBalls());
+      team2Points.wickets += team2Data.wicket;
+
+      switch (result.winType) {
+        case WinnerByType.run:
+          var winningTeamPoints =
+              teamPoints.firstWhere((team) => team.team.id == result.teamId);
+          winningTeamPoints.points += 2;
+          break;
+
+        case WinnerByType.wicket:
+          var winningTeamPoints =
+              teamPoints.firstWhere((team) => team.team.id == result.teamId);
+          winningTeamPoints.points += 2;
+          break;
+
+        case WinnerByType.tie:
+          team1Points.points += 1;
+          team2Points.points += 1;
+          break;
       }
     }
 
-    // Sort teams first by points, then by run rate (or wickets for tiebreaker)
+    for (var team in teamPoints) {
+      if (team.oversFaced > 0) {
+        team.runRate = team.runs / team.oversFaced;
+      }
+    }
+
     teamPoints.sort((a, b) {
       if (a.points != b.points) {
-        return b.points.compareTo(a.points); // Sort by points descending
+        return b.points.compareTo(a.points);
       } else {
-        return b.runRate
-            .compareTo(a.runRate); // Tiebreak by run rate (descending)
+        return b.runRate.compareTo(a.runRate);
       }
     });
 
