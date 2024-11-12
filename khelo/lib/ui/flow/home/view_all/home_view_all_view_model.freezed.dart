@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$HomeViewAllViewState {
   Object? get error => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
+  List<TournamentModel> get tournaments => throw _privateConstructorUsedError;
   List<MatchModel> get matches => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeViewAllViewState
@@ -33,7 +34,11 @@ abstract class $HomeViewAllViewStateCopyWith<$Res> {
           $Res Function(HomeViewAllViewState) then) =
       _$HomeViewAllViewStateCopyWithImpl<$Res, HomeViewAllViewState>;
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<TournamentModel> tournaments,
+      List<MatchModel> matches});
 }
 
 /// @nodoc
@@ -54,6 +59,7 @@ class _$HomeViewAllViewStateCopyWithImpl<$Res,
   $Res call({
     Object? error = freezed,
     Object? loading = null,
+    Object? tournaments = null,
     Object? matches = null,
   }) {
     return _then(_value.copyWith(
@@ -62,6 +68,10 @@ class _$HomeViewAllViewStateCopyWithImpl<$Res,
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      tournaments: null == tournaments
+          ? _value.tournaments
+          : tournaments // ignore: cast_nullable_to_non_nullable
+              as List<TournamentModel>,
       matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -78,7 +88,11 @@ abstract class _$$HomeViewAllViewStateImplCopyWith<$Res>
       __$$HomeViewAllViewStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Object? error, bool loading, List<MatchModel> matches});
+  $Res call(
+      {Object? error,
+      bool loading,
+      List<TournamentModel> tournaments,
+      List<MatchModel> matches});
 }
 
 /// @nodoc
@@ -96,6 +110,7 @@ class __$$HomeViewAllViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? loading = null,
+    Object? tournaments = null,
     Object? matches = null,
   }) {
     return _then(_$HomeViewAllViewStateImpl(
@@ -104,6 +119,10 @@ class __$$HomeViewAllViewStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
+      tournaments: null == tournaments
+          ? _value._tournaments
+          : tournaments // ignore: cast_nullable_to_non_nullable
+              as List<TournamentModel>,
       matches: null == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -118,14 +137,25 @@ class _$HomeViewAllViewStateImpl implements _HomeViewAllViewState {
   const _$HomeViewAllViewStateImpl(
       {this.error,
       this.loading = false,
+      final List<TournamentModel> tournaments = const [],
       final List<MatchModel> matches = const []})
-      : _matches = matches;
+      : _tournaments = tournaments,
+        _matches = matches;
 
   @override
   final Object? error;
   @override
   @JsonKey()
   final bool loading;
+  final List<TournamentModel> _tournaments;
+  @override
+  @JsonKey()
+  List<TournamentModel> get tournaments {
+    if (_tournaments is EqualUnmodifiableListView) return _tournaments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tournaments);
+  }
+
   final List<MatchModel> _matches;
   @override
   @JsonKey()
@@ -137,7 +167,7 @@ class _$HomeViewAllViewStateImpl implements _HomeViewAllViewState {
 
   @override
   String toString() {
-    return 'HomeViewAllViewState(error: $error, loading: $loading, matches: $matches)';
+    return 'HomeViewAllViewState(error: $error, loading: $loading, tournaments: $tournaments, matches: $matches)';
   }
 
   @override
@@ -147,6 +177,8 @@ class _$HomeViewAllViewStateImpl implements _HomeViewAllViewState {
             other is _$HomeViewAllViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.loading, loading) || other.loading == loading) &&
+            const DeepCollectionEquality()
+                .equals(other._tournaments, _tournaments) &&
             const DeepCollectionEquality().equals(other._matches, _matches));
   }
 
@@ -155,6 +187,7 @@ class _$HomeViewAllViewStateImpl implements _HomeViewAllViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       loading,
+      const DeepCollectionEquality().hash(_tournaments),
       const DeepCollectionEquality().hash(_matches));
 
   /// Create a copy of HomeViewAllViewState
@@ -172,12 +205,15 @@ abstract class _HomeViewAllViewState implements HomeViewAllViewState {
   const factory _HomeViewAllViewState(
       {final Object? error,
       final bool loading,
+      final List<TournamentModel> tournaments,
       final List<MatchModel> matches}) = _$HomeViewAllViewStateImpl;
 
   @override
   Object? get error;
   @override
   bool get loading;
+  @override
+  List<TournamentModel> get tournaments;
   @override
   List<MatchModel> get matches;
 

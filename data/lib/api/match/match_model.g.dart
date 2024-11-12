@@ -12,6 +12,7 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
           .map((e) =>
               MatchTeamModel.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
+      tournament_id: json['tournament_id'] as String?,
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
       number_of_over: (json['number_of_over'] as num).toInt(),
       over_per_bowler: (json['over_per_bowler'] as num).toInt(),
@@ -76,6 +77,7 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'teams': instance.teams.map((e) => e.toJson()).toList(),
+      'tournament_id': instance.tournament_id,
       'match_type': _$MatchTypeEnumMap[instance.match_type]!,
       'number_of_over': instance.number_of_over,
       'over_per_bowler': instance.over_per_bowler,

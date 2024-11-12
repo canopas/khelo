@@ -22,6 +22,7 @@ MatchModel _$MatchModelFromJson(Map<String, dynamic> json) {
 mixin _$MatchModel {
   String get id => throw _privateConstructorUsedError;
   List<MatchTeamModel> get teams => throw _privateConstructorUsedError;
+  String? get tournament_id => throw _privateConstructorUsedError;
   MatchType get match_type => throw _privateConstructorUsedError;
   int get number_of_over => throw _privateConstructorUsedError;
   int get over_per_bowler => throw _privateConstructorUsedError;
@@ -78,6 +79,7 @@ abstract class $MatchModelCopyWith<$Res> {
   $Res call(
       {String id,
       List<MatchTeamModel> teams,
+      String? tournament_id,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
@@ -133,6 +135,7 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
   $Res call({
     Object? id = null,
     Object? teams = null,
+    Object? tournament_id = freezed,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
@@ -173,6 +176,10 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<MatchTeamModel>,
+      tournament_id: freezed == tournament_id
+          ? _value.tournament_id
+          : tournament_id // ignore: cast_nullable_to_non_nullable
+              as String?,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -336,6 +343,7 @@ abstract class _$$MatchModelImplCopyWith<$Res>
   $Res call(
       {String id,
       List<MatchTeamModel> teams,
+      String? tournament_id,
       MatchType match_type,
       int number_of_over,
       int over_per_bowler,
@@ -391,6 +399,7 @@ class __$$MatchModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? teams = null,
+    Object? tournament_id = freezed,
     Object? match_type = null,
     Object? number_of_over = null,
     Object? over_per_bowler = null,
@@ -431,6 +440,10 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<MatchTeamModel>,
+      tournament_id: freezed == tournament_id
+          ? _value.tournament_id
+          : tournament_id // ignore: cast_nullable_to_non_nullable
+              as String?,
       match_type: null == match_type
           ? _value.match_type
           : match_type // ignore: cast_nullable_to_non_nullable
@@ -562,6 +575,7 @@ class _$MatchModelImpl implements _MatchModel {
   const _$MatchModelImpl(
       {required this.id,
       required final List<MatchTeamModel> teams,
+      this.tournament_id,
       required this.match_type,
       required this.number_of_over,
       required this.over_per_bowler,
@@ -622,6 +636,8 @@ class _$MatchModelImpl implements _MatchModel {
     return EqualUnmodifiableListView(_teams);
   }
 
+  @override
+  final String? tournament_id;
   @override
   final MatchType match_type;
   @override
@@ -785,7 +801,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_at: $start_at, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target, updated_at: $updated_at)';
+    return 'MatchModel(id: $id, teams: $teams, tournament_id: $tournament_id, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_at: $start_at, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target, updated_at: $updated_at)';
   }
 
   @override
@@ -795,6 +811,8 @@ class _$MatchModelImpl implements _MatchModel {
             other is _$MatchModelImpl &&
             (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
+            (identical(other.tournament_id, tournament_id) ||
+                other.tournament_id == tournament_id) &&
             (identical(other.match_type, match_type) ||
                 other.match_type == match_type) &&
             (identical(other.number_of_over, number_of_over) ||
@@ -857,6 +875,7 @@ class _$MatchModelImpl implements _MatchModel {
         runtimeType,
         id,
         const DeepCollectionEquality().hash(_teams),
+        tournament_id,
         match_type,
         number_of_over,
         over_per_bowler,
@@ -909,6 +928,7 @@ abstract class _MatchModel implements MatchModel {
   const factory _MatchModel(
       {required final String id,
       required final List<MatchTeamModel> teams,
+      final String? tournament_id,
       required final MatchType match_type,
       required final int number_of_over,
       required final int over_per_bowler,
@@ -951,6 +971,8 @@ abstract class _MatchModel implements MatchModel {
   String get id;
   @override
   List<MatchTeamModel> get teams;
+  @override
+  String? get tournament_id;
   @override
   MatchType get match_type;
   @override

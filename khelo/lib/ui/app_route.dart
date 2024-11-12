@@ -158,8 +158,11 @@ class AppRoute {
       AppRoute(pathSearchHome,
           builder: (_) => SearchHomeScreen(matches: matches));
 
-  static AppRoute viewAll(MatchStatusLabel status) =>
-      AppRoute(pathViewAll, builder: (_) => HomeViewAllScreen(status: status));
+  static AppRoute viewAll(
+          {MatchStatusLabel? status, bool isTournament = false}) =>
+      AppRoute(pathViewAll,
+          builder: (_) =>
+              HomeViewAllScreen(status: status, isTournament: isTournament));
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,

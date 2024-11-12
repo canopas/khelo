@@ -59,6 +59,8 @@ class FireStoreConst {
   // tournament field const
   static const String members = "members";
   static const String matchIds = "match_ids";
+  static const String endDate = "end_date";
+  static const String startDate = "start_date";
 }
 
 class DataConfig {

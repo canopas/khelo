@@ -54,6 +54,88 @@ class TournamentService {
     }
   }
 
+  Future<List<TournamentModel>> getTournaments({
+    String? lastMatchId,
+    int limit = 10,
+  }) async {
+    var query = _tournamentCollection.orderBy(FireStoreConst.startDate);
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+
+    final snapshot = await query.limit(limit).get();
+
+    return Future.wait(
+      snapshot.docs.map(
+        (e) async {
+          final tournament = e.data();
+          final matchIds = tournament.match_ids;
+          if (matchIds.isNotEmpty) {
+            final matches = await _matchService.getMatchesByIds(matchIds);
+            final status = getTournamentStatus(matches);
+            return tournament.copyWith(matches: matches, status: status);
+          }
+          return tournament;
+        },
+      ),
+    );
+  }
+
+  Future<List<PlayerKeyStat>> getKeyStats(List<MatchModel> matches) async {
+    final List<PlayerKeyStat> playerStatsList = [];
+    final List<String> matchIds = matches.map((match) => match.id).toList();
+    final scores = await _ballScoreService.getBallScoresByMatchIds(matchIds);
+
+    for (final match in matches) {
+      for (final team in match.teams) {
+        for (final player in team.squad) {
+          final stats = scores.calculateUserStats(player.id);
+
+          playerStatsList.add(
+            PlayerKeyStat(
+              player: player.player,
+              teamName: team.team.name,
+              stats: stats,
+            ),
+          );
+        }
+      }
+    }
+    final keyStats = playerStatsList.getTopKeyStats();
+
+    return keyStats.where((element) => element.player.isActive).toList();
+  }
+
+  Stream<List<TournamentModel>> streamActiveTournaments() {
+    final currentDate = DateTime.now();
+    final past30DaysDate = currentDate.subtract(Duration(days: 30));
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.startDate, isGreaterThan: currentDate),
+      Filter(FireStoreConst.endDate, isGreaterThanOrEqualTo: past30DaysDate),
+    );
+
+    return _tournamentCollection.where(filter).snapshots().asyncMap(
+      (event) async {
+        return await Future.wait(
+          event.docs.map(
+            (e) async {
+              final tournament = e.data();
+              final matchIds = tournament.match_ids;
+              if (matchIds.isNotEmpty) {
+                final matches = await _matchService.getMatchesByIds(matchIds);
+                final status = getTournamentStatus(matches);
+                return tournament.copyWith(matches: matches, status: status);
+              }
+              return tournament;
+            },
+          ),
+        );
+      },
+    ).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Stream<List<TournamentModel>> streamCurrentUserRelatedMatches(String userId) {
     final currentMember = TournamentMember(id: userId);
 
@@ -121,31 +203,6 @@ class TournamentService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Future<List<PlayerKeyStat>> getKeyStats(List<MatchModel> matches) async {
-    final List<PlayerKeyStat> playerStatsList = [];
-    final List<String> matchIds = matches.map((match) => match.id).toList();
-    final scores = await _ballScoreService.getBallScoresByMatchIds(matchIds);
-
-    for (final match in matches) {
-      for (final team in match.teams) {
-        for (final player in team.squad) {
-          final stats = scores.calculateUserStats(player.id);
-
-          playerStatsList.add(
-            PlayerKeyStat(
-              player: player.player,
-              teamName: team.team.name,
-              stats: stats,
-            ),
-          );
-        }
-      }
-    }
-    final keyStats = playerStatsList.getTopKeyStats();
-
-    return keyStats.where((element) => element.player.isActive).toList();
-  }
-
   Future<void> updateTeamIds(
     String tournamentId,
     List<String> teamIds,
@@ -167,14 +224,6 @@ class TournamentService {
       await _tournamentCollection
           .doc(tournamentId)
           .update({FireStoreConst.matchIds: matchIds});
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> deleteTournament(String tournamentId) async {
-    try {
-      await _tournamentCollection.doc(tournamentId).delete();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -219,5 +268,32 @@ class TournamentService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
+  }
+
+  Future<void> deleteTournament(String tournamentId) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).delete();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  // Helper
+  TournamentStatus getTournamentStatus(List<MatchModel> matches) {
+    final bool anyRunning =
+        matches.any((match) => match.match_status == MatchStatus.running);
+    final bool allYetToStart =
+        matches.every((match) => match.match_status == MatchStatus.yetToStart);
+    final bool allFinishedOrAbandoned = matches.every(
+      (match) =>
+          match.match_status == MatchStatus.abandoned ||
+          match.match_status == MatchStatus.finish,
+    );
+
+    if (anyRunning) return TournamentStatus.running;
+    if (allYetToStart) return TournamentStatus.upcoming;
+    if (allFinishedOrAbandoned) return TournamentStatus.finish;
+
+    return TournamentStatus.finish;
   }
 }
