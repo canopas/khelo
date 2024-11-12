@@ -249,8 +249,9 @@ class _TournamentDetailScreenState
             shape: BoxShape.circle,
             color: context.colorScheme.containerHighOnSurface.withOpacity(0.4),
           ),
+          alignment: Alignment.center,
           child: Icon(
-            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            Platform.isIOS ? Icons.arrow_back_ios_new : Icons.arrow_back,
             size: 20,
             color: context.colorScheme.textPrimary,
           ),
@@ -262,8 +263,7 @@ class _TournamentDetailScreenState
     if (state.tournament == null) {
       return;
     }
-    if (state.tournament!.teams.length >=
-        state.tournament!.type.minTeamReq) {
+    if (state.tournament!.teams.length >= state.tournament!.type.minTeamReq) {
       await AppRoute.matchSelection(tournamentId: state.tournament!.id)
           .push(context);
     } else {

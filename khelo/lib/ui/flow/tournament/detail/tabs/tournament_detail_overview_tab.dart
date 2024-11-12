@@ -9,6 +9,7 @@ import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:khelo/ui/flow/tournament/detail/components/match_group_tag.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
@@ -63,10 +64,14 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
   }
 
   Widget _matchCellView(BuildContext context, MatchModel match) {
+    final showMatchGroup =
+        match.match_group != null && match.match_group != MatchGroup.round;
     return OnTapScale(
       onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        padding: showMatchGroup
+            ? EdgeInsets.only(top: 8, bottom: 8, right: 16)
+            : EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         margin: EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
           color: context.colorScheme.surface,
@@ -74,6 +79,7 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
         ),
         child: Row(
           children: [
+            if (showMatchGroup) MatchGroupTag(tag: match.match_group!),
             _buildTeamInfo(context, team: match.teams.first.team),
             const Spacer(),
             if (match.matchResult != null) ...[

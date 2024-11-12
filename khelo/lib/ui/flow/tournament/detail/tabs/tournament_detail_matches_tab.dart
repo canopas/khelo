@@ -26,7 +26,7 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tournamentDetailStateProvider);
 
-    if (state.filteredMatches.isEmpty) {
+    if (state.filteredMatches.isEmpty && state.tournament!.matches.isEmpty) {
       return EmptyScreen(
         title: context.l10n.tournament_detail_matches_empty_title,
         description: context.l10n.tournament_detail_matches_empty_description,
@@ -53,11 +53,22 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
           filterValue: state.matchFilter ??
               context.l10n.tournament_detail_matches_filter_all_teams_option,
         ),
+        if (state.filteredMatches.isEmpty)
+          SizedBox(
+            height: context.mediaQuerySize.height / 2.5,
+            child: EmptyScreen(
+              title: context.l10n.tournament_detail_matches_filter_empty_title,
+              description: context
+                  .l10n.tournament_detail_matches_filter_empty_description,
+              isShowButton: false,
+            ),
+          ),
         ...state.filteredMatches.map(
           (match) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: MatchDetailCell(
+                showTournamentBadge: false,
                 backgroundColor: context.colorScheme.surface,
                 match: match,
                 onTap: () =>

@@ -17,6 +17,7 @@ class MatchDetailCell extends StatelessWidget {
   final MatchModel match;
   final VoidCallback onTap;
   final bool showStatusTag;
+  final bool showTournamentBadge;
   final bool showActionButtons;
   final VoidCallback? onActionTap;
   final Color? backgroundColor;
@@ -27,6 +28,7 @@ class MatchDetailCell extends StatelessWidget {
     required this.onTap,
     this.showStatusTag = true,
     this.showActionButtons = false,
+    this.showTournamentBadge = true,
     this.backgroundColor,
     this.onActionTap,
   });
@@ -80,8 +82,10 @@ class MatchDetailCell extends StatelessWidget {
 
   Widget _matchTimeAndGroundView(BuildContext context) {
     return Row(children: [
-      if (match.tournament_id != null) TournamentBadge(),
-      const SizedBox(width: 8),
+      if (showTournamentBadge && match.tournament_id != null) ...[
+        TournamentBadge(),
+        const SizedBox(width: 8),
+      ],
       Expanded(
         flex: 2,
         child: Text(

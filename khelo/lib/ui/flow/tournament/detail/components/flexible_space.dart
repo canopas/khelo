@@ -8,7 +8,6 @@ import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:style/theme/colors.dart';
 
 import '../../../../../components/image_avatar.dart';
 import '../../../../../gen/assets.gen.dart';
@@ -104,8 +103,8 @@ class _FlexibleSpaceState extends State<FlexibleSpace> {
                   end: Alignment.bottomCenter,
                   colors: [
                     dominant.withOpacity(0),
-                    dominant.withOpacity(0.5),
-                    dominant,
+                    dominant.withOpacity(0.2),
+                    dominant.withOpacity(0.86),
                   ],
                 ),
               ),
@@ -135,10 +134,10 @@ class _FlexibleSpaceState extends State<FlexibleSpace> {
           size: 80,
           imageUrl: tournament.profile_img_url,
           border: Border.all(
-            color: surfaceLightColor,
+            color: context.colorScheme.outline,
             width: 1.5,
           ),
-          backgroundColor: context.colorScheme.primary,
+          backgroundColor: context.colorScheme.onPrimary,
         ),
         const SizedBox(height: 16),
         SizedBox(
