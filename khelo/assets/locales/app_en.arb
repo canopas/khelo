@@ -200,7 +200,7 @@
   "match_selection_no_matches_title": "No Matches Scheduled Yet",
   "match_selection_no_matches_description": "There are currently no matches scheduled. Tap the '+' button to schedule new matches.",
   "match_selection_not_found_title": "No Matches Found for {team}",
-  "match_selection_not_found_description": "We couldn’t find any match results for {team} at this time. Please check again later."
+  "match_selection_not_found_description": "We couldn’t find any match results for {team} at this time. Please check again later.",
   "match_group_round_title": "Round",
   "match_group_quarter_final_title": "Quarter final",
   "match_group_semi_final_title": "Semi final",
