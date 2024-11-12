@@ -8,6 +8,7 @@ import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/storage/provider/preferences_provider.dart';
 import 'package:data/utils/constant/firebase_storage_constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final AuthService _authService;
   final TeamService _teamService;
   final MatchService _matchService;
-  final StateController<String?> _userJsonController;
+  final PreferenceNotifier<String?> _userJsonController;
 
   EditProfileViewNotifier(
     this._fileUploadService,

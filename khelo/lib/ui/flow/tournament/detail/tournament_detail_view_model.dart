@@ -8,6 +8,7 @@ import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:khelo/domain/extensions/context_extensions.dart';
 
 part 'tournament_detail_view_model.freezed.dart';
 
@@ -52,7 +53,7 @@ class TournamentDetailStateViewNotifier
         loading: false,
       );
       onMatchFilter(null);
-      onStatFilter(null);
+      onStatFilter(state.selectedFilterTag);
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -103,20 +104,76 @@ class TournamentDetailStateViewNotifier
     }
   }
 
-  void onStatFilter(KeyStatTag? tag) {
+  void onStatFilter(KeyStatFilterTag tag) {
     if (state.tournament == null) return;
 
-    final filteredStats = state.tournament!.keyStats
-        .where((element) => element.tag == (tag ?? state.statFilter))
-        .toList();
+    var filteredStats = state.tournament!.keyStats;
+
+    filteredStats = filteredStats.where((e) {
+      switch (tag) {
+        case KeyStatFilterTag.all:
+          return true;
+        case KeyStatFilterTag.runs:
+          return (e.stats.battingStat?.runScored ?? 0) > 0;
+        case KeyStatFilterTag.wickets:
+          return (e.stats.bowlingStat?.wicketTaken ?? 0.0) > 0.0;
+        case KeyStatFilterTag.battingAverage:
+          return (e.stats.battingStat?.average ?? 0.0) > 0.0;
+        case KeyStatFilterTag.bowlingAverage:
+          return (e.stats.bowlingStat?.average ?? 0.0) > 0.0;
+        case KeyStatFilterTag.mostHundreds:
+          return (e.stats.battingStat?.hundreds ?? 0) > 0;
+        case KeyStatFilterTag.mostFifties:
+          return (e.stats.battingStat?.fifties ?? 0) > 0;
+        case KeyStatFilterTag.sixes:
+          return (e.stats.battingStat?.sixes ?? 0) > 0;
+        case KeyStatFilterTag.fours:
+          return (e.stats.battingStat?.fours ?? 0) > 0;
+        case KeyStatFilterTag.boundaries:
+          return (e.stats.battingStat?.fours ?? 0) +
+                  (e.stats.battingStat?.sixes ?? 0) >
+              0;
+      }
+    }).toList();
+
+    filteredStats.sort((a, b) {
+      int compareByTag(PlayerKeyStat x, PlayerKeyStat y) {
+        switch (tag) {
+          case KeyStatFilterTag.mostHundreds:
+            return (y.stats.battingStat?.hundreds ?? 0)
+                .compareTo(x.stats.battingStat?.hundreds ?? 0);
+          case KeyStatFilterTag.mostFifties:
+            return (y.stats.battingStat?.fifties ?? 0)
+                .compareTo(x.stats.battingStat?.fifties ?? 0);
+          case KeyStatFilterTag.boundaries:
+            return ((y.stats.battingStat?.fours ?? 0) +
+                    (y.stats.battingStat?.sixes ?? 0))
+                .compareTo((x.stats.battingStat?.fours ?? 0) +
+                    (x.stats.battingStat?.sixes ?? 0));
+          default:
+            return (b.stats.battingStat?.runScored ?? 0)
+                .compareTo(a.stats.battingStat?.runScored ?? 0);
+        }
+      }
+
+      return compareByTag(a, b);
+    });
+
+    filteredStats.sort((a, b) => (b.stats.battingStat?.runScored ?? 0)
+        .compareTo(a.stats.battingStat?.runScored ?? 0));
+
     state = state.copyWith(
-        filteredStats: filteredStats, statFilter: tag ?? state.statFilter);
+      filteredStats: filteredStats,
+      selectedFilterTag: tag,
+    );
   }
 
   List<TeamPoint> _calculatePointsTable(TournamentModel tournament) {
     List<TeamPoint> teamPoints = [];
 
-    final finishedMatches = _filterFinishedMatches(tournament.matches);
+    final finishedMatches = tournament.matches
+        .where((match) => match.match_status == MatchStatus.finish)
+        .toList();
 
     if (finishedMatches.isEmpty) return [];
 
@@ -124,7 +181,7 @@ class TournamentDetailStateViewNotifier
       final matches = finishedMatches
           .where((element) => element.team_ids.contains(team.id))
           .toList();
-      final teamStat = _teamStat(team.id, matches);
+      final teamStat = matches.teamStat(team.id);
       //If team has won then add 2 points and tie then add 1 point
       final points = teamStat.status.win * 2 + teamStat.status.tie;
       teamPoints.add(TeamPoint(
@@ -135,69 +192,6 @@ class TournamentDetailStateViewNotifier
       ));
     }
     return teamPoints..sort((a, b) => b.points.compareTo(a.points));
-  }
-
-  TeamStat _teamStat(String teamId, List<MatchModel> matches) {
-    if (matches.isEmpty) return const TeamStat();
-    return TeamStat(
-      played: matches.length,
-      status: _teamMatchStatus(teamId, matches),
-      run_rate: _runRate(teamId, matches),
-    );
-  }
-
-  List<MatchModel> _filterFinishedMatches(List<MatchModel> matches) {
-    return matches
-        .where((match) => match.match_status == MatchStatus.finish)
-        .toList();
-  }
-
-  double _runRate(String teamId, List<MatchModel> finishedMatches) {
-    final runs = finishedMatches
-        .map((match) => _getTeam(match, teamId))
-        .fold<int>(0, (totalRuns, team) => totalRuns + team.run);
-
-    final totalOvers = finishedMatches
-        .map((match) => _getTeam(match, teamId))
-        .fold<double>(0.0, (total, team) => total + team.over);
-
-    return totalOvers > 0 ? runs / totalOvers : 0;
-  }
-
-  MatchTeamModel _getTeam(MatchModel match, String teamId) =>
-      match.teams.firstWhere((team) => team.team.id == teamId);
-
-  TeamMatchStatus _teamMatchStatus(
-      String teamId, List<MatchModel> finishedMatches) {
-    return finishedMatches.fold<TeamMatchStatus>(
-      const TeamMatchStatus(),
-      (status, match) {
-        final firstTeam = match.teams.firstWhere((team) =>
-            team.team.id ==
-            (match.toss_decision == TossDecision.bat
-                ? match.toss_winner_id
-                : match.teams
-                    .firstWhere((team) => team.team.id != match.toss_winner_id)
-                    .team
-                    .id));
-
-        final secondTeam =
-            match.teams.firstWhere((team) => team.team.id != firstTeam.team.id);
-
-        if (firstTeam.run == secondTeam.run) {
-          return TeamMatchStatus(
-              win: status.win, lost: status.lost, tie: status.tie + 1);
-        } else if ((firstTeam.run > secondTeam.run &&
-                firstTeam.team.id == teamId) ||
-            (firstTeam.run < secondTeam.run && secondTeam.team.id == teamId)) {
-          return TeamMatchStatus(
-              win: status.win + 1, lost: status.lost, tie: status.tie);
-        } else {
-          return TeamMatchStatus(
-              win: status.win, lost: status.lost + 1, tie: status.tie);
-        }
-      },
-    );
   }
 
   @override
@@ -218,8 +212,46 @@ class TournamentDetailState with _$TournamentDetailState {
     String? currentUserId,
     @Default(null) String? matchFilter,
     @Default([]) List<MatchModel> filteredMatches,
-    @Default(KeyStatTag.mostRuns) KeyStatTag statFilter,
+    @Default(KeyStatFilterTag.all) KeyStatFilterTag selectedFilterTag,
     @Default([]) List<PlayerKeyStat> filteredStats,
     @Default([]) List<TeamPoint> teamPoints,
   }) = _TournamentDetailState;
+}
+
+enum KeyStatFilterTag {
+  all,
+  runs,
+  wickets,
+  battingAverage,
+  bowlingAverage,
+  mostHundreds,
+  mostFifties,
+  sixes,
+  fours,
+  boundaries;
+
+  String getString(BuildContext context) {
+    switch (this) {
+      case KeyStatFilterTag.all:
+        return context.l10n.key_stat_all;
+      case KeyStatFilterTag.runs:
+        return context.l10n.key_stat_filter_runs;
+      case KeyStatFilterTag.wickets:
+        return context.l10n.key_stat_filter_wickets;
+      case KeyStatFilterTag.battingAverage:
+        return context.l10n.common_batting_average_title;
+      case KeyStatFilterTag.bowlingAverage:
+        return context.l10n.common_bowling_average_title;
+      case KeyStatFilterTag.mostHundreds:
+        return context.l10n.key_stat_filter_most_hundreds;
+      case KeyStatFilterTag.mostFifties:
+        return context.l10n.key_stat_filter_most_fifties;
+      case KeyStatFilterTag.sixes:
+        return context.l10n.key_stat_filter_sixes;
+      case KeyStatFilterTag.fours:
+        return context.l10n.key_stat_filter_fours;
+      case KeyStatFilterTag.boundaries:
+        return context.l10n.key_stat_filter_boundaries;
+    }
+  }
 }

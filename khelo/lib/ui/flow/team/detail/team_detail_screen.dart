@@ -207,7 +207,7 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
       ),
       if (state.team?.players.isNotEmpty ?? false)
         BottomSheetAction(
-          title: context.l10n.team_detail_make_admin,
+          title: context.l10n.common_make_admin,
           child: Text(context.l10n.team_detail_admin(state.team!.players
               .where((element) => element.role == TeamPlayerRole.admin)
               .toList()

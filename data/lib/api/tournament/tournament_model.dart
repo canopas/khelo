@@ -22,6 +22,9 @@ class TournamentModel with _$TournamentModel {
     String? profile_img_url,
     String? banner_img_url,
     required TournamentType type,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(TournamentStatus.upcoming)
+    TournamentStatus status,
     @Default([]) List<TournamentMember> members,
     required String created_by,
     @TimeStampJsonConverter() DateTime? created_at,
@@ -81,6 +84,17 @@ enum TournamentType {
   final int minTeamReq;
 
   const TournamentType(this.value, {required this.minTeamReq});
+}
+
+@JsonEnum(valueField: "value")
+enum TournamentStatus {
+  upcoming(1),
+  running(2),
+  finish(3);
+
+  final int value;
+
+  const TournamentStatus(this.value);
 }
 
 enum TournamentMemberRole {

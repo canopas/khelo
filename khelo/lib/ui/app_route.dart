@@ -28,6 +28,7 @@ import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
+import 'package:khelo/ui/flow/tournament/detail/members/tournament_detail_members_screen.dart';
 import 'package:khelo/ui/flow/tournament/team_selection/team_selection_screen.dart';
 
 import 'flow/home/view_all/home_view_all_screen.dart';
@@ -63,6 +64,7 @@ class AppRoute {
   static const pathTeamSelection = "/team-selection";
   static const pathMatchSelection = "/match-selection";
   static const pathTournamentDetail = "/tournament-detail";
+  static const pathMemberSelection = "/member-selection";
 
   final String path;
   final String? name;
@@ -158,8 +160,11 @@ class AppRoute {
       AppRoute(pathSearchHome,
           builder: (_) => SearchHomeScreen(matches: matches));
 
-  static AppRoute viewAll(MatchStatusLabel status) =>
-      AppRoute(pathViewAll, builder: (_) => HomeViewAllScreen(status: status));
+  static AppRoute viewAll(
+          {MatchStatusLabel? status, bool isTournament = false}) =>
+      AppRoute(pathViewAll,
+          builder: (_) =>
+              HomeViewAllScreen(status: status, isTournament: isTournament));
 
   static AppRoute addTossDetail({required String matchId}) => AppRoute(
         pathAddTossDetail,
@@ -196,10 +201,18 @@ class AppRoute {
         builder: (_) => TeamSelectionScreen(selectedTeams: selectedTeams),
       );
 
-  static AppRoute matchSelection({required String tournamentId}) => AppRoute(
-        pathMatchSelection,
-        builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
+  static AppRoute memberSelection({required TournamentModel tournament}) =>
+      AppRoute(
+        pathMemberSelection,
+        builder: (_) => TournamentDetailMembersScreen(
+          tournament: tournament,
+        ),
       );
+
+  static AppRoute matchSelection({required String tournamentId}) => AppRoute(
+    pathMatchSelection,
+    builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
+  );
 
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
         pathTournamentDetail,
@@ -370,6 +383,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathTeamSelection,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathMemberSelection,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

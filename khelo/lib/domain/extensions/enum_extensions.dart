@@ -180,9 +180,9 @@ extension MatchStatusString on MatchStatus {
       case MatchStatus.yetToStart:
         return context.l10n.match_status_yet_to_start_title;
       case MatchStatus.running:
-        return context.l10n.match_status_running_title;
+        return context.l10n.commonRunning;
       case MatchStatus.finish:
-        return context.l10n.match_status_finish_title;
+        return context.l10n.commonFinish;
       case MatchStatus.abandoned:
         return context.l10n.match_status_abandoned_title;
     }
@@ -198,6 +198,30 @@ extension MatchStatusString on MatchStatus {
         return context.colorScheme.positive;
       case MatchStatus.abandoned:
         return context.colorScheme.secondary;
+    }
+  }
+}
+
+extension TournamentStatusString on TournamentStatus {
+  String getString(BuildContext context) {
+    switch (this) {
+      case TournamentStatus.upcoming:
+        return context.l10n.home_screen_upcoming_title;
+      case TournamentStatus.running:
+        return context.l10n.commonRunning;
+      case TournamentStatus.finish:
+        return context.l10n.commonFinish;
+    }
+  }
+
+  Color getColor(BuildContext context) {
+    switch (this) {
+      case TournamentStatus.upcoming:
+        return context.colorScheme.warning;
+      case TournamentStatus.running:
+        return context.colorScheme.alert;
+      case TournamentStatus.finish:
+        return context.colorScheme.positive;
     }
   }
 }

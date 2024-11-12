@@ -2,21 +2,22 @@ import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:style/button/chip_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
-import '../../../../../components/action_bottom_sheet.dart';
 import '../../../../../components/empty_screen.dart';
 import '../../../../../components/image_avatar.dart';
 import '../components/filter_tab_view.dart';
 import '../tournament_detail_view_model.dart';
 
 class TournamentDetailStatsTab extends ConsumerWidget {
-  final Function(KeyStatTag) onFiltered;
+  final Function(KeyStatFilterTag) onFiltered;
 
   const TournamentDetailStatsTab({
     super.key,
@@ -43,10 +44,10 @@ class TournamentDetailStatsTab extends ConsumerWidget {
           title: context.l10n.tournament_detail_stats_tab,
           onFilter: () => showFilterOptionSelectionSheet(
             context,
-            keyStatFilter: state.statFilter,
+            selectedTag: state.selectedFilterTag,
             onTap: onFiltered,
           ),
-          filterValue: state.statFilter.getString(context),
+          filterValue: state.selectedFilterTag.getString(context),
         ),
         const SizedBox(height: 16),
         if (state.filteredStats.isNotEmpty) ...[
@@ -195,21 +196,41 @@ class TournamentDetailStatsTab extends ConsumerWidget {
 
   void showFilterOptionSelectionSheet(
     BuildContext context, {
-    required Function(KeyStatTag) onTap,
-    KeyStatTag? keyStatFilter,
+    required Function(KeyStatFilterTag) onTap,
+    KeyStatFilterTag? selectedTag,
   }) async {
-    return await showActionBottomSheet(
-        context: context,
-        items: KeyStatTag.values
-            .map((option) => BottomSheetAction(
-                  title: option.getString(context),
-                  enabled: keyStatFilter != option,
-                  showCheck: keyStatFilter == option,
+    HapticFeedback.mediumImpact();
+    return await showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      enableDrag: true,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: context.colorScheme.surface,
+      builder: (context) {
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(16)
+              .copyWith(bottom: context.mediaQueryPadding.bottom + 24),
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            spacing: 8,
+            runSpacing: 8,
+            children: KeyStatFilterTag.values.map(
+              (element) {
+                return ChipButton(
+                  title: element.getString(context),
+                  isSelected: selectedTag == element,
                   onTap: () {
                     context.pop();
-                    onTap(option);
+                    onTap(element);
                   },
-                ))
-            .toList());
+                );
+              },
+            ).toList(),
+          ),
+        );
+      },
+    );
   }
 }

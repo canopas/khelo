@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/components/match_status_tag.dart';
+import 'package:khelo/components/tournament_badge.dart';
 import 'package:khelo/components/won_by_message_text.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -60,8 +61,8 @@ class MatchDetailCell extends StatelessWidget {
               children: [
                 Expanded(child: _winnerMessageText(context)),
                 if (showStatusTag) ...[
-                  MatchStatusTag(
-                    status: match.match_status,
+                  StatusTag(
+                    matchStatus: match.match_status,
                     onTap: showActionButtons &&
                             match.match_status != MatchStatus.finish &&
                             match.match_status != MatchStatus.abandoned
@@ -78,8 +79,10 @@ class MatchDetailCell extends StatelessWidget {
   }
 
   Widget _matchTimeAndGroundView(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Flexible(
+    return Row(children: [
+      if (match.tournament_id != null) TournamentBadge(),
+      const SizedBox(width: 8),
+      Expanded(
         flex: 2,
         child: Text(
             (match.start_at ?? match.start_time ?? DateTime.now())

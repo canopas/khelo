@@ -1,15 +1,14 @@
-import 'package:data/api/match/match_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/string_extensions.dart';
-import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:khelo/ui/flow/home/components/match_item.dart';
+import 'package:khelo/ui/flow/home/components/tournament_item.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/action_button.dart';
@@ -79,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (state.error != null) {
       return ErrorScreen(
         error: state.error,
-        onRetryTap: notifier.loadMatches,
+        onRetryTap: notifier.loadData,
       );
     }
     return ListView(
@@ -88,10 +87,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       children: [
         _actionRow(context),
         const SizedBox(height: 8),
+        if (state.tournaments.isNotEmpty) ...[
+          _tournamentList(context, state.tournaments),
+          const SizedBox(height: 8),
+        ],
         (state.matches.isNotEmpty)
             ? _content(context, state)
             : SizedBox(
-                height: context.mediaQuerySize.height / 1.5,
+                height: context.mediaQuerySize.height /
+                    (state.tournaments.isEmpty ? 0.5 : 2),
                 child: EmptyScreen(
                   title: context.l10n.home_screen_no_matches_title,
                   description:
@@ -114,19 +118,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: [
                 _createActionView(
                   context,
+                  title: context.l10n.home_screen_set_up_team_title,
+                  btnText: context.l10n.common_create_team_title,
+                  onTap: () => AppRoute.addTeam().push(context),
+                ),
+                _createActionView(
+                  context,
                   title: context.l10n.home_screen_set_up_match_title,
                   btnText: context.l10n.home_screen_create_match_btn,
                   onTap: () => AppRoute.addMatch().push(context),
                 ),
                 _createActionView(
                   context,
-                  title: context.l10n.home_screen_set_up_team_title,
-                  btnText: context.l10n.common_create_team_title,
-                  onTap: () => AppRoute.addTeam().push(context),
+                  title: context.l10n.home_screen_set_up_tournament_title,
+                  btnText: context.l10n.home_screen_create_tournament_btn,
+                  onTap: () => AppRoute.addTournament().push(context),
                 ),
               ],
             ),
           )),
+    );
+  }
+
+  Widget _tournamentList(
+    BuildContext context,
+    List<TournamentModel> tournaments,
+  ) {
+    return Column(
+      children: [
+        _header(
+          context,
+          header: context.l10n.common_tournaments,
+          isViewAllShow: tournaments.length > 2,
+          onViewAll: () => AppRoute.viewAll(isTournament: true).push(context),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: tournaments
+                  .map((tournament) => TournamentItem(
+                        tournament: tournament,
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                      ))
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -145,11 +186,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _matchHeader(
+                  _header(
                     context,
                     header: item.key.getString(context),
                     isViewAllShow: item.value.length > 3,
-                    onViewAll: () => AppRoute.viewAll(item.key).push(context),
+                    onViewAll: () =>
+                        AppRoute.viewAll(status: item.key).push(context),
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -157,7 +199,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         children: item.value
-                            .map((match) => _matchCell(context, match))
+                            .map((match) => MatchItem(match: match))
                             .toList(),
                       ),
                     ),
@@ -169,7 +211,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _matchHeader(
+  Widget _header(
     BuildContext context, {
     required String header,
     required bool isViewAllShow,
@@ -179,7 +221,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       onTap: onViewAll,
       enabled: isViewAllShow,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -202,109 +244,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
-  }
-
-  Widget _matchCell(BuildContext context, MatchModel match) {
-    return OnTapScale(
-      onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
-      child: MediaQuery.withNoTextScaling(
-        child: Container(
-          width: context.mediaQuerySize.width * 0.83,
-          padding: const EdgeInsets.all(16),
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: context.colorScheme.containerLow,
-            border: Border.all(color: context.colorScheme.outline),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _matchDetailView(context, match),
-              const SizedBox(height: 24),
-              _teamScore(
-                context,
-                match.teams.first,
-                match.teams.elementAt(1).wicket,
-              ),
-              const SizedBox(height: 22),
-              _teamScore(
-                context,
-                match.teams.elementAt(1),
-                match.teams.first.wicket,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _teamScore(
-    BuildContext context,
-    MatchTeamModel matchTeam,
-    int wicket,
-  ) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ImageAvatar(
-          initial: matchTeam.team.name_initial ??
-              matchTeam.team.name.initials(limit: 1),
-          imageUrl: matchTeam.team.profile_img_url,
-          size: 32,
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(matchTeam.team.name,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              style: AppTextStyle.subtitle3
-                  .copyWith(color: context.colorScheme.textPrimary)),
-        ),
-        if (matchTeam.over != 0) ...[
-          Text.rich(TextSpan(
-              text: "${matchTeam.run}-$wicket",
-              style: AppTextStyle.subtitle2
-                  .copyWith(color: context.colorScheme.textPrimary),
-              children: [
-                TextSpan(
-                  text: " ${matchTeam.over}",
-                  style: AppTextStyle.body2
-                      .copyWith(color: context.colorScheme.textSecondary),
-                )
-              ])),
-        ],
-      ],
-    );
-  }
-
-  Widget _matchDetailView(
-    BuildContext context,
-    MatchModel match,
-  ) {
-    return Text.rich(
-        overflow: TextOverflow.ellipsis,
-        TextSpan(
-            text: (match.start_at ?? match.start_time)
-                ?.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.caption
-                .copyWith(color: context.colorScheme.textSecondary),
-            children: [
-              WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    height: 5,
-                    width: 5,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: context.colorScheme.textSecondary,
-                    ),
-                  )),
-              TextSpan(text: match.ground)
-            ]));
   }
 
   Widget _createActionView(

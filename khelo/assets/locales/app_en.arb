@@ -22,6 +22,8 @@
   "common_create": "Create",
   "common_edit": "Edit",
   "common_not_specified_title": "Not Specified",
+  "commonRunning": "Running",
+  "commonFinish": "Finish",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
     "placeholders": {
@@ -75,6 +77,11 @@
   "common_view_all": "View all",
   "common_today": "Today",
   "common_tomorrow": "Tomorrow",
+  "common_owner": "Owner",
+  "common_make_admin": "Make admin",
+  "common_remove_admin": "Remove admin",
+  "common_transfer_ownership": "Transfer ownership",
+  "common_tournaments": "Tournaments",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -134,6 +141,8 @@
   "home_screen_create_match_btn": "Create match",
   "home_screen_set_up_team_title": "Set up a team in minutes.",
   "home_screen_create_team_btn": "Create team",
+  "home_screen_set_up_tournament_title": "Set up a tournament in minutes.",
+  "home_screen_create_tournament_btn": "Create tournament",
   "home_screen_no_matches_title": "No Matches in this area!",
   "home_screen_no_matches_description_text": "Enjoy the freedom of creating your own cricket matches or teams.",
 
@@ -156,7 +165,6 @@
   },
   "my_cricket_teams_tab_title": "Teams",
   "my_cricket_screen_title": "My Cricket",
-  "my_cricket_tournament_title": "Tournament",
 
   "@_ADD_TOURNAMENT": {
   },
@@ -250,6 +258,15 @@
   "tournament_detail_key_stat_most_fours_title": "Most Fours",
   "tournament_detail_key_stat_most_sixes_title": "Most Sixes",
 
+  "key_stat_all": "All",
+  "key_stat_filter_runs": "Runs",
+  "key_stat_filter_wickets": "Wickets",
+  "key_stat_filter_fours": "Fours",
+  "key_stat_filter_sixes": "Sixes",
+  "key_stat_filter_most_hundreds": "Most hundreds",
+  "key_stat_filter_most_fifties": "Most fifties",
+  "key_stat_filter_boundaries": "Boundaries",
+
   "tournament_detail_points_table_points_title": "Points",
   "tournament_detail_points_table_empty_title": "No Points Yet!",
   "tournament_detail_points_table_empty_description": "The points table will be updated once matches begin. Stay tuned for the latest standings!",
@@ -266,6 +283,15 @@
   "tournament_detail_stats_player_title": "Player",
   "tournament_detail_stats_avg_title": "Avg",
   "tournament_detail_stats_runs_title": "Runs",
+
+  "tournament_members_empty_title": "No members yet!",
+  "tournament_members_empty_description": "Tap the + button to add members and start managing your tournament effectively!",
+  "tournament_members_search_member_empty_title": "Assign Tournament Role",
+  "tournament_members_search_member_empty_description": "Search for a user to assign a management role. This role will empower them to help organize and lead the tournament effectively.",
+  "tournament_members_remove_self": "Remove self",
+  "tournament_members_make_organizer": "Make organizer",
+  "tournament_members_remove_member": "Remove member",
+  "tournament_members_transfer_ownership_description": "Search for a user to transfer tournament ownership. This grants them full management control. Choose someone who can effectively lead the tournament.",
 
   "@_TOURNAMENT_TYPE":{
   },
@@ -442,19 +468,14 @@
   "team_detail_empty_stat_description_text": "The players are warming up! Stay tuned for exciting stats as the team progresses.",
   "team_detail_add_members_title": "Add members",
   "team_detail_add_match_title": "Add match",
-  "team_detail_make_admin": "Make admin",
-  "team_detail_remove_admin": "Remove admin",
   "team_detail_use_qr_description": "Use your phone camera or a QR code app to scan the code above and easily add the team to the tournament",
   "make_admin_selection_error": "Can't select deactivated user as admin",
-  "team_detail_make_admin_screen_title": "Make Admin",
   "team_detail_admin": "{count, plural, =0{{count} admins} =1{{count} admin} other{{count} admins}}",
   "@team_detail_admin": {
     "placeholders": {
       "count": {}
     }
   },
-  "team_detail_make_admin_owner_title": "Owner",
-  "team_detail_transfer_ownership_title": "Transfer ownership",
   "team_detail_remove_ownership_title": "Remove ownership",
   "team_detail_transfer_ownership_description": "Search for a user to transfer team ownership. This grants them full management control. Choose someone who can effectively lead the team.",
   "team_detail_match_tab_title": "Match",
@@ -528,8 +549,6 @@
   "user_detail_stumping_title": "Stumping",
 
   "match_status_yet_to_start_title": "Yet to start",
-  "match_status_running_title": "Running",
-  "match_status_finish_title": "Finish",
   "match_status_abandoned_title": "Abandoned",
 
   "wicket_type_bowled_title": "Bowled",
