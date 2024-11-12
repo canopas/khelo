@@ -18,9 +18,11 @@ import '../../../../gen/assets.gen.dart';
 class TournamentItem extends StatefulWidget {
   final TournamentModel tournament;
   final EdgeInsets margin;
+  final Color? background;
 
   const TournamentItem({
     super.key,
+    this.background,
     required this.tournament,
     this.margin = EdgeInsets.zero,
   });
@@ -40,11 +42,13 @@ class _TournamentItemState extends State<TournamentItem> {
     if (widget.tournament.banner_img_url != null) {
       imageProvider =
           CachedNetworkImageProvider(widget.tournament.banner_img_url!);
-      imageProvider.createPaletteGenerator().then((palette) {
-        if (mounted) {
-          setState(() => this.palette = palette);
-        }
-      });
+      if (widget.background == null) {
+        imageProvider.createPaletteGenerator().then((palette) {
+          if (mounted) {
+            setState(() => this.palette = palette);
+          }
+        });
+      }
     }
   }
 
@@ -59,8 +63,9 @@ class _TournamentItemState extends State<TournamentItem> {
         padding: EdgeInsets.all(16),
         margin: widget.margin,
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: widget.background ?? backgroundColor,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: context.colorScheme.outline),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,14 +75,18 @@ class _TournamentItemState extends State<TournamentItem> {
             _titleAndStatus(
               title: widget.tournament.name,
               status: widget.tournament.status,
-              titleColor: titleColor,
+              titleColor: widget.background != null
+                  ? context.colorScheme.textPrimary
+                  : titleColor,
             ),
             const SizedBox(height: 8),
             _dateAndType(
               startTime: widget.tournament.start_date,
               endTime: widget.tournament.end_date,
               type: widget.tournament.type,
-              dateAndTypeColor: dateAndTypeColor,
+              dateAndTypeColor: widget.background != null
+                  ? context.colorScheme.textDisabled
+                  : dateAndTypeColor,
             ),
           ],
         ),
@@ -90,7 +99,7 @@ class _TournamentItemState extends State<TournamentItem> {
       height: 98,
       width: context.mediaQuerySize.width - 32,
       decoration: BoxDecoration(
-        color: context.colorScheme.textDisabled,
+        color: context.colorScheme.containerNormalOnSurface,
         borderRadius: BorderRadius.circular(8),
         image: bannerUrl == null
             ? null
@@ -105,7 +114,7 @@ class _TournamentItemState extends State<TournamentItem> {
                   height: 32,
                   width: 32,
                   colorFilter: ColorFilter.mode(
-                    context.colorScheme.surface,
+                    context.colorScheme.textPrimary,
                     BlendMode.srcATop,
                   )),
             )

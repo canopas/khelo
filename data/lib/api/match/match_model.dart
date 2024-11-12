@@ -18,6 +18,7 @@ class MatchModel with _$MatchModel {
   const factory MatchModel({
     required String id,
     required List<MatchTeamModel> teams,
+    String? tournament_id,
     required MatchType match_type,
     required int number_of_over,
     required int over_per_bowler,

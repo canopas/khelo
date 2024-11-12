@@ -1,5 +1,6 @@
 import 'package:data/api/match/match_model.dart';
 import 'package:flutter/material.dart';
+import 'package:khelo/components/tournament_bedge.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
@@ -98,26 +99,34 @@ class MatchItem extends StatelessWidget {
     BuildContext context,
     MatchModel match,
   ) {
-    return Text.rich(
-        overflow: TextOverflow.ellipsis,
-        TextSpan(
-            text: (match.start_at ?? match.start_time)
-                ?.format(context, DateFormatType.dateAndTime),
-            style: AppTextStyle.caption
-                .copyWith(color: context.colorScheme.textSecondary),
-            children: [
-              WidgetSpan(
-                  alignment: PlaceholderAlignment.middle,
-                  child: Container(
-                    height: 5,
-                    width: 5,
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: context.colorScheme.textSecondary,
-                    ),
-                  )),
-              TextSpan(text: match.ground)
-            ]));
+    return Row(
+      children: [
+        if (match.tournament_id != null) TournamentBadge(),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text.rich(
+              overflow: TextOverflow.ellipsis,
+              TextSpan(
+                  text: (match.start_at ?? match.start_time)
+                      ?.format(context, DateFormatType.dateAndTime),
+                  style: AppTextStyle.caption
+                      .copyWith(color: context.colorScheme.textSecondary),
+                  children: [
+                    WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          height: 5,
+                          width: 5,
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: context.colorScheme.textSecondary,
+                          ),
+                        )),
+                    TextSpan(text: match.ground)
+                  ])),
+        ),
+      ],
+    );
   }
 }
