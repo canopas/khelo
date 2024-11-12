@@ -251,7 +251,7 @@ class _TournamentDetailScreenState
           ),
           alignment: Alignment.center,
           child: Icon(
-            Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back,
+            Platform.isIOS ? Icons.arrow_back_ios_new : Icons.arrow_back,
             size: 20,
             color: context.colorScheme.textPrimary,
           ),
