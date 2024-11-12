@@ -249,6 +249,8 @@
 
   "tournament_detail_matches_empty_title": "Schedule Your Matches!",
   "tournament_detail_matches_empty_description": "Create matches to kick off your tournament and get the games started!",
+  "tournament_detail_matches_filter_empty_title": "No Results Found",
+  "tournament_detail_matches_filter_empty_description": "No matches match the selected filters. Try adjusting them.",
   "tournament_detail_matches_add_btn": "Add matches",
   "tournament_detail_matches_filter_by_teams_title": "Filter by teams",
   "tournament_detail_matches_filter_all_teams_option": "All Teams",
