@@ -37,6 +37,7 @@ import 'flow/settings/support/contact_support_screen.dart';
 import 'flow/sign_in/sign_in_with_phone/sign_in_with_phone_screen.dart';
 import 'flow/team/user_detail/user_detail_screen.dart';
 import 'flow/tournament/detail/tournament_detail_screen.dart';
+import 'flow/tournament/match_selection/match_selection_screen.dart';
 
 class AppRoute {
   static const pathPhoneNumberVerification = '/phone-number-verification';
@@ -61,6 +62,7 @@ class AppRoute {
   static const pathContactSelection = "/contact-selection";
   static const pathAddTournament = "/add-tournament";
   static const pathTeamSelection = "/team-selection";
+  static const pathMatchSelection = "/match-selection";
   static const pathTournamentDetail = "/tournament-detail";
   static const pathMemberSelection = "/member-selection";
 
@@ -169,12 +171,23 @@ class AppRoute {
         builder: (_) => AddTossDetailScreen(matchId: matchId),
       );
 
-  static AppRoute addMatch({String? matchId, TeamModel? defaultTeam}) =>
+  static AppRoute addMatch({
+    String? matchId,
+    TeamModel? defaultTeam,
+    TeamModel? defaultOpponent,
+    String? tournamentId,
+    MatchGroup? group,
+    int? groupNumber,
+  }) =>
       AppRoute(
         pathAddMatch,
         builder: (_) => AddMatchScreen(
           matchId: matchId,
           defaultTeam: defaultTeam,
+          defaultOpponent: defaultOpponent,
+          tournamentId: tournamentId,
+          group: group,
+          groupNumber: groupNumber,
         ),
       );
 
@@ -196,6 +209,11 @@ class AppRoute {
         ),
       );
 
+  static AppRoute matchSelection({required String tournamentId}) => AppRoute(
+    pathMatchSelection,
+    builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
+  );
+
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
         pathTournamentDetail,
         builder: (_) => TournamentDetailScreen(tournamentId: tournamentId),
@@ -215,13 +233,17 @@ class AppRoute {
       AppRoute(pathMakeTeamAdmin,
           builder: (context) => MakeTeamAdminScreen(team: team));
 
-  static AppRoute searchTeam(
-          {List<String>? excludedIds, required bool onlyUserTeams}) =>
+  static AppRoute searchTeam({
+    List<String>? excludedIds,
+    required bool onlyUserTeams,
+    String? tournamentId,
+  }) =>
       AppRoute(
         pathSearchTeam,
         builder: (_) => SearchTeamScreen(
           excludedIds: excludedIds,
           onlyUserTeams: onlyUserTeams,
+          tournamentId: tournamentId,
         ),
       );
 
@@ -367,6 +389,9 @@ class AppRoute {
       path: pathMemberSelection,
       builder: (context, state) => state.widget(context),
     ),
+    GoRoute(
+        path: pathMatchSelection,
+        builder: (context, state) => state.widget(context)),
     GoRoute(
       path: pathTournamentDetail,
       builder: (context, state) => state.widget(context),

@@ -13,6 +13,9 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
               MatchTeamModel.fromJson(Map<String, dynamic>.from(e as Map)))
           .toList(),
       tournament_id: json['tournament_id'] as String?,
+      match_group:
+          $enumDecodeNullable(_$MatchGroupEnumMap, json['match_group']),
+      match_group_number: (json['match_group_number'] as num?)?.toInt(),
       match_type: $enumDecode(_$MatchTypeEnumMap, json['match_type']),
       number_of_over: (json['number_of_over'] as num).toInt(),
       over_per_bowler: (json['over_per_bowler'] as num).toInt(),
@@ -78,6 +81,8 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'id': instance.id,
       'teams': instance.teams.map((e) => e.toJson()).toList(),
       'tournament_id': instance.tournament_id,
+      'match_group': _$MatchGroupEnumMap[instance.match_group],
+      'match_group_number': instance.match_group_number,
       'match_type': _$MatchTypeEnumMap[instance.match_type]!,
       'number_of_over': instance.number_of_over,
       'over_per_bowler': instance.over_per_bowler,
@@ -107,6 +112,13 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'updated_at': _$JsonConverterToJson<Object, DateTime>(
           instance.updated_at, const TimeStampJsonConverter().toJson),
     };
+
+const _$MatchGroupEnumMap = {
+  MatchGroup.round: 1,
+  MatchGroup.quarterfinal: 2,
+  MatchGroup.semifinal: 3,
+  MatchGroup.finals: 4,
+};
 
 const _$MatchTypeEnumMap = {
   MatchType.limitedOvers: 1,

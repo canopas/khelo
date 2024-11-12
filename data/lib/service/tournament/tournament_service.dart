@@ -54,6 +54,27 @@ class TournamentService {
     }
   }
 
+  Future<TournamentModel> getTournamentById(String id) async {
+    try {
+      final snapshot = await _tournamentCollection.doc(id).get();
+      final tournament = snapshot.data();
+      if (tournament != null) {
+        return tournament;
+      } else {
+        return TournamentModel(
+          id: '',
+          name: '',
+          type: TournamentType.knockOut,
+          created_by: '',
+          start_date: DateTime.now(),
+          end_date: DateTime.now(),
+        );
+      }
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<List<TournamentModel>> getTournaments({
     String? lastMatchId,
     int limit = 10,
@@ -216,14 +237,24 @@ class TournamentService {
     }
   }
 
-  Future<void> updateMatchIds(
+  Future<void> removeMatchFromTournament(
     String tournamentId,
-    List<String> matchIds,
+    String matchId,
   ) async {
     try {
-      await _tournamentCollection
-          .doc(tournamentId)
-          .update({FireStoreConst.matchIds: matchIds});
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.matchIds: FieldValue.arrayRemove([matchId]),
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> addMatchInTournament(String tournamentId, String matchId) async {
+    try {
+      await _tournamentCollection.doc(tournamentId).update({
+        FireStoreConst.matchIds: FieldValue.arrayUnion([matchId]),
+      });
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

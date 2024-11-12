@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/errors/app_error.dart';
@@ -59,6 +60,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
           DateTime.now().add(const Duration(days: 1)),
       selectedType: editedTournament?.type ?? TournamentType.knockOut,
       teams: editedTournament?.teams ?? [],
+      matches: editedTournament?.matches ?? [],
     );
   }
 
@@ -159,6 +161,7 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
         created_at: _editedTournament?.created_at ?? DateTime.now(),
         created_by: _editedTournament?.created_by ?? state.currentUserId!,
         team_ids: state.teams.map((e) => e.id).toList(),
+        match_ids: state.matches.map((e) => e.id).toList(),
         members: _editedTournament?.members ??
             [
               TournamentMember(
@@ -214,6 +217,7 @@ class AddTournamentState with _$AddTournamentState {
     required DateTime endDate,
     required DateTime startDate,
     @Default([]) List<TeamModel> teams,
+    @Default([]) List<MatchModel> matches,
     @Default(false) bool pop,
     @Default(false) bool loading,
     @Default(false) bool showDateError,

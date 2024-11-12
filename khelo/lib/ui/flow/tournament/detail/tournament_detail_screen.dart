@@ -154,7 +154,7 @@ class _TournamentDetailScreenState
           ),
           TournamentDetailMatchesTab(
             onMatchFilter: notifier.onMatchFilter,
-            onSelected: notifier.onMatchesSelected,
+            onAddMatchTap: () => _handleAddMatchTap(context, state),
           ),
           TournamentDetailPointsTableTab(
             teamPoints: state.teamPoints,
@@ -218,7 +218,7 @@ class _TournamentDetailScreenState
         title: context.l10n.tournament_detail_matches_add_btn,
         onTap: () async {
           context.pop();
-          // TODO: Add matches
+          _handleAddMatchTap(context, state);
         },
       ),
       BottomSheetAction(
@@ -255,5 +255,22 @@ class _TournamentDetailScreenState
             color: context.colorScheme.textPrimary,
           ),
         ));
+  }
+
+  void _handleAddMatchTap(
+      BuildContext context, TournamentDetailState state) async {
+    if (state.tournament == null) {
+      return;
+    }
+    if (state.tournament!.teams.length >=
+        state.tournament!.type.minTeamReq) {
+      await AppRoute.matchSelection(tournamentId: state.tournament!.id)
+          .push(context);
+    } else {
+      showErrorSnackBar(
+          context: context,
+          error: context.l10n.add_tournament_select_min_team_error(
+              state.tournament!.type.minTeamReq));
+    }
   }
 }

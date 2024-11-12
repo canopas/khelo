@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:data/api/team/team_model.dart';
+import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/extensions/string_extensions.dart';
 import 'package:data/service/team/team_service.dart';
+import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +17,7 @@ final searchTeamViewStateProvider =
         (ref) {
   final notifier = SearchTeamViewNotifier(
     ref.read(teamServiceProvider),
+    ref.read(tournamentServiceProvider),
     ref.read(currentUserPod)?.id,
   );
   ref.listen(currentUserPod, (previous, next) {
@@ -25,14 +28,19 @@ final searchTeamViewStateProvider =
 
 class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
   final TeamService _teamService;
+  final TournamentService _tournamentService;
   StreamSubscription? _streamSubscription;
   String? _currentUserId;
   Timer? _debounce;
   List<String> _excludedIds = [];
   bool _onlyUserTeams = false;
+  String? _tournamentId;
 
-  SearchTeamViewNotifier(this._teamService, this._currentUserId)
-      : super(SearchTeamState(searchController: TextEditingController())) {
+  SearchTeamViewNotifier(
+    this._teamService,
+    this._tournamentService,
+    this._currentUserId,
+  ) : super(SearchTeamState(searchController: TextEditingController())) {
     _loadTeamList();
   }
 
@@ -44,9 +52,26 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
     _loadTeamList();
   }
 
-  void setData(List<String>? ids, bool userTeams) {
+  void setData(List<String>? ids, bool userTeams, String? tournamentId) {
     _excludedIds = ids ?? [];
-    _onlyUserTeams = userTeams;
+    _onlyUserTeams = tournamentId == null && userTeams;
+    _tournamentId = tournamentId;
+    if (_tournamentId != null) {
+      getTournament();
+    }
+  }
+
+  Future<void> getTournament() async {
+    if (_tournamentId == null) return;
+
+    try {
+      final tournament =
+          await _tournamentService.getTournamentById(_tournamentId!);
+      state = state.copyWith(tournament: tournament);
+    } catch (e) {
+      debugPrint(
+          "SearchTeamViewNotifier: error while getting tournament -> $e");
+    }
   }
 
   Future<void> _loadTeamList() async {
@@ -120,6 +145,21 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
     }
   }
 
+  Future<void> addTeamToTournamentIfNeeded() async {
+    if (state.tournament == null || state.selectedTeam == null) {
+      return;
+    }
+    if(state.tournament!.team_ids.contains(state.selectedTeam!.id)) return;
+    try {
+      final teamIds = state.tournament!.team_ids.toList();
+      teamIds.add(state.selectedTeam!.id);
+      await _tournamentService.updateTeamIds(state.tournament!.id, teamIds);
+    } catch (e) {
+      debugPrint(
+          "SearchTeamViewNotifier: error while adding team to tournament -> $e");
+    }
+  }
+
   @override
   void dispose() {
     state.searchController.dispose();
@@ -135,6 +175,7 @@ class SearchTeamState with _$SearchTeamState {
     required TextEditingController searchController,
     Object? error,
     TeamModel? selectedTeam,
+    TournamentModel? tournament,
     @Default([]) List<TeamModel> searchResults,
     @Default([]) List<TeamModel> userTeams,
     @Default(false) bool loading,

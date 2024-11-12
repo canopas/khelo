@@ -24,6 +24,7 @@ mixin _$AddTournamentState {
   DateTime get endDate => throw _privateConstructorUsedError;
   DateTime get startDate => throw _privateConstructorUsedError;
   List<TeamModel> get teams => throw _privateConstructorUsedError;
+  List<MatchModel> get matches => throw _privateConstructorUsedError;
   bool get pop => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   bool get showDateError => throw _privateConstructorUsedError;
@@ -57,6 +58,7 @@ abstract class $AddTournamentStateCopyWith<$Res> {
       DateTime endDate,
       DateTime startDate,
       List<TeamModel> teams,
+      List<MatchModel> matches,
       bool pop,
       bool loading,
       bool showDateError,
@@ -91,6 +93,7 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
     Object? endDate = null,
     Object? startDate = null,
     Object? teams = null,
+    Object? matches = null,
     Object? pop = null,
     Object? loading = null,
     Object? showDateError = null,
@@ -128,6 +131,10 @@ class _$AddTournamentStateCopyWithImpl<$Res, $Val extends AddTournamentState>
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
+      matches: null == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
       pop: null == pop
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
@@ -185,6 +192,7 @@ abstract class _$$AddTournamentStateImplCopyWith<$Res>
       DateTime endDate,
       DateTime startDate,
       List<TeamModel> teams,
+      List<MatchModel> matches,
       bool pop,
       bool loading,
       bool showDateError,
@@ -217,6 +225,7 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
     Object? endDate = null,
     Object? startDate = null,
     Object? teams = null,
+    Object? matches = null,
     Object? pop = null,
     Object? loading = null,
     Object? showDateError = null,
@@ -254,6 +263,10 @@ class __$$AddTournamentStateImplCopyWithImpl<$Res>
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
+      matches: null == matches
+          ? _value._matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
       pop: null == pop
           ? _value.pop
           : pop // ignore: cast_nullable_to_non_nullable
@@ -306,6 +319,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       required this.endDate,
       required this.startDate,
       final List<TeamModel> teams = const [],
+      final List<MatchModel> matches = const [],
       this.pop = false,
       this.loading = false,
       this.showDateError = false,
@@ -315,7 +329,8 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       this.bannerImgUrl = null,
       required this.nameController,
       this.selectedType = TournamentType.knockOut})
-      : _teams = teams;
+      : _teams = teams,
+        _matches = matches;
 
   @override
   final Object? error;
@@ -338,6 +353,15 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
     if (_teams is EqualUnmodifiableListView) return _teams;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_teams);
+  }
+
+  final List<MatchModel> _matches;
+  @override
+  @JsonKey()
+  List<MatchModel> get matches {
+    if (_matches is EqualUnmodifiableListView) return _matches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_matches);
   }
 
   @override
@@ -369,7 +393,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
 
   @override
   String toString() {
-    return 'AddTournamentState(error: $error, actionError: $actionError, profilePath: $profilePath, bannerPath: $bannerPath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, teams: $teams, pop: $pop, loading: $loading, showDateError: $showDateError, enableButton: $enableButton, imageUploading: $imageUploading, profileImgUrl: $profileImgUrl, bannerImgUrl: $bannerImgUrl, nameController: $nameController, selectedType: $selectedType)';
+    return 'AddTournamentState(error: $error, actionError: $actionError, profilePath: $profilePath, bannerPath: $bannerPath, currentUserId: $currentUserId, endDate: $endDate, startDate: $startDate, teams: $teams, matches: $matches, pop: $pop, loading: $loading, showDateError: $showDateError, enableButton: $enableButton, imageUploading: $imageUploading, profileImgUrl: $profileImgUrl, bannerImgUrl: $bannerImgUrl, nameController: $nameController, selectedType: $selectedType)';
   }
 
   @override
@@ -390,6 +414,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
             (identical(other.startDate, startDate) ||
                 other.startDate == startDate) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
+            const DeepCollectionEquality().equals(other._matches, _matches) &&
             (identical(other.pop, pop) || other.pop == pop) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.showDateError, showDateError) ||
@@ -419,6 +444,7 @@ class _$AddTournamentStateImpl implements _AddTournamentState {
       endDate,
       startDate,
       const DeepCollectionEquality().hash(_teams),
+      const DeepCollectionEquality().hash(_matches),
       pop,
       loading,
       showDateError,
@@ -449,6 +475,7 @@ abstract class _AddTournamentState implements AddTournamentState {
       required final DateTime endDate,
       required final DateTime startDate,
       final List<TeamModel> teams,
+      final List<MatchModel> matches,
       final bool pop,
       final bool loading,
       final bool showDateError,
@@ -475,6 +502,8 @@ abstract class _AddTournamentState implements AddTournamentState {
   DateTime get startDate;
   @override
   List<TeamModel> get teams;
+  @override
+  List<MatchModel> get matches;
   @override
   bool get pop;
   @override

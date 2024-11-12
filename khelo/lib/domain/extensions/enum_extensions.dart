@@ -318,23 +318,38 @@ extension TournamentTypeString on TournamentType {
   String getDescriptionString(BuildContext context) {
     switch (this) {
       case TournamentType.knockOut:
-        return context.l10n.tournament_type_knock_out_description;
+        return context.l10n.tournament_type_knock_out_description(minTeamReq);
       case TournamentType.miniRobin:
-        return context.l10n.tournament_type_mini_robin_description;
+        return context.l10n.tournament_type_mini_robin_description(minTeamReq);
       case TournamentType.boxLeague:
-        return context.l10n.tournament_type_box_league_description;
+        return context.l10n.tournament_type_box_league_description(minTeamReq);
       case TournamentType.doubleOut:
-        return context.l10n.tournament_type_double_out_description;
+        return context.l10n.tournament_type_double_out_description(minTeamReq);
       case TournamentType.superOver:
-        return context.l10n.tournament_type_super_over_description;
+        return context.l10n.tournament_type_super_over_description(minTeamReq);
       case TournamentType.bestOf:
-        return context.l10n.tournament_type_best_of_description;
+        return context.l10n.tournament_type_best_of_description(minTeamReq);
       case TournamentType.gully:
-        return context.l10n.tournament_type_gully_description;
+        return context.l10n.tournament_type_gully_description(minTeamReq);
       case TournamentType.mixed:
-        return context.l10n.tournament_type_mixed_description;
+        return context.l10n.tournament_type_mixed_description(minTeamReq);
       case TournamentType.other:
-        return context.l10n.tournament_type_other_description;
+        return context.l10n.tournament_type_other_description(minTeamReq);
+    }
+  }
+}
+
+extension MatchGroupString on MatchGroup {
+  String getString(BuildContext context) {
+    switch (this) {
+      case MatchGroup.round:
+        return context.l10n.match_group_round_title;
+      case MatchGroup.quarterfinal:
+        return context.l10n.match_group_quarter_final_title;
+      case MatchGroup.semifinal:
+        return context.l10n.match_group_semi_final_title;
+      case MatchGroup.finals:
+        return context.l10n.match_group_final_title;
     }
   }
 }

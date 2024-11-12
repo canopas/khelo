@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'search_team_view_model.dart';
+part of 'match_selection_view_model.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,69 +15,67 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$SearchTeamState {
+mixin _$MatchSelectionState {
   TextEditingController get searchController =>
       throw _privateConstructorUsedError;
   Object? get error => throw _privateConstructorUsedError;
-  TeamModel? get selectedTeam => throw _privateConstructorUsedError;
+  Object? get actionError => throw _privateConstructorUsedError;
   TournamentModel? get tournament => throw _privateConstructorUsedError;
-  List<TeamModel> get searchResults => throw _privateConstructorUsedError;
-  List<TeamModel> get userTeams => throw _privateConstructorUsedError;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get searchResults =>
+      throw _privateConstructorUsedError;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get matches =>
+      throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
-  bool get showSelectionError => throw _privateConstructorUsedError;
   bool get searchInProgress => throw _privateConstructorUsedError;
 
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $SearchTeamStateCopyWith<SearchTeamState> get copyWith =>
+  $MatchSelectionStateCopyWith<MatchSelectionState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SearchTeamStateCopyWith<$Res> {
-  factory $SearchTeamStateCopyWith(
-          SearchTeamState value, $Res Function(SearchTeamState) then) =
-      _$SearchTeamStateCopyWithImpl<$Res, SearchTeamState>;
+abstract class $MatchSelectionStateCopyWith<$Res> {
+  factory $MatchSelectionStateCopyWith(
+          MatchSelectionState value, $Res Function(MatchSelectionState) then) =
+      _$MatchSelectionStateCopyWithImpl<$Res, MatchSelectionState>;
   @useResult
   $Res call(
       {TextEditingController searchController,
       Object? error,
-      TeamModel? selectedTeam,
+      Object? actionError,
       TournamentModel? tournament,
-      List<TeamModel> searchResults,
-      List<TeamModel> userTeams,
+      Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
+      Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       bool loading,
-      bool showSelectionError,
       bool searchInProgress});
 
-  $TeamModelCopyWith<$Res>? get selectedTeam;
   $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
-class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
-    implements $SearchTeamStateCopyWith<$Res> {
-  _$SearchTeamStateCopyWithImpl(this._value, this._then);
+class _$MatchSelectionStateCopyWithImpl<$Res, $Val extends MatchSelectionState>
+    implements $MatchSelectionStateCopyWith<$Res> {
+  _$MatchSelectionStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
-    Object? selectedTeam = freezed,
+    Object? actionError = freezed,
     Object? tournament = freezed,
     Object? searchResults = null,
-    Object? userTeams = null,
+    Object? matches = null,
     Object? loading = null,
-    Object? showSelectionError = null,
     Object? searchInProgress = null,
   }) {
     return _then(_value.copyWith(
@@ -86,10 +84,7 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
-      selectedTeam: freezed == selectedTeam
-          ? _value.selectedTeam
-          : selectedTeam // ignore: cast_nullable_to_non_nullable
-              as TeamModel?,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       tournament: freezed == tournament
           ? _value.tournament
           : tournament // ignore: cast_nullable_to_non_nullable
@@ -97,18 +92,14 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
       searchResults: null == searchResults
           ? _value.searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
-      userTeams: null == userTeams
-          ? _value.userTeams
-          : userTeams // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
+              as Map<MatchGroup, Map<int, List<MatchModel>>>,
+      matches: null == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as Map<MatchGroup, Map<int, List<MatchModel>>>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showSelectionError: null == showSelectionError
-          ? _value.showSelectionError
-          : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
       searchInProgress: null == searchInProgress
           ? _value.searchInProgress
@@ -117,21 +108,7 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
     ) as $Val);
   }
 
-  /// Create a copy of SearchTeamState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TeamModelCopyWith<$Res>? get selectedTeam {
-    if (_value.selectedTeam == null) {
-      return null;
-    }
-
-    return $TeamModelCopyWith<$Res>(_value.selectedTeam!, (value) {
-      return _then(_value.copyWith(selectedTeam: value) as $Val);
-    });
-  }
-
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -147,63 +124,56 @@ class _$SearchTeamStateCopyWithImpl<$Res, $Val extends SearchTeamState>
 }
 
 /// @nodoc
-abstract class _$$SearchTeamStateImplCopyWith<$Res>
-    implements $SearchTeamStateCopyWith<$Res> {
-  factory _$$SearchTeamStateImplCopyWith(_$SearchTeamStateImpl value,
-          $Res Function(_$SearchTeamStateImpl) then) =
-      __$$SearchTeamStateImplCopyWithImpl<$Res>;
+abstract class _$$MatchSelectionStateImplCopyWith<$Res>
+    implements $MatchSelectionStateCopyWith<$Res> {
+  factory _$$MatchSelectionStateImplCopyWith(_$MatchSelectionStateImpl value,
+          $Res Function(_$MatchSelectionStateImpl) then) =
+      __$$MatchSelectionStateImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {TextEditingController searchController,
       Object? error,
-      TeamModel? selectedTeam,
+      Object? actionError,
       TournamentModel? tournament,
-      List<TeamModel> searchResults,
-      List<TeamModel> userTeams,
+      Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
+      Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       bool loading,
-      bool showSelectionError,
       bool searchInProgress});
 
-  @override
-  $TeamModelCopyWith<$Res>? get selectedTeam;
   @override
   $TournamentModelCopyWith<$Res>? get tournament;
 }
 
 /// @nodoc
-class __$$SearchTeamStateImplCopyWithImpl<$Res>
-    extends _$SearchTeamStateCopyWithImpl<$Res, _$SearchTeamStateImpl>
-    implements _$$SearchTeamStateImplCopyWith<$Res> {
-  __$$SearchTeamStateImplCopyWithImpl(
-      _$SearchTeamStateImpl _value, $Res Function(_$SearchTeamStateImpl) _then)
+class __$$MatchSelectionStateImplCopyWithImpl<$Res>
+    extends _$MatchSelectionStateCopyWithImpl<$Res, _$MatchSelectionStateImpl>
+    implements _$$MatchSelectionStateImplCopyWith<$Res> {
+  __$$MatchSelectionStateImplCopyWithImpl(_$MatchSelectionStateImpl _value,
+      $Res Function(_$MatchSelectionStateImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? searchController = null,
     Object? error = freezed,
-    Object? selectedTeam = freezed,
+    Object? actionError = freezed,
     Object? tournament = freezed,
     Object? searchResults = null,
-    Object? userTeams = null,
+    Object? matches = null,
     Object? loading = null,
-    Object? showSelectionError = null,
     Object? searchInProgress = null,
   }) {
-    return _then(_$SearchTeamStateImpl(
+    return _then(_$MatchSelectionStateImpl(
       searchController: null == searchController
           ? _value.searchController
           : searchController // ignore: cast_nullable_to_non_nullable
               as TextEditingController,
       error: freezed == error ? _value.error : error,
-      selectedTeam: freezed == selectedTeam
-          ? _value.selectedTeam
-          : selectedTeam // ignore: cast_nullable_to_non_nullable
-              as TeamModel?,
+      actionError: freezed == actionError ? _value.actionError : actionError,
       tournament: freezed == tournament
           ? _value.tournament
           : tournament // ignore: cast_nullable_to_non_nullable
@@ -211,18 +181,14 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
       searchResults: null == searchResults
           ? _value._searchResults
           : searchResults // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
-      userTeams: null == userTeams
-          ? _value._userTeams
-          : userTeams // ignore: cast_nullable_to_non_nullable
-              as List<TeamModel>,
+              as Map<MatchGroup, Map<int, List<MatchModel>>>,
+      matches: null == matches
+          ? _value._matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as Map<MatchGroup, Map<int, List<MatchModel>>>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showSelectionError: null == showSelectionError
-          ? _value.showSelectionError
-          : showSelectionError // ignore: cast_nullable_to_non_nullable
               as bool,
       searchInProgress: null == searchInProgress
           ? _value.searchInProgress
@@ -234,44 +200,44 @@ class __$$SearchTeamStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SearchTeamStateImpl implements _SearchTeamState {
-  const _$SearchTeamStateImpl(
+class _$MatchSelectionStateImpl implements _MatchSelectionState {
+  const _$MatchSelectionStateImpl(
       {required this.searchController,
       this.error,
-      this.selectedTeam,
+      this.actionError,
       this.tournament,
-      final List<TeamModel> searchResults = const [],
-      final List<TeamModel> userTeams = const [],
+      final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults =
+          const {},
+      final Map<MatchGroup, Map<int, List<MatchModel>>> matches = const {},
       this.loading = false,
-      this.showSelectionError = false,
       this.searchInProgress = false})
       : _searchResults = searchResults,
-        _userTeams = userTeams;
+        _matches = matches;
 
   @override
   final TextEditingController searchController;
   @override
   final Object? error;
   @override
-  final TeamModel? selectedTeam;
+  final Object? actionError;
   @override
   final TournamentModel? tournament;
-  final List<TeamModel> _searchResults;
+  final Map<MatchGroup, Map<int, List<MatchModel>>> _searchResults;
   @override
   @JsonKey()
-  List<TeamModel> get searchResults {
-    if (_searchResults is EqualUnmodifiableListView) return _searchResults;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get searchResults {
+    if (_searchResults is EqualUnmodifiableMapView) return _searchResults;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_searchResults);
+    return EqualUnmodifiableMapView(_searchResults);
   }
 
-  final List<TeamModel> _userTeams;
+  final Map<MatchGroup, Map<int, List<MatchModel>>> _matches;
   @override
   @JsonKey()
-  List<TeamModel> get userTeams {
-    if (_userTeams is EqualUnmodifiableListView) return _userTeams;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get matches {
+    if (_matches is EqualUnmodifiableMapView) return _matches;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_userTeams);
+    return EqualUnmodifiableMapView(_matches);
   }
 
   @override
@@ -279,35 +245,29 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
   final bool loading;
   @override
   @JsonKey()
-  final bool showSelectionError;
-  @override
-  @JsonKey()
   final bool searchInProgress;
 
   @override
   String toString() {
-    return 'SearchTeamState(searchController: $searchController, error: $error, selectedTeam: $selectedTeam, tournament: $tournament, searchResults: $searchResults, userTeams: $userTeams, loading: $loading, showSelectionError: $showSelectionError, searchInProgress: $searchInProgress)';
+    return 'MatchSelectionState(searchController: $searchController, error: $error, actionError: $actionError, tournament: $tournament, searchResults: $searchResults, matches: $matches, loading: $loading, searchInProgress: $searchInProgress)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SearchTeamStateImpl &&
+            other is _$MatchSelectionStateImpl &&
             (identical(other.searchController, searchController) ||
                 other.searchController == searchController) &&
             const DeepCollectionEquality().equals(other.error, error) &&
-            (identical(other.selectedTeam, selectedTeam) ||
-                other.selectedTeam == selectedTeam) &&
+            const DeepCollectionEquality()
+                .equals(other.actionError, actionError) &&
             (identical(other.tournament, tournament) ||
                 other.tournament == tournament) &&
             const DeepCollectionEquality()
                 .equals(other._searchResults, _searchResults) &&
-            const DeepCollectionEquality()
-                .equals(other._userTeams, _userTeams) &&
+            const DeepCollectionEquality().equals(other._matches, _matches) &&
             (identical(other.loading, loading) || other.loading == loading) &&
-            (identical(other.showSelectionError, showSelectionError) ||
-                other.showSelectionError == showSelectionError) &&
             (identical(other.searchInProgress, searchInProgress) ||
                 other.searchInProgress == searchInProgress));
   }
@@ -317,59 +277,55 @@ class _$SearchTeamStateImpl implements _SearchTeamState {
       runtimeType,
       searchController,
       const DeepCollectionEquality().hash(error),
-      selectedTeam,
+      const DeepCollectionEquality().hash(actionError),
       tournament,
       const DeepCollectionEquality().hash(_searchResults),
-      const DeepCollectionEquality().hash(_userTeams),
+      const DeepCollectionEquality().hash(_matches),
       loading,
-      showSelectionError,
       searchInProgress);
 
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>
-      __$$SearchTeamStateImplCopyWithImpl<_$SearchTeamStateImpl>(
+  _$$MatchSelectionStateImplCopyWith<_$MatchSelectionStateImpl> get copyWith =>
+      __$$MatchSelectionStateImplCopyWithImpl<_$MatchSelectionStateImpl>(
           this, _$identity);
 }
 
-abstract class _SearchTeamState implements SearchTeamState {
-  const factory _SearchTeamState(
+abstract class _MatchSelectionState implements MatchSelectionState {
+  const factory _MatchSelectionState(
       {required final TextEditingController searchController,
       final Object? error,
-      final TeamModel? selectedTeam,
+      final Object? actionError,
       final TournamentModel? tournament,
-      final List<TeamModel> searchResults,
-      final List<TeamModel> userTeams,
+      final Map<MatchGroup, Map<int, List<MatchModel>>> searchResults,
+      final Map<MatchGroup, Map<int, List<MatchModel>>> matches,
       final bool loading,
-      final bool showSelectionError,
-      final bool searchInProgress}) = _$SearchTeamStateImpl;
+      final bool searchInProgress}) = _$MatchSelectionStateImpl;
 
   @override
   TextEditingController get searchController;
   @override
   Object? get error;
   @override
-  TeamModel? get selectedTeam;
+  Object? get actionError;
   @override
   TournamentModel? get tournament;
   @override
-  List<TeamModel> get searchResults;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get searchResults;
   @override
-  List<TeamModel> get userTeams;
+  Map<MatchGroup, Map<int, List<MatchModel>>> get matches;
   @override
   bool get loading;
   @override
-  bool get showSelectionError;
-  @override
   bool get searchInProgress;
 
-  /// Create a copy of SearchTeamState
+  /// Create a copy of MatchSelectionState
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$SearchTeamStateImplCopyWith<_$SearchTeamStateImpl> get copyWith =>
+  _$$MatchSelectionStateImplCopyWith<_$MatchSelectionStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

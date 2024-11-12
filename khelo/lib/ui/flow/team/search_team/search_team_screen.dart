@@ -13,6 +13,7 @@ import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/flow/team/search_team/components/team_member_sheet.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -25,11 +26,13 @@ import '../../../../gen/assets.gen.dart';
 class SearchTeamScreen extends ConsumerStatefulWidget {
   final List<String>? excludedIds;
   final bool onlyUserTeams;
+  final String? tournamentId;
 
   const SearchTeamScreen({
     super.key,
     required this.excludedIds,
     required this.onlyUserTeams,
+    this.tournamentId,
   });
 
   @override
@@ -43,8 +46,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(searchTeamViewStateProvider.notifier);
-    runPostFrame(
-        () => notifier.setData(widget.excludedIds, widget.onlyUserTeams));
+    runPostFrame(() => notifier.setData(
+        widget.excludedIds, widget.onlyUserTeams, widget.tournamentId));
   }
 
   @override
@@ -55,23 +58,10 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
     return AppPage(
       title: context.l10n.search_team_screen_title,
       actions: [
-        IconButton(
+        actionButton(
+          context,
           onPressed: state.selectedTeam != null
-              ? () async {
-                  if (state.userTeams
-                      .any((team) => team.id == state.selectedTeam?.id)) {
-                    context.pop(state.selectedTeam);
-                  } else {
-                    final res = await TeamMemberSheet.show<bool>(
-                      context,
-                      team: state.selectedTeam!,
-                      isForVerification: true,
-                    );
-                    if (res != null && res && context.mounted) {
-                      context.pop(state.selectedTeam);
-                    }
-                  }
-                }
+              ? () => _handleSaveAction(context, state)
               : null,
           icon: SvgPicture.asset(
             Assets.images.icCheck,
@@ -96,6 +86,31 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSaveAction(
+    BuildContext context,
+    SearchTeamState state,
+  ) async {
+    if (state.userTeams.any((team) => team.id == state.selectedTeam?.id) ||
+        (state.tournament?.team_ids
+                .any((element) => element == state.selectedTeam?.id) ??
+            false)) {
+      await notifier.addTeamToTournamentIfNeeded();
+      if (context.mounted) {
+        context.pop(state.selectedTeam);
+      }
+    } else {
+      final res = await TeamMemberSheet.show<bool>(
+        context,
+        team: state.selectedTeam!,
+        isForVerification: true,
+      );
+      await notifier.addTeamToTournamentIfNeeded();
+      if (res != null && res && context.mounted) {
+        context.pop(state.selectedTeam);
+      }
+    }
   }
 
   Widget _searchTextField(

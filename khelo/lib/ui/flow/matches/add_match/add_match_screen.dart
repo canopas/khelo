@@ -1,3 +1,4 @@
+import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,7 +31,6 @@ import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/pickers/date_and_time_picker.dart';
 import 'package:style/text/app_text_field.dart';
 import 'package:style/text/app_text_style.dart';
-import 'package:data/api/match/match_model.dart';
 import 'package:style/widgets/adaptive_outlined_tile.dart';
 
 import '../../../../components/confirmation_dialog.dart';
@@ -38,8 +38,20 @@ import '../../../../components/confirmation_dialog.dart';
 class AddMatchScreen extends ConsumerStatefulWidget {
   final String? matchId;
   final TeamModel? defaultTeam;
+  final TeamModel? defaultOpponent;
+  final String? tournamentId;
+  final MatchGroup? group;
+  final int? groupNumber;
 
-  const AddMatchScreen({super.key, this.matchId, this.defaultTeam});
+  const AddMatchScreen({
+    super.key,
+    this.matchId,
+    this.defaultTeam,
+    this.defaultOpponent,
+    this.groupNumber,
+    this.group,
+    this.tournamentId,
+  });
 
   @override
   ConsumerState createState() => _AddMatchScreenState();
@@ -52,7 +64,13 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
   void initState() {
     super.initState();
     notifier = ref.read(addMatchViewStateProvider.notifier);
-    runPostFrame(() => notifier.setData(widget.matchId, widget.defaultTeam));
+    runPostFrame(() => notifier.setData(
+        widget.matchId,
+        widget.defaultTeam,
+        widget.defaultOpponent,
+        widget.tournamentId,
+        widget.group,
+        widget.groupNumber));
   }
 
   @override
@@ -61,7 +79,7 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
 
     _observeActionError(context, ref);
     _observePushTossDetailScreen(context, ref, notifier.matchId);
-    _observePop(context, ref);
+    _observeMatch(context, ref);
 
     return AppPage(
       title: (widget.matchId != null)
@@ -382,11 +400,11 @@ class _AddMatchScreenState extends ConsumerState<AddMatchScreen> {
     });
   }
 
-  void _observePop(BuildContext context, WidgetRef ref) {
-    ref.listen(addMatchViewStateProvider.select((value) => value.pop),
+  void _observeMatch(BuildContext context, WidgetRef ref) {
+    ref.listen(addMatchViewStateProvider.select((value) => value.match),
         (previous, next) {
-      if (next != null && next) {
-        context.pop(true);
+      if (next != null) {
+        context.pop(next);
       }
     });
   }

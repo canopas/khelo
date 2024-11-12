@@ -70,19 +70,20 @@ class TournamentMember with _$TournamentMember {
 
 @JsonEnum(valueField: "value")
 enum TournamentType {
-  knockOut(1),
-  miniRobin(2),
-  boxLeague(3),
-  doubleOut(4),
-  superOver(5),
-  bestOf(6),
-  gully(7),
-  mixed(8),
-  other(9);
+  knockOut(1, minTeamReq: 2),
+  miniRobin(2, minTeamReq: 3),
+  boxLeague(3, minTeamReq: 4),
+  doubleOut(4, minTeamReq: 4),
+  superOver(5, minTeamReq: 2),
+  bestOf(6, minTeamReq: 2),
+  gully(7, minTeamReq: 2),
+  mixed(8, minTeamReq: 2),
+  other(9, minTeamReq: 2);
 
   final int value;
+  final int minTeamReq;
 
-  const TournamentType(this.value);
+  const TournamentType(this.value, {required this.minTeamReq});
 }
 
 @JsonEnum(valueField: "value")
