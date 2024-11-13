@@ -76,9 +76,7 @@ enum TournamentType {
   doubleOut(4, minTeamReq: 4),
   superOver(5, minTeamReq: 2),
   bestOf(6, minTeamReq: 2),
-  gully(7, minTeamReq: 2),
-  mixed(8, minTeamReq: 2),
-  other(9, minTeamReq: 2);
+  custom(7, minTeamReq: 2);
 
   final int value;
   final int minTeamReq;

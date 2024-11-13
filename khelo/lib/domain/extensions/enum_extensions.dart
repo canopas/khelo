@@ -306,12 +306,8 @@ extension TournamentTypeString on TournamentType {
         return context.l10n.tournament_type_super_over;
       case TournamentType.bestOf:
         return context.l10n.tournament_type_best_of;
-      case TournamentType.gully:
-        return context.l10n.tournament_type_gully;
-      case TournamentType.mixed:
-        return context.l10n.tournament_type_mixed;
-      case TournamentType.other:
-        return context.l10n.tournament_type_other;
+      case TournamentType.custom:
+        return context.l10n.tournament_type_custom;
     }
   }
 
@@ -329,12 +325,8 @@ extension TournamentTypeString on TournamentType {
         return context.l10n.tournament_type_super_over_description(minTeamReq);
       case TournamentType.bestOf:
         return context.l10n.tournament_type_best_of_description(minTeamReq);
-      case TournamentType.gully:
-        return context.l10n.tournament_type_gully_description(minTeamReq);
-      case TournamentType.mixed:
-        return context.l10n.tournament_type_mixed_description(minTeamReq);
-      case TournamentType.other:
-        return context.l10n.tournament_type_other_description(minTeamReq);
+      case TournamentType.custom:
+        return context.l10n.tournament_type_custom_description(minTeamReq);
     }
   }
 }

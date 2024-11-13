@@ -60,9 +60,7 @@ const _$TournamentTypeEnumMap = {
   TournamentType.doubleOut: 4,
   TournamentType.superOver: 5,
   TournamentType.bestOf: 6,
-  TournamentType.gully: 7,
-  TournamentType.mixed: 8,
-  TournamentType.other: 9,
+  TournamentType.custom: 7,
 };
 
 Value? _$JsonConverterFromJson<Json, Value>(
