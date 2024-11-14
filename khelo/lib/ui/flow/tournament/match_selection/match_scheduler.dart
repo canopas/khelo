@@ -58,7 +58,7 @@ class MatchScheduler {
       case TournamentType.boxLeague:
         return scheduleBoxLeagueMatches();
       case TournamentType.doubleOut:
-        return scheduleDoubleEliminationMatches();
+        return scheduleDoubleOutMatches();
       case TournamentType.superOver:
         return scheduleSuperOverMatches();
       case TournamentType.bestOf:
@@ -88,7 +88,7 @@ class MatchScheduler {
         groupNumbers.forEach((number, matches) {
           removeAlreadyScheduledTeams(matches, teamPool);
 
-          final teamPairs = createTeamPairsForKnockout(teamPool);
+          final teamPairs = createKnockoutTeamPairs(teamPool);
           addMatches(matches, teamPairs, group, number);
 
           teamPool.removeWhere((team) => teamPairs
@@ -143,7 +143,7 @@ class MatchScheduler {
       rounds.forEach((number, matches) {
         removeTeamsThatReachedLimit(matches, teamPool, matchesPerTeam);
 
-        final teamPairs = createTeamPairsForRoundRobin(
+        final teamPairs = createRoundRobinTeamPairs(
             teamPool,
             matchesPerTeam,
             matches
@@ -224,7 +224,7 @@ class MatchScheduler {
           teams.addAll(teamPool.take(boxSize - teams.length + 1));
         }
 
-        final teamPairs = createTeamPairsForRoundRobin(
+        final teamPairs = createRoundRobinTeamPairs(
             teams,
             teams.length - 1,
             matches
@@ -305,7 +305,7 @@ class MatchScheduler {
     return additionalScheduledMatches;
   }
 
-  GroupedMatchMap scheduleDoubleEliminationMatches() {
+  GroupedMatchMap scheduleDoubleOutMatches() {
     final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
     final teamPool = List.of(teams);
 
@@ -434,7 +434,7 @@ class MatchScheduler {
     return teamPoints;
   }
 
-  List<List<TeamModel>> createTeamPairsForRoundRobin(List<TeamModel> teamPool,
+  List<List<TeamModel>> createRoundRobinTeamPairs(List<TeamModel> teamPool,
       int matchesPerTeam, List<List<TeamModel>> scheduledMatches) {
     final List<List<TeamModel>> teamPairs = [];
 
@@ -475,7 +475,7 @@ class MatchScheduler {
     return teamPairs;
   }
 
-  List<List<TeamModel>> createTeamPairsForKnockout(List<TeamModel> teams) {
+  List<List<TeamModel>> createKnockoutTeamPairs(List<TeamModel> teams) {
     final List<TeamModel> shuffledTeams = List.from(teams)..shuffle();
     return shuffledTeams.chunked(2);
   }
@@ -591,7 +591,7 @@ class MatchScheduler {
         unFinishedMatches
             .any((element) => element.teams.map((e) => e.team).contains(team)));
 
-    final chunks = createTeamPairsForKnockout(teams);
+    final chunks = createKnockoutTeamPairs(teams);
     addMatches(matches, chunks, MatchGroup.round, isWinBracket ? 1 : 2);
     TeamModel? teamToReturn;
     if (unFinishedMatches.isEmpty && teams.length == 1) {
