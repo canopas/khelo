@@ -321,7 +321,7 @@ extension TournamentTypeString on TournamentType {
         return context.l10n.tournament_type_double_out_description(minTeamReq);
       case TournamentType.bestOfThree:
         return context.l10n
-            .tournament_type_best_of_three__description(minTeamReq);
+            .tournament_type_best_of_three_description(minTeamReq);
       case TournamentType.custom:
         return context.l10n.tournament_type_custom_description(minTeamReq);
     }
