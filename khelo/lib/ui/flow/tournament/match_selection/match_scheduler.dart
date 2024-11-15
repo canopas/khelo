@@ -345,7 +345,104 @@ class MatchScheduler {
   }
 
   GroupedMatchMap scheduleBestOfMatches() {
-    return {};
+    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
+    final List<TeamModel> teamPool = List.from(teams);
+
+    final roundOne = additionalScheduledMatches[MatchGroup.round]?[1] ?? [];
+    final roundTwo = additionalScheduledMatches[MatchGroup.round]?[2] ?? [];
+
+    final winnersRoundOne = scheduleBestOfBracketTeams(roundOne, teamPool, 3);
+
+    if (winnersRoundOne.isNotEmpty && roundTwo.isNotEmpty) {
+      scheduleBestOfBracketTeams(roundTwo, winnersRoundOne, 3);
+    }
+
+    final rounds = {1: roundOne};
+    if (roundTwo.isNotEmpty) {
+      rounds.addAll({2: roundTwo});
+    }
+
+    additionalScheduledMatches.addAll({MatchGroup.round: rounds});
+    return additionalScheduledMatches;
+  }
+
+  List<TeamModel> scheduleBestOfBracketTeams(
+    List<MatchModel> roundMatches,
+    List<TeamModel> teams,
+    int bestOfCount,
+  ) {
+    final List<TeamModel> winners = [];
+
+    final teamPairs = createTeamPairsForBestOf(teams);
+
+    for (var pair in teamPairs) {
+      int teamAWins = 0;
+      int teamBWins = 0;
+
+      for (int matchNumber = 1; matchNumber <= bestOfCount; matchNumber++) {
+        final match = createBestOfMatch(pair.first, pair.last, 1, matchNumber);
+        roundMatches.add(match);
+
+        final winnerTeam = match.teams
+            .firstWhereOrNull(
+                (element) => element.team.id == match.matchResult!.teamId)
+            ?.team;
+
+        if (winnerTeam == pair.first) {
+          teamAWins++;
+        } else if (winnerTeam == pair.last) {
+          teamBWins++;
+        }
+
+        if (teamAWins > bestOfCount / 2) {
+          winners.add(pair.first);
+          break;
+        } else if (teamBWins > bestOfCount / 2) {
+          winners.add(pair.last);
+          break;
+        }
+      }
+    }
+
+    return winners;
+  }
+
+  List<List<TeamModel>> createTeamPairsForBestOf(List<TeamModel> teams) {
+    List<List<TeamModel>> pairs = [];
+
+    for (int i = 0; i < teams.length; i++) {
+      for (int j = i + 1; j < teams.length; j++) {
+        pairs.add([teams[i], teams[j]]);
+      }
+    }
+
+    return pairs;
+  }
+
+  MatchModel createBestOfMatch(
+    TeamModel teamA,
+    TeamModel teamB,
+    int roundNumber,
+    int matchNumber,
+  ) {
+    return MatchModel(
+      id: '',
+      teams: [
+        MatchTeamModel(team_id: teamA.id, team: teamA),
+        MatchTeamModel(team_id: teamB.id, team: teamB)
+      ],
+      match_type: MatchType.limitedOvers,
+      number_of_over: 10,
+      over_per_bowler: 2,
+      city: '',
+      ground: '',
+      ball_type: BallType.leather,
+      pitch_type: PitchType.rough,
+      created_by: '',
+      match_status: MatchStatus.yetToStart,
+      match_group: MatchGroup.round,
+      match_group_number: matchNumber,
+    );
   }
 
   // Helper functions

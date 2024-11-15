@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/ball_score/ball_score_model.dart';
 import '../../api/match/match_model.dart';
+import '../../api/team/team_model.dart';
 import '../../api/tournament/tournament_model.dart';
 import '../../errors/app_error.dart';
 import '../../utils/constant/firestore_constant.dart';
@@ -197,14 +198,14 @@ class TournamentService {
 
         if (teamIds.isNotEmpty) {
           final teams = await _teamService.getTeamsByIds(teamIds);
-          tournament = tournament.copyWith(teams: teams);
+          tournament = tournament.copyWith(teams: DataClass().teams);
         }
 
         if (matchIds.isNotEmpty) {
           final matches = await _matchService.getMatchesByIds(matchIds);
-          final keyStats = await getKeyStats(matches);
+          final keyStats = await getKeyStats(DataClass().matches);
           tournament =
-              tournament.copyWith(matches: matches, keyStats: keyStats);
+              tournament.copyWith(matches: DataClass().matches, keyStats: keyStats);
         }
 
         if (tournament.members.isNotEmpty) {
@@ -326,5 +327,121 @@ class TournamentService {
     if (allFinishedOrAbandoned) return TournamentStatus.finish;
 
     return TournamentStatus.finish;
+  }
+}
+
+class DataClass {
+  final List<TeamModel> teams = [
+    TeamModel(id: "1", name: "A", name_lowercase: "a"),
+    TeamModel(id: "2", name: "B", name_lowercase: "b"),
+    TeamModel(id: "3", name: "C", name_lowercase: "c"),
+    TeamModel(id: "4", name: "D", name_lowercase: "d"),
+    // TeamModel(id: "5", name: "E", name_lowercase: "e"),
+    // TeamModel(id: "6", name: "F", name_lowercase: "f"),
+    // TeamModel(id: "7", name: "G", name_lowercase: "g"),
+    // TeamModel(id: "8", name: "H", name_lowercase: "h"),
+    // TeamModel(id: "9", name: "I", name_lowercase: "i"),
+    // TeamModel(id: "10", name: "J", name_lowercase: "j"),
+    // TeamModel(id: "11", name: "K", name_lowercase: "k"),
+    // TeamModel(id: "12", name: "L", name_lowercase: "l"),
+    // TeamModel(id: "13", name: "M", name_lowercase: "m"),
+    // TeamModel(id: "14", name: "N", name_lowercase: "n"),
+    // TeamModel(id: "15", name: "O", name_lowercase: "o"),
+    // TeamModel(id: "16", name: "P", name_lowercase: "p"),
+    // TeamModel(id: "17", name: "Q", name_lowercase: "q"),
+    // TeamModel(id: "18", name: "R", name_lowercase: "r"),
+    // TeamModel(id: "19", name: "S", name_lowercase: "s"),
+    // TeamModel(id: "20", name: "T", name_lowercase: "t"),
+    // TeamModel(id: "21", name: "U", name_lowercase: "u"),
+    // TeamModel(id: "22", name: "V", name_lowercase: "v"),
+    // TeamModel(id: "23", name: "W", name_lowercase: "w"),
+    // TeamModel(id: "24", name: "X", name_lowercase: "x"),
+    // TeamModel(id: "25", name: "Y", name_lowercase: "y"),
+    // TeamModel(id: "26", name: "Z", name_lowercase: "z"),
+  ];
+
+  final MatchModel defaultMatchModel = MatchModel(
+    id: "",
+    teams: [],
+    match_type: MatchType.limitedOvers,
+    number_of_over: 4,
+    over_per_bowler: 2,
+    city: "Surat",
+    ground: "Surat",
+    ball_type: BallType.leather,
+    pitch_type: PitchType.cement,
+    created_by: "",
+    match_status: MatchStatus.yetToStart,
+    match_group: MatchGroup.round,
+    match_group_number: 1,
+  );
+  late List<MatchModel> matches;
+
+  DataClass() {
+    matches = [
+      defaultMatchModel.copyWith(
+        match_group: MatchGroup.round,
+        match_group_number: 1,
+        teams: [
+          MatchTeamModel(
+              team_id: teams[0].id,
+              team: teams[0],
+              over: 2,
+              run: 20,
+              wicket: 2),
+          MatchTeamModel(
+              team_id: teams[1].id,
+              team: teams[1],
+              over: 1.4,
+              run: 22,
+              wicket: 3)
+        ],
+        match_status: MatchStatus.finish,
+        toss_winner_id: teams[0].id,
+        toss_decision: TossDecision.bat,
+      ),
+      defaultMatchModel.copyWith(
+        match_group: MatchGroup.round,
+        match_group_number: 1,
+        teams: [
+          MatchTeamModel(
+              team_id: teams[2].id,
+              team: teams[2],
+              over: 2,
+              run: 20,
+              wicket: 2),
+          MatchTeamModel(
+              team_id: teams[3].id,
+              team: teams[3],
+              over: 1.4,
+              run: 22,
+              wicket: 3)
+        ],
+        match_status: MatchStatus.finish,
+        toss_winner_id: teams[3].id,
+        toss_decision: TossDecision.bat,
+      ),
+      // defaultMatchModel.copyWith(
+      //   match_group: MatchGroup.round,
+      //   match_group_number: 1,
+      //   teams: [
+      //     MatchTeamModel(
+      //         team_id: teams[4].id,
+      //         team: teams[4],
+      //         over: 2,
+      //         run: 20,
+      //         wicket: 2),
+      //     MatchTeamModel(
+      //         team_id: teams[5].id,
+      //         team: teams[5],
+      //         over: 1.4,
+      //         run: 22,
+      //         wicket: 3)
+      //   ],
+      //   match_status: MatchStatus.finish,
+      //   toss_winner_id: teams[4].id,
+      //   toss_decision: TossDecision.bat,
+      // ),
+    ];
   }
 }
