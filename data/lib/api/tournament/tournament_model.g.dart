@@ -58,8 +58,7 @@ const _$TournamentTypeEnumMap = {
   TournamentType.miniRobin: 2,
   TournamentType.boxLeague: 3,
   TournamentType.doubleOut: 4,
-  TournamentType.superOver: 5,
-  TournamentType.bestOf: 6,
+  TournamentType.bestOfThree: 6,
   TournamentType.custom: 7,
 };
 

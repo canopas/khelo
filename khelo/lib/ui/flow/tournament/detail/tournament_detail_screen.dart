@@ -263,7 +263,7 @@ class _TournamentDetailScreenState
     if (state.tournament == null) {
       return;
     }
-    if (state.tournament!.teams.length >= state.tournament!.type.minTeamReq) {
+    if (state.tournament!.teams.length == state.tournament!.type.minTeamReq) {
       await AppRoute.matchSelection(tournamentId: state.tournament!.id)
           .push(context);
     } else {

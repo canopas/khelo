@@ -302,10 +302,8 @@ extension TournamentTypeString on TournamentType {
         return context.l10n.tournament_type_box_league;
       case TournamentType.doubleOut:
         return context.l10n.tournament_type_double_out;
-      case TournamentType.superOver:
-        return context.l10n.tournament_type_super_over;
-      case TournamentType.bestOf:
-        return context.l10n.tournament_type_best_of;
+      case TournamentType.bestOfThree:
+        return context.l10n.tournament_type_best_of_three;
       case TournamentType.custom:
         return context.l10n.tournament_type_custom;
     }
@@ -321,10 +319,9 @@ extension TournamentTypeString on TournamentType {
         return context.l10n.tournament_type_box_league_description(minTeamReq);
       case TournamentType.doubleOut:
         return context.l10n.tournament_type_double_out_description(minTeamReq);
-      case TournamentType.superOver:
-        return context.l10n.tournament_type_super_over_description(minTeamReq);
-      case TournamentType.bestOf:
-        return context.l10n.tournament_type_best_of_description(minTeamReq);
+      case TournamentType.bestOfThree:
+        return context.l10n
+            .tournament_type_best_of_three__description(minTeamReq);
       case TournamentType.custom:
         return context.l10n.tournament_type_custom_description(minTeamReq);
     }
