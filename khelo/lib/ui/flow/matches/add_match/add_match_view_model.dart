@@ -232,7 +232,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
       matchId = await _matchService.updateMatch(match);
 
-      if(tournamentId != null && editMatch == null && matchId != null) {
+      if (tournamentId != null && editMatch == null && matchId != null) {
         await _tournamentService.addMatchInTournament(tournamentId!, matchId!);
       }
 
@@ -269,6 +269,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
 
   void onTeamSelect(TeamModel team, TeamType type) {
     final matchPlayer = team.players
+        .where((element) => element.user.isActive)
         .take(11)
         .map((e) => MatchPlayer(id: e.user.id, player: e.user))
         .toList();

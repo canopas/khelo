@@ -9,6 +9,7 @@ import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/list_extensions.dart';
 import '../../utils/constant/firestore_constant.dart';
+import '../../utils/dummy_deactivated_account.dart';
 import '../team/team_service.dart';
 import '../user/user_service.dart';
 
@@ -560,30 +561,19 @@ class MatchService {
   ) async {
     try {
       final teamIds = teamList.map((e) => e.team_id).toList();
+      final List<TeamModel> teams = await _teamService.getTeamsByIds(teamIds);
 
-      final playerIds = teamList.expand((team) => team.squad).toList();
+      final list = await Future.wait(
+        teamList.map((matchPlayer) async {
+          final team =
+              teams.firstWhere((element) => element.id == matchPlayer.team_id);
 
-      final teamsData = await Future.wait([
-        _teamService.getTeamsByIds(teamIds),
-        getPlayerListFromPlayerIds(playerIds),
-      ]);
+          final squad = await getPlayerListFromPlayerIds(matchPlayer.squad);
+          return matchPlayer.copyWith(team: team, squad: squad);
+        }),
+      );
 
-      final List<TeamModel> teams = teamsData[0] as List<TeamModel>;
-      final List<MatchPlayer> players = teamsData[1] as List<MatchPlayer>;
-
-      final List<List<MatchPlayer>> squads = teamList.map((team) {
-        final teamPlayerIds = team.squad.map((player) => player.id).toSet();
-        return players
-            .where((player) => teamPlayerIds.contains(player.id))
-            .toList();
-      }).toList();
-
-      return List.generate(teamList.length, (index) {
-        return teamList[index].copyWith(
-          team: teams[index],
-          squad: squads[index],
-        );
-      });
+      return list;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
@@ -594,19 +584,16 @@ class MatchService {
   ) async {
     try {
       final List<String> playerIds =
-          players.map((player) => player.id).toList();
+          players.map((player) => player.id).toSet().toList();
 
       final List<UserModel> users = await _userService.getUsersByIds(playerIds);
 
-      return users.map((user) {
-        final matchPlayer =
-            players.firstWhere((element) => element.id == user.id);
-
-        return MatchPlayer(
-          player: user,
-          performance: matchPlayer.performance,
-          id: user.id,
+      return players.map((matchPlayer) {
+        final user = users.firstWhere(
+          (user) => user.id == matchPlayer.id,
+          orElse: () => deActiveDummyUserAccount(matchPlayer.id),
         );
+        return matchPlayer.copyWith(player: user);
       }).toList();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
