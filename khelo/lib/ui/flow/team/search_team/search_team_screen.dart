@@ -217,7 +217,8 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
                       ),
                     )),
                 TextSpan(
-                  text: context.l10n.common_players_title(team.players.length),
+                  text: context.l10n.common_players_title(
+                      team.players.where((e) => e.user.isActive).length),
                 ),
               ],
             ),
