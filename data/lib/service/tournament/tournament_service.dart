@@ -186,7 +186,7 @@ class TournamentService {
           id: tournamentId,
           name: '',
           created_by: '',
-          type: TournamentType.other,
+          type: TournamentType.knockOut,
           start_date: DateTime.now(),
           end_date: DateTime.now().add(const Duration(days: 1)),
         );

@@ -303,9 +303,7 @@
   "tournament_type_double_out": "Double Out",
   "tournament_type_super_over": "Super Over",
   "tournament_type_best_of": "Best Of",
-  "tournament_type_gully": "Gully",
-  "tournament_type_mixed": "Mixed",
-  "tournament_type_other": "Other",
+  "tournament_type_custom": "Custom",
 
   "tournament_type_knock_out_description": "Teams face off in a single elimination, with the loser immediately knocked out.\nMinimum {count} teams required.",
   "tournament_type_mini_robin_description": "A smaller round-robin format where each team plays once against all others.\nMinimum {count} teams required.",
@@ -313,9 +311,7 @@
   "tournament_type_double_out_description": "Teams get two chances before being knocked out, with a winners and losers bracket.\nMinimum {count} teams required.",
   "tournament_type_super_over_description": "A knockout format with a super over to decide tied matches.\nMinimum {count} teams required.",
   "tournament_type_best_of_description": "Teams play a series of matches, and the first to win the majority is the champion.\nMinimum {count} teams required.",
-  "tournament_type_gully_description": "Casual street-style cricket with short games and flexible rules.\nMinimum {count} teams required.",
-  "tournament_type_mixed_description": "Teams are randomly mixed, creating fun and unpredictable matches.\nMinimum {count} teams required.",
-  "tournament_type_other_description": "A custom format for tournaments with unique rules or structures.\nMinimum {count} teams required.",
+  "tournament_type_custom_description": "Fully flexible, create a structure that suits your needs.\nMinimum {count} teams required.",
 
   "add_team_screen_title": "Add Team",
   "add_team_edit_team_screen_title": "Edit Team",

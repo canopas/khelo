@@ -58,13 +58,13 @@ class MatchScheduler {
       case TournamentType.boxLeague:
         return scheduleBoxLeagueMatches();
       case TournamentType.doubleOut:
-        return scheduleDoubleEliminationMatches();
+        return scheduleDoubleOutMatches();
       case TournamentType.superOver:
         return scheduleSuperOverMatches();
       case TournamentType.bestOf:
         return scheduleBestOfMatches();
-      default:
-        throw Exception('Unsupported match type');
+      case TournamentType.custom:
+        return scheduledMatches;
     }
   }
 
@@ -88,7 +88,7 @@ class MatchScheduler {
         groupNumbers.forEach((number, matches) {
           removeAlreadyScheduledTeams(matches, teamPool);
 
-          final teamPairs = createTeamPairsForKnockout(teamPool);
+          final teamPairs = createKnockoutTeamPairs(teamPool);
           addMatches(matches, teamPairs, group, number);
 
           teamPool.removeWhere((team) => teamPairs
@@ -143,7 +143,7 @@ class MatchScheduler {
       rounds.forEach((number, matches) {
         removeTeamsThatReachedLimit(matches, teamPool, matchesPerTeam);
 
-        final teamPairs = createTeamPairsForRoundRobin(
+        final teamPairs = createRoundRobinTeamPairs(
             teamPool,
             matchesPerTeam,
             matches
@@ -224,7 +224,7 @@ class MatchScheduler {
           teams.addAll(teamPool.take(boxSize - teams.length + 1));
         }
 
-        final teamPairs = createTeamPairsForRoundRobin(
+        final teamPairs = createRoundRobinTeamPairs(
             teams,
             teams.length - 1,
             matches
@@ -305,8 +305,39 @@ class MatchScheduler {
     return additionalScheduledMatches;
   }
 
-  GroupedMatchMap scheduleDoubleEliminationMatches() {
-    return {};
+  GroupedMatchMap scheduleDoubleOutMatches() {
+    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
+    final teamPool = List.of(teams);
+
+    final roundOne = additionalScheduledMatches[MatchGroup.round]?[1] ?? [];
+    final roundTwo = additionalScheduledMatches[MatchGroup.round]?[2] ?? [];
+
+    final win = scheduleSingleBracketTeams(roundOne, teamPool, true);
+    final los = scheduleSingleBracketTeams(roundTwo, teamPool, false);
+    final rounds = {1: roundOne};
+    if (roundTwo.isNotEmpty) {
+      rounds.addAll({2: roundTwo});
+    }
+
+    additionalScheduledMatches.addAll({MatchGroup.round: rounds});
+    if (win != null && los != null) {
+      addNewGroupToGroupMap(additionalScheduledMatches, MatchGroup.finals);
+      final finalRounds =
+          additionalScheduledMatches[MatchGroup.finals]![1] ?? [];
+      bool isMatchAdded = finalRounds.any((match) =>
+          match.teams.map((e) => e.team_id).contains(win.id) &&
+          match.teams.map((e) => e.team_id).contains(los.id));
+      if (!isMatchAdded) {
+        addMatches(
+            additionalScheduledMatches[MatchGroup.finals]![1] ?? [],
+            [
+              [win, los]
+            ],
+            MatchGroup.finals,
+            1);
+      }
+    }
+    return additionalScheduledMatches;
   }
 
   GroupedMatchMap scheduleSuperOverMatches() {
@@ -403,7 +434,7 @@ class MatchScheduler {
     return teamPoints;
   }
 
-  List<List<TeamModel>> createTeamPairsForRoundRobin(List<TeamModel> teamPool,
+  List<List<TeamModel>> createRoundRobinTeamPairs(List<TeamModel> teamPool,
       int matchesPerTeam, List<List<TeamModel>> scheduledMatches) {
     final List<List<TeamModel>> teamPairs = [];
 
@@ -444,7 +475,7 @@ class MatchScheduler {
     return teamPairs;
   }
 
-  List<List<TeamModel>> createTeamPairsForKnockout(List<TeamModel> teams) {
+  List<List<TeamModel>> createKnockoutTeamPairs(List<TeamModel> teams) {
     final List<TeamModel> shuffledTeams = List.from(teams)..shuffle();
     return shuffledTeams.chunked(2);
   }
@@ -540,5 +571,38 @@ class MatchScheduler {
     additionalScheduledMatches.addEntries([
       MapEntry(newGroup, {1: []})
     ]);
+  }
+
+  TeamModel? scheduleSingleBracketTeams(
+    List<MatchModel> matches,
+    List<TeamModel> teams,
+    bool isWinBracket,
+  ) {
+    final finishedMatches =
+        matches.where((element) => element.match_status == MatchStatus.finish);
+
+    final loserTeams = finishedMatches.map((e) => e.teams
+        .firstWhere((element) => element.team_id != e.matchResult!.teamId)
+        .team);
+    final unFinishedMatches =
+        matches.where((element) => element.match_status != MatchStatus.finish);
+    teams.removeWhere((team) =>
+        loserTeams.contains(team) ||
+        unFinishedMatches
+            .any((element) => element.teams.map((e) => e.team).contains(team)));
+
+    final chunks = createKnockoutTeamPairs(teams);
+    addMatches(matches, chunks, MatchGroup.round, isWinBracket ? 1 : 2);
+    TeamModel? teamToReturn;
+    if (unFinishedMatches.isEmpty && teams.length == 1) {
+      teamToReturn = teams.first;
+    }
+    teams
+        .removeWhere((team) => chunks.any((element) => element.contains(team)));
+
+    if (isWinBracket) {
+      teams.addAll(loserTeams);
+    }
+    return teamToReturn;
   }
 }
