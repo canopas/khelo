@@ -262,10 +262,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return;
     }
 
-    final List<MatchPlayer>? battingTeamSquad = state.match!.teams
-        .firstWhereOrNull((element) =>
-            state.match!.current_playing_team_id == element.team.id)
-        ?.squad;
+    final MatchTeamModel? battingTeam = state.match!.teams.firstWhereOrNull(
+        (element) => state.match!.current_playing_team_id == element.team.id);
+    final List<MatchPlayer>? battingTeamSquad = battingTeam?.squad;
     final currentPlayingBatsMan = battingTeamSquad
         ?.where((element) => element.performance.any((element) =>
             element.status == PlayerStatus.playing &&
