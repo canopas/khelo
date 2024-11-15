@@ -565,8 +565,10 @@ class MatchService {
 
       final list = await Future.wait(
         teamList.map((matchPlayer) async {
-          final team =
-              teams.firstWhere((element) => element.id == matchPlayer.team_id);
+          final team = teams.firstWhere(
+            (element) => element.id == matchPlayer.team_id,
+            orElse: () => deActiveDummyTeamModel(matchPlayer.team_id),
+          );
 
           final squad = await getPlayerListFromPlayerIds(matchPlayer.squad);
           return matchPlayer.copyWith(team: team, squad: squad);
