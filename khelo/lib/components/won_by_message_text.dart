@@ -24,7 +24,10 @@ class WonByMessageText extends StatelessWidget {
       return const SizedBox();
     }
     if (matchResult!.winType == WinnerByType.tie) {
-      return Text(context.l10n.score_board_match_tied_text,
+      return Text(
+          isTournament
+              ? context.l10n.score_board_match_tied
+              : context.l10n.score_board_match_tied_text,
           style: textStyle ??
               AppTextStyle.subtitle1
                   .copyWith(color: context.colorScheme.textPrimary));

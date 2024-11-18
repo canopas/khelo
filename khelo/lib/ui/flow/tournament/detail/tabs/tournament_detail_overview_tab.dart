@@ -81,31 +81,35 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
           children: [
             if (showMatchGroup) MatchGroupTag(tag: match.match_group!),
             _buildTeamInfo(context, team: match.teams.first.team),
-            const Spacer(),
             if (match.matchResult != null) ...[
-              WonByMessageText(
-                isTournament: true,
-                matchResult: match.matchResult,
+              Expanded(
+                child: WonByMessageText(
+                  isTournament: true,
+                  matchResult: match.matchResult,
+                ),
               ),
             ] else ...[
-              Column(
-                children: [
-                  Text(
-                    match.start_at?.format(context, DateFormatType.time) ??
-                        DateTime.now().format(context, DateFormatType.time),
-                    style: AppTextStyle.caption
-                        .copyWith(color: context.colorScheme.textDisabled),
-                  ),
-                  Text(
-                    match.start_at?.relativeTime(context) ??
-                        DateTime.now().relativeTime(context),
-                    style: AppTextStyle.subtitle2
-                        .copyWith(color: context.colorScheme.textPrimary),
-                  ),
-                ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      match.start_at?.format(context, DateFormatType.time) ??
+                          DateTime.now().format(context, DateFormatType.time),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.textDisabled),
+                    ),
+                    Text(
+                      match.start_at?.relativeTime(context) ??
+                          DateTime.now().relativeTime(context),
+                      textAlign: TextAlign.center,
+                      style: AppTextStyle.subtitle2
+                          .copyWith(color: context.colorScheme.textPrimary),
+                    ),
+                  ],
+                ),
               ),
             ],
-            const Spacer(),
             _buildTeamInfo(
               context,
               team: match.teams.last.team,
@@ -123,36 +127,38 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
     bool isSecond = false,
   }) {
     final initials = team.name_initial ?? team.name.initials(limit: 2);
-    return Row(
-      children: [
-        if (isSecond) ...[
-          Text(
-            initials,
-            style: AppTextStyle.subtitle1.copyWith(
-              color: context.colorScheme.textPrimary,
+    return MediaQuery.withNoTextScaling(
+      child: Row(
+        children: [
+          if (isSecond) ...[
+            Text(
+              initials,
+              style: AppTextStyle.subtitle1.copyWith(
+                color: context.colorScheme.textPrimary,
+              ),
             ),
-          ),
-          const SizedBox(width: 16),
-          ImageAvatar(
-            initial: initials,
-            imageUrl: team.profile_img_url,
-            size: 40,
-          ),
-        ] else ...[
-          ImageAvatar(
-            initial: initials,
-            imageUrl: team.profile_img_url,
-            size: 40,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            initials,
-            style: AppTextStyle.subtitle1.copyWith(
-              color: context.colorScheme.textPrimary,
+            const SizedBox(width: 16),
+            ImageAvatar(
+              initial: initials,
+              imageUrl: team.profile_img_url,
+              size: 40,
             ),
-          ),
+          ] else ...[
+            ImageAvatar(
+              initial: initials,
+              imageUrl: team.profile_img_url,
+              size: 40,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              initials,
+              style: AppTextStyle.subtitle1.copyWith(
+                color: context.colorScheme.textPrimary,
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -196,64 +202,66 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
   Widget _keyStatsCellView(BuildContext context, PlayerKeyStat keyStat) {
     if (keyStat.tag == null && keyStat.value == null) return SizedBox();
 
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: context.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                keyStat.tag!.getString(context),
-                style: AppTextStyle.body2
-                    .copyWith(color: context.colorScheme.positive),
-              ),
-              Text(
-                keyStat.value.toString(),
-                style: AppTextStyle.subtitle1.copyWith(
-                  color: context.colorScheme.textPrimary,
+    return MediaQuery.withNoTextScaling(
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: context.colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  keyStat.tag!.getString(context),
+                  style: AppTextStyle.body2
+                      .copyWith(color: context.colorScheme.positive),
                 ),
-              )
-            ],
-          ),
-          Divider(color: context.colorScheme.outline),
-          Row(
-            children: [
-              ImageAvatar(
-                initial: keyStat.player.nameInitial,
-                imageUrl: keyStat.player.profile_img_url,
-                size: 40,
-              ),
-              const SizedBox(width: 8),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      keyStat.player.name ?? '',
-                      style: AppTextStyle.subtitle2.copyWith(
-                        color: context.colorScheme.textPrimary,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      keyStat.teamName,
-                      style: AppTextStyle.caption.copyWith(
-                        color: context.colorScheme.textDisabled,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    )
-                  ],
+                Text(
+                  keyStat.value.toString(),
+                  style: AppTextStyle.subtitle1.copyWith(
+                    color: context.colorScheme.textPrimary,
+                  ),
+                )
+              ],
+            ),
+            Divider(color: context.colorScheme.outline),
+            Row(
+              children: [
+                ImageAvatar(
+                  initial: keyStat.player.nameInitial,
+                  imageUrl: keyStat.player.profile_img_url,
+                  size: 40,
                 ),
-              )
-            ],
-          ),
-        ],
+                const SizedBox(width: 8),
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        keyStat.player.name ?? '',
+                        style: AppTextStyle.subtitle2.copyWith(
+                          color: context.colorScheme.textPrimary,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        keyStat.teamName,
+                        style: AppTextStyle.caption.copyWith(
+                          color: context.colorScheme.textDisabled,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -374,10 +382,13 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
       padding: const EdgeInsets.all(16.0),
       child: Row(
         children: [
-          Text(
-            title,
-            style: AppTextStyle.subtitle3
-                .copyWith(color: context.colorScheme.textSecondary),
+          Expanded(
+            child: Text(
+              title,
+              style: AppTextStyle.subtitle3
+                  .copyWith(color: context.colorScheme.textSecondary),
+              textScaler: TextScaler.noScaling,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -402,14 +413,15 @@ class TournamentDetailOverviewTab extends ConsumerWidget {
   }) {
     return Row(
       children: [
-        Text(
-          title,
-          style: AppTextStyle.header4
-              .copyWith(color: context.colorScheme.textPrimary),
+        Expanded(
+          child: Text(
+            title,
+            style: AppTextStyle.header4
+                .copyWith(color: context.colorScheme.textPrimary),
+          ),
         ),
-        const Spacer(),
-        Opacity(
-          opacity: showViewAll ? 1 : 0,
+        Visibility(
+          visible: showViewAll,
           child: TextButton(
             onPressed: onViewAll,
             child: Text(

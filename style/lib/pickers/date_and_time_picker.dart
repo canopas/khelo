@@ -7,6 +7,7 @@ Future<void> selectDate(
   BuildContext context, {
   String? helpText,
   DateTime? startDate,
+  DateTime? endDate,
   required DateTime initialDate,
   required Function(DateTime) onDateSelected,
 }) async {
@@ -17,7 +18,7 @@ Future<void> selectDate(
     helpText: helpText,
     initialDate: initialDate,
     firstDate: startDate ?? (initialDate.isBefore(now) ? initialDate : now),
-    lastDate: DateTime(now.year + 1, now.month, now.day),
+    lastDate: endDate ?? DateTime(now.year + 1, now.month, now.day),
     builder: (context, child) {
       return Theme(
         data: context.brightness == Brightness.dark

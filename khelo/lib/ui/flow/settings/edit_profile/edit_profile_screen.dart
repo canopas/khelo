@@ -178,6 +178,8 @@ class EditProfileScreen extends ConsumerWidget {
               context,
               helpText: context.l10n.edit_profile_select_birth_date_placeholder,
               initialDate: state.dob,
+              startDate: DateTime(1950),
+              endDate: DateTime.now(),
               onDateSelected: (date) {
                 if (date != state.dob) {
                   notifier.onDateSelect(selectedDate: date);

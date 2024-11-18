@@ -153,27 +153,21 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
       }
     }
 
-    if (tournamentType == TournamentType.doubleOut ||
-        state.matches.containsKey(MatchGroup.quarterfinal)) {
+    void handleDoubleOutValidation(MatchGroup group) {
       if (tournamentType == TournamentType.doubleOut ||
-          tournamentType == TournamentType.miniRobin ||
-          tournamentType == TournamentType.boxLeague ||
-          tournamentType == TournamentType.knockOut) {
-        options.remove(MatchGroup.quarterfinal);
-      }
-    }
-
-    if (tournamentType == TournamentType.doubleOut ||
-        state.matches.containsKey(MatchGroup.semifinal)) {
-      if (tournamentType == TournamentType.doubleOut ||
-          tournamentType == TournamentType.miniRobin ||
-          tournamentType == TournamentType.boxLeague ||
-          tournamentType == TournamentType.knockOut) {
-        {
-          options.remove(MatchGroup.semifinal);
+          state.matches.containsKey(group)) {
+        if (tournamentType == TournamentType.doubleOut ||
+            tournamentType == TournamentType.miniRobin ||
+            tournamentType == TournamentType.boxLeague ||
+            tournamentType == TournamentType.custom ||
+            tournamentType == TournamentType.knockOut) {
+          options.remove(group);
         }
       }
     }
+
+    handleDoubleOutValidation(MatchGroup.quarterfinal);
+    handleDoubleOutValidation(MatchGroup.semifinal);
 
     if (state.matches.containsKey(MatchGroup.finals)) {
       options.remove(MatchGroup.finals);
