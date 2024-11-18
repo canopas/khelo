@@ -189,15 +189,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             context,
             icon: Assets.images.icPrivacyPolicy,
             title: context.l10n.profile_setting_privacy_policy_title,
-            onTap: () => notifier
-                .openUrl("https://canopas.github.io/khelo/privacy-policy"),
+            onTap: () {
+              final colors = _getWebPageColors(context, ref);
+              notifier.openUrl(
+                  "https://canopas.github.io/khelo/privacy-policy?bgColor=${colors.background}&textColor=${colors.text}");
+            },
           ),
           _settingItem(
             context,
             icon: Assets.images.icTermsConditions,
             title: context.l10n.profile_setting_terms_and_condition_title,
-            onTap: () => notifier
-                .openUrl("https://canopas.github.io/khelo/terms-and-condition"),
+            onTap: () {
+              final colors = _getWebPageColors(context, ref);
+              notifier.openUrl(
+                  "https://canopas.github.io/khelo/terms-and-condition?bgColor=${colors.background}&textColor=${colors.text}");
+            },
           ),
           _settingItem(
             context,
@@ -215,6 +221,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           ),
         ],
       ),
+    );
+  }
+
+  ({String background, String text}) _getWebPageColors(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    final isDark = context.brightness == Brightness.dark;
+    return (
+      background: isDark ? "%23000000" : "%23FFFFFF",
+      text: isDark ? "%23FFFFFF" : "%23000000"
     );
   }
 
