@@ -112,12 +112,26 @@ class AddTournamentViewNotifier extends StateNotifier<AddTournamentState> {
   }
 
   void onStartDate(DateTime startDate) {
-    state = state.copyWith(startDate: startDate);
+    DateTime endDate = state.endDate;
+
+    if (startDate.isAfter(endDate)) {
+      endDate = startDate.add(Duration(days: 1));
+    }
+    state = state.copyWith(startDate: startDate, endDate: endDate);
     onChange();
   }
 
   void onEndDate(DateTime endDate) {
-    state = state.copyWith(endDate: endDate);
+    DateTime startDate = state.startDate;
+
+    if (endDate.isBefore(startDate)) {
+      startDate = endDate.subtract(Duration(days: 1));
+      if (_editedTournament != null &&
+          startDate.isBefore(_editedTournament!.start_date)) {
+        startDate = _editedTournament!.start_date;
+      }
+    }
+    state = state.copyWith(endDate: endDate, startDate: startDate);
     onChange();
   }
 

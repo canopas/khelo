@@ -142,6 +142,46 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
     return filteredMatches;
   }
 
+  List<MatchGroup> getMatchGroupOption() {
+    final options = MatchGroup.values.toList();
+    final tournamentType = state.tournament?.type;
+    if (state.matches.containsKey(MatchGroup.round)) {
+      if (tournamentType == TournamentType.miniRobin ||
+          (tournamentType == TournamentType.doubleOut &&
+              (state.matches[MatchGroup.round]?.entries.length ?? 0) > 1)) {
+        options.remove(MatchGroup.round);
+      }
+    }
+
+    if (tournamentType == TournamentType.doubleOut ||
+        state.matches.containsKey(MatchGroup.quarterfinal)) {
+      if (tournamentType == TournamentType.doubleOut ||
+          tournamentType == TournamentType.miniRobin ||
+          tournamentType == TournamentType.boxLeague ||
+          tournamentType == TournamentType.knockOut) {
+        options.remove(MatchGroup.quarterfinal);
+      }
+    }
+
+    if (tournamentType == TournamentType.doubleOut ||
+        state.matches.containsKey(MatchGroup.semifinal)) {
+      if (tournamentType == TournamentType.doubleOut ||
+          tournamentType == TournamentType.miniRobin ||
+          tournamentType == TournamentType.boxLeague ||
+          tournamentType == TournamentType.knockOut) {
+        {
+          options.remove(MatchGroup.semifinal);
+        }
+      }
+    }
+
+    if (state.matches.containsKey(MatchGroup.finals)) {
+      options.remove(MatchGroup.finals);
+    }
+
+    return options;
+  }
+
   @override
   void dispose() {
     _tournamentSubscription?.cancel();

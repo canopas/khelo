@@ -6,6 +6,7 @@ import '../theme/colors.dart';
 Future<void> selectDate(
   BuildContext context, {
   String? helpText,
+  DateTime? startDate,
   required DateTime initialDate,
   required Function(DateTime) onDateSelected,
 }) async {
@@ -15,7 +16,7 @@ Future<void> selectDate(
     context: context,
     helpText: helpText,
     initialDate: initialDate,
-    firstDate: initialDate.isBefore(now) ? initialDate : now,
+    firstDate: startDate ?? (initialDate.isBefore(now) ? initialDate : now),
     lastDate: DateTime(now.year + 1, now.month, now.day),
     builder: (context, child) {
       return Theme(
