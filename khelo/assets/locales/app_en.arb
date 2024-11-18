@@ -301,14 +301,14 @@
   "tournament_type_mini_robin": "Mini Robin",
   "tournament_type_box_league": "Box League",
   "tournament_type_double_out": "Double Out",
-  "tournament_type_best_of_three": "Best Of three",
+  "tournament_type_best_of": "Best Of three",
   "tournament_type_custom": "Custom",
 
   "tournament_type_knock_out_description": "Teams face off in a single elimination, with the loser immediately knocked out.\nMinimum {count} teams required.",
   "tournament_type_mini_robin_description": "A smaller round-robin format where each team plays once against all others.\nMinimum {count} teams required.",
   "tournament_type_box_league_description": "Teams are divided into groups, with top teams advancing to the knockout stage.\nMinimum {count} teams required.",
   "tournament_type_double_out_description": "Teams get two chances before being knocked out, with a winners and losers bracket.\nMinimum {count} teams required.",
-  "tournament_type_best_of_three_description": "Teams play a series of matches, and the first to win the majority is the champion.\nMinimum {count} teams required.",
+  "tournament_type_best_of_description": "Teams play a series of matches, and the first to win the majority is the champion.\nMinimum {count} teams required.",
   "tournament_type_custom_description": "Fully flexible, create a structure that suits your needs.\nMinimum {count} teams required.",
 
   "add_team_screen_title": "Add Team",
