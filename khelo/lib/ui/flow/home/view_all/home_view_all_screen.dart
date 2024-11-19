@@ -81,10 +81,7 @@ class _HomeViewAllScreenState extends ConsumerState<HomeViewAllScreen> {
                     : state.matches.length)) {
               if (widget.isTournament) {
                 final tournament = state.tournaments[index];
-                return TournamentItem(
-                  tournament: tournament,
-                  background: context.colorScheme.containerLow,
-                );
+                return TournamentItem(tournament: tournament);
               } else {
                 final match = state.matches[index];
                 return MatchDetailCell(
