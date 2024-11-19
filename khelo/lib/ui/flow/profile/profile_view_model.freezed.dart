@@ -164,7 +164,7 @@ class __$$ProfileStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProfileStateImpl implements _ProfileState {
+class _$ProfileStateImpl with DiagnosticableTreeMixin implements _ProfileState {
   const _$ProfileStateImpl(
       {this.actionError,
       this.currentUser,
@@ -186,8 +186,22 @@ class _$ProfileStateImpl implements _ProfileState {
   final bool shouldShowNotificationBanner;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'ProfileState(actionError: $actionError, currentUser: $currentUser, appVersion: $appVersion, enableUserNotification: $enableUserNotification, shouldShowNotificationBanner: $shouldShowNotificationBanner)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ProfileState'))
+      ..add(DiagnosticsProperty('actionError', actionError))
+      ..add(DiagnosticsProperty('currentUser', currentUser))
+      ..add(DiagnosticsProperty('appVersion', appVersion))
+      ..add(
+          DiagnosticsProperty('enableUserNotification', enableUserNotification))
+      ..add(DiagnosticsProperty(
+          'shouldShowNotificationBanner', shouldShowNotificationBanner));
   }
 
   @override

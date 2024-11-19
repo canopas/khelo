@@ -206,7 +206,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           ),
           _settingItem(
             context,
-            icon: Assets.images.icTermsConditions,
+            icon: Assets.images.icShare,
             title: context.l10n.profile_setting_share_app_title,
             onTap: () => notifier.onShareApp(context.l10n
                 .profile_setting_share_app_message(
@@ -214,7 +214,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
           ),
           _settingItem(
             context,
-            icon: Assets.images.icTermsConditions,
+            icon: Assets.images.icStar,
             title: context.l10n.profile_setting_rate_us_title,
             onTap: () => notifier.onRateUs(),
           ),
