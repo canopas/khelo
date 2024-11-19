@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
@@ -377,23 +376,59 @@ class MatchScheduler {
   GroupedMatchMap scheduleBestOfMatches() {
     final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
     final List<TeamModel> teamPool = List.from(teams);
-    final Map<String, TeamModel> roundWinners = {};
+    List<TeamModel> roundWinners = [];
 
     final roundOne = additionalScheduledMatches[MatchGroup.round]?[1] ?? [];
+    final semiFinalRoundOne =
+        additionalScheduledMatches[MatchGroup.semifinal]?[1] ?? [];
 
+    roundWinners =
+        scheduleBestOfGroupMatches(roundOne, teamPool, MatchGroup.round);
+    additionalScheduledMatches.addAll({
+      MatchGroup.round: {1: roundOne}
+    });
+
+    if (roundWinners.length == 2) {
+      final finalMatch = createBestOfThreeMatch(
+          roundWinners.first, roundWinners.last, MatchGroup.finals, 1);
+      additionalScheduledMatches.addAll({
+        MatchGroup.finals: {
+          1: [finalMatch]
+        }
+      });
+    } else if (roundWinners.length > 2) {
+      roundWinners = scheduleBestOfGroupMatches(
+        semiFinalRoundOne,
+        teamPool,
+        MatchGroup.semifinal,
+      );
+      additionalScheduledMatches.addAll({
+        MatchGroup.semifinal: {1: semiFinalRoundOne}
+      });
+    }
+
+    return additionalScheduledMatches;
+  }
+
+  List<TeamModel> scheduleBestOfGroupMatches(
+    List<MatchModel> matches,
+    List<TeamModel> teamPool,
+    MatchGroup group,
+  ) {
+    final Map<String, TeamModel> roundWinners = {};
     final teamPairs = createTeamPairsForBestOfThree(teamPool);
 
     for (var pair in teamPairs) {
       final teamA = pair[0];
       final teamB = pair[1];
 
-      final existingMatches = roundOne.where((match) {
+      final existingMatches = matches.where((match) {
         return match.teams.any((e) => pair.contains(e.team));
       }).toList();
 
       for (int i = existingMatches.length; i < 2; i++) {
-        final match = createBestOfThreeMatch(teamA, teamB, MatchGroup.round, 1);
-        roundOne.add(match);
+        final match = createBestOfThreeMatch(teamA, teamB, group, 1);
+        matches.add(match);
       }
 
       if (existingMatches.length > 2) {
@@ -405,9 +440,8 @@ class MatchScheduler {
             .length;
 
         if (teamAWins == 1 && teamBWins == 1) {
-          final thirdMatch =
-              createBestOfThreeMatch(teamA, teamB, MatchGroup.round, 1);
-          roundOne.add(thirdMatch);
+          final thirdMatch = createBestOfThreeMatch(teamA, teamB, group, 1);
+          matches.add(thirdMatch);
         } else if (teamAWins == 2) {
           roundWinners[teamA.id] = teamA;
         } else if (teamBWins == 2) {
@@ -415,37 +449,7 @@ class MatchScheduler {
         }
       }
     }
-    additionalScheduledMatches.addAll({
-      MatchGroup.round: {1: roundOne}
-    });
-
-    if (roundWinners.length == 2) {
-      final teamA = roundWinners.values.first;
-      final teamB = roundWinners.values.last;
-      final finalMatch =
-          createBestOfThreeMatch(teamA, teamB, MatchGroup.finals, 1);
-      additionalScheduledMatches.addAll({
-        MatchGroup.finals: {
-          1: [finalMatch]
-        }
-      });
-    }
-
-    return additionalScheduledMatches;
-  }
-
-  // Helper functions
-  int calculateMatchesPerTeam(int teamCount) {
-    if (teamCount <= 1) {
-      throw ArgumentError("Team count must be greater than 1.");
-    }
-
-    const double maxPercentage = 0.75;
-    int matchesPerTeam =
-        (teamCount * maxPercentage / log(teamCount + 1)).round();
-    matchesPerTeam = max(1, matchesPerTeam);
-
-    return matchesPerTeam;
+    return roundWinners.values.toList();
   }
 
   List<TeamPoints> calculateTeamPoints(
