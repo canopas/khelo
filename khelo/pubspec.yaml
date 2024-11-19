@@ -41,6 +41,7 @@ dependencies:
 
   shared_preferences: ^2.3.2
   collection: any
+  share_plus: ^10.1.2
 
   # UI
   cupertino_icons: ^1.0.8

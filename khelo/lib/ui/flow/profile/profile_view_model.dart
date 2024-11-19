@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'profile_view_model.freezed.dart';
@@ -103,6 +106,20 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     } else {
       state = state.copyWith(shouldShowNotificationBanner: false);
     }
+  }
+
+  void onRateUs() async {
+    final packageName = await _deviceService.packageName;
+    final targetUrl = (!kIsWeb && Platform.isAndroid)
+        ? "market://details?id=$packageName"
+        : (!kIsWeb && Platform.isIOS)
+            ? "itms-apps://itunes.apple.com/app/6480175424"
+            : "https://github.com/canopas/khelo";
+    launchUrl(Uri.parse(targetUrl));
+  }
+
+  void onShareApp(String shareString) async {
+    Share.share(shareString);
   }
 }
 

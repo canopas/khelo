@@ -31,6 +31,13 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen>
     with WidgetsBindingObserver {
+  final privacyPolicyUrl = "https://canopas.github.io/khelo/privacy-policy";
+  final termsAndConditionsUrl =
+      "https://canopas.github.io/khelo/terms-and-condition";
+  final playStoreLink =
+      "https://play.google.com/store/apps/details?id=com.canopas.khelo";
+  final appStoreLink = "https://apps.apple.com/app/khelo/id6480175424";
+
   late ProfileViewNotifier notifier;
 
   @override
@@ -189,15 +196,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen>
             context,
             icon: Assets.images.icPrivacyPolicy,
             title: context.l10n.profile_setting_privacy_policy_title,
-            onTap: () => notifier
-                .openUrl("https://canopas.github.io/khelo/privacy-policy"),
+            onTap: () => notifier.openUrl(privacyPolicyUrl),
           ),
           _settingItem(
             context,
             icon: Assets.images.icTermsConditions,
             title: context.l10n.profile_setting_terms_and_condition_title,
-            onTap: () => notifier
-                .openUrl("https://canopas.github.io/khelo/terms-and-condition"),
+            onTap: () => notifier.openUrl(termsAndConditionsUrl),
+          ),
+          _settingItem(
+            context,
+            icon: Assets.images.icTermsConditions,
+            title: context.l10n.profile_setting_share_app_title,
+            onTap: () => notifier.onShareApp(context.l10n
+                .profile_setting_share_app_message(
+                    playStoreLink, appStoreLink)),
+          ),
+          _settingItem(
+            context,
+            icon: Assets.images.icTermsConditions,
+            title: context.l10n.profile_setting_rate_us_title,
+            onTap: () => notifier.onRateUs(),
           ),
           _settingItem(
             context,
