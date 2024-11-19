@@ -22,10 +22,12 @@ class FilterTabView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: AppTextStyle.header4.copyWith(
-            color: context.colorScheme.textPrimary,
+        Expanded(
+          child: Text(
+            title,
+            style: AppTextStyle.header4.copyWith(
+              color: context.colorScheme.textPrimary,
+            ),
           ),
         ),
         TextButton.icon(
