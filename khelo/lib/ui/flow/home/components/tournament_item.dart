@@ -45,13 +45,11 @@ class _TournamentItemState extends State<TournamentItem> {
   void _initializeImageProvider(String? imageUrl) {
     if (imageUrl != null) {
       imageProvider = CachedNetworkImageProvider(imageUrl);
-      if (widget.background == null) {
-        imageProvider!.createPaletteGenerator().then((generatedPalette) {
-          if (mounted) {
-            setState(() => palette = generatedPalette);
-          }
-        });
-      }
+      imageProvider!.createPaletteGenerator().then((generatedPalette) {
+        if (mounted) {
+          setState(() => palette = generatedPalette);
+        }
+      });
     } else {
       setState(() => imageProvider = null);
     }
