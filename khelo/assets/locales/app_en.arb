@@ -817,6 +817,7 @@
   "score_board_inning_complete_title": "Inning complete",
   "score_board_match_complete_title": "Match complete",
   "score_board_match_tied_text": "The match has been tied",
+  "score_board_match_tied": "Match tied",
   "score_board_start_next_inning_title": "Start Next Inning",
   "score_board_end_inning_title": "End Inning",
   "score_board_current_team_title": "Current Team",

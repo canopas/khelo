@@ -1,14 +1,16 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../api/ball_score/ball_score_model.dart';
-import '../../errors/app_error.dart';
-import '../../extensions/double_extensions.dart';
-import '../innings/inning_service.dart';
-import '../match/match_service.dart';
-import '../../utils/constant/firestore_constant.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../api/ball_score/ball_score_model.dart';
 import '../../api/match/match_model.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/double_extensions.dart';
+import '../../extensions/list_extensions.dart';
+import '../../utils/constant/firestore_constant.dart';
+import '../innings/inning_service.dart';
+import '../match/match_service.dart';
 
 final ballScoreServiceProvider = Provider((ref) {
   final service = BallScoreService(
@@ -105,10 +107,15 @@ class BallScoreService {
   ) async {
     try {
       if (matchIds.isEmpty) return [];
-      final ballScoreRef = await _ballScoreCollection
-          .where(FireStoreConst.matchId, whereIn: matchIds)
-          .get();
-      return ballScoreRef.docs.map((e) => e.data()).toList();
+      final List<BallScoreModel> data = [];
+      for (var ids in matchIds.chunked(30)) {
+        final ballScoreRef = await _ballScoreCollection
+            .where(FireStoreConst.matchId, whereIn: ids)
+            .get();
+        data.addAll(ballScoreRef.docs.map((e) => e.data()));
+      }
+
+      return data;
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }

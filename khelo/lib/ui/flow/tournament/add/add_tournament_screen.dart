@@ -363,6 +363,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                   onTap: () {
                     selectDate(
                       context,
+                      startDate: widget.editTournament?.start_date,
                       initialDate: state.startDate,
                       onDateSelected: notifier.onStartDate,
                     );
@@ -377,6 +378,7 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
                   onTap: () {
                     selectDate(
                       context,
+                      startDate: widget.editTournament?.start_date,
                       initialDate: state.endDate,
                       onDateSelected: notifier.onEndDate,
                     );

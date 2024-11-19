@@ -32,21 +32,37 @@ class TournamentItem extends StatefulWidget {
 }
 
 class _TournamentItemState extends State<TournamentItem> {
-  late ImageProvider imageProvider;
+  ImageProvider? imageProvider;
 
   PaletteGenerator? palette;
 
   @override
   void initState() {
     super.initState();
-    if (widget.tournament.banner_img_url != null) {
-      imageProvider =
-          CachedNetworkImageProvider(widget.tournament.banner_img_url!);
-      imageProvider.createPaletteGenerator().then((palette) {
-        if (mounted) {
-          setState(() => this.palette = palette);
-        }
-      });
+    _initializeImageProvider(widget.tournament.banner_img_url);
+  }
+
+  void _initializeImageProvider(String? imageUrl) {
+    if (imageUrl != null) {
+      imageProvider = CachedNetworkImageProvider(imageUrl);
+      if (widget.background == null) {
+        imageProvider!.createPaletteGenerator().then((generatedPalette) {
+          if (mounted) {
+            setState(() => palette = generatedPalette);
+          }
+        });
+      }
+    } else {
+      setState(() => imageProvider = null);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant TournamentItem oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.tournament.banner_img_url !=
+        oldWidget.tournament.banner_img_url) {
+      _initializeImageProvider(widget.tournament.banner_img_url);
     }
   }
 
