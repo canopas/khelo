@@ -161,6 +161,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               children: tournaments
                   .map((tournament) => TournamentItem(
                         tournament: tournament,
+                        size: Size.fromWidth(360),
                         margin: EdgeInsets.symmetric(horizontal: 8),
                       ))
                   .toList(),

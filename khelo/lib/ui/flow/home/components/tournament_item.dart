@@ -18,11 +18,11 @@ import '../../../../gen/assets.gen.dart';
 class TournamentItem extends StatefulWidget {
   final TournamentModel tournament;
   final EdgeInsets margin;
-  final Color? background;
+  final Size? size;
 
   const TournamentItem({
     super.key,
-    this.background,
+    this.size,
     required this.tournament,
     this.margin = EdgeInsets.zero,
   });
@@ -42,51 +42,55 @@ class _TournamentItemState extends State<TournamentItem> {
     if (widget.tournament.banner_img_url != null) {
       imageProvider =
           CachedNetworkImageProvider(widget.tournament.banner_img_url!);
-      if (widget.background == null) {
-        imageProvider.createPaletteGenerator().then((palette) {
-          if (mounted) {
-            setState(() => this.palette = palette);
-          }
-        });
-      }
+      imageProvider.createPaletteGenerator().then((palette) {
+        if (mounted) {
+          setState(() => this.palette = palette);
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final (titleColor, dateAndTypeColor, backgroundColor) = _getColors();
+    final width = widget.size?.width ?? context.mediaQuerySize.width;
+    final (titleColor, dateAndTypeColor) = _getTextColors();
     return OnTapScale(
       onTap: () => AppRoute.tournamentDetail(tournamentId: widget.tournament.id)
           .push(context),
       child: Container(
-        width: context.mediaQuerySize.width * 0.85,
-        padding: EdgeInsets.all(16),
+        height: width / 2,
+        width: width,
         margin: widget.margin,
+        clipBehavior: Clip.antiAlias,
+        alignment: Alignment.bottomCenter,
         decoration: BoxDecoration(
-          color: widget.background ?? backgroundColor,
+          color: context.colorScheme.containerNormalOnSurface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: context.colorScheme.outline),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            _bannerImage(widget.tournament.banner_img_url),
-            const SizedBox(height: 16),
-            _titleAndStatus(
-              title: widget.tournament.name,
-              status: widget.tournament.status,
-              titleColor: widget.background != null
-                  ? context.colorScheme.textPrimary
-                  : titleColor,
-            ),
-            const SizedBox(height: 8),
-            _dateAndType(
-              startTime: widget.tournament.start_date,
-              endTime: widget.tournament.end_date,
-              type: widget.tournament.type,
-              dateAndTypeColor: widget.background != null
-                  ? context.colorScheme.textDisabled
-                  : dateAndTypeColor,
+            _bannerImage(widget.tournament.banner_img_url, width),
+            _gradient(context, width),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  _titleAndStatus(
+                    title: widget.tournament.name,
+                    status: widget.tournament.status,
+                    titleColor: titleColor,
+                  ),
+                  const SizedBox(height: 4),
+                  _dateAndType(
+                    startTime: widget.tournament.start_date,
+                    endTime: widget.tournament.end_date,
+                    type: widget.tournament.type,
+                    dateAndTypeColor: dateAndTypeColor,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -94,32 +98,46 @@ class _TournamentItemState extends State<TournamentItem> {
     );
   }
 
-  Widget _bannerImage(String? bannerUrl) {
-    return Container(
-      height: 98,
-      width: context.mediaQuerySize.width - 32,
-      decoration: BoxDecoration(
-        color: context.colorScheme.containerNormalOnSurface,
-        borderRadius: BorderRadius.circular(8),
-        image: bannerUrl == null
-            ? null
-            : DecorationImage(
-                image: imageProvider,
-                fit: BoxFit.fill,
-              ),
+  Widget _gradient(BuildContext context, double width) {
+    final dominant =
+        palette?.dominantColor?.color ?? context.colorScheme.primary;
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        height: width / 2,
+        width: width,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              dominant.withOpacity(0),
+              dominant.withOpacity(0.5),
+              dominant,
+            ],
+          ),
+        ),
       ),
-      child: bannerUrl == null
-          ? Center(
-              child: SvgPicture.asset(Assets.images.icTournaments,
-                  height: 32,
-                  width: 32,
-                  colorFilter: ColorFilter.mode(
-                    context.colorScheme.textPrimary,
-                    BlendMode.srcATop,
-                  )),
-            )
-          : null,
     );
+  }
+
+  Widget _bannerImage(String? bannerUrl, double width) {
+    return bannerUrl == null
+        ? Center(
+            child: SvgPicture.asset(Assets.images.icTournaments,
+                height: 32,
+                width: 32,
+                colorFilter: ColorFilter.mode(
+                  context.colorScheme.textPrimary,
+                  BlendMode.srcATop,
+                )),
+          )
+        : CachedNetworkImage(
+            imageUrl: bannerUrl,
+            fit: BoxFit.cover,
+            width: width,
+            height: width / 2,
+          );
   }
 
   Widget _titleAndStatus(
@@ -178,30 +196,21 @@ class _TournamentItemState extends State<TournamentItem> {
             ]));
   }
 
-  (Color, Color, Color) _getColors() {
+  (Color, Color) _getTextColors() {
     final dominant =
         palette?.dominantColor?.color ?? context.colorScheme.primary;
 
     if (dominant == context.colorScheme.primary) {
       return (
         context.colorScheme.onPrimary,
-        context.colorScheme.onPrimary.withOpacity(0.8),
-        dominant,
+        context.colorScheme.onPrimary.withOpacity(0.8)
       );
     }
 
     if (dominant.computeLuminance() < 0.5) {
-      return (
-        Colors.white,
-        Colors.white.withOpacity(0.8),
-        dominant.withOpacity(0.85),
-      );
+      return (Colors.white, Colors.white.withOpacity(0.8));
     } else {
-      return (
-        Colors.black.withOpacity(0.87),
-        Colors.black.withOpacity(0.6),
-        dominant.withOpacity(0.89),
-      );
+      return (Colors.black.withOpacity(0.87), Colors.black.withOpacity(0.6));
     }
   }
 }
