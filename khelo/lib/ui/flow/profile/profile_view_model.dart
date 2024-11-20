@@ -28,8 +28,8 @@ final profileStateProvider =
 });
 
 class ProfileViewNotifier extends StateNotifier<ProfileState> {
-  String iosAppId = '6480175424';
-  String webFallbackUrl = 'https://github.com/canopas/khelo';
+  static const String iosAppId = '6480175424';
+  static const String webFallbackUrl = 'https://github.com/canopas/khelo';
 
   final AuthService _authService;
   final DeviceService _deviceService;
@@ -119,7 +119,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
           : (!kIsWeb && Platform.isIOS)
               ? "itms-apps://itunes.apple.com/app/$iosAppId"
               : webFallbackUrl;
-      launchUrl(Uri.parse(targetUrl));
+      await launchUrl(Uri.parse(targetUrl));
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("ProfileViewNotifier: error while rate us -> $e");
