@@ -106,8 +106,14 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_search.svg
   String get icSearch => 'assets/images/ic_search.svg';
 
+  /// File path: assets/images/ic_share.svg
+  String get icShare => 'assets/images/ic_share.svg';
+
   /// File path: assets/images/ic_sign_out.svg
   String get icSignOut => 'assets/images/ic_sign_out.svg';
+
+  /// File path: assets/images/ic_star.svg
+  String get icStar => 'assets/images/ic_star.svg';
 
   /// File path: assets/images/ic_stats.svg
   String get icStats => 'assets/images/ic_stats.svg';
@@ -179,7 +185,9 @@ class $AssetsImagesGen {
         icSave,
         icScorer,
         icSearch,
+        icShare,
         icSignOut,
+        icStar,
         icStats,
         icTermsConditions,
         icTime,
