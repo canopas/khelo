@@ -50,8 +50,11 @@ class MatchScheduler {
   GroupedMatchMap scheduleMatchesByType() {
     switch (matchType) {
       case TournamentType.knockOut:
-        return scheduleKnockOutMatchesWithArguments(scheduledMatches, teams,
-            addInitialRound: true);
+        return scheduleKnockOutMatchesWithArguments(
+          scheduledMatches,
+          teams,
+          addInitialRound: true,
+        );
       case TournamentType.miniRobin:
         return scheduleMiniRoundRobinMatches();
       case TournamentType.boxLeague:

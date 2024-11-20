@@ -56,19 +56,7 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
         _addButton(
           context,
           onPressed: () {
-            final option = MatchGroup.values.toList();
-            if (state.matches.containsKey(MatchGroup.quarterfinal)) {
-              option.remove(MatchGroup.quarterfinal);
-            }
-
-            if (state.matches.containsKey(MatchGroup.semifinal)) {
-              option.remove(MatchGroup.semifinal);
-            }
-
-            if (state.matches.containsKey(MatchGroup.finals)) {
-              option.remove(MatchGroup.finals);
-            }
-
+            final option = notifier.getMatchGroupOption();
             showActionBottomSheet(
                 context: context,
                 items: option
@@ -161,6 +149,11 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
     final roundDisplay = group == MatchGroup.round
         ? "${group.getString(context)} $number"
         : group.getString(context);
+    final showAddButton =
+        (group == MatchGroup.quarterfinal && matches.length < 4) ||
+            (group == MatchGroup.semifinal && matches.length < 2) ||
+            (group == MatchGroup.finals && matches.isEmpty) ||
+            group == MatchGroup.round;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -178,13 +171,14 @@ class _MatchSelectionScreenState extends ConsumerState<MatchSelectionScreen> {
                   ),
                 ),
               ),
-              _addButton(context, onPressed: () {
-                AppRoute.addMatch(
-                  tournamentId: tournamentId,
-                  group: group,
-                  groupNumber: number,
-                ).push(context);
-              }),
+              if (showAddButton)
+                _addButton(context, onPressed: () {
+                  AppRoute.addMatch(
+                    tournamentId: tournamentId,
+                    group: group,
+                    groupNumber: number,
+                  ).push(context);
+                }),
             ],
           ),
         ),
