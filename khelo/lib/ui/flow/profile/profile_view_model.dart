@@ -28,7 +28,6 @@ final profileStateProvider =
 });
 
 class ProfileViewNotifier extends StateNotifier<ProfileState> {
-  static const String iosAppId = '6480175424';
   static const String webFallbackUrl = 'https://github.com/canopas/khelo';
 
   final AuthService _authService;
@@ -111,13 +110,13 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  void onRateUs() async {
+  Future<void> onRateUs() async {
     try {
       final packageName = await _deviceService.packageName;
       final targetUrl = (!kIsWeb && Platform.isAndroid)
           ? "market://details?id=$packageName"
           : (!kIsWeb && Platform.isIOS)
-              ? "itms-apps://itunes.apple.com/app/$iosAppId"
+              ? "itms-apps://itunes.apple.com/app/6480175424"
               : webFallbackUrl;
       await launchUrl(Uri.parse(targetUrl));
     } catch (e) {
@@ -126,9 +125,9 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  void onShareApp(String shareString) async {
+  Future<void> onShareApp(String shareString) async {
     try {
-      Share.share(shareString);
+      await Share.share(shareString);
     } catch (e) {
       state = state.copyWith(actionError: e);
       debugPrint("ProfileViewNotifier: error while share app -> $e");
