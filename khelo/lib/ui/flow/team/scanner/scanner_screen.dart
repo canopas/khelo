@@ -51,22 +51,26 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
                 ? context.l10n.add_team_already_added
                 : context.l10n.add_team_member_already_added);
       } else if (scannedId.isNotEmpty) {
-        switch (widget.target) {
-          case ScanTarget.team:
-            final team = await AppRoute.teamDetail(
-                    teamId: scannedId, showAddButton: true)
-                .push<TeamModel>(context);
-            if (mounted) context.pop(team);
-            break;
-          case ScanTarget.player:
-            final user = await AppRoute.userDetail(
-                    userId: scannedId, showAddButton: true)
-                .push<UserModel?>(context);
-            if (mounted) context.pop(user);
-            break;
-        }
+        _handleScanTarget(widget.target, scannedId);
       }
     });
+  }
+
+  void _handleScanTarget(ScanTarget target, String scannedId) async {
+    switch (widget.target) {
+      case ScanTarget.team:
+        final team =
+            await AppRoute.teamDetail(teamId: scannedId, showAddButton: true)
+                .push<TeamModel>(context);
+        if (mounted) context.pop(team);
+        break;
+      case ScanTarget.player:
+        final user =
+            await AppRoute.userDetail(userId: scannedId, showAddButton: true)
+                .push<UserModel?>(context);
+        if (mounted) context.pop(user);
+        break;
+    }
   }
 
   void _observeError() {
