@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../converter/timestamp_json_converter.dart';
@@ -209,6 +210,23 @@ extension DataMatchModel on MatchModel {
         overRemained >= 2 &&
         revised_target == null &&
         match_type == MatchType.limitedOvers;
+  }
+
+  double getRunRate(String teamId) {
+    if (!team_ids.contains(teamId)) return 0;
+
+    final team = teams.firstWhereOrNull((team) => team.team_id == teamId);
+    if (team == null) return 0;
+
+    final runs = team.run;
+    final overs = team.over;
+
+    if (overs == 0) {
+      return 0.0;
+    }
+
+    final runRate = runs / overs;
+    return double.parse(runRate.toStringAsFixed(2));
   }
 }
 

@@ -74,8 +74,7 @@ enum TournamentType {
   miniRobin(2, minTeamReq: 3),
   boxLeague(3, minTeamReq: 4),
   doubleOut(4, minTeamReq: 4),
-  superOver(5, minTeamReq: 2),
-  bestOf(6, minTeamReq: 2),
+  bestOfThree(6, minTeamReq: 2),
   custom(7, minTeamReq: 2);
 
   final int value;
