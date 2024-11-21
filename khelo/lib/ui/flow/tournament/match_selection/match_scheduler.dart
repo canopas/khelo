@@ -62,7 +62,8 @@ class MatchScheduler {
       case TournamentType.doubleOut:
         return scheduleDoubleOutMatches();
       case TournamentType.bestOf:
-        return scheduleBestOfMatches();
+        // return scheduleBestOfMatchesLoopingApproach();
+        return scheduleBestOfMatchesHybridApproach();
       case TournamentType.custom:
         return scheduledMatches;
     }
@@ -337,6 +338,80 @@ class MatchScheduler {
             1);
       }
     }
+    return additionalScheduledMatches;
+  }
+
+  GroupedMatchMap scheduleBestOfMatchesLoopingApproach() {
+    final GroupedMatchMap additionalScheduledMatches =
+        Map.from(scheduledMatches);
+    final List<TeamModel> teamPool = List.of(teams);
+
+    var currentGroup = MatchGroup.round;
+    var currentRound = 1;
+
+    while (teamPool.length > 1) {
+      final group =
+          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
+      final matches = group[currentRound] ?? [];
+      final expectedQualifiers = handleSingleBestOfThreePhase(
+          matches, teamPool, currentGroup, currentRound);
+      group[currentRound] = matches;
+
+      if (expectedQualifiers > 8) {
+        currentRound++;
+      } else if (expectedQualifiers > 4) {
+        currentRound = 1;
+        currentGroup = MatchGroup.quarterfinal;
+      } else if (expectedQualifiers > 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.semifinal;
+      } else if (expectedQualifiers == 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.finals;
+      }
+    }
+
+    return additionalScheduledMatches;
+  }
+
+  GroupedMatchMap scheduleBestOfMatchesHybridApproach() {
+    final GroupedMatchMap additionalScheduledMatches =
+        Map.from(scheduledMatches);
+    final List<TeamModel> teamPool = List.of(teams);
+
+    var currentGroup = MatchGroup.round;
+    var currentRound = 1;
+
+    while (teamPool.length > 1) {
+      final group =
+          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
+      final matches = group[currentRound] ?? [];
+      var expectedQualifiers = 0;
+
+      if (currentGroup == MatchGroup.round) {
+        expectedQualifiers = handleSingleBestOfThreePhase(
+            matches, teamPool, currentGroup, currentRound);
+      } else {
+        expectedQualifiers =
+            handleSingleKnockoutPhase(matches, teamPool, currentGroup, currentRound);
+      }
+
+      group[currentRound] = matches;
+
+      if (expectedQualifiers > 8) {
+        currentRound++;
+      } else if (expectedQualifiers > 4) {
+        currentRound = 1;
+        currentGroup = MatchGroup.quarterfinal;
+      } else if (expectedQualifiers > 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.semifinal;
+      } else if (expectedQualifiers == 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.finals;
+      }
+    }
+
     return additionalScheduledMatches;
   }
 
@@ -713,5 +788,125 @@ class MatchScheduler {
       teams.addAll(loserTeams);
     }
     return teamToReturn;
+  }
+
+  int handleSingleKnockoutPhase(List<MatchModel> matches, List<TeamModel> teamPool,
+      MatchGroup group, int number) {
+    removeAlreadyScheduledTeams(matches, teamPool);
+
+    final teamPairs = createKnockoutTeamPairs(teamPool);
+    addMatches(matches, teamPairs, group, number);
+
+    teamPool.removeWhere((team) => teamPairs
+        .any((element) => element.length == 2 && element.contains(team)));
+
+    addWinnerTeamsBackToTeam(matches, teamPool);
+
+    return matches.length;
+  }
+
+  int handleSingleBestOfThreePhase(
+      List<MatchModel> matches, List<TeamModel> teamPool, group, number) {
+    final existingPairs = getExistingTeamPairs(matches);
+    final remainedTeams = teamPool
+        .where((team) => !existingPairs.expand((pair) => pair).contains(team))
+        .toList();
+
+    final newPairs = createKnockoutTeamPairs(remainedTeams);
+    final allPairs = [...existingPairs, ...newPairs];
+
+    final winners =
+        handleBestOfThreeMatchesAndItsWinner(matches, allPairs, group, number);
+
+    teamPool.removeWhere((team) => allPairs.any((pair) =>
+        pair.length == 2 && pair.contains(team) && !winners.contains(team.id)));
+    return allPairs.length;
+  }
+
+  List<List<TeamModel>> getExistingTeamPairs(List<MatchModel> matches) {
+    final List<List<TeamModel>> pairs = [];
+    for (var match in matches) {
+      final pair = match.teams.map((e) => e.team).toList();
+      if (!pairs.map((e) => e.map((e) => e.id)).any((element) =>
+          element.contains(pair.first.id) && element.contains(pair.last.id))) {
+        pairs.add(pair);
+      }
+    }
+
+    return pairs;
+  }
+
+  List<String> handleBestOfThreeMatchesAndItsWinner(
+    List<MatchModel> groupMatches,
+    List<List<TeamModel>> pair,
+    MatchGroup group,
+    int number,
+  ) {
+    final List<String> winnerTeams = [];
+    for (var p in pair) {
+      final matchesForPair = groupMatches
+          .where(
+            (element) =>
+                element.team_ids.contains(p.first.id) &&
+                element.team_ids.contains(p.last.id),
+          )
+          .toList();
+      if (matchesForPair.isEmpty) {
+        addMatches(groupMatches, [p], group, number);
+        addMatches(groupMatches, [p], group, number);
+      } else if (matchesForPair.length == 1) {
+        addMatches(groupMatches, [p], group, number);
+      } else {
+        final finishedMatches =
+            matchesForPair.where((element) => element.matchResult != null);
+        if (finishedMatches.length >= 2) {
+          final winner = getWinnerTeam(
+            matchesForPair.toList(),
+            p.first.id,
+            p.last.id,
+          );
+          if (winner == null && matchesForPair.length == 2) {
+            addMatches(groupMatches, [p], group, number);
+          } else if (winner != null) {
+            winnerTeams.add(winner);
+          }
+        }
+      }
+    }
+    return winnerTeams;
+  }
+
+  String? getWinnerTeam(
+    List<MatchModel> matches,
+    String teamOne,
+    String teamTwo,
+  ) {
+    Map<String, int> winner = {teamOne: 0, teamTwo: 0};
+    for (var element in matches) {
+      final result = element.matchResult;
+      if (result == null) continue;
+
+      if (result.winType != WinnerByType.tie &&
+          winner.containsKey(result.teamId)) {
+        winner[result.teamId] = winner[result.teamId]! + 1;
+      } else if (result.winType == WinnerByType.tie) {
+        final runRateOne = element.getRunRate(teamOne);
+        final runRateTwo = element.getRunRate(teamTwo);
+        final win = (runRateOne > runRateTwo ? teamOne : teamTwo);
+        if (winner.containsKey(win)) {
+          winner[win] = winner[win]! + 1;
+        }
+      }
+    }
+    final maxWin = winner.values.max;
+
+    final maxWinners =
+        winner.entries.where((element) => element.value == maxWin);
+
+    if (maxWinners.length == 1) {
+      return maxWinners.first.key;
+    } else {
+      return null;
+    }
   }
 }
