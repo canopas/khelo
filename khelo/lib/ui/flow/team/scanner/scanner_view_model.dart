@@ -98,3 +98,5 @@ class ScannerState with _$ScannerState {
     @Default(false) bool hasPermission,
   }) = _ScannerState;
 }
+
+enum ScanTarget { player, team }

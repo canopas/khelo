@@ -23,6 +23,7 @@ import 'package:style/widgets/rounded_check_box.dart';
 import '../../../../components/create_team_cell.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../../app_route.dart';
+import '../scanner/scanner_view_model.dart';
 
 class SearchTeamScreen extends ConsumerStatefulWidget {
   final List<String>? excludedIds;
@@ -63,8 +64,9 @@ class _SearchTeamScreenState extends ConsumerState<SearchTeamScreen> {
           context,
           onPressed: () async {
             final team = await AppRoute.scannerScreen(
-                    isForTeam: true, addedIds: widget.excludedIds ?? [])
-                .push<TeamModel>(context);
+              target: ScanTarget.team,
+              addedIds: widget.excludedIds ?? [],
+            ).push<TeamModel>(context);
             if (context.mounted && team != null) notifier.onTeamCellTap(team);
           },
           icon: SvgPicture.asset(

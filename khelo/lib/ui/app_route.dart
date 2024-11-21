@@ -26,6 +26,7 @@ import 'package:khelo/ui/flow/team/add_team_member/contact_selection/contact_sel
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
+import 'package:khelo/ui/flow/team/scanner/scanner_view_model.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
 import 'package:khelo/ui/flow/tournament/detail/members/tournament_detail_members_screen.dart';
@@ -321,13 +322,15 @@ class AppRoute {
                 showAddButton: showAddButton,
               ));
 
-  static AppRoute scannerScreen(
-          {required List<String> addedIds, bool isForTeam = false}) =>
+  static AppRoute scannerScreen({
+    required List<String> addedIds,
+    ScanTarget target = ScanTarget.player,
+  }) =>
       AppRoute(
         pathScannerScreen,
         builder: (_) => ScannerScreen(
           addedIds: addedIds,
-          isForTeam: isForTeam,
+          target: target,
         ),
       );
 

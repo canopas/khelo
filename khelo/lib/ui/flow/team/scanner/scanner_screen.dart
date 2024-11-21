@@ -24,12 +24,12 @@ import '../../../../components/error_snackbar.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
   final List<String> addedIds;
-  final bool isForTeam;
+  final ScanTarget target;
 
   const ScannerScreen({
     super.key,
     required this.addedIds,
-    this.isForTeam = false,
+    this.target = ScanTarget.player,
   });
 
   @override
@@ -47,24 +47,23 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
       if (widget.addedIds.contains(scannedId)) {
         showSnackBar(
             context,
-            widget.isForTeam
+            widget.target == ScanTarget.team
                 ? context.l10n.add_team_already_added
                 : context.l10n.add_team_member_already_added);
       } else if (scannedId.isNotEmpty) {
-        if (widget.isForTeam) {
-          final team =
-              await AppRoute.teamDetail(teamId: scannedId, showAddButton: true)
-                  .push<TeamModel>(context);
-          if (mounted) {
-            context.pop(team);
-          }
-        } else {
-          final user =
-              await AppRoute.userDetail(userId: scannedId, showAddButton: true)
-                  .push<UserModel?>(context);
-          if (mounted) {
-            context.pop(user);
-          }
+        switch (widget.target) {
+          case ScanTarget.team:
+            final team = await AppRoute.teamDetail(
+                    teamId: scannedId, showAddButton: true)
+                .push<TeamModel>(context);
+            if (mounted) context.pop(team);
+            break;
+          case ScanTarget.player:
+            final user = await AppRoute.userDetail(
+                    userId: scannedId, showAddButton: true)
+                .push<UserModel?>(context);
+            if (mounted) context.pop(user);
+            break;
         }
       }
     });
