@@ -15,15 +15,15 @@ final scannerStateNotifierProvider =
 });
 
 class ScannerStateNotifier extends StateNotifier<ScannerState> {
-  List<String> _addedMembers = [];
+  List<String> _addedIds = [];
   StreamSubscription? _subscription;
 
   ScannerStateNotifier() : super(const ScannerState()) {
     _checkCameraPermission();
   }
 
-  void setData(List<String> addedMembers) {
-    _addedMembers = addedMembers;
+  void setData(List<String> addedIds) {
+    _addedIds = addedIds;
   }
 
   Future<void> _checkCameraPermission() async {
@@ -62,11 +62,11 @@ class ScannerStateNotifier extends StateNotifier<ScannerState> {
     _subscription = state.controller?.scannedDataStream.listen(
       (event) {
         final code = event.code;
-        if (!_addedMembers.contains(code)) {
+        if (!_addedIds.contains(code)) {
           _removeListeners();
         }
         state = state.copyWith(
-          userId: code ?? "",
+          scannedId: code ?? "",
         );
       },
       onError: (e) {
@@ -93,7 +93,7 @@ class ScannerState with _$ScannerState {
   const factory ScannerState({
     Object? error,
     QRViewController? controller,
-    @Default('') String userId,
+    @Default('') String scannedId,
     @Default(false) bool flashOn,
     @Default(false) bool hasPermission,
   }) = _ScannerState;

@@ -321,6 +321,7 @@
   "add_team_player_role_title": "Playing role",
   "add_team_player_add_via_contact_title": "Add via Contact",
   "add_team_players_text": "Players",
+  "add_team_already_added": "Team already added",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
 
   "scan_qr_code": "Scan QR code",

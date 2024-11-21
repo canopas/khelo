@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ScannerState {
   Object? get error => throw _privateConstructorUsedError;
   QRViewController? get controller => throw _privateConstructorUsedError;
-  String get userId => throw _privateConstructorUsedError;
+  String get scannedId => throw _privateConstructorUsedError;
   bool get flashOn => throw _privateConstructorUsedError;
   bool get hasPermission => throw _privateConstructorUsedError;
 
@@ -38,7 +38,7 @@ abstract class $ScannerStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       QRViewController? controller,
-      String userId,
+      String scannedId,
       bool flashOn,
       bool hasPermission});
 }
@@ -60,7 +60,7 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
   $Res call({
     Object? error = freezed,
     Object? controller = freezed,
-    Object? userId = null,
+    Object? scannedId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
   }) {
@@ -70,9 +70,9 @@ class _$ScannerStateCopyWithImpl<$Res, $Val extends ScannerState>
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
               as QRViewController?,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      scannedId: null == scannedId
+          ? _value.scannedId
+          : scannedId // ignore: cast_nullable_to_non_nullable
               as String,
       flashOn: null == flashOn
           ? _value.flashOn
@@ -97,7 +97,7 @@ abstract class _$$ScannerStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       QRViewController? controller,
-      String userId,
+      String scannedId,
       bool flashOn,
       bool hasPermission});
 }
@@ -117,7 +117,7 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? controller = freezed,
-    Object? userId = null,
+    Object? scannedId = null,
     Object? flashOn = null,
     Object? hasPermission = null,
   }) {
@@ -127,9 +127,9 @@ class __$$ScannerStateImplCopyWithImpl<$Res>
           ? _value.controller
           : controller // ignore: cast_nullable_to_non_nullable
               as QRViewController?,
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
+      scannedId: null == scannedId
+          ? _value.scannedId
+          : scannedId // ignore: cast_nullable_to_non_nullable
               as String,
       flashOn: null == flashOn
           ? _value.flashOn
@@ -149,7 +149,7 @@ class _$ScannerStateImpl implements _ScannerState {
   const _$ScannerStateImpl(
       {this.error,
       this.controller,
-      this.userId = '',
+      this.scannedId = '',
       this.flashOn = false,
       this.hasPermission = false});
 
@@ -159,7 +159,7 @@ class _$ScannerStateImpl implements _ScannerState {
   final QRViewController? controller;
   @override
   @JsonKey()
-  final String userId;
+  final String scannedId;
   @override
   @JsonKey()
   final bool flashOn;
@@ -169,7 +169,7 @@ class _$ScannerStateImpl implements _ScannerState {
 
   @override
   String toString() {
-    return 'ScannerState(error: $error, controller: $controller, userId: $userId, flashOn: $flashOn, hasPermission: $hasPermission)';
+    return 'ScannerState(error: $error, controller: $controller, scannedId: $scannedId, flashOn: $flashOn, hasPermission: $hasPermission)';
   }
 
   @override
@@ -180,7 +180,8 @@ class _$ScannerStateImpl implements _ScannerState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.controller, controller) ||
                 other.controller == controller) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.scannedId, scannedId) ||
+                other.scannedId == scannedId) &&
             (identical(other.flashOn, flashOn) || other.flashOn == flashOn) &&
             (identical(other.hasPermission, hasPermission) ||
                 other.hasPermission == hasPermission));
@@ -191,7 +192,7 @@ class _$ScannerStateImpl implements _ScannerState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       controller,
-      userId,
+      scannedId,
       flashOn,
       hasPermission);
 
@@ -208,7 +209,7 @@ abstract class _ScannerState implements ScannerState {
   const factory _ScannerState(
       {final Object? error,
       final QRViewController? controller,
-      final String userId,
+      final String scannedId,
       final bool flashOn,
       final bool hasPermission}) = _$ScannerStateImpl;
 
@@ -217,7 +218,7 @@ abstract class _ScannerState implements ScannerState {
   @override
   QRViewController? get controller;
   @override
-  String get userId;
+  String get scannedId;
   @override
   bool get flashOn;
   @override
