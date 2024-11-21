@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,9 +23,14 @@ import '../../../../components/app_page.dart';
 import '../../../../components/error_snackbar.dart';
 
 class ScannerScreen extends ConsumerStatefulWidget {
-  final List<String> addedMembers;
+  final List<String> addedIds;
+  final ScanTarget target;
 
-  const ScannerScreen({super.key, required this.addedMembers});
+  const ScannerScreen({
+    super.key,
+    required this.addedIds,
+    this.target = ScanTarget.player,
+  });
 
   @override
   ConsumerState<ScannerScreen> createState() => _ScannerScreenState();
@@ -36,19 +42,35 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   late final ScannerStateNotifier _notifier;
 
   void _observeBarcode() {
-    ref.listen(scannerStateNotifierProvider.select((value) => value.userId),
-        (prev, userId) async {
-      if (widget.addedMembers.contains(userId)) {
-        showSnackBar(context, context.l10n.add_team_member_already_added);
-      } else if (userId.isNotEmpty) {
-        final user =
-            await AppRoute.userDetail(userId: userId, showAddButton: true)
-                .push<UserModel?>(context);
-        if (mounted) {
-          context.pop(user);
-        }
+    ref.listen(scannerStateNotifierProvider.select((value) => value.scannedId),
+        (prev, scannedId) async {
+      if (widget.addedIds.contains(scannedId)) {
+        showSnackBar(
+            context,
+            widget.target == ScanTarget.team
+                ? context.l10n.add_team_already_added
+                : context.l10n.add_team_member_already_added);
+      } else if (scannedId.isNotEmpty) {
+        _handleScanTarget(widget.target, scannedId);
       }
     });
+  }
+
+  void _handleScanTarget(ScanTarget target, String scannedId) async {
+    switch (widget.target) {
+      case ScanTarget.team:
+        final team =
+            await AppRoute.teamDetail(teamId: scannedId, showAddButton: true)
+                .push<TeamModel>(context);
+        if (mounted) context.pop(team);
+        break;
+      case ScanTarget.player:
+        final user =
+            await AppRoute.userDetail(userId: scannedId, showAddButton: true)
+                .push<UserModel?>(context);
+        if (mounted) context.pop(user);
+        break;
+    }
   }
 
   void _observeError() {
@@ -63,7 +85,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
   @override
   void initState() {
     _notifier = ref.read(scannerStateNotifierProvider.notifier);
-    runPostFrame(() => _notifier.setData(widget.addedMembers));
+    runPostFrame(() => _notifier.setData(widget.addedIds));
     super.initState();
   }
 

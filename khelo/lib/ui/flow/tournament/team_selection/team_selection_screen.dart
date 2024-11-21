@@ -19,6 +19,8 @@ import '../../../../components/error_screen.dart';
 import '../../../../components/error_snackbar.dart';
 import '../../../../domain/extensions/widget_extension.dart';
 import '../../../../gen/assets.gen.dart';
+import '../../../app_route.dart';
+import '../../team/scanner/scanner_view_model.dart';
 import '../../team/search_team/components/team_member_sheet.dart';
 import 'component/team_profile_cell.dart';
 
@@ -52,6 +54,23 @@ class _TeamSelectionScreenState extends ConsumerState<TeamSelectionScreen> {
     return AppPage(
       title: context.l10n.team_selection_screen_title,
       actions: [
+        actionButton(
+          context,
+          onPressed: () async {
+            final team = await AppRoute.scannerScreen(
+              target: ScanTarget.team,
+              addedIds: widget.selectedTeams?.map((e) => e.id).toList() ?? [],
+            ).push<TeamModel>(context);
+            if (context.mounted && team != null) notifier.onTeamCellTap(team);
+          },
+          icon: SvgPicture.asset(
+            Assets.images.icQrCode,
+            colorFilter: ColorFilter.mode(
+              context.colorScheme.textPrimary,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
         actionButton(
           context,
           onPressed: () async {
