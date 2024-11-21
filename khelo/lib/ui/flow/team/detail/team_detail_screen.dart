@@ -15,6 +15,7 @@ import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/more_option_button.dart';
+import 'package:style/button/secondary_button.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -25,8 +26,13 @@ import 'components/team_detail_stat_content.dart';
 
 class TeamDetailScreen extends ConsumerStatefulWidget {
   final String teamId;
+  final bool showAddButton;
 
-  const TeamDetailScreen({super.key, required this.teamId});
+  const TeamDetailScreen({
+    super.key,
+    required this.teamId,
+    required this.showAddButton,
+  });
 
   @override
   ConsumerState createState() => _TeamDetailScreenState();
@@ -66,14 +72,20 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             size: 24,
             color: context.colorScheme.textPrimary,
           )),
-      actions: (state.team?.isAdminOrOwner(state.currentUserId) ?? false)
-          ? [
-              moreOptionButton(
-                context,
-                onPressed: () => _moreActionButton(context, notifier, state),
-              ),
-            ]
-          : null,
+      actions: [
+        if (widget.showAddButton)
+          SecondaryButton(
+            context.l10n.common_add_title,
+            enabled: !state.loading,
+            onPressed: () => context.pop(state.team),
+          ),
+        if (!widget.showAddButton &&
+            (state.team?.isAdminOrOwner(state.currentUserId) ?? false))
+          moreOptionButton(
+            context,
+            onPressed: () => _moreActionButton(context, notifier, state),
+          ),
+      ],
       body: Builder(builder: (context) {
         return _body(context, state);
       }),

@@ -26,6 +26,7 @@ import 'package:khelo/ui/flow/team/add_team_member/contact_selection/contact_sel
 import 'package:khelo/ui/flow/team/detail/make_admin/make_team_admin_screen.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_screen.dart';
 import 'package:khelo/ui/flow/team/scanner/scanner_screen.dart';
+import 'package:khelo/ui/flow/team/scanner/scanner_view_model.dart';
 import 'package:khelo/ui/flow/team/search_team/search_team_screen.dart';
 import 'package:khelo/ui/flow/tournament/add/add_tournament_screen.dart';
 import 'package:khelo/ui/flow/tournament/detail/members/tournament_detail_members_screen.dart';
@@ -210,9 +211,9 @@ class AppRoute {
       );
 
   static AppRoute matchSelection({required String tournamentId}) => AppRoute(
-    pathMatchSelection,
-    builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
-  );
+        pathMatchSelection,
+        builder: (_) => MatchSelectionScreen(tournamentId: tournamentId),
+      );
 
   static AppRoute tournamentDetail({required String tournamentId}) => AppRoute(
         pathTournamentDetail,
@@ -301,9 +302,15 @@ class AppRoute {
       pathEditProfile,
       builder: (_) => EditProfileScreen(isToCreateAccount: isToCreateAccount));
 
-  static AppRoute teamDetail({required String teamId}) =>
+  static AppRoute teamDetail({
+    required String teamId,
+    bool showAddButton = false,
+  }) =>
       AppRoute(pathTeamDetail,
-          builder: (_) => TeamDetailScreen(teamId: teamId));
+          builder: (_) => TeamDetailScreen(
+                teamId: teamId,
+                showAddButton: showAddButton,
+              ));
 
   static AppRoute userDetail({
     required String userId,
@@ -315,10 +322,16 @@ class AppRoute {
                 showAddButton: showAddButton,
               ));
 
-  static AppRoute scannerScreen({required List<String> addedMembers}) =>
+  static AppRoute scannerScreen({
+    required List<String> addedIds,
+    ScanTarget target = ScanTarget.player,
+  }) =>
       AppRoute(
         pathScannerScreen,
-        builder: (_) => ScannerScreen(addedMembers: addedMembers),
+        builder: (_) => ScannerScreen(
+          addedIds: addedIds,
+          target: target,
+        ),
       );
 
   static AppRoute qrCodeView(

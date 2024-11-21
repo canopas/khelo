@@ -1,12 +1,15 @@
+import 'dart:io';
+
 import 'package:data/api/user/user_models.dart';
 import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/device/device_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 part 'profile_view_model.freezed.dart';
@@ -25,6 +28,8 @@ final profileStateProvider =
 });
 
 class ProfileViewNotifier extends StateNotifier<ProfileState> {
+  static const String webFallbackUrl = 'https://github.com/canopas/khelo';
+
   final AuthService _authService;
   final DeviceService _deviceService;
   final UserService _userService;
@@ -102,6 +107,30 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
       state = state.copyWith(shouldShowNotificationBanner: !isGranted);
     } else {
       state = state.copyWith(shouldShowNotificationBanner: false);
+    }
+  }
+
+  Future<void> onRateUs() async {
+    try {
+      final packageName = await _deviceService.packageName;
+      final targetUrl = (!kIsWeb && Platform.isAndroid)
+          ? "market://details?id=$packageName"
+          : (!kIsWeb && Platform.isIOS)
+              ? "itms-apps://itunes.apple.com/app/6480175424"
+              : webFallbackUrl;
+      await launchUrl(Uri.parse(targetUrl));
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint("ProfileViewNotifier: error while rate us -> $e");
+    }
+  }
+
+  Future<void> onShareApp(String shareString) async {
+    try {
+      await Share.share(shareString);
+    } catch (e) {
+      state = state.copyWith(actionError: e);
+      debugPrint("ProfileViewNotifier: error while share app -> $e");
     }
   }
 }
