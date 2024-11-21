@@ -61,9 +61,8 @@ class MatchScheduler {
         return scheduleBoxLeagueMatches();
       case TournamentType.doubleOut:
         return scheduleDoubleOutMatches();
-      case TournamentType.bestOf:
-        // return scheduleBestOfMatchesLoopingApproach();
-        return scheduleBestOfMatchesHybridApproach();
+      case TournamentType.bestOfThree:
+        return scheduleBestOfThreeMatches();
       case TournamentType.custom:
         return scheduledMatches;
     }
@@ -341,40 +340,7 @@ class MatchScheduler {
     return additionalScheduledMatches;
   }
 
-  GroupedMatchMap scheduleBestOfMatchesLoopingApproach() {
-    final GroupedMatchMap additionalScheduledMatches =
-        Map.from(scheduledMatches);
-    final List<TeamModel> teamPool = List.of(teams);
-
-    var currentGroup = MatchGroup.round;
-    var currentRound = 1;
-
-    while (teamPool.length > 1) {
-      final group =
-          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
-      final matches = group[currentRound] ?? [];
-      final expectedQualifiers = handleSingleBestOfThreePhase(
-          matches, teamPool, currentGroup, currentRound);
-      group[currentRound] = matches;
-
-      if (expectedQualifiers > 8) {
-        currentRound++;
-      } else if (expectedQualifiers > 4) {
-        currentRound = 1;
-        currentGroup = MatchGroup.quarterfinal;
-      } else if (expectedQualifiers > 2) {
-        currentRound = 1;
-        currentGroup = MatchGroup.semifinal;
-      } else if (expectedQualifiers == 2) {
-        currentRound = 1;
-        currentGroup = MatchGroup.finals;
-      }
-    }
-
-    return additionalScheduledMatches;
-  }
-
-  GroupedMatchMap scheduleBestOfMatchesHybridApproach() {
+  GroupedMatchMap scheduleBestOfThreeMatches() {
     final GroupedMatchMap additionalScheduledMatches =
         Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
@@ -392,8 +358,12 @@ class MatchScheduler {
         expectedQualifiers = handleSingleBestOfThreePhase(
             matches, teamPool, currentGroup, currentRound);
       } else {
-        expectedQualifiers =
-            handleSingleKnockoutPhase(matches, teamPool, currentGroup, currentRound);
+        expectedQualifiers = handleSingleKnockoutPhase(
+          matches,
+          teamPool,
+          currentGroup,
+          currentRound,
+        );
       }
 
       group[currentRound] = matches;
@@ -413,137 +383,6 @@ class MatchScheduler {
     }
 
     return additionalScheduledMatches;
-  }
-
-  List<List<TeamModel>> createTeamPairsForBestOfThree(List<TeamModel> teams) {
-    final List<List<TeamModel>> pairs = [];
-    for (int i = 0; i < teams.length; i++) {
-      for (int j = i + 1; j < teams.length; j++) {
-        pairs.add([teams[i], teams[j]]);
-      }
-    }
-    return pairs;
-  }
-
-  MatchModel createBestOfThreeMatch(
-    TeamModel teamA,
-    TeamModel teamB,
-    MatchGroup group,
-    int roundNumber,
-  ) {
-    return MatchModel(
-      id: '',
-      teams: [
-        MatchTeamModel(team_id: teamA.id, team: teamA),
-        MatchTeamModel(team_id: teamB.id, team: teamB),
-      ],
-      match_type: MatchType.limitedOvers,
-      number_of_over: 10,
-      over_per_bowler: 2,
-      city: '',
-      ground: '',
-      ball_type: BallType.leather,
-      pitch_type: PitchType.rough,
-      created_by: '',
-      match_status: MatchStatus.yetToStart,
-      match_group: group,
-      match_group_number: roundNumber,
-    );
-  }
-
-  GroupedMatchMap scheduleBestOfMatches() {
-    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
-    final List<TeamModel> teamPool = List.from(teams);
-
-    final roundOne = additionalScheduledMatches[MatchGroup.round]?[1] ?? [];
-    final quarterfinal =
-        additionalScheduledMatches[MatchGroup.quarterfinal]?[1] ?? [];
-    final semifinal =
-        additionalScheduledMatches[MatchGroup.semifinal]?[1] ?? [];
-    final finals = additionalScheduledMatches[MatchGroup.finals]?[1] ?? [];
-
-    final roundWinners =
-        scheduleBestOfMatchesForRound(roundOne, teamPool, MatchGroup.round);
-    additionalScheduledMatches.addAll({
-      MatchGroup.round: {1: roundOne}
-    });
-
-    List<TeamModel> qualifiedTeams = roundWinners;
-    if (roundWinners.length > 4) {
-      qualifiedTeams = scheduleBestOfMatchesForRound(
-        quarterfinal,
-        roundWinners,
-        MatchGroup.quarterfinal,
-      );
-      additionalScheduledMatches.addAll({
-        MatchGroup.quarterfinal: {1: quarterfinal}
-      });
-    }
-
-    // Semifinals
-    if (qualifiedTeams.length > 2) {
-      qualifiedTeams = scheduleBestOfMatchesForRound(
-          semifinal, qualifiedTeams, MatchGroup.semifinal);
-      additionalScheduledMatches.addAll({
-        MatchGroup.semifinal: {1: semifinal}
-      });
-    }
-
-    // Finals
-    if (qualifiedTeams.length == 2) {
-      scheduleBestOfMatchesForRound(
-        finals,
-        qualifiedTeams,
-        MatchGroup.finals,
-      );
-      additionalScheduledMatches.addAll({
-        MatchGroup.finals: {1: finals}
-      });
-    }
-
-    return additionalScheduledMatches;
-  }
-
-  List<TeamModel> scheduleBestOfMatchesForRound(
-    List<MatchModel> matches,
-    List<TeamModel> teamPool,
-    MatchGroup group, {
-    bool isTiebreaker = false,
-  }) {
-    final Map<String, TeamModel> roundWinners = {};
-    final List<List<TeamModel>> teamPairs =
-        createTeamPairsForBestOfThree(teamPool);
-
-    for (var pair in teamPairs) {
-      final teamA = pair[0];
-      final teamB = pair[1];
-
-      final existingMatches = matches.where((match) {
-        return match.teams.any((team) => pair.contains(team.team));
-      }).toList();
-
-      for (int i = existingMatches.length; i < 2; i++) {
-        final newMatch = createBestOfThreeMatch(teamA, teamB, group, 1);
-        matches.add(newMatch);
-      }
-
-      final teamAWins = existingMatches
-          .where((match) => match.matchResult?.teamId == teamA.id)
-          .length;
-      final teamBWins = existingMatches
-          .where((match) => match.matchResult?.teamId == teamB.id)
-          .length;
-
-      if (teamAWins == 1 && teamBWins == 1 && !isTiebreaker) {
-        matches.add(createBestOfThreeMatch(teamA, teamB, group, 1));
-      } else if (teamAWins == 2) {
-        roundWinners[teamA.id] = teamA;
-      } else if (teamBWins == 2) {
-        roundWinners[teamB.id] = teamB;
-      }
-    }
-
-    return roundWinners.values.toList();
   }
 
   List<TeamPoints> calculateTeamPoints(
@@ -790,8 +629,12 @@ class MatchScheduler {
     return teamToReturn;
   }
 
-  int handleSingleKnockoutPhase(List<MatchModel> matches, List<TeamModel> teamPool,
-      MatchGroup group, int number) {
+  int handleSingleKnockoutPhase(
+    List<MatchModel> matches,
+    List<TeamModel> teamPool,
+    MatchGroup group,
+    int number,
+  ) {
     removeAlreadyScheduledTeams(matches, teamPool);
 
     final teamPairs = createKnockoutTeamPairs(teamPool);
@@ -892,7 +735,18 @@ class MatchScheduler {
       } else if (result.winType == WinnerByType.tie) {
         final runRateOne = element.getRunRate(teamOne);
         final runRateTwo = element.getRunRate(teamTwo);
-        final win = (runRateOne > runRateTwo ? teamOne : teamTwo);
+        String? win;
+        if (runRateOne != runRateTwo) {
+          win = (runRateOne > runRateTwo ? teamOne : teamTwo);
+        } else {
+          final wicketsOne = element.teams
+              .firstWhere((team) => team.team.id == teamOne)
+              .wicket;
+          final wicketsTwo = element.teams
+              .firstWhere((team) => team.team.id == teamTwo)
+              .wicket;
+          win = (wicketsOne > wicketsTwo ? teamOne : teamTwo);
+        }
         if (winner.containsKey(win)) {
           winner[win] = winner[win]! + 1;
         }
