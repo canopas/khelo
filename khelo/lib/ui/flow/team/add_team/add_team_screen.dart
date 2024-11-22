@@ -96,7 +96,9 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
     return Stack(
       children: [
         ListView(
-          padding: context.mediaQueryPadding + const EdgeInsets.all(16) + BottomStickyOverlay.padding,
+          padding: context.mediaQueryPadding +
+              const EdgeInsets.all(16) +
+              BottomStickyOverlay.padding,
           children: [
             ProfileImageAvatar(
               size: profileViewHeight,
@@ -105,8 +107,10 @@ class _AddTeamScreenState extends ConsumerState<AddTeamScreen> {
               imageUrl: state.editTeam?.profile_img_url,
               filePath: state.filePath,
               onEditButtonTap: () async {
-                final imagePath =
-                    await ImagePickerSheet.show<String>(context, true);
+                final imagePath = await ImagePickerSheet.show<String>(
+                  context,
+                  allowCrop: true,
+                );
                 if (imagePath != null) {
                   notifier.onImageSelect(imagePath);
                 }

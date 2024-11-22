@@ -14,8 +14,8 @@ import '../gen/assets.gen.dart';
 
 class ImagePickerSheet extends ConsumerWidget {
   static Future<T?> show<T>(
-    BuildContext context,
-    bool allowCrop, {
+    BuildContext context, {
+    required bool allowCrop,
     bool cropOriginal = false,
   }) {
     HapticFeedback.mediumImpact();
@@ -169,7 +169,11 @@ class ImagePickerSheet extends ConsumerWidget {
         ),
         IOSUiSettings(
           title: context.l10n.image_picker_crop_image_title,
-          aspectRatioPresets: [CropAspectRatioPreset.square],
+          aspectRatioPresets: [
+            cropOriginal
+                ? CropAspectRatioPreset.original
+                : CropAspectRatioPreset.square
+          ],
         ),
         WebUiSettings(context: context),
       ],

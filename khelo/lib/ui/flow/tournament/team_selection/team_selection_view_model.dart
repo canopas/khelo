@@ -103,8 +103,6 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
 
   void onTeamCellTap(TeamModel team) {
     state = state.copyWith(showSelectionError: false);
-    final playersCount =
-        (team.players.where((player) => player.user.isActive).toList()).length;
 
     final isAlreadySelected =
         state.selectedTeams.map((e) => e.id).contains(team.id);
@@ -113,6 +111,8 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
     if (isAlreadySelected) {
       teams.removeWhere((e) => e.id == team.id);
     } else {
+      final playersCount = team.players.where((player) => player.user.isActive).length;
+
       if (playersCount >= 2) {
         teams.add(team);
       } else {

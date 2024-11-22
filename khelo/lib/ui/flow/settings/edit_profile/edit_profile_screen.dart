@@ -78,8 +78,10 @@ class EditProfileScreen extends ConsumerWidget {
                     filePath: state.filePath,
                     isLoading: state.isImageUploading,
                     onEditButtonTap: () async {
-                      final imagePath =
-                          await ImagePickerSheet.show<String>(context, true);
+                      final imagePath = await ImagePickerSheet.show<String>(
+                        context,
+                        allowCrop: true,
+                      );
                       if (imagePath != null) {
                         notifier.onImageChange(imagePath);
                       }
