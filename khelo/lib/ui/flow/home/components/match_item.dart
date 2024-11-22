@@ -24,7 +24,7 @@ class MatchItem extends StatelessWidget {
       onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
       child: MediaQuery.withNoTextScaling(
         child: Container(
-          width: context.mediaQuerySize.width * 0.83,
+          width: 360,
           padding: const EdgeInsets.all(16),
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(

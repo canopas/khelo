@@ -13,7 +13,11 @@ import 'package:style/text/app_text_style.dart';
 import '../gen/assets.gen.dart';
 
 class ImagePickerSheet extends ConsumerWidget {
-  static Future<T?> show<T>(BuildContext context, bool allowCrop) {
+  static Future<T?> show<T>(
+    BuildContext context, {
+    required bool allowCrop,
+    bool cropOriginal = false,
+  }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(
       context: context,
@@ -22,6 +26,7 @@ class ImagePickerSheet extends ConsumerWidget {
       builder: (context) {
         return ImagePickerSheet(
             allowCrop: allowCrop,
+            cropOriginal: cropOriginal,
             onPop: (String? imagePath) {
               context.pop(imagePath);
             });
@@ -30,9 +35,15 @@ class ImagePickerSheet extends ConsumerWidget {
   }
 
   final bool allowCrop;
+  final bool cropOriginal;
   final void Function(String? imagePath) onPop;
 
-  ImagePickerSheet({super.key, required this.allowCrop, required this.onPop});
+  ImagePickerSheet({
+    super.key,
+    required this.allowCrop,
+    required this.onPop,
+    this.cropOriginal = false,
+  });
 
   final ImagePicker _picker = ImagePicker();
 
@@ -150,11 +161,19 @@ class ImagePickerSheet extends ConsumerWidget {
           toolbarWidgetColor: context.colorScheme.onPrimary,
           initAspectRatio: CropAspectRatioPreset.square,
           lockAspectRatio: true,
-          aspectRatioPresets: [CropAspectRatioPreset.square],
+          aspectRatioPresets: [
+            cropOriginal
+                ? CropAspectRatioPreset.original
+                : CropAspectRatioPreset.square
+          ],
         ),
         IOSUiSettings(
           title: context.l10n.image_picker_crop_image_title,
-          aspectRatioPresets: [CropAspectRatioPreset.square],
+          aspectRatioPresets: [
+            cropOriginal
+                ? CropAspectRatioPreset.original
+                : CropAspectRatioPreset.square
+          ],
         ),
         WebUiSettings(context: context),
       ],

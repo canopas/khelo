@@ -95,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ? _content(context, state)
             : SizedBox(
                 height: context.mediaQuerySize.height /
-                    (state.tournaments.isEmpty ? 0.5 : 2),
+                    (state.tournaments.isEmpty ? 1.3 : 2),
                 child: EmptyScreen(
                   title: context.l10n.home_screen_no_matches_title,
                   description:
@@ -145,6 +145,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     List<TournamentModel> tournaments,
   ) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _header(
           context,

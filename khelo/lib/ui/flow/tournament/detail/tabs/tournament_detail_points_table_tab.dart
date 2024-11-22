@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
+import 'package:khelo/ui/app_route.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
@@ -94,21 +96,24 @@ class TournamentDetailPointsTableTab extends ConsumerWidget {
   }
 
   DataCell _teamProfileDataCell(BuildContext context, TeamModel team) {
-    return DataCell(Row(
-      children: [
-        ImageAvatar(
-          initial: team.name_initial ?? team.name.initials(limit: 1),
-          imageUrl: team.profile_img_url,
-          size: 32,
-        ),
-        const SizedBox(width: 16),
-        Text(
-          team.name_initial ?? team.name.initials(limit: 2),
-          style: AppTextStyle.subtitle2.copyWith(
-            color: context.colorScheme.textPrimary,
+    return DataCell(OnTapScale(
+      onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
+      child: Row(
+        children: [
+          ImageAvatar(
+            initial: team.name_initial ?? team.name.initials(limit: 1),
+            imageUrl: team.profile_img_url,
+            size: 32,
           ),
-        )
-      ],
+          const SizedBox(width: 16),
+          Text(
+            team.name_initial ?? team.name.initials(limit: 2),
+            style: AppTextStyle.subtitle2.copyWith(
+              color: context.colorScheme.textPrimary,
+            ),
+          )
+        ],
+      ),
     ));
   }
 

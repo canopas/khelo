@@ -283,7 +283,11 @@ class _AddTournamentScreenState extends ConsumerState<AddTournamentScreen> {
   }
 
   void _pickImage({bool isBanner = false}) async {
-    final imagePath = await ImagePickerSheet.show<String>(context, true);
+    final imagePath = await ImagePickerSheet.show<String>(
+      context,
+      allowCrop: true,
+      cropOriginal: isBanner,
+    );
     if (imagePath != null) {
       notifier.onImageChange(imagePath: imagePath, isBanner: isBanner);
     }

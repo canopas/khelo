@@ -818,9 +818,9 @@ extension BallScoreList on List<BallScoreModel> {
         .where(
           (element) =>
               element.wicket_type != null &&
-              (element.wicket_type == WicketType.retired ||
-                  element.wicket_type == WicketType.retiredHurt ||
-                  element.wicket_type == WicketType.timedOut),
+              element.wicket_type != WicketType.retired &&
+              element.wicket_type != WicketType.retiredHurt &&
+              element.wicket_type != WicketType.timedOut,
         )
         .length;
 
