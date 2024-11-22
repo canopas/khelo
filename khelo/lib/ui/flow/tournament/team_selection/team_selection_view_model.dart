@@ -105,20 +105,21 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
     state = state.copyWith(showSelectionError: false);
     final playersCount =
         (team.players.where((player) => player.user.isActive).toList()).length;
-    if (playersCount >= 2) {
-      final isAlreadySelected =
-          state.selectedTeams.map((e) => e.id).contains(team.id);
 
-      final teams = state.selectedTeams.toList();
-      if (isAlreadySelected) {
-        teams.removeWhere((e) => e.id == team.id);
-      } else {
-        teams.add(team);
-      }
-      state = state.copyWith(selectedTeams: teams);
+    final isAlreadySelected =
+        state.selectedTeams.map((e) => e.id).contains(team.id);
+
+    final teams = state.selectedTeams.toList();
+    if (isAlreadySelected) {
+      teams.removeWhere((e) => e.id == team.id);
     } else {
-      state = state.copyWith(showSelectionError: true);
+      if (playersCount >= 2) {
+        teams.add(team);
+      } else {
+        state = state.copyWith(showSelectionError: true);
+      }
     }
+    state = state.copyWith(selectedTeams: teams);
   }
 
   List<TeamModel> getSelectedTeamOfOtherUser() {

@@ -952,7 +952,7 @@
   "edit_profile_delete_account_btn_title": "Delete account",
   "edit_profile_delete_account_description_text": "This can not undone. if you delete your account, your data will be gone forever.",
   "transfer_teams_title" : "Before You Go...",
-  "transfer_teams_description" : "We're sorry to see you go. Before deleting your account, please:\n• Assign new owners and admins for your teams or delete the teams\n• Transfer scoring for ongoing matches\n• Remove any scheduled matches\nThis will ensure everything is properly managed after you leave.",
+  "transfer_teams_description" : "We're sorry to see you go. Before deleting your account, please:\n• Assign new owners and admins for your teams or delete the teams\n• Transfer scoring for ongoing matches\n• Remove any scheduled matches\n•Transfer or assign responsibilities for ongoing tournaments\nThis will ensure everything is properly managed after you leave.",
   "transfer_teams_go_to_my_cricket" : "Go to My Cricket",
 
   "profile_settings_title": "Settings",

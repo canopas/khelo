@@ -6,6 +6,7 @@ import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/file_upload/file_upload_service.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
+import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/storage/app_preferences.dart';
 import 'package:data/storage/provider/preferences_provider.dart';
@@ -27,6 +28,7 @@ final editProfileStateProvider = StateNotifierProvider.autoDispose<
     ref.read(authServiceProvider),
     ref.read(teamServiceProvider),
     ref.read(matchServiceProvider),
+    ref.read(tournamentServiceProvider),
     ref.read(currentUserPod),
     ref.read(currentUserJsonPod.notifier),
   );
@@ -40,6 +42,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
   final AuthService _authService;
   final TeamService _teamService;
   final MatchService _matchService;
+  final TournamentService _tournamentService;
   final PreferenceNotifier<String?> _userJsonController;
 
   EditProfileViewNotifier(
@@ -48,6 +51,7 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
     this._authService,
     this._teamService,
     this._matchService,
+    this._tournamentService,
     UserModel? user,
     this._userJsonController,
   ) : super(EditProfileState(
@@ -190,11 +194,12 @@ class EditProfileViewNotifier extends StateNotifier<EditProfileState> {
         showTransferTeamsSheet: false,
       );
 
-      final [matchCount, teamCount] = await Future.wait([
+      final [matchCount, teamCount, tournamentCount] = await Future.wait([
         _matchService.getUserOwnedMatchesCount(userId),
-        _teamService.getUserOwnedTeamsCount(userId)
+        _teamService.getUserOwnedTeamsCount(userId),
+        _tournamentService.getUserOwnedTournamentsCount(userId)
       ]);
-      if (teamCount == 0 && matchCount == 0) {
+      if (teamCount == 0 && matchCount == 0 && tournamentCount == 0) {
         state = state.copyWith(showDeleteConfirmationDialog: true);
       } else {
         state = state.copyWith(showTransferTeamsSheet: true);

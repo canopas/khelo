@@ -7,12 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/chip_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 import '../../../../../components/empty_screen.dart';
 import '../../../../../components/image_avatar.dart';
+import '../../../../app_route.dart';
 import '../components/filter_tab_view.dart';
 import '../tournament_detail_view_model.dart';
 
@@ -148,38 +150,41 @@ class TournamentDetailStatsTab extends ConsumerWidget {
 
   DataCell _playerProfileDataCell(BuildContext context, UserModel player) {
     return DataCell(
-      Row(
-        children: [
-          ImageAvatar(
-            size: 40,
-            initial: player.nameInitial,
-            imageUrl: player.profile_img_url,
-          ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  player.name ?? '',
-                  style: AppTextStyle.body1.copyWith(
-                    color: context.colorScheme.textPrimary,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (player.player_role != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    player.player_role!.getString(context),
-                    style: AppTextStyle.caption
-                        .copyWith(color: context.colorScheme.textSecondary),
-                  )
-                ],
-              ],
+      OnTapScale(
+        onTap: () => AppRoute.userDetail(userId: player.id).push(context),
+        child: Row(
+          children: [
+            ImageAvatar(
+              size: 40,
+              initial: player.nameInitial,
+              imageUrl: player.profile_img_url,
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    player.name ?? '',
+                    style: AppTextStyle.body1.copyWith(
+                      color: context.colorScheme.textPrimary,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  if (player.player_role != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      player.player_role!.getString(context),
+                      style: AppTextStyle.caption
+                          .copyWith(color: context.colorScheme.textSecondary),
+                    )
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

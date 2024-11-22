@@ -128,6 +128,21 @@ class TournamentService {
     return keyStats.where((element) => element.player.isActive).toList();
   }
 
+  Future<int> getUserOwnedTournamentsCount(String userId) {
+    final currentPlayer = TournamentMember(
+      id: userId,
+      role: TournamentMemberRole.organizer,
+    );
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.createdBy, isEqualTo: userId),
+      Filter(FireStoreConst.members, arrayContains: currentPlayer.toJson()),
+    );
+    return _tournamentCollection.where(filter).count().get().then((snapshot) {
+      return snapshot.count ?? 0;
+    }).catchError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
   Stream<List<TournamentModel>> streamActiveTournaments() {
     final currentDate = DateTime.now();
     final past30DaysDate = currentDate.subtract(Duration(days: 30));
