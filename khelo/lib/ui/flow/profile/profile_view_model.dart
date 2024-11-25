@@ -82,11 +82,14 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
 
   void onToggleUserNotificationChange() async {
     try {
-      if (state.currentUser == null) return;
+      final userId = state.currentUser?.id;
+      if (userId == null) return;
       state = state.copyWith(actionError: null);
 
       await _userService.updateUserNotificationSettings(
-          state.currentUser?.id ?? "INVALID ID", !state.enableUserNotification);
+        userId,
+        !state.enableUserNotification,
+      );
       state = state.copyWith(
         enableUserNotification: !state.enableUserNotification,
         actionError: null,
