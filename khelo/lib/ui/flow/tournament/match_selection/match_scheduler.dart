@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:collection/collection.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
@@ -50,11 +48,7 @@ class MatchScheduler {
   GroupedMatchMap scheduleMatchesByType() {
     switch (matchType) {
       case TournamentType.knockOut:
-        return scheduleKnockOutMatchesWithArguments(
-          scheduledMatches,
-          teams,
-          addInitialRound: true,
-        );
+        return scheduleKnockOutMatches();
       case TournamentType.miniRobin:
         return scheduleMiniRoundRobinMatches();
       case TournamentType.boxLeague:
@@ -68,62 +62,44 @@ class MatchScheduler {
     }
   }
 
-  GroupedMatchMap scheduleKnockOutMatchesWithArguments(
-    GroupedMatchMap matches,
-    List<TeamModel> teams, {
-    bool addInitialRound = false,
-  }) {
-    final List<TeamModel> teamPool = List.of(teams);
-    if (addInitialRound && !matches.containsKey(MatchGroup.round)) {
-      matches.addAll({
-        MatchGroup.round: {1: []}
-      });
-    }
+  GroupedMatchMap scheduleKnockOutMatches() {
     final GroupedMatchMap additionalScheduledMatches =
-        SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
-            matches, (a, b) => a.index.compareTo(b.index));
-    final GroupedMatchMap tempScheduledMatches = {};
+        Map.from(scheduledMatches);
+    final List<TeamModel> teamPool = List.of(teams);
+
+    var currentGroup = MatchGroup.round;
+    var currentRound = 1;
+
     while (teamPool.length > 1) {
-      additionalScheduledMatches.forEach((group, groupNumbers) {
-        groupNumbers.forEach((number, matches) {
-          removeAlreadyScheduledTeams(matches, teamPool);
-
-          final teamPairs = createKnockoutTeamPairs(teamPool);
-          addMatches(matches, teamPairs, group, number);
-
-          teamPool.removeWhere((team) => teamPairs
-              .any((element) => element.length == 2 && element.contains(team)));
-
-          addWinnerTeamsBackToTeam(matches, teamPool);
-
-          if (teamPool.length <= 1) {
-            return;
-          }
-          final expectedQualifier = matches.length;
-          if (expectedQualifier > 8) {
-            addRoundToGroupMap(tempScheduledMatches, number);
-          } else if (expectedQualifier > 4) {
-            addNewGroupToGroupMap(
-                tempScheduledMatches, MatchGroup.quarterfinal);
-          } else if (expectedQualifier > 2) {
-            addNewGroupToGroupMap(tempScheduledMatches, MatchGroup.semifinal);
-          } else if (expectedQualifier == 2) {
-            addNewGroupToGroupMap(tempScheduledMatches, MatchGroup.finals);
-          }
-        });
-      });
-
-      additionalScheduledMatches.addAll(tempScheduledMatches);
-      tempScheduledMatches.clear();
+      final group =
+          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
+      final matches = group[currentRound] ?? [];
+      final expectedQualifier = handleSingleKnockoutPhase(
+          matches, teamPool, currentGroup, currentRound);
+      if (expectedQualifier > 8) {
+        currentRound++;
+      } else if (expectedQualifier > 4) {
+        currentRound = 1;
+        currentGroup = MatchGroup.quarterfinal;
+      } else if (expectedQualifier > 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.semifinal;
+      } else if (expectedQualifier == 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.finals;
+      }
     }
 
     return additionalScheduledMatches;
   }
 
   GroupedMatchMap scheduleMiniRoundRobinMatches() {
-    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
+    final GroupedMatchMap additionalScheduledMatches =
+        Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
 
+    var currentGroup = MatchGroup.round;
+    var currentRound = 1;
     final int totalTeams = teamPool.length;
     int matchesPerTeam;
 
@@ -135,172 +111,176 @@ class MatchScheduler {
       matchesPerTeam = 3;
     }
 
-    final rounds = scheduledMatches[MatchGroup.round] ?? {1: []};
-    final Map<int, List<MatchModel>> tempRound = {};
-
-    List<List<TeamPoints>> teamPoints = [];
     while (teamPool.length > 1) {
-      rounds.forEach((number, matches) {
-        removeTeamsThatReachedLimit(matches, teamPool, matchesPerTeam);
+      final group =
+          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
+      final matches = group[currentRound] ?? [];
+      var expectedQualifiers = 0;
 
-        final teamPairs = createRoundRobinTeamPairs(
-            teamPool,
-            matchesPerTeam,
-            matches
-                .map((element) => element.teams.map((e) => e.team).toList())
-                .toList());
-        addMatches(matches, teamPairs, MatchGroup.round, number);
+      if (currentGroup == MatchGroup.round) {
+        handleSingleMiniRobinMatches(
+            matches, teamPool, matchesPerTeam, currentGroup, currentRound);
+        group[currentRound] = matches;
 
-        teamPool.removeWhere(
-            (team) => teamPairs.any((pair) => pair.contains(team)));
-      });
+        expectedQualifiers = teams.length;
+        final List<List<TeamPoints>> teamPoints = [];
 
-      tempRound.forEach((key, value) {
-        rounds.putIfAbsent(key, () => value);
-      });
-      tempRound.clear();
-    }
-    rounds.forEach((key, matches) {
-      final teams =
-          matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
+        additionalScheduledMatches[MatchGroup.round]!.forEach((key, matches) {
+          final teams = matches
+              .expand((e) => e.teams.map((e) => e.team))
+              .toSet()
+              .toList();
 
-      final points = calculateTeamPoints(matches, teams);
-      teamPoints.add(points);
-    });
+          final List<TeamPoints> points = calculateTeamPoints(matches, teams);
+          teamPoints.add(points);
+        });
 
-    teamPoints.sort((a, b) {
-      if (a.first.points != b.first.points) {
-        return b.first.points.compareTo(a.first.points);
+        teamPoints.sort((a, b) {
+          if (a.firstOrNull?.points != b.firstOrNull?.points) {
+            return (b.firstOrNull?.points ?? 0)
+                .compareTo(a.firstOrNull?.points ?? 0);
+          } else {
+            return (b.firstOrNull?.runRate ?? 0)
+                .compareTo(a.firstOrNull?.runRate ?? 0);
+          }
+        });
+
+        final List<TeamModel> teamsToAdd;
+
+        if (expectedQualifiers > 4) {
+          teamsToAdd = teamPoints.first.take(8).map((e) => e.team).toList();
+        } else if (expectedQualifiers > 2) {
+          teamsToAdd = teamPoints.first.take(4).map((e) => e.team).toList();
+        } else if (expectedQualifiers == 2) {
+          teamsToAdd = teamPoints.first.take(2).map((e) => e.team).toList();
+        } else {
+          teamsToAdd = [];
+        }
+
+        teamPool.addAll(teamsToAdd);
       } else {
-        return b.first.runRate.compareTo(a.first.runRate);
+        expectedQualifiers = handleSingleKnockoutPhase(
+          matches,
+          teamPool,
+          currentGroup,
+          currentRound,
+        );
+        group[currentRound] = matches;
       }
-    });
 
-    final expectedQualifier = teams.length;
-    final List<TeamModel> teamsToAdd;
-    if (expectedQualifier > 4) {
-      addNewGroupToGroupMap(
-          additionalScheduledMatches, MatchGroup.quarterfinal);
-      teamsToAdd = teamPoints.first.take(8).map((e) => e.team).toList();
-    } else if (expectedQualifier > 2) {
-      addNewGroupToGroupMap(additionalScheduledMatches, MatchGroup.semifinal);
-      teamsToAdd = teamPoints.first.take(4).map((e) => e.team).toList();
-    } else if (expectedQualifier == 2) {
-      addNewGroupToGroupMap(additionalScheduledMatches, MatchGroup.finals);
-      teamsToAdd = teamPoints.first.take(2).map((e) => e.team).toList();
-    } else {
-      teamsToAdd = [];
+      if (expectedQualifiers > 4) {
+        currentRound = 1;
+        currentGroup = MatchGroup.quarterfinal;
+      } else if (expectedQualifiers > 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.semifinal;
+      } else if (expectedQualifiers == 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.finals;
+      }
     }
-
-    teamPool.addAll(teamsToAdd);
-    final copyMatches = additionalScheduledMatches;
-    copyMatches.remove(MatchGroup.round);
-    final knockOutPhaseMatches =
-        scheduleKnockOutMatchesWithArguments(copyMatches, teamPool);
-
-    additionalScheduledMatches
-        .addAll({MatchGroup.round: rounds, ...knockOutPhaseMatches});
 
     return additionalScheduledMatches;
   }
 
   GroupedMatchMap scheduleBoxLeagueMatches() {
-    final GroupedMatchMap additionalScheduledMatches = scheduledMatches;
-    final teamPool = teams;
+    final GroupedMatchMap additionalScheduledMatches =
+        Map.from(scheduledMatches);
+    final List<TeamModel> teamPool = List.of(teams);
+
+    var currentGroup = MatchGroup.round;
+    var currentRound = 1;
     final int boxSize = 3;
 
-    final rounds = scheduledMatches[MatchGroup.round] ?? {1: []};
-    final Map<int, List<MatchModel>> tempRound = {};
-
-    List<List<TeamPoints>> teamPoints = [];
     while (teamPool.length > 1) {
-      rounds.forEach((number, matches) {
-        final teams =
-            matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
+      final group =
+          additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
+      final matches = group[currentRound] ?? [];
+      var expectedQualifiers = 0;
 
-        int remainingTeam = teamPool.length % boxSize;
-        removeAlreadyScheduledTeams(matches, teamPool);
-        if (teams.length < boxSize || remainingTeam > 0) {
-          teams.addAll(teamPool.take(boxSize - teams.length + 1));
+      if (currentGroup == MatchGroup.round) {
+        handleSingleBoxLeague(
+          additionalScheduledMatches[MatchGroup.round]!
+              .values
+              .expand((element) => element)
+              .toList(),
+          matches,
+          teamPool,
+          currentGroup,
+          currentRound,
+          boxSize,
+        );
+        group[currentRound] = matches;
+
+        if (teamPool.length <= 1) {
+          final List<List<TeamPoints>> teamPoints = [];
+          additionalScheduledMatches[MatchGroup.round]!.forEach((key, matches) {
+            final teams = matches
+                .expand((e) => e.teams.map((e) => e.team))
+                .toSet()
+                .toList();
+
+            final List<TeamPoints> points = calculateTeamPoints(matches, teams);
+            teamPoints.add(points);
+          });
+
+          teamPoints.sort((a, b) {
+            if (a.firstOrNull?.points != b.firstOrNull?.points) {
+              return (b.firstOrNull?.points ?? 0)
+                  .compareTo(a.firstOrNull?.points ?? 0);
+            } else {
+              return (b.firstOrNull?.runRate ?? 0)
+                  .compareTo(a.firstOrNull?.runRate ?? 0);
+            }
+          });
+
+          int teamsTobeAdded =
+              additionalScheduledMatches[MatchGroup.round]?.length ?? 0;
+          if (teamsTobeAdded > 4) {
+            expectedQualifiers = 8;
+          } else if (teamsTobeAdded > 2) {
+            expectedQualifiers = 4;
+          } else if (teamsTobeAdded == 2) {
+            expectedQualifiers = 2;
+          }
+
+          int round = 0;
+          while (teamPool.length < expectedQualifiers) {
+            final List<TeamModel> teamsToAdd = teamPoints
+                .map((e) => e.elementAtOrNull(round)?.team)
+                .whereType<TeamModel>()
+                .toList();
+            if (teamsToAdd.isEmpty) break;
+            final remainingSlots = expectedQualifiers - teamPool.length;
+
+            teamPool.addAll(teamsToAdd.take(remainingSlots));
+
+            round++;
+          }
+        } else {
+          currentRound++;
         }
-
-        final teamPairs = createRoundRobinTeamPairs(
-            teams,
-            teams.length - 1,
-            matches
-                .map((element) => element.teams.map((e) => e.team).toList())
-                .toList());
-
-        addMatches(matches, teamPairs, MatchGroup.round, number);
-
-        teamPool.removeWhere((team) =>
-            teamPairs.any((pair) => pair.length == 2 && pair.contains(team)));
-
-        if (teamPool.length > 1 && !rounds.containsKey(number + 1)) {
-          tempRound[number + 1] = [];
-        }
-      });
-
-      tempRound.forEach((key, value) {
-        rounds.putIfAbsent(key, () => value);
-      });
-      tempRound.clear();
-    }
-    rounds.forEach((key, matches) {
-      final teams =
-          matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
-
-      final points = calculateTeamPoints(matches, teams);
-      teamPoints.add(points);
-    });
-
-    teamPoints.sort((a, b) {
-      if (a.first.points != b.first.points) {
-        return b.first.points.compareTo(a.first.points);
       } else {
-        return b.first.runRate.compareTo(a.first.runRate);
+        expectedQualifiers = handleSingleKnockoutPhase(
+          matches,
+          teamPool,
+          currentGroup,
+          currentRound,
+        );
+        group[currentRound] = matches;
       }
-    });
 
-    final expectedQualifier =
-        additionalScheduledMatches[MatchGroup.round]?.length ?? 0;
-    int pickTeamNumber = 0;
-    if (expectedQualifier > 4) {
-      addNewGroupToGroupMap(
-          additionalScheduledMatches, MatchGroup.quarterfinal);
-      pickTeamNumber = 8;
-    } else if (expectedQualifier > 2) {
-      addNewGroupToGroupMap(additionalScheduledMatches, MatchGroup.semifinal);
-      pickTeamNumber = 4;
-    } else if (expectedQualifier == 2) {
-      addNewGroupToGroupMap(additionalScheduledMatches, MatchGroup.finals);
-      pickTeamNumber = 2;
+      if (expectedQualifiers > 4) {
+        currentRound = 1;
+        currentGroup = MatchGroup.quarterfinal;
+      } else if (expectedQualifiers > 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.semifinal;
+      } else if (expectedQualifiers == 2) {
+        currentRound = 1;
+        currentGroup = MatchGroup.finals;
+      }
     }
-
-    int round = 0;
-
-    while (teamPool.length < pickTeamNumber) {
-      final teamsToAdd = teamPoints
-          .map((e) => e.elementAtOrNull(round)?.team)
-          .whereType<TeamModel>()
-          .toList();
-
-      if (teamsToAdd.isEmpty) break;
-
-      final remainingSlots = pickTeamNumber - teamPool.length;
-
-      teamPool.addAll(teamsToAdd.take(remainingSlots));
-
-      round++;
-    }
-
-    final copyMatches = additionalScheduledMatches;
-    copyMatches.remove(MatchGroup.round);
-    final knockOutPhaseMatches =
-        scheduleKnockOutMatchesWithArguments(copyMatches, teamPool);
-
-    additionalScheduledMatches
-        .addAll({MatchGroup.round: rounds, ...knockOutPhaseMatches});
 
     return additionalScheduledMatches;
   }
@@ -574,18 +554,6 @@ class MatchScheduler {
     teams.addAll(winners);
   }
 
-  void addRoundToGroupMap(
-      GroupedMatchMap additionalScheduledMatches, int currentRoundNumber) {
-    if (!additionalScheduledMatches.containsKey(MatchGroup.round)) {
-      return;
-    }
-    if (additionalScheduledMatches[MatchGroup.round]!
-        .containsKey(currentRoundNumber + 1)) {
-      return;
-    }
-    additionalScheduledMatches[MatchGroup.round]![currentRoundNumber + 1] = [];
-  }
-
   void addNewGroupToGroupMap(
       GroupedMatchMap additionalScheduledMatches, MatchGroup newGroup) {
     if (additionalScheduledMatches.containsKey(newGroup)) {
@@ -664,6 +632,69 @@ class MatchScheduler {
     teamPool.removeWhere((team) => allPairs.any((pair) =>
         pair.length == 2 && pair.contains(team) && !winners.contains(team.id)));
     return allPairs.length;
+  }
+
+  void handleSingleMiniRobinMatches(
+      List<MatchModel> matches,
+      List<TeamModel> teamPool,
+      int matchesPerTeam,
+      MatchGroup group,
+      int number) {
+    removeTeamsThatReachedLimit(matches, teamPool, matchesPerTeam);
+
+    final teamPairs = createRoundRobinTeamPairs(
+        teamPool,
+        matchesPerTeam,
+        matches
+            .map((element) => element.teams.map((e) => e.team).toList())
+            .toList());
+    addMatches(matches, teamPairs, group, number);
+
+    teamPool
+        .removeWhere((team) => teamPairs.any((pair) => pair.contains(team)));
+  }
+
+  void handleSingleBoxLeague(
+    List<MatchModel> allMatches,
+    List<MatchModel> matches,
+    List<TeamModel> teamPool,
+    MatchGroup group,
+    int number,
+    int boxSize,
+  ) {
+    final teams =
+        matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
+
+    completeTeamSet(allMatches, teamPool, teams, boxSize);
+
+    final teamPairs = createRoundRobinTeamPairs(
+        teams,
+        teams.length - 1,
+        matches
+            .map((element) => element.teams.map((e) => e.team).toList())
+            .toList());
+
+    addMatches(matches, teamPairs, MatchGroup.round, number);
+
+    teamPool.removeWhere((team) =>
+        teamPairs.any((pair) => pair.length == 2 && pair.contains(team)));
+  }
+
+  void completeTeamSet(
+    List<MatchModel> allMatches,
+    List<TeamModel> sourceTeams,
+    List<TeamModel> destinationTeams,
+    int boxSize,
+  ) {
+    final teams = sourceTeams.toList();
+    int remainingTeam = sourceTeams.length % boxSize;
+    teams.removeWhere((srcTeam) => allMatches
+        .any((match) => match.teams.any((team) => team.team_id == srcTeam.id)));
+    if (destinationTeams.length < boxSize || remainingTeam > 0) {
+      final pick =
+          boxSize - destinationTeams.length + (remainingTeam > 0 ? 1 : 0);
+      destinationTeams.addAll(teams.take(pick));
+    }
   }
 
   List<List<TeamModel>> getExistingTeamPairs(List<MatchModel> matches) {

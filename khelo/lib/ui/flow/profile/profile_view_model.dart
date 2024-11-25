@@ -86,8 +86,7 @@ class ProfileViewNotifier extends StateNotifier<ProfileState> {
       state = state.copyWith(actionError: null);
 
       await _userService.updateUserNotificationSettings(
-          state.currentUser?.id ?? "INVALID ID", state.enableUserNotification);
-
+          state.currentUser?.id ?? "INVALID ID", !state.enableUserNotification);
       state = state.copyWith(
         enableUserNotification: !state.enableUserNotification,
         actionError: null,
