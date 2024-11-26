@@ -160,3 +160,178 @@ enum BowlingStyle {
 
   const BowlingStyle(this.value);
 }
+
+enum UserStatType {
+  test(1),
+  other(2);
+
+  final int value;
+
+  const UserStatType(this.value);
+}
+
+@freezed
+class UserStat with _$UserStat {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
+  const factory UserStat({
+    @Default(0) int matches,
+    UserStatType? type,
+    @Default(Batting()) Batting batting,
+    @Default(Bowling()) Bowling bowling,
+    @Default(Fielding()) Fielding fielding,
+  }) = _UserStats;
+
+  factory UserStat.fromJson(Map<String, dynamic> json) =>
+      _$UserStatFromJson(json);
+
+  factory UserStat.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      UserStat.fromJson(snapshot.data()!);
+}
+
+@freezed
+class Batting with _$Batting {
+  const factory Batting({
+    @Default(0) int innings,
+    @Default(0) int runScored,
+    @Default(0.0) double average,
+    @Default(0.0) double strikeRate,
+    @Default(0) int ballFaced,
+    @Default(0) int fours,
+    @Default(0) int sixes,
+    @Default(0) int fifties,
+    @Default(0) int hundreds,
+    @Default(0) int ducks,
+  }) = _Batting;
+
+  factory Batting.fromJson(Map<String, dynamic> json) =>
+      _$BattingFromJson(json);
+}
+
+@freezed
+class Bowling with _$Bowling {
+  const factory Bowling({
+    @Default(0) int innings,
+    @Default(0) int wicketTaken,
+    @Default(0) int balls,
+    @Default(0) int runsConceded,
+    @Default(0) int maiden,
+    @Default(0) int noBalls,
+    @Default(0) int wideBalls,
+    @Default(0.0) double average,
+    @Default(0.0) double strikeRate,
+    @Default(0.0) double economyRate,
+  }) = _Bowling;
+
+  factory Bowling.fromJson(Map<String, dynamic> json) =>
+      _$BowlingFromJson(json);
+}
+
+@freezed
+class Fielding with _$Fielding {
+  const factory Fielding({
+    @Default(0) int catches,
+    @Default(0) int runOut,
+    @Default(0) int stumping,
+  }) = _Fielding;
+
+  factory Fielding.fromJson(Map<String, dynamic> json) =>
+      _$FieldingFromJson(json);
+}
+
+extension UserStatsExtension on UserStat {
+  UserStat addStats(UserStat other) {
+    return UserStat(
+      matches: matches + other.matches,
+      type: type,
+      batting: _addBattingStats(batting, other.batting),
+      bowling: _addBowlingStats(bowling, other.bowling),
+      fielding: _addFieldingStats(fielding, other.fielding),
+    );
+  }
+
+  Batting _addBattingStats(Batting? oldBatting, Batting? newBatting) {
+    if (oldBatting == null) return newBatting!;
+    if (newBatting == null) return oldBatting;
+
+    final combinedInnings = oldBatting.innings + newBatting.innings;
+    final combinedRunsScored = oldBatting.runScored + newBatting.runScored;
+    final combinedDismissals = oldBatting.ducks + newBatting.ducks;
+    final combinedBallsFaced = oldBatting.ballFaced + newBatting.ballFaced;
+    final combinedFours = oldBatting.fours + newBatting.fours;
+    final combinedSixes = oldBatting.sixes + newBatting.sixes;
+    final combinedDucks = oldBatting.ducks + newBatting.ducks;
+    final combinedFifties = oldBatting.fifties + newBatting.fifties;
+    final combinedHundreds = oldBatting.hundreds + newBatting.hundreds;
+
+    final average =
+        combinedDismissals == 0 ? 0.0 : combinedRunsScored / combinedDismissals;
+    final strikeRate = combinedBallsFaced == 0
+        ? 0.0
+        : (combinedRunsScored / combinedBallsFaced) * 100.0;
+
+    return Batting(
+      innings: combinedInnings,
+      average: average,
+      strikeRate: strikeRate,
+      ballFaced: combinedBallsFaced,
+      runScored: combinedRunsScored,
+      fours: combinedFours,
+      sixes: combinedSixes,
+      ducks: combinedDucks,
+      fifties: combinedFifties,
+      hundreds: combinedHundreds,
+    );
+  }
+
+  Bowling _addBowlingStats(Bowling? oldBowling, Bowling? newBowling) {
+    if (oldBowling == null) return newBowling!;
+    if (newBowling == null) return oldBowling;
+
+    final combinedInnings = oldBowling.innings + newBowling.innings;
+    final combinedWickets = oldBowling.wicketTaken + newBowling.wicketTaken;
+    final combinedBalls = oldBowling.balls + newBowling.balls;
+    final combinedRunsConceded =
+        oldBowling.runsConceded + newBowling.runsConceded;
+    final combinedWideBalls = oldBowling.wideBalls + newBowling.wideBalls;
+    final combinedNoBalls = oldBowling.noBalls + newBowling.noBalls;
+    final combinedMaidenOvers = oldBowling.maiden + newBowling.maiden;
+
+    final average =
+        combinedWickets == 0 ? 0.0 : combinedRunsConceded / combinedWickets;
+    final strikeRate =
+        combinedWickets == 0 ? 0.0 : combinedBalls / combinedWickets;
+    final economyRate =
+        combinedBalls == 0 ? 0.0 : (combinedRunsConceded / combinedBalls) * 6;
+
+    return Bowling(
+      innings: combinedInnings,
+      average: average,
+      strikeRate: strikeRate,
+      wicketTaken: combinedWickets,
+      economyRate: economyRate,
+      balls: combinedBalls,
+      wideBalls: combinedWideBalls,
+      runsConceded: combinedRunsConceded,
+      noBalls: combinedNoBalls,
+      maiden: combinedMaidenOvers,
+    );
+  }
+
+  Fielding _addFieldingStats(Fielding? oldFielding, Fielding? newFielding) {
+    if (oldFielding == null) return newFielding!;
+    if (newFielding == null) return oldFielding;
+
+    final combinedCatches = oldFielding.catches + newFielding.catches;
+    final combinedRunOuts = oldFielding.runOut + newFielding.runOut;
+    final combinedStumpings = oldFielding.stumping + newFielding.stumping;
+
+    return Fielding(
+      catches: combinedCatches,
+      runOut: combinedRunOuts,
+      stumping: combinedStumpings,
+    );
+  }
+}

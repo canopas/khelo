@@ -851,3 +851,1169 @@ abstract class _ApiSession extends ApiSession {
   _$$ApiSessionImplCopyWith<_$ApiSessionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+UserStat _$UserStatFromJson(Map<String, dynamic> json) {
+  return _UserStats.fromJson(json);
+}
+
+/// @nodoc
+mixin _$UserStat {
+  int get matches => throw _privateConstructorUsedError;
+  UserStatType? get type => throw _privateConstructorUsedError;
+  Batting get batting => throw _privateConstructorUsedError;
+  Bowling get bowling => throw _privateConstructorUsedError;
+  Fielding get fielding => throw _privateConstructorUsedError;
+
+  /// Serializes this UserStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $UserStatCopyWith<UserStat> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $UserStatCopyWith<$Res> {
+  factory $UserStatCopyWith(UserStat value, $Res Function(UserStat) then) =
+      _$UserStatCopyWithImpl<$Res, UserStat>;
+  @useResult
+  $Res call(
+      {int matches,
+      UserStatType? type,
+      Batting batting,
+      Bowling bowling,
+      Fielding fielding});
+
+  $BattingCopyWith<$Res> get batting;
+  $BowlingCopyWith<$Res> get bowling;
+  $FieldingCopyWith<$Res> get fielding;
+}
+
+/// @nodoc
+class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
+    implements $UserStatCopyWith<$Res> {
+  _$UserStatCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? matches = null,
+    Object? type = freezed,
+    Object? batting = null,
+    Object? bowling = null,
+    Object? fielding = null,
+  }) {
+    return _then(_value.copyWith(
+      matches: null == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as UserStatType?,
+      batting: null == batting
+          ? _value.batting
+          : batting // ignore: cast_nullable_to_non_nullable
+              as Batting,
+      bowling: null == bowling
+          ? _value.bowling
+          : bowling // ignore: cast_nullable_to_non_nullable
+              as Bowling,
+      fielding: null == fielding
+          ? _value.fielding
+          : fielding // ignore: cast_nullable_to_non_nullable
+              as Fielding,
+    ) as $Val);
+  }
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BattingCopyWith<$Res> get batting {
+    return $BattingCopyWith<$Res>(_value.batting, (value) {
+      return _then(_value.copyWith(batting: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $BowlingCopyWith<$Res> get bowling {
+    return $BowlingCopyWith<$Res>(_value.bowling, (value) {
+      return _then(_value.copyWith(bowling: value) as $Val);
+    });
+  }
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $FieldingCopyWith<$Res> get fielding {
+    return $FieldingCopyWith<$Res>(_value.fielding, (value) {
+      return _then(_value.copyWith(fielding: value) as $Val);
+    });
+  }
+}
+
+/// @nodoc
+abstract class _$$UserStatsImplCopyWith<$Res>
+    implements $UserStatCopyWith<$Res> {
+  factory _$$UserStatsImplCopyWith(
+          _$UserStatsImpl value, $Res Function(_$UserStatsImpl) then) =
+      __$$UserStatsImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int matches,
+      UserStatType? type,
+      Batting batting,
+      Bowling bowling,
+      Fielding fielding});
+
+  @override
+  $BattingCopyWith<$Res> get batting;
+  @override
+  $BowlingCopyWith<$Res> get bowling;
+  @override
+  $FieldingCopyWith<$Res> get fielding;
+}
+
+/// @nodoc
+class __$$UserStatsImplCopyWithImpl<$Res>
+    extends _$UserStatCopyWithImpl<$Res, _$UserStatsImpl>
+    implements _$$UserStatsImplCopyWith<$Res> {
+  __$$UserStatsImplCopyWithImpl(
+      _$UserStatsImpl _value, $Res Function(_$UserStatsImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? matches = null,
+    Object? type = freezed,
+    Object? batting = null,
+    Object? bowling = null,
+    Object? fielding = null,
+  }) {
+    return _then(_$UserStatsImpl(
+      matches: null == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as int,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as UserStatType?,
+      batting: null == batting
+          ? _value.batting
+          : batting // ignore: cast_nullable_to_non_nullable
+              as Batting,
+      bowling: null == bowling
+          ? _value.bowling
+          : bowling // ignore: cast_nullable_to_non_nullable
+              as Bowling,
+      fielding: null == fielding
+          ? _value.fielding
+          : fielding // ignore: cast_nullable_to_non_nullable
+              as Fielding,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(anyMap: true, explicitToJson: true)
+class _$UserStatsImpl implements _UserStats {
+  const _$UserStatsImpl(
+      {this.matches = 0,
+      this.type,
+      this.batting = const Batting(),
+      this.bowling = const Bowling(),
+      this.fielding = const Fielding()});
+
+  factory _$UserStatsImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserStatsImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int matches;
+  @override
+  final UserStatType? type;
+  @override
+  @JsonKey()
+  final Batting batting;
+  @override
+  @JsonKey()
+  final Bowling bowling;
+  @override
+  @JsonKey()
+  final Fielding fielding;
+
+  @override
+  String toString() {
+    return 'UserStat(matches: $matches, type: $type, batting: $batting, bowling: $bowling, fielding: $fielding)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$UserStatsImpl &&
+            (identical(other.matches, matches) || other.matches == matches) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.batting, batting) || other.batting == batting) &&
+            (identical(other.bowling, bowling) || other.bowling == bowling) &&
+            (identical(other.fielding, fielding) ||
+                other.fielding == fielding));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, matches, type, batting, bowling, fielding);
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$UserStatsImplCopyWith<_$UserStatsImpl> get copyWith =>
+      __$$UserStatsImplCopyWithImpl<_$UserStatsImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$UserStatsImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _UserStats implements UserStat {
+  const factory _UserStats(
+      {final int matches,
+      final UserStatType? type,
+      final Batting batting,
+      final Bowling bowling,
+      final Fielding fielding}) = _$UserStatsImpl;
+
+  factory _UserStats.fromJson(Map<String, dynamic> json) =
+      _$UserStatsImpl.fromJson;
+
+  @override
+  int get matches;
+  @override
+  UserStatType? get type;
+  @override
+  Batting get batting;
+  @override
+  Bowling get bowling;
+  @override
+  Fielding get fielding;
+
+  /// Create a copy of UserStat
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$UserStatsImplCopyWith<_$UserStatsImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Batting _$BattingFromJson(Map<String, dynamic> json) {
+  return _Batting.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Batting {
+  int get innings => throw _privateConstructorUsedError;
+  int get runScored => throw _privateConstructorUsedError;
+  double get average => throw _privateConstructorUsedError;
+  double get strikeRate => throw _privateConstructorUsedError;
+  int get ballFaced => throw _privateConstructorUsedError;
+  int get fours => throw _privateConstructorUsedError;
+  int get sixes => throw _privateConstructorUsedError;
+  int get fifties => throw _privateConstructorUsedError;
+  int get hundreds => throw _privateConstructorUsedError;
+  int get ducks => throw _privateConstructorUsedError;
+
+  /// Serializes this Batting to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Batting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $BattingCopyWith<Batting> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BattingCopyWith<$Res> {
+  factory $BattingCopyWith(Batting value, $Res Function(Batting) then) =
+      _$BattingCopyWithImpl<$Res, Batting>;
+  @useResult
+  $Res call(
+      {int innings,
+      int runScored,
+      double average,
+      double strikeRate,
+      int ballFaced,
+      int fours,
+      int sixes,
+      int fifties,
+      int hundreds,
+      int ducks});
+}
+
+/// @nodoc
+class _$BattingCopyWithImpl<$Res, $Val extends Batting>
+    implements $BattingCopyWith<$Res> {
+  _$BattingCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Batting
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? innings = null,
+    Object? runScored = null,
+    Object? average = null,
+    Object? strikeRate = null,
+    Object? ballFaced = null,
+    Object? fours = null,
+    Object? sixes = null,
+    Object? fifties = null,
+    Object? hundreds = null,
+    Object? ducks = null,
+  }) {
+    return _then(_value.copyWith(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
+      runScored: null == runScored
+          ? _value.runScored
+          : runScored // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as double,
+      strikeRate: null == strikeRate
+          ? _value.strikeRate
+          : strikeRate // ignore: cast_nullable_to_non_nullable
+              as double,
+      ballFaced: null == ballFaced
+          ? _value.ballFaced
+          : ballFaced // ignore: cast_nullable_to_non_nullable
+              as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fifties: null == fifties
+          ? _value.fifties
+          : fifties // ignore: cast_nullable_to_non_nullable
+              as int,
+      hundreds: null == hundreds
+          ? _value.hundreds
+          : hundreds // ignore: cast_nullable_to_non_nullable
+              as int,
+      ducks: null == ducks
+          ? _value.ducks
+          : ducks // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$BattingImplCopyWith<$Res> implements $BattingCopyWith<$Res> {
+  factory _$$BattingImplCopyWith(
+          _$BattingImpl value, $Res Function(_$BattingImpl) then) =
+      __$$BattingImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int innings,
+      int runScored,
+      double average,
+      double strikeRate,
+      int ballFaced,
+      int fours,
+      int sixes,
+      int fifties,
+      int hundreds,
+      int ducks});
+}
+
+/// @nodoc
+class __$$BattingImplCopyWithImpl<$Res>
+    extends _$BattingCopyWithImpl<$Res, _$BattingImpl>
+    implements _$$BattingImplCopyWith<$Res> {
+  __$$BattingImplCopyWithImpl(
+      _$BattingImpl _value, $Res Function(_$BattingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Batting
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? innings = null,
+    Object? runScored = null,
+    Object? average = null,
+    Object? strikeRate = null,
+    Object? ballFaced = null,
+    Object? fours = null,
+    Object? sixes = null,
+    Object? fifties = null,
+    Object? hundreds = null,
+    Object? ducks = null,
+  }) {
+    return _then(_$BattingImpl(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
+      runScored: null == runScored
+          ? _value.runScored
+          : runScored // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as double,
+      strikeRate: null == strikeRate
+          ? _value.strikeRate
+          : strikeRate // ignore: cast_nullable_to_non_nullable
+              as double,
+      ballFaced: null == ballFaced
+          ? _value.ballFaced
+          : ballFaced // ignore: cast_nullable_to_non_nullable
+              as int,
+      fours: null == fours
+          ? _value.fours
+          : fours // ignore: cast_nullable_to_non_nullable
+              as int,
+      sixes: null == sixes
+          ? _value.sixes
+          : sixes // ignore: cast_nullable_to_non_nullable
+              as int,
+      fifties: null == fifties
+          ? _value.fifties
+          : fifties // ignore: cast_nullable_to_non_nullable
+              as int,
+      hundreds: null == hundreds
+          ? _value.hundreds
+          : hundreds // ignore: cast_nullable_to_non_nullable
+              as int,
+      ducks: null == ducks
+          ? _value.ducks
+          : ducks // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BattingImpl implements _Batting {
+  const _$BattingImpl(
+      {this.innings = 0,
+      this.runScored = 0,
+      this.average = 0.0,
+      this.strikeRate = 0.0,
+      this.ballFaced = 0,
+      this.fours = 0,
+      this.sixes = 0,
+      this.fifties = 0,
+      this.hundreds = 0,
+      this.ducks = 0});
+
+  factory _$BattingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BattingImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int innings;
+  @override
+  @JsonKey()
+  final int runScored;
+  @override
+  @JsonKey()
+  final double average;
+  @override
+  @JsonKey()
+  final double strikeRate;
+  @override
+  @JsonKey()
+  final int ballFaced;
+  @override
+  @JsonKey()
+  final int fours;
+  @override
+  @JsonKey()
+  final int sixes;
+  @override
+  @JsonKey()
+  final int fifties;
+  @override
+  @JsonKey()
+  final int hundreds;
+  @override
+  @JsonKey()
+  final int ducks;
+
+  @override
+  String toString() {
+    return 'Batting(innings: $innings, runScored: $runScored, average: $average, strikeRate: $strikeRate, ballFaced: $ballFaced, fours: $fours, sixes: $sixes, fifties: $fifties, hundreds: $hundreds, ducks: $ducks)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BattingImpl &&
+            (identical(other.innings, innings) || other.innings == innings) &&
+            (identical(other.runScored, runScored) ||
+                other.runScored == runScored) &&
+            (identical(other.average, average) || other.average == average) &&
+            (identical(other.strikeRate, strikeRate) ||
+                other.strikeRate == strikeRate) &&
+            (identical(other.ballFaced, ballFaced) ||
+                other.ballFaced == ballFaced) &&
+            (identical(other.fours, fours) || other.fours == fours) &&
+            (identical(other.sixes, sixes) || other.sixes == sixes) &&
+            (identical(other.fifties, fifties) || other.fifties == fifties) &&
+            (identical(other.hundreds, hundreds) ||
+                other.hundreds == hundreds) &&
+            (identical(other.ducks, ducks) || other.ducks == ducks));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, innings, runScored, average,
+      strikeRate, ballFaced, fours, sixes, fifties, hundreds, ducks);
+
+  /// Create a copy of Batting
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BattingImplCopyWith<_$BattingImpl> get copyWith =>
+      __$$BattingImplCopyWithImpl<_$BattingImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BattingImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Batting implements Batting {
+  const factory _Batting(
+      {final int innings,
+      final int runScored,
+      final double average,
+      final double strikeRate,
+      final int ballFaced,
+      final int fours,
+      final int sixes,
+      final int fifties,
+      final int hundreds,
+      final int ducks}) = _$BattingImpl;
+
+  factory _Batting.fromJson(Map<String, dynamic> json) = _$BattingImpl.fromJson;
+
+  @override
+  int get innings;
+  @override
+  int get runScored;
+  @override
+  double get average;
+  @override
+  double get strikeRate;
+  @override
+  int get ballFaced;
+  @override
+  int get fours;
+  @override
+  int get sixes;
+  @override
+  int get fifties;
+  @override
+  int get hundreds;
+  @override
+  int get ducks;
+
+  /// Create a copy of Batting
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BattingImplCopyWith<_$BattingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Bowling _$BowlingFromJson(Map<String, dynamic> json) {
+  return _Bowling.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Bowling {
+  int get innings => throw _privateConstructorUsedError;
+  int get wicketTaken => throw _privateConstructorUsedError;
+  int get balls => throw _privateConstructorUsedError;
+  int get runsConceded => throw _privateConstructorUsedError;
+  int get maiden => throw _privateConstructorUsedError;
+  int get noBalls => throw _privateConstructorUsedError;
+  int get wideBalls => throw _privateConstructorUsedError;
+  double get average => throw _privateConstructorUsedError;
+  double get strikeRate => throw _privateConstructorUsedError;
+  double get economyRate => throw _privateConstructorUsedError;
+
+  /// Serializes this Bowling to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Bowling
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $BowlingCopyWith<Bowling> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $BowlingCopyWith<$Res> {
+  factory $BowlingCopyWith(Bowling value, $Res Function(Bowling) then) =
+      _$BowlingCopyWithImpl<$Res, Bowling>;
+  @useResult
+  $Res call(
+      {int innings,
+      int wicketTaken,
+      int balls,
+      int runsConceded,
+      int maiden,
+      int noBalls,
+      int wideBalls,
+      double average,
+      double strikeRate,
+      double economyRate});
+}
+
+/// @nodoc
+class _$BowlingCopyWithImpl<$Res, $Val extends Bowling>
+    implements $BowlingCopyWith<$Res> {
+  _$BowlingCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Bowling
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? innings = null,
+    Object? wicketTaken = null,
+    Object? balls = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
+    Object? average = null,
+    Object? strikeRate = null,
+    Object? economyRate = null,
+  }) {
+    return _then(_value.copyWith(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicketTaken: null == wicketTaken
+          ? _value.wicketTaken
+          : wicketTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      balls: null == balls
+          ? _value.balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as int,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as double,
+      strikeRate: null == strikeRate
+          ? _value.strikeRate
+          : strikeRate // ignore: cast_nullable_to_non_nullable
+              as double,
+      economyRate: null == economyRate
+          ? _value.economyRate
+          : economyRate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$BowlingImplCopyWith<$Res> implements $BowlingCopyWith<$Res> {
+  factory _$$BowlingImplCopyWith(
+          _$BowlingImpl value, $Res Function(_$BowlingImpl) then) =
+      __$$BowlingImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int innings,
+      int wicketTaken,
+      int balls,
+      int runsConceded,
+      int maiden,
+      int noBalls,
+      int wideBalls,
+      double average,
+      double strikeRate,
+      double economyRate});
+}
+
+/// @nodoc
+class __$$BowlingImplCopyWithImpl<$Res>
+    extends _$BowlingCopyWithImpl<$Res, _$BowlingImpl>
+    implements _$$BowlingImplCopyWith<$Res> {
+  __$$BowlingImplCopyWithImpl(
+      _$BowlingImpl _value, $Res Function(_$BowlingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Bowling
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? innings = null,
+    Object? wicketTaken = null,
+    Object? balls = null,
+    Object? runsConceded = null,
+    Object? maiden = null,
+    Object? noBalls = null,
+    Object? wideBalls = null,
+    Object? average = null,
+    Object? strikeRate = null,
+    Object? economyRate = null,
+  }) {
+    return _then(_$BowlingImpl(
+      innings: null == innings
+          ? _value.innings
+          : innings // ignore: cast_nullable_to_non_nullable
+              as int,
+      wicketTaken: null == wicketTaken
+          ? _value.wicketTaken
+          : wicketTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      balls: null == balls
+          ? _value.balls
+          : balls // ignore: cast_nullable_to_non_nullable
+              as int,
+      runsConceded: null == runsConceded
+          ? _value.runsConceded
+          : runsConceded // ignore: cast_nullable_to_non_nullable
+              as int,
+      maiden: null == maiden
+          ? _value.maiden
+          : maiden // ignore: cast_nullable_to_non_nullable
+              as int,
+      noBalls: null == noBalls
+          ? _value.noBalls
+          : noBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      wideBalls: null == wideBalls
+          ? _value.wideBalls
+          : wideBalls // ignore: cast_nullable_to_non_nullable
+              as int,
+      average: null == average
+          ? _value.average
+          : average // ignore: cast_nullable_to_non_nullable
+              as double,
+      strikeRate: null == strikeRate
+          ? _value.strikeRate
+          : strikeRate // ignore: cast_nullable_to_non_nullable
+              as double,
+      economyRate: null == economyRate
+          ? _value.economyRate
+          : economyRate // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$BowlingImpl implements _Bowling {
+  const _$BowlingImpl(
+      {this.innings = 0,
+      this.wicketTaken = 0,
+      this.balls = 0,
+      this.runsConceded = 0,
+      this.maiden = 0,
+      this.noBalls = 0,
+      this.wideBalls = 0,
+      this.average = 0.0,
+      this.strikeRate = 0.0,
+      this.economyRate = 0.0});
+
+  factory _$BowlingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$BowlingImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int innings;
+  @override
+  @JsonKey()
+  final int wicketTaken;
+  @override
+  @JsonKey()
+  final int balls;
+  @override
+  @JsonKey()
+  final int runsConceded;
+  @override
+  @JsonKey()
+  final int maiden;
+  @override
+  @JsonKey()
+  final int noBalls;
+  @override
+  @JsonKey()
+  final int wideBalls;
+  @override
+  @JsonKey()
+  final double average;
+  @override
+  @JsonKey()
+  final double strikeRate;
+  @override
+  @JsonKey()
+  final double economyRate;
+
+  @override
+  String toString() {
+    return 'Bowling(innings: $innings, wicketTaken: $wicketTaken, balls: $balls, runsConceded: $runsConceded, maiden: $maiden, noBalls: $noBalls, wideBalls: $wideBalls, average: $average, strikeRate: $strikeRate, economyRate: $economyRate)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BowlingImpl &&
+            (identical(other.innings, innings) || other.innings == innings) &&
+            (identical(other.wicketTaken, wicketTaken) ||
+                other.wicketTaken == wicketTaken) &&
+            (identical(other.balls, balls) || other.balls == balls) &&
+            (identical(other.runsConceded, runsConceded) ||
+                other.runsConceded == runsConceded) &&
+            (identical(other.maiden, maiden) || other.maiden == maiden) &&
+            (identical(other.noBalls, noBalls) || other.noBalls == noBalls) &&
+            (identical(other.wideBalls, wideBalls) ||
+                other.wideBalls == wideBalls) &&
+            (identical(other.average, average) || other.average == average) &&
+            (identical(other.strikeRate, strikeRate) ||
+                other.strikeRate == strikeRate) &&
+            (identical(other.economyRate, economyRate) ||
+                other.economyRate == economyRate));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      innings,
+      wicketTaken,
+      balls,
+      runsConceded,
+      maiden,
+      noBalls,
+      wideBalls,
+      average,
+      strikeRate,
+      economyRate);
+
+  /// Create a copy of Bowling
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BowlingImplCopyWith<_$BowlingImpl> get copyWith =>
+      __$$BowlingImplCopyWithImpl<_$BowlingImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$BowlingImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Bowling implements Bowling {
+  const factory _Bowling(
+      {final int innings,
+      final int wicketTaken,
+      final int balls,
+      final int runsConceded,
+      final int maiden,
+      final int noBalls,
+      final int wideBalls,
+      final double average,
+      final double strikeRate,
+      final double economyRate}) = _$BowlingImpl;
+
+  factory _Bowling.fromJson(Map<String, dynamic> json) = _$BowlingImpl.fromJson;
+
+  @override
+  int get innings;
+  @override
+  int get wicketTaken;
+  @override
+  int get balls;
+  @override
+  int get runsConceded;
+  @override
+  int get maiden;
+  @override
+  int get noBalls;
+  @override
+  int get wideBalls;
+  @override
+  double get average;
+  @override
+  double get strikeRate;
+  @override
+  double get economyRate;
+
+  /// Create a copy of Bowling
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$BowlingImplCopyWith<_$BowlingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Fielding _$FieldingFromJson(Map<String, dynamic> json) {
+  return _Fielding.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Fielding {
+  int get catches => throw _privateConstructorUsedError;
+  int get runOut => throw _privateConstructorUsedError;
+  int get stumping => throw _privateConstructorUsedError;
+
+  /// Serializes this Fielding to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Fielding
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $FieldingCopyWith<Fielding> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $FieldingCopyWith<$Res> {
+  factory $FieldingCopyWith(Fielding value, $Res Function(Fielding) then) =
+      _$FieldingCopyWithImpl<$Res, Fielding>;
+  @useResult
+  $Res call({int catches, int runOut, int stumping});
+}
+
+/// @nodoc
+class _$FieldingCopyWithImpl<$Res, $Val extends Fielding>
+    implements $FieldingCopyWith<$Res> {
+  _$FieldingCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Fielding
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? catches = null,
+    Object? runOut = null,
+    Object? stumping = null,
+  }) {
+    return _then(_value.copyWith(
+      catches: null == catches
+          ? _value.catches
+          : catches // ignore: cast_nullable_to_non_nullable
+              as int,
+      runOut: null == runOut
+          ? _value.runOut
+          : runOut // ignore: cast_nullable_to_non_nullable
+              as int,
+      stumping: null == stumping
+          ? _value.stumping
+          : stumping // ignore: cast_nullable_to_non_nullable
+              as int,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$FieldingImplCopyWith<$Res>
+    implements $FieldingCopyWith<$Res> {
+  factory _$$FieldingImplCopyWith(
+          _$FieldingImpl value, $Res Function(_$FieldingImpl) then) =
+      __$$FieldingImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int catches, int runOut, int stumping});
+}
+
+/// @nodoc
+class __$$FieldingImplCopyWithImpl<$Res>
+    extends _$FieldingCopyWithImpl<$Res, _$FieldingImpl>
+    implements _$$FieldingImplCopyWith<$Res> {
+  __$$FieldingImplCopyWithImpl(
+      _$FieldingImpl _value, $Res Function(_$FieldingImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Fielding
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? catches = null,
+    Object? runOut = null,
+    Object? stumping = null,
+  }) {
+    return _then(_$FieldingImpl(
+      catches: null == catches
+          ? _value.catches
+          : catches // ignore: cast_nullable_to_non_nullable
+              as int,
+      runOut: null == runOut
+          ? _value.runOut
+          : runOut // ignore: cast_nullable_to_non_nullable
+              as int,
+      stumping: null == stumping
+          ? _value.stumping
+          : stumping // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$FieldingImpl implements _Fielding {
+  const _$FieldingImpl({this.catches = 0, this.runOut = 0, this.stumping = 0});
+
+  factory _$FieldingImpl.fromJson(Map<String, dynamic> json) =>
+      _$$FieldingImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int catches;
+  @override
+  @JsonKey()
+  final int runOut;
+  @override
+  @JsonKey()
+  final int stumping;
+
+  @override
+  String toString() {
+    return 'Fielding(catches: $catches, runOut: $runOut, stumping: $stumping)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$FieldingImpl &&
+            (identical(other.catches, catches) || other.catches == catches) &&
+            (identical(other.runOut, runOut) || other.runOut == runOut) &&
+            (identical(other.stumping, stumping) ||
+                other.stumping == stumping));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, catches, runOut, stumping);
+
+  /// Create a copy of Fielding
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$FieldingImplCopyWith<_$FieldingImpl> get copyWith =>
+      __$$FieldingImplCopyWithImpl<_$FieldingImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$FieldingImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Fielding implements Fielding {
+  const factory _Fielding(
+      {final int catches,
+      final int runOut,
+      final int stumping}) = _$FieldingImpl;
+
+  factory _Fielding.fromJson(Map<String, dynamic> json) =
+      _$FieldingImpl.fromJson;
+
+  @override
+  int get catches;
+  @override
+  int get runOut;
+  @override
+  int get stumping;
+
+  /// Create a copy of Fielding
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$FieldingImplCopyWith<_$FieldingImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

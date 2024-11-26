@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../converter/timestamp_json_converter.dart';
-import '../ball_score/ball_score_model.dart';
 import '../match/match_model.dart';
 import '../team/team_model.dart';
 import '../user/user_models.dart';
@@ -137,10 +136,8 @@ extension PlayerKeyStatListExtensions on List<PlayerKeyStat> {
     final Map<String, PlayerKeyStat> playerMap = {};
 
     for (final playerStat in this) {
-      final battingStats = playerStat.stats.battingStat;
-      final bowlingStats = playerStat.stats.bowlingStat;
-
-      if (bowlingStats == null || battingStats == null) continue;
+      final battingStats = playerStat.stats.batting;
+      final bowlingStats = playerStat.stats.bowling;
 
       int highestRuns = 0;
       int highestWickets = 0;

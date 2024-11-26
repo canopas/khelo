@@ -49,6 +49,12 @@ class MatchService {
             toFirestore: (MatchSetting setting, _) => setting.toJson(),
           );
 
+  Future<(List<MatchModel>, List<UserModel>)> migrate() async {
+    final matches = await _matchCollection.get();
+    final users = await _userService.migrate();
+    return (matches.docs.map((e) => e.data()).toList(), users);
+  }
+
   String get generateMatchId => _matchCollection.doc().id;
 
   Future<MatchModel> getMatchById(String id) async {

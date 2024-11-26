@@ -18,10 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$UserStatViewState {
   Object? get error => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
-  int get testMatchesCount => throw _privateConstructorUsedError;
-  int get otherMatchesCount => throw _privateConstructorUsedError;
-  UserStat get testStats => throw _privateConstructorUsedError;
-  UserStat get otherStats => throw _privateConstructorUsedError;
+  List<UserStat>? get userStats => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
   /// Create a copy of UserStatViewState
@@ -40,14 +37,8 @@ abstract class $UserStatViewStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       int selectedTab,
-      int testMatchesCount,
-      int otherMatchesCount,
-      UserStat testStats,
-      UserStat otherStats,
+      List<UserStat>? userStats,
       bool loading});
-
-  $UserStatCopyWith<$Res> get testStats;
-  $UserStatCopyWith<$Res> get otherStats;
 }
 
 /// @nodoc
@@ -67,10 +58,7 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
   $Res call({
     Object? error = freezed,
     Object? selectedTab = null,
-    Object? testMatchesCount = null,
-    Object? otherMatchesCount = null,
-    Object? testStats = null,
-    Object? otherStats = null,
+    Object? userStats = freezed,
     Object? loading = null,
   }) {
     return _then(_value.copyWith(
@@ -79,47 +67,15 @@ class _$UserStatViewStateCopyWithImpl<$Res, $Val extends UserStatViewState>
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
-      testMatchesCount: null == testMatchesCount
-          ? _value.testMatchesCount
-          : testMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      otherMatchesCount: null == otherMatchesCount
-          ? _value.otherMatchesCount
-          : otherMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      testStats: null == testStats
-          ? _value.testStats
-          : testStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
-      otherStats: null == otherStats
-          ? _value.otherStats
-          : otherStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
+      userStats: freezed == userStats
+          ? _value.userStats
+          : userStats // ignore: cast_nullable_to_non_nullable
+              as List<UserStat>?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
-  }
-
-  /// Create a copy of UserStatViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserStatCopyWith<$Res> get testStats {
-    return $UserStatCopyWith<$Res>(_value.testStats, (value) {
-      return _then(_value.copyWith(testStats: value) as $Val);
-    });
-  }
-
-  /// Create a copy of UserStatViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserStatCopyWith<$Res> get otherStats {
-    return $UserStatCopyWith<$Res>(_value.otherStats, (value) {
-      return _then(_value.copyWith(otherStats: value) as $Val);
-    });
   }
 }
 
@@ -134,16 +90,8 @@ abstract class _$$UserStatViewStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       int selectedTab,
-      int testMatchesCount,
-      int otherMatchesCount,
-      UserStat testStats,
-      UserStat otherStats,
+      List<UserStat>? userStats,
       bool loading});
-
-  @override
-  $UserStatCopyWith<$Res> get testStats;
-  @override
-  $UserStatCopyWith<$Res> get otherStats;
 }
 
 /// @nodoc
@@ -161,10 +109,7 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? selectedTab = null,
-    Object? testMatchesCount = null,
-    Object? otherMatchesCount = null,
-    Object? testStats = null,
-    Object? otherStats = null,
+    Object? userStats = freezed,
     Object? loading = null,
   }) {
     return _then(_$UserStatViewStateImpl(
@@ -173,22 +118,10 @@ class __$$UserStatViewStateImplCopyWithImpl<$Res>
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
               as int,
-      testMatchesCount: null == testMatchesCount
-          ? _value.testMatchesCount
-          : testMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      otherMatchesCount: null == otherMatchesCount
-          ? _value.otherMatchesCount
-          : otherMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      testStats: null == testStats
-          ? _value.testStats
-          : testStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
-      otherStats: null == otherStats
-          ? _value.otherStats
-          : otherStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
+      userStats: freezed == userStats
+          ? _value._userStats
+          : userStats // ignore: cast_nullable_to_non_nullable
+              as List<UserStat>?,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -203,36 +136,33 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
   const _$UserStatViewStateImpl(
       {this.error,
       this.selectedTab = 0,
-      this.testMatchesCount = 0,
-      this.otherMatchesCount = 0,
-      this.testStats = const UserStat(),
-      this.otherStats = const UserStat(),
-      this.loading = false});
+      final List<UserStat>? userStats = null,
+      this.loading = false})
+      : _userStats = userStats;
 
   @override
   final Object? error;
   @override
   @JsonKey()
   final int selectedTab;
+  final List<UserStat>? _userStats;
   @override
   @JsonKey()
-  final int testMatchesCount;
-  @override
-  @JsonKey()
-  final int otherMatchesCount;
-  @override
-  @JsonKey()
-  final UserStat testStats;
-  @override
-  @JsonKey()
-  final UserStat otherStats;
+  List<UserStat>? get userStats {
+    final value = _userStats;
+    if (value == null) return null;
+    if (_userStats is EqualUnmodifiableListView) return _userStats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey()
   final bool loading;
 
   @override
   String toString() {
-    return 'UserStatViewState(error: $error, selectedTab: $selectedTab, testMatchesCount: $testMatchesCount, otherMatchesCount: $otherMatchesCount, testStats: $testStats, otherStats: $otherStats, loading: $loading)';
+    return 'UserStatViewState(error: $error, selectedTab: $selectedTab, userStats: $userStats, loading: $loading)';
   }
 
   @override
@@ -243,14 +173,8 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
             const DeepCollectionEquality().equals(other.error, error) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab) &&
-            (identical(other.testMatchesCount, testMatchesCount) ||
-                other.testMatchesCount == testMatchesCount) &&
-            (identical(other.otherMatchesCount, otherMatchesCount) ||
-                other.otherMatchesCount == otherMatchesCount) &&
-            (identical(other.testStats, testStats) ||
-                other.testStats == testStats) &&
-            (identical(other.otherStats, otherStats) ||
-                other.otherStats == otherStats) &&
+            const DeepCollectionEquality()
+                .equals(other._userStats, _userStats) &&
             (identical(other.loading, loading) || other.loading == loading));
   }
 
@@ -259,10 +183,7 @@ class _$UserStatViewStateImpl implements _UserStatViewState {
       runtimeType,
       const DeepCollectionEquality().hash(error),
       selectedTab,
-      testMatchesCount,
-      otherMatchesCount,
-      testStats,
-      otherStats,
+      const DeepCollectionEquality().hash(_userStats),
       loading);
 
   /// Create a copy of UserStatViewState
@@ -279,10 +200,7 @@ abstract class _UserStatViewState implements UserStatViewState {
   const factory _UserStatViewState(
       {final Object? error,
       final int selectedTab,
-      final int testMatchesCount,
-      final int otherMatchesCount,
-      final UserStat testStats,
-      final UserStat otherStats,
+      final List<UserStat>? userStats,
       final bool loading}) = _$UserStatViewStateImpl;
 
   @override
@@ -290,13 +208,7 @@ abstract class _UserStatViewState implements UserStatViewState {
   @override
   int get selectedTab;
   @override
-  int get testMatchesCount;
-  @override
-  int get otherMatchesCount;
-  @override
-  UserStat get testStats;
-  @override
-  UserStat get otherStats;
+  List<UserStat>? get userStats;
   @override
   bool get loading;
 

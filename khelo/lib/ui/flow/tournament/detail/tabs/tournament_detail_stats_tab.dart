@@ -130,9 +130,8 @@ class TournamentDetailStatsTab extends ConsumerWidget {
     final matchCount = matches
         .where((element) => element.players.contains(keyStat.player.id))
         .length;
-    final average =
-        keyStat.stats.bowlingStat?.average.toStringAsFixed(1) ?? '0.0';
-    final runs = keyStat.stats.battingStat?.runScored.toString() ?? '0';
+    final average = keyStat.stats.bowling.average.toStringAsFixed(1);
+    final runs = keyStat.stats.batting.runScored.toString();
 
     return DataRow(
       cells: [

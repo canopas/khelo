@@ -53,6 +53,19 @@ class UserService {
         toFirestore: (session, _) => session.toJson(),
       );
 
+  CollectionReference<UserStat> _userStatsRef(String userId) => _userRef
+      .doc(userId)
+      .collection(FireStoreConst.userStatCollection)
+      .withConverter(
+        fromFirestore: UserStat.fromFireStore,
+        toFirestore: (userStat, _) => userStat.toJson(),
+      );
+
+  Future<List<UserModel>> migrate() async {
+    final users = await _userRef.get();
+    return users.docs.map((e) => e.data()).toList();
+  }
+
   Future<void> clearSession({
     required String uid,
     required String sessionId,
@@ -96,56 +109,10 @@ class UserService {
     }
   }
 
-  Future<UserModel> createNewUser(
-    String phoneNumber,
-    String displayName,
-  ) async {
-    try {
-      final response = await client.req(
-        CreateUserEndpoint(
-          name: displayName,
-          phone: phoneNumber,
-        ),
-      );
-
-      return UserModel.fromJson(response.data);
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<void> updateUser(UserModel user) async {
-    try {
-      final userRef = _userRef.doc(user.id);
-      await userRef.set(user, SetOptions(merge: true));
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
-  Future<UserModel> _createUser(String userId, String phone) async {
-    final user = UserModel(
-      id: userId,
-      phone: phone,
-      created_at: DateTime.now(),
-    );
-    await _userRef.doc(userId).set(user);
-    return user;
-  }
-
-  Future<void> deleteUser() async {
-    try {
-      await _userRef.doc(_currentUser?.id).delete();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
-  }
-
   Future<UserModel?> getUserByPhoneNumber(String number) async {
     try {
-      final snapshot = await _userRef
-          .where(FireStoreConst.phone, isEqualTo: number)
-          .get();
+      final snapshot =
+          await _userRef.where(FireStoreConst.phone, isEqualTo: number).get();
       if (snapshot.docs.isNotEmpty) {
         return snapshot.docs.first.data();
       } else {
@@ -191,6 +158,83 @@ class UserService {
     }).handleError((error, stack) {
       throw AppError.fromError(error, stack);
     });
+  }
+
+  Stream<List<UserStat>?> streamUserStats(String userId) {
+    return _userStatsRef(userId).snapshots().map((snapshot) {
+      return snapshot.docs.isEmpty
+          ? null
+          : snapshot.docs.map((e) => e.data()).toList();
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
+  }
+
+  Future<UserStat?> getUserStats(String userId, UserStatType type) async {
+    try {
+      final snapshot = await _userStatsRef(userId)
+          .where(FireStoreConst.type, isEqualTo: type.name)
+          .limit(1)
+          .get();
+      return snapshot.docs.isEmpty ? null : snapshot.docs.first.data();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<UserModel> createNewUser(
+    String phoneNumber,
+    String displayName,
+  ) async {
+    try {
+      final response = await client.req(
+        CreateUserEndpoint(
+          name: displayName,
+          phone: phoneNumber,
+        ),
+      );
+
+      return UserModel.fromJson(response.data);
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> updateUser(UserModel user) async {
+    try {
+      final userRef = _userRef.doc(user.id);
+      await userRef.set(user, SetOptions(merge: true));
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> updateUserStats(String userId, UserStat stats) async {
+    try {
+      final userStatsRef = _userStatsRef(userId);
+
+      await userStatsRef
+          .doc(stats.type?.name)
+          .set(stats, SetOptions(merge: true));
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<UserModel> _createUser(String userId, String phone) async {
+    final user = UserModel(
+      id: userId,
+      phone: phone,
+      created_at: DateTime.now(),
+    );
+    await _userRef.doc(userId).set(user);
+    return user;
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await _userRef.doc(_currentUser?.id).delete();
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Future<List<UserModel>> searchUser(String searchKey) async {
