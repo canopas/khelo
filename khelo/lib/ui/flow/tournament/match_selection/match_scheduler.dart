@@ -442,7 +442,9 @@ class MatchScheduler {
     final List<List<TeamModel>> teamPairs = [];
 
     // Initialize match count based on the existing scheduled matches
-    final Map<TeamModel, int> matchCount = {for (final team in teamPool) team: 0};
+    final Map<TeamModel, int> matchCount = {
+      for (final team in teamPool) team: 0
+    };
 
     // Update match count based on already scheduled matches
     for (final match in scheduledMatches) {
@@ -683,6 +685,7 @@ class MatchScheduler {
     final teams =
         matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
     completeTeamSet(allMatches, teamPool, teams, boxSize);
+    teamPool.removeWhere((element) => teams.contains(element));
 
     final teamPairs = createRoundRobinTeamPairs(
         teams,
