@@ -67,8 +67,8 @@ class MatchScheduler {
         Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
 
-    var currentGroup = MatchGroup.round;
-    var currentRound = 1;
+    MatchGroup currentGroup = MatchGroup.round;
+    int currentRound = 1;
 
     while (teamPool.length > 1) {
       final group =
@@ -98,8 +98,8 @@ class MatchScheduler {
         Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
 
-    var currentGroup = MatchGroup.round;
-    var currentRound = 1;
+    MatchGroup currentGroup = MatchGroup.round;
+    int currentRound = 1;
     final int totalTeams = teamPool.length;
     int matchesPerTeam;
 
@@ -115,7 +115,7 @@ class MatchScheduler {
       final group =
           additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
       final matches = group[currentRound] ?? [];
-      var expectedQualifiers = 0;
+      int expectedQualifiers = 0;
 
       if (currentGroup == MatchGroup.round) {
         handleSingleMiniRobinMatches(
@@ -188,15 +188,15 @@ class MatchScheduler {
         Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
 
-    var currentGroup = MatchGroup.round;
-    var currentRound = 1;
+    MatchGroup currentGroup = MatchGroup.round;
+    int currentRound = 1;
     final int boxSize = 3;
 
     while (teamPool.length > 1) {
       final group =
           additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
       final matches = group[currentRound] ?? [];
-      var expectedQualifiers = 0;
+      int expectedQualifiers = 0;
 
       if (currentGroup == MatchGroup.round) {
         handleSingleBoxLeague(
@@ -325,14 +325,14 @@ class MatchScheduler {
         Map.from(scheduledMatches);
     final List<TeamModel> teamPool = List.of(teams);
 
-    var currentGroup = MatchGroup.round;
-    var currentRound = 1;
+    MatchGroup currentGroup = MatchGroup.round;
+    int currentRound = 1;
 
     while (teamPool.length > 1) {
       final group =
           additionalScheduledMatches.putIfAbsent(currentGroup, () => {1: []});
       final matches = group[currentRound] ?? [];
-      var expectedQualifiers = 0;
+      int expectedQualifiers = 0;
 
       if (currentGroup == MatchGroup.round) {
         expectedQualifiers = handleSingleBestOfThreePhase(
@@ -378,18 +378,18 @@ class MatchScheduler {
             ))
         .toList();
 
-    for (var match in matches) {
+    for (final match in matches) {
       if (match.matchResult == null) {
         continue;
       }
       MatchResult result = match.matchResult!;
 
-      var team1Data = match.teams.first;
-      var team2Data = match.teams.last;
+      MatchTeamModel team1Data = match.teams.first;
+      MatchTeamModel team2Data = match.teams.last;
 
-      var team1Points =
+      TeamPoints team1Points =
           teamPoints.firstWhere((team) => team.team.id == team1Data.team_id);
-      var team2Points =
+      TeamPoints team2Points =
           teamPoints.firstWhere((team) => team.team.id == team2Data.team_id);
 
       team1Points.runs += team1Data.run;
@@ -402,13 +402,13 @@ class MatchScheduler {
 
       switch (result.winType) {
         case WinnerByType.run:
-          var winningTeamPoints =
+          TeamPoints winningTeamPoints =
               teamPoints.firstWhere((team) => team.team.id == result.teamId);
           winningTeamPoints.points += 2;
           break;
 
         case WinnerByType.wicket:
-          var winningTeamPoints =
+          TeamPoints winningTeamPoints =
               teamPoints.firstWhere((team) => team.team.id == result.teamId);
           winningTeamPoints.points += 2;
           break;
@@ -420,7 +420,7 @@ class MatchScheduler {
       }
     }
 
-    for (var team in teamPoints) {
+    for (final team in teamPoints) {
       if (team.oversFaced > 0) {
         team.runRate = team.runs / team.oversFaced;
       }
@@ -442,11 +442,11 @@ class MatchScheduler {
     final List<List<TeamModel>> teamPairs = [];
 
     // Initialize match count based on the existing scheduled matches
-    final Map<TeamModel, int> matchCount = {for (var team in teamPool) team: 0};
+    final Map<TeamModel, int> matchCount = {for (final team in teamPool) team: 0};
 
     // Update match count based on already scheduled matches
-    for (var match in scheduledMatches) {
-      for (var team in match) {
+    for (final match in scheduledMatches) {
+      for (final team in match) {
         if (teamPool.contains(team)) {
           matchCount[team] = (matchCount[team] ?? 0) + 1;
         }
@@ -490,6 +490,11 @@ class MatchScheduler {
     int groupNumber,
   ) {
     for (final pair in teamPairs) {
+      if ((group == MatchGroup.quarterfinal && existingMatches.length >= 4) ||
+          (group == MatchGroup.semifinal && existingMatches.length >= 2) ||
+          (group == MatchGroup.finals && existingMatches.isNotEmpty)) {
+        return;
+      }
       if (pair.length == 2) {
         existingMatches.add(MatchModel(
           id: '',
@@ -606,14 +611,27 @@ class MatchScheduler {
     removeAlreadyScheduledTeams(matches, teamPool);
 
     final teamPairs = createKnockoutTeamPairs(teamPool);
-    addMatches(matches, teamPairs, group, number);
+
+    if ((group == MatchGroup.quarterfinal && matches.length < 4) ||
+        (group == MatchGroup.semifinal && matches.length < 2) ||
+        (group == MatchGroup.finals && matches.isEmpty)) {
+      addMatches(matches, teamPairs, group, number);
+    }
 
     teamPool.removeWhere((team) => teamPairs
         .any((element) => element.length == 2 && element.contains(team)));
-
-    addWinnerTeamsBackToTeam(matches, teamPool);
-
-    return matches.length;
+    if (group != MatchGroup.finals) {
+      addWinnerTeamsBackToTeam(matches, teamPool);
+    }
+    if (group == MatchGroup.quarterfinal && matches.length >= 4) {
+      return 4;
+    } else if (group == MatchGroup.semifinal && matches.length >= 2) {
+      return 2;
+    } else if (group == MatchGroup.finals && matches.isNotEmpty) {
+      return 1;
+    } else {
+      return matches.length;
+    }
   }
 
   int handleSingleBestOfThreePhase(
@@ -664,7 +682,6 @@ class MatchScheduler {
   ) {
     final teams =
         matches.expand((e) => e.teams.map((e) => e.team)).toSet().toList();
-
     completeTeamSet(allMatches, teamPool, teams, boxSize);
 
     final teamPairs = createRoundRobinTeamPairs(
@@ -673,8 +690,7 @@ class MatchScheduler {
         matches
             .map((element) => element.teams.map((e) => e.team).toList())
             .toList());
-
-    addMatches(matches, teamPairs, MatchGroup.round, number);
+    addMatches(matches, teamPairs, group, number);
 
     teamPool.removeWhere((team) =>
         teamPairs.any((pair) => pair.length == 2 && pair.contains(team)));
@@ -699,7 +715,7 @@ class MatchScheduler {
 
   List<List<TeamModel>> getExistingTeamPairs(List<MatchModel> matches) {
     final List<List<TeamModel>> pairs = [];
-    for (var match in matches) {
+    for (final match in matches) {
       final pair = match.teams.map((e) => e.team).toList();
       if (!pairs.map((e) => e.map((e) => e.id)).any((element) =>
           element.contains(pair.first.id) && element.contains(pair.last.id))) {
@@ -717,13 +733,11 @@ class MatchScheduler {
     int number,
   ) {
     final List<String> winnerTeams = [];
-    for (var p in pair) {
+    for (final p in pair) {
       final matchesForPair = groupMatches
-          .where(
-            (element) =>
-                element.team_ids.contains(p.first.id) &&
-                element.team_ids.contains(p.last.id),
-          )
+          .where((element) =>
+              element.team_ids.contains(p.first.id) &&
+              element.team_ids.contains(p.last.id))
           .toList();
       if (matchesForPair.isEmpty) {
         addMatches(groupMatches, [p], group, number);
@@ -756,7 +770,7 @@ class MatchScheduler {
     String teamTwo,
   ) {
     Map<String, int> winner = {teamOne: 0, teamTwo: 0};
-    for (var element in matches) {
+    for (final element in matches) {
       final result = element.matchResult;
       if (result == null) continue;
 
