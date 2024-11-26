@@ -641,7 +641,7 @@ extension BallScoreList on List<BallScoreModel> {
     UserStat? oldUserStats,
     UserStatType? type,
   }) {
-    final newBattingStat = calculateBattingStats(currentUserId: currentUserId);
+    final newBattingStat = calculateBattingStats(currentUserId);
     final newBowlingStat = calculateBowlingStats(currentUserId);
     final newFieldingStat = calculateFieldingStats(currentUserId);
 
@@ -665,7 +665,7 @@ extension BallScoreList on List<BallScoreModel> {
     return oldUserStats?.addStats(newUserStats) ?? newUserStats;
   }
 
-  Batting calculateBattingStats({required String currentUserId}) {
+  Batting calculateBattingStats(String currentUserId) {
     int runScored = 0;
     int dismissal = 0;
     int ballFaced = 0;
@@ -730,7 +730,7 @@ extension BallScoreList on List<BallScoreModel> {
         fifties++;
       }
 
-      if (isDismissed && inningRunScored == 0) {
+      if (isDismissed && inningRunScored >= 0 && inningRunScored <= 2) {
         ducks++;
       }
     });
