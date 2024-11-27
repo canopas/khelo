@@ -662,7 +662,7 @@ extension BallScoreList on List<BallScoreModel> {
       fielding: newFieldingStat,
     );
 
-    return oldUserStats?.addStats(newUserStats) ?? newUserStats;
+    return oldUserStats?.updateStat(newUserStats) ?? newUserStats;
   }
 
   Batting calculateBattingStats(String currentUserId) {
@@ -738,14 +738,15 @@ extension BallScoreList on List<BallScoreModel> {
     return Batting(
       innings: inningGroup.length,
       average: average,
-      strikeRate: strikeRate,
-      ballFaced: ballFaced,
-      runScored: runScored,
+      strike_rate: strikeRate,
+      ball_faced: ballFaced,
+      run_scored: runScored,
       fours: fours,
       sixes: sixes,
       ducks: ducks,
       fifties: fifties,
       hundreds: hundreds,
+      dismissal: dismissal,
     );
   }
 
@@ -806,13 +807,13 @@ extension BallScoreList on List<BallScoreModel> {
     return Bowling(
       innings: inningGroup.length,
       average: average,
-      strikeRate: strikeRate,
-      wicketTaken: wicketTaken,
-      economyRate: economyRate,
+      strike_rate: strikeRate,
+      wicket_taken: wicketTaken,
+      economy_rate: economyRate,
       balls: bowledBallCount,
-      wideBalls: wideBallCount,
-      runsConceded: runsConceded,
-      noBalls: noBallCount,
+      wide_balls: wideBallCount,
+      runs_conceded: runsConceded,
+      no_balls: noBallCount,
       maiden: maidenOvers,
     );
   }
@@ -824,12 +825,17 @@ extension BallScoreList on List<BallScoreModel> {
 
     overGroups.forEach((overNumber, balls) {
       int runsConceded = 0;
+      bool hasExtras = false;
 
       for (final ball in balls) {
         runsConceded += ball.runs_scored + (ball.extras_awarded ?? 0);
+        if (ball.extras_type != null) {
+          hasExtras = true;
+          break;
+        }
       }
 
-      if (runsConceded == 0 && balls.length == 6) {
+      if (runsConceded == 0 && !hasExtras && balls.length == 6) {
         maiden++;
       }
     });

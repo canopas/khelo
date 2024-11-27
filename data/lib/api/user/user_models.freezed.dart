@@ -853,7 +853,7 @@ abstract class _ApiSession extends ApiSession {
 }
 
 UserStat _$UserStatFromJson(Map<String, dynamic> json) {
-  return _UserStats.fromJson(json);
+  return _UserStat.fromJson(json);
 }
 
 /// @nodoc
@@ -968,11 +968,11 @@ class _$UserStatCopyWithImpl<$Res, $Val extends UserStat>
 }
 
 /// @nodoc
-abstract class _$$UserStatsImplCopyWith<$Res>
+abstract class _$$UserStatImplCopyWith<$Res>
     implements $UserStatCopyWith<$Res> {
-  factory _$$UserStatsImplCopyWith(
-          _$UserStatsImpl value, $Res Function(_$UserStatsImpl) then) =
-      __$$UserStatsImplCopyWithImpl<$Res>;
+  factory _$$UserStatImplCopyWith(
+          _$UserStatImpl value, $Res Function(_$UserStatImpl) then) =
+      __$$UserStatImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -991,11 +991,11 @@ abstract class _$$UserStatsImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$UserStatsImplCopyWithImpl<$Res>
-    extends _$UserStatCopyWithImpl<$Res, _$UserStatsImpl>
-    implements _$$UserStatsImplCopyWith<$Res> {
-  __$$UserStatsImplCopyWithImpl(
-      _$UserStatsImpl _value, $Res Function(_$UserStatsImpl) _then)
+class __$$UserStatImplCopyWithImpl<$Res>
+    extends _$UserStatCopyWithImpl<$Res, _$UserStatImpl>
+    implements _$$UserStatImplCopyWith<$Res> {
+  __$$UserStatImplCopyWithImpl(
+      _$UserStatImpl _value, $Res Function(_$UserStatImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of UserStat
@@ -1009,7 +1009,7 @@ class __$$UserStatsImplCopyWithImpl<$Res>
     Object? bowling = null,
     Object? fielding = null,
   }) {
-    return _then(_$UserStatsImpl(
+    return _then(_$UserStatImpl(
       matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
@@ -1037,16 +1037,16 @@ class __$$UserStatsImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(anyMap: true, explicitToJson: true)
-class _$UserStatsImpl implements _UserStats {
-  const _$UserStatsImpl(
+class _$UserStatImpl implements _UserStat {
+  const _$UserStatImpl(
       {this.matches = 0,
       this.type,
       this.batting = const Batting(),
       this.bowling = const Bowling(),
       this.fielding = const Fielding()});
 
-  factory _$UserStatsImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserStatsImplFromJson(json);
+  factory _$UserStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$UserStatImplFromJson(json);
 
   @override
   @JsonKey()
@@ -1072,7 +1072,7 @@ class _$UserStatsImpl implements _UserStats {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserStatsImpl &&
+            other is _$UserStatImpl &&
             (identical(other.matches, matches) || other.matches == matches) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.batting, batting) || other.batting == batting) &&
@@ -1091,27 +1091,27 @@ class _$UserStatsImpl implements _UserStats {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserStatsImplCopyWith<_$UserStatsImpl> get copyWith =>
-      __$$UserStatsImplCopyWithImpl<_$UserStatsImpl>(this, _$identity);
+  _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
+      __$$UserStatImplCopyWithImpl<_$UserStatImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserStatsImplToJson(
+    return _$$UserStatImplToJson(
       this,
     );
   }
 }
 
-abstract class _UserStats implements UserStat {
-  const factory _UserStats(
+abstract class _UserStat implements UserStat {
+  const factory _UserStat(
       {final int matches,
       final UserStatType? type,
       final Batting batting,
       final Bowling bowling,
-      final Fielding fielding}) = _$UserStatsImpl;
+      final Fielding fielding}) = _$UserStatImpl;
 
-  factory _UserStats.fromJson(Map<String, dynamic> json) =
-      _$UserStatsImpl.fromJson;
+  factory _UserStat.fromJson(Map<String, dynamic> json) =
+      _$UserStatImpl.fromJson;
 
   @override
   int get matches;
@@ -1128,7 +1128,7 @@ abstract class _UserStats implements UserStat {
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$UserStatsImplCopyWith<_$UserStatsImpl> get copyWith =>
+  _$$UserStatImplCopyWith<_$UserStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1139,15 +1139,16 @@ Batting _$BattingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Batting {
   int get innings => throw _privateConstructorUsedError;
-  int get runScored => throw _privateConstructorUsedError;
+  int get run_scored => throw _privateConstructorUsedError;
   double get average => throw _privateConstructorUsedError;
-  double get strikeRate => throw _privateConstructorUsedError;
-  int get ballFaced => throw _privateConstructorUsedError;
+  double get strike_rate => throw _privateConstructorUsedError;
+  int get ball_faced => throw _privateConstructorUsedError;
   int get fours => throw _privateConstructorUsedError;
   int get sixes => throw _privateConstructorUsedError;
   int get fifties => throw _privateConstructorUsedError;
   int get hundreds => throw _privateConstructorUsedError;
   int get ducks => throw _privateConstructorUsedError;
+  int get dismissal => throw _privateConstructorUsedError;
 
   /// Serializes this Batting to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1165,15 +1166,16 @@ abstract class $BattingCopyWith<$Res> {
   @useResult
   $Res call(
       {int innings,
-      int runScored,
+      int run_scored,
       double average,
-      double strikeRate,
-      int ballFaced,
+      double strike_rate,
+      int ball_faced,
       int fours,
       int sixes,
       int fifties,
       int hundreds,
-      int ducks});
+      int ducks,
+      int dismissal});
 }
 
 /// @nodoc
@@ -1192,36 +1194,37 @@ class _$BattingCopyWithImpl<$Res, $Val extends Batting>
   @override
   $Res call({
     Object? innings = null,
-    Object? runScored = null,
+    Object? run_scored = null,
     Object? average = null,
-    Object? strikeRate = null,
-    Object? ballFaced = null,
+    Object? strike_rate = null,
+    Object? ball_faced = null,
     Object? fours = null,
     Object? sixes = null,
     Object? fifties = null,
     Object? hundreds = null,
     Object? ducks = null,
+    Object? dismissal = null,
   }) {
     return _then(_value.copyWith(
       innings: null == innings
           ? _value.innings
           : innings // ignore: cast_nullable_to_non_nullable
               as int,
-      runScored: null == runScored
-          ? _value.runScored
-          : runScored // ignore: cast_nullable_to_non_nullable
+      run_scored: null == run_scored
+          ? _value.run_scored
+          : run_scored // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
               as double,
-      strikeRate: null == strikeRate
-          ? _value.strikeRate
-          : strikeRate // ignore: cast_nullable_to_non_nullable
+      strike_rate: null == strike_rate
+          ? _value.strike_rate
+          : strike_rate // ignore: cast_nullable_to_non_nullable
               as double,
-      ballFaced: null == ballFaced
-          ? _value.ballFaced
-          : ballFaced // ignore: cast_nullable_to_non_nullable
+      ball_faced: null == ball_faced
+          ? _value.ball_faced
+          : ball_faced // ignore: cast_nullable_to_non_nullable
               as int,
       fours: null == fours
           ? _value.fours
@@ -1243,6 +1246,10 @@ class _$BattingCopyWithImpl<$Res, $Val extends Batting>
           ? _value.ducks
           : ducks // ignore: cast_nullable_to_non_nullable
               as int,
+      dismissal: null == dismissal
+          ? _value.dismissal
+          : dismissal // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -1256,15 +1263,16 @@ abstract class _$$BattingImplCopyWith<$Res> implements $BattingCopyWith<$Res> {
   @useResult
   $Res call(
       {int innings,
-      int runScored,
+      int run_scored,
       double average,
-      double strikeRate,
-      int ballFaced,
+      double strike_rate,
+      int ball_faced,
       int fours,
       int sixes,
       int fifties,
       int hundreds,
-      int ducks});
+      int ducks,
+      int dismissal});
 }
 
 /// @nodoc
@@ -1281,36 +1289,37 @@ class __$$BattingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? innings = null,
-    Object? runScored = null,
+    Object? run_scored = null,
     Object? average = null,
-    Object? strikeRate = null,
-    Object? ballFaced = null,
+    Object? strike_rate = null,
+    Object? ball_faced = null,
     Object? fours = null,
     Object? sixes = null,
     Object? fifties = null,
     Object? hundreds = null,
     Object? ducks = null,
+    Object? dismissal = null,
   }) {
     return _then(_$BattingImpl(
       innings: null == innings
           ? _value.innings
           : innings // ignore: cast_nullable_to_non_nullable
               as int,
-      runScored: null == runScored
-          ? _value.runScored
-          : runScored // ignore: cast_nullable_to_non_nullable
+      run_scored: null == run_scored
+          ? _value.run_scored
+          : run_scored // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
               as double,
-      strikeRate: null == strikeRate
-          ? _value.strikeRate
-          : strikeRate // ignore: cast_nullable_to_non_nullable
+      strike_rate: null == strike_rate
+          ? _value.strike_rate
+          : strike_rate // ignore: cast_nullable_to_non_nullable
               as double,
-      ballFaced: null == ballFaced
-          ? _value.ballFaced
-          : ballFaced // ignore: cast_nullable_to_non_nullable
+      ball_faced: null == ball_faced
+          ? _value.ball_faced
+          : ball_faced // ignore: cast_nullable_to_non_nullable
               as int,
       fours: null == fours
           ? _value.fours
@@ -1332,6 +1341,10 @@ class __$$BattingImplCopyWithImpl<$Res>
           ? _value.ducks
           : ducks // ignore: cast_nullable_to_non_nullable
               as int,
+      dismissal: null == dismissal
+          ? _value.dismissal
+          : dismissal // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -1341,15 +1354,16 @@ class __$$BattingImplCopyWithImpl<$Res>
 class _$BattingImpl implements _Batting {
   const _$BattingImpl(
       {this.innings = 0,
-      this.runScored = 0,
+      this.run_scored = 0,
       this.average = 0.0,
-      this.strikeRate = 0.0,
-      this.ballFaced = 0,
+      this.strike_rate = 0.0,
+      this.ball_faced = 0,
       this.fours = 0,
       this.sixes = 0,
       this.fifties = 0,
       this.hundreds = 0,
-      this.ducks = 0});
+      this.ducks = 0,
+      this.dismissal = 0});
 
   factory _$BattingImpl.fromJson(Map<String, dynamic> json) =>
       _$$BattingImplFromJson(json);
@@ -1359,16 +1373,16 @@ class _$BattingImpl implements _Batting {
   final int innings;
   @override
   @JsonKey()
-  final int runScored;
+  final int run_scored;
   @override
   @JsonKey()
   final double average;
   @override
   @JsonKey()
-  final double strikeRate;
+  final double strike_rate;
   @override
   @JsonKey()
-  final int ballFaced;
+  final int ball_faced;
   @override
   @JsonKey()
   final int fours;
@@ -1384,10 +1398,13 @@ class _$BattingImpl implements _Batting {
   @override
   @JsonKey()
   final int ducks;
+  @override
+  @JsonKey()
+  final int dismissal;
 
   @override
   String toString() {
-    return 'Batting(innings: $innings, runScored: $runScored, average: $average, strikeRate: $strikeRate, ballFaced: $ballFaced, fours: $fours, sixes: $sixes, fifties: $fifties, hundreds: $hundreds, ducks: $ducks)';
+    return 'Batting(innings: $innings, run_scored: $run_scored, average: $average, strike_rate: $strike_rate, ball_faced: $ball_faced, fours: $fours, sixes: $sixes, fifties: $fifties, hundreds: $hundreds, ducks: $ducks, dismissal: $dismissal)';
   }
 
   @override
@@ -1396,25 +1413,38 @@ class _$BattingImpl implements _Batting {
         (other.runtimeType == runtimeType &&
             other is _$BattingImpl &&
             (identical(other.innings, innings) || other.innings == innings) &&
-            (identical(other.runScored, runScored) ||
-                other.runScored == runScored) &&
+            (identical(other.run_scored, run_scored) ||
+                other.run_scored == run_scored) &&
             (identical(other.average, average) || other.average == average) &&
-            (identical(other.strikeRate, strikeRate) ||
-                other.strikeRate == strikeRate) &&
-            (identical(other.ballFaced, ballFaced) ||
-                other.ballFaced == ballFaced) &&
+            (identical(other.strike_rate, strike_rate) ||
+                other.strike_rate == strike_rate) &&
+            (identical(other.ball_faced, ball_faced) ||
+                other.ball_faced == ball_faced) &&
             (identical(other.fours, fours) || other.fours == fours) &&
             (identical(other.sixes, sixes) || other.sixes == sixes) &&
             (identical(other.fifties, fifties) || other.fifties == fifties) &&
             (identical(other.hundreds, hundreds) ||
                 other.hundreds == hundreds) &&
-            (identical(other.ducks, ducks) || other.ducks == ducks));
+            (identical(other.ducks, ducks) || other.ducks == ducks) &&
+            (identical(other.dismissal, dismissal) ||
+                other.dismissal == dismissal));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, innings, runScored, average,
-      strikeRate, ballFaced, fours, sixes, fifties, hundreds, ducks);
+  int get hashCode => Object.hash(
+      runtimeType,
+      innings,
+      run_scored,
+      average,
+      strike_rate,
+      ball_faced,
+      fours,
+      sixes,
+      fifties,
+      hundreds,
+      ducks,
+      dismissal);
 
   /// Create a copy of Batting
   /// with the given fields replaced by the non-null parameter values.
@@ -1435,28 +1465,29 @@ class _$BattingImpl implements _Batting {
 abstract class _Batting implements Batting {
   const factory _Batting(
       {final int innings,
-      final int runScored,
+      final int run_scored,
       final double average,
-      final double strikeRate,
-      final int ballFaced,
+      final double strike_rate,
+      final int ball_faced,
       final int fours,
       final int sixes,
       final int fifties,
       final int hundreds,
-      final int ducks}) = _$BattingImpl;
+      final int ducks,
+      final int dismissal}) = _$BattingImpl;
 
   factory _Batting.fromJson(Map<String, dynamic> json) = _$BattingImpl.fromJson;
 
   @override
   int get innings;
   @override
-  int get runScored;
+  int get run_scored;
   @override
   double get average;
   @override
-  double get strikeRate;
+  double get strike_rate;
   @override
-  int get ballFaced;
+  int get ball_faced;
   @override
   int get fours;
   @override
@@ -1467,6 +1498,8 @@ abstract class _Batting implements Batting {
   int get hundreds;
   @override
   int get ducks;
+  @override
+  int get dismissal;
 
   /// Create a copy of Batting
   /// with the given fields replaced by the non-null parameter values.
@@ -1483,15 +1516,15 @@ Bowling _$BowlingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Bowling {
   int get innings => throw _privateConstructorUsedError;
-  int get wicketTaken => throw _privateConstructorUsedError;
+  int get wicket_taken => throw _privateConstructorUsedError;
   int get balls => throw _privateConstructorUsedError;
-  int get runsConceded => throw _privateConstructorUsedError;
+  int get runs_conceded => throw _privateConstructorUsedError;
   int get maiden => throw _privateConstructorUsedError;
-  int get noBalls => throw _privateConstructorUsedError;
-  int get wideBalls => throw _privateConstructorUsedError;
+  int get no_balls => throw _privateConstructorUsedError;
+  int get wide_balls => throw _privateConstructorUsedError;
   double get average => throw _privateConstructorUsedError;
-  double get strikeRate => throw _privateConstructorUsedError;
-  double get economyRate => throw _privateConstructorUsedError;
+  double get strike_rate => throw _privateConstructorUsedError;
+  double get economy_rate => throw _privateConstructorUsedError;
 
   /// Serializes this Bowling to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1509,15 +1542,15 @@ abstract class $BowlingCopyWith<$Res> {
   @useResult
   $Res call(
       {int innings,
-      int wicketTaken,
+      int wicket_taken,
       int balls,
-      int runsConceded,
+      int runs_conceded,
       int maiden,
-      int noBalls,
-      int wideBalls,
+      int no_balls,
+      int wide_balls,
       double average,
-      double strikeRate,
-      double economyRate});
+      double strike_rate,
+      double economy_rate});
 }
 
 /// @nodoc
@@ -1536,56 +1569,56 @@ class _$BowlingCopyWithImpl<$Res, $Val extends Bowling>
   @override
   $Res call({
     Object? innings = null,
-    Object? wicketTaken = null,
+    Object? wicket_taken = null,
     Object? balls = null,
-    Object? runsConceded = null,
+    Object? runs_conceded = null,
     Object? maiden = null,
-    Object? noBalls = null,
-    Object? wideBalls = null,
+    Object? no_balls = null,
+    Object? wide_balls = null,
     Object? average = null,
-    Object? strikeRate = null,
-    Object? economyRate = null,
+    Object? strike_rate = null,
+    Object? economy_rate = null,
   }) {
     return _then(_value.copyWith(
       innings: null == innings
           ? _value.innings
           : innings // ignore: cast_nullable_to_non_nullable
               as int,
-      wicketTaken: null == wicketTaken
-          ? _value.wicketTaken
-          : wicketTaken // ignore: cast_nullable_to_non_nullable
+      wicket_taken: null == wicket_taken
+          ? _value.wicket_taken
+          : wicket_taken // ignore: cast_nullable_to_non_nullable
               as int,
       balls: null == balls
           ? _value.balls
           : balls // ignore: cast_nullable_to_non_nullable
               as int,
-      runsConceded: null == runsConceded
-          ? _value.runsConceded
-          : runsConceded // ignore: cast_nullable_to_non_nullable
+      runs_conceded: null == runs_conceded
+          ? _value.runs_conceded
+          : runs_conceded // ignore: cast_nullable_to_non_nullable
               as int,
       maiden: null == maiden
           ? _value.maiden
           : maiden // ignore: cast_nullable_to_non_nullable
               as int,
-      noBalls: null == noBalls
-          ? _value.noBalls
-          : noBalls // ignore: cast_nullable_to_non_nullable
+      no_balls: null == no_balls
+          ? _value.no_balls
+          : no_balls // ignore: cast_nullable_to_non_nullable
               as int,
-      wideBalls: null == wideBalls
-          ? _value.wideBalls
-          : wideBalls // ignore: cast_nullable_to_non_nullable
+      wide_balls: null == wide_balls
+          ? _value.wide_balls
+          : wide_balls // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
               as double,
-      strikeRate: null == strikeRate
-          ? _value.strikeRate
-          : strikeRate // ignore: cast_nullable_to_non_nullable
+      strike_rate: null == strike_rate
+          ? _value.strike_rate
+          : strike_rate // ignore: cast_nullable_to_non_nullable
               as double,
-      economyRate: null == economyRate
-          ? _value.economyRate
-          : economyRate // ignore: cast_nullable_to_non_nullable
+      economy_rate: null == economy_rate
+          ? _value.economy_rate
+          : economy_rate // ignore: cast_nullable_to_non_nullable
               as double,
     ) as $Val);
   }
@@ -1600,15 +1633,15 @@ abstract class _$$BowlingImplCopyWith<$Res> implements $BowlingCopyWith<$Res> {
   @useResult
   $Res call(
       {int innings,
-      int wicketTaken,
+      int wicket_taken,
       int balls,
-      int runsConceded,
+      int runs_conceded,
       int maiden,
-      int noBalls,
-      int wideBalls,
+      int no_balls,
+      int wide_balls,
       double average,
-      double strikeRate,
-      double economyRate});
+      double strike_rate,
+      double economy_rate});
 }
 
 /// @nodoc
@@ -1625,56 +1658,56 @@ class __$$BowlingImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? innings = null,
-    Object? wicketTaken = null,
+    Object? wicket_taken = null,
     Object? balls = null,
-    Object? runsConceded = null,
+    Object? runs_conceded = null,
     Object? maiden = null,
-    Object? noBalls = null,
-    Object? wideBalls = null,
+    Object? no_balls = null,
+    Object? wide_balls = null,
     Object? average = null,
-    Object? strikeRate = null,
-    Object? economyRate = null,
+    Object? strike_rate = null,
+    Object? economy_rate = null,
   }) {
     return _then(_$BowlingImpl(
       innings: null == innings
           ? _value.innings
           : innings // ignore: cast_nullable_to_non_nullable
               as int,
-      wicketTaken: null == wicketTaken
-          ? _value.wicketTaken
-          : wicketTaken // ignore: cast_nullable_to_non_nullable
+      wicket_taken: null == wicket_taken
+          ? _value.wicket_taken
+          : wicket_taken // ignore: cast_nullable_to_non_nullable
               as int,
       balls: null == balls
           ? _value.balls
           : balls // ignore: cast_nullable_to_non_nullable
               as int,
-      runsConceded: null == runsConceded
-          ? _value.runsConceded
-          : runsConceded // ignore: cast_nullable_to_non_nullable
+      runs_conceded: null == runs_conceded
+          ? _value.runs_conceded
+          : runs_conceded // ignore: cast_nullable_to_non_nullable
               as int,
       maiden: null == maiden
           ? _value.maiden
           : maiden // ignore: cast_nullable_to_non_nullable
               as int,
-      noBalls: null == noBalls
-          ? _value.noBalls
-          : noBalls // ignore: cast_nullable_to_non_nullable
+      no_balls: null == no_balls
+          ? _value.no_balls
+          : no_balls // ignore: cast_nullable_to_non_nullable
               as int,
-      wideBalls: null == wideBalls
-          ? _value.wideBalls
-          : wideBalls // ignore: cast_nullable_to_non_nullable
+      wide_balls: null == wide_balls
+          ? _value.wide_balls
+          : wide_balls // ignore: cast_nullable_to_non_nullable
               as int,
       average: null == average
           ? _value.average
           : average // ignore: cast_nullable_to_non_nullable
               as double,
-      strikeRate: null == strikeRate
-          ? _value.strikeRate
-          : strikeRate // ignore: cast_nullable_to_non_nullable
+      strike_rate: null == strike_rate
+          ? _value.strike_rate
+          : strike_rate // ignore: cast_nullable_to_non_nullable
               as double,
-      economyRate: null == economyRate
-          ? _value.economyRate
-          : economyRate // ignore: cast_nullable_to_non_nullable
+      economy_rate: null == economy_rate
+          ? _value.economy_rate
+          : economy_rate // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
@@ -1685,15 +1718,15 @@ class __$$BowlingImplCopyWithImpl<$Res>
 class _$BowlingImpl implements _Bowling {
   const _$BowlingImpl(
       {this.innings = 0,
-      this.wicketTaken = 0,
+      this.wicket_taken = 0,
       this.balls = 0,
-      this.runsConceded = 0,
+      this.runs_conceded = 0,
       this.maiden = 0,
-      this.noBalls = 0,
-      this.wideBalls = 0,
+      this.no_balls = 0,
+      this.wide_balls = 0,
       this.average = 0.0,
-      this.strikeRate = 0.0,
-      this.economyRate = 0.0});
+      this.strike_rate = 0.0,
+      this.economy_rate = 0.0});
 
   factory _$BowlingImpl.fromJson(Map<String, dynamic> json) =>
       _$$BowlingImplFromJson(json);
@@ -1703,35 +1736,35 @@ class _$BowlingImpl implements _Bowling {
   final int innings;
   @override
   @JsonKey()
-  final int wicketTaken;
+  final int wicket_taken;
   @override
   @JsonKey()
   final int balls;
   @override
   @JsonKey()
-  final int runsConceded;
+  final int runs_conceded;
   @override
   @JsonKey()
   final int maiden;
   @override
   @JsonKey()
-  final int noBalls;
+  final int no_balls;
   @override
   @JsonKey()
-  final int wideBalls;
+  final int wide_balls;
   @override
   @JsonKey()
   final double average;
   @override
   @JsonKey()
-  final double strikeRate;
+  final double strike_rate;
   @override
   @JsonKey()
-  final double economyRate;
+  final double economy_rate;
 
   @override
   String toString() {
-    return 'Bowling(innings: $innings, wicketTaken: $wicketTaken, balls: $balls, runsConceded: $runsConceded, maiden: $maiden, noBalls: $noBalls, wideBalls: $wideBalls, average: $average, strikeRate: $strikeRate, economyRate: $economyRate)';
+    return 'Bowling(innings: $innings, wicket_taken: $wicket_taken, balls: $balls, runs_conceded: $runs_conceded, maiden: $maiden, no_balls: $no_balls, wide_balls: $wide_balls, average: $average, strike_rate: $strike_rate, economy_rate: $economy_rate)';
   }
 
   @override
@@ -1740,20 +1773,21 @@ class _$BowlingImpl implements _Bowling {
         (other.runtimeType == runtimeType &&
             other is _$BowlingImpl &&
             (identical(other.innings, innings) || other.innings == innings) &&
-            (identical(other.wicketTaken, wicketTaken) ||
-                other.wicketTaken == wicketTaken) &&
+            (identical(other.wicket_taken, wicket_taken) ||
+                other.wicket_taken == wicket_taken) &&
             (identical(other.balls, balls) || other.balls == balls) &&
-            (identical(other.runsConceded, runsConceded) ||
-                other.runsConceded == runsConceded) &&
+            (identical(other.runs_conceded, runs_conceded) ||
+                other.runs_conceded == runs_conceded) &&
             (identical(other.maiden, maiden) || other.maiden == maiden) &&
-            (identical(other.noBalls, noBalls) || other.noBalls == noBalls) &&
-            (identical(other.wideBalls, wideBalls) ||
-                other.wideBalls == wideBalls) &&
+            (identical(other.no_balls, no_balls) ||
+                other.no_balls == no_balls) &&
+            (identical(other.wide_balls, wide_balls) ||
+                other.wide_balls == wide_balls) &&
             (identical(other.average, average) || other.average == average) &&
-            (identical(other.strikeRate, strikeRate) ||
-                other.strikeRate == strikeRate) &&
-            (identical(other.economyRate, economyRate) ||
-                other.economyRate == economyRate));
+            (identical(other.strike_rate, strike_rate) ||
+                other.strike_rate == strike_rate) &&
+            (identical(other.economy_rate, economy_rate) ||
+                other.economy_rate == economy_rate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1761,15 +1795,15 @@ class _$BowlingImpl implements _Bowling {
   int get hashCode => Object.hash(
       runtimeType,
       innings,
-      wicketTaken,
+      wicket_taken,
       balls,
-      runsConceded,
+      runs_conceded,
       maiden,
-      noBalls,
-      wideBalls,
+      no_balls,
+      wide_balls,
       average,
-      strikeRate,
-      economyRate);
+      strike_rate,
+      economy_rate);
 
   /// Create a copy of Bowling
   /// with the given fields replaced by the non-null parameter values.
@@ -1790,38 +1824,38 @@ class _$BowlingImpl implements _Bowling {
 abstract class _Bowling implements Bowling {
   const factory _Bowling(
       {final int innings,
-      final int wicketTaken,
+      final int wicket_taken,
       final int balls,
-      final int runsConceded,
+      final int runs_conceded,
       final int maiden,
-      final int noBalls,
-      final int wideBalls,
+      final int no_balls,
+      final int wide_balls,
       final double average,
-      final double strikeRate,
-      final double economyRate}) = _$BowlingImpl;
+      final double strike_rate,
+      final double economy_rate}) = _$BowlingImpl;
 
   factory _Bowling.fromJson(Map<String, dynamic> json) = _$BowlingImpl.fromJson;
 
   @override
   int get innings;
   @override
-  int get wicketTaken;
+  int get wicket_taken;
   @override
   int get balls;
   @override
-  int get runsConceded;
+  int get runs_conceded;
   @override
   int get maiden;
   @override
-  int get noBalls;
+  int get no_balls;
   @override
-  int get wideBalls;
+  int get wide_balls;
   @override
   double get average;
   @override
-  double get strikeRate;
+  double get strike_rate;
   @override
-  double get economyRate;
+  double get economy_rate;
 
   /// Create a copy of Bowling
   /// with the given fields replaced by the non-null parameter values.

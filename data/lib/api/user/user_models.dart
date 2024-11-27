@@ -179,7 +179,7 @@ class UserStat with _$UserStat {
     @Default(Batting()) Batting batting,
     @Default(Bowling()) Bowling bowling,
     @Default(Fielding()) Fielding fielding,
-  }) = _UserStats;
+  }) = _UserStat;
 
   factory UserStat.fromJson(Map<String, dynamic> json) =>
       _$UserStatFromJson(json);
@@ -195,15 +195,16 @@ class UserStat with _$UserStat {
 class Batting with _$Batting {
   const factory Batting({
     @Default(0) int innings,
-    @Default(0) int runScored,
+    @Default(0) int run_scored,
     @Default(0.0) double average,
-    @Default(0.0) double strikeRate,
-    @Default(0) int ballFaced,
+    @Default(0.0) double strike_rate,
+    @Default(0) int ball_faced,
     @Default(0) int fours,
     @Default(0) int sixes,
     @Default(0) int fifties,
     @Default(0) int hundreds,
     @Default(0) int ducks,
+    @Default(0) int dismissal,
   }) = _Batting;
 
   factory Batting.fromJson(Map<String, dynamic> json) =>
@@ -214,15 +215,15 @@ class Batting with _$Batting {
 class Bowling with _$Bowling {
   const factory Bowling({
     @Default(0) int innings,
-    @Default(0) int wicketTaken,
+    @Default(0) int wicket_taken,
     @Default(0) int balls,
-    @Default(0) int runsConceded,
+    @Default(0) int runs_conceded,
     @Default(0) int maiden,
-    @Default(0) int noBalls,
-    @Default(0) int wideBalls,
+    @Default(0) int no_balls,
+    @Default(0) int wide_balls,
     @Default(0.0) double average,
-    @Default(0.0) double strikeRate,
-    @Default(0.0) double economyRate,
+    @Default(0.0) double strike_rate,
+    @Default(0.0) double economy_rate,
   }) = _Bowling;
 
   factory Bowling.fromJson(Map<String, dynamic> json) =>
@@ -242,24 +243,21 @@ class Fielding with _$Fielding {
 }
 
 extension UserStatsExtension on UserStat {
-  UserStat addStats(UserStat other) {
+  UserStat updateStat(UserStat other) {
     return UserStat(
       matches: matches + other.matches,
       type: type,
-      batting: _addBattingStats(batting, other.batting),
-      bowling: _addBowlingStats(bowling, other.bowling),
-      fielding: _addFieldingStats(fielding, other.fielding),
+      batting: _updateBatting(batting, other.batting),
+      bowling: _updateBowling(bowling, other.bowling),
+      fielding: _updateFielding(fielding, other.fielding),
     );
   }
 
-  Batting _addBattingStats(Batting? oldBatting, Batting? newBatting) {
-    if (oldBatting == null) return newBatting!;
-    if (newBatting == null) return oldBatting;
-
+  Batting _updateBatting(Batting oldBatting, Batting newBatting) {
     final combinedInnings = oldBatting.innings + newBatting.innings;
-    final combinedRunsScored = oldBatting.runScored + newBatting.runScored;
-    final combinedDismissals = oldBatting.ducks + newBatting.ducks;
-    final combinedBallsFaced = oldBatting.ballFaced + newBatting.ballFaced;
+    final combinedRunsScored = oldBatting.run_scored + newBatting.run_scored;
+    final combinedDismissals = oldBatting.dismissal + newBatting.dismissal;
+    final combinedBallsFaced = oldBatting.ball_faced + newBatting.ball_faced;
     final combinedFours = oldBatting.fours + newBatting.fours;
     final combinedSixes = oldBatting.sixes + newBatting.sixes;
     final combinedDucks = oldBatting.ducks + newBatting.ducks;
@@ -275,28 +273,26 @@ extension UserStatsExtension on UserStat {
     return Batting(
       innings: combinedInnings,
       average: average,
-      strikeRate: strikeRate,
-      ballFaced: combinedBallsFaced,
-      runScored: combinedRunsScored,
+      strike_rate: strikeRate,
+      ball_faced: combinedBallsFaced,
+      run_scored: combinedRunsScored,
       fours: combinedFours,
       sixes: combinedSixes,
       ducks: combinedDucks,
       fifties: combinedFifties,
       hundreds: combinedHundreds,
+      dismissal: combinedDismissals,
     );
   }
 
-  Bowling _addBowlingStats(Bowling? oldBowling, Bowling? newBowling) {
-    if (oldBowling == null) return newBowling!;
-    if (newBowling == null) return oldBowling;
-
+  Bowling _updateBowling(Bowling oldBowling, Bowling newBowling) {
     final combinedInnings = oldBowling.innings + newBowling.innings;
-    final combinedWickets = oldBowling.wicketTaken + newBowling.wicketTaken;
+    final combinedWickets = oldBowling.wicket_taken + newBowling.wicket_taken;
     final combinedBalls = oldBowling.balls + newBowling.balls;
     final combinedRunsConceded =
-        oldBowling.runsConceded + newBowling.runsConceded;
-    final combinedWideBalls = oldBowling.wideBalls + newBowling.wideBalls;
-    final combinedNoBalls = oldBowling.noBalls + newBowling.noBalls;
+        oldBowling.runs_conceded + newBowling.runs_conceded;
+    final combinedWideBalls = oldBowling.wide_balls + newBowling.wide_balls;
+    final combinedNoBalls = oldBowling.no_balls + newBowling.no_balls;
     final combinedMaidenOvers = oldBowling.maiden + newBowling.maiden;
 
     final average =
@@ -309,21 +305,18 @@ extension UserStatsExtension on UserStat {
     return Bowling(
       innings: combinedInnings,
       average: average,
-      strikeRate: strikeRate,
-      wicketTaken: combinedWickets,
-      economyRate: economyRate,
+      strike_rate: strikeRate,
+      wicket_taken: combinedWickets,
+      economy_rate: economyRate,
       balls: combinedBalls,
-      wideBalls: combinedWideBalls,
-      runsConceded: combinedRunsConceded,
-      noBalls: combinedNoBalls,
+      wide_balls: combinedWideBalls,
+      runs_conceded: combinedRunsConceded,
+      no_balls: combinedNoBalls,
       maiden: combinedMaidenOvers,
     );
   }
 
-  Fielding _addFieldingStats(Fielding? oldFielding, Fielding? newFielding) {
-    if (oldFielding == null) return newFielding!;
-    if (newFielding == null) return oldFielding;
-
+  Fielding _updateFielding(Fielding oldFielding, Fielding newFielding) {
     final combinedCatches = oldFielding.catches + newFielding.catches;
     final combinedRunOuts = oldFielding.runOut + newFielding.runOut;
     final combinedStumpings = oldFielding.stumping + newFielding.stumping;

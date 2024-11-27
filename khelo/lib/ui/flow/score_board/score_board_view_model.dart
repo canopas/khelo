@@ -770,7 +770,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           state = state.copyWith(showInningCompleteSheet: DateTime.now());
         }
     }
-    _addPlayerStats();
   }
 
   void _addPlayerStats() async {
@@ -781,8 +780,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       for (final player in state.match?.players ?? []) {
         final oldStats = await _userService.getUserStats(player, userStatType);
         final newState = state.currentScoresList
-            .where((element) =>
-                element.batsman_id == player || element.bowler_id == player)
+            .where(
+              (element) =>
+                  element.batsman_id == player ||
+                  element.bowler_id == player ||
+                  element.wicket_taker_id == player,
+            )
             .toList()
             .calculateUserStats(player,
                 oldUserStats: oldStats, type: userStatType);
@@ -1124,6 +1127,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
+      _addPlayerStats();
       final batsMan = state.batsMans!
           .map((e) => e.copyWith(
                   performance: e.performance.updateWhere(
@@ -1196,6 +1200,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
+      _addPlayerStats();
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
         batsMan = state.batsMans!

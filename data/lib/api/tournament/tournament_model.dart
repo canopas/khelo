@@ -148,17 +148,17 @@ extension PlayerKeyStatListExtensions on List<PlayerKeyStat> {
       int highestValue = 0;
 
       // Check for most runs
-      if (battingStats.runScored > highestRuns) {
+      if (battingStats.run_scored > highestRuns) {
         assignedTag = KeyStatTag.mostRuns;
-        highestRuns = battingStats.runScored;
-        highestValue = battingStats.runScored;
+        highestRuns = battingStats.run_scored;
+        highestValue = battingStats.run_scored;
       }
 
       // Check for most wickets
-      if (bowlingStats.wicketTaken > highestWickets) {
+      if (bowlingStats.wicket_taken > highestWickets) {
         assignedTag = KeyStatTag.mostWickets;
-        highestWickets = bowlingStats.wicketTaken;
-        highestValue = bowlingStats.wicketTaken;
+        highestWickets = bowlingStats.wicket_taken;
+        highestValue = bowlingStats.wicket_taken;
       }
 
       // Check for most fours

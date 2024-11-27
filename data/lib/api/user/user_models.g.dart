@@ -119,7 +119,7 @@ Map<String, dynamic> _$$ApiSessionImplToJson(_$ApiSessionImpl instance) =>
       'is_active': instance.is_active,
     };
 
-_$UserStatsImpl _$$UserStatsImplFromJson(Map json) => _$UserStatsImpl(
+_$UserStatImpl _$$UserStatImplFromJson(Map json) => _$UserStatImpl(
       matches: (json['matches'] as num?)?.toInt() ?? 0,
       type: $enumDecodeNullable(_$UserStatTypeEnumMap, json['type']),
       batting: json['batting'] == null
@@ -134,7 +134,7 @@ _$UserStatsImpl _$$UserStatsImplFromJson(Map json) => _$UserStatsImpl(
               Map<String, dynamic>.from(json['fielding'] as Map)),
     );
 
-Map<String, dynamic> _$$UserStatsImplToJson(_$UserStatsImpl instance) =>
+Map<String, dynamic> _$$UserStatImplToJson(_$UserStatImpl instance) =>
     <String, dynamic>{
       'matches': instance.matches,
       'type': _$UserStatTypeEnumMap[instance.type],
@@ -151,57 +151,59 @@ const _$UserStatTypeEnumMap = {
 _$BattingImpl _$$BattingImplFromJson(Map<String, dynamic> json) =>
     _$BattingImpl(
       innings: (json['innings'] as num?)?.toInt() ?? 0,
-      runScored: (json['runScored'] as num?)?.toInt() ?? 0,
+      run_scored: (json['run_scored'] as num?)?.toInt() ?? 0,
       average: (json['average'] as num?)?.toDouble() ?? 0.0,
-      strikeRate: (json['strikeRate'] as num?)?.toDouble() ?? 0.0,
-      ballFaced: (json['ballFaced'] as num?)?.toInt() ?? 0,
+      strike_rate: (json['strike_rate'] as num?)?.toDouble() ?? 0.0,
+      ball_faced: (json['ball_faced'] as num?)?.toInt() ?? 0,
       fours: (json['fours'] as num?)?.toInt() ?? 0,
       sixes: (json['sixes'] as num?)?.toInt() ?? 0,
       fifties: (json['fifties'] as num?)?.toInt() ?? 0,
       hundreds: (json['hundreds'] as num?)?.toInt() ?? 0,
       ducks: (json['ducks'] as num?)?.toInt() ?? 0,
+      dismissal: (json['dismissal'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$BattingImplToJson(_$BattingImpl instance) =>
     <String, dynamic>{
       'innings': instance.innings,
-      'runScored': instance.runScored,
+      'run_scored': instance.run_scored,
       'average': instance.average,
-      'strikeRate': instance.strikeRate,
-      'ballFaced': instance.ballFaced,
+      'strike_rate': instance.strike_rate,
+      'ball_faced': instance.ball_faced,
       'fours': instance.fours,
       'sixes': instance.sixes,
       'fifties': instance.fifties,
       'hundreds': instance.hundreds,
       'ducks': instance.ducks,
+      'dismissal': instance.dismissal,
     };
 
 _$BowlingImpl _$$BowlingImplFromJson(Map<String, dynamic> json) =>
     _$BowlingImpl(
       innings: (json['innings'] as num?)?.toInt() ?? 0,
-      wicketTaken: (json['wicketTaken'] as num?)?.toInt() ?? 0,
+      wicket_taken: (json['wicket_taken'] as num?)?.toInt() ?? 0,
       balls: (json['balls'] as num?)?.toInt() ?? 0,
-      runsConceded: (json['runsConceded'] as num?)?.toInt() ?? 0,
+      runs_conceded: (json['runs_conceded'] as num?)?.toInt() ?? 0,
       maiden: (json['maiden'] as num?)?.toInt() ?? 0,
-      noBalls: (json['noBalls'] as num?)?.toInt() ?? 0,
-      wideBalls: (json['wideBalls'] as num?)?.toInt() ?? 0,
+      no_balls: (json['no_balls'] as num?)?.toInt() ?? 0,
+      wide_balls: (json['wide_balls'] as num?)?.toInt() ?? 0,
       average: (json['average'] as num?)?.toDouble() ?? 0.0,
-      strikeRate: (json['strikeRate'] as num?)?.toDouble() ?? 0.0,
-      economyRate: (json['economyRate'] as num?)?.toDouble() ?? 0.0,
+      strike_rate: (json['strike_rate'] as num?)?.toDouble() ?? 0.0,
+      economy_rate: (json['economy_rate'] as num?)?.toDouble() ?? 0.0,
     );
 
 Map<String, dynamic> _$$BowlingImplToJson(_$BowlingImpl instance) =>
     <String, dynamic>{
       'innings': instance.innings,
-      'wicketTaken': instance.wicketTaken,
+      'wicket_taken': instance.wicket_taken,
       'balls': instance.balls,
-      'runsConceded': instance.runsConceded,
+      'runs_conceded': instance.runs_conceded,
       'maiden': instance.maiden,
-      'noBalls': instance.noBalls,
-      'wideBalls': instance.wideBalls,
+      'no_balls': instance.no_balls,
+      'wide_balls': instance.wide_balls,
       'average': instance.average,
-      'strikeRate': instance.strikeRate,
-      'economyRate': instance.economyRate,
+      'strike_rate': instance.strike_rate,
+      'economy_rate': instance.economy_rate,
     };
 
 _$FieldingImpl _$$FieldingImplFromJson(Map<String, dynamic> json) =>
