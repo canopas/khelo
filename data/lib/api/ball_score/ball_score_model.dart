@@ -652,7 +652,6 @@ extension BallScoreList on List<BallScoreModel> {
       batting: newBattingStat,
       bowling: newBowlingStat,
       fielding: newFieldingStat,
-
     );
 
     return oldUserStats?.updateStat(newUserStats) ?? newUserStats;
@@ -769,15 +768,14 @@ extension BallScoreList on List<BallScoreModel> {
     final bowledBallCountForEconomyRate = deliveries
         .where(
           (element) =>
-      (element.extras_type == null ||
-          element.extras_type == ExtrasType.legBye ||
-          element.extras_type == ExtrasType.bye) &&
-          element.wicket_type != WicketType.retired &&
-          element.wicket_type != WicketType.retiredHurt &&
-          element.wicket_type != WicketType.timedOut &&
-          element.extras_type != ExtrasType.penaltyRun,
-    )
-        .length;
+              (element.extras_type == null ||
+                  element.extras_type == ExtrasType.legBye ||
+                  element.extras_type == ExtrasType.bye) &&
+              element.wicket_type != WicketType.retired &&
+              element.wicket_type != WicketType.retiredHurt &&
+              element.wicket_type != WicketType.timedOut &&
+              element.extras_type != ExtrasType.penaltyRun,
+        ).length;
 
     final runsConceded = deliveries
         .where((element) => element.extras_type != ExtrasType.penaltyRun)
