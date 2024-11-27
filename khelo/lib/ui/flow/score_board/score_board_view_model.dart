@@ -772,7 +772,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void _addPlayerStats() async {
+  void _addPlayerStats({bool isMatchComplete = false}) async {
     try {
       final userStatType = state.match?.match_type == MatchType.testMatch
           ? UserStatType.test
@@ -787,8 +787,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
                   element.wicket_taker_id == player,
             )
             .toList()
-            .calculateUserStats(player,
-                oldUserStats: oldStats, type: userStatType);
+            .calculateUserStats(
+              player,
+              oldUserStats: oldStats,
+              type: userStatType,
+            );
         await _userService.updateUserStats(player, newState);
       }
     } catch (e) {
@@ -1200,7 +1203,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
-      _addPlayerStats();
+      _addPlayerStats(isMatchComplete: true);
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
         batsMan = state.batsMans!

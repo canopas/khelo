@@ -640,26 +640,19 @@ extension BallScoreList on List<BallScoreModel> {
     String currentUserId, {
     UserStat? oldUserStats,
     UserStatType? type,
+    bool isMatchComplete = false,
   }) {
     final newBattingStat = calculateBattingStats(currentUserId);
     final newBowlingStat = calculateBowlingStats(currentUserId);
     final newFieldingStat = calculateFieldingStats(currentUserId);
 
-    final uniqueMatches = where(
-      (ball) =>
-          ball.batsman_id == currentUserId ||
-          ball.non_striker_id == currentUserId ||
-          ball.bowler_id == currentUserId ||
-          ball.player_out_id == currentUserId ||
-          ball.wicket_taker_id == currentUserId,
-    ).map((ball) => ball.match_id).toSet();
-
     final newUserStats = UserStat(
-      matches: uniqueMatches.length,
+      matches: isMatchComplete ? 1 : 0,
       type: type,
       batting: newBattingStat,
       bowling: newBowlingStat,
       fielding: newFieldingStat,
+
     );
 
     return oldUserStats?.updateStat(newUserStats) ?? newUserStats;
