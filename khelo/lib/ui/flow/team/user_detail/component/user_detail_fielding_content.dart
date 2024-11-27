@@ -1,4 +1,4 @@
-import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -7,8 +7,8 @@ import 'package:khelo/ui/flow/team/user_detail/component/user_detail_bowling_con
 class UserDetailFieldingContent extends ConsumerWidget {
   final int testMatchesCount;
   final int otherMatchesCount;
-  final FieldingStat? testStats;
-  final FieldingStat? otherStats;
+  final Fielding? testStats;
+  final Fielding? otherStats;
 
   const UserDetailFieldingContent({
     super.key,

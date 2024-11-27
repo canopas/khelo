@@ -1,3 +1,4 @@
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -166,6 +167,13 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
   }
 
   Widget _content(BuildContext context, UserDetailViewState state) {
+    final testStats = state.userStats
+            ?.firstWhere((element) => element.type == UserStatType.test) ??
+        UserStat();
+    final otherStats = state.userStats
+            ?.firstWhere((element) => element.type == UserStatType.other) ??
+        UserStat();
+
     return Expanded(
       child: PageView(
         controller: _controller,
@@ -176,16 +184,16 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
             user: state.user,
           ),
           UserDetailBattingContent(
-            testMatchesCount: state.testMatchesCount,
-            otherMatchesCount: state.otherMatchesCount,
-            testStats: state.testStats.battingStat,
-            otherStats: state.otherStats.battingStat,
+            testMatchesCount: testStats.matches,
+            otherMatchesCount: otherStats.matches,
+            testStats: testStats.batting,
+            otherStats: otherStats.batting,
           ),
           UserDetailBowlingContent(
-            testMatchesCount: state.testMatchesCount,
-            otherMatchesCount: state.otherMatchesCount,
-            testStats: state.testStats.bowlingStat,
-            otherStats: state.otherStats.bowlingStat,
+            testMatchesCount: testStats.matches,
+            otherMatchesCount: otherStats.matches,
+            testStats: testStats.bowling,
+            otherStats: otherStats.bowling,
           ),
         ],
       ),

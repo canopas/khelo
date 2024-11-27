@@ -1,4 +1,4 @@
-import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -8,8 +8,8 @@ import 'package:style/text/app_text_style.dart';
 class UserDetailBowlingContent extends ConsumerWidget {
   final int testMatchesCount;
   final int otherMatchesCount;
-  final BowlingStat? testStats;
-  final BowlingStat? otherStats;
+  final Bowling? testStats;
+  final Bowling? otherStats;
 
   const UserDetailBowlingContent({
     super.key,
@@ -55,8 +55,8 @@ class UserDetailBowlingContent extends ConsumerWidget {
         statsDataRow(
           context,
           title: context.l10n.user_detail_runs_title,
-          subtitle1: testStats?.runsConceded.toString(),
-          subtitle2: otherStats?.runsConceded.toString(),
+          subtitle1: testStats?.runs_conceded.toString(),
+          subtitle2: otherStats?.runs_conceded.toString(),
         ),
         statsDataRow(
           context,
@@ -67,26 +67,26 @@ class UserDetailBowlingContent extends ConsumerWidget {
         statsDataRow(
           context,
           title: context.l10n.user_detail_wickets_title,
-          subtitle1: testStats?.wicketTaken.toString(),
-          subtitle2: otherStats?.wicketTaken.toString(),
+          subtitle1: testStats?.wicket_taken.toString(),
+          subtitle2: otherStats?.wicket_taken.toString(),
         ),
         statsDataRow(
           context,
           title: context.l10n.user_detail_eco_title,
-          subtitle1: testStats?.economyRate.toStringAsFixed(1),
-          subtitle2: otherStats?.economyRate.toStringAsFixed(1),
+          subtitle1: testStats?.economy_rate.toStringAsFixed(1),
+          subtitle2: otherStats?.economy_rate.toStringAsFixed(1),
         ),
         statsDataRow(
           context,
           title: context.l10n.user_detail_no_ball_title,
-          subtitle1: testStats?.noBalls.toString(),
-          subtitle2: otherStats?.noBalls.toString(),
+          subtitle1: testStats?.no_balls.toString(),
+          subtitle2: otherStats?.no_balls.toString(),
         ),
         statsDataRow(
           context,
           title: context.l10n.user_detail_wide_ball_title,
-          subtitle1: testStats?.wideBalls.toString(),
-          subtitle2: otherStats?.wideBalls.toString(),
+          subtitle1: testStats?.wide_balls.toString(),
+          subtitle2: otherStats?.wide_balls.toString(),
         ),
       ],
     );

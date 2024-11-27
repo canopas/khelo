@@ -21,10 +21,7 @@ mixin _$UserDetailViewState {
   int get selectedTab => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   List<TeamModel> get teams => throw _privateConstructorUsedError;
-  int get testMatchesCount => throw _privateConstructorUsedError;
-  int get otherMatchesCount => throw _privateConstructorUsedError;
-  UserStat get testStats => throw _privateConstructorUsedError;
-  UserStat get otherStats => throw _privateConstructorUsedError;
+  List<UserStat>? get userStats => throw _privateConstructorUsedError;
 
   /// Create a copy of UserDetailViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -45,14 +42,9 @@ abstract class $UserDetailViewStateCopyWith<$Res> {
       int selectedTab,
       bool loading,
       List<TeamModel> teams,
-      int testMatchesCount,
-      int otherMatchesCount,
-      UserStat testStats,
-      UserStat otherStats});
+      List<UserStat>? userStats});
 
   $UserModelCopyWith<$Res>? get user;
-  $UserStatCopyWith<$Res> get testStats;
-  $UserStatCopyWith<$Res> get otherStats;
 }
 
 /// @nodoc
@@ -75,10 +67,7 @@ class _$UserDetailViewStateCopyWithImpl<$Res, $Val extends UserDetailViewState>
     Object? selectedTab = null,
     Object? loading = null,
     Object? teams = null,
-    Object? testMatchesCount = null,
-    Object? otherMatchesCount = null,
-    Object? testStats = null,
-    Object? otherStats = null,
+    Object? userStats = freezed,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
@@ -98,22 +87,10 @@ class _$UserDetailViewStateCopyWithImpl<$Res, $Val extends UserDetailViewState>
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      testMatchesCount: null == testMatchesCount
-          ? _value.testMatchesCount
-          : testMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      otherMatchesCount: null == otherMatchesCount
-          ? _value.otherMatchesCount
-          : otherMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      testStats: null == testStats
-          ? _value.testStats
-          : testStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
-      otherStats: null == otherStats
-          ? _value.otherStats
-          : otherStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
+      userStats: freezed == userStats
+          ? _value.userStats
+          : userStats // ignore: cast_nullable_to_non_nullable
+              as List<UserStat>?,
     ) as $Val);
   }
 
@@ -128,26 +105,6 @@ class _$UserDetailViewStateCopyWithImpl<$Res, $Val extends UserDetailViewState>
 
     return $UserModelCopyWith<$Res>(_value.user!, (value) {
       return _then(_value.copyWith(user: value) as $Val);
-    });
-  }
-
-  /// Create a copy of UserDetailViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserStatCopyWith<$Res> get testStats {
-    return $UserStatCopyWith<$Res>(_value.testStats, (value) {
-      return _then(_value.copyWith(testStats: value) as $Val);
-    });
-  }
-
-  /// Create a copy of UserDetailViewState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserStatCopyWith<$Res> get otherStats {
-    return $UserStatCopyWith<$Res>(_value.otherStats, (value) {
-      return _then(_value.copyWith(otherStats: value) as $Val);
     });
   }
 }
@@ -166,17 +123,10 @@ abstract class _$$UserDetailViewStateImplCopyWith<$Res>
       int selectedTab,
       bool loading,
       List<TeamModel> teams,
-      int testMatchesCount,
-      int otherMatchesCount,
-      UserStat testStats,
-      UserStat otherStats});
+      List<UserStat>? userStats});
 
   @override
   $UserModelCopyWith<$Res>? get user;
-  @override
-  $UserStatCopyWith<$Res> get testStats;
-  @override
-  $UserStatCopyWith<$Res> get otherStats;
 }
 
 /// @nodoc
@@ -197,10 +147,7 @@ class __$$UserDetailViewStateImplCopyWithImpl<$Res>
     Object? selectedTab = null,
     Object? loading = null,
     Object? teams = null,
-    Object? testMatchesCount = null,
-    Object? otherMatchesCount = null,
-    Object? testStats = null,
-    Object? otherStats = null,
+    Object? userStats = freezed,
   }) {
     return _then(_$UserDetailViewStateImpl(
       error: freezed == error ? _value.error : error,
@@ -220,22 +167,10 @@ class __$$UserDetailViewStateImplCopyWithImpl<$Res>
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      testMatchesCount: null == testMatchesCount
-          ? _value.testMatchesCount
-          : testMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      otherMatchesCount: null == otherMatchesCount
-          ? _value.otherMatchesCount
-          : otherMatchesCount // ignore: cast_nullable_to_non_nullable
-              as int,
-      testStats: null == testStats
-          ? _value.testStats
-          : testStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
-      otherStats: null == otherStats
-          ? _value.otherStats
-          : otherStats // ignore: cast_nullable_to_non_nullable
-              as UserStat,
+      userStats: freezed == userStats
+          ? _value._userStats
+          : userStats // ignore: cast_nullable_to_non_nullable
+              as List<UserStat>?,
     ));
   }
 }
@@ -249,11 +184,9 @@ class _$UserDetailViewStateImpl implements _UserDetailViewState {
       this.selectedTab = 0,
       this.loading = false,
       final List<TeamModel> teams = const [],
-      this.testMatchesCount = 0,
-      this.otherMatchesCount = 0,
-      this.testStats = const UserStat(),
-      this.otherStats = const UserStat()})
-      : _teams = teams;
+      final List<UserStat>? userStats = null})
+      : _teams = teams,
+        _userStats = userStats;
 
   @override
   final Object? error;
@@ -274,22 +207,20 @@ class _$UserDetailViewStateImpl implements _UserDetailViewState {
     return EqualUnmodifiableListView(_teams);
   }
 
+  final List<UserStat>? _userStats;
   @override
   @JsonKey()
-  final int testMatchesCount;
-  @override
-  @JsonKey()
-  final int otherMatchesCount;
-  @override
-  @JsonKey()
-  final UserStat testStats;
-  @override
-  @JsonKey()
-  final UserStat otherStats;
+  List<UserStat>? get userStats {
+    final value = _userStats;
+    if (value == null) return null;
+    if (_userStats is EqualUnmodifiableListView) return _userStats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'UserDetailViewState(error: $error, user: $user, selectedTab: $selectedTab, loading: $loading, teams: $teams, testMatchesCount: $testMatchesCount, otherMatchesCount: $otherMatchesCount, testStats: $testStats, otherStats: $otherStats)';
+    return 'UserDetailViewState(error: $error, user: $user, selectedTab: $selectedTab, loading: $loading, teams: $teams, userStats: $userStats)';
   }
 
   @override
@@ -303,14 +234,8 @@ class _$UserDetailViewStateImpl implements _UserDetailViewState {
                 other.selectedTab == selectedTab) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
-            (identical(other.testMatchesCount, testMatchesCount) ||
-                other.testMatchesCount == testMatchesCount) &&
-            (identical(other.otherMatchesCount, otherMatchesCount) ||
-                other.otherMatchesCount == otherMatchesCount) &&
-            (identical(other.testStats, testStats) ||
-                other.testStats == testStats) &&
-            (identical(other.otherStats, otherStats) ||
-                other.otherStats == otherStats));
+            const DeepCollectionEquality()
+                .equals(other._userStats, _userStats));
   }
 
   @override
@@ -321,10 +246,7 @@ class _$UserDetailViewStateImpl implements _UserDetailViewState {
       selectedTab,
       loading,
       const DeepCollectionEquality().hash(_teams),
-      testMatchesCount,
-      otherMatchesCount,
-      testStats,
-      otherStats);
+      const DeepCollectionEquality().hash(_userStats));
 
   /// Create a copy of UserDetailViewState
   /// with the given fields replaced by the non-null parameter values.
@@ -343,10 +265,7 @@ abstract class _UserDetailViewState implements UserDetailViewState {
       final int selectedTab,
       final bool loading,
       final List<TeamModel> teams,
-      final int testMatchesCount,
-      final int otherMatchesCount,
-      final UserStat testStats,
-      final UserStat otherStats}) = _$UserDetailViewStateImpl;
+      final List<UserStat>? userStats}) = _$UserDetailViewStateImpl;
 
   @override
   Object? get error;
@@ -359,13 +278,7 @@ abstract class _UserDetailViewState implements UserDetailViewState {
   @override
   List<TeamModel> get teams;
   @override
-  int get testMatchesCount;
-  @override
-  int get otherMatchesCount;
-  @override
-  UserStat get testStats;
-  @override
-  UserStat get otherStats;
+  List<UserStat>? get userStats;
 
   /// Create a copy of UserDetailViewState
   /// with the given fields replaced by the non-null parameter values.
