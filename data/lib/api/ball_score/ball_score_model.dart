@@ -703,11 +703,17 @@ extension BallScoreList on List<BallScoreModel> {
 
     inningGroup.forEach((inningId, balls) {
       int inningRunScored = 0;
+      int inningBallFaced = 0;
       bool isDismissed = false;
 
       for (final ball in balls) {
         if (ball.batsman_id == currentUserId) {
           inningRunScored += ball.runs_scored;
+          if (ball.extras_type == null ||
+              ball.extras_type == ExtrasType.legBye ||
+              ball.extras_type == ExtrasType.bye) {
+            inningBallFaced++;
+          }
         }
 
         if (ball.player_out_id == currentUserId &&
@@ -722,7 +728,7 @@ extension BallScoreList on List<BallScoreModel> {
         fifties++;
       }
 
-      if (isDismissed && inningRunScored >= 0 && inningRunScored <= 2) {
+      if (isDismissed && inningBallFaced >= 0 && inningBallFaced <= 2) {
         ducks++;
       }
     });
@@ -775,7 +781,8 @@ extension BallScoreList on List<BallScoreModel> {
               element.wicket_type != WicketType.retiredHurt &&
               element.wicket_type != WicketType.timedOut &&
               element.extras_type != ExtrasType.penaltyRun,
-        ).length;
+        )
+        .length;
 
     final runsConceded = deliveries
         .where((element) => element.extras_type != ExtrasType.penaltyRun)
