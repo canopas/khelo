@@ -80,16 +80,16 @@ class TournamentDetailPointsTableTab extends ConsumerWidget {
                     _teamProfileDataCell(context, teamPoint.team),
                     _dataCell(context, text: teamPoint.matchCount.toString()),
                     _dataCell(context,
-                        text: teamPoint.stat.status.win.toString()),
+                        text: teamPoint.team.stat.status.win.toString()),
                     _dataCell(context,
-                        text: teamPoint.stat.status.lost.toString()),
+                        text: teamPoint.team.stat.status.lost.toString()),
                     _dataCell(
                       context,
                       text: teamPoint.points.toString(),
                       textColor: context.colorScheme.textPrimary,
                     ),
                     _dataCell(context,
-                        text: teamPoint.stat.run_rate.toStringAsFixed(1)),
+                        text: teamPoint.team.stat.run_rate.toStringAsFixed(1)),
                   ]),
                 )
                 .toList()));

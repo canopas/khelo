@@ -30,6 +30,9 @@ abstract class TeamModel with _$TeamModel {
     @JsonKey(name: FireStoreConst.teamPlayers)
     @Default([])
     List<TeamPlayer> players,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(TeamStat())
+    TeamStat stat,
   }) = _TeamModel;
 
   factory TeamModel.fromJson(Map<String, dynamic> json) =>
@@ -75,4 +78,45 @@ class TeamPlayer with _$TeamPlayer {
 
   factory TeamPlayer.fromJson(Map<String, dynamic> json) =>
       _$TeamPlayerFromJson(json);
+}
+
+@freezed
+class TeamStat with _$TeamStat {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
+  const factory TeamStat({
+    @Default(0) int played,
+    @Default(TeamMatchStatus()) TeamMatchStatus status,
+    @Default(0) int runs,
+    @Default(0) int wickets,
+    @Default(0.0) double batting_average,
+    @Default(0.0) double bowling_average,
+    @Default(0) int highest_runs,
+    @Default(0) int lowest_runs,
+    @Default(0.0) double run_rate,
+  }) = _TeamStat;
+
+  factory TeamStat.fromJson(Map<String, dynamic> json) =>
+      _$TeamStatFromJson(json);
+
+  factory TeamStat.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      TeamStat.fromJson(snapshot.data()!);
+}
+
+@freezed
+class TeamMatchStatus with _$TeamMatchStatus {
+  const factory TeamMatchStatus({
+    @Default(0) int win,
+    @Default(0) int tie,
+    @Default(0) int lost,
+  }) = _TeamMatchStatus;
+
+  factory TeamMatchStatus.fromJson(Map<String, dynamic> json) =>
+      _$TeamMatchStatusFromJson(json);
+}
+
+extension TeamMatchStatusExtension on TeamMatchStatus {
+  int get matchCount => win + tie + lost;
 }

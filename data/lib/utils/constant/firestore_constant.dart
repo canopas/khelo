@@ -4,6 +4,7 @@ class FireStoreConst {
   static const String matchSettingsSubCollection = "match_settings";
   static const String settingDocument = "setting";
   static const String teamsCollection = "teams";
+  static const String teamStatCollection = "team_stat";
   static const String inningsCollection = "innings";
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";
@@ -51,6 +52,7 @@ class FireStoreConst {
   static const String createdBy = "created_by";
   static const String nameLowercase = "name_lowercase";
   static const String profileImageUrl = "profile_img_url";
+  static const String stat = "stat";
 
   // users field const
   static const String deviceFcmToken = "device_fcm_token";

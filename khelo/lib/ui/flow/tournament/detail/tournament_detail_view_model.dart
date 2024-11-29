@@ -175,12 +175,12 @@ class TournamentDetailStateViewNotifier
       final matches = finishedMatches
           .where((element) => element.team_ids.contains(team.id))
           .toList();
-      final teamStat = matches.teamStat(team.id);
+      //final teamStat = matches.teamStat(team.id);
       //If team has won then add 2 points and tie then add 1 point
-      final points = teamStat.status.win * 2 + teamStat.status.tie;
+      final points = team.stat.status.win * 2 + team.stat.status.tie;
       teamPoints.add(TeamPoint(
         team: team,
-        stat: teamStat,
+        stat: team.stat,
         points: points,
         matchCount: matches.length,
       ));

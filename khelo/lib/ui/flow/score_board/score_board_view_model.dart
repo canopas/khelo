@@ -11,6 +11,7 @@ import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/service/team/team_service.dart';
 import 'package:data/service/user/user_service.dart';
 import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ final scoreBoardStateProvider = StateNotifierProvider.autoDispose<
     ScoreBoardViewNotifier, ScoreBoardViewState>((ref) {
   return ScoreBoardViewNotifier(
     ref.read(matchServiceProvider),
+    ref.read(teamServiceProvider),
     ref.read(inningServiceProvider),
     ref.read(userServiceProvider),
     ref.read(ballScoreServiceProvider),
@@ -33,6 +35,7 @@ final scoreBoardStateProvider = StateNotifierProvider.autoDispose<
 
 class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final MatchService _matchService;
+  final TeamService _teamService;
   final InningsService _inningService;
   final UserService _userService;
   final BallScoreService _ballScoreService;
@@ -45,6 +48,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
   ScoreBoardViewNotifier(
     this._matchService,
+    this._teamService,
     this._inningService,
     this._userService,
     this._ballScoreService,
@@ -772,7 +776,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void _addPlayerStats({bool isMatchComplete = false}) async {
+  void _updatePlayerStats({bool isMatchComplete = false}) async {
     try {
       final userStatType = state.match?.match_type == MatchType.testMatch
           ? UserStatType.test
@@ -797,6 +801,20 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     } catch (e) {
       debugPrint(
           "ScoreBoardViewNotifier: error while adding player stats -> $e");
+    }
+  }
+
+  void _updateTeamStats() async {
+    try {
+      final teamIds = state.match?.teams.map((e) => e.team_id).toList() ?? [];
+      for (final teamId in teamIds) {
+        final currentStat = await _teamService.getTeamStatById(teamId);
+        final newStat =
+            state.match?.updateTeamStat(teamId, currentStat) ?? currentStat;
+        await _teamService.updateTeamStat(teamId, newStat);
+      }
+    } catch (e) {
+      debugPrint("ScoreBoardViewNotifier: error while adding team stats -> $e");
     }
   }
 
@@ -1130,7 +1148,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
-      _addPlayerStats();
+      _updatePlayerStats();
       final batsMan = state.batsMans!
           .map((e) => e.copyWith(
                   performance: e.performance.updateWhere(
@@ -1203,7 +1221,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
-      _addPlayerStats(isMatchComplete: true);
+      _updatePlayerStats(isMatchComplete: true);
+      _updateTeamStats();
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
         batsMan = state.batsMans!
