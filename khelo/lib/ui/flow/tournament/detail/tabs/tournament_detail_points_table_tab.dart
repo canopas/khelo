@@ -13,16 +13,16 @@ import 'package:style/text/app_text_style.dart';
 import '../../../../../components/empty_screen.dart';
 
 class TournamentDetailPointsTableTab extends ConsumerWidget {
-  final List<TeamPoint> teamPoints;
+  final List<TournamentTeamStat> teamStats;
 
   const TournamentDetailPointsTableTab({
     super.key,
-    required this.teamPoints,
+    required this.teamStats,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (teamPoints.isEmpty) {
+    if (teamStats.isEmpty) {
       return EmptyScreen(
         title: context.l10n.tournament_detail_points_table_empty_title,
         description:
@@ -74,47 +74,46 @@ class TournamentDetailPointsTableTab extends ConsumerWidget {
                           : context.mediaQuerySize.width * 0.07,
                     ))
                 .toList(),
-            rows: teamPoints
+            rows: teamStats
                 .map(
-                  (teamPoint) => DataRow(cells: [
-                    _teamProfileDataCell(context, teamPoint.team),
-                    _dataCell(context, text: teamPoint.matchCount.toString()),
-                    _dataCell(context,
-                        text: teamPoint.team.stat.status.win.toString()),
-                    _dataCell(context,
-                        text: teamPoint.team.stat.status.lost.toString()),
+                  (stat) => DataRow(cells: [
+                    _teamProfileDataCell(context, stat.team),
+                    _dataCell(context, text: stat.played_matches.toString()),
+                    _dataCell(context, text: stat.wins.toString()),
+                    _dataCell(context, text: stat.losses.toString()),
                     _dataCell(
                       context,
-                      text: teamPoint.points.toString(),
+                      text: stat.points.toString(),
                       textColor: context.colorScheme.textPrimary,
                     ),
-                    _dataCell(context,
-                        text: teamPoint.team.stat.run_rate.toStringAsFixed(1)),
+                    _dataCell(context, text: stat.nrr.toStringAsFixed(1)),
                   ]),
                 )
                 .toList()));
   }
 
-  DataCell _teamProfileDataCell(BuildContext context, TeamModel team) {
-    return DataCell(OnTapScale(
-      onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
-      child: Row(
-        children: [
-          ImageAvatar(
-            initial: team.name_initial ?? team.name.initials(limit: 1),
-            imageUrl: team.profile_img_url,
-            size: 32,
-          ),
-          const SizedBox(width: 16),
-          Text(
-            team.name_initial ?? team.name.initials(limit: 2),
-            style: AppTextStyle.subtitle2.copyWith(
-              color: context.colorScheme.textPrimary,
+  DataCell _teamProfileDataCell(BuildContext context, TeamModel? team) {
+    return team == null
+        ? const DataCell(SizedBox.shrink())
+        : DataCell(OnTapScale(
+            onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
+            child: Row(
+              children: [
+                ImageAvatar(
+                  initial: team.name_initial ?? team.name.initials(limit: 1),
+                  imageUrl: team.profile_img_url,
+                  size: 32,
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  team.name_initial ?? team.name.initials(limit: 2),
+                  style: AppTextStyle.subtitle2.copyWith(
+                    color: context.colorScheme.textPrimary,
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
-    ));
+          ));
   }
 
   DataColumn _dataColumn(

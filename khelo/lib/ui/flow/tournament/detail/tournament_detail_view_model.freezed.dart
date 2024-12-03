@@ -26,7 +26,6 @@ mixin _$TournamentDetailState {
   List<MatchModel> get filteredMatches => throw _privateConstructorUsedError;
   KeyStatFilterTag get selectedFilterTag => throw _privateConstructorUsedError;
   List<PlayerKeyStat> get filteredStats => throw _privateConstructorUsedError;
-  List<TeamPoint> get teamPoints => throw _privateConstructorUsedError;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -51,8 +50,7 @@ abstract class $TournamentDetailStateCopyWith<$Res> {
       String? matchFilter,
       List<MatchModel> filteredMatches,
       KeyStatFilterTag selectedFilterTag,
-      List<PlayerKeyStat> filteredStats,
-      List<TeamPoint> teamPoints});
+      List<PlayerKeyStat> filteredStats});
 
   $TournamentModelCopyWith<$Res>? get tournament;
 }
@@ -83,7 +81,6 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
     Object? filteredMatches = null,
     Object? selectedFilterTag = null,
     Object? filteredStats = null,
-    Object? teamPoints = null,
   }) {
     return _then(_value.copyWith(
       tournament: freezed == tournament
@@ -120,10 +117,6 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
           ? _value.filteredStats
           : filteredStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
-      teamPoints: null == teamPoints
-          ? _value.teamPoints
-          : teamPoints // ignore: cast_nullable_to_non_nullable
-              as List<TeamPoint>,
     ) as $Val);
   }
 
@@ -161,8 +154,7 @@ abstract class _$$TournamentDetailStateImplCopyWith<$Res>
       String? matchFilter,
       List<MatchModel> filteredMatches,
       KeyStatFilterTag selectedFilterTag,
-      List<PlayerKeyStat> filteredStats,
-      List<TeamPoint> teamPoints});
+      List<PlayerKeyStat> filteredStats});
 
   @override
   $TournamentModelCopyWith<$Res>? get tournament;
@@ -192,7 +184,6 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
     Object? filteredMatches = null,
     Object? selectedFilterTag = null,
     Object? filteredStats = null,
-    Object? teamPoints = null,
   }) {
     return _then(_$TournamentDetailStateImpl(
       tournament: freezed == tournament
@@ -229,10 +220,6 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
           ? _value._filteredStats
           : filteredStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
-      teamPoints: null == teamPoints
-          ? _value._teamPoints
-          : teamPoints // ignore: cast_nullable_to_non_nullable
-              as List<TeamPoint>,
     ));
   }
 }
@@ -250,11 +237,9 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       this.matchFilter = null,
       final List<MatchModel> filteredMatches = const [],
       this.selectedFilterTag = KeyStatFilterTag.all,
-      final List<PlayerKeyStat> filteredStats = const [],
-      final List<TeamPoint> teamPoints = const []})
+      final List<PlayerKeyStat> filteredStats = const []})
       : _filteredMatches = filteredMatches,
-        _filteredStats = filteredStats,
-        _teamPoints = teamPoints;
+        _filteredStats = filteredStats;
 
   @override
   @JsonKey()
@@ -295,18 +280,9 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
     return EqualUnmodifiableListView(_filteredStats);
   }
 
-  final List<TeamPoint> _teamPoints;
-  @override
-  @JsonKey()
-  List<TeamPoint> get teamPoints {
-    if (_teamPoints is EqualUnmodifiableListView) return _teamPoints;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teamPoints);
-  }
-
   @override
   String toString() {
-    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, currentUserId: $currentUserId, matchFilter: $matchFilter, filteredMatches: $filteredMatches, selectedFilterTag: $selectedFilterTag, filteredStats: $filteredStats, teamPoints: $teamPoints)';
+    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, currentUserId: $currentUserId, matchFilter: $matchFilter, filteredMatches: $filteredMatches, selectedFilterTag: $selectedFilterTag, filteredStats: $filteredStats)';
   }
 
   @override
@@ -331,9 +307,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
             (identical(other.selectedFilterTag, selectedFilterTag) ||
                 other.selectedFilterTag == selectedFilterTag) &&
             const DeepCollectionEquality()
-                .equals(other._filteredStats, _filteredStats) &&
-            const DeepCollectionEquality()
-                .equals(other._teamPoints, _teamPoints));
+                .equals(other._filteredStats, _filteredStats));
   }
 
   @override
@@ -348,8 +322,7 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       matchFilter,
       const DeepCollectionEquality().hash(_filteredMatches),
       selectedFilterTag,
-      const DeepCollectionEquality().hash(_filteredStats),
-      const DeepCollectionEquality().hash(_teamPoints));
+      const DeepCollectionEquality().hash(_filteredStats));
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -372,8 +345,7 @@ abstract class _TournamentDetailState implements TournamentDetailState {
       final String? matchFilter,
       final List<MatchModel> filteredMatches,
       final KeyStatFilterTag selectedFilterTag,
-      final List<PlayerKeyStat> filteredStats,
-      final List<TeamPoint> teamPoints}) = _$TournamentDetailStateImpl;
+      final List<PlayerKeyStat> filteredStats}) = _$TournamentDetailStateImpl;
 
   @override
   TournamentModel? get tournament;
@@ -395,8 +367,6 @@ abstract class _TournamentDetailState implements TournamentDetailState {
   KeyStatFilterTag get selectedFilterTag;
   @override
   List<PlayerKeyStat> get filteredStats;
-  @override
-  List<TeamPoint> get teamPoints;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.

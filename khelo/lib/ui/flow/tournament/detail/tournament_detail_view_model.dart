@@ -46,10 +46,8 @@ class TournamentDetailStateViewNotifier
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) {
-      final teamPoints = _calculatePointsTable(tournament);
       state = state.copyWith(
         tournament: tournament,
-        teamPoints: teamPoints,
         loading: false,
       );
       onMatchFilter(null);
@@ -162,32 +160,6 @@ class TournamentDetailStateViewNotifier
     );
   }
 
-  List<TeamPoint> _calculatePointsTable(TournamentModel tournament) {
-    List<TeamPoint> teamPoints = [];
-
-    final finishedMatches = tournament.matches
-        .where((match) => match.match_status == MatchStatus.finish)
-        .toList();
-
-    if (finishedMatches.isEmpty) return [];
-
-    for (final team in tournament.teams) {
-      final matches = finishedMatches
-          .where((element) => element.team_ids.contains(team.id))
-          .toList();
-      //final teamStat = matches.teamStat(team.id);
-      //If team has won then add 2 points and tie then add 1 point
-      final points = team.stat.status.win * 2 + team.stat.status.tie;
-      teamPoints.add(TeamPoint(
-        team: team,
-        stat: team.stat,
-        points: points,
-        matchCount: matches.length,
-      ));
-    }
-    return teamPoints..sort((a, b) => b.points.compareTo(a.points));
-  }
-
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
@@ -208,7 +180,6 @@ class TournamentDetailState with _$TournamentDetailState {
     @Default([]) List<MatchModel> filteredMatches,
     @Default(KeyStatFilterTag.all) KeyStatFilterTag selectedFilterTag,
     @Default([]) List<PlayerKeyStat> filteredStats,
-    @Default([]) List<TeamPoint> teamPoints,
   }) = _TournamentDetailState;
 }
 

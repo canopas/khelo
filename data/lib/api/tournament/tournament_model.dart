@@ -40,6 +40,9 @@ class TournamentModel with _$TournamentModel {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default([])
     List<PlayerKeyStat> keyStats,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default([])
+    List<TournamentTeamStat> teamStats,
   }) = _TournamentModel;
 
   factory TournamentModel.fromJson(Map<String, dynamic> json) =>
@@ -106,12 +109,24 @@ enum TournamentMemberRole {
 class PlayerKeyStat with _$PlayerKeyStat {
   @JsonSerializable(explicitToJson: true)
   const factory PlayerKeyStat({
+    required String player_id,
     required String teamName,
-    required UserModel player,
-    required UserStat stats,
-    KeyStatTag? tag,
+    @JsonKey(includeToJson: false, includeFromJson: false)
+    @Default(UserModel(id: ''))
+    UserModel player,
+    @Default(UserStat()) UserStat stats,
+    @JsonKey(includeToJson: false, includeFromJson: false) KeyStatTag? tag,
     int? value,
   }) = _PlayerKeyStat;
+
+  factory PlayerKeyStat.fromJson(Map<String, dynamic> json) =>
+      _$PlayerKeyStatFromJson(json);
+
+  factory PlayerKeyStat.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      PlayerKeyStat.fromJson(snapshot.data()!);
 }
 
 enum KeyStatTag {
@@ -122,13 +137,77 @@ enum KeyStatTag {
 }
 
 @freezed
-class TeamPoint with _$TeamPoint {
-  const factory TeamPoint({
-    required TeamModel team,
-    required int points,
-    required TeamStat stat,
-    required int matchCount,
-  }) = _TeamPoint;
+class TournamentTeamStat with _$TournamentTeamStat {
+  @JsonSerializable(anyMap: true, explicitToJson: true)
+  const factory TournamentTeamStat({
+    required String team_id,
+    @JsonKey(includeToJson: false, includeFromJson: false) TeamModel? team,
+    @Default(0) int points,
+    @Default(0) int wins,
+    @Default(0) int losses,
+    @Default(0.0) double nrr,
+    @Default(0) int played_matches,
+  }) = _TournamentTeamStat;
+
+  factory TournamentTeamStat.fromJson(Map<String, dynamic> json) =>
+      _$TournamentTeamStatFromJson(json);
+
+  factory TournamentTeamStat.fromFireStore(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
+      TournamentTeamStat.fromJson(snapshot.data()!);
+}
+
+extension TournamentTeamStatExtensions on MatchModel {
+  TournamentTeamStat getTeamStat(
+    String teamId, {
+    TournamentTeamStat? currentTeamStat,
+  }) {
+    int wins = currentTeamStat?.wins ?? 0;
+    int losses = currentTeamStat?.losses ?? 0;
+    int points = currentTeamStat?.points ?? 0;
+    final int playedMatches = currentTeamStat?.played_matches ?? 0;
+
+    final team = teams.firstWhere((team) => team.team.id == teamId);
+    final opponent = teams.firstWhere((team) => team.team.id != teamId);
+
+    final teamRuns = team.run;
+    final teamOvers = team.over;
+    final opponentRuns = opponent.run;
+    final opponentOvers = opponent.over;
+
+    if (matchResult?.teamId == teamId) {
+      wins++;
+      points += 2;
+    } else if (matchResult?.winType == WinnerByType.tie) {
+      points += 1;
+    } else {
+      losses++;
+    }
+
+    double currentNRR = 0;
+    if (teamOvers > 0 && opponentOvers > 0) {
+      currentNRR = (teamRuns / teamOvers) - (opponentRuns / opponentOvers);
+    }
+
+    double combinedNRR = currentTeamStat?.nrr ?? 0;
+    if (playedMatches > 1) {
+      combinedNRR =
+          ((combinedNRR * (playedMatches - 1)) + currentNRR) / playedMatches;
+    } else {
+      combinedNRR = currentNRR;
+    }
+
+    return TournamentTeamStat(
+      team_id: teamId,
+      wins: wins,
+      losses: losses,
+      played_matches: playedMatches + 1,
+      points: points,
+      nrr: combinedNRR,
+    );
+  }
 }
 
 extension PlayerKeyStatListExtensions on List<PlayerKeyStat> {

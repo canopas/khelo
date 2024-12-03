@@ -12,6 +12,9 @@ class FireStoreConst {
   static const String userStatCollection = "user_stat";
   static const String supportCollection = "contact_support";
   static const String tournamentCollection = "tournaments";
+  static const String tournamentTeamStatsCollection = "team_stats";
+  static const String tournamentPlayerKeyStatsCollection = "player_key_stats";
+
 
   // matches field const
   static const String id = "id";

@@ -157,7 +157,7 @@ class _TournamentDetailScreenState
             onAddMatchTap: () => _handleAddMatchTap(context, state),
           ),
           TournamentDetailPointsTableTab(
-            teamPoints: state.teamPoints,
+            teamStats: state.tournament!.teamStats,
           ),
           TournamentDetailStatsTab(
             onFiltered: notifier.onStatFilter,
