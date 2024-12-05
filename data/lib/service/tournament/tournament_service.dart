@@ -100,7 +100,16 @@ class TournamentService {
     String? lastMatchId,
     int limit = 10,
   }) async {
-    var query = _tournamentCollection.orderBy(FireStoreConst.startDate);
+    final currentDate = DateTime.now();
+    final past30DaysDate = currentDate.subtract(Duration(days: 30));
+
+    final filter = Filter.or(
+      Filter(FireStoreConst.startDate, isGreaterThan: currentDate),
+      Filter(FireStoreConst.endDate, isGreaterThanOrEqualTo: past30DaysDate),
+    );
+
+    var query =
+        _tournamentCollection.where(filter).orderBy(FireStoreConst.startDate);
 
     if (lastMatchId != null) {
       query = query.startAfter([lastMatchId]);
@@ -115,10 +124,10 @@ class TournamentService {
           final matchIds = tournament.match_ids;
           if (matchIds.isNotEmpty) {
             final matches = await _matchService.getMatchesByIds(matchIds);
-            final status = getTournamentStatus(matches);
-            return tournament.copyWith(matches: matches, status: status);
+            return tournament.copyWith(matches: matches);
           }
-          return tournament;
+          final status = getTournamentStatus(tournament);
+          return tournament.copyWith(status: status);
         },
       ),
     );
@@ -222,14 +231,14 @@ class TournamentService {
         return await Future.wait(
           event.docs.map(
             (e) async {
-              final tournament = e.data();
+              var tournament = e.data();
               final matchIds = tournament.match_ids;
               if (matchIds.isNotEmpty) {
                 final matches = await _matchService.getMatchesByIds(matchIds);
-                final status = getTournamentStatus(matches);
-                return tournament.copyWith(matches: matches, status: status);
+                tournament = tournament.copyWith(matches: matches);
               }
-              return tournament;
+              final status = getTournamentStatus(tournament);
+              return tournament.copyWith(status: status);
             },
           ),
         );
@@ -310,8 +319,9 @@ class TournamentService {
 
           tournament = tournament.copyWith(members: members);
         }
+        final status = getTournamentStatus(tournament);
 
-        return tournament;
+        return tournament.copyWith(status: status);
       }
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
@@ -487,20 +497,37 @@ class TournamentService {
   }
 
   // Helper
-  TournamentStatus getTournamentStatus(List<MatchModel> matches) {
-    final bool anyRunning =
-        matches.any((match) => match.match_status == MatchStatus.running);
-    final bool allYetToStart =
-        matches.every((match) => match.match_status == MatchStatus.yetToStart);
-    final bool allFinishedOrAbandoned = matches.every(
-      (match) =>
-          match.match_status == MatchStatus.abandoned ||
-          match.match_status == MatchStatus.finish,
-    );
+  TournamentStatus getTournamentStatus(TournamentModel tournament) {
+    if (tournament.matches.isEmpty) return TournamentStatus.upcoming;
 
-    if (anyRunning) return TournamentStatus.running;
-    if (allYetToStart) return TournamentStatus.upcoming;
-    if (allFinishedOrAbandoned) return TournamentStatus.finish;
+    final bool isUpcoming = (tournament.start_date.isAfter(DateTime.now()) &&
+            tournament.end_date.isAfter(DateTime.now())) &&
+        tournament.matches
+            .every((match) => match.match_status == MatchStatus.yetToStart);
+
+    final bool isRunning = tournament.start_date.isBefore(DateTime.now()) &&
+        tournament.end_date.isAfter(DateTime.now()) &&
+        tournament.matches
+            .any((match) => match.match_status == MatchStatus.running);
+
+    final bool isFinished = tournament.end_date.isBefore(DateTime.now()) &&
+        tournament.matches.every(
+          (match) =>
+              match.match_status == MatchStatus.finish ||
+              match.match_status == MatchStatus.abandoned,
+        );
+
+    final bool isInProgress = tournament.start_date.isBefore(DateTime.now()) &&
+        tournament.end_date.isAfter(DateTime.now()) &&
+        tournament.matches.any(
+          (match) =>
+              match.match_status == MatchStatus.running ||
+              match.match_status == MatchStatus.yetToStart,
+        );
+
+    if (isUpcoming) return TournamentStatus.upcoming;
+    if (isRunning || isInProgress) return TournamentStatus.running;
+    if (isFinished) return TournamentStatus.finish;
 
     return TournamentStatus.finish;
   }
