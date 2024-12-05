@@ -694,8 +694,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           element.id != bowlingTeamInningId);
       await addMatchEventIfNeeded(ball);
       if (wicketType != null) {
-        await addMatchPartnershipIfNeeded(
-            strikerId, nonStrikerId, matchId, ballInningId, ball);
+        await addMatchPartnershipIfNeeded(ball);
       }
       await _ballScoreService.addBallScoreAndUpdateTeamDetails(
         score: ball,
@@ -800,16 +799,15 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   Future<void> handleMilestonesMatchEvent(
       BallScoreModel ball, String playerId) async {
     final currentBattingStat =
-        state.currentScoresList.calculateBattingStats(currentUserId: playerId);
+        state.currentScoresList.calculateBattingStats(playerId);
 
-    final currentRun = currentBattingStat.runScored;
+    final currentRun = currentBattingStat.run_scored;
     final updatedList = state.currentScoresList.toList();
     updatedList.add(ball);
 
-    final updatedBattingStat =
-        updatedList.calculateBattingStats(currentUserId: playerId);
+    final updatedBattingStat = updatedList.calculateBattingStats(playerId);
 
-    final runsAfterUpdate = updatedBattingStat.runScored;
+    final runsAfterUpdate = updatedBattingStat.run_scored;
     if ((currentRun < 50 && runsAfterUpdate >= 50) ||
         (currentRun < 100 && runsAfterUpdate >= 100)) {
       MatchEventModel? matchEvent;
@@ -825,9 +823,9 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       mileStone.add(MatchEventMilestone(
         time: ball.score_time ?? DateTime.now(),
-        runs: updatedBattingStat.runScored,
+        runs: updatedBattingStat.run_scored,
         over: ball.formattedOver,
-        ball_faced: updatedBattingStat.ballFaced,
+        ball_faced: updatedBattingStat.ball_faced,
         fours: updatedBattingStat.fours,
         sixes: updatedBattingStat.sixes,
         ball_id: ball.id,
@@ -845,17 +843,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  Future<void> addMatchPartnershipIfNeeded(
-    String strikerId,
-    String nonStrikerId,
-    String matchId,
-    String inningId,
-    BallScoreModel ball,
-  ) async {
+  Future<void> addMatchPartnershipIfNeeded(BallScoreModel ball) async {
+    final batsMen = [ball.batsman_id, ball.non_striker_id];
     final scores = state.currentScoresList
         .where((element) =>
-            [strikerId, nonStrikerId].contains(element.batsman_id) &&
-            [strikerId, nonStrikerId].contains(element.non_striker_id))
+            batsMen.contains(element.batsman_id) &&
+            batsMen.contains(element.non_striker_id))
         .toList();
     scores.add(ball);
 
@@ -881,24 +874,24 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         .compareTo(b.score_time ?? DateTime.now()));
 
     if (totalRuns > 50) {
-      final player = [strikerId, nonStrikerId].map(
+      final player = batsMen.map(
         (id) {
-          final stat = scores.calculateBattingStats(currentUserId: id);
+          final stat = scores.calculateBattingStats(id);
           return PartnershipPlayer(
             player_id: id,
             sixes: stat.sixes,
             fours: stat.fours,
-            runs: stat.runScored,
-            ball_faced: stat.ballFaced,
+            runs: stat.run_scored,
+            ball_faced: stat.ball_faced,
           );
         },
       ).toList();
 
       final partnership = PartnershipModel(
         id: _partnershipService.generatePartnershipId,
-        match_id: matchId,
-        inning_id: inningId,
-        player_ids: [strikerId, nonStrikerId],
+        match_id: ball.match_id,
+        inning_id: ball.inning_id,
+        player_ids: batsMen,
         players: player,
         runs: totalRuns,
         extras: extras,
@@ -1297,23 +1290,22 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
     final scores = state.currentScoresList.toList();
     scores.remove(ball);
-    final updatedBattingStat =
-        scores.calculateBattingStats(currentUserId: ball.batsman_id);
+    final updatedBattingStat = scores.calculateBattingStats(ball.batsman_id);
 
     if (mileStoneEvent != null &&
-        (updatedBattingStat.runScored <
+        (updatedBattingStat.run_scored <
             (mileStoneEvent.type == EventType.fifty ? 50 : 100))) {
       final milestone = mileStoneEvent.milestone.toList();
       milestone.removeWhere((element) =>
-          (updatedBattingStat.runScored < 100 && element.runs >= 100) ||
-          (updatedBattingStat.runScored < 50 && element.runs >= 50));
+          (updatedBattingStat.run_scored < 100 && element.runs >= 100) ||
+          (updatedBattingStat.run_scored < 50 && element.runs >= 50));
 
       if (milestone.isEmpty) {
         await _matchEventService.deleteMatchEvent(mileStoneEvent.id);
       } else {
         await _matchEventService.updateMatchEvent(mileStoneEvent.copyWith(
           ball_ids: milestone.map((e) => e.ball_id).toList(),
-          type: updatedBattingStat.runScored >= 100
+          type: updatedBattingStat.run_scored >= 100
               ? EventType.century
               : EventType.fifty,
           milestone: milestone,
@@ -1454,6 +1446,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
+
+      final ball = _getLastBallExceptPenaltyBall();
+      if (ball != null && ball.wicket_type == null) {
+        await addMatchPartnershipIfNeeded(ball);
+      }
       _addPlayerStats();
       final batsMan = state.batsMans!
           .map((e) => e.copyWith(
@@ -1501,22 +1498,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  Future<void> abandonMatch() async {
-    final matchId = state.match?.id;
-    if (matchId == null) {
-      return;
-    }
-    try {
-      state = state.copyWith(actionError: null, isActionInProgress: true);
-      await _matchService.updateMatchStatus(matchId, MatchStatus.abandoned);
-      state = state.copyWith(pop: true, isActionInProgress: false);
-    } catch (e) {
-      debugPrint("ScoreBoardViewNotifier: error while abandon match -> $e");
-      state = state.copyWith(actionError: e, isActionInProgress: false);
-    }
-  }
-
-  Future<void> endMatch() async {
+  Future<void> endMatchWithStatus(MatchStatus status) async {
     final matchId = state.match?.id;
     final currentInningTeamId = state.currentInning?.team_id;
     final currentInningId = state.currentInning?.id;
@@ -1527,6 +1509,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
+
+      final ball = _getLastBallExceptPenaltyBall();
+      if (ball != null && ball.wicket_type == null) {
+        await addMatchPartnershipIfNeeded(ball);
+      }
       _addPlayerStats(isMatchComplete: true);
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
@@ -1549,7 +1536,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       await _inningService.updateInningStatus(
           inningId: currentInningId, status: InningStatus.finish);
 
-      await _matchService.updateMatchStatus(matchId, MatchStatus.finish);
+      await _matchService.updateMatchStatus(matchId, status);
 
       state = state.copyWith(pop: true, isActionInProgress: false);
     } catch (e) {
