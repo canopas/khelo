@@ -10,6 +10,8 @@ class FireStoreConst {
   static const String userSessionCollection = "user_sessions";
   static const String supportCollection = "contact_support";
   static const String tournamentCollection = "tournaments";
+  static const String matchEventsCollection = "match_events";
+  static const String partnershipsCollection = "partnerships";
 
   // matches field const
   static const String id = "id";

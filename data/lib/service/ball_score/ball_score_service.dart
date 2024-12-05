@@ -60,8 +60,7 @@ class BallScoreService {
     try {
       final scoreRef = _ballScoreCollection.doc();
       await _firestore.runTransaction(maxAttempts: 1, (transaction) async {
-        final overCount =
-            double.parse("${score.over_number - 1}.${score.ball_number}");
+        final overCount = score.formattedOver;
 
         // update matchTeamScore and squad(if needed)
         await _matchService.updateTeamScoreAndSquadViaTransaction(

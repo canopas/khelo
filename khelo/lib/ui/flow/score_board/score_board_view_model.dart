@@ -5,12 +5,16 @@ import 'package:collection/collection.dart';
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/innings/inning_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/match_event/match_event_model.dart';
+import 'package:data/api/partnership/partnership_model.dart';
 import 'package:data/api/user/user_models.dart';
 import 'package:data/errors/app_error.dart';
 import 'package:data/extensions/list_extensions.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/service/match_event/match_event_service.dart';
+import 'package:data/service/partnership/partnership_service.dart';
 import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +30,8 @@ final scoreBoardStateProvider = StateNotifierProvider.autoDispose<
     ref.read(matchServiceProvider),
     ref.read(inningServiceProvider),
     ref.read(ballScoreServiceProvider),
+    ref.read(matchEventServiceProvider),
+    ref.read(partnershipServiceProvider),
   );
 });
 
@@ -33,23 +39,34 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final MatchService _matchService;
   final InningsService _inningService;
   final BallScoreService _ballScoreService;
+  final MatchEventService _matchEventService;
+  final PartnershipService _partnershipService;
+
   StreamSubscription<MatchModel?>? _matchStreamSubscription;
   StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
   StreamSubscription<MatchSetting?>? _matchSettingSubscription;
+  StreamSubscription<List<MatchEventModel>>? _matchEventSubscription;
+  StreamSubscription<List<PartnershipModel>>? _matchPartnershipSubscription;
   final StreamController<MatchModel> _matchStreamController =
       StreamController<MatchModel>.broadcast();
   String? matchId;
+  List<MatchEventModel> matchEvents = [];
+  List<PartnershipModel> partnerships = [];
 
   ScoreBoardViewNotifier(
     this._matchService,
     this._inningService,
     this._ballScoreService,
+    this._matchEventService,
+    this._partnershipService,
   ) : super(const ScoreBoardViewState());
 
   void setData(String matchId) {
     this.matchId = matchId;
     _loadMatchesAndInning();
     _loadMatchSetting();
+    _loadMatchEvent();
+    _loadMatchPartnership();
   }
 
   void _loadMatchSetting() {
@@ -153,6 +170,39 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           error: AppError.fromError(e),
           loading: false,
           isActionInProgress: false);
+    }
+  }
+
+  void _loadMatchEvent() {
+    try {
+      if (matchId == null) return;
+      _matchEventSubscription?.cancel();
+      _matchEventSubscription = _matchEventService
+          .streamEventsByMatches(matchId!)
+          .listen((events) => matchEvents = events, onError: (e) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while loading match event -> $e");
+      });
+    } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while loading match event -> $e");
+    }
+  }
+
+  void _loadMatchPartnership() {
+    try {
+      if (matchId == null) return;
+      _matchPartnershipSubscription?.cancel();
+      _matchPartnershipSubscription = _partnershipService
+          .streamPartnershipByMatches(matchId!)
+          .listen((matchPartnership) => partnerships = matchPartnership,
+              onError: (e) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while loading partnership -> $e");
+      });
+    } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while loading partnership -> $e");
     }
   }
 
@@ -638,6 +688,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final otherBowlingInning = state.allInnings.firstWhereOrNull((element) =>
           element.team_id == bowlingTeamId &&
           element.id != bowlingTeamInningId);
+      await addMatchEventIfNeeded(ball);
+      if (wicketType != null) {
+        await addMatchPartnershipIfNeeded(
+            strikerId, nonStrikerId, matchId, ballInningId, ball);
+      }
       await _ballScoreService.addBallScoreAndUpdateTeamDetails(
         score: ball,
         matchId: matchId,
@@ -659,6 +714,196 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       debugPrint("ScoreBoardViewNotifier: error while adding ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
+    }
+  }
+
+  Future<void> addMatchEventIfNeeded(BallScoreModel ball) async {
+    try {
+      if (ball.is_four || ball.is_six) {
+        await _matchEventService.updateMatchEvent(MatchEventModel(
+          id: _matchEventService.generateMatchEventId,
+          match_id: ball.match_id,
+          inning_id: ball.inning_id,
+          type: ball.is_six ? EventType.six : EventType.four,
+          bowler_id: ball.bowler_id,
+          batsman_id: ball.batsman_id,
+          over: ball.formattedOver,
+          fielding_position: ball.fielding_position,
+          time: ball.score_time ?? DateTime.now(),
+          ball_ids: [ball.id],
+        ));
+      } else if (ball.wicket_type != null) {
+        await handleWicketMatchEvent(ball);
+        if (ball.player_out_id != ball.batsman_id) {
+          await handleMilestonesMatchEvent(ball, ball.player_out_id!);
+        }
+      }
+
+      await handleMilestonesMatchEvent(ball, ball.batsman_id);
+    } catch (e) {
+      debugPrint(
+          "ScoreBoardViewNotifier: error while adding match event -> $e");
+    }
+  }
+
+  Future<void> handleWicketMatchEvent(BallScoreModel ball) async {
+    final lastBall = state.currentScoresList.lastWhereOrNull(
+      (ball) =>
+          ball.wicket_type != WicketType.retired &&
+          ball.wicket_type != WicketType.retiredHurt &&
+          ball.wicket_type != WicketType.timedOut,
+    );
+    MatchEventModel matchEvent;
+    if (lastBall?.wicket_type != null &&
+        lastBall?.bowler_id == ball.bowler_id) {
+      matchEvent = matchEvents
+              .where((element) =>
+                  (element.type == EventType.wicket ||
+                      element.type == EventType.hatTrick) &&
+                  element.bowler_id == ball.bowler_id &&
+                  element.ball_ids.contains(lastBall?.id))
+              .firstOrNull ??
+          MatchEventModel(
+              id: _matchEventService.generateMatchEventId,
+              match_id: ball.match_id,
+              inning_id: ball.inning_id,
+              type: EventType.wicket,
+              bowler_id: ball.bowler_id,
+              time: ball.score_time ?? DateTime.now());
+    } else {
+      matchEvent = MatchEventModel(
+          id: _matchEventService.generateMatchEventId,
+          match_id: ball.match_id,
+          inning_id: ball.inning_id,
+          type: EventType.wicket,
+          bowler_id: ball.bowler_id,
+          time: ball.score_time ?? DateTime.now());
+    }
+    final wicket = matchEvent.wickets.toList();
+    wicket.add(MatchEventWicket(
+      time: ball.score_time ?? DateTime.now(),
+      ball_id: ball.id,
+      batsman_id: ball.player_out_id ?? ball.batsman_id,
+      wicket_type: ball.wicket_type!,
+      over: ball.formattedOver,
+    ));
+    await _matchEventService.updateMatchEvent(matchEvent.copyWith(
+        ball_ids: wicket.map((e) => e.ball_id).toList(),
+        type: (wicket.length == 1 ? EventType.wicket : EventType.hatTrick),
+        wickets: wicket));
+  }
+
+  Future<void> handleMilestonesMatchEvent(
+      BallScoreModel ball, String playerId) async {
+    final currentBattingStat =
+        state.currentScoresList.calculateBattingStats(currentUserId: playerId);
+
+    final currentRun = currentBattingStat.runScored;
+    final updatedList = state.currentScoresList.toList();
+    updatedList.add(ball);
+
+    final updatedBattingStat =
+        updatedList.calculateBattingStats(currentUserId: playerId);
+
+    final runsAfterUpdate = updatedBattingStat.runScored;
+    if ((currentRun < 50 && runsAfterUpdate >= 50) ||
+        (currentRun < 100 && runsAfterUpdate >= 100)) {
+      MatchEventModel? matchEvent;
+      matchEvent = matchEvents.firstWhereOrNull(
+        (element) =>
+            (element.type == EventType.fifty ||
+                element.type == EventType.century) &&
+            element.batsman_id == playerId &&
+            element.inning_id == ball.inning_id,
+      );
+
+      final mileStone = matchEvent?.milestone.toList() ?? [];
+
+      mileStone.add(MatchEventMilestone(
+        time: ball.score_time ?? DateTime.now(),
+        runs: updatedBattingStat.runScored,
+        over: ball.formattedOver,
+        ball_faced: updatedBattingStat.ballFaced,
+        fours: updatedBattingStat.fours,
+        sixes: updatedBattingStat.sixes,
+        ball_id: ball.id,
+      ));
+
+      await _matchEventService.updateMatchEvent(MatchEventModel(
+          id: matchEvent?.id ?? _matchEventService.generateMatchEventId,
+          match_id: matchEvent?.match_id ?? ball.match_id,
+          inning_id: matchEvent?.inning_id ?? ball.inning_id,
+          type: runsAfterUpdate >= 100 ? EventType.century : EventType.fifty,
+          batsman_id: playerId,
+          ball_ids: mileStone.map((e) => e.ball_id).toList(),
+          milestone: mileStone,
+          time: ball.score_time ?? DateTime.now()));
+    }
+  }
+
+  Future<void> addMatchPartnershipIfNeeded(
+    String strikerId,
+    String nonStrikerId,
+    String matchId,
+    String inningId,
+    BallScoreModel ball,
+  ) async {
+    final scores = state.currentScoresList
+        .where((element) =>
+            [strikerId, nonStrikerId].contains(element.batsman_id) &&
+            [strikerId, nonStrikerId].contains(element.non_striker_id))
+        .toList();
+    scores.add(ball);
+
+    int totalRuns = 0;
+    int extras = 0;
+    int ballFaced = 0;
+
+    for (var element in scores) {
+      totalRuns += (element.extras_awarded ?? 0) + element.runs_scored;
+
+      if ((element.extras_type == null ||
+              element.extras_type == ExtrasType.legBye ||
+              element.extras_type == ExtrasType.bye) &&
+          (element.wicket_type != WicketType.retired &&
+              element.wicket_type != WicketType.retiredHurt &&
+              element.wicket_type != WicketType.timedOut)) {
+        ballFaced++;
+      }
+      extras += (element.extras_awarded ?? 0);
+    }
+
+    scores.sort((a, b) => (a.score_time ?? DateTime.now())
+        .compareTo(b.score_time ?? DateTime.now()));
+
+    if (totalRuns > 50) {
+      final player = [strikerId, nonStrikerId].map(
+        (id) {
+          final stat = scores.calculateBattingStats(currentUserId: id);
+          return PartnershipPlayer(
+            player_id: id,
+            sixes: stat.sixes,
+            fours: stat.fours,
+            runs: stat.runScored,
+            ball_faced: stat.ballFaced,
+          );
+        },
+      ).toList();
+
+      final partnership = PartnershipModel(
+        id: _partnershipService.generatePartnershipId,
+        match_id: matchId,
+        inning_id: inningId,
+        player_ids: [strikerId, nonStrikerId],
+        players: player,
+        runs: totalRuns,
+        extras: extras,
+        ball_faced: ballFaced,
+        start_over: scores.first.formattedOver,
+        end_over: scores.last.formattedOver,
+      );
+
+      await _partnershipService.updatePartnership(partnership);
     }
   }
 
@@ -957,6 +1202,11 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           element.team_id == bowlingTeamId &&
           element.id != bowlingTeamInningId);
 
+      await undoMatchEventIfNeeded(lastBall);
+      if (lastBall.wicket_type != null) {
+        await undoPartnerShipIfNeeded(lastBall);
+      }
+
       await _ballScoreService.deleteBallAndUpdateTeamDetails(
           ballId: lastBall.id,
           matchId: matchId,
@@ -977,6 +1227,80 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       debugPrint("ScoreBoardViewNotifier: error while undo last ball -> $e");
       state = state.copyWith(
           actionError: e, isMatchUpdated: true, isActionInProgress: false);
+    }
+  }
+
+  Future<void> undoMatchEventIfNeeded(BallScoreModel ball) async {
+    final events =
+        matchEvents.where((element) => element.ball_ids.contains(ball.id));
+
+    for (final event in events) {
+      if (event.type == EventType.six || event.type == EventType.four) {
+        await _matchEventService.deleteMatchEvent(event.id);
+      } else if (event.type == EventType.hatTrick ||
+          event.type == EventType.wicket) {
+        if (event.wickets.length == 1) {
+          await _matchEventService.deleteMatchEvent(event.id);
+        } else {
+          final wickets = event.wickets.toList();
+          wickets.removeWhere((element) => element.ball_id == ball.id);
+          _matchEventService.updateMatchEvent(event.copyWith(
+            ball_ids: wickets.map((e) => e.ball_id).toList(),
+            type: EventType.wicket,
+            wickets: wickets,
+          ));
+        }
+      }
+    }
+
+    await handleMilestoneUndo(ball);
+  }
+
+  Future<void> handleMilestoneUndo(BallScoreModel ball) async {
+    final mileStoneEvent = matchEvents.firstWhereOrNull((element) =>
+        (element.type == EventType.fifty ||
+            element.type == EventType.century) &&
+        element.batsman_id == ball.batsman_id &&
+        element.inning_id == ball.inning_id);
+
+    final scores = state.currentScoresList.toList();
+    scores.remove(ball);
+    final updatedBattingStat =
+        scores.calculateBattingStats(currentUserId: ball.batsman_id);
+
+    if (mileStoneEvent != null &&
+        (updatedBattingStat.runScored <
+            (mileStoneEvent.type == EventType.fifty ? 50 : 100))) {
+      final milestone = mileStoneEvent.milestone.toList();
+      milestone.removeWhere((element) =>
+          (updatedBattingStat.runScored < 100 && element.runs >= 100) ||
+          (updatedBattingStat.runScored < 50 && element.runs >= 50));
+
+      if (milestone.isEmpty) {
+        await _matchEventService.deleteMatchEvent(mileStoneEvent.id);
+      } else {
+        await _matchEventService.updateMatchEvent(mileStoneEvent.copyWith(
+          ball_ids: milestone.map((e) => e.ball_id).toList(),
+          type: updatedBattingStat.runScored >= 100
+              ? EventType.century
+              : EventType.fifty,
+          milestone: milestone,
+        ));
+      }
+    }
+  }
+
+  Future<void> undoPartnerShipIfNeeded(BallScoreModel ball) async {
+    try {
+      final partnership = partnerships
+          .where((element) => element.end_over == ball.formattedOver)
+          .firstOrNull;
+
+      if (partnership != null) {
+        await _partnershipService.deletePartnership(partnership.id);
+      }
+    } catch (e) {
+      debugPrint("ScoreboardViewNotifier: error while undo partnership -> $e");
     }
   }
 
@@ -1563,6 +1887,8 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
     await _matchSettingSubscription?.cancel();
+    await _matchEventSubscription?.cancel();
+    await _matchPartnershipSubscription?.cancel();
     await _matchStreamController.close();
   }
 
