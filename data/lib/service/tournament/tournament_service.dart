@@ -120,11 +120,11 @@ class TournamentService {
     return Future.wait(
       snapshot.docs.map(
         (e) async {
-          final tournament = e.data();
+          var tournament = e.data();
           final matchIds = tournament.match_ids;
           if (matchIds.isNotEmpty) {
             final matches = await _matchService.getMatchesByIds(matchIds);
-            return tournament.copyWith(matches: matches);
+            tournament = tournament.copyWith(matches: matches);
           }
           final status = getTournamentStatus(tournament);
           return tournament.copyWith(status: status);
