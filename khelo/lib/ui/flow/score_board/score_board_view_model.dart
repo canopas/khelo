@@ -48,8 +48,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   StreamSubscription<MatchModel?>? _matchStreamSubscription;
   StreamSubscription<List<BallScoreChange>>? _ballScoreStreamSubscription;
   StreamSubscription<MatchSetting?>? _matchSettingSubscription;
-  StreamSubscription<List<MatchEventModel>>? _matchEventSubscription;
-  StreamSubscription<List<PartnershipModel>>? _matchPartnershipSubscription;
+  StreamSubscription? _matchEventSubscription;
   final StreamController<MatchModel> _matchStreamController =
       StreamController<MatchModel>.broadcast();
   String? matchId;
@@ -69,12 +68,12 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     this.matchId = matchId;
     _loadMatchesAndInning();
     _loadMatchSetting();
-    _loadMatchEvent();
-    _loadMatchPartnership();
+    _loadMatchEventAndPartnership();
   }
 
   void _loadMatchSetting() {
     if (matchId == null) return;
+    _matchSettingSubscription?.cancel();
     _matchSettingSubscription =
         _matchService.streamMatchSetting(matchId!).listen((setting) {
       state = state.copyWith(matchSetting: setting ?? state.matchSetting);
@@ -177,37 +176,19 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void _loadMatchEvent() {
-    try {
-      if (matchId == null) return;
-      _matchEventSubscription?.cancel();
-      _matchEventSubscription = _matchEventService
-          .streamEventsByMatches(matchId!)
-          .listen((events) => matchEvents = events, onError: (e) {
-        debugPrint(
-            "ScoreBoardViewNotifier: error while loading match event -> $e");
-      });
-    } catch (e) {
+  void _loadMatchEventAndPartnership() {
+    if (matchId == null) return;
+    _matchEventSubscription?.cancel();
+    _matchEventSubscription = combineLatest2(
+      _matchEventService.streamEventsByMatches(matchId!),
+      _partnershipService.streamPartnershipByMatches(matchId!),
+    ).listen((event) {
+      matchEvents = event.$1;
+      partnerships = event.$2;
+    }, onError: (e) {
       debugPrint(
-          "ScoreBoardViewNotifier: error while loading match event -> $e");
-    }
-  }
-
-  void _loadMatchPartnership() {
-    try {
-      if (matchId == null) return;
-      _matchPartnershipSubscription?.cancel();
-      _matchPartnershipSubscription = _partnershipService
-          .streamPartnershipByMatches(matchId!)
-          .listen((matchPartnership) => partnerships = matchPartnership,
-              onError: (e) {
-        debugPrint(
-            "ScoreBoardViewNotifier: error while loading partnership -> $e");
-      });
-    } catch (e) {
-      debugPrint(
-          "ScoreBoardViewNotifier: error while loading partnership -> $e");
-    }
+          "ScoreBoardViewNotifier: error while loading match event and Partnerships -> $e");
+    });
   }
 
   bool _isSelectInning(
@@ -1269,7 +1250,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         } else {
           final wickets = event.wickets.toList();
           wickets.removeWhere((element) => element.ball_id == ball.id);
-          _matchEventService.updateMatchEvent(event.copyWith(
+          await _matchEventService.updateMatchEvent(event.copyWith(
             ball_ids: wickets.map((e) => e.ball_id).toList(),
             type: EventType.wicket,
             wickets: wickets,
@@ -1909,7 +1890,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     await _ballScoreStreamSubscription?.cancel();
     await _matchSettingSubscription?.cancel();
     await _matchEventSubscription?.cancel();
-    await _matchPartnershipSubscription?.cancel();
     await _matchStreamController.close();
   }
 
