@@ -406,7 +406,7 @@ extension SingleMatchTeamStatExtension on MatchModel {
     } else if (teamRun > opponentRun) {
       return TeamMatchStatus(win: 1);
     } else {
-      return TeamMatchStatus(win: 0);
+      return TeamMatchStatus(lost: 1);
     }
   }
 
