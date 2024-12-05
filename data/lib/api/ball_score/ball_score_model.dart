@@ -135,68 +135,6 @@ class FieldingPosition {
 }
 
 @freezed
-class UserStat with _$UserStat {
-  const factory UserStat({
-    BattingStat? battingStat,
-    BowlingStat? bowlingStat,
-    FieldingStat? fieldingStat,
-  }) = _UserStat;
-
-  factory UserStat.fromJson(Map<String, dynamic> json) =>
-      _$UserStatFromJson(json);
-}
-
-@freezed
-class BattingStat with _$BattingStat {
-  const factory BattingStat({
-    @Default(0) int innings,
-    @Default(0) int runScored,
-    @Default(0.0) double average,
-    @Default(0.0) double strikeRate,
-    @Default(0) int ballFaced,
-    @Default(0) int fours,
-    @Default(0) int sixes,
-    @Default(0) int fifties,
-    @Default(0) int hundreds,
-    @Default(0) int ducks,
-  }) = _BattingStat;
-
-  factory BattingStat.fromJson(Map<String, dynamic> json) =>
-      _$BattingStatFromJson(json);
-}
-
-@freezed
-class BowlingStat with _$BowlingStat {
-  const factory BowlingStat({
-    @Default(0) int innings,
-    @Default(0) int wicketTaken,
-    @Default(0) int balls,
-    @Default(0) int runsConceded,
-    @Default(0) int maiden,
-    @Default(0) int noBalls,
-    @Default(0) int wideBalls,
-    @Default(0.0) double average,
-    @Default(0.0) double strikeRate,
-    @Default(0.0) double economyRate,
-  }) = _BowlingStat;
-
-  factory BowlingStat.fromJson(Map<String, dynamic> json) =>
-      _$BowlingStatFromJson(json);
-}
-
-@freezed
-class FieldingStat with _$FieldingStat {
-  const factory FieldingStat({
-    @Default(0) int catches,
-    @Default(0) int runOut,
-    @Default(0) int stumping,
-  }) = _FieldingStat;
-
-  factory FieldingStat.fromJson(Map<String, dynamic> json) =>
-      _$FieldingStatFromJson(json);
-}
-
-@freezed
 class OverStatModel with _$OverStatModel {
   const factory OverStatModel({
     @Default(0) int run,
@@ -700,23 +638,28 @@ extension ExtraSummaryMetaData on ExtraSummary {
 }
 
 extension BallScoreList on List<BallScoreModel> {
-  UserStat calculateUserStats(String currentUserId) {
-    final battingStat = calculateBattingStats(currentUserId: currentUserId);
+  UserStat calculateUserStats(
+    String currentUserId, {
+    UserStat? oldUserStats,
+    UserStatType? type,
+    bool isMatchComplete = false,
+  }) {
+    final newBattingStat = calculateBattingStats(currentUserId);
+    final newBowlingStat = calculateBowlingStats(currentUserId);
+    final newFieldingStat = calculateFieldingStats(currentUserId);
 
-    final bowlingStat = calculateBowlingStats(currentUserId);
-
-    final fieldingStat = calculateFieldingStats(currentUserId);
-
-    return UserStat(
-      battingStat: battingStat,
-      bowlingStat: bowlingStat,
-      fieldingStat: fieldingStat,
+    final newUserStats = UserStat(
+      matches: isMatchComplete ? 1 : 0,
+      type: type,
+      batting: newBattingStat,
+      bowling: newBowlingStat,
+      fielding: newFieldingStat,
     );
+
+    return oldUserStats?.updateStat(newUserStats) ?? newUserStats;
   }
 
-  BattingStat calculateBattingStats({
-    required String currentUserId,
-  }) {
+  Batting calculateBattingStats(String currentUserId) {
     int runScored = 0;
     int dismissal = 0;
     int ballFaced = 0;
@@ -726,18 +669,15 @@ extension BallScoreList on List<BallScoreModel> {
     final Map<String, List<BallScoreModel>> inningGroup = {};
 
     for (final element in this) {
-      // Runs scored
       if (element.batsman_id == currentUserId) {
         runScored += element.runs_scored;
 
-        // Track boundaries
         if (element.is_four && element.runs_scored == 4) {
           fours++;
         } else if (element.is_six && element.runs_scored == 6) {
           sixes++;
         }
 
-        // Count valid balls faced (excluding no balls, wides, etc.)
         if (element.extras_type == null ||
             element.extras_type == ExtrasType.legBye ||
             element.extras_type == ExtrasType.bye) {
@@ -745,12 +685,10 @@ extension BallScoreList on List<BallScoreModel> {
         }
       }
 
-      // Dismissals
       if (element.player_out_id == currentUserId) {
         dismissal++;
       }
 
-      // Group by innings
       if (element.batsman_id == currentUserId ||
           element.non_striker_id == currentUserId ||
           element.player_out_id == currentUserId) {
@@ -758,11 +696,9 @@ extension BallScoreList on List<BallScoreModel> {
       }
     }
 
-    // Calculate averages and strike rate
     final average = dismissal == 0 ? 0.0 : runScored / dismissal;
     final strikeRate = ballFaced == 0 ? 0.0 : (runScored / ballFaced) * 100.0;
 
-    // Calculate ducks, fifties, and hundreds
     int ducks = 0;
     int fifties = 0;
     int hundreds = 0;
@@ -799,21 +735,22 @@ extension BallScoreList on List<BallScoreModel> {
       }
     });
 
-    return BattingStat(
+    return Batting(
       innings: inningGroup.length,
       average: average,
-      strikeRate: strikeRate,
-      ballFaced: ballFaced,
-      runScored: runScored,
+      strike_rate: strikeRate,
+      ball_faced: ballFaced,
+      run_scored: runScored,
       fours: fours,
       sixes: sixes,
       ducks: ducks,
       fifties: fifties,
       hundreds: hundreds,
+      dismissal: dismissal,
     );
   }
 
-  BowlingStat calculateBowlingStats(String currentUserId) {
+  Bowling calculateBowlingStats(String currentUserId) {
     final deliveries = where((element) => element.bowler_id == currentUserId);
 
     final wicketTaken = deliveries
@@ -829,10 +766,10 @@ extension BallScoreList on List<BallScoreModel> {
     final bowledBallCount = deliveries
         .where(
           (element) =>
+              element.extras_type != ExtrasType.penaltyRun &&
               element.wicket_type != WicketType.retired &&
               element.wicket_type != WicketType.retiredHurt &&
-              element.wicket_type != WicketType.timedOut &&
-              element.extras_type != ExtrasType.penaltyRun,
+              element.wicket_type != WicketType.timedOut,
         )
         .length;
 
@@ -858,9 +795,7 @@ extension BallScoreList on List<BallScoreModel> {
         );
 
     final average = wicketTaken == 0 ? 0.0 : runsConceded / wicketTaken;
-
     final strikeRate = wicketTaken == 0 ? 0.0 : bowledBallCount / wicketTaken;
-
     final economyRate = bowledBallCountForEconomyRate == 0
         ? 0.0
         : (runsConceded / bowledBallCountForEconomyRate) * 6;
@@ -871,46 +806,49 @@ extension BallScoreList on List<BallScoreModel> {
     final noBallCount = deliveries
         .where((element) => element.extras_type == ExtrasType.noBall)
         .length;
-
     final inningGroup = groupBy(deliveries, (ball) => ball.inning_id);
-    int maiden = 0;
+    final maidenOvers = _calculateMaidenOvers(deliveries);
 
-    inningGroup.forEach((inningId, balls) {
-      final overGroup = groupBy(balls, (ball) => ball.over_number);
-
-      overGroup.forEach((overNumber, balls) {
-        int runsConcededInOver = 0;
-        bool hasExtras = false;
-
-        for (final ball in balls) {
-          runsConcededInOver += ball.runs_scored + (ball.extras_awarded ?? 0);
-          if (ball.extras_type != null) {
-            hasExtras = true;
-            break;
-          }
-        }
-
-        if (runsConcededInOver == 0 && !hasExtras && balls.length == 6) {
-          maiden++;
-        }
-      });
-    });
-
-    return BowlingStat(
+    return Bowling(
       innings: inningGroup.length,
       average: average,
-      strikeRate: strikeRate,
-      wicketTaken: wicketTaken,
-      economyRate: economyRate,
+      strike_rate: strikeRate,
+      wicket_taken: wicketTaken,
+      economy_rate: economyRate,
       balls: bowledBallCount,
-      wideBalls: wideBallCount,
-      runsConceded: runsConceded,
-      noBalls: noBallCount,
-      maiden: maiden,
+      wide_balls: wideBallCount,
+      runs_conceded: runsConceded,
+      no_balls: noBallCount,
+      maiden: maidenOvers,
     );
   }
 
-  FieldingStat calculateFieldingStats(String currentUserId) {
+  int _calculateMaidenOvers(Iterable<BallScoreModel> deliveries) {
+    final overGroups = groupBy(deliveries, (ball) => ball.over_number);
+
+    int maiden = 0;
+
+    overGroups.forEach((overNumber, balls) {
+      int runsConceded = 0;
+      bool hasExtras = false;
+
+      for (final ball in balls) {
+        runsConceded += ball.runs_scored + (ball.extras_awarded ?? 0);
+        if (ball.extras_type != null) {
+          hasExtras = true;
+          break;
+        }
+      }
+
+      if (runsConceded == 0 && !hasExtras && balls.length == 6) {
+        maiden++;
+      }
+    });
+
+    return maiden;
+  }
+
+  Fielding calculateFieldingStats(String currentUserId) {
     final catches = where(
       (element) =>
           element.wicket_taker_id == currentUserId &&
@@ -919,22 +857,22 @@ extension BallScoreList on List<BallScoreModel> {
               element.wicket_type == WicketType.caughtAndBowled),
     ).length;
 
-    final runOut = where(
+    final runOuts = where(
       (element) =>
           element.wicket_taker_id == currentUserId &&
           element.wicket_type == WicketType.runOut,
     ).length;
 
-    final stumping = where(
+    final stumpings = where(
       (element) =>
           element.wicket_taker_id == currentUserId &&
           element.wicket_type == WicketType.stumped,
     ).length;
 
-    return FieldingStat(
+    return Fielding(
       catches: catches,
-      runOut: runOut,
-      stumping: stumping,
+      runOut: runOuts,
+      stumping: stumpings,
     );
   }
 }

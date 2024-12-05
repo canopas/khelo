@@ -118,3 +118,104 @@ Map<String, dynamic> _$$ApiSessionImplToJson(_$ApiSessionImpl instance) =>
       'created_at': instance.created_at?.toIso8601String(),
       'is_active': instance.is_active,
     };
+
+_$UserStatImpl _$$UserStatImplFromJson(Map json) => _$UserStatImpl(
+      matches: (json['matches'] as num?)?.toInt() ?? 0,
+      type: $enumDecodeNullable(_$UserStatTypeEnumMap, json['type']),
+      batting: json['batting'] == null
+          ? const Batting()
+          : Batting.fromJson(Map<String, dynamic>.from(json['batting'] as Map)),
+      bowling: json['bowling'] == null
+          ? const Bowling()
+          : Bowling.fromJson(Map<String, dynamic>.from(json['bowling'] as Map)),
+      fielding: json['fielding'] == null
+          ? const Fielding()
+          : Fielding.fromJson(
+              Map<String, dynamic>.from(json['fielding'] as Map)),
+    );
+
+Map<String, dynamic> _$$UserStatImplToJson(_$UserStatImpl instance) =>
+    <String, dynamic>{
+      'matches': instance.matches,
+      'type': _$UserStatTypeEnumMap[instance.type],
+      'batting': instance.batting.toJson(),
+      'bowling': instance.bowling.toJson(),
+      'fielding': instance.fielding.toJson(),
+    };
+
+const _$UserStatTypeEnumMap = {
+  UserStatType.test: 'test',
+  UserStatType.other: 'other',
+};
+
+_$BattingImpl _$$BattingImplFromJson(Map<String, dynamic> json) =>
+    _$BattingImpl(
+      innings: (json['innings'] as num?)?.toInt() ?? 0,
+      run_scored: (json['run_scored'] as num?)?.toInt() ?? 0,
+      average: (json['average'] as num?)?.toDouble() ?? 0.0,
+      strike_rate: (json['strike_rate'] as num?)?.toDouble() ?? 0.0,
+      ball_faced: (json['ball_faced'] as num?)?.toInt() ?? 0,
+      fours: (json['fours'] as num?)?.toInt() ?? 0,
+      sixes: (json['sixes'] as num?)?.toInt() ?? 0,
+      fifties: (json['fifties'] as num?)?.toInt() ?? 0,
+      hundreds: (json['hundreds'] as num?)?.toInt() ?? 0,
+      ducks: (json['ducks'] as num?)?.toInt() ?? 0,
+      dismissal: (json['dismissal'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$BattingImplToJson(_$BattingImpl instance) =>
+    <String, dynamic>{
+      'innings': instance.innings,
+      'run_scored': instance.run_scored,
+      'average': instance.average,
+      'strike_rate': instance.strike_rate,
+      'ball_faced': instance.ball_faced,
+      'fours': instance.fours,
+      'sixes': instance.sixes,
+      'fifties': instance.fifties,
+      'hundreds': instance.hundreds,
+      'ducks': instance.ducks,
+      'dismissal': instance.dismissal,
+    };
+
+_$BowlingImpl _$$BowlingImplFromJson(Map<String, dynamic> json) =>
+    _$BowlingImpl(
+      innings: (json['innings'] as num?)?.toInt() ?? 0,
+      wicket_taken: (json['wicket_taken'] as num?)?.toInt() ?? 0,
+      balls: (json['balls'] as num?)?.toInt() ?? 0,
+      runs_conceded: (json['runs_conceded'] as num?)?.toInt() ?? 0,
+      maiden: (json['maiden'] as num?)?.toInt() ?? 0,
+      no_balls: (json['no_balls'] as num?)?.toInt() ?? 0,
+      wide_balls: (json['wide_balls'] as num?)?.toInt() ?? 0,
+      average: (json['average'] as num?)?.toDouble() ?? 0.0,
+      strike_rate: (json['strike_rate'] as num?)?.toDouble() ?? 0.0,
+      economy_rate: (json['economy_rate'] as num?)?.toDouble() ?? 0.0,
+    );
+
+Map<String, dynamic> _$$BowlingImplToJson(_$BowlingImpl instance) =>
+    <String, dynamic>{
+      'innings': instance.innings,
+      'wicket_taken': instance.wicket_taken,
+      'balls': instance.balls,
+      'runs_conceded': instance.runs_conceded,
+      'maiden': instance.maiden,
+      'no_balls': instance.no_balls,
+      'wide_balls': instance.wide_balls,
+      'average': instance.average,
+      'strike_rate': instance.strike_rate,
+      'economy_rate': instance.economy_rate,
+    };
+
+_$FieldingImpl _$$FieldingImplFromJson(Map<String, dynamic> json) =>
+    _$FieldingImpl(
+      catches: (json['catches'] as num?)?.toInt() ?? 0,
+      runOut: (json['runOut'] as num?)?.toInt() ?? 0,
+      stumping: (json['stumping'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$FieldingImplToJson(_$FieldingImpl instance) =>
+    <String, dynamic>{
+      'catches': instance.catches,
+      'runOut': instance.runOut,
+      'stumping': instance.stumping,
+    };

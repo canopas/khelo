@@ -1,4 +1,4 @@
-import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
@@ -7,8 +7,8 @@ import 'package:khelo/ui/flow/team/user_detail/component/user_detail_bowling_con
 class UserDetailBattingContent extends ConsumerWidget {
   final int testMatchesCount;
   final int otherMatchesCount;
-  final BattingStat? testStats;
-  final BattingStat? otherStats;
+  final Batting? testStats;
+  final Batting? otherStats;
 
   const UserDetailBattingContent({
     super.key,
@@ -48,14 +48,14 @@ class UserDetailBattingContent extends ConsumerWidget {
         statsDataRow(
           context,
           title: context.l10n.user_detail_runs_title,
-          subtitle1: testStats?.runScored.toString(),
-          subtitle2: otherStats?.runScored.toString(),
+          subtitle1: testStats?.run_scored.toString(),
+          subtitle2: otherStats?.run_scored.toString(),
         ),
         statsDataRow(
           context,
           title: context.l10n.user_detail_balls_title,
-          subtitle1: testStats?.ballFaced.toString(),
-          subtitle2: otherStats?.ballFaced.toString(),
+          subtitle1: testStats?.ball_faced.toString(),
+          subtitle2: otherStats?.ball_faced.toString(),
         ),
         statsDataRow(
           context,
@@ -66,8 +66,8 @@ class UserDetailBattingContent extends ConsumerWidget {
         statsDataRow(
           context,
           title: context.l10n.user_detail_strike_rate_title,
-          subtitle1: testStats?.strikeRate.toStringAsFixed(1),
-          subtitle2: otherStats?.strikeRate.toStringAsFixed(1),
+          subtitle1: testStats?.strike_rate.toStringAsFixed(1),
+          subtitle2: otherStats?.strike_rate.toStringAsFixed(1),
         ),
         statsDataRow(
           context,

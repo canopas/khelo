@@ -8,6 +8,7 @@ class FireStoreConst {
   static const String ballScoresCollection = "ball_scores";
   static const String usersCollection = "users";
   static const String userSessionCollection = "user_sessions";
+  static const String userStatCollection = "user_stat";
   static const String supportCollection = "contact_support";
   static const String tournamentCollection = "tournaments";
   static const String matchEventsCollection = "match_events";
@@ -30,6 +31,7 @@ class FireStoreConst {
   static const String revisedTarget = "revised_target";
   static const String updatedAt = "updated_at";
   static const String startAt = "start_at";
+  static const String type = "type";
 
   // innings field const
   static const String matchId = "match_id";

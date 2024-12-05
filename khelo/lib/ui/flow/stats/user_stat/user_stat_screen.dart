@@ -1,3 +1,4 @@
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -111,28 +112,35 @@ class _UserStatScreenState extends ConsumerState<UserStatScreen>
   }
 
   Widget _content(BuildContext context, UserStatViewState state) {
+    final testStats = state.userStats
+            ?.firstWhere((element) => element.type == UserStatType.test) ??
+        UserStat();
+    final otherStats = state.userStats
+            ?.firstWhere((element) => element.type == UserStatType.other) ??
+        UserStat();
+
     return Expanded(
       child: PageView(
         controller: _controller,
         onPageChanged: notifier.onTabChange,
         children: [
           UserDetailBattingContent(
-            testMatchesCount: state.testMatchesCount,
-            otherMatchesCount: state.otherMatchesCount,
-            testStats: state.testStats.battingStat,
-            otherStats: state.otherStats.battingStat,
+            testMatchesCount: testStats.matches,
+            otherMatchesCount: otherStats.matches,
+            testStats: testStats.batting,
+            otherStats: otherStats.batting,
           ),
           UserDetailBowlingContent(
-            testMatchesCount: state.testMatchesCount,
-            otherMatchesCount: state.otherMatchesCount,
-            testStats: state.testStats.bowlingStat,
-            otherStats: state.otherStats.bowlingStat,
+            testMatchesCount: testStats.matches,
+            otherMatchesCount: otherStats.matches,
+            testStats: testStats.bowling,
+            otherStats: otherStats.bowling,
           ),
           UserDetailFieldingContent(
-            testMatchesCount: state.testMatchesCount,
-            otherMatchesCount: state.otherMatchesCount,
-            testStats: state.testStats.fieldingStat,
-            otherStats: state.otherStats.fieldingStat,
+            testMatchesCount: testStats.matches,
+            otherMatchesCount: otherStats.matches,
+            testStats: testStats.fielding,
+            otherStats: otherStats.fielding,
           ),
         ],
       ),
