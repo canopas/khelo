@@ -14,6 +14,7 @@ import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/team/team_service.dart';
+import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/service/match_event/match_event_service.dart';
 import 'package:data/service/partnership/partnership_service.dart';
 import 'package:data/service/user/user_service.dart';
@@ -34,6 +35,7 @@ final scoreBoardStateProvider = StateNotifierProvider.autoDispose<
     ref.read(inningServiceProvider),
     ref.read(userServiceProvider),
     ref.read(ballScoreServiceProvider),
+    ref.read(tournamentServiceProvider),
     ref.read(matchEventServiceProvider),
     ref.read(partnershipServiceProvider),
   );
@@ -43,6 +45,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
   final MatchService _matchService;
   final TeamService _teamService;
   final InningsService _inningService;
+  final TournamentService _tournamentService;
   final UserService _userService;
   final BallScoreService _ballScoreService;
   final MatchEventService _matchEventService;
@@ -64,6 +67,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     this._inningService,
     this._userService,
     this._ballScoreService,
+    this._tournamentService,
     this._matchEventService,
     this._partnershipService,
   ) : super(const ScoreBoardViewState());
@@ -999,6 +1003,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           : UserStatType.other;
       for (final player in state.match?.players ?? []) {
         final oldStats = await _userService.getUserStats(player, userStatType);
+        if (!mounted) return;
         final newState = state.currentScoresList
             .where(
               (element) =>
@@ -1013,10 +1018,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
               type: userStatType,
             );
         await _userService.updateUserStats(player, newState);
+        if (!mounted) return;
       }
     } catch (e) {
-      debugPrint(
-          "ScoreBoardViewNotifier: error while adding player stats -> $e");
+      if (mounted) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while adding player stats -> $e");
+      }
     }
   }
 
@@ -1025,12 +1033,33 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       final teamIds = state.match?.teams.map((e) => e.team_id).toList() ?? [];
       for (final teamId in teamIds) {
         final currentStat = await _teamService.getTeamStatById(teamId);
+        if (!mounted) return;
         final newStat =
             state.match?.updateTeamStat(teamId, currentStat) ?? currentStat;
         await _teamService.updateTeamStat(teamId, newStat);
+        if (!mounted) return;
       }
     } catch (e) {
-      debugPrint("ScoreBoardViewNotifier: error while adding team stats -> $e");
+      if (mounted) {
+        debugPrint(
+            "ScoreBoardViewNotifier: error while adding tournament team stats -> $e");
+      }
+    }
+  }
+
+  void _updateTournamentStats() async {
+    try {
+      if (state.match?.tournament_id == null || !mounted) return;
+      await _tournamentService.updateTournamentStats(
+        tournamentId: state.match!.tournament_id!,
+        match: state.match!.copyWith(match_status: MatchStatus.finish),
+        ballScores: state.currentScoresList,
+      );
+    } catch (e) {
+      if (mounted) {
+        debugPrint(
+            "ScoreBoardViewNotifier: Error updating tournament stats -> $e");
+      }
     }
   }
 
@@ -1504,14 +1533,13 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
       return;
     }
     try {
+      if (!mounted) return;
       state = state.copyWith(actionError: null, isActionInProgress: true);
 
       final ball = _getLastBallExceptPenaltyBall();
       if (ball != null && ball.wicket_type == null) {
         await addMatchPartnershipIfNeeded(ball);
       }
-      _updatePlayerStats(isMatchComplete: true);
-      _updateTeamStats();
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
         batsMan = state.batsMans!
@@ -1534,6 +1562,10 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
           inningId: currentInningId, status: InningStatus.finish);
 
       await _matchService.updateMatchStatus(matchId, status);
+
+      _updatePlayerStats(isMatchComplete: true);
+      _updateTeamStats();
+      _updateTournamentStats();
 
       state = state.copyWith(pop: true, isActionInProgress: false);
     } catch (e) {

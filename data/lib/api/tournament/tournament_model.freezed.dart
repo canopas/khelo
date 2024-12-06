@@ -43,6 +43,8 @@ mixin _$TournamentModel {
   List<MatchModel> get matches => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<PlayerKeyStat> get keyStats => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<TournamentTeamStat> get teamStats => throw _privateConstructorUsedError;
 
   /// Serializes this TournamentModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -80,7 +82,9 @@ abstract class $TournamentModelCopyWith<$Res> {
       @JsonKey(includeFromJson: false, includeToJson: false)
       List<MatchModel> matches,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      List<PlayerKeyStat> keyStats});
+      List<PlayerKeyStat> keyStats,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      List<TournamentTeamStat> teamStats});
 }
 
 /// @nodoc
@@ -114,6 +118,7 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
     Object? teams = null,
     Object? matches = null,
     Object? keyStats = null,
+    Object? teamStats = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -180,6 +185,10 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
           ? _value.keyStats
           : keyStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
+      teamStats: null == teamStats
+          ? _value.teamStats
+          : teamStats // ignore: cast_nullable_to_non_nullable
+              as List<TournamentTeamStat>,
     ) as $Val);
   }
 }
@@ -212,7 +221,9 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
       @JsonKey(includeFromJson: false, includeToJson: false)
       List<MatchModel> matches,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      List<PlayerKeyStat> keyStats});
+      List<PlayerKeyStat> keyStats,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      List<TournamentTeamStat> teamStats});
 }
 
 /// @nodoc
@@ -244,6 +255,7 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
     Object? teams = null,
     Object? matches = null,
     Object? keyStats = null,
+    Object? teamStats = null,
   }) {
     return _then(_$TournamentModelImpl(
       id: null == id
@@ -310,6 +322,10 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
           ? _value._keyStats
           : keyStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
+      teamStats: null == teamStats
+          ? _value._teamStats
+          : teamStats // ignore: cast_nullable_to_non_nullable
+              as List<TournamentTeamStat>,
     ));
   }
 }
@@ -338,13 +354,16 @@ class _$TournamentModelImpl implements _TournamentModel {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final List<MatchModel> matches = const [],
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<PlayerKeyStat> keyStats = const []})
+      final List<PlayerKeyStat> keyStats = const [],
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final List<TournamentTeamStat> teamStats = const []})
       : _members = members,
         _team_ids = team_ids,
         _match_ids = match_ids,
         _teams = teams,
         _matches = matches,
-        _keyStats = keyStats;
+        _keyStats = keyStats,
+        _teamStats = teamStats;
 
   factory _$TournamentModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TournamentModelImplFromJson(json);
@@ -427,9 +446,18 @@ class _$TournamentModelImpl implements _TournamentModel {
     return EqualUnmodifiableListView(_keyStats);
   }
 
+  final List<TournamentTeamStat> _teamStats;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<TournamentTeamStat> get teamStats {
+    if (_teamStats is EqualUnmodifiableListView) return _teamStats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_teamStats);
+  }
+
   @override
   String toString() {
-    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, status: $status, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches, keyStats: $keyStats)';
+    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, status: $status, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches, keyStats: $keyStats, teamStats: $teamStats)';
   }
 
   @override
@@ -459,7 +487,9 @@ class _$TournamentModelImpl implements _TournamentModel {
                 .equals(other._match_ids, _match_ids) &&
             const DeepCollectionEquality().equals(other._teams, _teams) &&
             const DeepCollectionEquality().equals(other._matches, _matches) &&
-            const DeepCollectionEquality().equals(other._keyStats, _keyStats));
+            const DeepCollectionEquality().equals(other._keyStats, _keyStats) &&
+            const DeepCollectionEquality()
+                .equals(other._teamStats, _teamStats));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -481,7 +511,8 @@ class _$TournamentModelImpl implements _TournamentModel {
       const DeepCollectionEquality().hash(_match_ids),
       const DeepCollectionEquality().hash(_teams),
       const DeepCollectionEquality().hash(_matches),
-      const DeepCollectionEquality().hash(_keyStats));
+      const DeepCollectionEquality().hash(_keyStats),
+      const DeepCollectionEquality().hash(_teamStats));
 
   /// Create a copy of TournamentModel
   /// with the given fields replaced by the non-null parameter values.
@@ -521,7 +552,9 @@ abstract class _TournamentModel implements TournamentModel {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final List<MatchModel> matches,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<PlayerKeyStat> keyStats}) = _$TournamentModelImpl;
+      final List<PlayerKeyStat> keyStats,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      final List<TournamentTeamStat> teamStats}) = _$TournamentModelImpl;
 
   factory _TournamentModel.fromJson(Map<String, dynamic> json) =
       _$TournamentModelImpl.fromJson;
@@ -565,6 +598,9 @@ abstract class _TournamentModel implements TournamentModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<PlayerKeyStat> get keyStats;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<TournamentTeamStat> get teamStats;
 
   /// Create a copy of TournamentModel
   /// with the given fields replaced by the non-null parameter values.
@@ -790,13 +826,23 @@ abstract class _TournamentMember implements TournamentMember {
       throw _privateConstructorUsedError;
 }
 
+PlayerKeyStat _$PlayerKeyStatFromJson(Map<String, dynamic> json) {
+  return _PlayerKeyStat.fromJson(json);
+}
+
 /// @nodoc
 mixin _$PlayerKeyStat {
+  String get player_id => throw _privateConstructorUsedError;
   String get teamName => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel get player => throw _privateConstructorUsedError;
   UserStat get stats => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
   KeyStatTag? get tag => throw _privateConstructorUsedError;
   int? get value => throw _privateConstructorUsedError;
+
+  /// Serializes this PlayerKeyStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of PlayerKeyStat
   /// with the given fields replaced by the non-null parameter values.
@@ -812,10 +858,11 @@ abstract class $PlayerKeyStatCopyWith<$Res> {
       _$PlayerKeyStatCopyWithImpl<$Res, PlayerKeyStat>;
   @useResult
   $Res call(
-      {String teamName,
-      UserModel player,
+      {String player_id,
+      String teamName,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel player,
       UserStat stats,
-      KeyStatTag? tag,
+      @JsonKey(includeToJson: false, includeFromJson: false) KeyStatTag? tag,
       int? value});
 
   $UserModelCopyWith<$Res> get player;
@@ -837,6 +884,7 @@ class _$PlayerKeyStatCopyWithImpl<$Res, $Val extends PlayerKeyStat>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? player_id = null,
     Object? teamName = null,
     Object? player = null,
     Object? stats = null,
@@ -844,6 +892,10 @@ class _$PlayerKeyStatCopyWithImpl<$Res, $Val extends PlayerKeyStat>
     Object? value = freezed,
   }) {
     return _then(_value.copyWith(
+      player_id: null == player_id
+          ? _value.player_id
+          : player_id // ignore: cast_nullable_to_non_nullable
+              as String,
       teamName: null == teamName
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
@@ -897,10 +949,11 @@ abstract class _$$PlayerKeyStatImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String teamName,
-      UserModel player,
+      {String player_id,
+      String teamName,
+      @JsonKey(includeToJson: false, includeFromJson: false) UserModel player,
       UserStat stats,
-      KeyStatTag? tag,
+      @JsonKey(includeToJson: false, includeFromJson: false) KeyStatTag? tag,
       int? value});
 
   @override
@@ -922,6 +975,7 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? player_id = null,
     Object? teamName = null,
     Object? player = null,
     Object? stats = null,
@@ -929,6 +983,10 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
     Object? value = freezed,
   }) {
     return _then(_$PlayerKeyStatImpl(
+      player_id: null == player_id
+          ? _value.player_id
+          : player_id // ignore: cast_nullable_to_non_nullable
+              as String,
       teamName: null == teamName
           ? _value.teamName
           : teamName // ignore: cast_nullable_to_non_nullable
@@ -958,26 +1016,36 @@ class __$$PlayerKeyStatImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$PlayerKeyStatImpl implements _PlayerKeyStat {
   const _$PlayerKeyStatImpl(
-      {required this.teamName,
-      required this.player,
-      required this.stats,
-      this.tag,
+      {required this.player_id,
+      required this.teamName,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      this.player = const UserModel(id: ''),
+      this.stats = const UserStat(),
+      @JsonKey(includeToJson: false, includeFromJson: false) this.tag,
       this.value});
 
+  factory _$PlayerKeyStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PlayerKeyStatImplFromJson(json);
+
+  @override
+  final String player_id;
   @override
   final String teamName;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
   final UserModel player;
   @override
+  @JsonKey()
   final UserStat stats;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
   final KeyStatTag? tag;
   @override
   final int? value;
 
   @override
   String toString() {
-    return 'PlayerKeyStat(teamName: $teamName, player: $player, stats: $stats, tag: $tag, value: $value)';
+    return 'PlayerKeyStat(player_id: $player_id, teamName: $teamName, player: $player, stats: $stats, tag: $tag, value: $value)';
   }
 
   @override
@@ -985,6 +1053,8 @@ class _$PlayerKeyStatImpl implements _PlayerKeyStat {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PlayerKeyStatImpl &&
+            (identical(other.player_id, player_id) ||
+                other.player_id == player_id) &&
             (identical(other.teamName, teamName) ||
                 other.teamName == teamName) &&
             (identical(other.player, player) || other.player == player) &&
@@ -993,9 +1063,10 @@ class _$PlayerKeyStatImpl implements _PlayerKeyStat {
             (identical(other.value, value) || other.value == value));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, teamName, player, stats, tag, value);
+      Object.hash(runtimeType, player_id, teamName, player, stats, tag, value);
 
   /// Create a copy of PlayerKeyStat
   /// with the given fields replaced by the non-null parameter values.
@@ -1004,23 +1075,40 @@ class _$PlayerKeyStatImpl implements _PlayerKeyStat {
   @pragma('vm:prefer-inline')
   _$$PlayerKeyStatImplCopyWith<_$PlayerKeyStatImpl> get copyWith =>
       __$$PlayerKeyStatImplCopyWithImpl<_$PlayerKeyStatImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$PlayerKeyStatImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _PlayerKeyStat implements PlayerKeyStat {
   const factory _PlayerKeyStat(
-      {required final String teamName,
-      required final UserModel player,
-      required final UserStat stats,
+      {required final String player_id,
+      required final String teamName,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final UserModel player,
+      final UserStat stats,
+      @JsonKey(includeToJson: false, includeFromJson: false)
       final KeyStatTag? tag,
       final int? value}) = _$PlayerKeyStatImpl;
 
+  factory _PlayerKeyStat.fromJson(Map<String, dynamic> json) =
+      _$PlayerKeyStatImpl.fromJson;
+
+  @override
+  String get player_id;
   @override
   String get teamName;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel get player;
   @override
   UserStat get stats;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
   KeyStatTag? get tag;
   @override
   int? get value;
@@ -1033,142 +1121,189 @@ abstract class _PlayerKeyStat implements PlayerKeyStat {
       throw _privateConstructorUsedError;
 }
 
-/// @nodoc
-mixin _$TeamPoint {
-  TeamModel get team => throw _privateConstructorUsedError;
-  int get points => throw _privateConstructorUsedError;
-  TeamStat get stat => throw _privateConstructorUsedError;
-  int get matchCount => throw _privateConstructorUsedError;
+TournamentTeamStat _$TournamentTeamStatFromJson(Map<String, dynamic> json) {
+  return _TournamentTeamStat.fromJson(json);
+}
 
-  /// Create a copy of TeamPoint
+/// @nodoc
+mixin _$TournamentTeamStat {
+  String get team_id => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  TeamModel? get team => throw _privateConstructorUsedError;
+  int get points => throw _privateConstructorUsedError;
+  int get wins => throw _privateConstructorUsedError;
+  int get losses => throw _privateConstructorUsedError;
+  double get nrr => throw _privateConstructorUsedError;
+  int get played_matches => throw _privateConstructorUsedError;
+
+  /// Serializes this TournamentTeamStat to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TeamPointCopyWith<TeamPoint> get copyWith =>
+  $TournamentTeamStatCopyWith<TournamentTeamStat> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TeamPointCopyWith<$Res> {
-  factory $TeamPointCopyWith(TeamPoint value, $Res Function(TeamPoint) then) =
-      _$TeamPointCopyWithImpl<$Res, TeamPoint>;
+abstract class $TournamentTeamStatCopyWith<$Res> {
+  factory $TournamentTeamStatCopyWith(
+          TournamentTeamStat value, $Res Function(TournamentTeamStat) then) =
+      _$TournamentTeamStatCopyWithImpl<$Res, TournamentTeamStat>;
   @useResult
-  $Res call({TeamModel team, int points, TeamStat stat, int matchCount});
+  $Res call(
+      {String team_id,
+      @JsonKey(includeToJson: false, includeFromJson: false) TeamModel? team,
+      int points,
+      int wins,
+      int losses,
+      double nrr,
+      int played_matches});
 
-  $TeamModelCopyWith<$Res> get team;
-  $TeamStatCopyWith<$Res> get stat;
+  $TeamModelCopyWith<$Res>? get team;
 }
 
 /// @nodoc
-class _$TeamPointCopyWithImpl<$Res, $Val extends TeamPoint>
-    implements $TeamPointCopyWith<$Res> {
-  _$TeamPointCopyWithImpl(this._value, this._then);
+class _$TournamentTeamStatCopyWithImpl<$Res, $Val extends TournamentTeamStat>
+    implements $TournamentTeamStatCopyWith<$Res> {
+  _$TournamentTeamStatCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TeamPoint
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? team = null,
+    Object? team_id = null,
+    Object? team = freezed,
     Object? points = null,
-    Object? stat = null,
-    Object? matchCount = null,
+    Object? wins = null,
+    Object? losses = null,
+    Object? nrr = null,
+    Object? played_matches = null,
   }) {
     return _then(_value.copyWith(
-      team: null == team
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      team: freezed == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
-              as TeamModel,
+              as TeamModel?,
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
               as int,
-      stat: null == stat
-          ? _value.stat
-          : stat // ignore: cast_nullable_to_non_nullable
-              as TeamStat,
-      matchCount: null == matchCount
-          ? _value.matchCount
-          : matchCount // ignore: cast_nullable_to_non_nullable
+      wins: null == wins
+          ? _value.wins
+          : wins // ignore: cast_nullable_to_non_nullable
+              as int,
+      losses: null == losses
+          ? _value.losses
+          : losses // ignore: cast_nullable_to_non_nullable
+              as int,
+      nrr: null == nrr
+          ? _value.nrr
+          : nrr // ignore: cast_nullable_to_non_nullable
+              as double,
+      played_matches: null == played_matches
+          ? _value.played_matches
+          : played_matches // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
 
-  /// Create a copy of TeamPoint
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $TeamModelCopyWith<$Res> get team {
-    return $TeamModelCopyWith<$Res>(_value.team, (value) {
+  $TeamModelCopyWith<$Res>? get team {
+    if (_value.team == null) {
+      return null;
+    }
+
+    return $TeamModelCopyWith<$Res>(_value.team!, (value) {
       return _then(_value.copyWith(team: value) as $Val);
     });
   }
-
-  /// Create a copy of TeamPoint
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TeamStatCopyWith<$Res> get stat {
-    return $TeamStatCopyWith<$Res>(_value.stat, (value) {
-      return _then(_value.copyWith(stat: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
-abstract class _$$TeamPointImplCopyWith<$Res>
-    implements $TeamPointCopyWith<$Res> {
-  factory _$$TeamPointImplCopyWith(
-          _$TeamPointImpl value, $Res Function(_$TeamPointImpl) then) =
-      __$$TeamPointImplCopyWithImpl<$Res>;
+abstract class _$$TournamentTeamStatImplCopyWith<$Res>
+    implements $TournamentTeamStatCopyWith<$Res> {
+  factory _$$TournamentTeamStatImplCopyWith(_$TournamentTeamStatImpl value,
+          $Res Function(_$TournamentTeamStatImpl) then) =
+      __$$TournamentTeamStatImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({TeamModel team, int points, TeamStat stat, int matchCount});
+  $Res call(
+      {String team_id,
+      @JsonKey(includeToJson: false, includeFromJson: false) TeamModel? team,
+      int points,
+      int wins,
+      int losses,
+      double nrr,
+      int played_matches});
 
   @override
-  $TeamModelCopyWith<$Res> get team;
-  @override
-  $TeamStatCopyWith<$Res> get stat;
+  $TeamModelCopyWith<$Res>? get team;
 }
 
 /// @nodoc
-class __$$TeamPointImplCopyWithImpl<$Res>
-    extends _$TeamPointCopyWithImpl<$Res, _$TeamPointImpl>
-    implements _$$TeamPointImplCopyWith<$Res> {
-  __$$TeamPointImplCopyWithImpl(
-      _$TeamPointImpl _value, $Res Function(_$TeamPointImpl) _then)
+class __$$TournamentTeamStatImplCopyWithImpl<$Res>
+    extends _$TournamentTeamStatCopyWithImpl<$Res, _$TournamentTeamStatImpl>
+    implements _$$TournamentTeamStatImplCopyWith<$Res> {
+  __$$TournamentTeamStatImplCopyWithImpl(_$TournamentTeamStatImpl _value,
+      $Res Function(_$TournamentTeamStatImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TeamPoint
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? team = null,
+    Object? team_id = null,
+    Object? team = freezed,
     Object? points = null,
-    Object? stat = null,
-    Object? matchCount = null,
+    Object? wins = null,
+    Object? losses = null,
+    Object? nrr = null,
+    Object? played_matches = null,
   }) {
-    return _then(_$TeamPointImpl(
-      team: null == team
+    return _then(_$TournamentTeamStatImpl(
+      team_id: null == team_id
+          ? _value.team_id
+          : team_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      team: freezed == team
           ? _value.team
           : team // ignore: cast_nullable_to_non_nullable
-              as TeamModel,
+              as TeamModel?,
       points: null == points
           ? _value.points
           : points // ignore: cast_nullable_to_non_nullable
               as int,
-      stat: null == stat
-          ? _value.stat
-          : stat // ignore: cast_nullable_to_non_nullable
-              as TeamStat,
-      matchCount: null == matchCount
-          ? _value.matchCount
-          : matchCount // ignore: cast_nullable_to_non_nullable
+      wins: null == wins
+          ? _value.wins
+          : wins // ignore: cast_nullable_to_non_nullable
+              as int,
+      losses: null == losses
+          ? _value.losses
+          : losses // ignore: cast_nullable_to_non_nullable
+              as int,
+      nrr: null == nrr
+          ? _value.nrr
+          : nrr // ignore: cast_nullable_to_non_nullable
+              as double,
+      played_matches: null == played_matches
+          ? _value.played_matches
+          : played_matches // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -1176,71 +1311,117 @@ class __$$TeamPointImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$TeamPointImpl implements _TeamPoint {
-  const _$TeamPointImpl(
-      {required this.team,
-      required this.points,
-      required this.stat,
-      required this.matchCount});
+@JsonSerializable(anyMap: true, explicitToJson: true)
+class _$TournamentTeamStatImpl implements _TournamentTeamStat {
+  const _$TournamentTeamStatImpl(
+      {required this.team_id,
+      @JsonKey(includeToJson: false, includeFromJson: false) this.team,
+      this.points = 0,
+      this.wins = 0,
+      this.losses = 0,
+      this.nrr = 0.0,
+      this.played_matches = 0});
+
+  factory _$TournamentTeamStatImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TournamentTeamStatImplFromJson(json);
 
   @override
-  final TeamModel team;
+  final String team_id;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final TeamModel? team;
+  @override
+  @JsonKey()
   final int points;
   @override
-  final TeamStat stat;
+  @JsonKey()
+  final int wins;
   @override
-  final int matchCount;
+  @JsonKey()
+  final int losses;
+  @override
+  @JsonKey()
+  final double nrr;
+  @override
+  @JsonKey()
+  final int played_matches;
 
   @override
   String toString() {
-    return 'TeamPoint(team: $team, points: $points, stat: $stat, matchCount: $matchCount)';
+    return 'TournamentTeamStat(team_id: $team_id, team: $team, points: $points, wins: $wins, losses: $losses, nrr: $nrr, played_matches: $played_matches)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TeamPointImpl &&
+            other is _$TournamentTeamStatImpl &&
+            (identical(other.team_id, team_id) || other.team_id == team_id) &&
             (identical(other.team, team) || other.team == team) &&
             (identical(other.points, points) || other.points == points) &&
-            (identical(other.stat, stat) || other.stat == stat) &&
-            (identical(other.matchCount, matchCount) ||
-                other.matchCount == matchCount));
+            (identical(other.wins, wins) || other.wins == wins) &&
+            (identical(other.losses, losses) || other.losses == losses) &&
+            (identical(other.nrr, nrr) || other.nrr == nrr) &&
+            (identical(other.played_matches, played_matches) ||
+                other.played_matches == played_matches));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, team, points, stat, matchCount);
+  int get hashCode => Object.hash(
+      runtimeType, team_id, team, points, wins, losses, nrr, played_matches);
 
-  /// Create a copy of TeamPoint
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$TeamPointImplCopyWith<_$TeamPointImpl> get copyWith =>
-      __$$TeamPointImplCopyWithImpl<_$TeamPointImpl>(this, _$identity);
-}
-
-abstract class _TeamPoint implements TeamPoint {
-  const factory _TeamPoint(
-      {required final TeamModel team,
-      required final int points,
-      required final TeamStat stat,
-      required final int matchCount}) = _$TeamPointImpl;
+  _$$TournamentTeamStatImplCopyWith<_$TournamentTeamStatImpl> get copyWith =>
+      __$$TournamentTeamStatImplCopyWithImpl<_$TournamentTeamStatImpl>(
+          this, _$identity);
 
   @override
-  TeamModel get team;
+  Map<String, dynamic> toJson() {
+    return _$$TournamentTeamStatImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TournamentTeamStat implements TournamentTeamStat {
+  const factory _TournamentTeamStat(
+      {required final String team_id,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final TeamModel? team,
+      final int points,
+      final int wins,
+      final int losses,
+      final double nrr,
+      final int played_matches}) = _$TournamentTeamStatImpl;
+
+  factory _TournamentTeamStat.fromJson(Map<String, dynamic> json) =
+      _$TournamentTeamStatImpl.fromJson;
+
+  @override
+  String get team_id;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  TeamModel? get team;
   @override
   int get points;
   @override
-  TeamStat get stat;
+  int get wins;
   @override
-  int get matchCount;
+  int get losses;
+  @override
+  double get nrr;
+  @override
+  int get played_matches;
 
-  /// Create a copy of TeamPoint
+  /// Create a copy of TournamentTeamStat
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TeamPointImplCopyWith<_$TeamPointImpl> get copyWith =>
+  _$$TournamentTeamStatImplCopyWith<_$TournamentTeamStatImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
