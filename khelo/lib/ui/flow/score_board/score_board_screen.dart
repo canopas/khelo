@@ -275,7 +275,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
     final endMatch = await MatchCompleteSheet.show<bool>(context);
     if (endMatch != null && context.mounted) {
       if (endMatch) {
-        notifier.endMatch();
+        notifier.endMatchWithStatus(MatchStatus.finish);
       } else {
         notifier.undoLastBall();
       }
@@ -661,7 +661,7 @@ class _ScoreBoardScreenState extends ConsumerState<ScoreBoardScreen> {
           title: context.l10n.common_end_match_title,
           message: context.l10n.score_board_end_match_description_text,
           confirmBtnText: context.l10n.common_end_match_title,
-          onConfirm: notifier.abandonMatch,
+          onConfirm: () => notifier.endMatchWithStatus(MatchStatus.abandoned),
         );
       }
     });
