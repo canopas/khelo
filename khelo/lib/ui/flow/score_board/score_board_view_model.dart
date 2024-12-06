@@ -718,9 +718,6 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
         ));
       } else if (ball.wicket_type != null) {
         await handleWicketMatchEvent(ball);
-        if (ball.player_out_id != ball.batsman_id) {
-          await handleMilestonesMatchEvent(ball, ball.player_out_id!);
-        }
       }
 
       await handleMilestonesMatchEvent(ball, ball.batsman_id);

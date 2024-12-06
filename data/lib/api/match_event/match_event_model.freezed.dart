@@ -24,16 +24,16 @@ mixin _$MatchEventModel {
   String get match_id => throw _privateConstructorUsedError;
   String get inning_id => throw _privateConstructorUsedError;
   EventType get type => throw _privateConstructorUsedError;
+  @TimeStampJsonConverter()
+  DateTime get time => throw _privateConstructorUsedError;
   String? get bowler_id => throw _privateConstructorUsedError;
+  String? get batsman_id => throw _privateConstructorUsedError;
+  FieldingPositionType? get fielding_position =>
+      throw _privateConstructorUsedError;
+  double get over => throw _privateConstructorUsedError;
   List<String> get ball_ids => throw _privateConstructorUsedError;
   List<MatchEventWicket> get wickets => throw _privateConstructorUsedError;
   List<MatchEventMilestone> get milestone => throw _privateConstructorUsedError;
-  @TimeStampJsonConverter()
-  DateTime get time => throw _privateConstructorUsedError;
-  String? get batsman_id => throw _privateConstructorUsedError;
-  double get over => throw _privateConstructorUsedError;
-  FieldingPositionType? get fielding_position =>
-      throw _privateConstructorUsedError;
 
   /// Serializes this MatchEventModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,14 +56,14 @@ abstract class $MatchEventModelCopyWith<$Res> {
       String match_id,
       String inning_id,
       EventType type,
+      @TimeStampJsonConverter() DateTime time,
       String? bowler_id,
+      String? batsman_id,
+      FieldingPositionType? fielding_position,
+      double over,
       List<String> ball_ids,
       List<MatchEventWicket> wickets,
-      List<MatchEventMilestone> milestone,
-      @TimeStampJsonConverter() DateTime time,
-      String? batsman_id,
-      double over,
-      FieldingPositionType? fielding_position});
+      List<MatchEventMilestone> milestone});
 }
 
 /// @nodoc
@@ -85,14 +85,14 @@ class _$MatchEventModelCopyWithImpl<$Res, $Val extends MatchEventModel>
     Object? match_id = null,
     Object? inning_id = null,
     Object? type = null,
+    Object? time = null,
     Object? bowler_id = freezed,
+    Object? batsman_id = freezed,
+    Object? fielding_position = freezed,
+    Object? over = null,
     Object? ball_ids = null,
     Object? wickets = null,
     Object? milestone = null,
-    Object? time = null,
-    Object? batsman_id = freezed,
-    Object? over = null,
-    Object? fielding_position = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -111,10 +111,26 @@ class _$MatchEventModelCopyWithImpl<$Res, $Val extends MatchEventModel>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as EventType,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       bowler_id: freezed == bowler_id
           ? _value.bowler_id
           : bowler_id // ignore: cast_nullable_to_non_nullable
               as String?,
+      batsman_id: freezed == batsman_id
+          ? _value.batsman_id
+          : batsman_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fielding_position: freezed == fielding_position
+          ? _value.fielding_position
+          : fielding_position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
+      over: null == over
+          ? _value.over
+          : over // ignore: cast_nullable_to_non_nullable
+              as double,
       ball_ids: null == ball_ids
           ? _value.ball_ids
           : ball_ids // ignore: cast_nullable_to_non_nullable
@@ -127,22 +143,6 @@ class _$MatchEventModelCopyWithImpl<$Res, $Val extends MatchEventModel>
           ? _value.milestone
           : milestone // ignore: cast_nullable_to_non_nullable
               as List<MatchEventMilestone>,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      batsman_id: freezed == batsman_id
-          ? _value.batsman_id
-          : batsman_id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      over: null == over
-          ? _value.over
-          : over // ignore: cast_nullable_to_non_nullable
-              as double,
-      fielding_position: freezed == fielding_position
-          ? _value.fielding_position
-          : fielding_position // ignore: cast_nullable_to_non_nullable
-              as FieldingPositionType?,
     ) as $Val);
   }
 }
@@ -160,14 +160,14 @@ abstract class _$$MatchEventModelImplCopyWith<$Res>
       String match_id,
       String inning_id,
       EventType type,
+      @TimeStampJsonConverter() DateTime time,
       String? bowler_id,
+      String? batsman_id,
+      FieldingPositionType? fielding_position,
+      double over,
       List<String> ball_ids,
       List<MatchEventWicket> wickets,
-      List<MatchEventMilestone> milestone,
-      @TimeStampJsonConverter() DateTime time,
-      String? batsman_id,
-      double over,
-      FieldingPositionType? fielding_position});
+      List<MatchEventMilestone> milestone});
 }
 
 /// @nodoc
@@ -187,14 +187,14 @@ class __$$MatchEventModelImplCopyWithImpl<$Res>
     Object? match_id = null,
     Object? inning_id = null,
     Object? type = null,
+    Object? time = null,
     Object? bowler_id = freezed,
+    Object? batsman_id = freezed,
+    Object? fielding_position = freezed,
+    Object? over = null,
     Object? ball_ids = null,
     Object? wickets = null,
     Object? milestone = null,
-    Object? time = null,
-    Object? batsman_id = freezed,
-    Object? over = null,
-    Object? fielding_position = freezed,
   }) {
     return _then(_$MatchEventModelImpl(
       id: null == id
@@ -213,10 +213,26 @@ class __$$MatchEventModelImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as EventType,
+      time: null == time
+          ? _value.time
+          : time // ignore: cast_nullable_to_non_nullable
+              as DateTime,
       bowler_id: freezed == bowler_id
           ? _value.bowler_id
           : bowler_id // ignore: cast_nullable_to_non_nullable
               as String?,
+      batsman_id: freezed == batsman_id
+          ? _value.batsman_id
+          : batsman_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fielding_position: freezed == fielding_position
+          ? _value.fielding_position
+          : fielding_position // ignore: cast_nullable_to_non_nullable
+              as FieldingPositionType?,
+      over: null == over
+          ? _value.over
+          : over // ignore: cast_nullable_to_non_nullable
+              as double,
       ball_ids: null == ball_ids
           ? _value._ball_ids
           : ball_ids // ignore: cast_nullable_to_non_nullable
@@ -229,22 +245,6 @@ class __$$MatchEventModelImplCopyWithImpl<$Res>
           ? _value._milestone
           : milestone // ignore: cast_nullable_to_non_nullable
               as List<MatchEventMilestone>,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      batsman_id: freezed == batsman_id
-          ? _value.batsman_id
-          : batsman_id // ignore: cast_nullable_to_non_nullable
-              as String?,
-      over: null == over
-          ? _value.over
-          : over // ignore: cast_nullable_to_non_nullable
-              as double,
-      fielding_position: freezed == fielding_position
-          ? _value.fielding_position
-          : fielding_position // ignore: cast_nullable_to_non_nullable
-              as FieldingPositionType?,
     ));
   }
 }
@@ -258,14 +258,14 @@ class _$MatchEventModelImpl implements _MatchEventModel {
       required this.match_id,
       required this.inning_id,
       required this.type,
+      @TimeStampJsonConverter() required this.time,
       this.bowler_id,
+      this.batsman_id,
+      this.fielding_position,
+      this.over = 0,
       final List<String> ball_ids = const [],
       final List<MatchEventWicket> wickets = const [],
-      final List<MatchEventMilestone> milestone = const [],
-      @TimeStampJsonConverter() required this.time,
-      this.batsman_id,
-      this.over = 0,
-      this.fielding_position})
+      final List<MatchEventMilestone> milestone = const []})
       : _ball_ids = ball_ids,
         _wickets = wickets,
         _milestone = milestone;
@@ -282,7 +282,17 @@ class _$MatchEventModelImpl implements _MatchEventModel {
   @override
   final EventType type;
   @override
+  @TimeStampJsonConverter()
+  final DateTime time;
+  @override
   final String? bowler_id;
+  @override
+  final String? batsman_id;
+  @override
+  final FieldingPositionType? fielding_position;
+  @override
+  @JsonKey()
+  final double over;
   final List<String> _ball_ids;
   @override
   @JsonKey()
@@ -311,19 +321,8 @@ class _$MatchEventModelImpl implements _MatchEventModel {
   }
 
   @override
-  @TimeStampJsonConverter()
-  final DateTime time;
-  @override
-  final String? batsman_id;
-  @override
-  @JsonKey()
-  final double over;
-  @override
-  final FieldingPositionType? fielding_position;
-
-  @override
   String toString() {
-    return 'MatchEventModel(id: $id, match_id: $match_id, inning_id: $inning_id, type: $type, bowler_id: $bowler_id, ball_ids: $ball_ids, wickets: $wickets, milestone: $milestone, time: $time, batsman_id: $batsman_id, over: $over, fielding_position: $fielding_position)';
+    return 'MatchEventModel(id: $id, match_id: $match_id, inning_id: $inning_id, type: $type, time: $time, bowler_id: $bowler_id, batsman_id: $batsman_id, fielding_position: $fielding_position, over: $over, ball_ids: $ball_ids, wickets: $wickets, milestone: $milestone)';
   }
 
   @override
@@ -337,18 +336,18 @@ class _$MatchEventModelImpl implements _MatchEventModel {
             (identical(other.inning_id, inning_id) ||
                 other.inning_id == inning_id) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.time, time) || other.time == time) &&
             (identical(other.bowler_id, bowler_id) ||
                 other.bowler_id == bowler_id) &&
+            (identical(other.batsman_id, batsman_id) ||
+                other.batsman_id == batsman_id) &&
+            (identical(other.fielding_position, fielding_position) ||
+                other.fielding_position == fielding_position) &&
+            (identical(other.over, over) || other.over == over) &&
             const DeepCollectionEquality().equals(other._ball_ids, _ball_ids) &&
             const DeepCollectionEquality().equals(other._wickets, _wickets) &&
             const DeepCollectionEquality()
-                .equals(other._milestone, _milestone) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.batsman_id, batsman_id) ||
-                other.batsman_id == batsman_id) &&
-            (identical(other.over, over) || other.over == over) &&
-            (identical(other.fielding_position, fielding_position) ||
-                other.fielding_position == fielding_position));
+                .equals(other._milestone, _milestone));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -359,14 +358,14 @@ class _$MatchEventModelImpl implements _MatchEventModel {
       match_id,
       inning_id,
       type,
+      time,
       bowler_id,
+      batsman_id,
+      fielding_position,
+      over,
       const DeepCollectionEquality().hash(_ball_ids),
       const DeepCollectionEquality().hash(_wickets),
-      const DeepCollectionEquality().hash(_milestone),
-      time,
-      batsman_id,
-      over,
-      fielding_position);
+      const DeepCollectionEquality().hash(_milestone));
 
   /// Create a copy of MatchEventModel
   /// with the given fields replaced by the non-null parameter values.
@@ -391,14 +390,14 @@ abstract class _MatchEventModel implements MatchEventModel {
       required final String match_id,
       required final String inning_id,
       required final EventType type,
+      @TimeStampJsonConverter() required final DateTime time,
       final String? bowler_id,
+      final String? batsman_id,
+      final FieldingPositionType? fielding_position,
+      final double over,
       final List<String> ball_ids,
       final List<MatchEventWicket> wickets,
-      final List<MatchEventMilestone> milestone,
-      @TimeStampJsonConverter() required final DateTime time,
-      final String? batsman_id,
-      final double over,
-      final FieldingPositionType? fielding_position}) = _$MatchEventModelImpl;
+      final List<MatchEventMilestone> milestone}) = _$MatchEventModelImpl;
 
   factory _MatchEventModel.fromJson(Map<String, dynamic> json) =
       _$MatchEventModelImpl.fromJson;
@@ -412,22 +411,22 @@ abstract class _MatchEventModel implements MatchEventModel {
   @override
   EventType get type;
   @override
+  @TimeStampJsonConverter()
+  DateTime get time;
+  @override
   String? get bowler_id;
+  @override
+  String? get batsman_id;
+  @override
+  FieldingPositionType? get fielding_position;
+  @override
+  double get over;
   @override
   List<String> get ball_ids;
   @override
   List<MatchEventWicket> get wickets;
   @override
   List<MatchEventMilestone> get milestone;
-  @override
-  @TimeStampJsonConverter()
-  DateTime get time;
-  @override
-  String? get batsman_id;
-  @override
-  double get over;
-  @override
-  FieldingPositionType? get fielding_position;
 
   /// Create a copy of MatchEventModel
   /// with the given fields replaced by the non-null parameter values.

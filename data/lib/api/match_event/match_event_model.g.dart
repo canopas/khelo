@@ -12,7 +12,12 @@ _$MatchEventModelImpl _$$MatchEventModelImplFromJson(Map json) =>
       match_id: json['match_id'] as String,
       inning_id: json['inning_id'] as String,
       type: $enumDecode(_$EventTypeEnumMap, json['type']),
+      time: const TimeStampJsonConverter().fromJson(json['time'] as Object),
       bowler_id: json['bowler_id'] as String?,
+      batsman_id: json['batsman_id'] as String?,
+      fielding_position: $enumDecodeNullable(
+          _$FieldingPositionTypeEnumMap, json['fielding_position']),
+      over: (json['over'] as num?)?.toDouble() ?? 0,
       ball_ids: (json['ball_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -27,11 +32,6 @@ _$MatchEventModelImpl _$$MatchEventModelImplFromJson(Map json) =>
                   Map<String, dynamic>.from(e as Map)))
               .toList() ??
           const [],
-      time: const TimeStampJsonConverter().fromJson(json['time'] as Object),
-      batsman_id: json['batsman_id'] as String?,
-      over: (json['over'] as num?)?.toDouble() ?? 0,
-      fielding_position: $enumDecodeNullable(
-          _$FieldingPositionTypeEnumMap, json['fielding_position']),
     );
 
 Map<String, dynamic> _$$MatchEventModelImplToJson(
@@ -41,6 +41,7 @@ Map<String, dynamic> _$$MatchEventModelImplToJson(
     'match_id': instance.match_id,
     'inning_id': instance.inning_id,
     'type': _$EventTypeEnumMap[instance.type]!,
+    'time': const TimeStampJsonConverter().toJson(instance.time),
   };
 
   void writeNotNull(String key, dynamic value) {
@@ -50,14 +51,13 @@ Map<String, dynamic> _$$MatchEventModelImplToJson(
   }
 
   writeNotNull('bowler_id', instance.bowler_id);
+  writeNotNull('batsman_id', instance.batsman_id);
+  writeNotNull('fielding_position',
+      _$FieldingPositionTypeEnumMap[instance.fielding_position]);
+  val['over'] = instance.over;
   val['ball_ids'] = instance.ball_ids;
   val['wickets'] = instance.wickets.map((e) => e.toJson()).toList();
   val['milestone'] = instance.milestone.map((e) => e.toJson()).toList();
-  val['time'] = const TimeStampJsonConverter().toJson(instance.time);
-  writeNotNull('batsman_id', instance.batsman_id);
-  val['over'] = instance.over;
-  writeNotNull('fielding_position',
-      _$FieldingPositionTypeEnumMap[instance.fielding_position]);
   return val;
 }
 

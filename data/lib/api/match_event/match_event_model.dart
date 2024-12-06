@@ -17,15 +17,14 @@ class MatchEventModel with _$MatchEventModel {
     required String match_id,
     required String inning_id,
     required EventType type,
+    @TimeStampJsonConverter() required DateTime time,
     String? bowler_id,
+    String? batsman_id,
+    FieldingPositionType? fielding_position,
+    @Default(0) double over,
     @Default([]) List<String> ball_ids,
     @Default([]) List<MatchEventWicket> wickets,
     @Default([]) List<MatchEventMilestone> milestone,
-    @TimeStampJsonConverter() required DateTime time,
-    String? batsman_id,
-    @Default(0) double over,
-    FieldingPositionType? fielding_position,
-
   }) = _MatchEventModel;
 
   factory MatchEventModel.fromJson(Map<String, dynamic> json) =>
