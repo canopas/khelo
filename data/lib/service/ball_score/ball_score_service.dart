@@ -58,10 +58,9 @@ class BallScoreService {
     MatchPlayer? updatedPlayer,
   }) async {
     try {
-      final scoreRef = _ballScoreCollection.doc();
+      final scoreRef = _ballScoreCollection.doc(score.id);
       await _firestore.runTransaction(maxAttempts: 1, (transaction) async {
-        final overCount =
-            double.parse("${score.over_number - 1}.${score.ball_number}");
+        final overCount = score.formattedOver;
 
         // update matchTeamScore and squad(if needed)
         await _matchService.updateTeamScoreAndSquadViaTransaction(
@@ -89,11 +88,7 @@ class BallScoreService {
         );
 
         // add ball
-        transaction.set(
-          scoreRef,
-          score.copyWith(id: scoreRef.id),
-          SetOptions(merge: true),
-        );
+        transaction.set(scoreRef, score, SetOptions(merge: true));
       }).catchError((error, stack) {
         throw AppError.fromError(error, stack);
       });
