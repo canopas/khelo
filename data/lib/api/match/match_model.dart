@@ -367,7 +367,7 @@ extension SingleMatchTeamStatExtension on MatchModel {
         : 0.0;
 
     final matchOvers = team.over;
-    final updatedOvers = totalOvers + matchOvers;
+    final updatedOvers = totalOvers.add(matchOvers.toBalls());
 
     return TeamStat(
       played: currentStat.played + 1,
