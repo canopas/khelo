@@ -1,4 +1,5 @@
 import 'package:data/api/match/match_model.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -37,11 +38,11 @@ class TeamDetailStatContent extends ConsumerWidget {
       children: [
         _matchPlayedProgress(
           context,
-          state.teamStat.status,
-          state.teamStat.played,
+          state.team!.stat.status,
+          state.team!.stat.played,
         ),
         const SizedBox(height: 16),
-        _teamStatsView(context, state.teamStat),
+        _teamStatsView(context, state.team!.stat),
       ],
     );
   }

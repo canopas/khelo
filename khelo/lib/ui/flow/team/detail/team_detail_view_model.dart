@@ -42,12 +42,9 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
     final teamCombiner = combineLatest2(_teamService.streamTeamById(_teamId!),
         _matchService.streamMatchesByTeamId(_teamId!));
     _teamStreamSubscription = teamCombiner.listen((data) {
-      final teamStat = _calculateTeamStat(_teamId!, data.$2);
-
       state = state.copyWith(
         team: data.$1,
         matches: data.$2,
-        teamStat: teamStat,
         loading: false,
       );
     }, onError: (e) {
@@ -55,13 +52,6 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
       debugPrint(
           "TeamDetailViewNotifier: error while loading team and matches by id -> $e");
     });
-  }
-
-  TeamStat _calculateTeamStat(String teamId, List<MatchModel> matches) {
-    final finishedMatches = matches
-        .where((match) => match.match_status == MatchStatus.finish)
-        .toList();
-    return finishedMatches.teamStat(teamId);
   }
 
   void onTabChange(int tab) {
@@ -86,6 +76,5 @@ class TeamDetailState with _$TeamDetailState {
     List<MatchModel>? matches,
     @Default(0) int selectedTab,
     @Default(false) bool loading,
-    @Default(TeamStat()) TeamStat teamStat,
   }) = _TeamDetailState;
 }

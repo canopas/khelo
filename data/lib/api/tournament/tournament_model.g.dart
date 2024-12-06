@@ -96,25 +96,39 @@ const _$TournamentMemberRoleEnumMap = {
 
 _$PlayerKeyStatImpl _$$PlayerKeyStatImplFromJson(Map<String, dynamic> json) =>
     _$PlayerKeyStatImpl(
+      player_id: json['player_id'] as String,
       teamName: json['teamName'] as String,
-      player: UserModel.fromJson(json['player'] as Map<String, dynamic>),
-      stats: UserStat.fromJson(json['stats'] as Map<String, dynamic>),
-      tag: $enumDecodeNullable(_$KeyStatTagEnumMap, json['tag']),
+      stats: json['stats'] == null
+          ? const UserStat()
+          : UserStat.fromJson(json['stats'] as Map<String, dynamic>),
       value: (json['value'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$PlayerKeyStatImplToJson(_$PlayerKeyStatImpl instance) =>
     <String, dynamic>{
+      'player_id': instance.player_id,
       'teamName': instance.teamName,
-      'player': instance.player.toJson(),
       'stats': instance.stats.toJson(),
-      'tag': _$KeyStatTagEnumMap[instance.tag],
       'value': instance.value,
     };
 
-const _$KeyStatTagEnumMap = {
-  KeyStatTag.mostRuns: 'mostRuns',
-  KeyStatTag.mostWickets: 'mostWickets',
-  KeyStatTag.mostFours: 'mostFours',
-  KeyStatTag.mostSixes: 'mostSixes',
-};
+_$TournamentTeamStatImpl _$$TournamentTeamStatImplFromJson(Map json) =>
+    _$TournamentTeamStatImpl(
+      team_id: json['team_id'] as String,
+      points: (json['points'] as num?)?.toInt() ?? 0,
+      wins: (json['wins'] as num?)?.toInt() ?? 0,
+      losses: (json['losses'] as num?)?.toInt() ?? 0,
+      nrr: (json['nrr'] as num?)?.toDouble() ?? 0.0,
+      played_matches: (json['played_matches'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$TournamentTeamStatImplToJson(
+        _$TournamentTeamStatImpl instance) =>
+    <String, dynamic>{
+      'team_id': instance.team_id,
+      'points': instance.points,
+      'wins': instance.wins,
+      'losses': instance.losses,
+      'nrr': instance.nrr,
+      'played_matches': instance.played_matches,
+    };

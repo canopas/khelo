@@ -70,3 +70,47 @@ const _$TeamPlayerRoleEnumMap = {
   TeamPlayerRole.admin: 'admin',
   TeamPlayerRole.player: 'player',
 };
+
+_$TeamStatImpl _$$TeamStatImplFromJson(Map json) => _$TeamStatImpl(
+      played: (json['played'] as num?)?.toInt() ?? 0,
+      status: json['status'] == null
+          ? const TeamMatchStatus()
+          : TeamMatchStatus.fromJson(
+              Map<String, dynamic>.from(json['status'] as Map)),
+      runs: (json['runs'] as num?)?.toInt() ?? 0,
+      wickets: (json['wickets'] as num?)?.toInt() ?? 0,
+      batting_average: (json['batting_average'] as num?)?.toDouble() ?? 0.0,
+      bowling_average: (json['bowling_average'] as num?)?.toDouble() ?? 0.0,
+      highest_runs: (json['highest_runs'] as num?)?.toInt() ?? 0,
+      lowest_runs: (json['lowest_runs'] as num?)?.toInt() ?? 0,
+      run_rate: (json['run_rate'] as num?)?.toDouble() ?? 0.0,
+    );
+
+Map<String, dynamic> _$$TeamStatImplToJson(_$TeamStatImpl instance) =>
+    <String, dynamic>{
+      'played': instance.played,
+      'status': instance.status.toJson(),
+      'runs': instance.runs,
+      'wickets': instance.wickets,
+      'batting_average': instance.batting_average,
+      'bowling_average': instance.bowling_average,
+      'highest_runs': instance.highest_runs,
+      'lowest_runs': instance.lowest_runs,
+      'run_rate': instance.run_rate,
+    };
+
+_$TeamMatchStatusImpl _$$TeamMatchStatusImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TeamMatchStatusImpl(
+      win: (json['win'] as num?)?.toInt() ?? 0,
+      tie: (json['tie'] as num?)?.toInt() ?? 0,
+      lost: (json['lost'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$TeamMatchStatusImplToJson(
+        _$TeamMatchStatusImpl instance) =>
+    <String, dynamic>{
+      'win': instance.win,
+      'tie': instance.tie,
+      'lost': instance.lost,
+    };
