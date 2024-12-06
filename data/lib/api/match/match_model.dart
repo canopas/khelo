@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -383,14 +385,10 @@ extension SingleMatchTeamStatExtension on MatchModel {
       bowling_average: currentStat.played > 0
           ? (currentStat.bowling_average + bowlingAverage) / currentStat.played
           : 0.0,
-      highest_runs: matchRuns > currentStat.highest_runs
-          ? matchRuns
-          : currentStat.highest_runs,
+      highest_runs: max(matchRuns, currentStat.highest_runs),
       lowest_runs: currentStat.lowest_runs == 0
           ? matchRuns
-          : matchRuns < currentStat.lowest_runs
-              ? matchRuns
-              : currentStat.lowest_runs,
+          : min(matchRuns, currentStat.lowest_runs),
     );
   }
 
