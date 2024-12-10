@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/extensions/string_extensions.dart';
+import 'package:data/service/match/match_service.dart';
 import 'package:data/service/tournament/tournament_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,17 +17,20 @@ typedef GroupedMatchMap = Map<MatchGroup, Map<int, List<MatchModel>>>;
 
 final matchSelectionStateProvider = StateNotifierProvider.autoDispose<
         MatchSelectionViewNotifier, MatchSelectionState>(
-    (ref) => MatchSelectionViewNotifier(ref.read(tournamentServiceProvider)));
+    (ref) => MatchSelectionViewNotifier(
+        ref.read(tournamentServiceProvider), ref.read(matchServiceProvider)));
 
 class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
   final TournamentService _tournamentService;
+  final MatchService _matchService;
   late MatchScheduler _scheduler;
 
   StreamSubscription? _tournamentSubscription;
+  StreamSubscription? _matchSubscription;
   String? _tournamentId;
   Timer? _debounce;
 
-  MatchSelectionViewNotifier(this._tournamentService)
+  MatchSelectionViewNotifier(this._tournamentService, this._matchService)
       : super(MatchSelectionState(searchController: TextEditingController()));
 
   void setData(String tournamentId) {
@@ -42,18 +46,21 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
 
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
-        .listen((tournament) {
-      _scheduler =
-          MatchScheduler(tournament.teams, tournament.matches, tournament.type);
-      final scheduledMatches = _scheduler.scheduleMatchesByType();
-      final sorted = SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
-          scheduledMatches, (a, b) => a.index.compareTo(b.index));
-
-      state = state.copyWith(
-        tournament: tournament,
-        matches: sorted,
-        loading: false,
-      );
+        .listen((tournament) async {
+      _matchService.streamMatchesByIds(tournament.match_ids).listen((matches) {
+        _scheduler = MatchScheduler(tournament.teams, matches, tournament.type);
+        final scheduledMatches = _scheduler.scheduleMatchesByType();
+        final sorted =
+            SplayTreeMap<MatchGroup, Map<int, List<MatchModel>>>.from(
+                scheduledMatches, (a, b) => a.index.compareTo(b.index));
+        if (mounted) {
+          state = state.copyWith(
+            tournament: tournament,
+            matches: sorted,
+            loading: false,
+          );
+        }
+      });
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
@@ -179,6 +186,7 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
+    _matchSubscription?.cancel();
     state.searchController.dispose();
     _debounce?.cancel();
     super.dispose();

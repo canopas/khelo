@@ -625,4 +625,24 @@ class MatchService {
       throw AppError.fromError(error, stack);
     }
   }
+
+  Stream<List<MatchModel>> streamMatchesByIds(List<String> matchIds) {
+    try {
+      if (matchIds.isEmpty) return Stream.empty();
+      return _matchCollection
+          .where(FireStoreConst.id, whereIn: matchIds)
+          .snapshots()
+          .asyncMap((snapshot) async {
+        return await Future.wait(
+          snapshot.docs.map((mainDoc) async {
+            final match = mainDoc.data();
+            final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+            return match.copyWith(teams: teams);
+          }).toList(),
+        );
+      });
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
 }

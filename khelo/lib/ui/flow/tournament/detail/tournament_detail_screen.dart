@@ -146,7 +146,6 @@ class _TournamentDetailScreenState
         onPageChanged: notifier.onTabChange,
         children: [
           TournamentDetailOverviewTab(
-            tournament: state.tournament!,
             controller: _controller,
           ),
           TournamentDetailTeamsTab(
@@ -157,7 +156,7 @@ class _TournamentDetailScreenState
             onAddMatchTap: () => _handleAddMatchTap(context, state),
           ),
           TournamentDetailPointsTableTab(
-            teamStats: state.tournament!.teamStats,
+            teamStats: state.teamStats,
           ),
           TournamentDetailStatsTab(
             onFiltered: notifier.onStatFilter,
