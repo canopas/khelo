@@ -59,7 +59,10 @@ class TournamentDetailStateViewNotifier
       final teamStats = data.$2;
       final keyStats = data.$3.getTopKeyStats();
 
-      _matchService.streamMatchesByIds(tournament.match_ids).listen((matches) {
+      _matchSubscription?.cancel();
+      _matchSubscription = _matchService
+          .streamMatchesByIds(tournament.match_ids)
+          .listen((matches) {
         state = state.copyWith(
           tournament: tournament,
           teamStats: teamStats,

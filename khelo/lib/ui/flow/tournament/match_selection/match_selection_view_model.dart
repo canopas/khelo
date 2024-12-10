@@ -41,13 +41,13 @@ class MatchSelectionViewNotifier extends StateNotifier<MatchSelectionState> {
   void loadTournament() async {
     if (_tournamentId == null) return;
     _tournamentSubscription?.cancel();
-    _matchSubscription?.cancel();
 
     state = state.copyWith(loading: true);
 
     _tournamentSubscription = _tournamentService
         .streamTournamentById(_tournamentId!)
         .listen((tournament) async {
+      _matchSubscription?.cancel();
       _matchSubscription = _matchService
           .streamMatchesByIds(tournament.match_ids)
           .listen((matches) {
