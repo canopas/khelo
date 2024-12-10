@@ -3,7 +3,7 @@
 # Khelo - From Streets to Stadiums 🏏
 **Your Ultimate Companion for Cricket Management**
 
-<img src="./screenshots/cover-image.png"  alt=""/>
+<img src="./screenshots/cover_image.png"  alt=""/>
 
 ## Overview
 Welcome to Khelo, an open-source multi-platform app designed to cater to all your cricket needs, whether you're a cricket enthusiast, a team manager, or a player. With a wide array of features, our app simplifies the management of cricket teams, players, matches, and performance records. It's like having a personal assistant for your team!

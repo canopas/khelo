@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 
 class AppTextStyle {
   static const String poppinsFontFamily = 'Poppins';
-  static const String suezOneFontFamily = 'SuezOne';
-
-  static const TextStyle appHeader = TextStyle(
-    fontFamily: suezOneFontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 28,
-    letterSpacing: -0.64,
-    package: "style",
-  );
 
   static const TextStyle header1 = TextStyle(
     fontFamily: poppinsFontFamily,
