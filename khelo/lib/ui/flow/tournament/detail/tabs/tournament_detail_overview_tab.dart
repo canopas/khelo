@@ -15,27 +15,27 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/text/app_text_style.dart';
 
 import '../../../../../components/image_avatar.dart';
+import '../tournament_detail_view_model.dart';
 
 class TournamentDetailOverviewTab extends ConsumerWidget {
-  final TournamentModel tournament;
   final PageController controller;
 
   const TournamentDetailOverviewTab({
     super.key,
-    required this.tournament,
     required this.controller,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(tournamentDetailStateProvider);
     return ListView(
       padding: context.mediaQueryPadding.copyWith(top: 0) +
           EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 40),
       children: [
-        _featuredMatchesView(context, tournament.matches),
-        _keyStatsView(context, tournament.keyStats),
-        _teamsSquadsView(context, tournament.teams),
-        _infoView(context, tournament),
+        _featuredMatchesView(context, state.matches),
+        _keyStatsView(context, state.keyStats),
+        _teamsSquadsView(context, state.tournament!.teams),
+        _infoView(context, state.tournament!),
       ],
     );
   }

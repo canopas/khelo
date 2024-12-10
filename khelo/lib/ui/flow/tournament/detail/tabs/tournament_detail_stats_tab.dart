@@ -30,7 +30,7 @@ class TournamentDetailStatsTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tournamentDetailStateProvider);
 
-    if (state.tournament!.keyStats.isEmpty && state.filteredStats.isEmpty) {
+    if (state.keyStats.isEmpty && state.filteredStats.isEmpty) {
       return EmptyScreen(
         title: context.l10n.tournament_detail_stats_empty_title,
         description: context.l10n.tournament_detail_stats_empty_description,
@@ -96,11 +96,7 @@ class TournamentDetailStatsTab extends ConsumerWidget {
                   ))
               .toList(),
           rows: state.filteredStats
-              .map((e) => _dataRow(
-                    context,
-                    e,
-                    state.tournament!.matches,
-                  ))
+              .map((e) => _dataRow(context, e, state.matches))
               .toList()),
     );
   }

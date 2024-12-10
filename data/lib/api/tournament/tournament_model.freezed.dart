@@ -39,12 +39,6 @@ mixin _$TournamentModel {
   List<String> get match_ids => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<TeamModel> get teams => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<MatchModel> get matches => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<PlayerKeyStat> get keyStats => throw _privateConstructorUsedError;
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<TournamentTeamStat> get teamStats => throw _privateConstructorUsedError;
 
   /// Serializes this TournamentModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -78,13 +72,7 @@ abstract class $TournamentModelCopyWith<$Res> {
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      List<TeamModel> teams,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<MatchModel> matches,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<PlayerKeyStat> keyStats,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<TournamentTeamStat> teamStats});
+      List<TeamModel> teams});
 }
 
 /// @nodoc
@@ -116,9 +104,6 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
     Object? team_ids = null,
     Object? match_ids = null,
     Object? teams = null,
-    Object? matches = null,
-    Object? keyStats = null,
-    Object? teamStats = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -177,18 +162,6 @@ class _$TournamentModelCopyWithImpl<$Res, $Val extends TournamentModel>
           ? _value.teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      matches: null == matches
-          ? _value.matches
-          : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>,
-      keyStats: null == keyStats
-          ? _value.keyStats
-          : keyStats // ignore: cast_nullable_to_non_nullable
-              as List<PlayerKeyStat>,
-      teamStats: null == teamStats
-          ? _value.teamStats
-          : teamStats // ignore: cast_nullable_to_non_nullable
-              as List<TournamentTeamStat>,
     ) as $Val);
   }
 }
@@ -217,13 +190,7 @@ abstract class _$$TournamentModelImplCopyWith<$Res>
       List<String> team_ids,
       List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      List<TeamModel> teams,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<MatchModel> matches,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<PlayerKeyStat> keyStats,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      List<TournamentTeamStat> teamStats});
+      List<TeamModel> teams});
 }
 
 /// @nodoc
@@ -253,9 +220,6 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
     Object? team_ids = null,
     Object? match_ids = null,
     Object? teams = null,
-    Object? matches = null,
-    Object? keyStats = null,
-    Object? teamStats = null,
   }) {
     return _then(_$TournamentModelImpl(
       id: null == id
@@ -314,18 +278,6 @@ class __$$TournamentModelImplCopyWithImpl<$Res>
           ? _value._teams
           : teams // ignore: cast_nullable_to_non_nullable
               as List<TeamModel>,
-      matches: null == matches
-          ? _value._matches
-          : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>,
-      keyStats: null == keyStats
-          ? _value._keyStats
-          : keyStats // ignore: cast_nullable_to_non_nullable
-              as List<PlayerKeyStat>,
-      teamStats: null == teamStats
-          ? _value._teamStats
-          : teamStats // ignore: cast_nullable_to_non_nullable
-              as List<TournamentTeamStat>,
     ));
   }
 }
@@ -350,20 +302,11 @@ class _$TournamentModelImpl implements _TournamentModel {
       final List<String> team_ids = const [],
       final List<String> match_ids = const [],
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<TeamModel> teams = const [],
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<MatchModel> matches = const [],
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<PlayerKeyStat> keyStats = const [],
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<TournamentTeamStat> teamStats = const []})
+      final List<TeamModel> teams = const []})
       : _members = members,
         _team_ids = team_ids,
         _match_ids = match_ids,
-        _teams = teams,
-        _matches = matches,
-        _keyStats = keyStats,
-        _teamStats = teamStats;
+        _teams = teams;
 
   factory _$TournamentModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TournamentModelImplFromJson(json);
@@ -428,36 +371,9 @@ class _$TournamentModelImpl implements _TournamentModel {
     return EqualUnmodifiableListView(_teams);
   }
 
-  final List<MatchModel> _matches;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<MatchModel> get matches {
-    if (_matches is EqualUnmodifiableListView) return _matches;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_matches);
-  }
-
-  final List<PlayerKeyStat> _keyStats;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<PlayerKeyStat> get keyStats {
-    if (_keyStats is EqualUnmodifiableListView) return _keyStats;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_keyStats);
-  }
-
-  final List<TournamentTeamStat> _teamStats;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<TournamentTeamStat> get teamStats {
-    if (_teamStats is EqualUnmodifiableListView) return _teamStats;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teamStats);
-  }
-
   @override
   String toString() {
-    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, status: $status, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams, matches: $matches, keyStats: $keyStats, teamStats: $teamStats)';
+    return 'TournamentModel(id: $id, name: $name, profile_img_url: $profile_img_url, banner_img_url: $banner_img_url, type: $type, status: $status, members: $members, created_by: $created_by, created_at: $created_at, start_date: $start_date, end_date: $end_date, team_ids: $team_ids, match_ids: $match_ids, teams: $teams)';
   }
 
   @override
@@ -485,11 +401,7 @@ class _$TournamentModelImpl implements _TournamentModel {
             const DeepCollectionEquality().equals(other._team_ids, _team_ids) &&
             const DeepCollectionEquality()
                 .equals(other._match_ids, _match_ids) &&
-            const DeepCollectionEquality().equals(other._teams, _teams) &&
-            const DeepCollectionEquality().equals(other._matches, _matches) &&
-            const DeepCollectionEquality().equals(other._keyStats, _keyStats) &&
-            const DeepCollectionEquality()
-                .equals(other._teamStats, _teamStats));
+            const DeepCollectionEquality().equals(other._teams, _teams));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -509,10 +421,7 @@ class _$TournamentModelImpl implements _TournamentModel {
       end_date,
       const DeepCollectionEquality().hash(_team_ids),
       const DeepCollectionEquality().hash(_match_ids),
-      const DeepCollectionEquality().hash(_teams),
-      const DeepCollectionEquality().hash(_matches),
-      const DeepCollectionEquality().hash(_keyStats),
-      const DeepCollectionEquality().hash(_teamStats));
+      const DeepCollectionEquality().hash(_teams));
 
   /// Create a copy of TournamentModel
   /// with the given fields replaced by the non-null parameter values.
@@ -548,13 +457,7 @@ abstract class _TournamentModel implements TournamentModel {
       final List<String> team_ids,
       final List<String> match_ids,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<TeamModel> teams,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<MatchModel> matches,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<PlayerKeyStat> keyStats,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-      final List<TournamentTeamStat> teamStats}) = _$TournamentModelImpl;
+      final List<TeamModel> teams}) = _$TournamentModelImpl;
 
   factory _TournamentModel.fromJson(Map<String, dynamic> json) =
       _$TournamentModelImpl.fromJson;
@@ -592,15 +495,6 @@ abstract class _TournamentModel implements TournamentModel {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   List<TeamModel> get teams;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<MatchModel> get matches;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<PlayerKeyStat> get keyStats;
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  List<TournamentTeamStat> get teamStats;
 
   /// Create a copy of TournamentModel
   /// with the given fields replaced by the non-null parameter values.

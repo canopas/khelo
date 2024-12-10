@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/service/match/match_service.dart';
 import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
+import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -16,6 +18,7 @@ final tournamentDetailStateProvider = StateNotifierProvider.autoDispose<
     TournamentDetailStateViewNotifier, TournamentDetailState>(
   (ref) => TournamentDetailStateViewNotifier(
     ref.read(tournamentServiceProvider),
+    ref.read(matchServiceProvider),
     ref.read(currentUserPod)?.id,
   ),
 );
@@ -23,10 +26,13 @@ final tournamentDetailStateProvider = StateNotifierProvider.autoDispose<
 class TournamentDetailStateViewNotifier
     extends StateNotifier<TournamentDetailState> {
   final TournamentService _tournamentService;
+  final MatchService _matchService;
   StreamSubscription? _tournamentSubscription;
+  StreamSubscription? _matchSubscription;
 
   TournamentDetailStateViewNotifier(
     this._tournamentService,
+    this._matchService,
     String? userId,
   ) : super(TournamentDetailState(currentUserId: userId));
 
@@ -43,19 +49,31 @@ class TournamentDetailStateViewNotifier
 
     state = state.copyWith(loading: true);
 
-    _tournamentSubscription = _tournamentService
-        .streamTournamentById(_tournamentId!)
-        .listen((tournament) {
-      state = state.copyWith(
-        tournament: tournament,
-        loading: false,
-      );
-      onMatchFilter(null);
-      onStatFilter(state.selectedFilterTag);
+    final tournamentData = combineLatest3(
+        _tournamentService.streamTournamentById(_tournamentId!),
+        _tournamentService.streamTeamStats(_tournamentId!),
+        _tournamentService.streamPlayerKeyStats(_tournamentId!));
+
+    tournamentData.listen((data) async {
+      final tournament = data.$1;
+      final teamStats = data.$2;
+      final keyStats = data.$3.getTopKeyStats();
+
+      _matchService.streamMatchesByIds(tournament.match_ids).listen((matches) {
+        state = state.copyWith(
+          tournament: tournament,
+          teamStats: teamStats,
+          keyStats: keyStats,
+          matches: matches,
+          loading: false,
+        );
+        onMatchFilter(null);
+        onStatFilter(state.selectedFilterTag);
+      });
     }, onError: (e) {
       state = state.copyWith(error: e, loading: false);
       debugPrint(
-          "TournamentDetailStateViewNotifier: error while loading tournament list -> $e");
+          "TournamentDetailStateViewNotifier: error while loading tournament data -> $e");
     });
   }
 
@@ -78,9 +96,9 @@ class TournamentDetailStateViewNotifier
   }
 
   void onMatchFilter(String? filter) {
-    if (state.tournament == null) return;
+    if (state.matches.isEmpty || state.tournament == null) return;
 
-    final matches = state.tournament!.matches;
+    final matches = state.matches.toList();
 
     if (filter == null) {
       state = state.copyWith(filteredMatches: matches);
@@ -105,7 +123,7 @@ class TournamentDetailStateViewNotifier
   void onStatFilter(KeyStatFilterTag tag) {
     if (state.tournament == null) return;
 
-    var filteredStats = state.tournament!.keyStats;
+    var filteredStats = state.keyStats.toList();
 
     filteredStats = filteredStats.where((e) {
       switch (tag) {
@@ -163,6 +181,7 @@ class TournamentDetailStateViewNotifier
   @override
   void dispose() {
     _tournamentSubscription?.cancel();
+    _matchSubscription?.cancel();
     super.dispose();
   }
 }
@@ -177,6 +196,9 @@ class TournamentDetailState with _$TournamentDetailState {
     Object? actionError,
     String? currentUserId,
     @Default(null) String? matchFilter,
+    @Default([]) List<MatchModel> matches,
+    @Default([]) List<TournamentTeamStat> teamStats,
+    @Default([]) List<PlayerKeyStat> keyStats,
     @Default([]) List<MatchModel> filteredMatches,
     @Default(KeyStatFilterTag.all) KeyStatFilterTag selectedFilterTag,
     @Default([]) List<PlayerKeyStat> filteredStats,
