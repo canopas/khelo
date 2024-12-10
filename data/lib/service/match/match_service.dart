@@ -630,7 +630,7 @@ class MatchService {
     try {
       if (matchIds.isEmpty) return Stream.empty();
       return _matchCollection
-          .where(FireStoreConst.id, whereIn: matchIds)
+          .where(FieldPath.documentId, whereIn: matchIds)
           .snapshots()
           .asyncMap((snapshot) async {
         return await Future.wait(

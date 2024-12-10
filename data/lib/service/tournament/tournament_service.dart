@@ -142,7 +142,7 @@ class TournamentService {
           return data.copyWith(team: team);
         }),
       );
-    });
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<TournamentTeamStat> getTeamStatByTeamId(
@@ -170,7 +170,7 @@ class TournamentService {
           return player == null ? data : data.copyWith(player: player);
         }),
       );
-    });
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<PlayerKeyStat> getPlayerKeyStatByPlayerId(
