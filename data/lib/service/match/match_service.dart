@@ -123,17 +123,24 @@ class MatchService {
         .catchError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> streamUserRelatedMatches(String userId) {
+  Stream<List<MatchModel>> streamUserRelatedMatches({
+    required String userId,
+    String? lastMatchId,
+    int limit = 10,
+  }) {
     final filter = Filter.or(
       Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.players, arrayContains: userId),
       Filter(FireStoreConst.teamCreatorIds, arrayContains: userId),
     );
 
-    return _matchCollection
-        .where(filter)
-        .snapshots()
-        .asyncMap((snapshot) async {
+    var query = _matchCollection.where(filter).orderBy(FieldPath.documentId);
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+
+    return query.limit(limit).snapshots().asyncMap((snapshot) async {
       return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();

@@ -14,10 +14,12 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/more_option_button.dart';
+import 'package:style/callback/on_visible_callback.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../domain/extensions/widget_extension.dart';
 import '../../../gen/assets.gen.dart';
 
 class TeamListScreen extends ConsumerStatefulWidget {
@@ -79,17 +81,26 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
   ) {
     return (state.filteredTeams.isNotEmpty)
         ? ListView.separated(
-            itemCount: state.filteredTeams.length,
+            itemCount: state.filteredTeams.length + 1,
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8) +
                 context.mediaQueryPadding,
             separatorBuilder: (context, index) =>
                 Divider(color: context.colorScheme.outline),
             itemBuilder: (context, index) {
-              final team = state.filteredTeams[index];
-              return _teamListCell(
-                context,
-                team: team,
-                showMoreOptionButton: team.isAdminOrOwner(state.currentUserId),
+              if (index < state.filteredTeams.length) {
+                final team = state.filteredTeams[index];
+                return _teamListCell(
+                  context,
+                  team: team,
+                  showMoreOptionButton:
+                      team.isAdminOrOwner(state.currentUserId),
+                );
+              }
+              return OnVisibleCallback(
+                onVisible: () => runPostFrame(notifier.loadTeamList),
+                child: (state.loading && state.teams.isNotEmpty)
+                    ? const Center(child: AppProgressIndicator())
+                    : const SizedBox(),
               );
             },
           )
