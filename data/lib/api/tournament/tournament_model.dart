@@ -34,15 +34,6 @@ class TournamentModel with _$TournamentModel {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default([])
     List<TeamModel> teams,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default([])
-    List<MatchModel> matches,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default([])
-    List<PlayerKeyStat> keyStats,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Default([])
-    List<TournamentTeamStat> teamStats,
   }) = _TournamentModel;
 
   factory TournamentModel.fromJson(Map<String, dynamic> json) =>
@@ -53,6 +44,41 @@ class TournamentModel with _$TournamentModel {
     SnapshotOptions? options,
   ) =>
       TournamentModel.fromJson(snapshot.data()!);
+}
+
+extension TournamentModelExtensions on TournamentModel {
+  TournamentStatus getTournamentStatus(List<MatchModel> matches) {
+    if (matches.isEmpty) return TournamentStatus.upcoming;
+
+    final bool isUpcoming = (start_date.isAfter(DateTime.now()) &&
+            end_date.isAfter(DateTime.now())) &&
+        matches.every((match) => match.match_status == MatchStatus.yetToStart);
+
+    final bool isRunning = start_date.isBefore(DateTime.now()) &&
+        end_date.isAfter(DateTime.now()) &&
+        matches.any((match) => match.match_status == MatchStatus.running);
+
+    final bool isFinished = end_date.isBefore(DateTime.now()) &&
+        matches.every(
+          (match) =>
+              match.match_status == MatchStatus.finish ||
+              match.match_status == MatchStatus.abandoned,
+        );
+
+    final bool isInProgress = start_date.isBefore(DateTime.now()) &&
+        end_date.isAfter(DateTime.now()) &&
+        matches.any(
+          (match) =>
+              match.match_status == MatchStatus.running ||
+              match.match_status == MatchStatus.yetToStart,
+        );
+
+    if (isUpcoming) return TournamentStatus.upcoming;
+    if (isRunning || isInProgress) return TournamentStatus.running;
+    if (isFinished) return TournamentStatus.finish;
+
+    return TournamentStatus.finish;
+  }
 }
 
 @freezed
