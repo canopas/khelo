@@ -54,7 +54,7 @@ class TournamentDetailStateViewNotifier
         _tournamentService.streamTeamStats(_tournamentId!),
         _tournamentService.streamPlayerKeyStats(_tournamentId!));
 
-    tournamentData.listen((data) async {
+    _tournamentSubscription = tournamentData.listen((data) async {
       final tournament = data.$1;
       final teamStats = data.$2;
       final keyStats = data.$3.getTopKeyStats();
