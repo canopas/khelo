@@ -26,7 +26,7 @@ class TournamentDetailMatchesTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(tournamentDetailStateProvider);
 
-    if (state.filteredMatches.isEmpty && state.tournament!.matches.isEmpty) {
+    if (state.filteredMatches.isEmpty && state.matches.isEmpty) {
       return EmptyScreen(
         title: context.l10n.tournament_detail_matches_empty_title,
         description: context.l10n.tournament_detail_matches_empty_description,

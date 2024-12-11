@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/ball_score/ball_score_model.dart';
@@ -122,31 +121,28 @@ class TournamentService {
           final matchIds = tournament.match_ids;
           if (matchIds.isNotEmpty) {
             final matches = await _matchService.getMatchesByIds(matchIds);
-            tournament = tournament.copyWith(matches: matches);
+            final status = tournament.getTournamentStatus(matches);
+            tournament = tournament.copyWith(status: status);
           }
-          final status = getTournamentStatus(tournament);
-          return tournament.copyWith(status: status);
+
+          return tournament;
         },
       ),
     );
   }
 
-  Future<List<TournamentTeamStat>> getTeamsStats(
-    String tournamentId,
-    List<TeamModel> teams,
-  ) async {
-    try {
-      final snapshot = await _tournamentTeamStatCollection(tournamentId).get();
-      return snapshot.docs
-          .map(
-            (e) => e.data().copyWith(
-                  team: teams.firstWhere((element) => element.id == e.id),
-                ),
-          )
-          .toList();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
+  Stream<List<TournamentTeamStat>> streamTeamStats(String tournamentId) {
+    return _tournamentTeamStatCollection(tournamentId)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((doc) async {
+          final data = doc.data();
+          final team = await _teamService.getTeamById(data.team_id);
+          return data.copyWith(team: team);
+        }),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<TournamentTeamStat> getTeamStatByTeamId(
@@ -163,26 +159,18 @@ class TournamentService {
     }
   }
 
-  Future<List<PlayerKeyStat>> getPlayerKeyStats(
-    String tournamentId,
-    List<UserModel> players,
-  ) async {
-    try {
-      final snapshot =
-          await _tournamentPlayerKeyStatCollection(tournamentId).get();
-
-      if (snapshot.docs.isEmpty && players.isEmpty) return [];
-
-      return snapshot.docs.map((doc) {
-        final data = doc.data();
-
-        final player = players.firstWhereOrNull((p) => p.id == data.player_id);
-
-        return player == null ? data : data.copyWith(player: player);
-      }).toList();
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
+  Stream<List<PlayerKeyStat>> streamPlayerKeyStats(String tournamentId) {
+    return _tournamentPlayerKeyStatCollection(tournamentId)
+        .snapshots()
+        .asyncMap((snapshot) async {
+      return await Future.wait(
+        snapshot.docs.map((doc) async {
+          final data = doc.data();
+          final player = await _userService.getUser(data.player_id);
+          return player == null ? data : data.copyWith(player: player);
+        }),
+      );
+    }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
   Future<PlayerKeyStat> getPlayerKeyStatByPlayerId(
@@ -233,10 +221,11 @@ class TournamentService {
               final matchIds = tournament.match_ids;
               if (matchIds.isNotEmpty) {
                 final matches = await _matchService.getMatchesByIds(matchIds);
-                tournament = tournament.copyWith(matches: matches);
+                final status = tournament.getTournamentStatus(matches);
+                tournament = tournament.copyWith(status: status);
               }
-              final status = getTournamentStatus(tournament);
-              return tournament.copyWith(status: status);
+
+              return tournament;
             },
           ),
         );
@@ -280,30 +269,10 @@ class TournamentService {
       } else {
         var tournament = snapshot.data()!;
         final teamIds = tournament.team_ids;
-        final matchIds = tournament.match_ids;
 
         if (teamIds.isNotEmpty) {
           final teams = await _teamService.getTeamsByIds(teamIds);
-          final teamStats = await getTeamsStats(tournamentId, teams);
-          tournament = tournament.copyWith(teams: teams, teamStats: teamStats);
-        }
-
-        if (matchIds.isNotEmpty) {
-          final matches = await _matchService.getMatchesByIds(matchIds);
-
-          final players = matches
-              .expand((match) => match.teams)
-              .expand((team) => team.squad)
-              .map((member) => member.player)
-              .where((player) => player.isActive)
-              .toSet()
-              .toList();
-
-          final keyStats =
-              (await getPlayerKeyStats(tournamentId, players)).getTopKeyStats();
-
-          tournament =
-              tournament.copyWith(matches: matches, keyStats: keyStats);
+          tournament = tournament.copyWith(teams: teams);
         }
 
         if (tournament.members.isNotEmpty) {
@@ -317,9 +286,8 @@ class TournamentService {
 
           tournament = tournament.copyWith(members: members);
         }
-        final status = getTournamentStatus(tournament);
 
-        return tournament.copyWith(status: status);
+        return tournament;
       }
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
@@ -492,41 +460,5 @@ class TournamentService {
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
     }
-  }
-
-  // Helper
-  TournamentStatus getTournamentStatus(TournamentModel tournament) {
-    if (tournament.matches.isEmpty) return TournamentStatus.upcoming;
-
-    final bool isUpcoming = (tournament.start_date.isAfter(DateTime.now()) &&
-            tournament.end_date.isAfter(DateTime.now())) &&
-        tournament.matches
-            .every((match) => match.match_status == MatchStatus.yetToStart);
-
-    final bool isRunning = tournament.start_date.isBefore(DateTime.now()) &&
-        tournament.end_date.isAfter(DateTime.now()) &&
-        tournament.matches
-            .any((match) => match.match_status == MatchStatus.running);
-
-    final bool isFinished = tournament.end_date.isBefore(DateTime.now()) &&
-        tournament.matches.every(
-          (match) =>
-              match.match_status == MatchStatus.finish ||
-              match.match_status == MatchStatus.abandoned,
-        );
-
-    final bool isInProgress = tournament.start_date.isBefore(DateTime.now()) &&
-        tournament.end_date.isAfter(DateTime.now()) &&
-        tournament.matches.any(
-          (match) =>
-              match.match_status == MatchStatus.running ||
-              match.match_status == MatchStatus.yetToStart,
-        );
-
-    if (isUpcoming) return TournamentStatus.upcoming;
-    if (isRunning || isInProgress) return TournamentStatus.running;
-    if (isFinished) return TournamentStatus.finish;
-
-    return TournamentStatus.finish;
   }
 }
