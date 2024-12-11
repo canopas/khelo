@@ -29,6 +29,9 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
   TeamDetailViewNotifier(this._teamService, this._matchService, String? userId)
       : super(TeamDetailState(currentUserId: userId));
 
+  bool _maxLoaded = false;
+  String? _lastMatchId;
+
   void setData(String teamId) {
     _teamId = teamId;
     loadData();
@@ -36,15 +39,24 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
   void loadData() {
     if (_teamId == null) return;
+    if (_maxLoaded || state.loading) return;
     _teamStreamSubscription?.cancel();
     state =
-        state.copyWith(loading: state.team == null || state.matches == null);
-    final teamCombiner = combineLatest2(_teamService.streamTeamById(_teamId!),
-        _matchService.streamMatchesByTeamId(_teamId!));
+        state.copyWith(loading: state.team == null || state.matches.isEmpty);
+    final teamCombiner = combineLatest2(
+      _teamService.streamTeamById(_teamId!),
+      _matchService.streamMatchesByTeamId(
+          teamId: _teamId!, lastMatchId: _lastMatchId, limit: 10),
+    );
     _teamStreamSubscription = teamCombiner.listen((data) {
+      _maxLoaded = data.$2.length < 10;
+
+      if (data.$2.isNotEmpty) {
+        _lastMatchId = data.$2.last.id;
+      }
       state = state.copyWith(
         team: data.$1,
-        matches: data.$2,
+        matches: {...state.matches, ...data.$2}.toList(),
         loading: false,
       );
     }, onError: (e) {
@@ -73,7 +85,7 @@ class TeamDetailState with _$TeamDetailState {
     Object? error,
     TeamModel? team,
     String? currentUserId,
-    List<MatchModel>? matches,
+    @Default([]) List<MatchModel> matches,
     @Default(0) int selectedTab,
     @Default(false) bool loading,
   }) = _TeamDetailState;
