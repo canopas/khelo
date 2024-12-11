@@ -19,9 +19,8 @@ class TeamDetailStatContent extends ConsumerWidget {
     final state = ref.watch(teamDetailStateProvider);
 
     if (state.matches
-            ?.where((element) => element.match_status == MatchStatus.finish)
-            .isEmpty ??
-        true) {
+        .where((element) => element.match_status == MatchStatus.finish)
+        .isEmpty) {
       return EmptyScreen(
         title: context.l10n.team_detail_empty_stat_title,
         description: context.l10n.team_detail_empty_stat_description_text,
