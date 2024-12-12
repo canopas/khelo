@@ -27,7 +27,7 @@ class UserDetailFieldingContent extends ConsumerWidget {
           context,
           isHeader: true,
           showDivider: false,
-          title: context.l10n.user_detail_fielding_title,
+          title: context.l10n.common_fielding,
           subtitle1: context.l10n.user_detail_test_title,
           subtitle2: context.l10n.common_other_title,
         ),

@@ -1,4 +1,5 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
+import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
@@ -167,9 +168,9 @@ extension TossDecisionString on TossDecision {
   String getString(BuildContext context) {
     switch (this) {
       case TossDecision.bat:
-        return context.l10n.add_toss_detail_bat_text;
+        return context.l10n.common_batting;
       case TossDecision.bowl:
-        return context.l10n.add_toss_detail_bowl_text;
+        return context.l10n.common_bowling;
     }
   }
 }
@@ -320,7 +321,8 @@ extension TournamentTypeString on TournamentType {
       case TournamentType.doubleOut:
         return context.l10n.tournament_type_double_out_description(minTeamReq);
       case TournamentType.bestOfThree:
-        return context.l10n.tournament_type_best_of_three_description(minTeamReq);
+        return context.l10n
+            .tournament_type_best_of_three_description(minTeamReq);
       case TournamentType.custom:
         return context.l10n.tournament_type_custom_description(minTeamReq);
     }
@@ -353,6 +355,19 @@ extension TournamentKeyStatString on KeyStatTag {
         return context.l10n.tournament_detail_key_stat_most_fours_title;
       case KeyStatTag.mostSixes:
         return context.l10n.tournament_detail_key_stat_most_sixes_title;
+    }
+  }
+}
+
+extension LeaderboardFieldTypeString on LeaderboardField {
+  String getString(BuildContext context) {
+    switch (this) {
+      case LeaderboardField.batting:
+        return context.l10n.common_batting;
+      case LeaderboardField.bowling:
+        return context.l10n.common_bowling;
+      case LeaderboardField.fielding:
+        return context.l10n.common_fielding;
     }
   }
 }

@@ -772,7 +772,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void _addPlayerStats({bool isMatchComplete = false}) async {
+  void _addPlayerStats() async {
     try {
       final userStatType = state.match?.match_type == MatchType.testMatch
           ? UserStatType.test
@@ -1203,7 +1203,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
     try {
       state = state.copyWith(actionError: null, isActionInProgress: true);
-      _addPlayerStats(isMatchComplete: true);
+      _addPlayerStats();
       List<MatchPlayer> batsMan = [];
       if (state.batsMans?.isNotEmpty ?? false) {
         batsMan = state.batsMans!

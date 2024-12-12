@@ -20,6 +20,7 @@ mixin _$HomeViewState {
   bool get loading => throw _privateConstructorUsedError;
   List<MatchModel> get matches => throw _privateConstructorUsedError;
   List<TournamentModel> get tournaments => throw _privateConstructorUsedError;
+  List<LeaderboardModel> get leaderboard => throw _privateConstructorUsedError;
   Map<MatchStatusLabel, List<MatchModel>> get groupMatches =>
       throw _privateConstructorUsedError;
 
@@ -41,6 +42,7 @@ abstract class $HomeViewStateCopyWith<$Res> {
       bool loading,
       List<MatchModel> matches,
       List<TournamentModel> tournaments,
+      List<LeaderboardModel> leaderboard,
       Map<MatchStatusLabel, List<MatchModel>> groupMatches});
 }
 
@@ -63,6 +65,7 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
     Object? loading = null,
     Object? matches = null,
     Object? tournaments = null,
+    Object? leaderboard = null,
     Object? groupMatches = null,
   }) {
     return _then(_value.copyWith(
@@ -79,6 +82,10 @@ class _$HomeViewStateCopyWithImpl<$Res, $Val extends HomeViewState>
           ? _value.tournaments
           : tournaments // ignore: cast_nullable_to_non_nullable
               as List<TournamentModel>,
+      leaderboard: null == leaderboard
+          ? _value.leaderboard
+          : leaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardModel>,
       groupMatches: null == groupMatches
           ? _value.groupMatches
           : groupMatches // ignore: cast_nullable_to_non_nullable
@@ -100,6 +107,7 @@ abstract class _$$HomeViewStateImplCopyWith<$Res>
       bool loading,
       List<MatchModel> matches,
       List<TournamentModel> tournaments,
+      List<LeaderboardModel> leaderboard,
       Map<MatchStatusLabel, List<MatchModel>> groupMatches});
 }
 
@@ -120,6 +128,7 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
     Object? loading = null,
     Object? matches = null,
     Object? tournaments = null,
+    Object? leaderboard = null,
     Object? groupMatches = null,
   }) {
     return _then(_$HomeViewStateImpl(
@@ -136,6 +145,10 @@ class __$$HomeViewStateImplCopyWithImpl<$Res>
           ? _value._tournaments
           : tournaments // ignore: cast_nullable_to_non_nullable
               as List<TournamentModel>,
+      leaderboard: null == leaderboard
+          ? _value._leaderboard
+          : leaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardModel>,
       groupMatches: null == groupMatches
           ? _value._groupMatches
           : groupMatches // ignore: cast_nullable_to_non_nullable
@@ -152,9 +165,11 @@ class _$HomeViewStateImpl implements _HomeViewState {
       this.loading = false,
       final List<MatchModel> matches = const [],
       final List<TournamentModel> tournaments = const [],
+      final List<LeaderboardModel> leaderboard = const [],
       final Map<MatchStatusLabel, List<MatchModel>> groupMatches = const {}})
       : _matches = matches,
         _tournaments = tournaments,
+        _leaderboard = leaderboard,
         _groupMatches = groupMatches;
 
   @override
@@ -180,6 +195,15 @@ class _$HomeViewStateImpl implements _HomeViewState {
     return EqualUnmodifiableListView(_tournaments);
   }
 
+  final List<LeaderboardModel> _leaderboard;
+  @override
+  @JsonKey()
+  List<LeaderboardModel> get leaderboard {
+    if (_leaderboard is EqualUnmodifiableListView) return _leaderboard;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_leaderboard);
+  }
+
   final Map<MatchStatusLabel, List<MatchModel>> _groupMatches;
   @override
   @JsonKey()
@@ -191,7 +215,7 @@ class _$HomeViewStateImpl implements _HomeViewState {
 
   @override
   String toString() {
-    return 'HomeViewState(error: $error, loading: $loading, matches: $matches, tournaments: $tournaments, groupMatches: $groupMatches)';
+    return 'HomeViewState(error: $error, loading: $loading, matches: $matches, tournaments: $tournaments, leaderboard: $leaderboard, groupMatches: $groupMatches)';
   }
 
   @override
@@ -205,6 +229,8 @@ class _$HomeViewStateImpl implements _HomeViewState {
             const DeepCollectionEquality()
                 .equals(other._tournaments, _tournaments) &&
             const DeepCollectionEquality()
+                .equals(other._leaderboard, _leaderboard) &&
+            const DeepCollectionEquality()
                 .equals(other._groupMatches, _groupMatches));
   }
 
@@ -215,6 +241,7 @@ class _$HomeViewStateImpl implements _HomeViewState {
       loading,
       const DeepCollectionEquality().hash(_matches),
       const DeepCollectionEquality().hash(_tournaments),
+      const DeepCollectionEquality().hash(_leaderboard),
       const DeepCollectionEquality().hash(_groupMatches));
 
   /// Create a copy of HomeViewState
@@ -232,6 +259,7 @@ abstract class _HomeViewState implements HomeViewState {
           final bool loading,
           final List<MatchModel> matches,
           final List<TournamentModel> tournaments,
+          final List<LeaderboardModel> leaderboard,
           final Map<MatchStatusLabel, List<MatchModel>> groupMatches}) =
       _$HomeViewStateImpl;
 
@@ -243,6 +271,8 @@ abstract class _HomeViewState implements HomeViewState {
   List<MatchModel> get matches;
   @override
   List<TournamentModel> get tournaments;
+  @override
+  List<LeaderboardModel> get leaderboard;
   @override
   Map<MatchStatusLabel, List<MatchModel>> get groupMatches;
 

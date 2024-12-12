@@ -140,8 +140,8 @@ class _UserDetailScreenState extends ConsumerState<UserDetailScreen> {
   Widget _tabView(BuildContext context) {
     final tabs = [
       context.l10n.user_detail_info_title,
-      context.l10n.user_detail_batting_title,
-      context.l10n.user_detail_bowling_title
+      context.l10n.common_batting,
+      context.l10n.common_bowling
     ];
 
     return SingleChildScrollView(

@@ -11,6 +11,7 @@ class FireStoreConst {
   static const String userStatCollection = "user_stat";
   static const String supportCollection = "contact_support";
   static const String tournamentCollection = "tournaments";
+  static const String leaderboardCollection = "leaderboard";
 
   // matches field const
   static const String id = "id";
@@ -63,6 +64,16 @@ class FireStoreConst {
   static const String matchIds = "match_ids";
   static const String endDate = "end_date";
   static const String startDate = "start_date";
+
+  // leaderboard field const
+  static const String weeklyDocument = "weekly";
+  static const String monthlyDocument = "monthly";
+  static const String allTimeDocument = "all_time";
+  static const String dataCollection = "data";
+  static const String runs = "runs";
+  static const String wickets = "wickets";
+  static const String catches = "catches";
+  static const String date = "date";
 }
 
 class DataConfig {

@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+
+import '../../api/network/client.dart';
+import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/list_extensions.dart';
-import '../../api/network/client.dart';
-import '../device/device_service.dart';
+import '../../storage/app_preferences.dart';
 import '../../utils/constant/firestore_constant.dart';
 import '../../utils/dummy_deactivated_account.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../api/user/user_models.dart';
-import '../../storage/app_preferences.dart';
+import '../device/device_service.dart';
 import 'user_endpoint.dart';
 
 final userServiceProvider = Provider((ref) {
