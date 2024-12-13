@@ -30,7 +30,7 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
 
   void loadLeaderboard() {
     _streamSubscription?.cancel();
-    state = state.copyWith(loading: state.leaderboard.isNotEmpty);
+    state = state.copyWith(loading: state.leaderboard.isEmpty);
 
     _streamSubscription =
         _leaderboardService.streamLeaderboard().listen(

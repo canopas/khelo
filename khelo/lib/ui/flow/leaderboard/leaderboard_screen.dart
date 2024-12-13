@@ -48,6 +48,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final state = ref.watch(leaderboardStateProvider);
 

@@ -4,10 +4,10 @@ extension DateExtension on DateTime {
   }
 
   DateTime get getEndOfMonth {
-    final nextMonth = month == 12
-        ? DateTime(year + 1, 1, 1)
-        : DateTime(year, month + 1, 1);
-    return nextMonth.subtract(const Duration(days: 1));
+    final nextMonth =
+        month == 12 ? DateTime(year + 1, 1, 1) : DateTime(year, month + 1, 1);
+    final lastDay = nextMonth.subtract(const Duration(days: 1));
+    return DateTime(lastDay.year, lastDay.month, lastDay.day, 23, 59, 59);
   }
 
   DateTime get getStartOfWeek {
