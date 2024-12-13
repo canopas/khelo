@@ -116,9 +116,9 @@ class _FlexibleSpaceState extends State<FlexibleSpace> {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    dominant.withOpacity(0),
-                    dominant.withOpacity(0.2),
-                    dominant.withOpacity(0.86),
+                    dominant.withValues(alpha:0),
+                    dominant.withValues(alpha:0.2),
+                    dominant.withValues(alpha:0.86),
                   ],
                 ),
               ),
@@ -198,9 +198,9 @@ class _FlexibleSpaceState extends State<FlexibleSpace> {
         palette?.dominantColor?.color ?? context.colorScheme.surface;
 
     if (dominant.computeLuminance() < 0.5) {
-      return (Colors.white, Colors.white.withOpacity(0.86));
+      return (Colors.white, Colors.white.withValues(alpha:0.86));
     } else {
-      return (Colors.black, Colors.black.withOpacity(0.7));
+      return (Colors.black, Colors.black.withValues(alpha:0.7));
     }
   }
 }
