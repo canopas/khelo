@@ -23,10 +23,12 @@ mixin _$TournamentDetailState {
   Object? get actionError => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
   String? get matchFilter => throw _privateConstructorUsedError;
+  List<MatchModel> get matches => throw _privateConstructorUsedError;
+  List<TournamentTeamStat> get teamStats => throw _privateConstructorUsedError;
+  List<PlayerKeyStat> get keyStats => throw _privateConstructorUsedError;
   List<MatchModel> get filteredMatches => throw _privateConstructorUsedError;
   KeyStatFilterTag get selectedFilterTag => throw _privateConstructorUsedError;
   List<PlayerKeyStat> get filteredStats => throw _privateConstructorUsedError;
-  List<TeamPoint> get teamPoints => throw _privateConstructorUsedError;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -49,10 +51,12 @@ abstract class $TournamentDetailStateCopyWith<$Res> {
       Object? actionError,
       String? currentUserId,
       String? matchFilter,
+      List<MatchModel> matches,
+      List<TournamentTeamStat> teamStats,
+      List<PlayerKeyStat> keyStats,
       List<MatchModel> filteredMatches,
       KeyStatFilterTag selectedFilterTag,
-      List<PlayerKeyStat> filteredStats,
-      List<TeamPoint> teamPoints});
+      List<PlayerKeyStat> filteredStats});
 
   $TournamentModelCopyWith<$Res>? get tournament;
 }
@@ -80,10 +84,12 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
     Object? actionError = freezed,
     Object? currentUserId = freezed,
     Object? matchFilter = freezed,
+    Object? matches = null,
+    Object? teamStats = null,
+    Object? keyStats = null,
     Object? filteredMatches = null,
     Object? selectedFilterTag = null,
     Object? filteredStats = null,
-    Object? teamPoints = null,
   }) {
     return _then(_value.copyWith(
       tournament: freezed == tournament
@@ -108,6 +114,18 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
           ? _value.matchFilter
           : matchFilter // ignore: cast_nullable_to_non_nullable
               as String?,
+      matches: null == matches
+          ? _value.matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
+      teamStats: null == teamStats
+          ? _value.teamStats
+          : teamStats // ignore: cast_nullable_to_non_nullable
+              as List<TournamentTeamStat>,
+      keyStats: null == keyStats
+          ? _value.keyStats
+          : keyStats // ignore: cast_nullable_to_non_nullable
+              as List<PlayerKeyStat>,
       filteredMatches: null == filteredMatches
           ? _value.filteredMatches
           : filteredMatches // ignore: cast_nullable_to_non_nullable
@@ -120,10 +138,6 @@ class _$TournamentDetailStateCopyWithImpl<$Res,
           ? _value.filteredStats
           : filteredStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
-      teamPoints: null == teamPoints
-          ? _value.teamPoints
-          : teamPoints // ignore: cast_nullable_to_non_nullable
-              as List<TeamPoint>,
     ) as $Val);
   }
 
@@ -159,10 +173,12 @@ abstract class _$$TournamentDetailStateImplCopyWith<$Res>
       Object? actionError,
       String? currentUserId,
       String? matchFilter,
+      List<MatchModel> matches,
+      List<TournamentTeamStat> teamStats,
+      List<PlayerKeyStat> keyStats,
       List<MatchModel> filteredMatches,
       KeyStatFilterTag selectedFilterTag,
-      List<PlayerKeyStat> filteredStats,
-      List<TeamPoint> teamPoints});
+      List<PlayerKeyStat> filteredStats});
 
   @override
   $TournamentModelCopyWith<$Res>? get tournament;
@@ -189,10 +205,12 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
     Object? actionError = freezed,
     Object? currentUserId = freezed,
     Object? matchFilter = freezed,
+    Object? matches = null,
+    Object? teamStats = null,
+    Object? keyStats = null,
     Object? filteredMatches = null,
     Object? selectedFilterTag = null,
     Object? filteredStats = null,
-    Object? teamPoints = null,
   }) {
     return _then(_$TournamentDetailStateImpl(
       tournament: freezed == tournament
@@ -217,6 +235,18 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
           ? _value.matchFilter
           : matchFilter // ignore: cast_nullable_to_non_nullable
               as String?,
+      matches: null == matches
+          ? _value._matches
+          : matches // ignore: cast_nullable_to_non_nullable
+              as List<MatchModel>,
+      teamStats: null == teamStats
+          ? _value._teamStats
+          : teamStats // ignore: cast_nullable_to_non_nullable
+              as List<TournamentTeamStat>,
+      keyStats: null == keyStats
+          ? _value._keyStats
+          : keyStats // ignore: cast_nullable_to_non_nullable
+              as List<PlayerKeyStat>,
       filteredMatches: null == filteredMatches
           ? _value._filteredMatches
           : filteredMatches // ignore: cast_nullable_to_non_nullable
@@ -229,10 +259,6 @@ class __$$TournamentDetailStateImplCopyWithImpl<$Res>
           ? _value._filteredStats
           : filteredStats // ignore: cast_nullable_to_non_nullable
               as List<PlayerKeyStat>,
-      teamPoints: null == teamPoints
-          ? _value._teamPoints
-          : teamPoints // ignore: cast_nullable_to_non_nullable
-              as List<TeamPoint>,
     ));
   }
 }
@@ -248,13 +274,17 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       this.actionError,
       this.currentUserId,
       this.matchFilter = null,
+      final List<MatchModel> matches = const [],
+      final List<TournamentTeamStat> teamStats = const [],
+      final List<PlayerKeyStat> keyStats = const [],
       final List<MatchModel> filteredMatches = const [],
       this.selectedFilterTag = KeyStatFilterTag.all,
-      final List<PlayerKeyStat> filteredStats = const [],
-      final List<TeamPoint> teamPoints = const []})
-      : _filteredMatches = filteredMatches,
-        _filteredStats = filteredStats,
-        _teamPoints = teamPoints;
+      final List<PlayerKeyStat> filteredStats = const []})
+      : _matches = matches,
+        _teamStats = teamStats,
+        _keyStats = keyStats,
+        _filteredMatches = filteredMatches,
+        _filteredStats = filteredStats;
 
   @override
   @JsonKey()
@@ -274,6 +304,33 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
   @override
   @JsonKey()
   final String? matchFilter;
+  final List<MatchModel> _matches;
+  @override
+  @JsonKey()
+  List<MatchModel> get matches {
+    if (_matches is EqualUnmodifiableListView) return _matches;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_matches);
+  }
+
+  final List<TournamentTeamStat> _teamStats;
+  @override
+  @JsonKey()
+  List<TournamentTeamStat> get teamStats {
+    if (_teamStats is EqualUnmodifiableListView) return _teamStats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_teamStats);
+  }
+
+  final List<PlayerKeyStat> _keyStats;
+  @override
+  @JsonKey()
+  List<PlayerKeyStat> get keyStats {
+    if (_keyStats is EqualUnmodifiableListView) return _keyStats;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_keyStats);
+  }
+
   final List<MatchModel> _filteredMatches;
   @override
   @JsonKey()
@@ -295,18 +352,9 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
     return EqualUnmodifiableListView(_filteredStats);
   }
 
-  final List<TeamPoint> _teamPoints;
-  @override
-  @JsonKey()
-  List<TeamPoint> get teamPoints {
-    if (_teamPoints is EqualUnmodifiableListView) return _teamPoints;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_teamPoints);
-  }
-
   @override
   String toString() {
-    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, currentUserId: $currentUserId, matchFilter: $matchFilter, filteredMatches: $filteredMatches, selectedFilterTag: $selectedFilterTag, filteredStats: $filteredStats, teamPoints: $teamPoints)';
+    return 'TournamentDetailState(tournament: $tournament, loading: $loading, selectedTab: $selectedTab, error: $error, actionError: $actionError, currentUserId: $currentUserId, matchFilter: $matchFilter, matches: $matches, teamStats: $teamStats, keyStats: $keyStats, filteredMatches: $filteredMatches, selectedFilterTag: $selectedFilterTag, filteredStats: $filteredStats)';
   }
 
   @override
@@ -326,14 +374,16 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
                 other.currentUserId == currentUserId) &&
             (identical(other.matchFilter, matchFilter) ||
                 other.matchFilter == matchFilter) &&
+            const DeepCollectionEquality().equals(other._matches, _matches) &&
+            const DeepCollectionEquality()
+                .equals(other._teamStats, _teamStats) &&
+            const DeepCollectionEquality().equals(other._keyStats, _keyStats) &&
             const DeepCollectionEquality()
                 .equals(other._filteredMatches, _filteredMatches) &&
             (identical(other.selectedFilterTag, selectedFilterTag) ||
                 other.selectedFilterTag == selectedFilterTag) &&
             const DeepCollectionEquality()
-                .equals(other._filteredStats, _filteredStats) &&
-            const DeepCollectionEquality()
-                .equals(other._teamPoints, _teamPoints));
+                .equals(other._filteredStats, _filteredStats));
   }
 
   @override
@@ -346,10 +396,12 @@ class _$TournamentDetailStateImpl implements _TournamentDetailState {
       const DeepCollectionEquality().hash(actionError),
       currentUserId,
       matchFilter,
+      const DeepCollectionEquality().hash(_matches),
+      const DeepCollectionEquality().hash(_teamStats),
+      const DeepCollectionEquality().hash(_keyStats),
       const DeepCollectionEquality().hash(_filteredMatches),
       selectedFilterTag,
-      const DeepCollectionEquality().hash(_filteredStats),
-      const DeepCollectionEquality().hash(_teamPoints));
+      const DeepCollectionEquality().hash(_filteredStats));
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.
@@ -370,10 +422,12 @@ abstract class _TournamentDetailState implements TournamentDetailState {
       final Object? actionError,
       final String? currentUserId,
       final String? matchFilter,
+      final List<MatchModel> matches,
+      final List<TournamentTeamStat> teamStats,
+      final List<PlayerKeyStat> keyStats,
       final List<MatchModel> filteredMatches,
       final KeyStatFilterTag selectedFilterTag,
-      final List<PlayerKeyStat> filteredStats,
-      final List<TeamPoint> teamPoints}) = _$TournamentDetailStateImpl;
+      final List<PlayerKeyStat> filteredStats}) = _$TournamentDetailStateImpl;
 
   @override
   TournamentModel? get tournament;
@@ -390,13 +444,17 @@ abstract class _TournamentDetailState implements TournamentDetailState {
   @override
   String? get matchFilter;
   @override
+  List<MatchModel> get matches;
+  @override
+  List<TournamentTeamStat> get teamStats;
+  @override
+  List<PlayerKeyStat> get keyStats;
+  @override
   List<MatchModel> get filteredMatches;
   @override
   KeyStatFilterTag get selectedFilterTag;
   @override
   List<PlayerKeyStat> get filteredStats;
-  @override
-  List<TeamPoint> get teamPoints;
 
   /// Create a copy of TournamentDetailState
   /// with the given fields replaced by the non-null parameter values.

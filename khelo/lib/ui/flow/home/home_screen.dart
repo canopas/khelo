@@ -43,10 +43,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final state = ref.watch(homeViewStateProvider);
 
     return AppPage(
-      titleWidget: Text(
-        context.l10n.app_title,
-        style: AppTextStyle.appHeader.copyWith(
-          color: context.colorScheme.primary,
+      titleWidget: SvgPicture.asset(
+        Assets.images.icAppLogo,
+        height: 28,
+        width: 28,
+        colorFilter: ColorFilter.mode(
+          context.colorScheme.primary,
+          BlendMode.srcATop,
         ),
       ),
       actions: (state.matches.isNotEmpty)

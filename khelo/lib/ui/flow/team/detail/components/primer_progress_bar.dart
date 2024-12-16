@@ -1,4 +1,4 @@
-import 'package:data/api/match/match_model.dart';
+import 'package:data/api/team/team_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:khelo/domain/extensions/context_extensions.dart';

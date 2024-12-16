@@ -61,11 +61,6 @@ class UserService {
         toFirestore: (userStat, _) => userStat.toJson(),
       );
 
-  Future<List<UserModel>> migrate() async {
-    final users = await _userRef.get();
-    return users.docs.map((e) => e.data()).toList();
-  }
-
   Future<void> clearSession({
     required String uid,
     required String sessionId,
