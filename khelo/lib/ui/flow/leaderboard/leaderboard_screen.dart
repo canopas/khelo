@@ -6,7 +6,9 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/leaderboard/leaderboard_view_model.dart';
+import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/tab_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
@@ -163,38 +165,45 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     required LeaderboardField field,
     required int rank,
   }) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: context.colorScheme.outline),
-      ),
-      child: Row(
-        children: [
-          Text(
-            rank.toString().padLeft(2, '0'),
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          SizedBox(width: 16),
-          ImageAvatar(
-            initial: player.user?.nameInitial ?? "?",
-            imageUrl: player.user?.profile_img_url,
-            size: 42,
-          ),
-          SizedBox(width: 16),
-          Expanded(
-            child: Text(
-              player.user?.name ?? "Deactivated User",
+    return OnTapScale(
+      onTap: () => AppRoute.userDetail(userId: player.id).push(context),
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: context.colorScheme.outline),
+        ),
+        child: Row(
+          children: [
+            Text(
+              rank.toString().padLeft(2, '0'),
               style: AppTextStyle.subtitle2
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
-          ),
-          SizedBox(width: 8),
-          Material(
-            type: MaterialType.transparency,
-            child: Chip(
-              label: Text(
+            SizedBox(width: 16),
+            ImageAvatar(
+              initial: player.user?.nameInitial ?? "?",
+              imageUrl: player.user?.profile_img_url,
+              size: 42,
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                player.user?.name ?? context.l10n.commonDeactivatedUser,
+                style: AppTextStyle.subtitle2
+                    .copyWith(color: context.colorScheme.textPrimary),
+              ),
+            ),
+            SizedBox(width: 8),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: rank <= 2
+                    ? context.colorScheme.primary
+                    : context.colorScheme.containerLowOnSurface,
+                borderRadius: BorderRadius.circular(30)
+              ),
+              child: Text(
                 _getCountAsPerField(context, player, field),
                 style: AppTextStyle.body2.copyWith(
                   color: rank <= 2
@@ -202,17 +211,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                       : context.colorScheme.primary,
                 ),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              side: const BorderSide(color: Colors.transparent),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              backgroundColor: rank <= 2
-                  ? context.colorScheme.primary
-                  : context.colorScheme.containerLowOnSurface,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

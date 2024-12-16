@@ -24,6 +24,7 @@
   "common_not_specified_title": "Not Specified",
   "commonRunning": "Running",
   "commonFinish": "Finish",
+  "commonDeactivatedUser": "Deactivated User",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
     "placeholders": {

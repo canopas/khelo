@@ -197,9 +197,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16,
               children: leaderboard
                   .map((data) => _leaderboardCell(context, data))
                   .toList(),
@@ -216,8 +217,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           AppRoute.leaderboard(selectedField: leaderboard.type).push(context),
       child: Container(
         width: Size.fromWidth(360).width,
-        padding: EdgeInsets.only(left: 16, right: 8, top: 16, bottom: 16),
-        margin: EdgeInsets.only(left: 8, right: 8),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: context.colorScheme.outline)),
@@ -254,12 +254,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _leaderboardPlayerListView(List<LeaderboardPlayer> players) {
     return Row(
+      spacing: 8,
       children: [
         for (int rank = 0; rank < players.length; rank++)
           Expanded(
             child: Container(
               padding: EdgeInsets.all(8),
-              margin: EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
                   color: context.colorScheme.containerLow,
                   borderRadius: BorderRadius.circular(6),
@@ -299,7 +299,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
         Text(
-          user?.name ?? "Deactivated User",
+          user?.name ?? context.l10n.commonDeactivatedUser,
           overflow: TextOverflow.ellipsis,
           style: AppTextStyle.body1
               .copyWith(color: context.colorScheme.textPrimary),

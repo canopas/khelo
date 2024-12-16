@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/leaderboard/leaderboard_model.dart';
-import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/date_extension.dart';
 import '../../utils/combine_latest.dart';
@@ -47,10 +46,13 @@ class LeaderboardService {
         .orderBy(field.getDatabaseConst(), descending: true)
         .where(field.getDatabaseConst(), isGreaterThan: 0);
 
-    if(type == LeaderboardType.weekly || type == LeaderboardType.monthly){
+    if (type == LeaderboardType.weekly || type == LeaderboardType.monthly) {
       final now = DateTime.now();
-      final startTime = type == LeaderboardType.weekly ? now.getStartOfWeek : now.getStartOfMonth;
-      final endTime = type == LeaderboardType.weekly ? now.getEndOfWeek : now.getEndOfMonth;
+      final startTime = type == LeaderboardType.weekly
+          ? now.getStartOfWeek
+          : now.getStartOfMonth;
+      final endTime =
+          type == LeaderboardType.weekly ? now.getEndOfWeek : now.getEndOfMonth;
 
       final timeFilter = Filter.and(
         Filter(FireStoreConst.date, isGreaterThanOrEqualTo: startTime),
@@ -61,12 +63,10 @@ class LeaderboardService {
     }
 
     query = query.limit(limit);
-    return query
-        .snapshots()
-        .asyncMap((snapshot) async {
+    return query.snapshots().asyncMap((snapshot) async {
       final docs = snapshot.docs.map((e) => e.data()).toList();
       final players =
-          await getUserListFromUserIds(docs.map((e) => e.id).toList());
+          await _userService.getUsersByIds(docs.map((e) => e.id).toList());
       return docs.map((e) {
         final player = players.firstWhere((element) => element.id == e.id);
         return e.copyWith(user: player);
@@ -124,15 +124,5 @@ class LeaderboardService {
         return leaderboard;
       },
     ).handleError((error, stack) => throw AppError.fromError(error, stack));
-  }
-
-  // Helper Methods
-  Future<List<UserModel>> getUserListFromUserIds(List<String> users) async {
-    try {
-      final userList = await _userService.getUsersByIds(users);
-      return userList;
-    } catch (error, stack) {
-      throw AppError.fromError(error, stack);
-    }
   }
 }
