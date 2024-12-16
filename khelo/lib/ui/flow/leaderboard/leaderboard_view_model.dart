@@ -14,8 +14,16 @@ final leaderboardStateProvider = StateNotifierProvider.autoDispose<
 });
 
 class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
+  static const int _limit = 20;
+
   final LeaderboardService _leaderboardService;
   StreamSubscription? _streamSubscription;
+  bool _maxBattingLoaded = false;
+  bool _maxBowlingLoaded = false;
+  bool _maxFieldingLoaded = false;
+  String? _lastBattingUserId;
+  String? _lastBowlingUserId;
+  String? _lastFieldingUserId;
 
   LeaderboardViewNotifier(this._leaderboardService)
       : super(LeaderboardViewState()) {
@@ -25,27 +33,78 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
   void onTabChange(int tab) {
     if (state.selectedTab != tab) {
       state = state.copyWith(selectedTab: tab);
+      final selectedTab = LeaderboardField.values.elementAt(state.selectedTab);
+      if ((selectedTab == LeaderboardField.batting &&
+              state.battingLeaderboard.isEmpty) ||
+          (selectedTab == LeaderboardField.bowling &&
+              state.bowlingLeaderboard.isEmpty) ||
+          (selectedTab == LeaderboardField.fielding &&
+              state.fieldingLeaderboard.isEmpty)) {
+        loadLeaderboard();
+      }
     }
   }
 
-  void loadLeaderboard() {
-    _streamSubscription?.cancel();
-    state = state.copyWith(loading: state.leaderboard.isEmpty);
+  Future<void> loadLeaderboard() async {
+    try {
+      final selectedTab = LeaderboardField.values.elementAt(state.selectedTab);
 
-    _streamSubscription =
-        _leaderboardService.streamLeaderboard().listen(
-      (results) {
-        state = state.copyWith(
-          leaderboard: results,
-          loading: false,
-          error: null,
-        );
-      },
-      onError: (e) {
-        state = state.copyWith(error: e, loading: false);
-        debugPrint("LeaderboardViewNotifier: error while loading leaderboard -> $e");
-      },
-    );
+      switch (selectedTab) {
+        case LeaderboardField.batting:
+          if (state.loading || _maxBattingLoaded) return;
+        case LeaderboardField.bowling:
+          if (state.loading || _maxBowlingLoaded) return;
+        case LeaderboardField.fielding:
+          if (state.loading || _maxFieldingLoaded) return;
+      }
+
+      state = state.copyWith(
+          loading: (selectedTab == LeaderboardField.batting
+                  ? state.battingLeaderboard
+                  : selectedTab == LeaderboardField.bowling
+                      ? state.bowlingLeaderboard
+                      : state.fieldingLeaderboard)
+              .isEmpty);
+
+      final players = await _leaderboardService.getLeaderboardByField(
+          limit: _limit,
+          field: selectedTab,
+          lastUserId: selectedTab == LeaderboardField.batting
+              ? _lastBattingUserId
+              : selectedTab == LeaderboardField.bowling
+                  ? _lastBowlingUserId
+                  : _lastFieldingUserId);
+      state = state.copyWith(
+        battingLeaderboard: selectedTab == LeaderboardField.batting
+            ? {...state.battingLeaderboard, ...players}.toList()
+            : state.battingLeaderboard,
+        bowlingLeaderboard: selectedTab == LeaderboardField.bowling
+            ? {...state.bowlingLeaderboard, ...players}.toList()
+            : state.bowlingLeaderboard,
+        fieldingLeaderboard: selectedTab == LeaderboardField.fielding
+            ? {...state.fieldingLeaderboard, ...players}.toList()
+            : state.fieldingLeaderboard,
+        loading: false,
+        error: null,
+      );
+
+      final lastId = players.lastOrNull?.id;
+      switch (selectedTab) {
+        case LeaderboardField.batting:
+          _lastBattingUserId = lastId;
+          _maxBattingLoaded = players.length < _limit;
+        case LeaderboardField.bowling:
+          _lastBowlingUserId = lastId;
+          _maxBowlingLoaded = players.length < _limit;
+        case LeaderboardField.fielding:
+          _lastFieldingUserId = lastId;
+          _maxFieldingLoaded = players.length < _limit;
+      }
+    } catch (e) {
+      state = state.copyWith(error: e, loading: false);
+      debugPrint(
+          "LeaderboardViewNotifier: error while loading leaderboard -> $e");
+    }
   }
 
   @override
@@ -59,7 +118,9 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
 class LeaderboardViewState with _$LeaderboardViewState {
   const factory LeaderboardViewState({
     Object? error,
-    @Default([]) List<LeaderboardModel> leaderboard,
+    @Default([]) List<LeaderboardPlayer> battingLeaderboard,
+    @Default([]) List<LeaderboardPlayer> bowlingLeaderboard,
+    @Default([]) List<LeaderboardPlayer> fieldingLeaderboard,
     @Default(false) bool loading,
     @Default(0) int selectedTab,
   }) = _LeaderboardViewState;

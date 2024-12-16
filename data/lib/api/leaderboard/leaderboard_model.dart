@@ -79,4 +79,15 @@ enum LeaderboardField {
         return FireStoreConst.catches;
     }
   }
+
+  int getMinScoreToGetFeatured(){
+    switch(this){
+      case LeaderboardField.batting:
+        return 50;
+      case LeaderboardField.bowling:
+        return 10;
+      case LeaderboardField.fielding:
+        return 5;
+    }
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +9,7 @@ import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/leaderboard/leaderboard_view_model.dart';
 import 'package:style/animations/on_tap_scale.dart';
 import 'package:style/button/tab_button.dart';
+import 'package:style/callback/on_visible_callback.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
@@ -68,17 +68,6 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
   }
 
   Widget _body(BuildContext context, LeaderboardViewState state) {
-    if (state.loading) {
-      return const Center(child: AppProgressIndicator());
-    } else if (state.error != null) {
-      return ErrorScreen(
-        error: state.error,
-        onRetryTap: notifier.loadLeaderboard,
-      );
-    } else if (state.leaderboard.isEmpty) {
-      return _emptyLeaderboard(context);
-    }
-
     return Padding(
       padding: context.mediaQueryPadding,
       child: Column(
@@ -135,28 +124,48 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     );
   }
 
-  Widget _playerListView(BuildContext context, LeaderboardViewState state,
-      LeaderboardField field) {
-    final players = state.leaderboard
-            .firstWhereOrNull((data) => data.type == field)
-            ?.players ??
-        [];
-
-    if (players.isEmpty) {
+  Widget _playerListView(
+    BuildContext context,
+    LeaderboardViewState state,
+    LeaderboardField field,
+  ) {
+    final players = field == LeaderboardField.batting
+        ? state.battingLeaderboard
+        : field == LeaderboardField.bowling
+            ? state.bowlingLeaderboard
+            : state.fieldingLeaderboard;
+    if (state.loading) {
+      return const Center(child: AppProgressIndicator());
+    } else if (state.error != null) {
+      return ErrorScreen(
+        error: state.error,
+        onRetryTap: notifier.loadLeaderboard,
+      );
+    } else if (players.isEmpty) {
       return _emptyLeaderboard(context);
     }
+
     return ListView.separated(
       padding: EdgeInsets.all(16),
+      itemCount: players.length + 1,
       itemBuilder: (context, index) {
-        final player = players[index];
-        return _leaderboardCell(
-          player: player,
-          field: field,
-          rank: index + 1,
-        );
+        if (index < players.length) {
+          final player = players[index];
+          return _leaderboardCell(
+            player: player,
+            field: field,
+            rank: index + 1,
+          );
+        } else {
+          return OnVisibleCallback(
+            onVisible: () => runPostFrame(notifier.loadLeaderboard),
+            child: state.loading
+                ? const Center(child: AppProgressIndicator())
+                : const SizedBox(),
+          );
+        }
       },
       separatorBuilder: (context, index) => SizedBox(height: 16),
-      itemCount: players.length,
     );
   }
 
@@ -198,11 +207,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               decoration: BoxDecoration(
-                color: rank <= 2
-                    ? context.colorScheme.primary
-                    : context.colorScheme.containerLowOnSurface,
-                borderRadius: BorderRadius.circular(30)
-              ),
+                  color: rank <= 2
+                      ? context.colorScheme.primary
+                      : context.colorScheme.containerLowOnSurface,
+                  borderRadius: BorderRadius.circular(30)),
               child: Text(
                 _getCountAsPerField(context, player, field),
                 style: AppTextStyle.body2.copyWith(

@@ -17,7 +17,12 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$LeaderboardViewState {
   Object? get error => throw _privateConstructorUsedError;
-  List<LeaderboardModel> get leaderboard => throw _privateConstructorUsedError;
+  List<LeaderboardPlayer> get battingLeaderboard =>
+      throw _privateConstructorUsedError;
+  List<LeaderboardPlayer> get bowlingLeaderboard =>
+      throw _privateConstructorUsedError;
+  List<LeaderboardPlayer> get fieldingLeaderboard =>
+      throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
 
@@ -36,7 +41,9 @@ abstract class $LeaderboardViewStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
-      List<LeaderboardModel> leaderboard,
+      List<LeaderboardPlayer> battingLeaderboard,
+      List<LeaderboardPlayer> bowlingLeaderboard,
+      List<LeaderboardPlayer> fieldingLeaderboard,
       bool loading,
       int selectedTab});
 }
@@ -58,16 +65,26 @@ class _$LeaderboardViewStateCopyWithImpl<$Res,
   @override
   $Res call({
     Object? error = freezed,
-    Object? leaderboard = null,
+    Object? battingLeaderboard = null,
+    Object? bowlingLeaderboard = null,
+    Object? fieldingLeaderboard = null,
     Object? loading = null,
     Object? selectedTab = null,
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
-      leaderboard: null == leaderboard
-          ? _value.leaderboard
-          : leaderboard // ignore: cast_nullable_to_non_nullable
-              as List<LeaderboardModel>,
+      battingLeaderboard: null == battingLeaderboard
+          ? _value.battingLeaderboard
+          : battingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
+      bowlingLeaderboard: null == bowlingLeaderboard
+          ? _value.bowlingLeaderboard
+          : bowlingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
+      fieldingLeaderboard: null == fieldingLeaderboard
+          ? _value.fieldingLeaderboard
+          : fieldingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -90,7 +107,9 @@ abstract class _$$LeaderboardViewStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
-      List<LeaderboardModel> leaderboard,
+      List<LeaderboardPlayer> battingLeaderboard,
+      List<LeaderboardPlayer> bowlingLeaderboard,
+      List<LeaderboardPlayer> fieldingLeaderboard,
       bool loading,
       int selectedTab});
 }
@@ -109,16 +128,26 @@ class __$$LeaderboardViewStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
-    Object? leaderboard = null,
+    Object? battingLeaderboard = null,
+    Object? bowlingLeaderboard = null,
+    Object? fieldingLeaderboard = null,
     Object? loading = null,
     Object? selectedTab = null,
   }) {
     return _then(_$LeaderboardViewStateImpl(
       error: freezed == error ? _value.error : error,
-      leaderboard: null == leaderboard
-          ? _value._leaderboard
-          : leaderboard // ignore: cast_nullable_to_non_nullable
-              as List<LeaderboardModel>,
+      battingLeaderboard: null == battingLeaderboard
+          ? _value._battingLeaderboard
+          : battingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
+      bowlingLeaderboard: null == bowlingLeaderboard
+          ? _value._bowlingLeaderboard
+          : bowlingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
+      fieldingLeaderboard: null == fieldingLeaderboard
+          ? _value._fieldingLeaderboard
+          : fieldingLeaderboard // ignore: cast_nullable_to_non_nullable
+              as List<LeaderboardPlayer>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -136,20 +165,45 @@ class __$$LeaderboardViewStateImplCopyWithImpl<$Res>
 class _$LeaderboardViewStateImpl implements _LeaderboardViewState {
   const _$LeaderboardViewStateImpl(
       {this.error,
-      final List<LeaderboardModel> leaderboard = const [],
+      final List<LeaderboardPlayer> battingLeaderboard = const [],
+      final List<LeaderboardPlayer> bowlingLeaderboard = const [],
+      final List<LeaderboardPlayer> fieldingLeaderboard = const [],
       this.loading = false,
       this.selectedTab = 0})
-      : _leaderboard = leaderboard;
+      : _battingLeaderboard = battingLeaderboard,
+        _bowlingLeaderboard = bowlingLeaderboard,
+        _fieldingLeaderboard = fieldingLeaderboard;
 
   @override
   final Object? error;
-  final List<LeaderboardModel> _leaderboard;
+  final List<LeaderboardPlayer> _battingLeaderboard;
   @override
   @JsonKey()
-  List<LeaderboardModel> get leaderboard {
-    if (_leaderboard is EqualUnmodifiableListView) return _leaderboard;
+  List<LeaderboardPlayer> get battingLeaderboard {
+    if (_battingLeaderboard is EqualUnmodifiableListView)
+      return _battingLeaderboard;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_leaderboard);
+    return EqualUnmodifiableListView(_battingLeaderboard);
+  }
+
+  final List<LeaderboardPlayer> _bowlingLeaderboard;
+  @override
+  @JsonKey()
+  List<LeaderboardPlayer> get bowlingLeaderboard {
+    if (_bowlingLeaderboard is EqualUnmodifiableListView)
+      return _bowlingLeaderboard;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_bowlingLeaderboard);
+  }
+
+  final List<LeaderboardPlayer> _fieldingLeaderboard;
+  @override
+  @JsonKey()
+  List<LeaderboardPlayer> get fieldingLeaderboard {
+    if (_fieldingLeaderboard is EqualUnmodifiableListView)
+      return _fieldingLeaderboard;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_fieldingLeaderboard);
   }
 
   @override
@@ -161,7 +215,7 @@ class _$LeaderboardViewStateImpl implements _LeaderboardViewState {
 
   @override
   String toString() {
-    return 'LeaderboardViewState(error: $error, leaderboard: $leaderboard, loading: $loading, selectedTab: $selectedTab)';
+    return 'LeaderboardViewState(error: $error, battingLeaderboard: $battingLeaderboard, bowlingLeaderboard: $bowlingLeaderboard, fieldingLeaderboard: $fieldingLeaderboard, loading: $loading, selectedTab: $selectedTab)';
   }
 
   @override
@@ -171,7 +225,11 @@ class _$LeaderboardViewStateImpl implements _LeaderboardViewState {
             other is _$LeaderboardViewStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
             const DeepCollectionEquality()
-                .equals(other._leaderboard, _leaderboard) &&
+                .equals(other._battingLeaderboard, _battingLeaderboard) &&
+            const DeepCollectionEquality()
+                .equals(other._bowlingLeaderboard, _bowlingLeaderboard) &&
+            const DeepCollectionEquality()
+                .equals(other._fieldingLeaderboard, _fieldingLeaderboard) &&
             (identical(other.loading, loading) || other.loading == loading) &&
             (identical(other.selectedTab, selectedTab) ||
                 other.selectedTab == selectedTab));
@@ -181,7 +239,9 @@ class _$LeaderboardViewStateImpl implements _LeaderboardViewState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
-      const DeepCollectionEquality().hash(_leaderboard),
+      const DeepCollectionEquality().hash(_battingLeaderboard),
+      const DeepCollectionEquality().hash(_bowlingLeaderboard),
+      const DeepCollectionEquality().hash(_fieldingLeaderboard),
       loading,
       selectedTab);
 
@@ -199,14 +259,20 @@ class _$LeaderboardViewStateImpl implements _LeaderboardViewState {
 abstract class _LeaderboardViewState implements LeaderboardViewState {
   const factory _LeaderboardViewState(
       {final Object? error,
-      final List<LeaderboardModel> leaderboard,
+      final List<LeaderboardPlayer> battingLeaderboard,
+      final List<LeaderboardPlayer> bowlingLeaderboard,
+      final List<LeaderboardPlayer> fieldingLeaderboard,
       final bool loading,
       final int selectedTab}) = _$LeaderboardViewStateImpl;
 
   @override
   Object? get error;
   @override
-  List<LeaderboardModel> get leaderboard;
+  List<LeaderboardPlayer> get battingLeaderboard;
+  @override
+  List<LeaderboardPlayer> get bowlingLeaderboard;
+  @override
+  List<LeaderboardPlayer> get fieldingLeaderboard;
   @override
   bool get loading;
   @override

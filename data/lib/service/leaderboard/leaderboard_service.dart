@@ -37,6 +37,51 @@ class LeaderboardService {
                 leaderboard.toJson(),
           );
 
+  Future<List<LeaderboardPlayer>> getLeaderboardByField({
+    LeaderboardType type = LeaderboardType.allTime,
+    int limit = 20,
+    String? lastUserId,
+    LeaderboardField field = LeaderboardField.batting,
+  }) {
+    var query = _leaderboardCollection(type)
+        .orderBy(field.getDatabaseConst(), descending: true)
+        .where(
+      field.getDatabaseConst(),
+      isGreaterThan: field.getMinScoreToGetFeatured(),
+    );
+
+    if (type == LeaderboardType.weekly || type == LeaderboardType.monthly) {
+      final now = DateTime.now();
+      final startTime = type == LeaderboardType.weekly
+          ? now.getStartOfWeek
+          : now.getStartOfMonth;
+      final endTime =
+      type == LeaderboardType.weekly ? now.getEndOfWeek : now.getEndOfMonth;
+
+      final timeFilter = Filter.and(
+        Filter(FireStoreConst.date, isGreaterThanOrEqualTo: startTime),
+        Filter(FireStoreConst.date, isLessThanOrEqualTo: endTime),
+      );
+
+      query = query.where(timeFilter);
+    }
+
+    if (lastUserId != null) {
+      query = query.startAfter([lastUserId]);
+    }
+
+    query = query.limit(limit);
+    return query.get().then((snapshot) async {
+      final docs = snapshot.docs.map((e) => e.data()).toList();
+      final players =
+      await _userService.getUsersByIds(docs.map((e) => e.id).toList());
+      return docs.map((e) {
+        final player = players.firstWhere((element) => element.id == e.id);
+        return e.copyWith(user: player);
+      }).toList();
+    }).onError((error, stack) => throw AppError.fromError(error!, stack));
+  }
+
   Stream<List<LeaderboardPlayer>> streamLeaderboardByField({
     LeaderboardType type = LeaderboardType.allTime,
     int limit = 20,
@@ -44,7 +89,10 @@ class LeaderboardService {
   }) {
     var query = _leaderboardCollection(type)
         .orderBy(field.getDatabaseConst(), descending: true)
-        .where(field.getDatabaseConst(), isGreaterThan: 0);
+        .where(
+          field.getDatabaseConst(),
+          isGreaterThan: field.getMinScoreToGetFeatured(),
+        );
 
     if (type == LeaderboardType.weekly || type == LeaderboardType.monthly) {
       final now = DateTime.now();
