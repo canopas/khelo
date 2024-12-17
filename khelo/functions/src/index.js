@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {value: true});
-exports.fiveMinuteCron = exports.apiv1 = exports.teamPlayerChangeObserver = exports.TIMEZONE = void 0;
+exports.fiveMinuteCron = exports.apiv1 = exports.teamPlayerChangeObserver = exports.userStatWriteObserver = exports.TIMEZONE = void 0;
 
 const express = require("express");
 
@@ -15,11 +15,13 @@ const logger = require("firebase-functions/logger");
 const team_repository = require("./team/team_repository");
 const user_repository = require("./user/user_repository");
 const match_repository = require("./match/match_repository");
+const leaderboard_repository = require("./leaderboard/leaderboard_repository");
 
 const notification_service = require("./notification/notification_service");
 const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
 const auth_service = require("./auth/auth_service");
+const leaderboard_service = require("./leaderboard/leaderboard_service");
 
 exports.TIMEZONE = "Asia/Kolkata";
 const REGION = "asia-south1";
@@ -28,11 +30,13 @@ const db = (0, firestore_1.getFirestore)(app);
 
 const userRepository = new user_repository.UserRepository(db);
 const teamRepository = new team_repository.TeamRepository(db);
+const leaderboardRepository = new leaderboard_repository.LeaderboardRepository(db);
 
 const notificationService = new notification_service.NotificationService(userRepository);
 const teamService = new team_service.TeamService(userRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
 const authService = new auth_service.AuthService(userRepository);
+const leaderboardService = new leaderboard_service.LeaderboardService(leaderboardRepository);
 
 const matchRepository = new match_repository.MatchRepository(db, matchService);
 
@@ -64,6 +68,23 @@ exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: R
   const newTeam = snapshot.after.data();
 
   await teamService.notifyOnAddedToTeam(oldTeam, newTeam);
+});
+
+exports.userStatWriteObserver = (0, firestore_2.onDocumentWritten)({region: REGION, document: "users/{userId}/user_stat/{type}"}, async (event) => {
+  const snapshot = event.data;
+  if (!snapshot) {
+    (0, logger.error)("No data associated with the event");
+    return;
+  }
+
+  const oldStat = snapshot?.before?.data();
+  const newStat = snapshot?.after?.data();
+
+  const {userId} = event.params;
+
+  if (newStat) {
+    await leaderboardService.updateLeaderboard(userId, oldStat, newStat);
+  }
 });
 
 exports.fiveMinuteCron = (0, scheduler.onSchedule)({timeZone: exports.TIMEZONE, schedule: "*/5 * * * *", region: REGION}, async () => {

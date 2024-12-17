@@ -24,6 +24,7 @@
   "common_not_specified_title": "Not Specified",
   "commonRunning": "Running",
   "commonFinish": "Finish",
+  "commonDeactivatedUser": "Deactivated User",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
     "placeholders": {
@@ -82,6 +83,10 @@
   "common_remove_admin": "Remove admin",
   "common_transfer_ownership": "Transfer ownership",
   "common_tournaments": "Tournaments",
+  "common_leaderboard": "Leaderboard",
+  "common_batting": "Batting",
+  "common_bowling": "Bowling",
+  "common_fielding": "Fielding",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -154,6 +159,17 @@
   "home_search_results_title": "Results",
   "home_match_list_empty_search_title": "No match results",
   "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
+
+  "@_LEADERBOARD": {
+  },
+  "leaderboard_empty_title": "Nothing to Show Yet",
+  "leaderboard_empty_description": "No scores available yet. Make your move and take the lead!",
+  "leaderboard_catches_title": "{count, plural, =0{{count} catches} =1{{count} catch} other{{count} catches}}",
+  "@leaderboard_catches_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
 
   "@_NOTIFICATION_POPUP": {
   },
@@ -434,8 +450,6 @@
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
-  "add_toss_detail_bat_text": "Batting",
-  "add_toss_detail_bowl_text": "Bowling",
 
   "add_substitute_search_substitute_title": "Who’s ready to step in?",
   "add_substitute_search_substitute_description": "Search and assign a substitute fielder to maintain your fielding edge.",
@@ -504,9 +518,6 @@
   "team_detail_run_rate_title": "Run Rate",
 
   "user_detail_info_title": "Info",
-  "user_detail_batting_title": "Batting",
-  "user_detail_bowling_title": "Bowling",
-  "user_detail_fielding_title": "Fielding",
   "user_detail_personal_information_title": "Personal information",
   "user_detail_participation_title": "Participation",
   "user_detail_role_title": "Role",

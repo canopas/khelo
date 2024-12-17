@@ -7,7 +7,7 @@ export default [
   google,
   {
     languageOptions: {
-      ecmaVersion: 2018,
+      ecmaVersion: 2021,
       globals: {
         ...globals.browser,
         ...globals.node,
@@ -21,7 +21,7 @@ export default [
       "quotes": ["error", "double"],
       "import/no-unresolved": 0,
       "indent": ["error", 2],
-      "max-len": ["error", {"code": 140}],
+      "max-len": ["error", {"code": 200}],
       "new-cap": 0,
       "require-jsdoc": 0,
       "no-extend-native": 0,

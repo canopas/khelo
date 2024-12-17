@@ -19,7 +19,7 @@ class MatchGroupTag extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
         decoration: BoxDecoration(
-          color: context.colorScheme.primary.withValues(alpha: 0.2),
+          color: context.colorScheme.primary.withValues(alpha:0.2),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(

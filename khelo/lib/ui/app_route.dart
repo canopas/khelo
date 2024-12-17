@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
 import 'package:khelo/ui/flow/home/search/search_screen.dart';
 import 'package:khelo/ui/flow/intro/intro_screen.dart';
+import 'package:khelo/ui/flow/leaderboard/leaderboard_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
@@ -64,6 +66,7 @@ class AppRoute {
   static const pathMatchSelection = "/match-selection";
   static const pathTournamentDetail = "/tournament-detail";
   static const pathMemberSelection = "/member-selection";
+  static const pathLeaderboard = "/leaderboard";
 
   final String path;
   final String? name;
@@ -231,6 +234,12 @@ class AppRoute {
   static AppRoute makeTeamAdmin({required TeamModel team}) =>
       AppRoute(pathMakeTeamAdmin,
           builder: (context) => MakeTeamAdminScreen(team: team));
+
+  static AppRoute leaderboard({
+    LeaderboardField selectedField = LeaderboardField.batting,
+  }) =>
+      AppRoute(pathLeaderboard,
+          builder: (context) => LeaderboardScreen(selectedField: selectedField));
 
   static AppRoute searchTeam({
     List<String>? excludedIds,
@@ -437,6 +446,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathMakeTeamAdmin,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathLeaderboard,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(
