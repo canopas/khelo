@@ -134,7 +134,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
         : field == LeaderboardField.bowling
             ? state.bowlingLeaderboard
             : state.fieldingLeaderboard;
-    if (state.loading) {
+    if (state.loading && players.isEmpty) {
       return const Center(child: AppProgressIndicator());
     } else if (state.error != null) {
       return ErrorScreen(

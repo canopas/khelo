@@ -35,7 +35,7 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
 
     final selectedTab = LeaderboardField.values.elementAt(state.selectedTab);
     if ((selectedTab == LeaderboardField.batting &&
-        state.battingLeaderboard.isEmpty) ||
+            state.battingLeaderboard.isEmpty) ||
         (selectedTab == LeaderboardField.bowling &&
             state.bowlingLeaderboard.isEmpty) ||
         (selectedTab == LeaderboardField.fielding &&
@@ -57,13 +57,7 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
           if (state.loading || _maxFieldingLoaded) return;
       }
 
-      state = state.copyWith(
-          loading: (selectedTab == LeaderboardField.batting
-                  ? state.battingLeaderboard
-                  : selectedTab == LeaderboardField.bowling
-                      ? state.bowlingLeaderboard
-                      : state.fieldingLeaderboard)
-              .isEmpty);
+      state = state.copyWith(loading: true);
 
       final players = await _leaderboardService.getLeaderboardByField(
           limit: _limit,
