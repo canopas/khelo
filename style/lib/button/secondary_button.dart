@@ -29,7 +29,7 @@ class SecondaryButton extends StatelessWidget {
                 color: enabled
                     ? context.colorScheme.primary
                     : Color.alphaBlend(
-                        context.colorScheme.primary.withOpacity(0.5),
+                        context.colorScheme.primary.withValues(alpha: 0.5),
                         context.colorScheme.surface)),
           ),
           backgroundColor: context.colorScheme.containerLowOnSurface,

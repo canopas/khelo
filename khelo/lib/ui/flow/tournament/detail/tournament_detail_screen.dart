@@ -119,7 +119,7 @@ class _TournamentDetailScreenState
                       size: 20,
                       backgroundColor: context
                           .colorScheme.containerHighOnSurface
-                          .withOpacity(0.4),
+                          .withValues(alpha: 0.4),
                       onPressed: () => _moreActionButton(context, state),
                     ),
                   ]
@@ -246,7 +246,8 @@ class _TournamentDetailScreenState
           width: 28,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: context.colorScheme.containerHighOnSurface.withOpacity(0.4),
+            color: context.colorScheme.containerHighOnSurface
+                .withValues(alpha: 0.4),
           ),
           alignment: Alignment.center,
           child: Icon(
