@@ -125,8 +125,8 @@ class _TournamentItemState extends State<TournamentItem> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              dominant.withValues(alpha:0),
-              dominant.withValues(alpha:0.5),
+              dominant.withValues(alpha: 0),
+              dominant.withValues(alpha: 0.5),
               dominant,
             ],
           ),
@@ -217,14 +217,17 @@ class _TournamentItemState extends State<TournamentItem> {
     if (dominant == context.colorScheme.primary) {
       return (
         context.colorScheme.onPrimary,
-        context.colorScheme.onPrimary.withValues(alpha:0.8)
+        context.colorScheme.onPrimary.withValues(alpha: 0.8)
       );
     }
 
     if (dominant.computeLuminance() < 0.5) {
-      return (Colors.white, Colors.white.withValues(alpha:0.8));
+      return (Colors.white, Colors.white.withValues(alpha: 0.8));
     } else {
-      return (Colors.black.withValues(alpha:0.87), Colors.black.withValues(alpha:0.6));
+      return (
+        Colors.black.withValues(alpha: 0.87),
+        Colors.black.withValues(alpha: 0.6)
+      );
     }
   }
 }

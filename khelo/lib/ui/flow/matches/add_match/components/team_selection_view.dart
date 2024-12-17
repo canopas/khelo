@@ -94,7 +94,7 @@ class TeamSelectionView extends StatelessWidget {
                         : context.colorScheme.alert),
                 color: validSquad
                     ? context.colorScheme.containerHigh
-                    : context.colorScheme.alert.withValues(alpha:0.2),
+                    : context.colorScheme.alert.withValues(alpha: 0.2),
                 shape: BoxShape.circle,
                 image: (team != null && team.profile_img_url != null)
                     ? DecorationImage(

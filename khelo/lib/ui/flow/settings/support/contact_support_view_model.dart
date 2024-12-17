@@ -147,8 +147,7 @@ class ContactSupportViewStateNotifier
         id: _supportService.generateSupportId,
         title: state.titleController.text.trim(),
         description: state.descriptionController.text.trim(),
-        attachmentUrls:
-            state.attachments.map((e) => e.url).nonNulls.toList(),
+        attachmentUrls: state.attachments.map((e) => e.url).nonNulls.toList(),
         userId: _currentUserId ?? '',
         createdAt: DateTime.now(),
         createdTime: DateTime.now(),

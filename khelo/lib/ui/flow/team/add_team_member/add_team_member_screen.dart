@@ -1,6 +1,5 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -107,20 +106,14 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
     return Padding(
       padding:
           context.mediaQueryPadding + const EdgeInsets.symmetric(vertical: 8),
-      child: Stack(
-        alignment: Alignment.bottomRight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _searchField(context, state),
-              if (state.selectedUsers.isNotEmpty) ...[
-                _selectedPlayerList(context, state),
-              ],
-              _searchedPlayerList(context, state),
-            ],
-          ),
-          _addViaContactButton(context),
+          _searchField(context, state),
+          if (state.selectedUsers.isNotEmpty) ...[
+            _selectedPlayerList(context, state),
+          ],
+          _searchedPlayerList(context, state),
         ],
       ),
     );
@@ -277,48 +270,6 @@ class _AddTeamMemberScreenState extends ConsumerState<AddTeamMemberScreen> {
                 child: _crossIcon(context)),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _addViaContactButton(BuildContext context) {
-    return OnTapScale(
-      onTap: () async {
-        final user =
-            await AppRoute.contactSelection(memberIds: notifier.getMemberIds())
-                .push<UserModel>(context);
-        if (context.mounted && user != null) {
-          notifier.selectUser(user);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: context.colorScheme.containerLowOnSurface,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              CupertinoIcons.add,
-              size: 18,
-              weight: 24,
-              color: context.colorScheme.textPrimary,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                context.l10n.add_team_player_add_via_contact_title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyle.button
-                    .copyWith(color: context.colorScheme.textPrimary),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
