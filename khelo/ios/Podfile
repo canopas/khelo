@@ -54,8 +54,6 @@ post_install do |installer|
         ## dart: PermissionGroup.camera
         'PERMISSION_CAMERA=1',
 
-        ## dart: PermissionGroup.contacts
-        'PERMISSION_CONTACTS=1',
       ]
 
     end
