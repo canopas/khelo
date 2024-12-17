@@ -116,12 +116,21 @@ class BallScoreService {
     }
   }
 
-  Stream<List<BallScoreChange>> streamBallScoresByInningIds(
-    List<String> inningIds,
-  ) {
-    if (inningIds.isEmpty) return const Stream.empty();
-    return _ballScoreCollection
-        .where(FireStoreConst.inningId, whereIn: inningIds)
+  Stream<List<BallScoreChange>> streamBallScoresByInningIds({
+    required List<String> inningIds,
+    int? limit,
+  }) {
+    if (inningIds.isEmpty) return Stream.value([]);
+
+    var query =
+        _ballScoreCollection.where(FireStoreConst.inningId, whereIn: inningIds);
+    if (limit != null) {
+      query = query
+          .orderBy(FireStoreConst.scoreTime, descending: true)
+          .limit(limit);
+    }
+
+    return query
         .snapshots()
         .map(
           (event) => event.docChanges

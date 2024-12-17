@@ -96,7 +96,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     String otherInningId,
   ) {
     return _ballScoreService.streamBallScoresByInningIds(
-        [currentInningId, otherInningId]).handleError((e) {
+        inningIds: [currentInningId, otherInningId]).handleError((e) {
       throw AppError.fromError(e);
     });
   }

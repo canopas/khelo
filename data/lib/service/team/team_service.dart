@@ -89,7 +89,6 @@ class TeamService {
 
   Stream<List<TeamModel>> streamUserRelatedTeams({
     required String userId,
-    String? lastTeamId,
     int limit = 10,
   }) {
     final currentPlayer = TeamPlayer(id: userId);
@@ -103,11 +102,12 @@ class TeamService {
       Filter(FireStoreConst.teamPlayers, arrayContainsAny: playerContains),
     );
 
-    var query = _teamsCollection.where(filter).orderBy(FieldPath.documentId);
-    if (lastTeamId != null) {
-      query = query.startAfter([lastTeamId]);
-    }
-    return query.limit(limit).snapshots().asyncMap((snapshot) async {
+    return _teamsCollection
+        .where(filter)
+        .orderBy(FieldPath.documentId)
+        .limit(limit)
+        .snapshots()
+        .asyncMap((snapshot) async {
       final teams = await Future.wait(
         snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),
       );

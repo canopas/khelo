@@ -31,9 +31,6 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
     loadTeamList();
   }
 
-  bool _maxLoaded = false;
-  String? _lastTeamId;
-
   void _setUserId(String? userId) {
     if (userId == null) {
       _teamsStreamSubscription?.cancel();
@@ -43,21 +40,16 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
 
   Future<void> loadTeamList() async {
     if (state.currentUserId == null) return;
-    if (state.loading || _maxLoaded) return;
+    if (state.loading) return;
 
     _teamsStreamSubscription?.cancel();
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
       _teamsStreamSubscription = _teamService
           .streamUserRelatedTeams(
-              userId: state.currentUserId!, lastTeamId: _lastTeamId, limit: 10)
-          .listen((teams) {
-        _maxLoaded = teams.length < 10;
-
-        if (teams.isNotEmpty) {
-          _lastTeamId = teams.last.id;
-        }
-
+        userId: state.currentUserId!,
+        limit: state.teams.length + 10,
+      ).listen((teams) {
         state = state.copyWith(
           teams: {...state.teams, ...teams}.toList(),
           loading: false,

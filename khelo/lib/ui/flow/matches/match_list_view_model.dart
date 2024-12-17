@@ -30,9 +30,6 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
     loadMatches();
   }
 
-  bool _maxLoaded = false;
-  String? _lastMatchId;
-
   void _setUserId(String? userId) {
     if (userId == null) {
       _matchesStreamSubscription?.cancel();
@@ -43,24 +40,18 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
 
   Future<void> loadMatches() async {
     if (state.currentUserId == null) return;
-    if (state.loading || _maxLoaded) return;
+    if (state.loading) return;
 
     _matchesStreamSubscription?.cancel();
     state = state.copyWith(loading: state.matches.isEmpty);
     try {
       _matchesStreamSubscription = _matchService
           .streamUserRelatedMatches(
-              userId: state.currentUserId!,
-              lastMatchId: _lastMatchId,
-              limit: 10)
-          .listen((matches) {
-        _maxLoaded = matches.length < 10;
-
-        if (matches.isNotEmpty) {
-          _lastMatchId = matches.last.id;
-        }
+        userId: state.currentUserId!,
+        limit: state.matches.length + 10,
+      ).listen((matches) {
         state = state.copyWith(
-          matches: {...state.matches, ...matches}.toList(),
+          matches: matches,
           loading: false,
           error: null,
         );

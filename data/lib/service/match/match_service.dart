@@ -125,7 +125,6 @@ class MatchService {
 
   Stream<List<MatchModel>> streamUserRelatedMatches({
     required String userId,
-    String? lastMatchId,
     int limit = 10,
   }) {
     final filter = Filter.or(
@@ -134,13 +133,12 @@ class MatchService {
       Filter(FireStoreConst.teamCreatorIds, arrayContains: userId),
     );
 
-    var query = _matchCollection.where(filter).orderBy(FieldPath.documentId);
-
-    if (lastMatchId != null) {
-      query = query.startAfter([lastMatchId]);
-    }
-
-    return query.limit(limit).snapshots().asyncMap((snapshot) async {
+    return _matchCollection
+        .where(filter)
+        .orderBy(FieldPath.documentId)
+        .limit(limit)
+        .snapshots()
+        .asyncMap((snapshot) async {
       return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
@@ -168,18 +166,14 @@ class MatchService {
 
   Stream<List<MatchModel>> streamMatchesByTeamId({
     required String teamId,
-    String? lastMatchId,
     int limit = 10,
   }) {
-    var query = _matchCollection
+    return _matchCollection
         .where(FireStoreConst.teamIds, arrayContains: teamId)
-        .orderBy(FieldPath.documentId);
-
-    if (lastMatchId != null) {
-      query = query.startAfter([lastMatchId]);
-    }
-
-    return query.limit(limit).snapshots().asyncMap((snapshot) async {
+        .orderBy(FieldPath.documentId)
+        .limit(limit)
+        .snapshots()
+        .asyncMap((snapshot) async {
       return await Future.wait(
         snapshot.docs.map((mainDoc) async {
           final match = mainDoc.data();
@@ -190,7 +184,7 @@ class MatchService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> streamActiveRunningMatches() {
+  Stream<List<MatchModel>> streamActiveRunningMatches({int limit = 10}) {
     final DateTime now = DateTime.now();
     final DateTime oneAndHalfHoursAgo =
         now.subtract(Duration(hours: 1, minutes: 30));
@@ -203,6 +197,7 @@ class MatchService {
     );
     return _matchCollection
         .where(filter)
+        .limit(limit)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(
@@ -216,7 +211,7 @@ class MatchService {
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<MatchModel>> streamUpcomingMatches() {
+  Stream<List<MatchModel>> streamUpcomingMatches({int limit = 10}) {
     final DateTime now = DateTime.now();
     final startOfDay = DateTime(now.year, now.month, now.day);
     final DateTime aMonthAfter = DateTime(now.year, now.month + 1, now.day);
@@ -237,6 +232,7 @@ class MatchService {
     );
     return _matchCollection
         .where(filter)
+        .limit(limit)
         .snapshots()
         .asyncMap((snapshot) async {
       return await Future.wait(
