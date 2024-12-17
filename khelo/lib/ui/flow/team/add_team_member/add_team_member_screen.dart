@@ -1,6 +1,5 @@
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/user/user_models.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';

@@ -25,7 +25,9 @@ class _CompleteProfileProgressState
         widget.user?.gender != null &&
         widget.user?.player_role != null &&
         widget.user?.batting_style != null &&
-        widget.user?.bowling_style != null) return const SizedBox();
+        widget.user?.bowling_style != null) {
+      return const SizedBox();
+    }
 
     return OnTapScale(
       onTap: () => AppRoute.editProfile().push(context),
