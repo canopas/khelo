@@ -28,7 +28,10 @@ class LargeIconButton extends StatelessWidget {
     final bg = backgroundColor ?? context.colorScheme.primary;
     final bgColor = tappable
         ? bg
-        : Color.alphaBlend(bg.withValues(alpha: 0.4), context.colorScheme.surface);
+        : Color.alphaBlend(
+            bg.withValues(alpha: 0.4),
+            context.colorScheme.surface,
+          );
 
     return OnTapScale(
       enabled: tappable,
