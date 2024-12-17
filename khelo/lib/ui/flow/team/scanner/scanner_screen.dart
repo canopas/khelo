@@ -229,7 +229,7 @@ class _ScannerScreenState extends ConsumerState<ScannerScreen> {
               onPressed: () => context.pop(),
               icon: Icon(
                 Icons.close,
-                color: context.colorScheme.textPrimary.withOpacity(0.8),
+                color: context.colorScheme.textPrimary.withValues(alpha: 0.8),
               ),
             ),
             Expanded(
