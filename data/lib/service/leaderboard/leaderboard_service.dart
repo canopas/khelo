@@ -40,46 +40,60 @@ class LeaderboardService {
   Future<List<LeaderboardPlayer>> getLeaderboardByField({
     LeaderboardType type = LeaderboardType.allTime,
     int limit = 20,
-    String? lastUserId,
+    LeaderboardPlayer? lastPlayer,
     LeaderboardField field = LeaderboardField.batting,
-  }) {
-    var query = _leaderboardCollection(type)
-        .orderBy(field.getDatabaseConst(), descending: true)
-        .where(
-      field.getDatabaseConst(),
-      isGreaterThan: field.getMinScoreToGetFeatured(),
-    );
+  }) async {
+    try {
+      var query = _leaderboardCollection(type)
+          .orderBy(field.getDatabaseConst(), descending: true)
+          .orderBy(FieldPath.documentId)
+          .where(
+            field.getDatabaseConst(),
+            isGreaterThan: field.getMinScoreToGetFeatured(),
+          );
 
-    if (type == LeaderboardType.weekly || type == LeaderboardType.monthly) {
-      final now = DateTime.now();
-      final startTime = type == LeaderboardType.weekly
-          ? now.getStartOfWeek
-          : now.getStartOfMonth;
-      final endTime =
-      type == LeaderboardType.weekly ? now.getEndOfWeek : now.getEndOfMonth;
+      if (type == LeaderboardType.weekly || type == LeaderboardType.monthly) {
+        final now = DateTime.now();
+        final startTime = type == LeaderboardType.weekly
+            ? now.getStartOfWeek
+            : now.getStartOfMonth;
+        final endTime = type == LeaderboardType.weekly
+            ? now.getEndOfWeek
+            : now.getEndOfMonth;
 
-      final timeFilter = Filter.and(
-        Filter(FireStoreConst.date, isGreaterThanOrEqualTo: startTime),
-        Filter(FireStoreConst.date, isLessThanOrEqualTo: endTime),
-      );
+        query = query.where(
+          FireStoreConst.date,
+          isGreaterThanOrEqualTo: startTime,
+          isLessThanOrEqualTo: endTime,
+        );
+      }
 
-      query = query.where(timeFilter);
-    }
+      if (lastPlayer != null) {
+        query = query.startAfter([
+          field == LeaderboardField.batting
+              ? lastPlayer.runs
+              : field == LeaderboardField.bowling
+                  ? lastPlayer.wickets
+                  : lastPlayer.catches,
+          lastPlayer.id,
+        ]);
+      }
 
-    if (lastUserId != null) {
-      query = query.startAfter([lastUserId]);
-    }
+      query = query.limit(limit);
 
-    query = query.limit(limit);
-    return query.get().then((snapshot) async {
+      final snapshot = await query.get();
       final docs = snapshot.docs.map((e) => e.data()).toList();
+
       final players =
-      await _userService.getUsersByIds(docs.map((e) => e.id).toList());
+          await _userService.getUsersByIds(docs.map((e) => e.id).toList());
+
       return docs.map((e) {
         final player = players.firstWhere((element) => element.id == e.id);
         return e.copyWith(user: player);
       }).toList();
-    }).onError((error, stack) => throw AppError.fromError(error!, stack));
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
   }
 
   Stream<List<LeaderboardPlayer>> streamLeaderboardByField({

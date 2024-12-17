@@ -21,27 +21,26 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
   bool _maxBattingLoaded = false;
   bool _maxBowlingLoaded = false;
   bool _maxFieldingLoaded = false;
-  String? _lastBattingUserId;
-  String? _lastBowlingUserId;
-  String? _lastFieldingUserId;
+  LeaderboardPlayer? _lastBattingUser;
+  LeaderboardPlayer? _lastBowlingUser;
+  LeaderboardPlayer? _lastFieldingUser;
 
   LeaderboardViewNotifier(this._leaderboardService)
-      : super(LeaderboardViewState()) {
-    loadLeaderboard();
-  }
+      : super(LeaderboardViewState());
 
   void onTabChange(int tab) {
     if (state.selectedTab != tab) {
       state = state.copyWith(selectedTab: tab);
-      final selectedTab = LeaderboardField.values.elementAt(state.selectedTab);
-      if ((selectedTab == LeaderboardField.batting &&
-              state.battingLeaderboard.isEmpty) ||
-          (selectedTab == LeaderboardField.bowling &&
-              state.bowlingLeaderboard.isEmpty) ||
-          (selectedTab == LeaderboardField.fielding &&
-              state.fieldingLeaderboard.isEmpty)) {
-        loadLeaderboard();
-      }
+    }
+
+    final selectedTab = LeaderboardField.values.elementAt(state.selectedTab);
+    if ((selectedTab == LeaderboardField.batting &&
+        state.battingLeaderboard.isEmpty) ||
+        (selectedTab == LeaderboardField.bowling &&
+            state.bowlingLeaderboard.isEmpty) ||
+        (selectedTab == LeaderboardField.fielding &&
+            state.fieldingLeaderboard.isEmpty)) {
+      loadLeaderboard();
     }
   }
 
@@ -69,11 +68,11 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
       final players = await _leaderboardService.getLeaderboardByField(
           limit: _limit,
           field: selectedTab,
-          lastUserId: selectedTab == LeaderboardField.batting
-              ? _lastBattingUserId
+          lastPlayer: selectedTab == LeaderboardField.batting
+              ? _lastBattingUser
               : selectedTab == LeaderboardField.bowling
-                  ? _lastBowlingUserId
-                  : _lastFieldingUserId);
+                  ? _lastBowlingUser
+                  : _lastFieldingUser);
       state = state.copyWith(
         battingLeaderboard: selectedTab == LeaderboardField.batting
             ? {...state.battingLeaderboard, ...players}.toList()
@@ -88,16 +87,16 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
         error: null,
       );
 
-      final lastId = players.lastOrNull?.id;
+      final lastPlayer = players.lastOrNull;
       switch (selectedTab) {
         case LeaderboardField.batting:
-          _lastBattingUserId = lastId;
+          _lastBattingUser = lastPlayer;
           _maxBattingLoaded = players.length < _limit;
         case LeaderboardField.bowling:
-          _lastBowlingUserId = lastId;
+          _lastBowlingUser = lastPlayer;
           _maxBowlingLoaded = players.length < _limit;
         case LeaderboardField.fielding:
-          _lastFieldingUserId = lastId;
+          _lastFieldingUser = lastPlayer;
           _maxFieldingLoaded = players.length < _limit;
       }
     } catch (e) {
