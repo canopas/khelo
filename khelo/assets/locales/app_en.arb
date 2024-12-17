@@ -317,7 +317,6 @@
   "add_team_enter_team_name_placeholder_text": "Enter team name",
   "add_team_team_initial_placeholder_text": "Team initials (e.g. IND, AUS, PBKS)",
   "add_team_player_role_title": "Playing role",
-  "add_team_player_add_via_contact_title": "Add via Contact",
   "add_team_players_text": "Players",
   "add_team_already_added": "Team already added",
   "add_team_add_hint_text": "Added user will be shown here, tap on '+' button to add team member.",
@@ -347,18 +346,6 @@
       }
     }
   },
-
-  "contact_selection_contact_title": "Contact",
-  "contact_selection_empty_contact": "No Contacts Found",
-  "contact_selection_empty_contact_description": "We didn't find any contacts, will be shown here as soon as we get it.",
-  "contact_selection_access_permission": "Allow contact access",
-  "contact_selection_access_permission_description": "Allow contact access to add member via contacts.",
-  "contact_selection_allow_title": "Allow",
-
-  "confirm_number_confirm_phone_title": "Confirm phone number",
-  "confirm_number_confirm_title": "Confirm",
-  "confirm_number_name_title": "Name",
-  "confirm_number_add_user_manually_title": "Add user manually",
 
   "team_list_add_members_title": "Add Members",
   "team_list_all_teams_title": "All teams",
