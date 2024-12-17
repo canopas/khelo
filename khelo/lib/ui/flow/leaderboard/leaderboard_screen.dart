@@ -43,10 +43,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
     super.initState();
     notifier = ref.read(leaderboardStateProvider.notifier);
 
-    runPostFrame(() => notifier.onTabChange(widget.selectedField.index));
     _controller = PageController(
       initialPage: widget.selectedField.index,
     );
+    runPostFrame(() => notifier.onTabChange(widget.selectedField.index));
   }
 
   @override
