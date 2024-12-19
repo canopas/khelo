@@ -48,6 +48,8 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     this._ballScoreService,
   ) : super(const MatchDetailTabState());
 
+  int _ballsLoaded = 0;
+
   void setData(String matchId) {
     _matchId = matchId;
     _loadMatchesAndInning();
@@ -79,13 +81,12 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
           true,
         );
         state = state.copyWith(
-            highlightTeamId: state.highlightTeamId ?? match.teams.first.team.id,
-            allInnings: innings,
-            error: null);
+          highlightTeamId: state.highlightTeamId ?? match.teams.first.team.id,
+          allInnings: innings,
+          error: null,
+        );
 
-        if (!state.ballScoreQueryListenerSet) {
-          _loadBallScores();
-        }
+        loadBallScores();
       }, onError: (e) {
         debugPrint(
             "MatchDetailTabViewNotifier: error while loading match and inning -> $e");
@@ -98,24 +99,30 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     }
   }
 
-  void _loadBallScores() {
+  void loadBallScores() {
     if (state.allInnings.isEmpty) {
       state = state.copyWith(loading: false);
       return;
     }
-    state = state.copyWith(ballScoreQueryListenerSet: true);
-
+    if (state.loadingBallScoreMore) return;
+    state = state.copyWith(loadingBallScoreMore: _ballsLoaded > 0);
+    final inningIds = state.allInnings.map((inning) => inning.id).toList();
     _ballScoreStreamSubscription = _ballScoreService
-        .streamBallScoresByInningIds(state.allInnings.map((e) => e.id).toList())
+        .streamBallScoresByInningIds(
+      inningIds: inningIds,
+      limit: _ballsLoaded + 12,
+    )
         .listen(
       (scores) {
+        _ballsLoaded = scores.length;
+
         final sortedList = scores.toList();
         sortedList.sort((a, b) =>
             (a.ballScore.score_time ?? a.ballScore.time)?.compareTo(
                 b.ballScore.score_time ?? b.ballScore.time ?? DateTime.now()) ??
             0);
 
-        final overList = state.overList.toList();
+        final List<OverSummary> overList = [];
         for (final score in sortedList) {
           if (score.type == DocumentChangeType.added) {
             final overSummary =
@@ -139,7 +146,12 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
         }
 
         overList.sort((a, b) => a.time.compareTo(b.time));
-        state = state.copyWith(overList: overList, loading: false, error: null);
+        state = state.copyWith(
+          overList: overList,
+          loadingBallScoreMore: false,
+          loading: false,
+          error: null,
+        );
         changeHighlightFilter();
       },
       onError: (e, stack) {
@@ -156,10 +168,10 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     bool isUndo = false,
   }) {
     if (isUndo) {
-      final overToUpdate = overList.firstWhere((element) =>
+      final overToUpdate = overList.firstWhereOrNull((element) =>
           element.overNumber == ball.over_number &&
           element.inning_id == ball.inning_id);
-      return overToUpdate.removeBall(ball);
+      return overToUpdate?.removeBall(ball);
     }
 
     BatsmanSummary striker = _configureBatsman(
@@ -351,7 +363,6 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   }
 
   Future<void> _cancelStreamSubscription() async {
-    state = state.copyWith(ballScoreQueryListenerSet: false);
     await _matchStreamSubscription?.cancel();
     await _ballScoreStreamSubscription?.cancel();
   }
@@ -399,7 +410,7 @@ class MatchDetailTabState with _$MatchDetailTabState {
     @Default([]) List<OverSummary> filteredHighlight,
     @Default([]) List<String> expandedInningsScorecard,
     @Default(false) bool loading,
-    @Default(false) bool ballScoreQueryListenerSet,
+    @Default(false) bool loadingBallScoreMore,
     @Default(HighlightFilterOption.all)
     HighlightFilterOption highlightFilterOption,
   }) = _MatchDetailTabState;

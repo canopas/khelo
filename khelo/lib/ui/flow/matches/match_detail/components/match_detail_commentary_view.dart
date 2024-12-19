@@ -10,9 +10,12 @@ import 'package:khelo/ui/flow/matches/match_detail/components/commentary_ball_su
 import 'package:khelo/ui/flow/matches/match_detail/components/commentary_over_overview.dart';
 import 'package:khelo/ui/flow/matches/match_detail/components/final_score_view.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
+import 'package:style/callback/on_visible_callback.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
+
+import '../../../../../domain/extensions/widget_extension.dart';
 
 class MatchDetailCommentaryView extends ConsumerWidget {
   const MatchDetailCommentaryView({super.key});
@@ -39,10 +42,38 @@ class MatchDetailCommentaryView extends ConsumerWidget {
     }
 
     return (state.overList.isNotEmpty)
-        ? ListView(
+        ? ListView.builder(
             padding:
                 context.mediaQueryPadding + const EdgeInsets.only(bottom: 24),
-            children: _buildCommentaryList(context, state),
+            itemCount: 1 + state.overList.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: FinalScoreView(),
+                );
+              }
+              if (index < state.overList.length + 1) {
+                final overSummaryIndex = state.overList.length - index;
+                final overSummary = state.overList[overSummaryIndex];
+                final nextOverSummary =
+                    state.overList.elementAtOrNull(overSummaryIndex + 1);
+                final team = _getTeamByTeamId(state, overSummary.team_id);
+
+                return _buildCommentaryItem(
+                  context,
+                  overSummary: overSummary,
+                  team: team,
+                  nextOverSummary: nextOverSummary,
+                );
+              }
+              return OnVisibleCallback(
+                onVisible: () => runPostFrame(notifier.loadBallScores),
+                child: (state.loadingBallScoreMore && state.overList.isNotEmpty)
+                    ? const Center(child: AppProgressIndicator())
+                    : const SizedBox(),
+              );
+            },
           )
         : EmptyScreen(
             title: context.l10n.match_detail_match_not_started_error_title,
@@ -51,61 +82,65 @@ class MatchDetailCommentaryView extends ConsumerWidget {
           );
   }
 
-  List<Widget> _buildCommentaryList(
-    BuildContext context,
-    MatchDetailTabState state,
-  ) {
+  Widget _buildCommentaryItem(
+    BuildContext context, {
+    required OverSummary overSummary,
+    required TeamModel? team,
+    OverSummary? nextOverSummary,
+  }) {
     List<Widget> children = [];
 
-    children.add(const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
-      child: FinalScoreView(),
-    ));
-    for (int index = state.overList.length - 1; index >= 0; index--) {
-      final overSummary = state.overList[index];
-      final team = _getTeamByTeamId(state, overSummary.team_id);
-
-      final nextOverSummary = state.overList.elementAtOrNull(index + 1);
-      if (nextOverSummary != null &&
-          nextOverSummary.overNumber != overSummary.overNumber) {
-        children.add(Padding(
+    // Add BowlerSummaryView if applicable
+    if (nextOverSummary != null &&
+        nextOverSummary.overNumber != overSummary.overNumber) {
+      children.add(
+        Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: BowlerSummaryView(
             bowlerSummary: nextOverSummary.bowlerStatAtStart,
             isForBowlerIntro: true,
           ),
-        ));
-      }
-
-      if ((overSummary.balls.lastOrNull?.isLegalDelivery() ?? false) &&
-          overSummary.balls.lastOrNull?.ball_number == 6 &&
-          nextOverSummary?.inning_id == overSummary.inning_id) {
-        children
-            .add(CommentaryOverOverview(overSummary: overSummary, team: team));
-      } else if (nextOverSummary != null &&
-          nextOverSummary.inning_id != overSummary.inning_id) {
-        children.addAll([
-          _inningOverview(context,
-              teamName: team?.name ?? "", targetRun: overSummary.totalRuns + 1),
-          CommentaryOverOverview(overSummary: overSummary, team: team),
-        ]);
-      }
-
-      for (final ball in overSummary.balls.reversed) {
-        children.addAll([
-          CommentaryBallSummary(
-            ball: ball,
-            overSummary: overSummary,
-            showBallScore:
-                ball.is_four || ball.is_six || ball.wicket_taker_id != null,
-          ),
-          if (ball != overSummary.balls.first) ...[
-            Divider(color: context.colorScheme.outline),
-          ],
-        ]);
-      }
+        ),
+      );
     }
-    return children;
+
+    // Add CommentaryOverOverview or InningOverview if applicable
+    if ((overSummary.balls.lastOrNull?.isLegalDelivery() ?? false) &&
+        overSummary.balls.lastOrNull?.ball_number == 6 &&
+        nextOverSummary?.inning_id == overSummary.inning_id) {
+      children
+          .add(CommentaryOverOverview(overSummary: overSummary, team: team));
+    } else if (nextOverSummary != null &&
+        nextOverSummary.inning_id != overSummary.inning_id) {
+      children.addAll([
+        _inningOverview(
+          context,
+          teamName: team?.name ?? "",
+          targetRun: overSummary.totalRuns + 1,
+        ),
+        CommentaryOverOverview(overSummary: overSummary, team: team),
+      ]);
+    }
+
+    // Add CommentaryBallSummary for each ball
+    children.addAll(
+      overSummary.balls.reversed.map(
+        (ball) => Column(
+          children: [
+            CommentaryBallSummary(
+              ball: ball,
+              overSummary: overSummary,
+              showBallScore:
+                  ball.is_four || ball.is_six || ball.wicket_taker_id != null,
+            ),
+            if (ball != overSummary.balls.first)
+              Divider(color: context.colorScheme.outline),
+          ],
+        ),
+      ),
+    );
+
+    return Column(children: children);
   }
 
   TeamModel? _getTeamByTeamId(MatchDetailTabState state, String teamId) {

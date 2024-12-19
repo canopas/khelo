@@ -18,7 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MatchListViewState {
   Object? get error => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
-  List<MatchModel>? get matches => throw _privateConstructorUsedError;
+  List<MatchModel> get matches => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
   /// Create a copy of MatchListViewState
@@ -37,7 +37,7 @@ abstract class $MatchListViewStateCopyWith<$Res> {
   $Res call(
       {Object? error,
       String? currentUserId,
-      List<MatchModel>? matches,
+      List<MatchModel> matches,
       bool loading});
 }
 
@@ -58,7 +58,7 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
   $Res call({
     Object? error = freezed,
     Object? currentUserId = freezed,
-    Object? matches = freezed,
+    Object? matches = null,
     Object? loading = null,
   }) {
     return _then(_value.copyWith(
@@ -67,10 +67,10 @@ class _$MatchListViewStateCopyWithImpl<$Res, $Val extends MatchListViewState>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      matches: freezed == matches
+      matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -90,7 +90,7 @@ abstract class _$$MatchListViewStateImplCopyWith<$Res>
   $Res call(
       {Object? error,
       String? currentUserId,
-      List<MatchModel>? matches,
+      List<MatchModel> matches,
       bool loading});
 }
 
@@ -109,7 +109,7 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
   $Res call({
     Object? error = freezed,
     Object? currentUserId = freezed,
-    Object? matches = freezed,
+    Object? matches = null,
     Object? loading = null,
   }) {
     return _then(_$MatchListViewStateImpl(
@@ -118,10 +118,10 @@ class __$$MatchListViewStateImplCopyWithImpl<$Res>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      matches: freezed == matches
+      matches: null == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
       loading: null == loading
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
@@ -136,7 +136,7 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
   const _$MatchListViewStateImpl(
       {this.error,
       this.currentUserId,
-      final List<MatchModel>? matches,
+      final List<MatchModel> matches = const [],
       this.loading = false})
       : _matches = matches;
 
@@ -144,14 +144,13 @@ class _$MatchListViewStateImpl implements _MatchListViewState {
   final Object? error;
   @override
   final String? currentUserId;
-  final List<MatchModel>? _matches;
+  final List<MatchModel> _matches;
   @override
-  List<MatchModel>? get matches {
-    final value = _matches;
-    if (value == null) return null;
+  @JsonKey()
+  List<MatchModel> get matches {
     if (_matches is EqualUnmodifiableListView) return _matches;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_matches);
   }
 
   @override
@@ -197,7 +196,7 @@ abstract class _MatchListViewState implements MatchListViewState {
   const factory _MatchListViewState(
       {final Object? error,
       final String? currentUserId,
-      final List<MatchModel>? matches,
+      final List<MatchModel> matches,
       final bool loading}) = _$MatchListViewStateImpl;
 
   @override
@@ -205,7 +204,7 @@ abstract class _MatchListViewState implements MatchListViewState {
   @override
   String? get currentUserId;
   @override
-  List<MatchModel>? get matches;
+  List<MatchModel> get matches;
   @override
   bool get loading;
 

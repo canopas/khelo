@@ -87,20 +87,25 @@ class TeamService {
     }).catchError((error, stack) => throw AppError.fromError(error, stack));
   }
 
-  Stream<List<TeamModel>> streamUserRelatedTeams(String userId) {
+  Stream<List<TeamModel>> streamUserRelatedTeams({
+    required String userId,
+    int limit = 10,
+  }) {
     final currentPlayer = TeamPlayer(id: userId);
 
     final playerContains = [
       currentPlayer.copyWith(role: TeamPlayerRole.admin).toJson(),
       currentPlayer.copyWith(role: TeamPlayerRole.player).toJson(),
     ];
-
     final filter = Filter.or(
       Filter(FireStoreConst.createdBy, isEqualTo: userId),
       Filter(FireStoreConst.teamPlayers, arrayContainsAny: playerContains),
     );
+
     return _teamsCollection
         .where(filter)
+        .orderBy(FieldPath.documentId)
+        .limit(limit)
         .snapshots()
         .asyncMap((snapshot) async {
       final teams = await Future.wait(

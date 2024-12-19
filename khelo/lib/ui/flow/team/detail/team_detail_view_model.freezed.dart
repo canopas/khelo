@@ -19,7 +19,7 @@ mixin _$TeamDetailState {
   Object? get error => throw _privateConstructorUsedError;
   TeamModel? get team => throw _privateConstructorUsedError;
   String? get currentUserId => throw _privateConstructorUsedError;
-  List<MatchModel>? get matches => throw _privateConstructorUsedError;
+  List<MatchModel> get matches => throw _privateConstructorUsedError;
   int get selectedTab => throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
 
@@ -40,7 +40,7 @@ abstract class $TeamDetailStateCopyWith<$Res> {
       {Object? error,
       TeamModel? team,
       String? currentUserId,
-      List<MatchModel>? matches,
+      List<MatchModel> matches,
       int selectedTab,
       bool loading});
 
@@ -65,7 +65,7 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
     Object? error = freezed,
     Object? team = freezed,
     Object? currentUserId = freezed,
-    Object? matches = freezed,
+    Object? matches = null,
     Object? selectedTab = null,
     Object? loading = null,
   }) {
@@ -79,10 +79,10 @@ class _$TeamDetailStateCopyWithImpl<$Res, $Val extends TeamDetailState>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      matches: freezed == matches
+      matches: null == matches
           ? _value.matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
       selectedTab: null == selectedTab
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
@@ -121,7 +121,7 @@ abstract class _$$TeamDetailStateImplCopyWith<$Res>
       {Object? error,
       TeamModel? team,
       String? currentUserId,
-      List<MatchModel>? matches,
+      List<MatchModel> matches,
       int selectedTab,
       bool loading});
 
@@ -145,7 +145,7 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
     Object? error = freezed,
     Object? team = freezed,
     Object? currentUserId = freezed,
-    Object? matches = freezed,
+    Object? matches = null,
     Object? selectedTab = null,
     Object? loading = null,
   }) {
@@ -159,10 +159,10 @@ class __$$TeamDetailStateImplCopyWithImpl<$Res>
           ? _value.currentUserId
           : currentUserId // ignore: cast_nullable_to_non_nullable
               as String?,
-      matches: freezed == matches
+      matches: null == matches
           ? _value._matches
           : matches // ignore: cast_nullable_to_non_nullable
-              as List<MatchModel>?,
+              as List<MatchModel>,
       selectedTab: null == selectedTab
           ? _value.selectedTab
           : selectedTab // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
       {this.error,
       this.team,
       this.currentUserId,
-      final List<MatchModel>? matches,
+      final List<MatchModel> matches = const [],
       this.selectedTab = 0,
       this.loading = false})
       : _matches = matches;
@@ -193,14 +193,13 @@ class _$TeamDetailStateImpl implements _TeamDetailState {
   final TeamModel? team;
   @override
   final String? currentUserId;
-  final List<MatchModel>? _matches;
+  final List<MatchModel> _matches;
   @override
-  List<MatchModel>? get matches {
-    final value = _matches;
-    if (value == null) return null;
+  @JsonKey()
+  List<MatchModel> get matches {
     if (_matches is EqualUnmodifiableListView) return _matches;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
+    return EqualUnmodifiableListView(_matches);
   }
 
   @override
@@ -255,7 +254,7 @@ abstract class _TeamDetailState implements TeamDetailState {
       {final Object? error,
       final TeamModel? team,
       final String? currentUserId,
-      final List<MatchModel>? matches,
+      final List<MatchModel> matches,
       final int selectedTab,
       final bool loading}) = _$TeamDetailStateImpl;
 
@@ -266,7 +265,7 @@ abstract class _TeamDetailState implements TeamDetailState {
   @override
   String? get currentUserId;
   @override
-  List<MatchModel>? get matches;
+  List<MatchModel> get matches;
   @override
   int get selectedTab;
   @override

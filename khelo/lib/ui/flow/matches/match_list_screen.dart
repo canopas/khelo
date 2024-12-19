@@ -6,9 +6,11 @@ import 'package:khelo/components/error_screen.dart';
 import 'package:khelo/components/match_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
+import 'package:style/callback/on_visible_callback.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 
+import '../../../domain/extensions/widget_extension.dart';
 import 'match_list_view_model.dart';
 
 class MatchListScreen extends ConsumerStatefulWidget {
@@ -60,32 +62,38 @@ class _MatchListScreenState extends ConsumerState<MatchListScreen>
       );
     }
 
-    return (state.matches != null && state.matches!.isNotEmpty)
+    return (state.matches.isNotEmpty)
         ? ListView.separated(
             padding: context.mediaQueryPadding + const EdgeInsets.all(16),
-            itemCount: state.matches!.length,
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: 16);
-            },
+            itemCount: state.matches.length + 1,
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
-              final match = state.matches![index];
-              return MatchDetailCell(
-                match: match,
-                showActionButtons: match.created_by == state.currentUserId,
-                onTap: () =>
-                    AppRoute.matchDetailTab(matchId: match.id).push(context),
-                onActionTap: () {
-                  if (match.match_status == MatchStatus.yetToStart) {
-                    AppRoute.addMatch(matchId: match.id).push(context);
-                  } else if (match.match_status == MatchStatus.running) {
-                    if (match.toss_decision == null ||
-                        match.toss_winner_id == null) {
-                      AppRoute.addTossDetail(matchId: match.id).push(context);
-                    } else {
-                      AppRoute.scoreBoard(matchId: match.id).push(context);
+              if (index < state.matches.length) {
+                final match = state.matches[index];
+                return MatchDetailCell(
+                  match: match,
+                  showActionButtons: match.created_by == state.currentUserId,
+                  onTap: () =>
+                      AppRoute.matchDetailTab(matchId: match.id).push(context),
+                  onActionTap: () {
+                    if (match.match_status == MatchStatus.yetToStart) {
+                      AppRoute.addMatch(matchId: match.id).push(context);
+                    } else if (match.match_status == MatchStatus.running) {
+                      if (match.toss_decision == null ||
+                          match.toss_winner_id == null) {
+                        AppRoute.addTossDetail(matchId: match.id).push(context);
+                      } else {
+                        AppRoute.scoreBoard(matchId: match.id).push(context);
+                      }
                     }
-                  }
-                },
+                  },
+                );
+              }
+              return OnVisibleCallback(
+                onVisible: () => runPostFrame(notifier.loadMatches),
+                child: (state.loading && state.matches.isNotEmpty)
+                    ? const Center(child: AppProgressIndicator())
+                    : const SizedBox(),
               );
             },
           )

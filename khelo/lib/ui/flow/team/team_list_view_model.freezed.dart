@@ -178,7 +178,7 @@ class _$TeamListViewStateImpl implements _TeamListViewState {
       this.currentUserId,
       final List<TeamModel> teams = const [],
       final List<TeamModel> filteredTeams = const [],
-      this.loading = true,
+      this.loading = false,
       this.selectedFilter = TeamFilterOption.all})
       : _teams = teams,
         _filteredTeams = filteredTeams;

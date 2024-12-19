@@ -50,6 +50,7 @@ class FireStoreConst {
   static const String batsmanId = "batsman_id";
   static const String wicketTakerId = "wicket_taker_id";
   static const String playerOutId = "player_out_id";
+  static const String scoreTime = "score_time";
 
   // teams field const
   static const String players = "players";

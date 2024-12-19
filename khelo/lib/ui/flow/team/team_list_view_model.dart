@@ -36,19 +36,25 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
       _teamsStreamSubscription?.cancel();
     }
     state = state.copyWith(currentUserId: userId);
-    loadTeamList();
   }
 
   Future<void> loadTeamList() async {
     if (state.currentUserId == null) return;
+    if (state.loading) return;
 
     _teamsStreamSubscription?.cancel();
     state = state.copyWith(loading: state.teams.isEmpty);
     try {
       _teamsStreamSubscription = _teamService
-          .streamUserRelatedTeams(state.currentUserId!)
-          .listen((teams) {
-        state = state.copyWith(teams: teams, loading: false, error: null);
+          .streamUserRelatedTeams(
+        userId: state.currentUserId!,
+        limit: state.teams.length + 10,
+      ).listen((teams) {
+        state = state.copyWith(
+          teams: {...state.teams, ...teams}.toList(),
+          loading: false,
+          error: null,
+        );
         _filterTeamList();
       }, onError: (e) {
         state = state.copyWith(loading: false, error: e);
@@ -114,7 +120,7 @@ class TeamListViewState with _$TeamListViewState {
     String? currentUserId,
     @Default([]) List<TeamModel> teams,
     @Default([]) List<TeamModel> filteredTeams,
-    @Default(true) bool loading,
+    @Default(false) bool loading,
     @Default(TeamFilterOption.all) TeamFilterOption selectedFilter,
   }) = _TeamListViewState;
 }
