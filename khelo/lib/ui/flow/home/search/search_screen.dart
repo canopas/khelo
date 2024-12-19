@@ -1,4 +1,3 @@
-import 'package:data/api/match/match_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,22 +5,23 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/match_detail_cell.dart';
+import 'package:khelo/components/team_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/search/search_view_model.dart';
 import 'package:style/button/action_button.dart';
+import 'package:style/button/tab_button.dart';
+import 'package:style/callback/on_visible_callback.dart';
 import 'package:style/extensions/context_extensions.dart';
-import 'package:style/text/app_text_style.dart';
+import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/search_text_field.dart';
 
-class SearchHomeScreen extends ConsumerStatefulWidget {
-  final List<MatchModel> matches;
+import '../../../../components/user_detail_cell.dart';
+import '../components/tournament_item.dart';
 
-  const SearchHomeScreen({
-    super.key,
-    required this.matches,
-  });
+class SearchHomeScreen extends ConsumerStatefulWidget {
+  const SearchHomeScreen({super.key});
 
   @override
   ConsumerState<SearchHomeScreen> createState() => _SearchHomeScreenState();
@@ -29,12 +29,25 @@ class SearchHomeScreen extends ConsumerStatefulWidget {
 
 class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
   late SearchHomeViewNotifier notifier;
+  late PageController _controller;
+
+  int get _selectedTab => _controller.hasClients
+      ? _controller.page?.round() ?? 0
+      : _controller.initialPage;
 
   @override
   void initState() {
     super.initState();
     notifier = ref.read(searchHomeViewProvider.notifier);
-    runPostFrame(() => notifier.setData(widget.matches));
+    _controller = PageController(
+      initialPage: ref.read(searchHomeViewProvider).selectedTab,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -53,24 +66,23 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
               height: 24,
               thickness: 1,
             ),
-            if (state.searchedMatches.isEmpty) ...[
-              Expanded(
-                child: EmptyScreen(
-                  title: (state.searchController.text.isNotEmpty)
-                      ? context.l10n.home_match_list_empty_search_title
-                      : context.l10n.home_search_empty_title,
-                  description: (state.searchController.text.isNotEmpty)
-                      ? context.l10n.home_match_list_empty_search_message
-                      : context.l10n.home_search_empty_message,
-                  isShowButton: false,
-                ),
-              ),
-            ] else ...[
-              _searchedList(context, state.searchedMatches),
-            ],
+            _tabView(context),
+            _content(context, state),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _emptyScreen(BuildContext context, {required bool isSearchEmpty}) {
+    return EmptyScreen(
+      title: (isSearchEmpty)
+          ? context.l10n.home_search_empty_title
+          : context.l10n.home_match_list_empty_search_title,
+      description: (isSearchEmpty)
+          ? context.l10n.home_search_empty_message
+          : context.l10n.home_match_list_empty_search_message,
+      isShowButton: false,
     );
   }
 
@@ -107,27 +119,155 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
     );
   }
 
-  Widget _searchedList(BuildContext context, List<MatchModel> matches) {
-    return Expanded(
-        child: ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: 1 + matches.length,
-      itemBuilder: (context, index) {
-        if (index == 0) {
-          return Text(
-            context.l10n.home_search_results_title,
-            style: AppTextStyle.header3.copyWith(
-              color: context.colorScheme.textPrimary,
+  Widget _tabView(BuildContext context) {
+    final tabs = [
+      context.l10n.common_matches_title,
+      context.l10n.common_teams_title,
+      context.l10n.common_tournaments,
+      context.l10n.home_search_users_title,
+    ];
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(
+          tabs.length,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TabButton(
+              tabs[index],
+              onTap: () {
+                _controller.jumpToPage(index);
+              },
+              selected: index == _selectedTab,
             ),
-          );
-        }
-        final match = matches[index - 1];
-        return MatchDetailCell(
-          match: match,
-          onTap: () => AppRoute.matchDetailTab(matchId: match.id).push(context),
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
-    ));
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _content(BuildContext context, SearchHomeViewState state) {
+    return Expanded(
+      child: PageView(
+        controller: _controller,
+        onPageChanged: notifier.onTabChange,
+        children: [
+          _listView(
+            isLoading: state.loading,
+            isSearchEmpty: state.searchController.text.isEmpty,
+            itemCount: state.matches.length,
+            builder: (context, index) {
+              if (index == state.matches.length) {
+                return _loadMoreWidget(
+                  isLoading: state.loading,
+                  onLoadMore: notifier.searchMatches,
+                );
+              }
+
+              final match = state.matches[index];
+              return MatchDetailCell(
+                match: match,
+                onTap: () =>
+                    AppRoute.matchDetailTab(matchId: match.id).push(context),
+              );
+            },
+          ),
+          _listView(
+            isLoading: state.loading,
+            isSearchEmpty: state.searchController.text.isEmpty,
+            itemCount: state.teams.length,
+            separator: Divider(color: context.colorScheme.outline, height: 1,),
+            builder: (context, index) {
+              if (index == state.teams.length) {
+                return _loadMoreWidget(
+                  isLoading: state.loading,
+                  onLoadMore: notifier.searchTeam,
+                );
+              }
+
+              final team = state.teams[index];
+              return TeamDetailCell(
+                team: team,
+                onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
+              );
+            },
+          ),
+          _listView(
+            isLoading: state.loading,
+            isSearchEmpty: state.searchController.text.isEmpty,
+            itemCount: state.tournaments.length,
+            builder: (context, index) {
+              if (index == state.tournaments.length) {
+                return _loadMoreWidget(
+                  isLoading: state.loading,
+                  onLoadMore: notifier.searchTournament,
+                );
+              }
+
+              final tournament = state.tournaments[index];
+              return TournamentItem(
+                tournament: tournament,
+              );
+            },
+          ),
+          _listView(
+            isLoading: state.loading,
+            isSearchEmpty: state.searchController.text.isEmpty,
+            itemCount: state.users.length,
+            separator: Divider(),
+            builder: (context, index) {
+              if (index == state.users.length) {
+                return _loadMoreWidget(
+                  isLoading: state.loading,
+                  onLoadMore: notifier.searchUser,
+                );
+              }
+              final user = state.users[index];
+              return UserDetailCell(
+                  user: user,
+                  onTap: () =>
+                      AppRoute.userDetail(userId: user.id).push(context));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _listView({
+    required bool isSearchEmpty,
+    required bool isLoading,
+    required int itemCount,
+    required Widget Function(BuildContext, int) builder,
+    Widget? separator,
+  }) {
+    if (itemCount == 0 && isLoading) {
+      return AppProgressIndicator();
+    }
+    if (itemCount == 0) {
+      return _emptyScreen(context, isSearchEmpty: isSearchEmpty);
+    }
+    return ListView.separated(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      itemCount: itemCount,
+      itemBuilder: builder,
+      separatorBuilder: (context, index) =>
+          separator ?? const SizedBox(height: 16),
+    );
+  }
+
+  Widget _loadMoreWidget({
+    required bool isLoading,
+    required VoidCallback onLoadMore,
+  }) {
+    return OnVisibleCallback(
+      onVisible: () => runPostFrame(onLoadMore),
+      child: isLoading
+          ? const Center(child: AppProgressIndicator())
+          : const SizedBox(),
+    );
   }
 }

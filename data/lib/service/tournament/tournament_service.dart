@@ -454,6 +454,50 @@ class TournamentService {
     }
   }
 
+  Future<List<TournamentModel>> searchTournament(
+    String searchKey, {
+    int? limit,
+    String? lastTournamentId,
+  }) async {
+    try {
+      var query = _tournamentCollection
+          .where(
+            FireStoreConst.name,
+            isGreaterThanOrEqualTo: searchKey,
+          )
+          .where(
+            FireStoreConst.name,
+            isLessThan: '${searchKey}z',
+          );
+
+      if (lastTournamentId != null) {
+        query = query.startAfter([lastTournamentId]);
+      }
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+      final snapshot = await query.get();
+
+      return Future.wait(
+        snapshot.docs.map(
+          (e) async {
+            var tournament = e.data();
+            final matchIds = tournament.match_ids;
+            if (matchIds.isNotEmpty) {
+              final matches = await _matchService.getMatchesByIds(matchIds);
+              final status = tournament.getTournamentStatus(matches);
+              tournament = tournament.copyWith(status: status);
+            }
+
+            return tournament;
+          },
+        ),
+      );
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<void> deleteTournament(String tournamentId) async {
     try {
       await _tournamentCollection.doc(tournamentId).delete();

@@ -100,6 +100,67 @@ class MatchService {
     }
   }
 
+  Future<List<MatchModel>> getMatchByTeamIds({
+    required List<String> teamIds,
+    int? limit,
+    String? lastMatchId,
+  }) async {
+    final DateTime now = DateTime.now();
+    final oneAndHalfHoursAgo = now.subtract(Duration(hours: 1, minutes: 30));
+    final startOfDay = DateTime(now.year, now.month, now.day);
+    final DateTime aMonthAfter = DateTime(now.year, now.month + 1, now.day);
+    final fifteenDaysAgo =
+        DateTime(now.year, now.month, now.day).subtract(Duration(days: 15));
+
+    final runningFilter = Filter.and(
+      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.running.value),
+      Filter(FireStoreConst.updatedAt,
+          isGreaterThan: Timestamp.fromDate(oneAndHalfHoursAgo),),
+    );
+
+    final upcomingFilter = Filter.and(
+      Filter(
+        FireStoreConst.matchStatus,
+        isEqualTo: MatchStatus.yetToStart.value,
+      ),
+      Filter(FireStoreConst.startAt,
+          isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay),),
+      Filter(
+        FireStoreConst.startAt,
+        isLessThanOrEqualTo: Timestamp.fromDate(aMonthAfter),
+      ),
+    );
+
+    final finishFilter = Filter.and(
+      Filter(FireStoreConst.matchStatus, isEqualTo: MatchStatus.finish.value),
+      Filter(
+        FireStoreConst.updatedAt,
+        isGreaterThan: Timestamp.fromDate(fifteenDaysAgo),
+      ),
+    );
+
+    var query = _matchCollection
+        .where(FireStoreConst.teamIds, arrayContainsAny: teamIds)
+        .where(Filter.or(runningFilter, upcomingFilter, finishFilter));
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+
+    final snapshot = await query.get();
+    return await Future.wait(
+      snapshot.docs.map((mainDoc) async {
+        final match = mainDoc.data();
+        final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+        return match.copyWith(teams: teams);
+      }).toList(),
+    );
+  }
+
   Future<int> getUserOwnedMatchesCount(String userId) {
     return _matchCollection
         .where(FireStoreConst.createdBy, isEqualTo: userId)

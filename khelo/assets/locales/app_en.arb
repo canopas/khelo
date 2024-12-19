@@ -46,6 +46,8 @@
   "common_tie_title": "Tie",
   "common_wicket_taken_title": " Wicket taken",
   "common_matches_title": "Matches",
+  "common_teams_title": "Teams",
+  "common_stats_title": "Stats",
   "common_edit_team_title": "Edit team",
   "common_create_team_title": "Create team",
   "common_create_team_description": "Create Your Dream Cricket Team Today!",
@@ -157,6 +159,7 @@
   "home_search_empty_title": "Start your search here!",
   "home_search_empty_message": "Type your search above to find what you need fast.",
   "home_search_results_title": "Results",
+  "home_search_users_title": "Users",
   "home_match_list_empty_search_title": "No match results",
   "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
 
@@ -179,7 +182,6 @@
 
   "@_MY_CRICKET": {
   },
-  "my_cricket_teams_tab_title": "Teams",
   "my_cricket_screen_title": "My Cricket",
 
   "@_ADD_TOURNAMENT": {
@@ -244,10 +246,7 @@
     }
   },
   "tournament_detail_overview_tab": "Overview",
-  "tournament_detail_teams_tab": "Teams",
-  "tournament_detail_matches_tab": "Matches",
   "tournament_detail_points_table_tab": "Points Table",
-  "tournament_detail_stats_tab": "Stats",
   "tournament_detail_edit_title": "Edit tournament",
   "tournament_detail_members_title": "Members",
 
@@ -929,10 +928,6 @@
 
   "side_off_title": "OFF",
   "side_leg_title": "LEG",
-
-  "@_STATS": {
-  },
-  "tab_stats_title": "Stats",
 
   "@_PROFILE": {
   },

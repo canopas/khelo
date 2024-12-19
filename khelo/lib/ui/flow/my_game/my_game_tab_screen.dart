@@ -106,7 +106,7 @@ class _MyGameTabScreenState extends ConsumerState<MyGameTabScreen>
                   ),
                   const SizedBox(width: 8),
                   TabButton(
-                    context.l10n.my_cricket_teams_tab_title,
+                    context.l10n.common_teams_title,
                     selected: _selectedTab == 1,
                     onTap: () {
                       _controller.jumpToPage(1);

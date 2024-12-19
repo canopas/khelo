@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../errors/app_error.dart';
-import '../../extensions/list_extensions.dart';
-import '../device/device_service.dart';
-import '../../utils/constant/firestore_constant.dart';
-import '../../utils/dummy_deactivated_account.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../api/user/user_models.dart';
+import '../../errors/app_error.dart';
+import '../../extensions/list_extensions.dart';
 import '../../storage/app_preferences.dart';
+import '../../utils/constant/firestore_constant.dart';
+import '../../utils/dummy_deactivated_account.dart';
+import '../device/device_service.dart';
 
 final userServiceProvider = Provider((ref) {
   final service = UserService(
@@ -194,9 +194,13 @@ class UserService {
     }
   }
 
-  Future<List<UserModel>> searchUser(String searchKey) async {
+  Future<List<UserModel>> searchUser(
+    String searchKey, {
+    int? limit,
+    String? lastUserId,
+  }) async {
     try {
-      final snapshot = await _userRef
+      var query = _userRef
           .where(
             FireStoreConst.nameLowercase,
             isGreaterThanOrEqualTo: searchKey.toLowerCase(),
@@ -204,8 +208,15 @@ class UserService {
           .where(
             FireStoreConst.nameLowercase,
             isLessThan: '${searchKey.toLowerCase()}z',
-          )
-          .get();
+          );
+
+      if (lastUserId != null) {
+        query = query.startAfter([lastUserId]);
+      }
+      if (limit != null) {
+        query = query.limit(limit);
+      }
+      final snapshot = await query.get();
 
       return snapshot.docs.map((doc) {
         return doc.data();
