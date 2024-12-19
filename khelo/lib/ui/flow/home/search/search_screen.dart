@@ -273,7 +273,10 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
     return OnVisibleCallback(
       onVisible: () => runPostFrame(onLoadMore),
       child: isLoading
-          ? const Center(child: AppProgressIndicator())
+          ? const Center(
+              child: AppProgressIndicator(
+              size: AppProgressIndicatorSize.small,
+            ))
           : const SizedBox(),
     );
   }

@@ -160,7 +160,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           return OnVisibleCallback(
             onVisible: () => runPostFrame(notifier.loadLeaderboard),
             child: state.loading
-                ? const Center(child: AppProgressIndicator())
+                ? const Center(
+                    child: AppProgressIndicator(
+                    size: AppProgressIndicatorSize.small,
+                  ))
                 : const SizedBox(),
           );
         }
