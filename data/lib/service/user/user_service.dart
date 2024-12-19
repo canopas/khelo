@@ -196,7 +196,7 @@ class UserService {
 
   Future<List<UserModel>> searchUser(
     String searchKey, {
-    int? limit,
+    int limit = 20,
     String? lastUserId,
   }) async {
     try {
@@ -208,14 +208,14 @@ class UserService {
           .where(
             FireStoreConst.nameLowercase,
             isLessThan: '${searchKey.toLowerCase()}z',
-          );
+          )
+          .orderBy(FireStoreConst.id);
 
       if (lastUserId != null) {
         query = query.startAfter([lastUserId]);
       }
-      if (limit != null) {
-        query = query.limit(limit);
-      }
+
+      query = query.limit(limit);
       final snapshot = await query.get();
 
       return snapshot.docs.map((doc) {

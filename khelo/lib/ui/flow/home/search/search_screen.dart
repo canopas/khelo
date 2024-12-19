@@ -78,10 +78,10 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
     return EmptyScreen(
       title: (isSearchEmpty)
           ? context.l10n.home_search_empty_title
-          : context.l10n.home_match_list_empty_search_title,
+          : context.l10n.home_search_list_empty_title,
       description: (isSearchEmpty)
           ? context.l10n.home_search_empty_message
-          : context.l10n.home_match_list_empty_search_message,
+          : context.l10n.home_search_list_empty_message,
       isShowButton: false,
     );
   }
@@ -179,7 +179,10 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
             isLoading: state.loading,
             isSearchEmpty: state.searchController.text.isEmpty,
             itemCount: state.teams.length,
-            separator: Divider(color: context.colorScheme.outline, height: 1,),
+            separator: Divider(
+              color: context.colorScheme.outline,
+              height: 1,
+            ),
             builder: (context, index) {
               if (index == state.teams.length) {
                 return _loadMoreWidget(
@@ -217,7 +220,10 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
             isLoading: state.loading,
             isSearchEmpty: state.searchController.text.isEmpty,
             itemCount: state.users.length,
-            separator: Divider(),
+            separator: Divider(
+              color: context.colorScheme.outline,
+              height: 30,
+            ),
             builder: (context, index) {
               if (index == state.users.length) {
                 return _loadMoreWidget(
@@ -252,10 +258,11 @@ class _SearchHomeScreenState extends ConsumerState<SearchHomeScreen> {
     }
     return ListView.separated(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      itemCount: itemCount,
+      itemCount: itemCount + 1,
       itemBuilder: builder,
-      separatorBuilder: (context, index) =>
-          separator ?? const SizedBox(height: 16),
+      separatorBuilder: (context, index) => index >= itemCount - 1
+          ? const SizedBox()
+          : separator ?? const SizedBox(height: 16),
     );
   }
 

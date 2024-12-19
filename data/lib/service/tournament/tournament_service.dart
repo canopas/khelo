@@ -456,7 +456,7 @@ class TournamentService {
 
   Future<List<TournamentModel>> searchTournament(
     String searchKey, {
-    int? limit,
+    int limit = 20,
     String? lastTournamentId,
   }) async {
     try {
@@ -468,14 +468,13 @@ class TournamentService {
           .where(
             FireStoreConst.name,
             isLessThan: '${searchKey}z',
-          );
+          )
+          .orderBy(FireStoreConst.id);
 
       if (lastTournamentId != null) {
         query = query.startAfter([lastTournamentId]);
       }
-      if (limit != null) {
-        query = query.limit(limit);
-      }
+      query = query.limit(limit);
       final snapshot = await query.get();
 
       return Future.wait(

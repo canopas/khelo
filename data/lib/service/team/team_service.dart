@@ -223,7 +223,7 @@ class TeamService {
 
   Future<List<TeamModel>> searchTeam(
     String searchKey, {
-    int? limit,
+    int limit = 20,
     String? lastTeamId,
   }) async {
     try {
@@ -235,15 +235,13 @@ class TeamService {
           .where(
             FireStoreConst.nameLowercase,
             isLessThan: '${searchKey.caseAndSpaceInsensitive}z',
-          );
+          ).orderBy(FireStoreConst.id);
 
       if (lastTeamId != null && lastTeamId.isNotEmpty) {
         query = query.startAfter([lastTeamId]);
       }
-      if (limit != null) {
-        query = query.limit(limit);
-      }
 
+      query = query.limit(limit);
       final snapshot = await query.get();
 
       final teams = await Future.wait(

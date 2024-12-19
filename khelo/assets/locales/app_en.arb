@@ -160,8 +160,8 @@
   "home_search_empty_message": "Type your search above to find what you need fast.",
   "home_search_results_title": "Results",
   "home_search_users_title": "Users",
-  "home_match_list_empty_search_title": "No match results",
-  "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
+  "home_search_list_empty_title": "No results",
+  "home_search_list_empty_message": "We couldn't find any results for your search. Please try different keywords.",
 
   "@_LEADERBOARD": {
   },
