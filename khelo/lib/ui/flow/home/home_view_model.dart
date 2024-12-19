@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/service/leaderboard/leaderboard_service.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:data/service/tournament/tournament_service.dart';
 import 'package:data/storage/app_preferences.dart';
@@ -19,6 +21,7 @@ final homeViewStateProvider =
     final notifier = HomeViewNotifier(
       ref.read(matchServiceProvider),
       ref.read(tournamentServiceProvider),
+      ref.read(leaderboardServiceProvider),
     );
     ref.listen(
         hasUserSession, (_, next) => notifier._onUserSessionUpdate(next));
@@ -29,11 +32,13 @@ final homeViewStateProvider =
 class HomeViewNotifier extends StateNotifier<HomeViewState> {
   final MatchService _matchService;
   final TournamentService _tournamentService;
+  final LeaderboardService _leaderboardService;
   StreamSubscription? _streamSubscription;
 
   HomeViewNotifier(
     this._matchService,
     this._tournamentService,
+    this._leaderboardService,
   ) : super(const HomeViewState()) {
     loadData();
   }
@@ -48,11 +53,12 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
     _streamSubscription?.cancel();
     state = state.copyWith(loading: state.matches.isEmpty);
 
-    final combineFutures = combineLatest4(
+    final combineFutures = combineLatest5(
       _matchService.streamActiveRunningMatches(),
       _matchService.streamUpcomingMatches(),
       _matchService.streamFinishedMatches(),
       _tournamentService.streamActiveTournaments(),
+      _leaderboardService.streamLeaderboard(limit: 4),
     );
 
     _streamSubscription = combineFutures.listen(
@@ -65,6 +71,7 @@ class HomeViewNotifier extends StateNotifier<HomeViewState> {
             MatchStatusLabel.finished: results.$3,
           },
           tournaments: results.$4,
+          leaderboard: results.$5,
           loading: false,
           error: null,
         );
@@ -90,6 +97,7 @@ class HomeViewState with _$HomeViewState {
     @Default(false) bool loading,
     @Default([]) List<MatchModel> matches,
     @Default([]) List<TournamentModel> tournaments,
+    @Default([]) List<LeaderboardModel> leaderboard,
     @Default({}) Map<MatchStatusLabel, List<MatchModel>> groupMatches,
   }) = _HomeViewState;
 }

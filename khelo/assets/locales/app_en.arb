@@ -24,6 +24,7 @@
   "common_not_specified_title": "Not Specified",
   "commonRunning": "Running",
   "commonFinish": "Finish",
+  "commonDeactivatedUser": "Deactivated User",
   "common_runs_title": "{count, plural, =0{{count} runs} =1{{count} run} other{{count} runs}}",
   "@common_runs_title": {
     "placeholders": {
@@ -45,6 +46,8 @@
   "common_tie_title": "Tie",
   "common_wicket_taken_title": " Wicket taken",
   "common_matches_title": "Matches",
+  "common_teams_title": "Teams",
+  "common_stats_title": "Stats",
   "common_edit_team_title": "Edit team",
   "common_create_team_title": "Create team",
   "common_create_team_description": "Create Your Dream Cricket Team Today!",
@@ -82,6 +85,10 @@
   "common_remove_admin": "Remove admin",
   "common_transfer_ownership": "Transfer ownership",
   "common_tournaments": "Tournaments",
+  "common_leaderboard": "Leaderboard",
+  "common_batting": "Batting",
+  "common_bowling": "Bowling",
+  "common_fielding": "Fielding",
   "common_obscure_phone_number_text": "{countryCode} ***** ***{lastDigits}",
   "@common_obscure_phone_number_text": {
     "description": "+{countryCode} ***** ***{lastDigits}",
@@ -152,8 +159,20 @@
   "home_search_empty_title": "Start your search here!",
   "home_search_empty_message": "Type your search above to find what you need fast.",
   "home_search_results_title": "Results",
-  "home_match_list_empty_search_title": "No match results",
-  "home_match_list_empty_search_message": "No results found. Make sure the team name is correct or try again later.",
+  "home_search_users_title": "Users",
+  "home_search_list_empty_title": "No results",
+  "home_search_list_empty_message": "We couldn't find any results for your search. Please try different keywords.",
+
+  "@_LEADERBOARD": {
+  },
+  "leaderboard_empty_title": "Nothing to Show Yet",
+  "leaderboard_empty_description": "No scores available yet. Make your move and take the lead!",
+  "leaderboard_catches_title": "{count, plural, =0{{count} catches} =1{{count} catch} other{{count} catches}}",
+  "@leaderboard_catches_title": {
+    "placeholders": {
+      "count": {}
+    }
+  },
 
   "@_NOTIFICATION_POPUP": {
   },
@@ -163,7 +182,6 @@
 
   "@_MY_CRICKET": {
   },
-  "my_cricket_teams_tab_title": "Teams",
   "my_cricket_screen_title": "My Cricket",
 
   "@_ADD_TOURNAMENT": {
@@ -228,10 +246,7 @@
     }
   },
   "tournament_detail_overview_tab": "Overview",
-  "tournament_detail_teams_tab": "Teams",
-  "tournament_detail_matches_tab": "Matches",
   "tournament_detail_points_table_tab": "Points Table",
-  "tournament_detail_stats_tab": "Stats",
   "tournament_detail_edit_title": "Edit tournament",
   "tournament_detail_members_title": "Members",
 
@@ -434,8 +449,6 @@
   "add_toss_detail_screen_title": "Add Toss Detail",
   "add_toss_detail_who_won_toss_text": "Who won the toss?",
   "add_toss_detail_winner_elected_to_text": "Toss-winner elected to - ?",
-  "add_toss_detail_bat_text": "Batting",
-  "add_toss_detail_bowl_text": "Bowling",
 
   "add_substitute_search_substitute_title": "Who’s ready to step in?",
   "add_substitute_search_substitute_description": "Search and assign a substitute fielder to maintain your fielding edge.",
@@ -504,9 +517,6 @@
   "team_detail_run_rate_title": "Run Rate",
 
   "user_detail_info_title": "Info",
-  "user_detail_batting_title": "Batting",
-  "user_detail_bowling_title": "Bowling",
-  "user_detail_fielding_title": "Fielding",
   "user_detail_personal_information_title": "Personal information",
   "user_detail_participation_title": "Participation",
   "user_detail_role_title": "Role",
@@ -918,10 +928,6 @@
 
   "side_off_title": "OFF",
   "side_leg_title": "LEG",
-
-  "@_STATS": {
-  },
-  "tab_stats_title": "Stats",
 
   "@_PROFILE": {
   },

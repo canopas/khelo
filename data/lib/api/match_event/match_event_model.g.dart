@@ -35,31 +35,23 @@ _$MatchEventModelImpl _$$MatchEventModelImplFromJson(Map json) =>
     );
 
 Map<String, dynamic> _$$MatchEventModelImplToJson(
-    _$MatchEventModelImpl instance) {
-  final val = <String, dynamic>{
-    'id': instance.id,
-    'match_id': instance.match_id,
-    'inning_id': instance.inning_id,
-    'type': _$EventTypeEnumMap[instance.type]!,
-    'time': const TimeStampJsonConverter().toJson(instance.time),
-  };
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('bowler_id', instance.bowler_id);
-  writeNotNull('batsman_id', instance.batsman_id);
-  writeNotNull('fielding_position',
-      _$FieldingPositionTypeEnumMap[instance.fielding_position]);
-  val['over'] = instance.over;
-  val['ball_ids'] = instance.ball_ids;
-  val['wickets'] = instance.wickets.map((e) => e.toJson()).toList();
-  val['milestone'] = instance.milestone.map((e) => e.toJson()).toList();
-  return val;
-}
+        _$MatchEventModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'match_id': instance.match_id,
+      'inning_id': instance.inning_id,
+      'type': _$EventTypeEnumMap[instance.type]!,
+      'time': const TimeStampJsonConverter().toJson(instance.time),
+      if (instance.bowler_id case final value?) 'bowler_id': value,
+      if (instance.batsman_id case final value?) 'batsman_id': value,
+      if (_$FieldingPositionTypeEnumMap[instance.fielding_position]
+          case final value?)
+        'fielding_position': value,
+      'over': instance.over,
+      'ball_ids': instance.ball_ids,
+      'wickets': instance.wickets.map((e) => e.toJson()).toList(),
+      'milestone': instance.milestone.map((e) => e.toJson()).toList(),
+    };
 
 const _$EventTypeEnumMap = {
   EventType.hatTrick: 1,

@@ -226,9 +226,13 @@ class TeamService {
     }
   }
 
-  Future<List<TeamModel>> searchTeam(String searchKey) async {
+  Future<List<TeamModel>> searchTeam(
+    String searchKey, {
+    int limit = 20,
+    String? lastTeamId,
+  }) async {
     try {
-      final snapshot = await _teamsCollection
+      var query = _teamsCollection
           .where(
             FireStoreConst.nameLowercase,
             isGreaterThanOrEqualTo: searchKey.caseAndSpaceInsensitive,
@@ -236,8 +240,14 @@ class TeamService {
           .where(
             FireStoreConst.nameLowercase,
             isLessThan: '${searchKey.caseAndSpaceInsensitive}z',
-          )
-          .get();
+          ).orderBy(FireStoreConst.id);
+
+      if (lastTeamId != null && lastTeamId.isNotEmpty) {
+        query = query.startAfter([lastTeamId]);
+      }
+
+      query = query.limit(limit);
+      final snapshot = await query.get();
 
       final teams = await Future.wait(
         snapshot.docs.map((mainDoc) => fetchDetailsOfTeam(mainDoc.data())),

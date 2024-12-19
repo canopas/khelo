@@ -1,11 +1,15 @@
+import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
+import 'package:data/api/user/user_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
+import 'package:khelo/components/image_avatar.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
+import 'package:khelo/domain/extensions/enum_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/home/components/match_item.dart';
 import 'package:khelo/ui/flow/home/components/tournament_item.dart';
@@ -59,8 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     BlendMode.srcATop,
                   ),
                 ),
-                onPressed: () =>
-                    AppRoute.searchHome(matches: state.matches).push(context),
+                onPressed: () => AppRoute.searchHome.push(context),
               )
             ]
           : null,
@@ -92,6 +95,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         const SizedBox(height: 8),
         if (state.tournaments.isNotEmpty) ...[
           _tournamentList(context, state.tournaments),
+          const SizedBox(height: 8),
+        ],
+        if (state.leaderboard.isNotEmpty) ...[
+          _leaderboardList(context, state.leaderboard),
           const SizedBox(height: 8),
         ],
         (state.matches.isNotEmpty)
@@ -171,6 +178,133 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   .toList(),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _leaderboardList(
+    BuildContext context,
+    List<LeaderboardModel> leaderboard,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _header(
+          context,
+          header: context.l10n.common_leaderboard,
+          isViewAllShow: false,
+          onViewAll: () {},
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16,
+              children: leaderboard
+                  .map((data) => _leaderboardCell(context, data))
+                  .toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _leaderboardCell(BuildContext context, LeaderboardModel leaderboard) {
+    return OnTapScale(
+      onTap: () =>
+          AppRoute.leaderboard(selectedField: leaderboard.type).push(context),
+      child: Container(
+        width: Size.fromWidth(360).width,
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: context.colorScheme.outline)),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    leaderboard.type.getString(context),
+                    style: AppTextStyle.caption.copyWith(
+                      color: context.colorScheme.textDisabled,
+                    ),
+                  ),
+                ),
+                SvgPicture.asset(
+                  Assets.images.icArrowForward,
+                  width: 16,
+                  height: 16,
+                  colorFilter: ColorFilter.mode(
+                    context.colorScheme.textDisabled,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            _leaderboardPlayerListView(leaderboard.players),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _leaderboardPlayerListView(List<LeaderboardPlayer> players) {
+    return Row(
+      spacing: 8,
+      children: [
+        for (int rank = 0; rank < players.length; rank++)
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: context.colorScheme.containerLow,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: context.colorScheme.outline)),
+              child: _leaderboardPlayerProfileView(
+                  players.elementAt(rank).user, rank <= 2 ? rank + 1 : null),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _leaderboardPlayerProfileView(UserModel? user, int? rank) {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            ImageAvatar(
+              initial: user?.nameInitial ?? "?",
+              imageUrl: user?.profile_img_url,
+              size: 48,
+            ),
+            if (rank != null)
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: CircleAvatar(
+                  backgroundColor: context.colorScheme.primary,
+                  radius: 9,
+                  child: Text(
+                    rank.toString(),
+                    style: AppTextStyle.caption.copyWith(
+                        color: context.colorScheme.onPrimary, fontSize: 10),
+                  ),
+                ),
+              )
+          ],
+        ),
+        Text(
+          user?.name ?? context.l10n.commonDeactivatedUser,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyle.body1
+              .copyWith(color: context.colorScheme.textPrimary),
         ),
       ],
     );

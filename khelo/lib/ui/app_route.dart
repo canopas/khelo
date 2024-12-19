@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/api/leaderboard/leaderboard_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
@@ -9,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:khelo/ui/flow/home/home_view_model.dart';
 import 'package:khelo/ui/flow/home/search/search_screen.dart';
 import 'package:khelo/ui/flow/intro/intro_screen.dart';
+import 'package:khelo/ui/flow/leaderboard/leaderboard_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/add_match_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_officials_view_model.dart';
@@ -57,13 +59,13 @@ class AppRoute {
   static const pathTeamDetail = '/team-detail';
   static const pathUserDetail = '/user-detail';
   static const pathMatchDetailTab = '/match-detail-tab';
-  static const pathSearchHome = "/search-home";
   static const pathViewAll = "/view-all";
   static const pathAddTournament = "/add-tournament";
   static const pathTeamSelection = "/team-selection";
   static const pathMatchSelection = "/match-selection";
   static const pathTournamentDetail = "/tournament-detail";
   static const pathMemberSelection = "/member-selection";
+  static const pathLeaderboard = "/leaderboard";
 
   final String path;
   final String? name;
@@ -150,14 +152,13 @@ class AppRoute {
         builder: (_) => const ContactSupportScreen(),
       );
 
+  static AppRoute get searchHome =>
+      AppRoute("/search-home", builder: (_) => const SearchHomeScreen());
+
   static AppRoute scoreBoard({required String matchId}) => AppRoute(
         pathScoreBoard,
         builder: (_) => ScoreBoardScreen(matchId: matchId),
       );
-
-  static AppRoute searchHome({required List<MatchModel> matches}) =>
-      AppRoute(pathSearchHome,
-          builder: (_) => SearchHomeScreen(matches: matches));
 
   static AppRoute viewAll(
           {MatchStatusLabel? status, bool isTournament = false}) =>
@@ -231,6 +232,13 @@ class AppRoute {
   static AppRoute makeTeamAdmin({required TeamModel team}) =>
       AppRoute(pathMakeTeamAdmin,
           builder: (context) => MakeTeamAdminScreen(team: team));
+
+  static AppRoute leaderboard({
+    LeaderboardField selectedField = LeaderboardField.batting,
+  }) =>
+      AppRoute(pathLeaderboard,
+          builder: (context) =>
+              LeaderboardScreen(selectedField: selectedField));
 
   static AppRoute searchTeam({
     List<String>? excludedIds,
@@ -347,14 +355,6 @@ class AppRoute {
       },
     ),
     GoRoute(
-      path: pathSearchHome,
-      builder: (context, state) => state.widget(context),
-    ),
-    GoRoute(
-      path: pathViewAll,
-      builder: (context, state) => state.widget(context),
-    ),
-    GoRoute(
       path: intro.path,
       builder: (context, state) {
         return state.extra == null
@@ -372,6 +372,11 @@ class AppRoute {
     ),
     contactSupport.goRoute(),
     phoneLogin.goRoute(),
+    searchHome.goRoute(),
+    GoRoute(
+      path: pathViewAll,
+      builder: (context, state) => state.widget(context),
+    ),
     GoRoute(
       path: pathScoreBoard,
       builder: (context, state) => state.widget(context),
@@ -437,6 +442,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathMakeTeamAdmin,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathLeaderboard,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

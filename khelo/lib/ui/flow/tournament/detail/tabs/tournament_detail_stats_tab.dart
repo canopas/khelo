@@ -43,7 +43,7 @@ class TournamentDetailStatsTab extends ConsumerWidget {
           EdgeInsets.all(16).copyWith(bottom: 24),
       children: [
         FilterTabView(
-          title: context.l10n.tournament_detail_stats_tab,
+          title: context.l10n.common_stats_title,
           onFilter: () => showFilterOptionSelectionSheet(
             context,
             selectedTag: state.selectedFilterTag,

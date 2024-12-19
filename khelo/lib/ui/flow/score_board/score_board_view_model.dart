@@ -996,7 +996,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
     }
   }
 
-  void _updatePlayerStats({bool isMatchComplete = false}) async {
+  void _updatePlayerStats() async {
     try {
       final userStatType = state.match?.match_type == MatchType.testMatch
           ? UserStatType.test
@@ -1563,7 +1563,7 @@ class ScoreBoardViewNotifier extends StateNotifier<ScoreBoardViewState> {
 
       await _matchService.updateMatchStatus(matchId, status);
 
-      _updatePlayerStats(isMatchComplete: true);
+      _updatePlayerStats();
       _updateTeamStats();
       _updateTournamentStats();
 
