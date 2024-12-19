@@ -100,6 +100,33 @@ class MatchService {
     }
   }
 
+  Future<List<MatchModel>> getMatchByTeamIds({
+    required List<String> teamIds,
+    int limit = 20,
+    String? lastMatchId,
+  }) async {
+    var query = _matchCollection
+        .where(
+          FireStoreConst.teamIds,
+          arrayContainsAny: teamIds,
+        )
+        .orderBy(FieldPath.documentId);
+
+    if (lastMatchId != null) {
+      query = query.startAfter([lastMatchId]);
+    }
+    query = query.limit(limit);
+
+    final snapshot = await query.get();
+    return await Future.wait(
+      snapshot.docs.map((mainDoc) async {
+        final match = mainDoc.data();
+        final List<MatchTeamModel> teams = await getTeamsList(match.teams);
+        return match.copyWith(teams: teams);
+      }).toList(),
+    );
+  }
+
   Future<int> getUserOwnedMatchesCount(String userId) {
     return _matchCollection
         .where(FireStoreConst.createdBy, isEqualTo: userId)

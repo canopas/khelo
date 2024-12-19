@@ -7,16 +7,12 @@ import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/components/empty_screen.dart';
 import 'package:khelo/components/error_screen.dart';
-import 'package:khelo/components/image_avatar.dart';
+import 'package:khelo/components/team_detail_cell.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/team_list_view_model.dart';
-import 'package:style/animations/on_tap_scale.dart';
-import 'package:style/button/more_option_button.dart';
 import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
-import 'package:style/text/app_text_style.dart';
 
 import '../../../gen/assets.gen.dart';
 
@@ -86,10 +82,11 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
                 Divider(color: context.colorScheme.outline),
             itemBuilder: (context, index) {
               final team = state.filteredTeams[index];
-              return _teamListCell(
-                context,
+              return TeamDetailCell(
                 team: team,
                 showMoreOptionButton: team.isAdminOrOwner(state.currentUserId),
+                onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
+                onMoreOptionTap: () => _moreActionButton(context, team),
               );
             },
           )
@@ -98,47 +95,6 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
             description: context.l10n.team_list_empty_list_description,
             isShowButton: false,
           );
-  }
-
-  Widget _teamListCell(
-    BuildContext context, {
-    required TeamModel team,
-    required bool showMoreOptionButton,
-  }) {
-    return OnTapScale(
-      onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
-      child: Material(
-        type: MaterialType.transparency,
-        child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: ImageAvatar(
-            initial: team.name_initial ?? team.name.initials(limit: 1),
-            imageUrl: team.profile_img_url,
-            size: 40,
-          ),
-          title: Text(
-            team.name,
-            style: AppTextStyle.subtitle2
-                .copyWith(color: context.colorScheme.textPrimary),
-          ),
-          subtitle: team.players.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 4),
-                  child: Text(
-                      '${team.players.length} ${context.l10n.add_team_players_text}',
-                      style: AppTextStyle.subtitle2
-                          .copyWith(color: context.colorScheme.textSecondary)),
-                )
-              : null,
-          trailing: showMoreOptionButton
-              ? moreOptionButton(
-                  context,
-                  onPressed: () => _moreActionButton(context, team),
-                )
-              : null,
-        ),
-      ),
-    );
   }
 
   void _moreActionButton(

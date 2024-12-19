@@ -17,7 +17,6 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
   static const int _limit = 20;
 
   final LeaderboardService _leaderboardService;
-  StreamSubscription? _streamSubscription;
   bool _maxBattingLoaded = false;
   bool _maxBowlingLoaded = false;
   bool _maxFieldingLoaded = false;
@@ -98,12 +97,6 @@ class LeaderboardViewNotifier extends StateNotifier<LeaderboardViewState> {
       debugPrint(
           "LeaderboardViewNotifier: error while loading leaderboard -> $e");
     }
-  }
-
-  @override
-  void dispose() {
-    _streamSubscription?.cancel();
-    super.dispose();
   }
 }
 

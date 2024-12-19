@@ -169,10 +169,10 @@ class _TournamentDetailScreenState
   Widget _tabSelection(BuildContext context) {
     final tabs = [
       context.l10n.tournament_detail_overview_tab,
-      context.l10n.tournament_detail_teams_tab,
-      context.l10n.tournament_detail_matches_tab,
+      context.l10n.common_teams_title,
+      context.l10n.common_matches_title,
       context.l10n.tournament_detail_points_table_tab,
-      context.l10n.tournament_detail_stats_tab,
+      context.l10n.common_stats_title,
     ];
 
     return SingleChildScrollView(

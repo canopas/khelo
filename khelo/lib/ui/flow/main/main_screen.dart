@@ -157,7 +157,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
           tabIcon: _tabImage(context, imagePath: Assets.images.icStats),
           tabActiveIcon: _tabImage(context,
               imagePath: Assets.images.icStats, isActive: true),
-          tabLabel: context.l10n.tab_stats_title,
+          tabLabel: context.l10n.common_stats_title,
           route: '',
           onTap: () => _materialPageController.jumpToPage(2),
         ),

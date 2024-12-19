@@ -63,8 +63,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     BlendMode.srcATop,
                   ),
                 ),
-                onPressed: () =>
-                    AppRoute.searchHome(matches: state.matches).push(context),
+                onPressed: () => AppRoute.searchHome.push(context),
               )
             ]
           : null,
