@@ -11,8 +11,8 @@ If you are reporting a bug, please help speed up problem diagnosis by providing 
 ## Contributing code
 We actively welcome your pull requests. You can find instructions on building the project in [README.md](https://github.com/canopas/khelo).
 1. Fork the repo and create your branch from `master`.
-2. If you've added code that should be tested, add tests
-4. Make sure your code lints.
+2. If you've added code that should be tested, add tests.
+3. Make sure your code lints.
 
 ## Labels
 Labels on issues are managed by contributors, you don't have to worry about them. Here's a list of what they mean:
