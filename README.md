@@ -51,7 +51,7 @@ Khelo is built using Flutter and Dart, leveraging Firestore for database managem
 - **Performance Tracking**: Analyze player performance over time for informed decision-making.
 - **Team Statistics**: Gain insights into team performance through comprehensive statistical analysis and reporting.
 - **Toss Details**: Document toss results, including winning teams and choices, for improved match analysis.
-- **Tournament Feature**: Organize and track cricket tournaments with ease, right from the app.
+- **Tournament Management**: Organize and track cricket tournaments with ease, right from the app.
 
 > **Note**: Khelo is currently in active development 🚧, with plans to introduce additional features soon!
 
