@@ -36,11 +36,17 @@ class TeamDetailViewNotifier extends StateNotifier<TeamDetailState> {
 
   void loadData() {
     if (_teamId == null) return;
+    if (state.loading) return;
     _teamStreamSubscription?.cancel();
     state =
-        state.copyWith(loading: state.team == null || state.matches == null);
-    final teamCombiner = combineLatest2(_teamService.streamTeamById(_teamId!),
-        _matchService.streamMatchesByTeamId(_teamId!));
+        state.copyWith(loading: state.team == null || state.matches.isEmpty);
+    final teamCombiner = combineLatest2(
+      _teamService.streamTeamById(_teamId!),
+      _matchService.streamMatchesByTeamId(
+        teamId: _teamId!,
+        limit: state.matches.length + 10,
+      ),
+    );
     _teamStreamSubscription = teamCombiner.listen((data) {
       state = state.copyWith(
         team: data.$1,
@@ -73,7 +79,7 @@ class TeamDetailState with _$TeamDetailState {
     Object? error,
     TeamModel? team,
     String? currentUserId,
-    List<MatchModel>? matches,
+    @Default([]) List<MatchModel> matches,
     @Default(0) int selectedTab,
     @Default(false) bool loading,
   }) = _TeamDetailState;

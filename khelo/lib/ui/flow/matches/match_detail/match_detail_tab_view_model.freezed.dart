@@ -29,7 +29,7 @@ mixin _$MatchDetailTabState {
   List<String> get expandedInningsScorecard =>
       throw _privateConstructorUsedError;
   bool get loading => throw _privateConstructorUsedError;
-  bool get ballScoreQueryListenerSet => throw _privateConstructorUsedError;
+  bool get loadingBallScoreMore => throw _privateConstructorUsedError;
   HighlightFilterOption get highlightFilterOption =>
       throw _privateConstructorUsedError;
 
@@ -58,7 +58,7 @@ abstract class $MatchDetailTabStateCopyWith<$Res> {
       List<OverSummary> filteredHighlight,
       List<String> expandedInningsScorecard,
       bool loading,
-      bool ballScoreQueryListenerSet,
+      bool loadingBallScoreMore,
       HighlightFilterOption highlightFilterOption});
 
   $MatchModelCopyWith<$Res>? get match;
@@ -90,7 +90,7 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
     Object? filteredHighlight = null,
     Object? expandedInningsScorecard = null,
     Object? loading = null,
-    Object? ballScoreQueryListenerSet = null,
+    Object? loadingBallScoreMore = null,
     Object? highlightFilterOption = null,
   }) {
     return _then(_value.copyWith(
@@ -136,9 +136,9 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      ballScoreQueryListenerSet: null == ballScoreQueryListenerSet
-          ? _value.ballScoreQueryListenerSet
-          : ballScoreQueryListenerSet // ignore: cast_nullable_to_non_nullable
+      loadingBallScoreMore: null == loadingBallScoreMore
+          ? _value.loadingBallScoreMore
+          : loadingBallScoreMore // ignore: cast_nullable_to_non_nullable
               as bool,
       highlightFilterOption: null == highlightFilterOption
           ? _value.highlightFilterOption
@@ -182,7 +182,7 @@ abstract class _$$MatchDetailTabStateImplCopyWith<$Res>
       List<OverSummary> filteredHighlight,
       List<String> expandedInningsScorecard,
       bool loading,
-      bool ballScoreQueryListenerSet,
+      bool loadingBallScoreMore,
       HighlightFilterOption highlightFilterOption});
 
   @override
@@ -213,7 +213,7 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
     Object? filteredHighlight = null,
     Object? expandedInningsScorecard = null,
     Object? loading = null,
-    Object? ballScoreQueryListenerSet = null,
+    Object? loadingBallScoreMore = null,
     Object? highlightFilterOption = null,
   }) {
     return _then(_$MatchDetailTabStateImpl(
@@ -259,9 +259,9 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
           ? _value.loading
           : loading // ignore: cast_nullable_to_non_nullable
               as bool,
-      ballScoreQueryListenerSet: null == ballScoreQueryListenerSet
-          ? _value.ballScoreQueryListenerSet
-          : ballScoreQueryListenerSet // ignore: cast_nullable_to_non_nullable
+      loadingBallScoreMore: null == loadingBallScoreMore
+          ? _value.loadingBallScoreMore
+          : loadingBallScoreMore // ignore: cast_nullable_to_non_nullable
               as bool,
       highlightFilterOption: null == highlightFilterOption
           ? _value.highlightFilterOption
@@ -286,7 +286,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       final List<OverSummary> filteredHighlight = const [],
       final List<String> expandedInningsScorecard = const [],
       this.loading = false,
-      this.ballScoreQueryListenerSet = false,
+      this.loadingBallScoreMore = false,
       this.highlightFilterOption = HighlightFilterOption.all})
       : _allInnings = allInnings,
         _overList = overList,
@@ -349,14 +349,14 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
   final bool loading;
   @override
   @JsonKey()
-  final bool ballScoreQueryListenerSet;
+  final bool loadingBallScoreMore;
   @override
   @JsonKey()
   final HighlightFilterOption highlightFilterOption;
 
   @override
   String toString() {
-    return 'MatchDetailTabState(error: $error, match: $match, allInnings: $allInnings, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, selectedTab: $selectedTab, overList: $overList, filteredHighlight: $filteredHighlight, expandedInningsScorecard: $expandedInningsScorecard, loading: $loading, ballScoreQueryListenerSet: $ballScoreQueryListenerSet, highlightFilterOption: $highlightFilterOption)';
+    return 'MatchDetailTabState(error: $error, match: $match, allInnings: $allInnings, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, selectedTab: $selectedTab, overList: $overList, filteredHighlight: $filteredHighlight, expandedInningsScorecard: $expandedInningsScorecard, loading: $loading, loadingBallScoreMore: $loadingBallScoreMore, highlightFilterOption: $highlightFilterOption)';
   }
 
   @override
@@ -384,9 +384,8 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
             const DeepCollectionEquality().equals(
                 other._expandedInningsScorecard, _expandedInningsScorecard) &&
             (identical(other.loading, loading) || other.loading == loading) &&
-            (identical(other.ballScoreQueryListenerSet,
-                    ballScoreQueryListenerSet) ||
-                other.ballScoreQueryListenerSet == ballScoreQueryListenerSet) &&
+            (identical(other.loadingBallScoreMore, loadingBallScoreMore) ||
+                other.loadingBallScoreMore == loadingBallScoreMore) &&
             (identical(other.highlightFilterOption, highlightFilterOption) ||
                 other.highlightFilterOption == highlightFilterOption));
   }
@@ -405,7 +404,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
       const DeepCollectionEquality().hash(_filteredHighlight),
       const DeepCollectionEquality().hash(_expandedInningsScorecard),
       loading,
-      ballScoreQueryListenerSet,
+      loadingBallScoreMore,
       highlightFilterOption);
 
   /// Create a copy of MatchDetailTabState
@@ -431,7 +430,7 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
           final List<OverSummary> filteredHighlight,
           final List<String> expandedInningsScorecard,
           final bool loading,
-          final bool ballScoreQueryListenerSet,
+          final bool loadingBallScoreMore,
           final HighlightFilterOption highlightFilterOption}) =
       _$MatchDetailTabStateImpl;
 
@@ -458,7 +457,7 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
   @override
   bool get loading;
   @override
-  bool get ballScoreQueryListenerSet;
+  bool get loadingBallScoreMore;
   @override
   HighlightFilterOption get highlightFilterOption;
 
