@@ -12,16 +12,16 @@ _$AddSupportCaseRequestImpl _$$AddSupportCaseRequestImplFromJson(
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String?,
-      attachmentUrls: (json['attachmentUrls'] as List<dynamic>?)
+      attachment_urls: (json['attachment_urls'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      userId: json['userId'] as String,
-      createdAt: json['createdAt'] == null
+      user_id: json['user_id'] as String,
+      created_at: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      createdTime: _$JsonConverterFromJson<Object, DateTime>(
-          json['createdTime'], const TimeStampJsonConverter().fromJson),
+          : DateTime.parse(json['created_at'] as String),
+      created_time: _$JsonConverterFromJson<Object, DateTime>(
+          json['created_time'], const TimeStampJsonConverter().fromJson),
     );
 
 Map<String, dynamic> _$$AddSupportCaseRequestImplToJson(
@@ -30,11 +30,11 @@ Map<String, dynamic> _$$AddSupportCaseRequestImplToJson(
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'attachmentUrls': instance.attachmentUrls,
-      'userId': instance.userId,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'createdTime': _$JsonConverterToJson<Object, DateTime>(
-          instance.createdTime, const TimeStampJsonConverter().toJson),
+      'attachment_urls': instance.attachment_urls,
+      'user_id': instance.user_id,
+      'created_at': instance.created_at?.toIso8601String(),
+      'created_time': _$JsonConverterToJson<Object, DateTime>(
+          instance.created_time, const TimeStampJsonConverter().toJson),
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

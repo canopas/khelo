@@ -147,10 +147,10 @@ class ContactSupportViewStateNotifier
         id: _supportService.generateSupportId,
         title: state.titleController.text.trim(),
         description: state.descriptionController.text.trim(),
-        attachmentUrls: state.attachments.map((e) => e.url).nonNulls.toList(),
-        userId: _currentUserId ?? '',
-        createdAt: DateTime.now(),
-        createdTime: DateTime.now(),
+        attachment_urls: state.attachments.map((e) => e.url).nonNulls.toList(),
+        user_id: _currentUserId ?? '',
+        created_at: DateTime.now(),
+        created_time: DateTime.now(),
       );
 
       await _supportService.addSupportCase(supportCase).whenComplete(

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,10 +15,10 @@ class AddSupportCaseRequest with _$AddSupportCaseRequest {
     required String id,
     required String title,
     String? description,
-    @Default([]) List<String> attachmentUrls,
-    required String userId,
-    DateTime? createdAt,
-    @TimeStampJsonConverter() DateTime? createdTime,
+    @Default([]) List<String> attachment_urls,
+    required String user_id,
+    DateTime? created_at,
+    @TimeStampJsonConverter() DateTime? created_time,
   }) = _AddSupportCaseRequest;
 
   factory AddSupportCaseRequest.fromJson(Map<String, dynamic> json) =>
