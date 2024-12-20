@@ -103,7 +103,7 @@ Khelo leverages modern Flutter development technologies, adhering to industry be
 - **Cloud Functions**: To run backend code in response to events triggered by Firebase features.
 
 ## Contribution 🤝
-Khelo is an open-source project, but we are not currently accepting contributions. However, we appreciate community feedback and suggestions for future improvements.
+The Canopas team enthusiastically welcomes contributions and project participation! There are a bunch of things you can do if you want to contribute! The [Contributor Guide](CONTRIBUTING.md) has all the information you need for everything from reporting bugs to contributing entire new features. Please don't hesitate to jump in if you'd like to, or even ask us questions if something isn't clear.
 
 ## What's Coming Next? 🚀
 
