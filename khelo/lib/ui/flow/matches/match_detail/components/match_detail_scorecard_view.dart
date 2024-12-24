@@ -254,7 +254,7 @@ class MatchDetailScorecardView extends ConsumerWidget {
     bool highlightRow = false,
     int? highlightColumnNumber,
     required List<String> data,
-        VoidCallback? onTap,
+    VoidCallback? onTap,
   }) {
     return Container(
       color: context.colorScheme.surface,

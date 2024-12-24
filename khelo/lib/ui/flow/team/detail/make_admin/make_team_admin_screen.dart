@@ -122,8 +122,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                                     state.owner.id)
                                 ? context
                                     .l10n.team_detail_remove_ownership_title
-                                : context
-                                    .l10n.common_transfer_ownership,
+                                : context.l10n.common_transfer_ownership,
                             onTap: () async {
                               context.pop();
                               if (notifier.team.created_by_user.id !=
@@ -135,8 +134,8 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                               final newOwner =
                                   await SearchUserBottomSheet.show<UserModel>(
                                 context,
-                                emptyScreenTitle: context
-                                    .l10n.common_transfer_ownership,
+                                emptyScreenTitle:
+                                    context.l10n.common_transfer_ownership,
                                 emptyScreenDescription: context.l10n
                                     .team_detail_transfer_ownership_description,
                               );
@@ -163,8 +162,7 @@ class _MakeAdminScreenState extends ConsumerState<MakeTeamAdminScreen> {
                         UserDetailSheet.show(context, state.owner);
                       }
                     },
-                    trailing: Text(
-                        context.l10n.common_owner,
+                    trailing: Text(context.l10n.common_owner,
                         style: AppTextStyle.body2
                             .copyWith(color: context.colorScheme.primary)),
                   )

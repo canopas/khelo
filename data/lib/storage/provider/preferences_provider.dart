@@ -2,16 +2,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final sharedPreferencesProvider =
-Provider<SharedPreferences>((ref) => throw UnimplementedError());
+    Provider<SharedPreferences>((ref) => throw UnimplementedError());
 
 StateNotifierProvider<PreferenceNotifier<T>, T> createPrefProvider<T>({
   required String prefKey,
   required T defaultValue,
 }) {
   return StateNotifierProvider<PreferenceNotifier<T>, T>(
-        (ref) => PreferenceNotifier<T>(
+    (ref) => PreferenceNotifier<T>(
       ref.watch(sharedPreferencesProvider).get(prefKey) as T? ?? defaultValue,
-          (curr) {
+      (curr) {
         final prefs = ref.watch(sharedPreferencesProvider);
         if (curr == null) {
           prefs.remove(prefKey);
@@ -35,9 +35,9 @@ class PreferenceNotifier<T> extends StateNotifier<T> {
   Function(T curr)? onUpdate;
 
   PreferenceNotifier(
-      super.value,
-      this.onUpdate,
-      );
+    super.value,
+    this.onUpdate,
+  );
 
   @override
   set state(T value) {

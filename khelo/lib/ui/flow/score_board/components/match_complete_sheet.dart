@@ -117,7 +117,8 @@ class MatchCompleteSheet extends ConsumerWidget {
           ...state.allInnings.map(
             (inning) {
               final teamName = state.match?.teams
-                  .firstWhereOrNull((element) => element.team.id == inning.team_id)
+                  .firstWhereOrNull(
+                      (element) => element.team.id == inning.team_id)
                   ?.team
                   .name;
               return _teamScore(context, state,

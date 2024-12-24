@@ -162,7 +162,8 @@ class SearchHomeViewNotifier extends StateNotifier<SearchHomeViewState> {
   void onChange() {
     final searchKey = state.searchController.text.toLowerCase().trim();
     if (searchKey.isEmpty) {
-      state = state.copyWith(matches: [], teams: [], tournaments: [], users: []);
+      state =
+          state.copyWith(matches: [], teams: [], tournaments: [], users: []);
       return;
     }
     _debounce?.cancel();

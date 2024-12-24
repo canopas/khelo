@@ -90,8 +90,8 @@ class MatchEventMilestone with _$MatchEventMilestone {
       _$MatchEventMilestoneFromJson(json);
 
   factory MatchEventMilestone.fromFireStore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       MatchEventMilestone.fromJson(snapshot.data()!);
 }

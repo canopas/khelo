@@ -87,8 +87,10 @@ class _TeamListScreenState extends ConsumerState<TeamListScreen>
                 final team = state.filteredTeams[index];
                 return TeamDetailCell(
                   team: team,
-                  showMoreOptionButton: team.isAdminOrOwner(state.currentUserId),
-                  onTap: () => AppRoute.teamDetail(teamId: team.id).push(context),
+                  showMoreOptionButton:
+                      team.isAdminOrOwner(state.currentUserId),
+                  onTap: () =>
+                      AppRoute.teamDetail(teamId: team.id).push(context),
                   onMoreOptionTap: () => _moreActionButton(context, team),
                 );
               }
