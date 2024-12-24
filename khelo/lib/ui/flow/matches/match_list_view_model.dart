@@ -49,7 +49,8 @@ class MatchListViewNotifier extends StateNotifier<MatchListViewState> {
           .streamUserRelatedMatches(
         userId: state.currentUserId!,
         limit: state.matches.length + 10,
-      ).listen((matches) {
+      )
+          .listen((matches) {
         state = state.copyWith(
           matches: matches,
           loading: false,

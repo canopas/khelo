@@ -33,7 +33,8 @@ class MatchOfficialSelectionView extends StatelessWidget {
                         type: official,
                         isWholeCellTappable: true,
                         user: state.officials
-                            .firstWhereOrNull((element) => element.type == official)
+                            .firstWhereOrNull(
+                                (element) => element.type == official)
                             ?.user,
                         onCardTap: () async {
                           final officials = await AppRoute.addMatchOfficials(

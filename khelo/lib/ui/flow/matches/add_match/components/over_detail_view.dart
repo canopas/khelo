@@ -80,7 +80,7 @@ class OverDetailView extends StatelessWidget {
     BuildContext context, {
     required String title,
     required Widget trailing,
-        VoidCallback? onTap,
+    VoidCallback? onTap,
   }) {
     return OnTapScale(
       onTap: onTap,

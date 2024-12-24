@@ -224,7 +224,8 @@ class ExtraSummary with _$ExtraSummary {
 }
 
 extension BallScoreModelData on BallScoreModel? {
-  double get formattedOver => double.parse("${(this?.over_number ?? 1) - 1}.${this?.ball_number ?? 0}");
+  double get formattedOver =>
+      double.parse("${(this?.over_number ?? 1) - 1}.${this?.ball_number ?? 0}");
 
   bool? isLegalDelivery() {
     if (this == null) {

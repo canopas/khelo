@@ -240,7 +240,8 @@ class TeamService {
           .where(
             FireStoreConst.nameLowercase,
             isLessThan: '${searchKey.caseAndSpaceInsensitive}z',
-          ).orderBy(FireStoreConst.id);
+          )
+          .orderBy(FireStoreConst.id);
 
       if (lastTeamId != null && lastTeamId.isNotEmpty) {
         query = query.startAfter([lastTeamId]);

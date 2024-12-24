@@ -16,7 +16,7 @@ class UserDetailSheet extends StatelessWidget {
     BuildContext context,
     UserModel user, {
     String? actionButtonTitle,
-        VoidCallback? onButtonTap,
+    VoidCallback? onButtonTap,
   }) {
     HapticFeedback.mediumImpact();
     return showModalBottomSheet(

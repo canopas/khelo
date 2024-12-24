@@ -80,8 +80,8 @@ enum LeaderboardField {
     }
   }
 
-  int getMinScoreToGetFeatured(){
-    switch(this){
+  int getMinScoreToGetFeatured() {
+    switch (this) {
       case LeaderboardField.batting:
         return 50;
       case LeaderboardField.bowling:

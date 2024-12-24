@@ -49,7 +49,8 @@ class TeamListViewNotifier extends StateNotifier<TeamListViewState> {
           .streamUserRelatedTeams(
         userId: state.currentUserId!,
         limit: state.teams.length + 10,
-      ).listen((teams) {
+      )
+          .listen((teams) {
         state = state.copyWith(
           teams: {...state.teams, ...teams}.toList(),
           loading: false,

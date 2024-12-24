@@ -4,7 +4,7 @@ import 'package:style/extensions/context_extensions.dart';
 
 Widget backButton(
   BuildContext context, {
-      VoidCallback? onPressed,
+  VoidCallback? onPressed,
 }) {
   return actionButton(
     context,

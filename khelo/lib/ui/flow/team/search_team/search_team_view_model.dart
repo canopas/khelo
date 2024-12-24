@@ -149,7 +149,7 @@ class SearchTeamViewNotifier extends StateNotifier<SearchTeamState> {
     if (state.tournament == null || state.selectedTeam == null) {
       return;
     }
-    if(state.tournament!.team_ids.contains(state.selectedTeam!.id)) return;
+    if (state.tournament!.team_ids.contains(state.selectedTeam!.id)) return;
     try {
       final teamIds = state.tournament!.team_ids.toList();
       teamIds.add(state.selectedTeam!.id);

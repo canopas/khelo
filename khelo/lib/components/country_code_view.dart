@@ -9,12 +9,12 @@ import 'package:twemoji_v2/twemoji_v2.dart';
 
 import '../gen/assets.gen.dart';
 
-
 class CountryCodeView extends StatelessWidget {
   final CountryCode countryCode;
   final Function(CountryCode) onCodeChange;
 
-  const CountryCodeView({super.key, required this.countryCode, required this.onCodeChange});
+  const CountryCodeView(
+      {super.key, required this.countryCode, required this.onCodeChange});
 
   @override
   Widget build(BuildContext context) {

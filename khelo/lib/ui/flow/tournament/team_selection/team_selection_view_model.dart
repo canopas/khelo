@@ -111,7 +111,8 @@ class TeamSelectionViewNotifier extends StateNotifier<TeamSelectionViewState> {
     if (isAlreadySelected) {
       teams.removeWhere((e) => e.id == team.id);
     } else {
-      final playersCount = team.players.where((player) => player.user.isActive).length;
+      final playersCount =
+          team.players.where((player) => player.user.isActive).length;
 
       if (playersCount >= 2) {
         teams.add(team);

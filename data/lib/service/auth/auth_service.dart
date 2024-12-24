@@ -1,15 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
 import '../../storage/app_preferences.dart';
 import '../../storage/provider/preferences_provider.dart';
 import '../user/user_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../api/user/user_models.dart';
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
 
@@ -61,21 +60,19 @@ class AuthService {
         verificationCompleted: (phoneAuthCredential) async {
           final userCredential =
               await _auth.signInWithCredential(phoneAuthCredential);
-          _onVerificationSuccess(countryCode, phoneNumber, userCredential);
-          onVerificationCompleted != null
-              ? onVerificationCompleted(phoneAuthCredential, userCredential)
-              : null;
+          await _onVerificationSuccess(
+            countryCode,
+            phoneNumber,
+            userCredential,
+          );
+          onVerificationCompleted?.call(phoneAuthCredential, userCredential);
         },
         verificationFailed: (FirebaseAuthException e) =>
-            onVerificationFailed != null
-                ? onVerificationFailed(AppError.fromError(e, e.stackTrace))
-                : null,
+            onVerificationFailed?.call(AppError.fromError(e, e.stackTrace)),
         codeSent: (String verificationId, int? resendToken) =>
-            onCodeSent != null ? onCodeSent(verificationId, resendToken) : null,
+            onCodeSent?.call(verificationId, resendToken),
         codeAutoRetrievalTimeout: (verificationId) =>
-            onCodeAutoRetrievalTimeout != null
-                ? onCodeAutoRetrievalTimeout(verificationId)
-                : null,
+            onCodeAutoRetrievalTimeout?.call(verificationId),
       );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);

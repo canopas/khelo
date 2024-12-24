@@ -26,9 +26,9 @@ class PartnershipModel with _$PartnershipModel {
       _$PartnershipModelFromJson(json);
 
   factory PartnershipModel.fromFireStore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) =>
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) =>
       PartnershipModel.fromJson(snapshot.data()!);
 }
 
