@@ -119,7 +119,7 @@ We welcome and appreciate any suggestions you may have for improvement. For bugs
 ## Credits 💻
 Khelo is owned and maintained by the [Canopas team](https://canopas.com/).
 
-You can follow them on Twitter at [@canopas_eng](https://x.com/canopas_eng) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
+You can follow them on Twitter at [@canopassoftware](https://x.com/canopassoftware) for project updates and releases. If you are interested in building apps or designing products, please let us know. We'd love to hear from you!
 
 <a href="https://canopas.com/contact"><img src="./cta/cta_btn.png" alt="Contact Canopas" width="300"></a>
 
