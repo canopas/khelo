@@ -17,6 +17,7 @@ class FireStoreConst {
   static const String leaderboardCollection = "leaderboard";
   static const String matchEventsCollection = "match_events";
   static const String partnershipsCollection = "partnerships";
+  static const String liveStreamsCollection = "live_streams";
 
   // matches field const
   static const String id = "id";

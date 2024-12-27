@@ -16,11 +16,13 @@ const team_repository = require("./team/team_repository");
 const user_repository = require("./user/user_repository");
 const match_repository = require("./match/match_repository");
 const leaderboard_repository = require("./leaderboard/leaderboard_repository");
+const live_stream_repository = require("./live_stream/live_stream_repository");
 
 const notification_service = require("./notification/notification_service");
 const team_service = require("./team/team_service");
 const match_service = require("./match/match_service");
 const auth_service = require("./auth/auth_service");
+const live_stream_service = require("./live_stream/live_stream_service");
 const leaderboard_service = require("./leaderboard/leaderboard_service");
 
 exports.TIMEZONE = "Asia/Kolkata";
@@ -31,11 +33,13 @@ const db = (0, firestore_1.getFirestore)(app);
 const userRepository = new user_repository.UserRepository(db);
 const teamRepository = new team_repository.TeamRepository(db);
 const leaderboardRepository = new leaderboard_repository.LeaderboardRepository(db);
+const liveStreamRepository = new live_stream_repository.LiveStreamRepository(db);
 
 const notificationService = new notification_service.NotificationService(userRepository);
 const teamService = new team_service.TeamService(userRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
 const authService = new auth_service.AuthService(userRepository);
+const liveStreamService = new live_stream_service.LiveStreamService(liveStreamRepository);
 const leaderboardService = new leaderboard_service.LeaderboardService(leaderboardRepository);
 
 const matchRepository = new match_repository.MatchRepository(db, matchService);
@@ -56,6 +60,10 @@ expressApp.use((req, res, next) => {
 
 expressApp.post("/user/create", (req, res) => {
   authService.onCallCreateAuthUser(req, res);
+});
+
+expressApp.post("/liveStream/createYouTubeStream", (req, res) => {
+  liveStreamService.createYouTubeStream(req, res);
 });
 
 exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: REGION, document: "teams/{teamId}"}, async (event) => {

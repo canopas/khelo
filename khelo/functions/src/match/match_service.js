@@ -13,6 +13,7 @@ class MatchService {
     const matchContributorIds = new Set([
       ...(match.created_by !== null ? [match.created_by] : []),
       ...(match.referee_id !== null ? [match.referee_id] : []),
+      ...(match.live_streamer_id !== null ? [match.live_streamer_id] : []),
       ...match.players.filter((e) => e !== null),
       ...match.scorer_ids.filter((e) => e !== null),
       ...match.umpire_ids.filter((e) => e !== null),

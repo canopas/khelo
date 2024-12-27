@@ -84,21 +84,26 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
     state = state.copyWith(loading: true);
     try {
       final match = await _matchService.getMatchById(matchId!);
-      final umpire = match.umpires
+      List<Officials> officials = [];
+      officials.addAll(match.umpires
               ?.map((e) => Officials(MatchOfficials.umpires, e))
               .toList() ??
-          [];
-      final scorer = match.scorers
+          []);
+      officials.addAll(match.scorers
               ?.map((e) => Officials(MatchOfficials.scorers, e))
               .toList() ??
-          [];
-      final commentator = match.commentators
+          []);
+      officials.addAll(match.commentators
               ?.map((e) => Officials(MatchOfficials.commentator, e))
               .toList() ??
-          [];
-      final referee = match.referee != null
-          ? Officials(MatchOfficials.referee, match.referee!)
-          : null;
+          []);
+      if (match.referee != null) {
+        officials.add(Officials(MatchOfficials.referee, match.referee!));
+      }
+      if (match.live_streamer != null) {
+        officials
+            .add(Officials(MatchOfficials.liveStreamer, match.live_streamer!));
+      }
 
       editMatch = match;
       tournamentId = match.tournament_id;
@@ -126,13 +131,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           pitchType: match.pitch_type,
           matchType: match.match_type,
           ballType: match.ball_type,
-          officials: referee != null
-              ? [...umpire, ...commentator, ...scorer, referee]
-              : [
-                  ...umpire,
-                  ...commentator,
-                  ...scorer,
-                ],
+          officials: officials,
           loading: false);
     } catch (e) {
       state = state.copyWith(error: e, loading: false);
@@ -163,6 +162,11 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           .toList();
       final refereeId = state.officials
           .firstWhereOrNull((element) => element.type == MatchOfficials.referee)
+          ?.user
+          .id;
+      final liveStreamerId = state.officials
+          .firstWhereOrNull(
+              (element) => element.type == MatchOfficials.liveStreamer)
           ?.user
           .id;
 
@@ -226,6 +230,7 @@ class AddMatchViewNotifier extends StateNotifier<AddMatchViewState> {
           toss_decision: editMatch?.toss_decision,
           toss_winner_id: editMatch?.toss_winner_id,
           referee_id: refereeId,
+          live_streamer_id: liveStreamerId,
           current_playing_team_id: editMatch?.current_playing_team_id,
           match_status:
               startMatch ? MatchStatus.running : MatchStatus.yetToStart);
