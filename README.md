@@ -18,9 +18,9 @@ Khelo is built using Flutter and Dart, leveraging Firestore for database managem
 ## Screenshots
 <table>
   <tr>
-    <th width="32%">Matches Record</th>
+    <th width="32%">Home Screen</th>
+    <th width="32%">Matches List</th>
     <th width="32%">Teams List</th>
-    <th width="32%">Start New Match</th>
   </tr>
   <tr>
     <td><img src="./screenshots/screen_shot_1.png"  alt=""/></td>
@@ -31,14 +31,27 @@ Khelo is built using Flutter and Dart, leveraging Firestore for database managem
 
 <table>
   <tr>
+    <th width="32%">Start New Match</th>
     <th width="32%">Score Board</th>
     <th width="32%">Commentary</th>
-    <th width="32%">Squad</th>
   </tr>
   <tr>
     <td><img src="./screenshots/screen_shot_4.png"  alt=""/></td>
     <td><img src="./screenshots/screen_shot_5.png"  alt=""/></td>
     <td><img src="./screenshots/screen_shot_6.png"  alt=""/></td>
+  </tr>  
+</table>
+
+<table>
+  <tr>
+    <th width="32%">Squad</th>
+    <th width="32%">Tournament Detail</th>
+    <th width="32%"></th>
+  </tr>
+  <tr align="center">
+    <td><img src="./screenshots/screen_shot_7.png"  alt=""/></td>
+    <td><img src="./screenshots/screen_shot_8.png"  alt=""/></td>
+    <td></td>
   </tr>  
 </table>
 
