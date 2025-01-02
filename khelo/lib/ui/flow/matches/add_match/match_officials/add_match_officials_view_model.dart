@@ -77,7 +77,8 @@ enum MatchOfficials {
   umpires(4),
   scorers(2),
   referee(1),
-  commentator(2);
+  commentator(2),
+  liveStreamer(1);
 
   final int count;
 
@@ -93,6 +94,8 @@ enum MatchOfficials {
         return context.l10n.add_match_officials_referee_title;
       case MatchOfficials.commentator:
         return context.l10n.add_match_officials_commentators_title;
+      case MatchOfficials.liveStreamer:
+        return context.l10n.add_match_officials_live_streamer_title;
     }
   }
 
@@ -106,6 +109,8 @@ enum MatchOfficials {
         return Assets.images.icReferee;
       case MatchOfficials.commentator:
         return Assets.images.icCommentator;
+      case MatchOfficials.liveStreamer:
+        return Assets.images.icLiveStreamer;
     }
   }
 }

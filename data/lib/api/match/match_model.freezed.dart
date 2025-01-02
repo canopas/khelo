@@ -50,10 +50,13 @@ mixin _$MatchModel {
   List<UserModel>? get commentators => throw _privateConstructorUsedError;
   @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel? get referee => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel? get live_streamer => throw _privateConstructorUsedError;
   List<String>? get umpire_ids => throw _privateConstructorUsedError;
   List<String>? get scorer_ids => throw _privateConstructorUsedError;
   List<String>? get commentator_ids => throw _privateConstructorUsedError;
   String? get referee_id => throw _privateConstructorUsedError;
+  String? get live_streamer_id => throw _privateConstructorUsedError;
   MatchStatus get match_status => throw _privateConstructorUsedError;
   TossDecision? get toss_decision => throw _privateConstructorUsedError;
   String? get toss_winner_id => throw _privateConstructorUsedError;
@@ -107,10 +110,13 @@ abstract class $MatchModelCopyWith<$Res> {
       @JsonKey(includeToJson: false, includeFromJson: false)
       List<UserModel>? commentators,
       @JsonKey(includeToJson: false, includeFromJson: false) UserModel? referee,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      UserModel? live_streamer,
       List<String>? umpire_ids,
       List<String>? scorer_ids,
       List<String>? commentator_ids,
       String? referee_id,
+      String? live_streamer_id,
       MatchStatus match_status,
       TossDecision? toss_decision,
       String? toss_winner_id,
@@ -119,6 +125,7 @@ abstract class $MatchModelCopyWith<$Res> {
       @TimeStampJsonConverter() DateTime? updated_at});
 
   $UserModelCopyWith<$Res>? get referee;
+  $UserModelCopyWith<$Res>? get live_streamer;
   $RevisedTargetCopyWith<$Res>? get revised_target;
 }
 
@@ -162,10 +169,12 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
     Object? scorers = freezed,
     Object? commentators = freezed,
     Object? referee = freezed,
+    Object? live_streamer = freezed,
     Object? umpire_ids = freezed,
     Object? scorer_ids = freezed,
     Object? commentator_ids = freezed,
     Object? referee_id = freezed,
+    Object? live_streamer_id = freezed,
     Object? match_status = null,
     Object? toss_decision = freezed,
     Object? toss_winner_id = freezed,
@@ -274,6 +283,10 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
           ? _value.referee
           : referee // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      live_streamer: freezed == live_streamer
+          ? _value.live_streamer
+          : live_streamer // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       umpire_ids: freezed == umpire_ids
           ? _value.umpire_ids
           : umpire_ids // ignore: cast_nullable_to_non_nullable
@@ -289,6 +302,10 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
       referee_id: freezed == referee_id
           ? _value.referee_id
           : referee_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      live_streamer_id: freezed == live_streamer_id
+          ? _value.live_streamer_id
+          : live_streamer_id // ignore: cast_nullable_to_non_nullable
               as String?,
       match_status: null == match_status
           ? _value.match_status
@@ -328,6 +345,20 @@ class _$MatchModelCopyWithImpl<$Res, $Val extends MatchModel>
 
     return $UserModelCopyWith<$Res>(_value.referee!, (value) {
       return _then(_value.copyWith(referee: value) as $Val);
+    });
+  }
+
+  /// Create a copy of MatchModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserModelCopyWith<$Res>? get live_streamer {
+    if (_value.live_streamer == null) {
+      return null;
+    }
+
+    return $UserModelCopyWith<$Res>(_value.live_streamer!, (value) {
+      return _then(_value.copyWith(live_streamer: value) as $Val);
     });
   }
 
@@ -383,10 +414,13 @@ abstract class _$$MatchModelImplCopyWith<$Res>
       @JsonKey(includeToJson: false, includeFromJson: false)
       List<UserModel>? commentators,
       @JsonKey(includeToJson: false, includeFromJson: false) UserModel? referee,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      UserModel? live_streamer,
       List<String>? umpire_ids,
       List<String>? scorer_ids,
       List<String>? commentator_ids,
       String? referee_id,
+      String? live_streamer_id,
       MatchStatus match_status,
       TossDecision? toss_decision,
       String? toss_winner_id,
@@ -396,6 +430,8 @@ abstract class _$$MatchModelImplCopyWith<$Res>
 
   @override
   $UserModelCopyWith<$Res>? get referee;
+  @override
+  $UserModelCopyWith<$Res>? get live_streamer;
   @override
   $RevisedTargetCopyWith<$Res>? get revised_target;
 }
@@ -438,10 +474,12 @@ class __$$MatchModelImplCopyWithImpl<$Res>
     Object? scorers = freezed,
     Object? commentators = freezed,
     Object? referee = freezed,
+    Object? live_streamer = freezed,
     Object? umpire_ids = freezed,
     Object? scorer_ids = freezed,
     Object? commentator_ids = freezed,
     Object? referee_id = freezed,
+    Object? live_streamer_id = freezed,
     Object? match_status = null,
     Object? toss_decision = freezed,
     Object? toss_winner_id = freezed,
@@ -550,6 +588,10 @@ class __$$MatchModelImplCopyWithImpl<$Res>
           ? _value.referee
           : referee // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      live_streamer: freezed == live_streamer
+          ? _value.live_streamer
+          : live_streamer // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       umpire_ids: freezed == umpire_ids
           ? _value._umpire_ids
           : umpire_ids // ignore: cast_nullable_to_non_nullable
@@ -565,6 +607,10 @@ class __$$MatchModelImplCopyWithImpl<$Res>
       referee_id: freezed == referee_id
           ? _value.referee_id
           : referee_id // ignore: cast_nullable_to_non_nullable
+              as String?,
+      live_streamer_id: freezed == live_streamer_id
+          ? _value.live_streamer_id
+          : live_streamer_id // ignore: cast_nullable_to_non_nullable
               as String?,
       match_status: null == match_status
           ? _value.match_status
@@ -627,10 +673,12 @@ class _$MatchModelImpl implements _MatchModel {
       @JsonKey(includeToJson: false, includeFromJson: false)
       final List<UserModel>? commentators,
       @JsonKey(includeToJson: false, includeFromJson: false) this.referee,
+      @JsonKey(includeToJson: false, includeFromJson: false) this.live_streamer,
       final List<String>? umpire_ids,
       final List<String>? scorer_ids,
       final List<String>? commentator_ids,
       this.referee_id,
+      this.live_streamer_id,
       required this.match_status,
       this.toss_decision,
       this.toss_winner_id,
@@ -785,6 +833,9 @@ class _$MatchModelImpl implements _MatchModel {
   @override
   @JsonKey(includeToJson: false, includeFromJson: false)
   final UserModel? referee;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  final UserModel? live_streamer;
   final List<String>? _umpire_ids;
   @override
   List<String>? get umpire_ids {
@@ -818,6 +869,8 @@ class _$MatchModelImpl implements _MatchModel {
   @override
   final String? referee_id;
   @override
+  final String? live_streamer_id;
+  @override
   final MatchStatus match_status;
   @override
   final TossDecision? toss_decision;
@@ -833,7 +886,7 @@ class _$MatchModelImpl implements _MatchModel {
 
   @override
   String toString() {
-    return 'MatchModel(id: $id, teams: $teams, tournament_id: $tournament_id, match_group: $match_group, match_group_number: $match_group_number, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_at: $start_at, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target, updated_at: $updated_at)';
+    return 'MatchModel(id: $id, teams: $teams, tournament_id: $tournament_id, match_group: $match_group, match_group_number: $match_group_number, match_type: $match_type, number_of_over: $number_of_over, over_per_bowler: $over_per_bowler, players: $players, team_ids: $team_ids, team_creator_ids: $team_creator_ids, power_play_overs1: $power_play_overs1, power_play_overs2: $power_play_overs2, power_play_overs3: $power_play_overs3, city: $city, ground: $ground, start_time: $start_time, start_at: $start_at, ball_type: $ball_type, pitch_type: $pitch_type, created_by: $created_by, umpires: $umpires, scorers: $scorers, commentators: $commentators, referee: $referee, live_streamer: $live_streamer, umpire_ids: $umpire_ids, scorer_ids: $scorer_ids, commentator_ids: $commentator_ids, referee_id: $referee_id, live_streamer_id: $live_streamer_id, match_status: $match_status, toss_decision: $toss_decision, toss_winner_id: $toss_winner_id, current_playing_team_id: $current_playing_team_id, revised_target: $revised_target, updated_at: $updated_at)';
   }
 
   @override
@@ -882,6 +935,8 @@ class _$MatchModelImpl implements _MatchModel {
             const DeepCollectionEquality()
                 .equals(other._commentators, _commentators) &&
             (identical(other.referee, referee) || other.referee == referee) &&
+            (identical(other.live_streamer, live_streamer) ||
+                other.live_streamer == live_streamer) &&
             const DeepCollectionEquality()
                 .equals(other._umpire_ids, _umpire_ids) &&
             const DeepCollectionEquality()
@@ -890,6 +945,8 @@ class _$MatchModelImpl implements _MatchModel {
                 .equals(other._commentator_ids, _commentator_ids) &&
             (identical(other.referee_id, referee_id) ||
                 other.referee_id == referee_id) &&
+            (identical(other.live_streamer_id, live_streamer_id) ||
+                other.live_streamer_id == live_streamer_id) &&
             (identical(other.match_status, match_status) ||
                 other.match_status == match_status) &&
             (identical(other.toss_decision, toss_decision) ||
@@ -934,10 +991,12 @@ class _$MatchModelImpl implements _MatchModel {
         const DeepCollectionEquality().hash(_scorers),
         const DeepCollectionEquality().hash(_commentators),
         referee,
+        live_streamer,
         const DeepCollectionEquality().hash(_umpire_ids),
         const DeepCollectionEquality().hash(_scorer_ids),
         const DeepCollectionEquality().hash(_commentator_ids),
         referee_id,
+        live_streamer_id,
         match_status,
         toss_decision,
         toss_winner_id,
@@ -993,10 +1052,13 @@ abstract class _MatchModel implements MatchModel {
       final List<UserModel>? commentators,
       @JsonKey(includeToJson: false, includeFromJson: false)
       final UserModel? referee,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      final UserModel? live_streamer,
       final List<String>? umpire_ids,
       final List<String>? scorer_ids,
       final List<String>? commentator_ids,
       final String? referee_id,
+      final String? live_streamer_id,
       required final MatchStatus match_status,
       final TossDecision? toss_decision,
       final String? toss_winner_id,
@@ -1063,6 +1125,9 @@ abstract class _MatchModel implements MatchModel {
   @JsonKey(includeToJson: false, includeFromJson: false)
   UserModel? get referee;
   @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  UserModel? get live_streamer;
+  @override
   List<String>? get umpire_ids;
   @override
   List<String>? get scorer_ids;
@@ -1070,6 +1135,8 @@ abstract class _MatchModel implements MatchModel {
   List<String>? get commentator_ids;
   @override
   String? get referee_id;
+  @override
+  String? get live_streamer_id;
   @override
   MatchStatus get match_status;
   @override

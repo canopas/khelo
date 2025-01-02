@@ -63,6 +63,7 @@ _$MatchModelImpl _$$MatchModelImplFromJson(Map json) => _$MatchModelImpl(
           ?.map((e) => e as String)
           .toList(),
       referee_id: json['referee_id'] as String?,
+      live_streamer_id: json['live_streamer_id'] as String?,
       match_status: $enumDecode(_$MatchStatusEnumMap, json['match_status']),
       toss_decision:
           $enumDecodeNullable(_$TossDecisionEnumMap, json['toss_decision']),
@@ -104,6 +105,7 @@ Map<String, dynamic> _$$MatchModelImplToJson(_$MatchModelImpl instance) =>
       'scorer_ids': instance.scorer_ids,
       'commentator_ids': instance.commentator_ids,
       'referee_id': instance.referee_id,
+      'live_streamer_id': instance.live_streamer_id,
       'match_status': _$MatchStatusEnumMap[instance.match_status]!,
       'toss_decision': _$TossDecisionEnumMap[instance.toss_decision],
       'toss_winner_id': instance.toss_winner_id,
