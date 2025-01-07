@@ -6,4 +6,5 @@ class AppErrorL10nCodes {
   static const tooManyRequests = 'too-many-requests';
   static const largeAttachmentUpload = "large-attachment-upload";
   static const requiresRecentLogin = "requires-recent-login";
+  static const credentialAlreadyInUse = "credential-already-in-use";
 }

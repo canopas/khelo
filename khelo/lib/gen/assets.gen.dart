@@ -136,6 +136,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_umpire.svg
   String get icUmpire => 'assets/images/ic_umpire.svg';
 
+  /// File path: assets/images/ic_youtube.svg
+  String get icYoutube => 'assets/images/ic_youtube.svg';
+
   /// File path: assets/images/intro_cricket_dark.svg
   String get introCricketDark => 'assets/images/intro_cricket_dark.svg';
 
@@ -201,6 +204,7 @@ class $AssetsImagesGen {
         icTime,
         icTournaments,
         icUmpire,
+        icYoutube,
         introCricketDark,
         introCricketLight,
         introGraphicDark,

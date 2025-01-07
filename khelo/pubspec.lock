@@ -158,6 +158,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  camera:
+    dependency: "direct main"
+    description:
+      name: camera
+      sha256: dfa8fc5a1adaeb95e7a54d86a5bd56f4bb0e035515354c8ac6d262e35cec2ec8
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.6"
+  camera_android:
+    dependency: transitive
+    description:
+      name: camera_android
+      sha256: "19b7226387218864cb2388e1ad5db7db50d065222f5511254b03fc397dd21a5e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.10.9+17"
+  camera_avfoundation:
+    dependency: transitive
+    description:
+      name: camera_avfoundation
+      sha256: c3038e6e72e284b14ad246a419f26908c08f8886d114cb8a2e351988439bfa68
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.9.17+6"
+  camera_platform_interface:
+    dependency: transitive
+    description:
+      name: camera_platform_interface
+      sha256: b3ede1f171532e0d83111fe0980b46d17f1aa9788a07a2fbed07366bbdbb9061
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.8.0"
+  camera_web:
+    dependency: transitive
+    description:
+      name: camera_web
+      sha256: "595f28c89d1fb62d77c73c633193755b781c6d2e0ebcd8dc25b763b514e6ba8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.5"
   canopas_country_picker:
     dependency: "direct main"
     description:
@@ -429,6 +469,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  ffmpeg_kit_flutter:
+    dependency: "direct main"
+    description:
+      name: ffmpeg_kit_flutter
+      sha256: "843aae41823ca94a0988d975b4b6cdc6948744b9b7e2707d81a3a9cd237b0100"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.3"
+  ffmpeg_kit_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: ffmpeg_kit_flutter_platform_interface
+      sha256: addf046ae44e190ad0101b2fde2ad909a3cd08a2a109f6106d2f7048b7abedee
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   file:
     dependency: transitive
     description:
@@ -761,6 +817,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.7.1"
+  google_identity_services_web:
+    dependency: transitive
+    description:
+      name: google_identity_services_web
+      sha256: "55580f436822d64c8ff9a77e37d61f5fb1e6c7ec9d632a43ee324e2a05c3c6c9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.3"
+  google_sign_in:
+    dependency: "direct main"
+    description:
+      name: google_sign_in
+      sha256: fad6ddc80c427b0bba705f2116204ce1173e09cf299f85e053d57a55e5b2dd56
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.2.2"
+  google_sign_in_android:
+    dependency: transitive
+    description:
+      name: google_sign_in_android
+      sha256: "3b96f9b6cf61915f73cbe1218a192623e296a9b8b31965702503649477761e36"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.34"
+  google_sign_in_ios:
+    dependency: transitive
+    description:
+      name: google_sign_in_ios
+      sha256: "83f015169102df1ab2905cf8abd8934e28f87db9ace7a5fa676998842fed228a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.7.8"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      sha256: "1f6e5787d7a120cc0359ddf315c92309069171306242e181c09472d1b00a2971"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.5"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      sha256: ada595df6c30cead48e66b1f3a050edf0c5cf2ba60c185d69690e08adcc6281b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.4+3"
   graphs:
     dependency: transitive
     description:
@@ -1098,7 +1202,7 @@ packages:
     source: hosted
     version: "1.1.0"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       sha256: "50c5dd5b6e1aaf6fb3a78b33f6aa3afca52bf903a8a5298f53101fdaee55bbcd"

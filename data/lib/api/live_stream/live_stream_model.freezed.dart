@@ -317,3 +317,261 @@ abstract class _LiveStreamModel implements LiveStreamModel {
   _$$LiveStreamModelImplCopyWith<_$LiveStreamModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+/// @nodoc
+mixin _$YTChannel {
+  String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+  bool get madeForKids => throw _privateConstructorUsedError;
+  bool get selfDeclaredMadeForKids => throw _privateConstructorUsedError;
+  String? get thumbnailUrl => throw _privateConstructorUsedError;
+  PrivacyStatus get privacyStatus => throw _privateConstructorUsedError;
+
+  /// Create a copy of YTChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $YTChannelCopyWith<YTChannel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $YTChannelCopyWith<$Res> {
+  factory $YTChannelCopyWith(YTChannel value, $Res Function(YTChannel) then) =
+      _$YTChannelCopyWithImpl<$Res, YTChannel>;
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      String description,
+      bool madeForKids,
+      bool selfDeclaredMadeForKids,
+      String? thumbnailUrl,
+      PrivacyStatus privacyStatus});
+}
+
+/// @nodoc
+class _$YTChannelCopyWithImpl<$Res, $Val extends YTChannel>
+    implements $YTChannelCopyWith<$Res> {
+  _$YTChannelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of YTChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? description = null,
+    Object? madeForKids = null,
+    Object? selfDeclaredMadeForKids = null,
+    Object? thumbnailUrl = freezed,
+    Object? privacyStatus = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      madeForKids: null == madeForKids
+          ? _value.madeForKids
+          : madeForKids // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selfDeclaredMadeForKids: null == selfDeclaredMadeForKids
+          ? _value.selfDeclaredMadeForKids
+          : selfDeclaredMadeForKids // ignore: cast_nullable_to_non_nullable
+              as bool,
+      thumbnailUrl: freezed == thumbnailUrl
+          ? _value.thumbnailUrl
+          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      privacyStatus: null == privacyStatus
+          ? _value.privacyStatus
+          : privacyStatus // ignore: cast_nullable_to_non_nullable
+              as PrivacyStatus,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$YTChannelImplCopyWith<$Res>
+    implements $YTChannelCopyWith<$Res> {
+  factory _$$YTChannelImplCopyWith(
+          _$YTChannelImpl value, $Res Function(_$YTChannelImpl) then) =
+      __$$YTChannelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      String description,
+      bool madeForKids,
+      bool selfDeclaredMadeForKids,
+      String? thumbnailUrl,
+      PrivacyStatus privacyStatus});
+}
+
+/// @nodoc
+class __$$YTChannelImplCopyWithImpl<$Res>
+    extends _$YTChannelCopyWithImpl<$Res, _$YTChannelImpl>
+    implements _$$YTChannelImplCopyWith<$Res> {
+  __$$YTChannelImplCopyWithImpl(
+      _$YTChannelImpl _value, $Res Function(_$YTChannelImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of YTChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? description = null,
+    Object? madeForKids = null,
+    Object? selfDeclaredMadeForKids = null,
+    Object? thumbnailUrl = freezed,
+    Object? privacyStatus = null,
+  }) {
+    return _then(_$YTChannelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      madeForKids: null == madeForKids
+          ? _value.madeForKids
+          : madeForKids // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selfDeclaredMadeForKids: null == selfDeclaredMadeForKids
+          ? _value.selfDeclaredMadeForKids
+          : selfDeclaredMadeForKids // ignore: cast_nullable_to_non_nullable
+              as bool,
+      thumbnailUrl: freezed == thumbnailUrl
+          ? _value.thumbnailUrl
+          : thumbnailUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      privacyStatus: null == privacyStatus
+          ? _value.privacyStatus
+          : privacyStatus // ignore: cast_nullable_to_non_nullable
+              as PrivacyStatus,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$YTChannelImpl implements _YTChannel {
+  const _$YTChannelImpl(
+      {required this.id,
+      required this.title,
+      required this.description,
+      required this.madeForKids,
+      required this.selfDeclaredMadeForKids,
+      required this.thumbnailUrl,
+      required this.privacyStatus});
+
+  @override
+  final String id;
+  @override
+  final String title;
+  @override
+  final String description;
+  @override
+  final bool madeForKids;
+  @override
+  final bool selfDeclaredMadeForKids;
+  @override
+  final String? thumbnailUrl;
+  @override
+  final PrivacyStatus privacyStatus;
+
+  @override
+  String toString() {
+    return 'YTChannel(id: $id, title: $title, description: $description, madeForKids: $madeForKids, selfDeclaredMadeForKids: $selfDeclaredMadeForKids, thumbnailUrl: $thumbnailUrl, privacyStatus: $privacyStatus)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$YTChannelImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.madeForKids, madeForKids) ||
+                other.madeForKids == madeForKids) &&
+            (identical(
+                    other.selfDeclaredMadeForKids, selfDeclaredMadeForKids) ||
+                other.selfDeclaredMadeForKids == selfDeclaredMadeForKids) &&
+            (identical(other.thumbnailUrl, thumbnailUrl) ||
+                other.thumbnailUrl == thumbnailUrl) &&
+            (identical(other.privacyStatus, privacyStatus) ||
+                other.privacyStatus == privacyStatus));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id, title, description,
+      madeForKids, selfDeclaredMadeForKids, thumbnailUrl, privacyStatus);
+
+  /// Create a copy of YTChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$YTChannelImplCopyWith<_$YTChannelImpl> get copyWith =>
+      __$$YTChannelImplCopyWithImpl<_$YTChannelImpl>(this, _$identity);
+}
+
+abstract class _YTChannel implements YTChannel {
+  const factory _YTChannel(
+      {required final String id,
+      required final String title,
+      required final String description,
+      required final bool madeForKids,
+      required final bool selfDeclaredMadeForKids,
+      required final String? thumbnailUrl,
+      required final PrivacyStatus privacyStatus}) = _$YTChannelImpl;
+
+  @override
+  String get id;
+  @override
+  String get title;
+  @override
+  String get description;
+  @override
+  bool get madeForKids;
+  @override
+  bool get selfDeclaredMadeForKids;
+  @override
+  String? get thumbnailUrl;
+  @override
+  PrivacyStatus get privacyStatus;
+
+  /// Create a copy of YTChannel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$YTChannelImplCopyWith<_$YTChannelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

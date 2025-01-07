@@ -164,6 +164,16 @@ class UserService {
     }
   }
 
+  Future<void> updateGoogleRefreshToken(String userId, String refreshToken) async {
+    try {
+      final userRef = _userRef.doc(userId);
+
+      await userRef.update({FireStoreConst.googleRefreshToken: refreshToken});
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
   Future<void> updateUserStats(String userId, UserStat stats) async {
     try {
       final userStatsRef = _userStatsRef(userId);

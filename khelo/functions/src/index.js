@@ -5,6 +5,8 @@ exports.fiveMinuteCron = exports.apiv1 = exports.teamPlayerChangeObserver = expo
 
 const express = require("express");
 
+require("dotenv").config();
+
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
 const firestore_2 = require("firebase-functions/v2/firestore");
@@ -39,7 +41,7 @@ const notificationService = new notification_service.NotificationService(userRep
 const teamService = new team_service.TeamService(userRepository, notificationService);
 const matchService = new match_service.MatchService(userRepository, teamRepository, notificationService);
 const authService = new auth_service.AuthService(userRepository);
-const liveStreamService = new live_stream_service.LiveStreamService(liveStreamRepository);
+const liveStreamService = new live_stream_service.LiveStreamService(liveStreamRepository, userRepository, authService);
 const leaderboardService = new leaderboard_service.LeaderboardService(leaderboardRepository);
 
 const matchRepository = new match_repository.MatchRepository(db, matchService);
@@ -64,6 +66,14 @@ expressApp.post("/user/create", (req, res) => {
 
 expressApp.post("/liveStream/createYouTubeStream", (req, res) => {
   liveStreamService.createYouTubeStream(req, res);
+});
+
+expressApp.get("/liveStream/getYouTubeChannel", (req, res) => {
+  liveStreamService.getYouTubeChannel(req, res);
+});
+
+expressApp.post("/auth/storeGoogleRefreshToken", (req, res) => {
+  authService.updateGoogleRefreshToken(req, res);
 });
 
 exports.teamPlayerChangeObserver = (0, firestore_2.onDocumentUpdated)({region: REGION, document: "teams/{teamId}"}, async (event) => {

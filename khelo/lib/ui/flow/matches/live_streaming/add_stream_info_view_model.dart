@@ -1,12 +1,12 @@
 import 'package:data/api/live_stream/live_stream_model.dart';
 import 'package:data/api/match/match_model.dart';
+import 'package:data/service/auth/auth_service.dart';
 import 'package:data/service/live_stream/live_stream_endpoint.dart';
 import 'package:data/service/live_stream/live_stream_service.dart';
 import 'package:data/service/match/match_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:khelo/domain/extensions/string_extensions.dart';
 
 part 'add_stream_info_view_model.freezed.dart';
 
@@ -15,16 +15,19 @@ final addStreamInfoStateProvider = StateNotifierProvider.autoDispose<
   return AddStreamInfoViewNotifier(
     ref.read(matchServiceProvider),
     ref.read(liveStreamServiceProvider),
+    ref.read(authServiceProvider),
   );
 });
 
 class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
   final MatchService _matchService;
   final LiveStreamService _liveStreamService;
+  final AuthService _authService;
 
   String? matchId;
 
-  AddStreamInfoViewNotifier(this._matchService, this._liveStreamService)
+  AddStreamInfoViewNotifier(
+      this._matchService, this._liveStreamService, this._authService)
       : super(AddStreamInfoViewState());
 
   void setData(String matchId) {
@@ -46,67 +49,122 @@ class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
         loading: false,
         error: null,
       );
-      if (stream == null && match != null) {
-        createYTStream(
-          name: match.teams
-              .map((e) => e.team.name_initial ?? e.team.name.initials(limit: 3))
-              .join(" vs "),
-          description: match.teams.map((e) => e.team.name).join(" vs "),
-        );
-      } else {
-        startLiveStreaming();
-      }
     } catch (e) {
       state = state.copyWith(loading: false, error: e);
-      debugPrint(
-          "AddStreamInfoViewNotifier: error while load stream info -> $e");
+      debugPrint("AddStreamInfoViewNotifier: error while load data -> $e");
     }
   }
 
-  Future<void> createYTStream({
-    required String name,
-    required String description,
-  }) async {
-    if (matchId == null) return;
+  Future<void> onOptionSelected(MediumOption option) async {
+    state = state.copyWith(mediumOption: option, showSelectResolutionSheet: false);
+    switch (option) {
+      case MediumOption.kheloYTChannel:
+        showResolutionSheet();
+        break;
+      case MediumOption.userYTChannel:
+        fetchYTChannels();
+        break;
+    }
+  }
+
+  Future<void> fetchYTChannels() async {
     try {
-      state = state.copyWith(loading: true);
+      state = state.copyWith(loading: true, actionError: null, showSelectResolutionSheet: false);
+
+      await signInWithGoogleIfNeeded();
+
+      final channels = await _liveStreamService.fetchYTChannelLinkedToUser();
+      if (channels.length == 1) {
+        state = state.copyWith(
+            loading: false,
+            channelId: channels.first.id,
+            mediumOption: MediumOption.userYTChannel);
+        showResolutionSheet();
+      } else {
+        state = state.copyWith(
+          ytChannels: channels,
+          loading: false,
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(loading: false, actionError: e);
+      debugPrint(
+          "AddStreamInfoViewNotifier: error while fetching YT channels -> $e");
+    }
+  }
+
+  void onChannelSelect(String channelId) {
+    state = state.copyWith(channelId: channelId, showSelectResolutionSheet: false);
+    showResolutionSheet();
+  }
+
+  Future<void> signInWithGoogleIfNeeded() async {
+    if (!await _authService.isGoogleSignedIn()) {
+      await _authService.signInWithGoogle();
+    }
+  }
+
+  void showResolutionSheet() {
+    state = state.copyWith(showSelectResolutionSheet: true);
+  }
+
+  void onResolutionSelect(YouTubeResolution resolution) {
+    if (state.mediumOption == null) {
+      return;
+    }
+
+    createYTStream(resolution: resolution);
+  }
+
+  Future<void> createYTStream({
+    required YouTubeResolution resolution,
+  }) async {
+    if (matchId == null || state.match == null) return;
+    try {
+      state = state.copyWith(loading: true, actionError: null);
+
+      final matchStartTime =
+          ((state.match?.start_at ?? DateTime.now()).isAfter(DateTime.now())
+              ? state.match?.start_at ?? DateTime.now()
+              : DateTime.now());
+
       final stream =
           await _liveStreamService.createLiveStream(CreateLiveStreamEndPoint(
-        name: name,
-        description: description,
         matchId: matchId!,
+        name:
+            "Live Cricket Match | ${state.match!.teams.map((e) => e.team.name).join(" vs ")} | ${matchStartTime.toIso8601String()}",
+        option: state.mediumOption ?? MediumOption.kheloYTChannel,
+        channelId: state.channelId,
+        resolution: resolution,
+        scheduledStartTime: matchStartTime,
       ));
       state = state.copyWith(
         stream: stream,
         loading: false,
-        error: null,
       );
-      startLiveStreaming();
     } catch (e) {
-      // TODO: this will be action error and action loading so update those variables only
-      state = state.copyWith(loading: false, error: e);
+      state = state.copyWith(loading: false, actionError: e);
       debugPrint(
-          "AddStreamInfoViewNotifier: error while load stream info -> $e");
+          "AddStreamInfoViewNotifier: error while creating yt stream -> $e");
     }
   }
 
-  void startLiveStreaming() {
-    // things needed to record and then send to rtmp etcs
+  void unlink() {
+    _authService.unlinkGoogle();
   }
-
-  // start YT Flow here
-  // Get YT channel and all the stream key and all here
-  // after that show button to start live streaming
-  // on tap of that start streaming
-  // give some control like pause, resume and Stop Streaming
 }
 
 @freezed
 class AddStreamInfoViewState with _$AddStreamInfoViewState {
   const factory AddStreamInfoViewState({
     Object? error,
+    Object? actionError,
     LiveStreamModel? stream,
     MatchModel? match,
+    MediumOption? mediumOption,
+    String? channelId,
+    @Default([]) List<YTChannel> ytChannels,
+    @Default(false) bool showSelectResolutionSheet,
     @Default(false) bool loading,
   }) = _AddStreamInfoViewState;
 }

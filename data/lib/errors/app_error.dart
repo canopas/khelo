@@ -68,6 +68,13 @@ class AppError implements Exception {
           l10nCode: AppErrorL10nCodes.invalidPhoneNumber,
           stackTrace: error.stackTrace,
         );
+      case errorCredentialAlreadyInUse:
+        return AppError(
+          statusCode: error.code,
+          message: error.message,
+          l10nCode: AppErrorL10nCodes.credentialAlreadyInUse,
+          stackTrace: error.stackTrace,
+        );
       case errorNetworkRequestFailed:
         return const NoConnectionError();
       case errorRequiresRecentLogin:

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:data/api/leaderboard/leaderboard_model.dart';
+import 'package:data/api/live_stream/live_stream_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/team/team_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
@@ -17,6 +18,7 @@ import 'package:khelo/ui/flow/matches/add_match/match_officials/add_match_offici
 import 'package:khelo/ui/flow/matches/add_match/power_play/power_play_screen.dart';
 import 'package:khelo/ui/flow/matches/add_match/select_squad/select_squad_screen.dart';
 import 'package:khelo/ui/flow/matches/live_streaming/add_stream_info_screen.dart';
+import 'package:khelo/ui/flow/matches/live_streaming/stream_camera/stream_camera_screen.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/components/qr_code_view.dart';
 import 'package:khelo/ui/flow/score_board/add_toss_detail/add_toss_detail_screen.dart';
@@ -68,6 +70,7 @@ class AppRoute {
   static const pathMemberSelection = "/member-selection";
   static const pathLeaderboard = "/leaderboard";
   static const pathAddStreamInfo = "/add-stream-info";
+  static const pathStreamCamera = "/stream-camera";
 
   final String path;
   final String? name;
@@ -245,6 +248,10 @@ class AppRoute {
   static AppRoute addStreamInfo({required String matchId}) => AppRoute(
       pathAddStreamInfo,
       builder: (context) => AddStreamInfoScreen(matchId: matchId));
+
+  static AppRoute streamCameraView({required LiveStreamModel stream}) => AppRoute(
+      pathStreamCamera,
+      builder: (context) => StreamCameraScreen2(stream: stream));
 
   static AppRoute searchTeam({
     List<String>? excludedIds,
@@ -456,6 +463,10 @@ class AppRoute {
     ),
     GoRoute(
       path: pathAddStreamInfo,
+      builder: (context, state) => state.widget(context),
+    ),
+    GoRoute(
+      path: pathStreamCamera,
       builder: (context, state) => state.widget(context),
     ),
     GoRoute(

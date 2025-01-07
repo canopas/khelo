@@ -66,6 +66,7 @@ class FireStoreConst {
   static const String notifications = "notifications";
   static const String phone = "phone";
   static const String name = "name";
+  static const String googleRefreshToken = "google_refresh_token";
 
   // tournament field const
   static const String members = "members";

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -53,6 +55,19 @@ class LiveStreamService {
       return stream.docs.firstOrNull?.data();
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<List<YTChannel>> fetchYTChannelLinkedToUser() async {
+    try {
+      final response = await client.req(GetYTChannelEndPoint());
+      final data = jsonDecode(response.body);
+      return (data['items'] as List?)
+              ?.map((item) => YTChannel.fromJson(item))
+              .toList() ??
+          [];
+    } catch (e, stack) {
+      throw AppError.fromError(e, stack);
     }
   }
 }

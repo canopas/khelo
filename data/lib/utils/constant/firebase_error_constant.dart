@@ -7,3 +7,4 @@ const String errorUserNotFound = "user-not-found";
 const String errorUnauthenticated = "unauthenticated";
 const String errorTooManyRequest = "too-many-requests";
 const String errorRequiresRecentLogin = "requires-recent-login";
+const String errorCredentialAlreadyInUse = "credential-already-in-use";

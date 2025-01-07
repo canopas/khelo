@@ -38,3 +38,45 @@ enum LiveStreamStatus {
   paused,
   completed;
 }
+
+enum MediumOption {
+  kheloYTChannel,
+  userYTChannel;
+
+  bool get isLoginRequired => this == MediumOption.userYTChannel;
+}
+
+@freezed
+class YTChannel with _$YTChannel {
+  const factory YTChannel({
+    required String id,
+    required String title,
+    required String description,
+    required bool madeForKids,
+    required bool selfDeclaredMadeForKids,
+    required String? thumbnailUrl,
+    required PrivacyStatus privacyStatus,
+  }) = _YTChannel;
+
+  factory YTChannel.fromJson(Map<String, dynamic> json) {
+    return YTChannel(
+      id: json['id'],
+      title: json['snippet']['title'],
+      description: json['snippet']['description'],
+      madeForKids: json['status']['madeForKids'] ?? false,
+      selfDeclaredMadeForKids: json['status']['selfDeclaredMadeForKids'] ?? false,
+      thumbnailUrl: json['snippet']['thumbnails']['default']['url'],
+      privacyStatus: json['status']['privacyStatus'] == 'public'
+          ? PrivacyStatus.public
+          : json['status']['privacyStatus'] == 'private'
+          ? PrivacyStatus.private
+          : PrivacyStatus.unlisted,
+    );
+  }
+}
+
+enum PrivacyStatus {
+  public,
+  private,
+  unlisted,
+}

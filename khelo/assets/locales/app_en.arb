@@ -430,6 +430,18 @@
   "search_team_selection_error_text": "The team must have at least 2 players to add it in a match.",
   "search_team_search_placeholder_title": "Search team name",
 
+  "add_stream_info_title": "Add Stream Info",
+  "add_stream_info_go_live_with_text": "Go Live With",
+  "add_stream_info_khelo_yt_channel_text": "Khelo YouTube Channel",
+  "add_stream_info_your_yt_channel_text": "Your YouTube Channel",
+  "add_stream_info_login_required_text": "**login required",
+  "credential_already_in_use_error_text": "Google account is already linked.",
+  "add_stream_info_all_set_title": "All Set!!",
+  "add_stream_info_all_set_description": "You're all set to go live! just tap the button below and start streaming your match now.",
+  "add_stream_info_go_live_title": "Go Live",
+  "add_stream_info_choose_channel": "Choose Channel",
+  "add_stream_info_choose_resolution": "Choose Resolution",
+
   "power_play_text": "Power play {count}",
   "@power_play_text": {
     "description": "Power play {count}",

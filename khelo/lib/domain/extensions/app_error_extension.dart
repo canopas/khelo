@@ -1,7 +1,7 @@
+import 'package:data/errors/app_error.dart';
 import 'package:data/errors/app_error_l10n_codes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
-import 'package:data/errors/app_error.dart';
 
 extension AppErrorExtensions on Object {
   String l10nMessage(BuildContext context) {
@@ -15,6 +15,8 @@ extension AppErrorExtensions on Object {
           return context.l10n.sign_in_invalid_phone_number_text;
         case AppErrorL10nCodes.largeAttachmentUpload:
           return context.l10n.large_attachment_upload_error_text;
+        case AppErrorL10nCodes.credentialAlreadyInUse:
+          return context.l10n.credential_already_in_use_error_text;
         default:
           return (this as AppError).message ??
               context.l10n.error_something_went_wrong;
