@@ -73,7 +73,7 @@ class _FlexibleSpaceState extends State<FlexibleSpace> {
                 opacity: isCollapsed ? 1 : 0,
                 duration: const Duration(milliseconds: 100),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 64, right: 48),
+                  padding: const EdgeInsets.only(left: 64, right: 84),
                   child: Text(
                     widget.tournament.name,
                     style: AppTextStyle.header2.copyWith(

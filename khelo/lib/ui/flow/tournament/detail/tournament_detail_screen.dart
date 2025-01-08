@@ -15,6 +15,7 @@ import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_points_ta
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_stats_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tabs/tournament_detail_teams_tab.dart';
 import 'package:khelo/ui/flow/tournament/detail/tournament_detail_view_model.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/tab_button.dart';
@@ -26,6 +27,7 @@ import '../../../../components/app_page.dart';
 import '../../../../components/error_screen.dart';
 import '../../../../components/error_snackbar.dart';
 import '../../../../domain/extensions/widget_extension.dart';
+import '../../../../main.dart';
 
 class TournamentDetailScreen extends ConsumerStatefulWidget {
   final String tournamentId;
@@ -110,20 +112,24 @@ class _TournamentDetailScreenState
             backgroundColor: context.colorScheme.surface,
             leading: _backButton(context),
             flexibleSpace: FlexibleSpace(tournament: state.tournament!),
-            actions: state.tournament!.created_by == state.currentUserId ||
-                    state.tournament!.members
-                        .any((element) => element.id == state.currentUserId)
-                ? [
-                    moreOptionButton(
-                      context,
-                      size: 20,
-                      backgroundColor: context
-                          .colorScheme.containerHighOnSurface
-                          .withValues(alpha: 0.4),
-                      onPressed: () => _moreActionButton(context, state),
-                    ),
-                  ]
-                : null,
+            actions: [
+              _shareButton(
+                context,
+                onShareTap: () => Share.shareUri(Uri.parse(
+                    "$appBaseUrl/tournament/${state.tournament!.id}")),
+              ),
+              if (state.tournament!.created_by == state.currentUserId ||
+                  state.tournament!.members
+                      .any((element) => element.id == state.currentUserId)) ...[
+                moreOptionButton(
+                  context,
+                  size: 20,
+                  backgroundColor: context.colorScheme.containerHighOnSurface
+                      .withValues(alpha: 0.4),
+                  onPressed: () => _moreActionButton(context, state),
+                )
+              ],
+            ],
           ),
           SliverPersistentHeader(
             pinned: true,
@@ -256,6 +262,28 @@ class _TournamentDetailScreenState
             color: context.colorScheme.textPrimary,
           ),
         ));
+  }
+
+  Widget _shareButton(BuildContext context, {required Function() onShareTap}) {
+    return actionButton(
+      context,
+      onPressed: onShareTap,
+      icon: Container(
+        height: 28,
+        width: 28,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color:
+              context.colorScheme.containerHighOnSurface.withValues(alpha: 0.4),
+        ),
+        alignment: Alignment.center,
+        child: Icon(
+          Platform.isIOS ? Icons.share : Icons.share_outlined,
+          size: 20,
+          color: context.colorScheme.textPrimary,
+        ),
+      ),
+    );
   }
 
   void _handleAddMatchTap(

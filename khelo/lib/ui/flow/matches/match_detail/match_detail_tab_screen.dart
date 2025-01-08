@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/main.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/tab_button.dart';
+import 'package:style/extensions/context_extensions.dart';
 
 class MatchDetailTabScreen extends ConsumerStatefulWidget {
   final String matchId;
@@ -50,6 +56,18 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
 
     return AppPage(
       title: _getScreenTitle(context, state),
+      actions: [
+        actionButton(
+          context,
+          icon: Icon(
+            Platform.isIOS ? Icons.share : Icons.share_outlined,
+            size: 20,
+            color: context.colorScheme.textPrimary,
+          ),
+          onPressed: () =>
+              Share.shareUri(Uri.parse("$appBaseUrl/match/${widget.matchId}")),
+        )
+      ],
       body: Builder(
         builder: (context) {
           return _content(context, notifier);
