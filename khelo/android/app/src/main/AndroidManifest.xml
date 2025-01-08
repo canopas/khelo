@@ -27,7 +27,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="flutter_deeplinking_enabled" android:value="false" />
+            <meta-data
+                android:name="flutter_deeplinking_enabled"
+                android:value="false" />
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -36,6 +38,9 @@
 
                 <data android:scheme="https" />
                 <data android:host="khelo.canopas.com" />
+                <data android:pathPrefix="/tournament" />
+                <data android:pathPrefix="/match" />
+                <data android:pathPrefix="/team" />
             </intent-filter>
         </activity>
         <!-- configuration for image_cropper package -->
