@@ -60,7 +60,7 @@ class _MainScreenState extends ConsumerState<MainScreen>
 
   @override
   void dispose() {
-   _appLinksHandler.dispose();
+    _appLinksHandler.dispose();
     super.dispose();
   }
 
