@@ -29,13 +29,13 @@ class AppLinksHandler {
           AppRoute.tournamentDetail(tournamentId: tournamentId).push(context);
         }
 
-        if(pathSegments.first == _routePrefixMatch){
+        if (pathSegments.first == _routePrefixMatch) {
           final matchId = pathSegments[1];
           AppRoute.main.go(context);
           AppRoute.matchDetailTab(matchId: matchId).push(context);
         }
 
-        if(pathSegments.first == _routePrefixTeam){
+        if (pathSegments.first == _routePrefixTeam) {
           final teamId = pathSegments[1];
           AppRoute.main.go(context);
           AppRoute.teamDetail(teamId: teamId).push(context);
