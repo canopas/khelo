@@ -247,15 +247,10 @@ class _TournamentDetailScreenState
   Widget _backButton(BuildContext context) {
     return actionButton(context,
         onPressed: context.pop,
-        icon: Container(
-          height: 28,
-          width: 28,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: context.colorScheme.containerHighOnSurface
-                .withValues(alpha: 0.4),
-          ),
-          alignment: Alignment.center,
+        icon: CircleAvatar(
+          radius: 16,
+          backgroundColor:
+              context.colorScheme.containerHighOnSurface.withValues(alpha: 0.4),
           child: Icon(
             Platform.isIOS ? Icons.arrow_back_ios_new : Icons.arrow_back,
             size: 20,
@@ -268,15 +263,10 @@ class _TournamentDetailScreenState
     return actionButton(
       context,
       onPressed: onShareTap,
-      icon: Container(
-        height: 28,
-        width: 28,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color:
-              context.colorScheme.containerHighOnSurface.withValues(alpha: 0.4),
-        ),
-        alignment: Alignment.center,
+      icon: CircleAvatar(
+        radius: 16,
+        backgroundColor:
+            context.colorScheme.containerHighOnSurface.withValues(alpha: 0.4),
         child: Icon(
           Platform.isIOS ? Icons.share : Icons.share_outlined,
           size: 20,
