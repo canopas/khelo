@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^apple-app-site-association$ apple-app-site-association.json [L]
