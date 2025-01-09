@@ -1,5 +1,6 @@
 import 'package:data/api/ball_score/ball_score_model.dart';
 import 'package:data/api/leaderboard/leaderboard_model.dart';
+import 'package:data/api/live_stream/live_stream_model.dart';
 import 'package:data/api/match/match_model.dart';
 import 'package:data/api/tournament/tournament_model.dart';
 import 'package:data/api/user/user_models.dart';
@@ -368,6 +369,17 @@ extension LeaderboardFieldTypeString on LeaderboardField {
         return context.l10n.common_bowling;
       case LeaderboardField.fielding:
         return context.l10n.common_fielding;
+    }
+  }
+}
+
+extension MediumOptionString on MediumOption {
+  String getString(BuildContext context) {
+    switch (this) {
+      case MediumOption.kheloYTChannel:
+        return context.l10n.add_stream_info_khelo_yt_channel_text;
+      case MediumOption.userYTChannel:
+        return context.l10n.add_stream_info_your_yt_channel_text;
     }
   }
 }

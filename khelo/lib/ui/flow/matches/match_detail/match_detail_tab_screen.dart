@@ -4,7 +4,9 @@ import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/string_extensions.dart';
 import 'package:khelo/domain/extensions/widget_extension.dart';
+import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/matches/match_detail/match_detail_tab_view_model.dart';
+import 'package:style/button/action_button.dart';
 import 'package:style/button/tab_button.dart';
 
 class MatchDetailTabScreen extends ConsumerStatefulWidget {
@@ -50,6 +52,19 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
 
     return AppPage(
       title: _getScreenTitle(context, state),
+      actions: [
+        // TODO: Handle visibility of button to live streamer only
+        actionButton(
+          context,
+          icon: Icon(Icons.live_tv_outlined),
+          onPressed: () {
+            // TODO: Start live streaming Config Flow
+            AppRoute.addStreamInfo(matchId: widget.matchId).push(context);
+            // show configuration flow if not done already
+            // show resume live streaming panel or something to resume streaming or start streaming
+          },
+        )
+      ],
       body: Builder(
         builder: (context) {
           return _content(context, notifier);

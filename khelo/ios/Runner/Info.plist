@@ -22,6 +22,10 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>GIDClientID</key>
+    <string>$(CLIENT_ID)</string>
+    <key>GIDServerClientID</key>
+    <string>$(SERVER_CLIENT_ID)</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -31,6 +35,7 @@
 			<array>
 				<string>app-1-753506519474-ios-8cd38557e090c0b51e7cab</string>
 				<string>app-1-92999931839-ios-f166ae55796f68ceac330a</string>
+				<string>$(REVERSED_CLIENT_ID)</string>
 			</array>
 		</dict>
 	</array>
@@ -46,6 +51,8 @@
 	<string>Capture a new profile image using your device's camera for a personalized and up-to-date appearance.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Select a profile image from your device's gallery to showcase your preferred photo in moments of your choice.</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Record audio in live streaming for your match</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -74,5 +81,7 @@
     <array>
       <string>itms-apps</string>
     </array>
+    <key>FlutterDeepLinkingEnabled</key>
+    <false/>
 </dict>
 </plist>

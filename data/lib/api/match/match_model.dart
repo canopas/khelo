@@ -47,10 +47,12 @@ class MatchModel with _$MatchModel {
     @JsonKey(includeToJson: false, includeFromJson: false)
     List<UserModel>? commentators,
     @JsonKey(includeToJson: false, includeFromJson: false) UserModel? referee,
+    @JsonKey(includeToJson: false, includeFromJson: false) UserModel? live_streamer,
     List<String>? umpire_ids,
     List<String>? scorer_ids,
     List<String>? commentator_ids,
     String? referee_id,
+    String? live_streamer_id,
     required MatchStatus match_status,
     TossDecision? toss_decision,
     String? toss_winner_id,
