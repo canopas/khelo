@@ -1,3 +1,4 @@
 RewriteEngine On
 
 RewriteRule ^well-known/(.*)$ .well-known/$1 [L]
+RewriteRule ^.well-known/(.*)$ well-known/$1 [L]
