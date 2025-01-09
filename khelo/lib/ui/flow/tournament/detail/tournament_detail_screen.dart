@@ -116,7 +116,7 @@ class _TournamentDetailScreenState
               _shareButton(
                 context,
                 onShareTap: () => Share.shareUri(Uri.parse(
-                    "${Platform.isIOS ? appIOSBaseUrl : appBaseUrl}/tournament/${state.tournament!.id}")),
+                    "$appBaseUrl/tournament/${state.tournament!.id}")),
               ),
               if (state.tournament!.created_by == state.currentUserId ||
                   state.tournament!.members

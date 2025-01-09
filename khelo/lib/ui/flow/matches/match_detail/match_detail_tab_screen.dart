@@ -64,8 +64,8 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
             size: 20,
             color: context.colorScheme.textPrimary,
           ),
-          onPressed: () => Share.shareUri(Uri.parse(
-              "${Platform.isIOS ? appIOSBaseUrl : appBaseUrl}/match/${widget.matchId}")),
+          onPressed: () =>
+              Share.shareUri(Uri.parse("$appBaseUrl/match/${widget.matchId}")),
         )
       ],
       body: Builder(

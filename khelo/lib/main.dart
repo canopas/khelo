@@ -12,7 +12,6 @@ import 'firebase_options.dart';
 
 const _baseUrl = 'https://apiv1-g7mqemn2ga-el.a.run.app/';
 const appBaseUrl = 'https://khelo.canopas.com';
-const appIOSBaseUrl = "kheloapp://khelo.canopas.com";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -31,9 +31,8 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen>
     with WidgetsBindingObserver {
-  final privacyPolicyUrl = "https://canopas.github.io/khelo/privacy-policy";
-  final termsAndConditionsUrl =
-      "https://canopas.github.io/khelo/terms-and-condition";
+  final privacyPolicyUrl = "https://khelo.canopas.com/privacy-policy";
+  final termsAndConditionsUrl = "https://khelo.canopas.com/terms-and-condition";
   final playStoreLink =
       "https://play.google.com/store/apps/details?id=com.canopas.khelo";
   final appStoreLink = "https://apps.apple.com/app/khelo/id6480175424";
