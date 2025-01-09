@@ -56,6 +56,7 @@ dependencies:
   flutter_local_notifications: ^17.2.3
   qr_code_scanner: ^1.0.1
   palette_generator: ^0.3.3+5
+  app_links: ^6.3.2
 
   # picker
   canopas_country_picker: ^0.0.10

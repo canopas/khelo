@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/gen/assets.gen.dart';
+import 'package:khelo/ui/flow/app_links/app_links_handler.dart';
 import 'package:khelo/ui/flow/my_game/my_game_tab_screen.dart';
 import 'package:khelo/ui/flow/profile/profile_screen.dart';
 import 'package:khelo/ui/flow/stats/user_stat/user_stat_screen.dart';
@@ -33,14 +34,17 @@ class _MainScreenState extends ConsumerState<MainScreen>
   final _cupertinoTabController = CupertinoTabController();
   void Function(int) onTabChange = (_) {};
   late final NotificationHandler notificationHandler;
+  late final AppLinksHandler _appLinksHandler;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _appLinksHandler = AppLinksHandler();
     notificationHandler = ref.read(notificationHandlerProvider);
     runPostFrame(() {
       notificationHandler.init(context);
+      _appLinksHandler.init(context);
     });
   }
 
@@ -52,6 +56,12 @@ class _MainScreenState extends ConsumerState<MainScreen>
       _cupertinoTabController.dispose();
       WidgetsBinding.instance.removeObserver(this);
     }
+  }
+
+  @override
+  void dispose() {
+    _appLinksHandler.dispose();
+    super.dispose();
   }
 
   @override

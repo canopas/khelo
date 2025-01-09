@@ -12,13 +12,9 @@ Widget moreOptionButton(
 }) {
   return actionButton(context,
       onPressed: onPressed,
-      icon: Container(
-        height: 28,
-        width: 28,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: backgroundColor ?? Colors.transparent,
-        ),
+      icon: CircleAvatar(
+        radius: 16,
+        backgroundColor: backgroundColor ?? Colors.transparent,
         child: Icon(
           Platform.isIOS ? Icons.more_horiz_rounded : Icons.more_vert_rounded,
           size: size,

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:data/api/team/team_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:khelo/components/action_bottom_sheet.dart';
@@ -13,6 +16,7 @@ import 'package:khelo/domain/formatter/date_formatter.dart';
 import 'package:khelo/ui/app_route.dart';
 import 'package:khelo/ui/flow/team/detail/components/team_detail_member_content.dart';
 import 'package:khelo/ui/flow/team/detail/team_detail_view_model.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:style/button/action_button.dart';
 import 'package:style/button/more_option_button.dart';
 import 'package:style/button/secondary_button.dart';
@@ -21,6 +25,7 @@ import 'package:style/extensions/context_extensions.dart';
 import 'package:style/indicator/progress_indicator.dart';
 import 'package:style/text/app_text_style.dart';
 
+import '../../../../main.dart';
 import 'components/team_detail_match_content.dart';
 import 'components/team_detail_stat_content.dart';
 
@@ -79,12 +84,23 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
             enabled: !state.loading,
             onPressed: () => context.pop(state.team),
           ),
-        if (!widget.showAddButton &&
-            (state.team?.isAdminOrOwner(state.currentUserId) ?? false))
-          moreOptionButton(
+        if (!widget.showAddButton) ...[
+          actionButton(
             context,
-            onPressed: () => _moreActionButton(context, notifier, state),
+            icon: Icon(
+              Platform.isIOS ? Icons.share : Icons.share_outlined,
+              size: 20,
+              color: context.colorScheme.textPrimary,
+            ),
+            onPressed: () =>
+                Share.shareUri(Uri.parse("$appBaseUrl/team/${widget.teamId}")),
           ),
+          if (state.team?.isAdminOrOwner(state.currentUserId) ?? false)
+            moreOptionButton(
+              context,
+              onPressed: () => _moreActionButton(context, notifier, state),
+            ),
+        ],
       ],
       body: Builder(builder: (context) {
         return _body(context, state);
