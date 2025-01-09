@@ -92,8 +92,8 @@ class _TeamDetailScreenState extends ConsumerState<TeamDetailScreen> {
               size: 20,
               color: context.colorScheme.textPrimary,
             ),
-            onPressed: () =>
-                Share.shareUri(Uri.parse("$appBaseUrl/team/${widget.teamId}")),
+            onPressed: () => Share.shareUri(Uri.parse(
+                "${Platform.isIOS ? appIOSBaseUrl : appBaseUrl}/team/${widget.teamId}")),
           ),
           if (state.team?.isAdminOrOwner(state.currentUserId) ?? false)
             moreOptionButton(
