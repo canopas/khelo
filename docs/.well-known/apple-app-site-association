@@ -14,5 +14,10 @@
         ]
       }
     ]
+  },
+  "webcredentials": {
+    "apps": [
+      "S985H2T7J8.com.canopas.khelo"
+    ]
   }
 }
