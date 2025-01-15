@@ -2,20 +2,36 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
+import '../../api/network/client.dart';
 import '../../api/user/user_models.dart';
 import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
 import '../../storage/app_preferences.dart';
 import '../../storage/provider/preferences_provider.dart';
 import '../user/user_service.dart';
+import 'auth_endpoints.dart';
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
+final googleSignInProvider = Provider(
+  (ref) => GoogleSignIn(
+    clientId: '753506519474-6qolf71653023s197ur4ag97q2lvaf9r.apps.googleusercontent.com',
+    serverClientId: '753506519474-lt8hqsa2quvfel3oilfll5pemd5qba7p.apps.googleusercontent.com',
+    scopes: [
+      'https://www.googleapis.com/auth/youtube.force-ssl',
+      'https://www.googleapis.com/auth/youtube.readonly',
+    ],
+  ),
+);
 
 final authServiceProvider = Provider((ref) {
   return AuthService(
     ref.read(firebaseAuthProvider),
+    ref.read(googleSignInProvider),
     ref.read(userServiceProvider),
+    ref.read(httpProvider),
     ref.read(currentUserJsonPod.notifier),
     ref.read(currentUserSessionJsonPod.notifier),
   );
@@ -23,14 +39,18 @@ final authServiceProvider = Provider((ref) {
 
 class AuthService {
   final FirebaseAuth _auth;
+  final GoogleSignIn _googleSignIn;
   final UserService _userService;
+  final http.Client _client;
 
   final PreferenceNotifier<String?> _currentUserNotifier;
   final PreferenceNotifier<String?> _userSessionNotifier;
 
   AuthService(
     this._auth,
+    this._googleSignIn,
     this._userService,
+    this._client,
     this._currentUserNotifier,
     this._userSessionNotifier,
   ) {
@@ -76,6 +96,63 @@ class AuthService {
       );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return;
+
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw AppError(message: 'Google Sign-In was cancelled');
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await user.linkWithCredential(credential);
+
+      if (googleUser.serverAuthCode != null) {
+        await _client.req(
+          UpdateGoogleRefreshTokenEndPoint(
+            authCode: googleUser.serverAuthCode!,
+          ),
+        );
+      } else {
+        throw AppError(message: 'Server auth code is null');
+      }
+    } catch (error, stack) {
+      throw AppError.fromError(error, stack);
+    }
+  }
+
+  Future<bool> isGoogleSignedIn() async {
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      final bool isGoogleLinked =
+          user.providerData.any((info) => info.providerId == 'google.com');
+      final googleUser = await _googleSignIn.isSignedIn();
+
+
+      return isGoogleLinked && googleUser;
+    }
+    return false;
+  }
+
+  Future<void> unlinkGoogle() async {
+    try {
+      final User? user = _auth.currentUser;
+      if (user != null) {
+        await user.unlink('google.com');
+      }
+    } catch (error) {
+      debugPrint(error.toString());
     }
   }
 
@@ -175,6 +252,7 @@ class AuthService {
   Future<void> signOut() async {
     try {
       await clearSession();
+      await _googleSignIn.signOut();
       await _auth.signOut();
       _currentUserNotifier.state = null;
     } catch (error, stack) {

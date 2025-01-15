@@ -1,16 +1,17 @@
 import 'package:data/storage/provider/preferences_provider.dart';
 import 'package:data/utils/constant/firestore_constant.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:khelo/ui/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
-const _baseUrl = 'https://apiv1-g7mqemn2ga-el.a.run.app/';
+// const _baseUrl = 'https://apiv1-g7mqemn2ga-el.a.run.app/';
+const _baseUrl = 'http://127.0.0.1:5002/khelo-9b4b8/asia-south1/apiv1/';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

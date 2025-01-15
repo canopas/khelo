@@ -56,6 +56,8 @@ dependencies:
   flutter_local_notifications: ^17.2.3
   qr_code_scanner: ^1.0.1
   palette_generator: ^0.3.3+5
+  haishin_kit: ^0.14.0
+  audio_session: ^0.1.23
 
   # picker
   canopas_country_picker: ^0.0.10
@@ -68,6 +70,7 @@ dependencies:
   # auth
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
+  google_sign_in: ^6.2.2
   firebase_storage: ^12.3.2
   cloud_firestore: ^5.4.4
   firebase_crashlytics: ^4.1.3

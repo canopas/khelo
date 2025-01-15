@@ -84,8 +84,12 @@ class MatchService {
           await getUserListFromUserIds(match.scorer_ids);
 
       UserModel? referee;
+      UserModel? liveStreamer;
       if (match.referee_id != null) {
         referee = await _userService.getUser(match.referee_id!);
+      }
+      if (match.live_streamer_id != null) {
+        liveStreamer = await _userService.getUser(match.live_streamer_id!);
       }
 
       return match.copyWith(
@@ -94,6 +98,7 @@ class MatchService {
         referee: referee,
         scorers: scorers,
         umpires: umpires,
+        live_streamer: liveStreamer,
       );
     } catch (error, stack) {
       throw AppError.fromError(error, stack);
@@ -355,8 +360,12 @@ class MatchService {
           await getUserListFromUserIds(match.scorer_ids);
 
       UserModel? referee;
+      UserModel? liveStreamer;
       if (match.referee_id != null) {
         referee = await _userService.getUser(match.referee_id!);
+      }
+      if (match.live_streamer_id != null) {
+        liveStreamer = await _userService.getUser(match.live_streamer_id!);
       }
 
       return match.copyWith(
@@ -365,6 +374,7 @@ class MatchService {
         referee: referee,
         scorers: scorers,
         umpires: umpires,
+        live_streamer: liveStreamer,
       );
     }).handleError((error, stack) => throw AppError.fromError(error, stack));
   }

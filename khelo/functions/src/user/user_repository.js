@@ -29,6 +29,17 @@ class UserRepository {
       return null;
     }
   }
+
+  async updateGoogleRefreshToken(userId, token) {
+    try {
+      const userRef = this.userRef().doc(userId);
+      await userRef.update({google_refresh_token: token});
+    } catch (e) {
+      console.error("UserRepository: Error update google refresh token:", e);
+      return null;
+    }
+  }
+
   async getUser(userId) {
     const userRef = this.userRef().doc(userId);
     try {

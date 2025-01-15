@@ -70,6 +70,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_home.svg
   String get icHome => 'assets/images/ic_home.svg';
 
+  /// File path: assets/images/ic_live_streamer.svg
+  String get icLiveStreamer => 'assets/images/ic_live_streamer.svg';
+
   /// File path: assets/images/ic_location.svg
   String get icLocation => 'assets/images/ic_location.svg';
 
@@ -133,6 +136,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_umpire.svg
   String get icUmpire => 'assets/images/ic_umpire.svg';
 
+  /// File path: assets/images/ic_youtube.svg
+  String get icYoutube => 'assets/images/ic_youtube.svg';
+
   /// File path: assets/images/intro_cricket_dark.svg
   String get introCricketDark => 'assets/images/intro_cricket_dark.svg';
 
@@ -176,6 +182,7 @@ class $AssetsImagesGen {
         icGallery,
         icGroup,
         icHome,
+        icLiveStreamer,
         icLocation,
         icNoInternet,
         icNotificationBell,
@@ -197,6 +204,7 @@ class $AssetsImagesGen {
         icTime,
         icTournaments,
         icUmpire,
+        icYoutube,
         introCricketDark,
         introCricketLight,
         introGraphicDark,

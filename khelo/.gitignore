@@ -47,6 +47,7 @@ app.*.map.json
 # Credentials
 lib/firebase_options.dart
 ios/Runner/GoogleService-Info.plist
+ios/Config.xcconfig
 ios/firebase_app_id_file.json
 android/app/google-services.json
 macos/Runner/GoogleService-Info.plist

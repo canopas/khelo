@@ -17,6 +17,7 @@ class FireStoreConst {
   static const String leaderboardCollection = "leaderboard";
   static const String matchEventsCollection = "match_events";
   static const String partnershipsCollection = "partnerships";
+  static const String liveStreamsCollection = "live_streams";
 
   // matches field const
   static const String id = "id";
@@ -65,6 +66,7 @@ class FireStoreConst {
   static const String notifications = "notifications";
   static const String phone = "phone";
   static const String name = "name";
+  static const String googleRefreshToken = "google_refresh_token";
 
   // tournament field const
   static const String members = "members";
@@ -81,6 +83,9 @@ class FireStoreConst {
   static const String wickets = "wickets";
   static const String catches = "catches";
   static const String date = "date";
+
+  // live_streams field const
+  static const String status = "status";
 }
 
 class DataConfig {
