@@ -10,6 +10,7 @@ import 'package:data/errors/app_error.dart';
 import 'package:data/service/ball_score/ball_score_service.dart';
 import 'package:data/service/innings/inning_service.dart';
 import 'package:data/service/match/match_service.dart';
+import 'package:data/storage/app_preferences.dart';
 import 'package:data/utils/combine_latest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +27,17 @@ import 'package:khelo/ui/flow/matches/match_detail/components/match_detail_squad
 part 'match_detail_tab_view_model.freezed.dart';
 
 final matchDetailTabStateProvider = StateNotifierProvider.autoDispose<
-    MatchDetailTabViewNotifier, MatchDetailTabState>(
-  (ref) => MatchDetailTabViewNotifier(
+    MatchDetailTabViewNotifier, MatchDetailTabState>((ref) {
+  final notifier = MatchDetailTabViewNotifier(
     ref.read(matchServiceProvider),
     ref.read(inningServiceProvider),
     ref.read(ballScoreServiceProvider),
-  ),
-);
+  );
+  ref.listen(currentUserPod, (previous, next) {
+    notifier._setUserId(next?.id);
+  });
+  return notifier;
+});
 
 class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   final MatchService _matchService;
@@ -41,6 +46,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
   late String _matchId;
   StreamSubscription? _matchStreamSubscription;
   StreamSubscription? _ballScoreStreamSubscription;
+  int _ballsLoaded = 0;
 
   MatchDetailTabViewNotifier(
     this._matchService,
@@ -48,7 +54,11 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
     this._ballScoreService,
   ) : super(const MatchDetailTabState());
 
-  int _ballsLoaded = 0;
+  void _setUserId(String? userId) {
+    if (userId != null) {
+      state = state.copyWith(currentUserId: userId);
+    }
+  }
 
   void setData(String matchId) {
     _matchId = matchId;
@@ -400,6 +410,7 @@ class MatchDetailTabViewNotifier extends StateNotifier<MatchDetailTabState> {
 class MatchDetailTabState with _$MatchDetailTabState {
   const factory MatchDetailTabState({
     Object? error,
+    String? currentUserId,
     MatchModel? match,
     @Default([]) List<InningModel> allInnings,
     String? highlightTeamId,

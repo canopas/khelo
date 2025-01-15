@@ -145,17 +145,6 @@ class AuthService {
     return false;
   }
 
-  Future<void> unlinkGoogle() async {
-    try {
-      final User? user = _auth.currentUser;
-      if (user != null) {
-        await user.unlink('google.com');
-      }
-    } catch (error) {
-      debugPrint(error.toString());
-    }
-  }
-
   Future<void> verifyOTP(
     String countryCode,
     String phoneNumber,

@@ -245,13 +245,15 @@ class AppRoute {
           builder: (context) =>
               LeaderboardScreen(selectedField: selectedField));
 
-  static AppRoute addStreamInfo({required String matchId}) => AppRoute(
-      pathAddStreamInfo,
-      builder: (context) => AddStreamInfoScreen(matchId: matchId));
+  static AppRoute addStreamInfo({required String matchId}) =>
+      AppRoute(pathAddStreamInfo,
+          builder: (context) => AddStreamInfoScreen(matchId: matchId));
 
-  static AppRoute streamCameraView({required LiveStreamModel stream}) => AppRoute(
-      pathStreamCamera,
-      builder: (context) => StreamCameraScreen(stream: stream,));
+  static AppRoute streamCameraView({required LiveStreamModel stream}) =>
+      AppRoute(pathStreamCamera,
+          builder: (context) => StreamCameraScreen(
+                stream: stream,
+              ));
 
   static AppRoute searchTeam({
     List<String>? excludedIds,

@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$MatchDetailTabState {
   Object? get error => throw _privateConstructorUsedError;
+  String? get currentUserId => throw _privateConstructorUsedError;
   MatchModel? get match => throw _privateConstructorUsedError;
   List<InningModel> get allInnings => throw _privateConstructorUsedError;
   String? get highlightTeamId => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $MatchDetailTabStateCopyWith<$Res> {
   @useResult
   $Res call(
       {Object? error,
+      String? currentUserId,
       MatchModel? match,
       List<InningModel> allInnings,
       String? highlightTeamId,
@@ -80,6 +82,7 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
   @override
   $Res call({
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? match = freezed,
     Object? allInnings = null,
     Object? highlightTeamId = freezed,
@@ -95,6 +98,10 @@ class _$MatchDetailTabStateCopyWithImpl<$Res, $Val extends MatchDetailTabState>
   }) {
     return _then(_value.copyWith(
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -172,6 +179,7 @@ abstract class _$$MatchDetailTabStateImplCopyWith<$Res>
   @useResult
   $Res call(
       {Object? error,
+      String? currentUserId,
       MatchModel? match,
       List<InningModel> allInnings,
       String? highlightTeamId,
@@ -203,6 +211,7 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? error = freezed,
+    Object? currentUserId = freezed,
     Object? match = freezed,
     Object? allInnings = null,
     Object? highlightTeamId = freezed,
@@ -218,6 +227,10 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
   }) {
     return _then(_$MatchDetailTabStateImpl(
       error: freezed == error ? _value.error : error,
+      currentUserId: freezed == currentUserId
+          ? _value.currentUserId
+          : currentUserId // ignore: cast_nullable_to_non_nullable
+              as String?,
       match: freezed == match
           ? _value.match
           : match // ignore: cast_nullable_to_non_nullable
@@ -276,6 +289,7 @@ class __$$MatchDetailTabStateImplCopyWithImpl<$Res>
 class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
   const _$MatchDetailTabStateImpl(
       {this.error,
+      this.currentUserId,
       this.match,
       final List<InningModel> allInnings = const [],
       this.highlightTeamId,
@@ -295,6 +309,8 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
 
   @override
   final Object? error;
+  @override
+  final String? currentUserId;
   @override
   final MatchModel? match;
   final List<InningModel> _allInnings;
@@ -356,7 +372,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
 
   @override
   String toString() {
-    return 'MatchDetailTabState(error: $error, match: $match, allInnings: $allInnings, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, selectedTab: $selectedTab, overList: $overList, filteredHighlight: $filteredHighlight, expandedInningsScorecard: $expandedInningsScorecard, loading: $loading, loadingBallScoreMore: $loadingBallScoreMore, highlightFilterOption: $highlightFilterOption)';
+    return 'MatchDetailTabState(error: $error, currentUserId: $currentUserId, match: $match, allInnings: $allInnings, highlightTeamId: $highlightTeamId, showTeamSelectionSheet: $showTeamSelectionSheet, showHighlightOptionSelectionSheet: $showHighlightOptionSelectionSheet, selectedTab: $selectedTab, overList: $overList, filteredHighlight: $filteredHighlight, expandedInningsScorecard: $expandedInningsScorecard, loading: $loading, loadingBallScoreMore: $loadingBallScoreMore, highlightFilterOption: $highlightFilterOption)';
   }
 
   @override
@@ -365,6 +381,8 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
         (other.runtimeType == runtimeType &&
             other is _$MatchDetailTabStateImpl &&
             const DeepCollectionEquality().equals(other.error, error) &&
+            (identical(other.currentUserId, currentUserId) ||
+                other.currentUserId == currentUserId) &&
             (identical(other.match, match) || other.match == match) &&
             const DeepCollectionEquality()
                 .equals(other._allInnings, _allInnings) &&
@@ -394,6 +412,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(error),
+      currentUserId,
       match,
       const DeepCollectionEquality().hash(_allInnings),
       highlightTeamId,
@@ -420,6 +439,7 @@ class _$MatchDetailTabStateImpl implements _MatchDetailTabState {
 abstract class _MatchDetailTabState implements MatchDetailTabState {
   const factory _MatchDetailTabState(
           {final Object? error,
+          final String? currentUserId,
           final MatchModel? match,
           final List<InningModel> allInnings,
           final String? highlightTeamId,
@@ -436,6 +456,8 @@ abstract class _MatchDetailTabState implements MatchDetailTabState {
 
   @override
   Object? get error;
+  @override
+  String? get currentUserId;
   @override
   MatchModel? get match;
   @override

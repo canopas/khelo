@@ -56,7 +56,8 @@ class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
   }
 
   Future<void> onOptionSelected(MediumOption option) async {
-    state = state.copyWith(mediumOption: option, showSelectResolutionSheet: false);
+    state =
+        state.copyWith(mediumOption: option, showSelectResolutionSheet: false);
     switch (option) {
       case MediumOption.kheloYTChannel:
         showResolutionSheet();
@@ -69,7 +70,8 @@ class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
 
   Future<void> fetchYTChannels() async {
     try {
-      state = state.copyWith(loading: true, actionError: null, showSelectResolutionSheet: false);
+      state = state.copyWith(
+          loading: true, actionError: null, showSelectResolutionSheet: false);
 
       await signInWithGoogleIfNeeded();
 
@@ -94,7 +96,8 @@ class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
   }
 
   void onChannelSelect(String channelId) {
-    state = state.copyWith(channelId: channelId, showSelectResolutionSheet: false);
+    state =
+        state.copyWith(channelId: channelId, showSelectResolutionSheet: false);
     showResolutionSheet();
   }
 
@@ -147,10 +150,6 @@ class AddStreamInfoViewNotifier extends StateNotifier<AddStreamInfoViewState> {
       debugPrint(
           "AddStreamInfoViewNotifier: error while creating yt stream -> $e");
     }
-  }
-
-  void unlink() {
-    _authService.unlinkGoogle();
   }
 }
 

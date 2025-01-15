@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:khelo/components/action_bottom_sheet.dart';
 import 'package:khelo/components/app_page.dart';
 import 'package:khelo/domain/extensions/context_extensions.dart';
 import 'package:khelo/domain/extensions/enum_extensions.dart';
@@ -68,13 +69,13 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
     }
 
     return ListView(
+      padding: context.mediaQueryPadding + EdgeInsets.symmetric(horizontal: 16),
       children: [
         if (state.stream == null) ...[
           _mediumOptionView(context),
         ] else ...[
           Container(
-            padding: EdgeInsets.all(16),
-            margin: const EdgeInsets.all(16),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: context.colorScheme.outline),
@@ -82,14 +83,14 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
             child: Column(
               spacing: 16,
               children: [
-                Text(
-                  context.l10n.add_stream_info_all_set_title,
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-                Text(context.l10n.add_stream_info_all_set_description,
-                    style: AppTextStyle.subtitle2
+                Text(context.l10n.add_stream_info_all_set_title,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.header4
                         .copyWith(color: context.colorScheme.textPrimary)),
+                Text(context.l10n.add_stream_info_all_set_description,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.subtitle2
+                        .copyWith(color: context.colorScheme.textSecondary)),
                 PrimaryButton(
                   context.l10n.add_stream_info_go_live_title,
                   expanded: false,
@@ -107,7 +108,7 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
 
   Widget _mediumOptionView(BuildContext context) {
     return Padding(
-      padding: context.mediaQueryPadding + const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -116,11 +117,9 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
         child: Column(
           spacing: 16,
           children: [
-            // TODO: remove unlink button
-            ElevatedButton(
-                onPressed: () => notifier.unlink(), child: Text("Unlink")),
             Text(
               context.l10n.add_stream_info_go_live_with_text,
+              textAlign: TextAlign.center,
               style: AppTextStyle.header4
                   .copyWith(color: context.colorScheme.textPrimary),
             ),
@@ -145,9 +144,9 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
           children: [
             SvgPicture.asset(
               Assets.images.icYoutube,
+              height: 22,
               colorFilter:
                   ColorFilter.mode(context.colorScheme.alert, BlendMode.srcIn),
-              height: 20,
             ),
             SizedBox(width: 16),
             Expanded(
@@ -155,11 +154,13 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(option.getString(context),
+                      textAlign: TextAlign.center,
                       style: AppTextStyle.subtitle2
                           .copyWith(color: context.colorScheme.textPrimary)),
                   if (option.isLoginRequired)
                     Text(
                       context.l10n.add_stream_info_login_required_text,
+                      textAlign: TextAlign.center,
                       style: AppTextStyle.caption
                           .copyWith(color: context.colorScheme.textSecondary),
                     )
@@ -181,10 +182,7 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
     });
   }
 
-  void _observeYTChannels(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  void _observeYTChannels(BuildContext context, WidgetRef ref) {
     ref.listen(addStreamInfoStateProvider.select((value) => value.ytChannels),
         (previous, next) {
       if (next.isNotEmpty) {
@@ -193,15 +191,22 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
     });
   }
 
-  void _observeShowSelectResolutionSheet(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  void _observeShowSelectResolutionSheet(BuildContext context, WidgetRef ref) {
     ref.listen(
         addStreamInfoStateProvider.select(
             (value) => value.showSelectResolutionSheet), (previous, next) {
       if (next) {
-        chooseYTResolutionSheet(context);
+        showActionBottomSheet(
+            context: context,
+            items: YouTubeResolution.values
+                .map((e) => BottomSheetAction(
+                      title: e.stringResolution,
+                      onTap: () {
+                        context.pop();
+                        notifier.onResolutionSelect(e);
+                      },
+                    ))
+                .toList());
       }
     });
   }
@@ -237,49 +242,6 @@ class _AddStreamInfoScreenState extends ConsumerState<AddStreamInfoScreen> {
                       separatorBuilder: (context, index) =>
                           Divider(color: context.colorScheme.outline),
                       itemCount: channelList.length)),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void chooseYTResolutionSheet(BuildContext context) {
-    HapticFeedback.mediumImpact();
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: false,
-      enableDrag: false,
-      isScrollControlled: true,
-      useRootNavigator: true,
-      backgroundColor: context.colorScheme.surface,
-      builder: (context) {
-        return SizedBox(
-          height: context.mediaQuerySize.height * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
-                child: Text(
-                  context.l10n.add_stream_info_choose_resolution,
-                  style: AppTextStyle.header4
-                      .copyWith(color: context.colorScheme.textPrimary),
-                ),
-              ),
-              Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) => OnTapScale(
-                          onTap: () {
-                            context.pop();
-                            notifier.onResolutionSelect(
-                                YouTubeResolution.values[index]);
-                          },
-                          child: Text(YouTubeResolution.values[index].name)),
-                      separatorBuilder: (context, index) =>
-                          Divider(color: context.colorScheme.outline),
-                      itemCount: YouTubeResolution.values.length)),
             ],
           ),
         );

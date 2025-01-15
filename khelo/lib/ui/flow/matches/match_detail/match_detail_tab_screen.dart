@@ -53,17 +53,13 @@ class _MatchDetailTabScreenState extends ConsumerState<MatchDetailTabScreen> {
     return AppPage(
       title: _getScreenTitle(context, state),
       actions: [
-        // TODO: Handle visibility of button to live streamer only
-        actionButton(
-          context,
-          icon: Icon(Icons.live_tv_outlined),
-          onPressed: () {
-            // TODO: Start live streaming Config Flow
-            AppRoute.addStreamInfo(matchId: widget.matchId).push(context);
-            // show configuration flow if not done already
-            // show resume live streaming panel or something to resume streaming or start streaming
-          },
-        )
+        if (state.match?.live_streamer_id == state.currentUserId)
+          actionButton(
+            context,
+            icon: Icon(Icons.live_tv_outlined),
+            onPressed: () =>
+                AppRoute.addStreamInfo(matchId: widget.matchId).push(context),
+          )
       ],
       body: Builder(
         builder: (context) {

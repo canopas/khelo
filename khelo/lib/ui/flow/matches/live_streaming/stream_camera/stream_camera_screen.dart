@@ -62,11 +62,7 @@ class _StreamCameraScreenState extends ConsumerState<StreamCameraScreen> {
       );
     }
 
-    return Text(
-      "Something is not well",
-      style: AppTextStyle.subtitle1
-          .copyWith(color: context.colorScheme.textPrimary),
-    );
+    return const SizedBox();
   }
 
   Widget _recordingModeButton(StreamCameraViewState state) {
@@ -149,7 +145,7 @@ class _StreamCameraScreenState extends ConsumerState<StreamCameraScreen> {
     final showEnabled = disabledAction != null && isEnable;
     return OnTapScale(
       onTap: onTap,
-      enabled: true, // TODO: if state.loading is not true
+      enabled: true,
       child: Material(
         type: MaterialType.transparency,
         child: Chip(

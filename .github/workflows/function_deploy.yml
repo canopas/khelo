@@ -42,10 +42,12 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
           FIREBASE_JSON_BASE64: ${{ secrets.FIREBASE_JSON_BASE64 }}
+          ENVIRONMENT_VARIABLE_BASE64: ${{ secrets.ENVIRONMENT_VARIABLE_BASE64 }}
         run: |
           cd khelo
           echo $GOOGLE_APPLICATION_CREDENTIALS | base64 --decode > google-application-credentials.json
           echo $FIREBASE_JSON_BASE64 | base64 --decode > firebase.json
+          echo $ENVIRONMENT_VARIABLE_BASE64 | base64 --decode > functions/.env
 
       - name: Deploy Firebase functions
         run: |
