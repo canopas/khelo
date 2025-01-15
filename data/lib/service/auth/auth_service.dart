@@ -11,14 +11,15 @@ import '../../errors/app_error.dart';
 import '../../extensions/string_extensions.dart';
 import '../../storage/app_preferences.dart';
 import '../../storage/provider/preferences_provider.dart';
+import '../../utils/api_keys.dart';
 import '../user/user_service.dart';
 import 'auth_endpoints.dart';
 
 final firebaseAuthProvider = Provider((ref) => FirebaseAuth.instance);
 final googleSignInProvider = Provider(
   (ref) => GoogleSignIn(
-    clientId: '753506519474-6qolf71653023s197ur4ag97q2lvaf9r.apps.googleusercontent.com',
-    serverClientId: '753506519474-lt8hqsa2quvfel3oilfll5pemd5qba7p.apps.googleusercontent.com',
+    clientId: ApiKeys.clientId,
+    serverClientId: ApiKeys.serverClientId,
     scopes: [
       'https://www.googleapis.com/auth/youtube.force-ssl',
       'https://www.googleapis.com/auth/youtube.readonly',
@@ -138,7 +139,6 @@ class AuthService {
       final bool isGoogleLinked =
           user.providerData.any((info) => info.providerId == 'google.com');
       final googleUser = await _googleSignIn.isSignedIn();
-
 
       return isGoogleLinked && googleUser;
     }
