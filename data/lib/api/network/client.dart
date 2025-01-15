@@ -28,7 +28,8 @@ final rawDioProvider = Provider((ref) {
 
 extension HttpExtensions on http.Client {
   Future<http.Response> req(Endpoint endpoint) async {
-    final fullURL = '${endpoint.baseUrl ?? DataConfig.instance.apiBaseUrl}${endpoint.path}';
+    final fullURL =
+        '${endpoint.baseUrl ?? DataConfig.instance.apiBaseUrl}${endpoint.path}';
     final request = http.Request(
       endpoint.method.name,
       Uri.parse(fullURL),

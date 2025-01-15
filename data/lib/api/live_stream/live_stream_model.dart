@@ -66,13 +66,14 @@ class YTChannel with _$YTChannel {
       title: json['snippet']['title'],
       description: json['snippet']['description'],
       madeForKids: json['status']['madeForKids'] ?? false,
-      selfDeclaredMadeForKids: json['status']['selfDeclaredMadeForKids'] ?? false,
+      selfDeclaredMadeForKids:
+          json['status']['selfDeclaredMadeForKids'] ?? false,
       thumbnailUrl: json['snippet']['thumbnails']['default']['url'],
       privacyStatus: json['status']['privacyStatus'] == 'public'
           ? PrivacyStatus.public
           : json['status']['privacyStatus'] == 'private'
-          ? PrivacyStatus.private
-          : PrivacyStatus.unlisted,
+              ? PrivacyStatus.private
+              : PrivacyStatus.unlisted,
     );
   }
 }

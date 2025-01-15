@@ -164,7 +164,10 @@ class UserService {
     }
   }
 
-  Future<void> updateGoogleRefreshToken(String userId, String refreshToken) async {
+  Future<void> updateGoogleRefreshToken(
+    String userId,
+    String refreshToken,
+  ) async {
     try {
       final userRef = _userRef.doc(userId);
 
